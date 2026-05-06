@@ -29,6 +29,7 @@ from .evidence_shapes import (
     shape_diagnostics,
 )
 from .query_semantic_parser import _call_astron_text, _extract_json_block
+from .graph_retrieval import STRONG_RELATIONS_BY_QUERY_TYPE
 
 
 EVIDENCE_JUDGE_PROMPT_VERSION = "v0.1.0"
@@ -86,6 +87,7 @@ def judge_evidence(
 ) -> EvidenceJudgement:
     anchors = _anchors(query, expansion or {})
     query_type = _query_type_from_context(context)
+    strong_relations = _strong_relations_for(query_type)
     facts = list(context.get("facts") or [])
     evidence = list(context.get("evidence") or [])
     candidates = [
@@ -106,7 +108,7 @@ def judge_evidence(
             if contribution > 0:
                 score += contribution
                 shape_hits.append(shape.name)
-        if kind == "fact" and _has_strong_graph_support(item, query):
+        if kind == "fact" and _has_strong_graph_support(item, query, strong_relations):
             score += 1.05
         if kind == "fact" and str(item.get("fact_type") or "") == "table_requirement":
             score += 0.18
@@ -159,7 +161,7 @@ def judge_evidence(
         )
     if sufficient and selected_shape:
         reason = next((shape.reason for shape in active_shape_items if shape.name == selected_shape), "top evidence covers expected evidence shape")
-    elif sufficient and any(_has_strong_graph_support(row[2], query) for row in scored[:5]):
+    elif sufficient and any(_has_strong_graph_support(row[2], query, strong_relations) for row in scored[:5]):
         reason = "top fact is connected to the query anchor through a trusted graph relation and supporting evidence"
     elif sufficient:
         reason = "top evidence covers required anchors and expected signal-state table"
@@ -520,34 +522,29 @@ def _bp_codes(text: str) -> set[str]:
     return bp_codes_from_text(text)
 
 
-def _has_strong_graph_support(item: dict[str, object], query: str) -> bool:
+def _strong_relations_for(query_type: str) -> set[str]:
+    """Return set of strong graph relations allowed for given query_type."""
+    return set(STRONG_RELATIONS_BY_QUERY_TYPE.get(query_type, ()))
+
+
+def _has_strong_graph_support(item: dict[str, object], query: str, strong_relations: set[str]) -> bool:
+    """Check if item has strong graph support allowed for query_type."""
     if str(item.get("graph_trust_tier") or "") != "strong":
         return False
     relation = str(item.get("graph_relation") or "")
-    if relation not in {
-        "defines_term",
-        "has_parameter_topic",
-        "has_parameter_group",
-        "has_process",
-        "has_constraint",
-        "has_comparison",
-        "references_standard",
-        "replaces_standard",
-    }:
+    if relation not in strong_relations:
         return False
-    if _is_timing_query(query):
-        return relation == "has_process"
-    if _is_process_activity_query(query):
-        return relation == "has_process"
-    if is_parameter_definition_query(query):
-        return relation in {"has_parameter_topic", "has_parameter_group", "defines_term"}
-    if is_term_definition_query(query):
-        return relation in {"defines_term", "has_parameter_topic"}
-    if re.search(r"(阻值|电阻|电压|电流|占空比|PWM|检测点|参数|定义|含义|意思)", query, re.I):
-        return relation in {"has_parameter_topic", "has_parameter_group", "defines_term"}
-    if re.search(r"(是什么|定义|含义|什么意思)", query):
-        return relation in {"defines_term", "has_parameter_topic"}
-    return relation != "relates_to_term"
+    # Additional check: ensure graph path exists
+    graph_path = item.get("graph_path")
+    if not isinstance(graph_path, list) or len(graph_path) == 0:
+        return False
+    # Verify path structure has src_name, relation, dst_name pattern
+    for step in graph_path:
+        if not isinstance(step, dict):
+            return False
+        if "src_name" not in step or "relation" not in step or "dst_name" not in step:
+            return False
+    return True
 
 
 def _is_preface_or_index_blob(blob: str) -> bool:

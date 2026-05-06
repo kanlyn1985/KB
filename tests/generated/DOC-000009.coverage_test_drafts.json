@@ -2,104 +2,113 @@
   "doc_id": "DOC-000009",
   "source": "coverage_u3_not_tested",
   "candidate_count": 2,
-  "source_gap_count": 127,
-  "skipped_candidate_count": 79,
+  "source_gap_count": 261,
+  "skipped_candidate_count": 165,
   "draft_case_count": 2,
   "validated": true,
   "coverage_candidates_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\coverage_reports\\DOC-000009.test_gap_candidates.json",
   "coverage_candidates_report_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\coverage_reports\\DOC-000009.test_gap_candidates.md",
   "cases": [
     {
-      "name": "coverage_requirement_doc_000009_requirement_11_26",
+      "name": "coverage_requirement_doc_000009_requirement_4_fact_112218",
       "status": "draft",
-      "unit_id": "DOC-000009_requirement_11_26",
+      "unit_id": "DOC-000009:requirement:4:FACT-112218",
       "unit_type": "requirement_unit",
       "importance": "high",
-      "page_no": 11,
-      "semantic_key": "噪声",
-      "query": "噪声有哪些要求？",
+      "page_no": 4,
+      "semantic_key": "范围",
+      "query": "范围有哪些要求？",
       "must_include": [
-        "噪声"
+        "范围"
       ],
       "assert_mode": "rich_answer",
       "recommended_suite": "golden",
-      "source_excerpt": "对于强制风冷的车载充电机，其额定功率工作时声功率级的测量噪声最大值应不大于 65 dB(A)",
+      "source_excerpt": "不超过 1 500 V (DC)的电动汽车传导充电用车载充电机",
       "covered_by": {
         "evidence_ids": [
-          "EV-007563"
+          "EV-007913",
+          "EV-007914"
         ],
         "fact_ids": [
-          "FACT-106593",
-          "FACT-106814",
-          "FACT-106818"
+          "FACT-112072",
+          "FACT-112083",
+          "FACT-112084",
+          "FACT-112085",
+          "FACT-112217",
+          "FACT-112218",
+          "FACT-112220",
+          "FACT-112221"
         ],
         "entity_ids": [
-          "ENT-000175",
           "ENT-000265"
         ],
         "wiki_page_ids": [
-          "WPAGE-000175",
-          "WPAGE-000265",
-          "WPAGE-000340",
-          "WPROC-DOC-000009-process-doc-000009-5-8-噪声试验"
+          "WCON-DOC-000009-constraint-doc-000009-范围-e789283e",
+          "WPAGE-000265"
         ],
         "golden_case_ids": [],
         "regression_case_ids": []
       },
       "golden_case": {
         "kind": "coverage_requirement",
-        "query": "噪声有哪些要求？",
-        "must_include": "噪声",
+        "query": "范围有哪些要求？",
+        "must_include": "范围",
         "source": "coverage",
         "assert_mode": "rich_answer",
         "target_doc_id": "DOC-000009",
-        "page_no": 11
+        "page_no": 4
       },
       "validation_status": "passed"
     },
     {
-      "name": "coverage_process_doc_000009_procedure_12_15",
+      "name": "coverage_requirement_doc_000009_requirement_6_fact_112239",
       "status": "draft",
-      "unit_id": "DOC-000009_procedure_12_15",
-      "unit_type": "process_unit",
-      "importance": "medium",
-      "page_no": 12,
-      "semantic_key": "外观试验",
-      "query": "外观试验有哪些活动？",
+      "unit_id": "DOC-000009:requirement:6:FACT-112239",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 6,
+      "semantic_key": "功率因数",
+      "query": "功率因数有哪些要求？",
       "must_include": [
-        "外观试验"
+        "功率因数"
       ],
       "assert_mode": "rich_answer",
-      "recommended_suite": "regression",
-      "source_excerpt": "目测以及表面触摸检查",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合表 2 的要求",
       "covered_by": {
         "evidence_ids": [
-          "EV-007564"
+          "EV-007915"
         ],
         "fact_ids": [
-          "FACT-106601",
-          "FACT-106828"
+          "FACT-112099",
+          "FACT-112238",
+          "FACT-112239",
+          "FACT-112240",
+          "FACT-112247",
+          "FACT-112248"
         ],
         "entity_ids": [
           "ENT-000265",
-          "ENT-000301"
+          "ENT-000274"
         ],
         "wiki_page_ids": [
+          "WCON-DOC-000009-constraint-doc-000009-功率因数-b536fd76",
           "WPAGE-000265",
-          "WPAGE-000301",
-          "WPROC-DOC-000009-process-doc-000009-5-2-外观试验"
+          "WPAGE-000274",
+          "WPAGE-000315",
+          "WPROC-DOC-000009-process-doc-000009-5-3-12-功率因数试验"
         ],
         "golden_case_ids": [],
         "regression_case_ids": []
       },
       "golden_case": {
-        "kind": "coverage_gap",
-        "query": "外观试验有哪些活动？",
-        "must_include": "外观试验",
+        "kind": "coverage_requirement",
+        "query": "功率因数有哪些要求？",
+        "must_include": "功率因数",
         "source": "coverage",
         "assert_mode": "rich_answer",
         "target_doc_id": "DOC-000009",
-        "page_no": 12
+        "page_no": 6
       },
       "validation_status": "passed"
     }

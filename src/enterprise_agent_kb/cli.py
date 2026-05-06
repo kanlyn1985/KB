@@ -26,6 +26,7 @@ from .generated_tests import (
     validate_coverage_test_drafts_for_document,
 )
 from .graph import build_graph_for_document
+from .graph_report import build_graph_health_report, format_graph_health_report
 from .governance import assess_pending_quality
 from .ingest import register_document
 from .jobs import run_parse_jobs, summarize_job_results
@@ -301,6 +302,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--doc-id",
         required=True,
         help="Document ID to build graph for.",
+    )
+
+    subparsers.add_parser(
+        "graph-report",
+        help="Print a graph health report across all query types.",
     )
 
     subparsers.add_parser(
@@ -832,6 +838,12 @@ def main() -> None:
                 ensure_ascii=False,
             )
         )
+        return
+
+    if args.command == "graph-report":
+        db_path = Path(args.root) / "db" / "knowledge.db"
+        report = build_graph_health_report(db_path)
+        print(format_graph_health_report(report))
         return
 
     if args.command == "run-query-repair-smoke":
