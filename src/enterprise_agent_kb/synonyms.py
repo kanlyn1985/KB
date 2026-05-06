@@ -27,6 +27,13 @@ SYNONYM_MAP: dict[str, list[str]] = {
     "车载充电机": [
         "电动汽车用传导式车载充电机",
         "on-board charger",
+        "OBC",
+    ],
+    "OBC": [
+        "车载充电机",
+        "电动汽车用传导式车载充电机",
+        "on-board charger",
+        "onboard charger",
     ],
     "CC": [
         "CC1",

@@ -1,0 +1,57 @@
+{
+  "document_count": 6,
+  "case_count": 863,
+  "passed": 863,
+  "failed": 0,
+  "success": true,
+  "documents": [
+    {
+      "doc_id": "DOC-000003",
+      "case_count": 285,
+      "passed": 285,
+      "failed": 0,
+      "success": true,
+      "json_path": "E:\\AI_Project\\opencode_workspace\\KB1\\tests\\generated\\DOC-000003.golden.json"
+    },
+    {
+      "doc_id": "DOC-000004",
+      "case_count": 76,
+      "passed": 76,
+      "failed": 0,
+      "success": true,
+      "json_path": "E:\\AI_Project\\opencode_workspace\\KB1\\tests\\generated\\DOC-000004.golden.json"
+    },
+    {
+      "doc_id": "DOC-000005",
+      "case_count": 281,
+      "passed": 281,
+      "failed": 0,
+      "success": true,
+      "json_path": "E:\\AI_Project\\opencode_workspace\\KB1\\tests\\generated\\DOC-000005.golden.json"
+    },
+    {
+      "doc_id": "DOC-000009",
+      "case_count": 86,
+      "passed": 86,
+      "failed": 0,
+      "success": true,
+      "json_path": "E:\\AI_Project\\opencode_workspace\\KB1\\tests\\generated\\DOC-000009.golden.json"
+    },
+    {
+      "doc_id": "DOC-000012",
+      "case_count": 106,
+      "passed": 106,
+      "failed": 0,
+      "success": true,
+      "json_path": "E:\\AI_Project\\opencode_workspace\\KB1\\tests\\generated\\DOC-000012.golden.json"
+    },
+    {
+      "doc_id": "DOC-000013",
+      "case_count": 29,
+      "passed": 29,
+      "failed": 0,
+      "success": true,
+      "json_path": "E:\\AI_Project\\opencode_workspace\\KB1\\tests\\generated\\DOC-000013.golden.json"
+    }
+  ]
+}

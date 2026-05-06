@@ -49,6 +49,10 @@ def test_markdown_pipeline_end_to_end() -> None:
     assert result.page_count == 1
     assert result.fact_count >= 5
     assert result.entity_count >= 2
+    assert result.coverage_source_unit_count >= 1
+    assert (workspace / "coverage_reports" / f"{result.doc_id}.summary.json").exists()
+    assert result.coverage_summary_path.endswith(f"{result.doc_id}.summary.json")
+    assert result.coverage_report_path.endswith(f"{result.doc_id}.coverage_report.md")
 
     answer = answer_query(workspace, "什么是控制导引电路？", limit=6)
     assert "控制导引电路 control pilot circuit" in answer["direct_answer"]

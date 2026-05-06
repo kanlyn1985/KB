@@ -1,0 +1,110 @@
+{
+  "doc_id": "DOC-000009",
+  "source": "coverage_u3_not_tested",
+  "candidate_count": 2,
+  "source_gap_count": 127,
+  "skipped_candidate_count": 79,
+  "draft_case_count": 2,
+  "validated": true,
+  "coverage_candidates_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\coverage_reports\\DOC-000009.test_gap_candidates.json",
+  "coverage_candidates_report_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\coverage_reports\\DOC-000009.test_gap_candidates.md",
+  "cases": [
+    {
+      "name": "coverage_requirement_doc_000009_requirement_11_26",
+      "status": "draft",
+      "unit_id": "DOC-000009_requirement_11_26",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 11,
+      "semantic_key": "噪声",
+      "query": "噪声有哪些要求？",
+      "must_include": [
+        "噪声"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "对于强制风冷的车载充电机，其额定功率工作时声功率级的测量噪声最大值应不大于 65 dB(A)",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-007563"
+        ],
+        "fact_ids": [
+          "FACT-106593",
+          "FACT-106814",
+          "FACT-106818"
+        ],
+        "entity_ids": [
+          "ENT-000175",
+          "ENT-000265"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000175",
+          "WPAGE-000265",
+          "WPAGE-000340",
+          "WPROC-DOC-000009-process-doc-000009-5-8-噪声试验"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "噪声有哪些要求？",
+        "must_include": "噪声",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000009",
+        "page_no": 11
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_process_doc_000009_procedure_12_15",
+      "status": "draft",
+      "unit_id": "DOC-000009_procedure_12_15",
+      "unit_type": "process_unit",
+      "importance": "medium",
+      "page_no": 12,
+      "semantic_key": "外观试验",
+      "query": "外观试验有哪些活动？",
+      "must_include": [
+        "外观试验"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "regression",
+      "source_excerpt": "目测以及表面触摸检查",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-007564"
+        ],
+        "fact_ids": [
+          "FACT-106601",
+          "FACT-106828"
+        ],
+        "entity_ids": [
+          "ENT-000265",
+          "ENT-000301"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000265",
+          "WPAGE-000301",
+          "WPROC-DOC-000009-process-doc-000009-5-2-外观试验"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_gap",
+        "query": "外观试验有哪些活动？",
+        "must_include": "外观试验",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000009",
+        "page_no": 12
+      },
+      "validation_status": "passed"
+    }
+  ],
+  "validation_mode": "trace",
+  "passed_count": 2,
+  "failed_count": 0
+}

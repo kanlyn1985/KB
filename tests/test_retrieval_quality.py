@@ -1,0 +1,104 @@
+from __future__ import annotations
+
+from enterprise_agent_kb.retrieval_quality import evaluate_retrieval_quality
+
+
+def test_retrieval_quality_scores_rank_and_recall() -> None:
+    quality = evaluate_retrieval_quality(
+        case={"must_include": ["SWE.2.BP3", "SWE.2.BP4"], "negative_expected": ["SYS.3"]},
+        retrieved_items=[
+            {"result_type": "fact", "result_id": "FACT-1", "snippet": "SWE.2.BP2 定义软件架构动态方面"},
+            {"result_type": "fact", "result_id": "FACT-2", "snippet": "SWE.2.BP3 分析软件架构"},
+            {"result_type": "fact", "result_id": "FACT-3", "snippet": "SWE.2.BP4 确保一致性"},
+        ],
+        trace_metrics={"query_type": "lifecycle_lookup", "retrieval_channels": ["graph", "facts"], "graph_candidate_count": 4},
+    )
+
+    assert quality["must_hit_found"] == 2
+    assert quality["must_hit_best_rank"] == 2
+    assert quality["recall_at_5"] == 1.0
+    assert quality["mrr"] == 0.5
+    assert quality["negative_hit_rate"] == 0.0
+    assert quality["failure_attribution"] == "ok"
+
+
+def test_retrieval_quality_attributes_graph_not_engaged() -> None:
+    quality = evaluate_retrieval_quality(
+        case={"must_include": "SYS.4.BP1"},
+        retrieved_items=[{"result_type": "fact", "result_id": "FACT-X", "snippet": "unrelated"}],
+        trace_metrics={
+            "query_type": "lifecycle_lookup",
+            "retrieval_channels": ["graph", "facts"],
+            "graph_candidate_count": 0,
+            "topic_resolution_confidence": 0.8,
+            "top_hit_ids": ["FACT-X"],
+        },
+    )
+
+    assert quality["must_hit_found"] == 0
+    assert quality["recall_at_5"] == 0.0
+    assert quality["mrr"] == 0.0
+    assert quality["failure_attribution"] == "graph_not_engaged"
+
+
+def test_retrieval_quality_detects_negative_hits() -> None:
+    quality = evaluate_retrieval_quality(
+        case={"must_include": "CP", "negative_expected": ["Charge Pump"]},
+        retrieved_items=[{"result_type": "wiki", "result_id": "WPAGE-X", "snippet": "Charge Pump definition"}],
+        trace_metrics={"query_type": "definition", "retrieval_channels": ["wiki"]},
+    )
+
+    assert quality["negative_hit_count"] == 1
+    assert quality["negative_hit_rate"] == 1.0
+    assert quality["failure_attribution"] == "negative_hit"
+
+
+def test_retrieval_quality_matches_composite_table_conditions() -> None:
+    quality = evaluate_retrieval_quality(
+        case={"must_include": "9V 且输出 PWM"},
+        retrieved_items=[
+            {
+                "result_type": "fact",
+                "result_id": "FACT-CP-STATE",
+                "snippet": "检测点 1 电压值 / V | 最小值 8 | 标称值 9 | 最大值 10 | 是否输出 PWM | 是 | 状态 2'",
+            }
+        ],
+        trace_metrics={"query_type": "parameter_lookup", "retrieval_channels": ["facts"]},
+    )
+
+    assert quality["must_hit_found"] == 1
+    assert quality["recall_at_5"] == 1.0
+    assert quality["failure_attribution"] == "ok"
+
+
+def test_retrieval_quality_prefers_retrieval_specific_anchors() -> None:
+    quality = evaluate_retrieval_quality(
+        case={"must_include": "CC阻值", "retrieval_must_hit": ["CC", "等效电阻"]},
+        retrieved_items=[
+            {
+                "result_type": "fact",
+                "result_id": "FACT-CC-R",
+                "snippet": "CC1 CC2 R4c'等效电阻 标称值 1000 Ω",
+            }
+        ],
+        trace_metrics={"query_type": "parameter_lookup", "retrieval_channels": ["facts"]},
+    )
+
+    assert quality["must_hit_total"] == 2
+    assert quality["must_hit_found"] == 2
+    assert quality["recall_at_5"] == 1.0
+    assert quality["failure_attribution"] == "ok"
+
+
+def test_retrieval_quality_does_not_overmatch_process_code_tokens() -> None:
+    quality = evaluate_retrieval_quality(
+        case={"must_include": "SWE.2.BP3", "negative_expected": ["SYS.3"]},
+        retrieved_items=[
+            {"result_type": "fact", "result_id": "FACT-1", "snippet": "SWE.2.BP3 Analyze software architecture"},
+            {"result_type": "fact", "result_id": "FACT-2", "snippet": "SYS.1.BP3 分析利益相关方需求变更"},
+        ],
+        trace_metrics={"query_type": "lifecycle_lookup", "retrieval_channels": ["graph"], "graph_candidate_count": 2},
+    )
+
+    assert quality["negative_hit_count"] == 0
+    assert quality["failure_attribution"] == "ok"

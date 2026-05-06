@@ -35,6 +35,14 @@ def _find_doc_entity_id(connection, doc_id: str) -> str | None:
     return row["entity_id"] if row else None
 
 
+def _entity_type(connection, entity_id: str) -> str:
+    row = connection.execute(
+        "SELECT entity_type FROM entities WHERE entity_id = ?",
+        (entity_id,),
+    ).fetchone()
+    return str(row["entity_type"] or "") if row else ""
+
+
 def _ensure_edge(
     connection,
     src_entity_id: str,
@@ -152,7 +160,13 @@ def build_graph_for_document(workspace_root: Path, doc_id: str) -> GraphBuildRes
                 relation = "has_process"
                 dst_entity_id = row["object_entity_id"]
             elif row["fact_type"] == "table_requirement" and row["object_entity_id"]:
-                relation = "has_parameter_group"
+                dst_entity_id = row["object_entity_id"]
+                dst_entity_type = _entity_type(connection, dst_entity_id)
+                relation = "has_process" if dst_entity_type == "process" else "has_parameter_group"
+            elif row["fact_type"] == "parameter_value" and row["object_entity_id"]:
+                relation = "has_parameter_topic"
+                if row["subject_entity_id"]:
+                    src_entity_id = row["subject_entity_id"]
                 dst_entity_id = row["object_entity_id"]
             elif row["fact_type"] in {"requirement", "threshold"} and row["subject_entity_id"]:
                 relation = "has_constraint"

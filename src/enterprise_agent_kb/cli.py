@@ -9,9 +9,22 @@ from .answer_api import answer_query
 from .api_server import serve_api
 from .mcp_server import run_mcp_stdio
 from .bootstrap import initialize_workspace, workspace_status
+from .coverage import build_coverage_for_document, build_test_gap_candidates_for_document
+from .coverage_diagnostics import build_all_docs_uncovered_priority_report
+from .doc_diagnostics import build_document_diagnostics
 from .evidence import build_evidence_for_document
 from .entities import build_entities_for_document
 from .facts import build_facts_for_document
+from .generated_tests import (
+    assess_all_coverage_test_draft_readiness,
+    assess_coverage_test_draft_readiness_for_document,
+    generate_coverage_test_drafts_for_document,
+    promote_coverage_test_drafts_for_document,
+    run_coverage_promoted_pytest_for_document,
+    run_coverage_promoted_tests_for_document,
+    run_query_repair_smoke_eval,
+    validate_coverage_test_drafts_for_document,
+)
 from .graph import build_graph_for_document
 from .governance import assess_pending_quality
 from .ingest import register_document
@@ -27,6 +40,7 @@ from .pipeline import (
 from .query_api import build_query_context
 from .quality import assess_document_quality
 from .retrieval import search_knowledge_base
+from .user_query_retrieval_eval import run_user_query_retrieval_eval
 from .workspace_admin import reset_workspace_data
 from .wiki_compiler import build_wiki_for_document
 
@@ -161,6 +175,124 @@ def build_parser() -> argparse.ArgumentParser:
         help="Document ID to build wiki for.",
     )
 
+    coverage_parser = subparsers.add_parser(
+        "build-coverage",
+        help="Build source-unit coverage reports for a document.",
+    )
+    coverage_parser.add_argument(
+        "--doc-id",
+        required=True,
+        help="Document ID to build coverage for.",
+    )
+
+    test_gaps_parser = subparsers.add_parser(
+        "build-test-gaps",
+        help="Build test-gap candidates for source units that are ingested but not tested.",
+    )
+    test_gaps_parser.add_argument(
+        "--doc-id",
+        required=True,
+        help="Document ID to inspect.",
+    )
+    test_gaps_parser.add_argument(
+        "--limit",
+        type=int,
+        default=None,
+        help="Maximum number of candidates to emit.",
+    )
+    test_gaps_parser.add_argument(
+        "--rebuild",
+        action="store_true",
+        help="Rebuild coverage before deriving test-gap candidates.",
+    )
+
+    draft_tests_parser = subparsers.add_parser(
+        "generate-coverage-test-drafts",
+        help="Generate reviewable draft tests from coverage test-gap candidates.",
+    )
+    draft_tests_parser.add_argument(
+        "--doc-id",
+        required=True,
+        help="Document ID to inspect.",
+    )
+    draft_tests_parser.add_argument(
+        "--limit",
+        type=int,
+        default=50,
+        help="Maximum number of draft cases to emit.",
+    )
+    draft_tests_parser.add_argument(
+        "--rebuild-coverage",
+        action="store_true",
+        help="Rebuild coverage before deriving draft tests.",
+    )
+    draft_tests_parser.add_argument(
+        "--validate",
+        action="store_true",
+        help="Run each draft through the answer/query validator.",
+    )
+
+    validate_draft_tests_parser = subparsers.add_parser(
+        "validate-coverage-test-drafts",
+        help="Validate existing coverage test drafts for a document.",
+    )
+    validate_draft_tests_parser.add_argument(
+        "--doc-id",
+        required=True,
+        help="Document ID to validate.",
+    )
+    validate_draft_tests_parser.add_argument(
+        "--mode",
+        choices=["trace", "answer", "hybrid"],
+        default="trace",
+        help="Validation mode. trace checks source/fact/wiki coverage; answer also runs generated answers.",
+    )
+
+    readiness_parser = subparsers.add_parser(
+        "assess-coverage-test-draft-readiness",
+        help="Assess whether coverage test drafts are suitable for validation or promotion.",
+    )
+    readiness_parser.add_argument(
+        "--doc-id",
+        help="Document ID to assess. Omit to assess all active documents with draft files.",
+    )
+
+    promote_draft_tests_parser = subparsers.add_parser(
+        "promote-coverage-test-drafts",
+        help="Promote validated coverage test drafts into the document golden suite.",
+    )
+    promote_draft_tests_parser.add_argument(
+        "--doc-id",
+        required=True,
+        help="Document ID to promote.",
+    )
+    promote_draft_tests_parser.add_argument(
+        "--allow-unvalidated",
+        action="store_true",
+        help="Allow promotion without a validated draft file.",
+    )
+
+    run_coverage_tests_parser = subparsers.add_parser(
+        "run-coverage-promoted-tests",
+        help="Run only generated golden tests promoted from coverage gaps.",
+    )
+    run_coverage_tests_parser.add_argument(
+        "--doc-id",
+        required=True,
+        help="Document ID to test.",
+    )
+    run_coverage_tests_parser.add_argument(
+        "--pytest",
+        action="store_true",
+        help="Run through pytest marker selection instead of the direct JSON runner.",
+    )
+    run_coverage_tests_parser.add_argument(
+        "--mode",
+        choices=["trace", "context", "rich", "hybrid"],
+        default="trace",
+        help="Validation mode for the direct JSON runner.",
+    )
+
     graph_parser = subparsers.add_parser(
         "build-graph",
         help="Build graph edges for a document.",
@@ -169,6 +301,71 @@ def build_parser() -> argparse.ArgumentParser:
         "--doc-id",
         required=True,
         help="Document ID to build graph for.",
+    )
+
+    subparsers.add_parser(
+        "run-query-repair-smoke",
+        help="Run a small query repair regression suite and record an eval run.",
+    )
+
+    user_query_retrieval_parser = subparsers.add_parser(
+        "run-user-query-retrieval-eval",
+        help="Run real user-style query retrieval evaluation and record an eval run.",
+    )
+    user_query_retrieval_parser.add_argument(
+        "--case-file",
+        type=Path,
+        default=None,
+        help="JSON file containing real user-style retrieval cases.",
+    )
+    user_query_retrieval_parser.add_argument(
+        "--suite-id",
+        default="regression:user_query_retrieval",
+        help="Eval suite ID to record.",
+    )
+    user_query_retrieval_parser.add_argument(
+        "--limit",
+        type=int,
+        default=8,
+        help="Retrieval hit limit per query.",
+    )
+    user_query_retrieval_parser.add_argument(
+        "--output-dir",
+        type=Path,
+        default=None,
+        help="Directory for JSON and Markdown reports.",
+    )
+
+    diagnostics_parser = subparsers.add_parser(
+        "document-diagnostics",
+        help="Build diagnostics and coverage summary for a document.",
+    )
+    diagnostics_parser.add_argument(
+        "--doc-id",
+        required=True,
+        help="Document ID to inspect.",
+    )
+
+    uncovered_priority_parser = subparsers.add_parser(
+        "uncovered-priority-report",
+        help="Build an all-docs priority report for uncovered coverage units.",
+    )
+    uncovered_priority_parser.add_argument(
+        "--output-dir",
+        type=Path,
+        default=None,
+        help="Directory for the generated JSON and Markdown reports.",
+    )
+    uncovered_priority_parser.add_argument(
+        "--sample-limit",
+        type=int,
+        default=8,
+        help="Maximum sampled issues per document and coverage status.",
+    )
+    uncovered_priority_parser.add_argument(
+        "--no-rebuild-missing-coverage",
+        action="store_true",
+        help="Do not rebuild missing per-document coverage artifacts.",
     )
 
     search_parser = subparsers.add_parser(
@@ -496,6 +693,131 @@ def main() -> None:
         )
         return
 
+    if args.command == "build-coverage":
+        result = build_coverage_for_document(args.root, args.doc_id)
+        print(
+            json.dumps(
+                {
+                    "doc_id": result.doc_id,
+                    "source_unit_count": result.source_unit_count,
+                    "text_coverage_rate": result.text_coverage_rate,
+                    "semantic_coverage_rate": result.semantic_coverage_rate,
+                    "object_coverage_rate": result.object_coverage_rate,
+                    "test_coverage_rate": result.test_coverage_rate,
+                    "uncovered_counts": result.uncovered_counts,
+                    "summary_path": str(result.summary_path),
+                    "report_path": str(result.report_path),
+                },
+                indent=2,
+                ensure_ascii=False,
+            )
+        )
+        return
+
+    if args.command == "build-test-gaps":
+        result = build_test_gap_candidates_for_document(
+            args.root,
+            args.doc_id,
+            limit=args.limit,
+            rebuild=args.rebuild,
+        )
+        print(
+            json.dumps(
+                {
+                    "doc_id": result.doc_id,
+                    "candidate_count": result.candidate_count,
+                    "candidates_path": str(result.candidates_path),
+                    "report_path": str(result.report_path),
+                },
+                indent=2,
+                ensure_ascii=False,
+            )
+        )
+        return
+
+    if args.command == "generate-coverage-test-drafts":
+        result = generate_coverage_test_drafts_for_document(
+            args.root,
+            args.doc_id,
+            limit=args.limit,
+            rebuild_coverage=args.rebuild_coverage,
+            validate=args.validate,
+        )
+        print(
+            json.dumps(
+                {
+                    "doc_id": result["doc_id"],
+                    "draft_case_count": result["draft_case_count"],
+                    "validated": result["validated"],
+                    "json_path": result["json_path"],
+                    "report_path": result["report_path"],
+                    "coverage_candidates_path": result["coverage_candidates_path"],
+                },
+                indent=2,
+                ensure_ascii=False,
+            )
+        )
+        return
+
+    if args.command == "validate-coverage-test-drafts":
+        result = validate_coverage_test_drafts_for_document(args.root, args.doc_id, mode=args.mode)
+        print(
+            json.dumps(
+                {
+                    "doc_id": result["doc_id"],
+                    "draft_case_count": result["draft_case_count"],
+                    "validation_mode": result["validation_mode"],
+                    "passed_count": result["passed_count"],
+                    "failed_count": result["failed_count"],
+                    "json_path": result["json_path"],
+                    "report_path": result["report_path"],
+                },
+                indent=2,
+                ensure_ascii=False,
+            )
+        )
+        return
+
+    if args.command == "assess-coverage-test-draft-readiness":
+        if args.doc_id:
+            result = assess_coverage_test_draft_readiness_for_document(args.root, args.doc_id)
+        else:
+            result = assess_all_coverage_test_draft_readiness(args.root)
+        print(
+            json.dumps(
+                {
+                    "status_counts": result["status_counts"],
+                    "flag_counts": result["flag_counts"],
+                    "json_path": result["json_path"],
+                    "report_path": result["report_path"],
+                },
+                indent=2,
+                ensure_ascii=False,
+            )
+        )
+        return
+
+    if args.command == "promote-coverage-test-drafts":
+        result = promote_coverage_test_drafts_for_document(
+            args.root,
+            args.doc_id,
+            require_validated=not args.allow_unvalidated,
+        )
+        print(json.dumps(result, indent=2, ensure_ascii=False))
+        return
+
+    if args.command == "run-coverage-promoted-tests":
+        if args.pytest:
+            result = run_coverage_promoted_pytest_for_document(args.root, args.doc_id)
+        else:
+            result = run_coverage_promoted_tests_for_document(
+                args.root,
+                args.doc_id,
+                validation_mode=args.mode,
+            )
+        print(json.dumps(result, indent=2, ensure_ascii=False))
+        return
+
     if args.command == "build-graph":
         result = build_graph_for_document(args.root, args.doc_id)
         print(
@@ -505,6 +827,63 @@ def main() -> None:
                     "edge_count": result.edge_count,
                     "edge_types": result.edge_types,
                     "export_path": str(result.export_path),
+                },
+                indent=2,
+                ensure_ascii=False,
+            )
+        )
+        return
+
+    if args.command == "run-query-repair-smoke":
+        result = run_query_repair_smoke_eval(args.root)
+        print(json.dumps(result, indent=2, ensure_ascii=False))
+        return
+
+    if args.command == "run-user-query-retrieval-eval":
+        result = run_user_query_retrieval_eval(
+            args.root,
+            case_file=args.case_file,
+            suite_id=args.suite_id,
+            limit=args.limit,
+            output_dir=args.output_dir,
+        )
+        print(
+            json.dumps(
+                {
+                    "eval_run_id": result.eval_run_id,
+                    "suite_id": result.suite_id,
+                    "case_count": result.case_count,
+                    "passed": result.passed,
+                    "failed": result.failed,
+                    "success": result.success,
+                    "json_path": str(result.json_path),
+                    "report_path": str(result.report_path),
+                },
+                indent=2,
+                ensure_ascii=False,
+            )
+        )
+        return
+
+    if args.command == "document-diagnostics":
+        result = build_document_diagnostics(args.root, args.doc_id)
+        print(json.dumps(result, indent=2, ensure_ascii=False))
+        return
+
+    if args.command == "uncovered-priority-report":
+        result = build_all_docs_uncovered_priority_report(
+            args.root,
+            output_dir=args.output_dir,
+            sample_limit_per_doc_status=args.sample_limit,
+            rebuild_missing_coverage=not args.no_rebuild_missing_coverage,
+        )
+        print(
+            json.dumps(
+                {
+                    "document_count": result.document_count,
+                    "issue_count": result.issue_count,
+                    "json_path": str(result.json_path),
+                    "report_path": str(result.report_path),
                 },
                 indent=2,
                 ensure_ascii=False,

@@ -1,0 +1,77 @@
+[
+  {
+    "name": "cc_resistance_meaning",
+    "query": "CC阻值代表什么意思",
+    "expected_query_type": "definition",
+    "expected_target_topic": "CC阻值",
+    "expected_protected_anchor": "CC阻值",
+    "expected_answer_mode": "parameter_meaning",
+    "expected_top_entity_name": "CC阻值",
+    "expected_top_entity_type": "parameter_topic",
+    "direct_answer_contains_all": ["CC阻值", "连接确认回路", "连接状态"],
+    "expected_fallback_reason": ""
+  },
+  {
+    "name": "cp_duty_cycle_meaning",
+    "query": "CP占空比是什么意思",
+    "expected_query_type": "definition",
+    "expected_target_topic": "CP占空比",
+    "expected_protected_anchor": "CP占空比",
+    "expected_answer_mode": "parameter_meaning",
+    "expected_top_entity_name": "CP占空比",
+    "expected_top_entity_type": "parameter_topic",
+    "direct_answer_contains_all": ["CP占空比", "PWM", "占空比参数"],
+    "expected_fallback_reason": ""
+  },
+  {
+    "name": "detection_point_voltage_meaning",
+    "query": "检测点1电压表示什么",
+    "expected_query_type": "definition",
+    "expected_target_topic": "检测点1电压",
+    "expected_protected_anchor": "检测点1电压",
+    "expected_answer_mode": "parameter_meaning",
+    "expected_top_entity_name": "检测点1电压",
+    "expected_top_entity_type": "parameter_topic",
+    "direct_answer_contains_all": ["检测点1电压", "检测点电压参数", "控制状态"],
+    "expected_fallback_reason": ""
+  },
+  {
+    "name": "v2v_plain_definition",
+    "query": "什么是V2V",
+    "expected_query_type": "definition",
+    "expected_target_topic": "V2V",
+    "expected_protected_anchor": "V2V",
+    "expected_answer_mode": "definition",
+    "direct_answer_contains_all": ["未找到 V2V 的直接定义", "V2X", "近似解释"],
+    "expected_fallback_reason": "fallback_to_related_concept"
+  },
+  {
+    "name": "v2v_explicit_definition",
+    "query": "V2V的定义是什么",
+    "expected_query_type": "definition",
+    "expected_target_topic": "V2V",
+    "expected_protected_anchor": "V2V",
+    "expected_answer_mode": "definition",
+    "direct_answer_contains_all": ["未找到 V2V 的直接定义", "V2X", "近似解释"],
+    "expected_fallback_reason": "fallback_to_related_concept"
+  },
+  {
+    "name": "standard_lifecycle_colloquial",
+    "query": "QC/T 1036—2016 从哪天开始实施",
+    "expected_query_type": "lifecycle_lookup",
+    "expected_target_topic": "QC/T1036—2016",
+    "expected_answer_mode": "lifecycle_lookup",
+    "direct_answer_contains_all": ["QC/T 1036—2016", "实施日期"],
+    "expected_fallback_reason": ""
+  },
+  {
+    "name": "control_pilot_definition",
+    "query": "什么是控制导引电路",
+    "expected_query_type": "definition",
+    "expected_target_topic": "控制导引电路",
+    "expected_answer_mode": "definition",
+    "expected_top_entity_name_contains": "控制导引电路",
+    "expected_top_entity_type": "term",
+    "expected_fallback_reason_any": ["", "fallback_to_wiki_definition"]
+  }
+]

@@ -10,6 +10,7 @@ from pathlib import Path
 
 from .config import AppPaths
 from .db import connect
+from .entities import _is_low_quality_process_name
 
 
 @dataclass(frozen=True)
@@ -53,6 +54,7 @@ def _find_entity_id_by_name(connection, canonical_name: str, entity_type: str) -
         SELECT entity_id
         FROM entities
         WHERE canonical_name = ? AND entity_type = ?
+          AND entity_status = 'ready'
         LIMIT 1
         """,
         (canonical_name, entity_type),
@@ -67,6 +69,7 @@ def _find_entity_id_by_name(connection, canonical_name: str, entity_type: str) -
             SELECT entity_id
             FROM entities
             WHERE canonical_name = ? AND entity_type = ?
+              AND entity_status = 'ready'
             LIMIT 1
             """,
             (normalized, entity_type),
@@ -79,6 +82,7 @@ def _find_entity_id_by_name(connection, canonical_name: str, entity_type: str) -
         SELECT entity_id, canonical_name
         FROM entities
         WHERE entity_type = ?
+          AND entity_status = 'ready'
         """,
         (entity_type,),
     ).fetchall()
@@ -185,6 +189,26 @@ def _build_term_page(entity: sqlite3.Row, facts: list[sqlite3.Row]) -> str:
     return "\n".join(lines)
 
 
+def _build_parameter_topic_page(entity: sqlite3.Row, facts: list[sqlite3.Row]) -> str:
+    lines = [f"# {entity['canonical_name']}", "", "## 参数主题"]
+    if entity["description"]:
+        lines.append(str(entity["description"]).strip())
+        lines.append("")
+    related_tables: list[str] = []
+    for row in facts:
+        payload = _load_payload(row["object_value"])
+        if row["fact_type"] == "parameter_value":
+            for key in ("table_title", "source_caption"):
+                value = str(payload.get(key) or "").strip()
+                if value and value not in related_tables:
+                    related_tables.append(value)
+    if related_tables:
+        lines.append("## 相关参数表")
+        lines.extend(f"- {item}" for item in related_tables[:12])
+        lines.append("")
+    return "\n".join(lines)
+
+
 def _build_process_wiki_page(title: str, facts: list[sqlite3.Row]) -> str:
     lines = [f"# {title}", "", "## 过程概览"]
     rendered: list[str] = []
@@ -272,12 +296,26 @@ def _clean_heading_topic(title: str) -> str:
     return text
 
 
+def _mark_doc_wiki_pages_stale(connection, doc_id: str, now: str) -> None:
+    connection.execute(
+        """
+        UPDATE wiki_pages
+        SET trust_status = 'stale',
+            updated_at = ?
+        WHERE source_doc_ids_json LIKE ?
+        """,
+        (now, f'%"{doc_id}"%'),
+    )
+
+
 def build_wiki_for_document(workspace_root: Path, doc_id: str) -> WikiBuildResult:
     paths = AppPaths.from_root(workspace_root)
     connection = connect(paths.db_file)
     now = _utc_now()
 
     try:
+        _mark_doc_wiki_pages_stale(connection, doc_id, now)
+
         entity_rows = connection.execute(
             """
             SELECT DISTINCT e.entity_id, e.canonical_name, e.entity_type, e.description, e.source_confidence
@@ -285,6 +323,7 @@ def build_wiki_for_document(workspace_root: Path, doc_id: str) -> WikiBuildResul
             JOIN facts f
               ON f.subject_entity_id = e.entity_id OR f.object_entity_id = e.entity_id
             WHERE f.source_doc_id = ?
+              AND e.entity_status = 'ready'
             ORDER BY e.entity_type, e.canonical_name
             """,
             (doc_id,),
@@ -325,6 +364,26 @@ def build_wiki_for_document(workspace_root: Path, doc_id: str) -> WikiBuildResul
                 content = _build_standard_page(entity, fact_rows)
                 page_type = "standard"
                 subdir = "standards"
+            elif entity["entity_type"] == "parameter_topic":
+                content = _build_parameter_topic_page(entity, fact_rows)
+                page_type = "parameter"
+                subdir = "parameter_topics"
+            elif entity["entity_type"] == "parameter_group":
+                content = _build_parameter_group_wiki_page(str(entity["canonical_name"]), fact_rows)
+                page_type = "parameter_group"
+                subdir = "parameter_groups"
+            elif entity["entity_type"] == "process":
+                content = _build_process_wiki_page(str(entity["canonical_name"]), fact_rows)
+                page_type = "process"
+                subdir = "processes"
+            elif entity["entity_type"] == "constraint_topic":
+                content = _build_constraint_wiki_page(str(entity["canonical_name"]), fact_rows)
+                page_type = "constraint"
+                subdir = "constraints"
+            elif entity["entity_type"] == "comparison_topic":
+                content = _build_comparison_wiki_page(str(entity["canonical_name"]), fact_rows)
+                page_type = "comparison"
+                subdir = "comparisons"
             else:
                 content = _build_term_page(entity, fact_rows)
                 page_type = "term"
@@ -403,7 +462,7 @@ def _build_extra_wiki_pages(connection, doc_id: str, paths: AppPaths, now: str) 
     for row in process_rows:
         payload = _load_payload(row["object_value"])
         title = str(payload.get("table_title") or payload.get("title") or payload.get("process_name") or "").strip()
-        if title:
+        if title and not _is_low_quality_process_name(title):
             process_groups.setdefault(title, []).append(row)
 
     for title, grouped_rows in process_groups.items():

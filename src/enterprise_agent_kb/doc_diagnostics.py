@@ -52,12 +52,19 @@ def build_document_diagnostics(workspace_root: Path, doc_id: str) -> dict[str, o
         ).fetchall()
         quality_row = connection.execute(
             """
-            SELECT overall_score, high_risk_page_count, review_required_count, blocked_count
+            SELECT overall_score, high_risk_page_count, review_required_count, blocked_count, report_json
             FROM quality_reports
             WHERE doc_id = ?
             """,
             (doc_id,),
         ).fetchone()
+        quality_payload = {}
+        if quality_row and quality_row["report_json"]:
+            try:
+                quality_payload = json.loads(quality_row["report_json"])
+            except json.JSONDecodeError:
+                quality_payload = {}
+        coverage_summary = _load_coverage_summary(paths, doc_id)
 
         page_count = int(document["page_count"] or 0)
         evidence_page_set = {int(row["page_no"]) for row in evidence_rows if int(row["page_no"] or 0) > 0}
@@ -101,13 +108,20 @@ def build_document_diagnostics(workspace_root: Path, doc_id: str) -> dict[str, o
             warnings.append("未抽取到术语/概念定义。")
         if effective_text_page_count < max(1, page_count // 3):
             warnings.append("有效文本页占比偏低。")
-        if len(high_risk_pages) > max(1, page_count // 3):
+        if page_count and len(high_risk_pages) / page_count >= 0.3:
             warnings.append("高风险页占比偏高。")
+        low_readability_pages = [
+            page.get("page_no")
+            for page in quality_payload.get("pages", [])
+            if isinstance(page, dict) and "low_readability" in page.get("risk_flags", [])
+        ]
+        if low_readability_pages:
+            warnings.append("存在低可读性页面，可能是 OCR/编码解析异常。")
 
         return {
             "doc_id": doc_id,
             "document": dict(document),
-            "quality": dict(quality_row) if quality_row else None,
+            "quality": _diagnostic_quality_payload(quality_row),
             "counts": {
                 "page_count": page_count,
                 "effective_text_page_count": effective_text_page_count,
@@ -124,6 +138,17 @@ def build_document_diagnostics(workspace_root: Path, doc_id: str) -> dict[str, o
                 "evidence_per_page": round(evidence_coverage, 3),
                 "facts_per_page": round(fact_coverage, 3),
                 "answerability_score": answerability_score,
+                "source_unit_count": int(coverage_summary.get("source_unit_count", 0)),
+                "text_coverage_rate": float(coverage_summary.get("text_coverage_rate", 0.0)),
+                "semantic_coverage_rate": float(coverage_summary.get("semantic_coverage_rate", 0.0)),
+                "object_coverage_rate": float(coverage_summary.get("object_coverage_rate", 0.0)),
+                "knowledge_page_coverage_rate": float(coverage_summary.get("knowledge_page_coverage_rate", 0.0)),
+                "test_coverage_rate": float(coverage_summary.get("test_coverage_rate", 0.0)),
+                "uncovered_counts": dict(coverage_summary.get("uncovered_counts", {})),
+            },
+            "artifacts": {
+                "coverage_summary_path": str(paths.coverage_reports / f"{doc_id}.summary.json"),
+                "coverage_report_path": str(paths.coverage_reports / f"{doc_id}.coverage_report.md"),
             },
             "page_sets": {
                 "effective_text_pages": sorted(evidence_page_set),
@@ -142,3 +167,24 @@ def _has_fact(rows, fact_type: str, predicate: str) -> bool:
         if row["fact_type"] == fact_type and row["predicate"] == predicate:
             return True
     return False
+
+
+def _diagnostic_quality_payload(row) -> dict[str, object] | None:
+    if row is None:
+        return None
+    return {
+        "overall_score": row["overall_score"],
+        "high_risk_page_count": row["high_risk_page_count"],
+        "review_required_count": row["review_required_count"],
+        "blocked_count": row["blocked_count"],
+    }
+
+
+def _load_coverage_summary(paths: AppPaths, doc_id: str) -> dict[str, object]:
+    summary_path = paths.coverage_reports / f"{doc_id}.summary.json"
+    if not summary_path.exists():
+        return {}
+    try:
+        return json.loads(summary_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}

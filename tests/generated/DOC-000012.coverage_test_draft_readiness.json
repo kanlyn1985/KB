@@ -1,0 +1,121 @@
+{
+  "doc_id": "DOC-000012",
+  "draft_case_count": 2,
+  "status_counts": {
+    "promotable": 1,
+    "reject": 1
+  },
+  "flag_counts": {
+    "weak_anchor": 1
+  },
+  "source_draft_path": "E:\\AI_Project\\opencode_workspace\\KB1\\tests\\generated\\DOC-000012.coverage_test_drafts.json",
+  "cases": [
+    {
+      "name": "coverage_requirement_doc_000012_requirement_8_fact_056641",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:8:FACT-056641",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 8,
+      "semantic_key": "分类",
+      "query": "分类有哪些要求？",
+      "must_include": [
+        "分类"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合 GB/T 18487",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-005260"
+        ],
+        "fact_ids": [
+          "FACT-056526",
+          "FACT-056640",
+          "FACT-056641"
+        ],
+        "entity_ids": [
+          "ENT-000368",
+          "ENT-000370"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000012-constraint-doc-000012-分类-273617f3",
+          "WPAGE-000368",
+          "WPAGE-000370"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "分类有哪些要求？",
+        "must_include": "分类",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "page_no": 8
+      },
+      "validation_status": "passed",
+      "readiness_status": "reject",
+      "readiness_score": 80,
+      "quality_flags": [
+        "weak_anchor"
+      ],
+      "readiness_reasons": [
+        "must-hit anchor is too short, too symbolic, or too noisy"
+      ]
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_45_11",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_45_11",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 45,
+      "semantic_key": "B.2.2.5 充电阶段",
+      "query": "B.2.2.5 充电阶段有哪些要求？",
+      "must_include": [
+        "B.2.2.5 充电阶段"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "注：车辆需求电流降低期间，充电机输出电流响应延迟可能造成车辆和充电机的过流保护",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-005297"
+        ],
+        "fact_ids": [
+          "FACT-056616",
+          "FACT-057024",
+          "FACT-057025",
+          "FACT-057026",
+          "FACT-057027"
+        ],
+        "entity_ids": [
+          "ENT-000368",
+          "ENT-000411"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000368",
+          "WPAGE-000411"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "B.2.2.5 充电阶段有哪些要求？",
+        "must_include": "B.2.2.5 充电阶段",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "page_no": 45
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    }
+  ]
+}

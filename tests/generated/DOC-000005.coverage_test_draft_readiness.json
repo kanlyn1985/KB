@@ -1,0 +1,287 @@
+{
+  "doc_id": "DOC-000005",
+  "draft_case_count": 5,
+  "status_counts": {
+    "promotable": 1,
+    "reject": 4
+  },
+  "flag_counts": {
+    "clause_reference_query": 1,
+    "document_boilerplate": 1,
+    "overlong_semantic_key": 1,
+    "table_syntax_noise": 1,
+    "taxonomy_heading_query": 1,
+    "weak_anchor": 2
+  },
+  "source_draft_path": "E:\\AI_Project\\opencode_workspace\\KB1\\tests\\generated\\DOC-000005.coverage_test_drafts.json",
+  "cases": [
+    {
+      "name": "coverage_definition_doc_000005_definition_132_4",
+      "status": "draft",
+      "unit_id": "DOC-000005_definition_132_4",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 132,
+      "semantic_key": "机器学习工程过程组 ( MLE ) 4.6.1. MLE.1 机器学习需求分析",
+      "query": "什么是机器学习工程过程组 ( MLE ) 4.6.1. MLE.1 机器学习需求分析？",
+      "must_include": [
+        "机器学习工程过程组 ( MLE ) 4.6.1. MLE.1 机器学习需求分析"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "| 过程 ID | | :--- | | **MLE",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-005021"
+        ],
+        "fact_ids": [
+          "FACT-055501"
+        ],
+        "entity_ids": [
+          "ENT-000434"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000434"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是机器学习工程过程组 ( MLE ) 4.6.1. MLE.1 机器学习需求分析？",
+        "must_include": "机器学习工程过程组 ( MLE ) 4.6.1. MLE.1 机器学习需求分析",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "page_no": 132
+      },
+      "validation_status": "passed",
+      "readiness_status": "reject",
+      "readiness_score": 30,
+      "quality_flags": [
+        "table_syntax_noise",
+        "taxonomy_heading_query"
+      ],
+      "readiness_reasons": [
+        "query or anchor looks like document noise rather than user intent",
+        "query needs human review before it becomes a stable golden case"
+      ]
+    },
+    {
+      "name": "coverage_definition_doc_000005_definition_268_2",
+      "status": "draft",
+      "unit_id": "DOC-000005_definition_268_2",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 268,
+      "semantic_key": "条款 6.1，“介绍",
+      "query": "什么是条款 6.1，“介绍？",
+      "must_include": [
+        "条款 6.1，“介绍"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "本过程评估模型的目的是：使用已定义的过程度量框架，以支持在汽车领域的过程能力的评估",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-005158"
+        ],
+        "fact_ids": [
+          "FACT-055839"
+        ],
+        "entity_ids": [
+          "ENT-000655"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000655"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是条款 6.1，“介绍？",
+        "must_include": "条款 6.1，“介绍",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "page_no": 268
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 85,
+      "quality_flags": [
+        "clause_reference_query"
+      ],
+      "readiness_reasons": [
+        "query needs human review before it becomes a stable golden case"
+      ]
+    },
+    {
+      "name": "coverage_requirement_doc_000005_requirement_328_2",
+      "status": "draft",
+      "unit_id": "DOC-000005_requirement_328_2",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 328,
+      "semantic_key": "Annex C.2 \"要素\"、\"组件\"和\"单元",
+      "query": "Annex C.2 \"要素\"、\"组件\"和\"单元有哪些要求？",
+      "must_include": [
+        "Annex C.2 \"要素\"、\"组件\"和\"单元"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "下图描述了贯穿于工程过程中应用到的系统要素、软件组件和软件单元之间的关系",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-005218"
+        ],
+        "fact_ids": [
+          "FACT-055202",
+          "FACT-055953"
+        ],
+        "entity_ids": [
+          "ENT-000434",
+          "ENT-000665"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000005-constraint-doc-000005-annex-c-2-要素-组件-和-单元-c9dccd40",
+          "WPAGE-000434",
+          "WPAGE-000665"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "Annex C.2 \"要素\"、\"组件\"和\"单元有哪些要求？",
+        "must_include": "Annex C.2 \"要素\"、\"组件\"和\"单元",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "page_no": 328
+      },
+      "validation_status": "passed",
+      "readiness_status": "reject",
+      "readiness_score": 80,
+      "quality_flags": [
+        "weak_anchor"
+      ],
+      "readiness_reasons": [
+        "must-hit anchor is too short, too symbolic, or too noisy"
+      ]
+    },
+    {
+      "name": "coverage_requirement_doc_000005_requirement_18_fact_055217",
+      "status": "draft",
+      "unit_id": "DOC-000005:requirement:18:FACT-055217",
+      "unit_type": "requirement_unit",
+      "importance": "medium",
+      "page_no": 18,
+      "semantic_key": "术语",
+      "query": "术语有哪些要求？",
+      "must_include": [
+        "术语"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "regression",
+      "source_excerpt": "",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-004908",
+          "EV-004909"
+        ],
+        "fact_ids": [
+          "FACT-055040",
+          "FACT-055217",
+          "FACT-055218"
+        ],
+        "entity_ids": [
+          "ENT-000434"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000434",
+          "WPAGE-000636",
+          "WPAGE-000642"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "术语有哪些要求？",
+        "must_include": "术语",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "page_no": 18
+      },
+      "validation_status": "passed",
+      "readiness_status": "reject",
+      "readiness_score": 80,
+      "quality_flags": [
+        "weak_anchor"
+      ],
+      "readiness_reasons": [
+        "must-hit anchor is too short, too symbolic, or too noisy"
+      ]
+    },
+    {
+      "name": "coverage_requirement_doc_000005_requirement_61_fact_055283",
+      "status": "draft",
+      "unit_id": "DOC-000005:requirement:61:FACT-055283",
+      "unit_type": "requirement_unit",
+      "importance": "medium",
+      "page_no": 61,
+      "semantic_key": "Process reference model and performance indicators (Level 1) The processes in the process dimension can be drawn from the Automotive SPICE process reference model, which is incorporated in the tables below indicated by a red bar at the le",
+      "query": "Process reference model and performance indicators (Level 1) The processes in the process dimension can be drawn from the Automotive SPICE process reference model, which is incorporated in the tables below indicated by a red bar at the le有哪些要求？",
+      "must_include": [
+        "Process reference model and performance indicators (Level 1) The processes in the process dimension can be drawn from the Automotive SPICE process reference model, which is incorporated in the tables below indicated by a red bar at the le"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "regression",
+      "source_excerpt": "",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-004951",
+          "EV-004952"
+        ],
+        "fact_ids": [
+          "FACT-055076",
+          "FACT-055283",
+          "FACT-055285"
+        ],
+        "entity_ids": [
+          "ENT-000434"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000434",
+          "WPAGE-000663",
+          "WPROC-DOC-000005-process-doc-000005-automotive-spice"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "Process reference model and performance indicators (Level 1) The processes in the process dimension can be drawn from the Automotive SPICE process reference model, which is incorporated in the tables below indicated by a red bar at the le有哪些要求？",
+        "must_include": "Process reference model and performance indicators (Level 1) The processes in the process dimension can be drawn from the Automotive SPICE process reference model, which is incorporated in the tables below indicated by a red bar at the le",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "page_no": 61
+      },
+      "validation_status": "passed",
+      "readiness_status": "reject",
+      "readiness_score": 30,
+      "quality_flags": [
+        "document_boilerplate",
+        "overlong_semantic_key"
+      ],
+      "readiness_reasons": [
+        "query or anchor looks like document noise rather than user intent",
+        "query needs human review before it becomes a stable golden case"
+      ]
+    }
+  ]
+}

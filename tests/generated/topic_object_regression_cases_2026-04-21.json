@@ -24,8 +24,8 @@
     "name": "parameter_topic_cc",
     "doc_id": "DOC-000002",
     "query": "CC阻值",
-    "expected_topic_titles_any": ["表 A.5 车辆接口连接状态及 RC 的电阻值", "表 H.1 具备充电兼容的电动汽车控制导引电路参数"],
-    "expected_topic_entity_types_any": ["parameter_group", "process"]
+    "expected_topic_titles_any": ["CC"],
+    "expected_topic_entity_types_any": ["parameter_topic"]
   },
   {
     "name": "definition_topic_v2g",

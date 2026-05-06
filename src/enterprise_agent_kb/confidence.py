@@ -14,7 +14,7 @@ def compute_confidence_score(
     if direct_answer and direct_answer != "没有找到足够的结构化结果。":
         score += 0.2
 
-    if answer_mode in {"definition", "standard_lookup", "lifecycle_lookup"}:
+    if answer_mode in {"definition", "standard_lookup", "lifecycle_lookup", "timing_lookup", "test_method_lookup"}:
         score += 0.1
 
     score += min(len(supporting_facts) * 0.18, 0.4)

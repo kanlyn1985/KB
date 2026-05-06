@@ -1,0 +1,66 @@
+{
+  "generated_at": "2026-04-26T10:59:04",
+  "status": "completed",
+  "validation_mode": "retrieval_sample_context_contains",
+  "document_count": 6,
+  "sample_count": 6,
+  "passed": 6,
+  "failed": 0,
+  "zero_sample_documents": [],
+  "results": [
+    {
+      "doc_id": "DOC-000003",
+      "source_filename": "GBT+18487.1-2023.pdf",
+      "sample_count": 1,
+      "passed": 1,
+      "failed": 0,
+      "seconds": 55.17,
+      "failed_cases": []
+    },
+    {
+      "doc_id": "DOC-000004",
+      "source_filename": "QC_T 1036-2016 汽车电源逆变器-免费标准网_www.upbz.net.pdf",
+      "sample_count": 1,
+      "passed": 1,
+      "failed": 0,
+      "seconds": 47.95,
+      "failed_cases": []
+    },
+    {
+      "doc_id": "DOC-000005",
+      "source_filename": "AutomotiveSPICE_PAM_40_Chinese.pdf",
+      "sample_count": 1,
+      "passed": 1,
+      "failed": 0,
+      "seconds": 42.42,
+      "failed_cases": []
+    },
+    {
+      "doc_id": "DOC-000009",
+      "source_filename": "GBT+40432-2021.pdf",
+      "sample_count": 1,
+      "passed": 1,
+      "failed": 0,
+      "seconds": 68.22,
+      "failed_cases": []
+    },
+    {
+      "doc_id": "DOC-000012",
+      "source_filename": "GB_T 18487.5-2024 电动汽车传导充电系统   第5部分：用于GB_T 20234.3直流充电系统.pdf",
+      "sample_count": 1,
+      "passed": 1,
+      "failed": 0,
+      "seconds": 53.22,
+      "failed_cases": []
+    },
+    {
+      "doc_id": "DOC-000013",
+      "source_filename": "V2G相关.pdf",
+      "sample_count": 1,
+      "passed": 1,
+      "failed": 0,
+      "seconds": 43.29,
+      "failed_cases": []
+    }
+  ]
+}

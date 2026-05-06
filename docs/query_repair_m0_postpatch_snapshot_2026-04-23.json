@@ -1,0 +1,142 @@
+[
+  {
+    "query": "CC????????",
+    "rewrite": {
+      "original_query": "CC????????",
+      "normalized_query": "CC",
+      "query_type": "general_search",
+      "target_topic": "CC",
+      "aliases": [
+        "CC1",
+        "CC2",
+        "控制导引",
+        "控制导引电路"
+      ],
+      "must_terms": [
+        "CC"
+      ],
+      "should_terms": [
+        "CC1",
+        "CC2",
+        "控制导引",
+        "控制导引电路"
+      ],
+      "negative_terms": [],
+      "protected_anchor_terms": [
+        "CC"
+      ],
+      "rewrite_override_applied": false,
+      "semantic_quality_flags": [
+        "meaningful_query_marked_no_answer"
+      ]
+    }
+  },
+  {
+    "query": "CP????????",
+    "rewrite": {
+      "original_query": "CP????????",
+      "normalized_query": "CP",
+      "query_type": "definition",
+      "target_topic": "CP",
+      "aliases": [
+        "控制导引",
+        "控制导引电路",
+        "control pilot",
+        "检测点"
+      ],
+      "must_terms": [
+        "CP"
+      ],
+      "should_terms": [
+        "控制导引",
+        "控制导引电路",
+        "control pilot",
+        "检测点"
+      ],
+      "negative_terms": [],
+      "protected_anchor_terms": [
+        "CP"
+      ],
+      "rewrite_override_applied": false,
+      "semantic_quality_flags": []
+    }
+  },
+  {
+    "query": "???1??????",
+    "rewrite": {
+      "original_query": "???1??????",
+      "normalized_query": "???",
+      "query_type": "general_search",
+      "target_topic": "???",
+      "aliases": [],
+      "must_terms": [
+        "???"
+      ],
+      "should_terms": [],
+      "negative_terms": [],
+      "protected_anchor_terms": [],
+      "rewrite_override_applied": false,
+      "semantic_quality_flags": []
+    }
+  },
+  {
+    "query": "???V2V",
+    "rewrite": {
+      "original_query": "???V2V",
+      "normalized_query": "V2V",
+      "query_type": "general_search",
+      "target_topic": "V2V",
+      "aliases": [],
+      "must_terms": [
+        "V2V"
+      ],
+      "should_terms": [],
+      "negative_terms": [],
+      "protected_anchor_terms": [
+        "V2V"
+      ],
+      "rewrite_override_applied": false,
+      "semantic_quality_flags": [
+        "meaningful_query_marked_no_answer"
+      ]
+    }
+  },
+  {
+    "query": "V2V??????",
+    "rewrite": {
+      "original_query": "V2V??????",
+      "normalized_query": "V2V",
+      "query_type": "general_search",
+      "target_topic": "V2V",
+      "aliases": [],
+      "must_terms": [
+        "V2V"
+      ],
+      "should_terms": [],
+      "negative_terms": [],
+      "protected_anchor_terms": [
+        "V2V"
+      ],
+      "rewrite_override_applied": false,
+      "semantic_quality_flags": []
+    }
+  },
+  {
+    "query": "?????????",
+    "rewrite": {
+      "original_query": "?????????",
+      "normalized_query": "?????????",
+      "query_type": "general_search",
+      "target_topic": "?????????",
+      "aliases": [],
+      "must_terms": [
+        "?????????"
+      ],
+      "should_terms": [],
+      "negative_terms": [],
+      "protected_anchor_terms": [],
+      "rewrite_override_applied": true,
+      "semantic_quality_flags": []
+    }
+  }
+]

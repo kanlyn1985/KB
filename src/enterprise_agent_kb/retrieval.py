@@ -94,8 +94,11 @@ def refresh_fts_index(workspace_root: Path) -> dict[str, int]:
 
         wiki_rows = connection.execute(
             """
-            SELECT page_id, json_extract(source_doc_ids_json, '$[0]') AS doc_id, title, slug
-            FROM wiki_pages
+            SELECT w.page_id, json_extract(w.source_doc_ids_json, '$[0]') AS doc_id, w.title, w.slug
+            FROM wiki_pages w
+            LEFT JOIN entities e ON e.entity_id = w.entity_id
+            WHERE COALESCE(w.trust_status, '') != 'stale'
+              AND (w.entity_id IS NULL OR e.entity_status = 'ready')
             """
         ).fetchall()
         for row in wiki_rows:
@@ -145,6 +148,7 @@ def search_knowledge_base_expanded(
     query: str,
     limit: int = 10,
     connection=None,
+    result_types: set[str] | None = None,
 ) -> list[dict[str, object]]:
     query = query.strip()
     if not query:
@@ -159,8 +163,8 @@ def search_knowledge_base_expanded(
     try:
         ensure_fts_schema(connection)
         expanded_queries = _expanded_queries(query)
-        fts_hits = _search_fts(connection, expanded_queries, limit=max(limit * 4, 20))
-        semantic_hits = _search_semantic(connection, expanded_queries, limit=max(limit * 4, 20))
+        fts_hits = _search_fts(connection, expanded_queries, limit=max(limit * 4, 20), result_types=result_types)
+        semantic_hits = _search_semantic(connection, expanded_queries, limit=max(limit * 4, 20), result_types=result_types)
 
         merged: dict[tuple[str, str], dict[str, object]] = {}
         for hit in [*fts_hits, *semantic_hits]:
@@ -210,7 +214,15 @@ def _source_counts(connection) -> dict[str, int]:
     return {
         "evidence": connection.execute("SELECT count(*) FROM evidence").fetchone()[0],
         "facts": connection.execute("SELECT count(*) FROM facts").fetchone()[0],
-        "wiki": connection.execute("SELECT count(*) FROM wiki_pages").fetchone()[0],
+        "wiki": connection.execute(
+            """
+            SELECT count(*)
+            FROM wiki_pages w
+            LEFT JOIN entities e ON e.entity_id = w.entity_id
+            WHERE COALESCE(w.trust_status, '') != 'stale'
+              AND (w.entity_id IS NULL OR e.entity_status = 'ready')
+            """
+        ).fetchone()[0],
     }
 
 
@@ -259,15 +271,28 @@ def _fts_match_expr(query: str) -> str:
     return " OR ".join(f'"{token}"' for token in tokens[:8])
 
 
-def _search_fts(connection, queries: list[str], limit: int) -> list[dict[str, object]]:
+def _search_fts(
+    connection,
+    queries: list[str],
+    limit: int,
+    result_types: set[str] | None = None,
+) -> list[dict[str, object]]:
     hits: list[dict[str, object]] = []
     seen: set[tuple[str, str]] = set()
+    sources = [
+        source
+        for source in ("evidence", "facts", "wiki")
+        if result_types is None or _source_result_type(source) in result_types
+    ]
     for query in queries:
         expr = _fts_match_expr(query)
-        hits.extend(_search_fts_table(connection, "evidence", expr, limit, seen))
-        hits.extend(_search_fts_table(connection, "facts", expr, limit, seen))
-        hits.extend(_search_fts_table(connection, "wiki", expr, limit, seen))
+        for source in sources:
+            hits.extend(_search_fts_table(connection, source, expr, limit, seen))
     return hits
+
+
+def _source_result_type(source: str) -> str:
+    return "wiki" if source == "wiki" else source.rstrip("s")
 
 
 def _search_fts_table(connection, source: str, expr: str, limit: int, seen: set[tuple[str, str]]) -> list[dict[str, object]]:
@@ -292,7 +317,7 @@ def _search_fts_table(connection, source: str, expr: str, limit: int, seen: set[
         score = 1.0 / (1.0 + max(float(row["rank"] or 0), 0.0))
         hits.append(
             {
-                "result_type": "wiki" if source == "wiki" else source.rstrip("s"),
+                "result_type": _source_result_type(source),
                 "result_id": row["result_id"],
                 "doc_id": row["doc_id"],
                 "page_no": row["page_no"],
@@ -303,9 +328,14 @@ def _search_fts_table(connection, source: str, expr: str, limit: int, seen: set[
     return hits
 
 
-def _search_semantic(connection, queries: list[str], limit: int) -> list[dict[str, object]]:
+def _search_semantic(
+    connection,
+    queries: list[str],
+    limit: int,
+    result_types: set[str] | None = None,
+) -> list[dict[str, object]]:
     query_vec = _semantic_vector(" ".join(queries))
-    candidates = _semantic_candidates(connection, limit=max(limit * 2, 40))
+    candidates = _semantic_candidates(connection, limit=max(limit * 2, 40), result_types=result_types)
     hits: list[dict[str, object]] = []
     for item in candidates:
         score = _cosine_similarity(query_vec, _semantic_vector(item["snippet"]))
@@ -335,39 +365,55 @@ def _search_semantic(connection, queries: list[str], limit: int) -> list[dict[st
     return deduped
 
 
-def _semantic_candidates(connection, limit: int) -> list[dict[str, object]]:
-    evidence_rows = connection.execute(
-        """
-        SELECT 'evidence' AS result_type, evidence_id AS result_id, doc_id, page_no, normalized_text AS snippet
-        FROM evidence
-        ORDER BY confidence DESC
-        LIMIT ?
-        """,
-        (limit,),
-    ).fetchall()
-    fact_rows = connection.execute(
-        """
-        SELECT 'fact' AS result_type, fact_id AS result_id, source_doc_id AS doc_id,
-               json_extract(qualifiers_json, '$.page_no') AS page_no,
-               predicate || ' ' || object_value AS snippet
-        FROM facts
-        ORDER BY confidence DESC
-        LIMIT ?
-        """,
-        (limit,),
-    ).fetchall()
-    wiki_rows = connection.execute(
-        """
-        SELECT 'wiki' AS result_type, page_id AS result_id,
-               json_extract(source_doc_ids_json, '$[0]') AS doc_id,
-               NULL AS page_no,
-               title || ' ' || slug AS snippet
-        FROM wiki_pages
-        LIMIT ?
-        """,
-        (limit,),
-    ).fetchall()
-    return [dict(row) for row in evidence_rows] + [dict(row) for row in fact_rows] + [dict(row) for row in wiki_rows]
+def _semantic_candidates(connection, limit: int, result_types: set[str] | None = None) -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
+    if result_types is None or "evidence" in result_types:
+        rows.extend(
+            dict(row)
+            for row in connection.execute(
+                """
+                SELECT 'evidence' AS result_type, evidence_id AS result_id, doc_id, page_no, normalized_text AS snippet
+                FROM evidence
+                ORDER BY confidence DESC
+                LIMIT ?
+                """,
+                (limit,),
+            ).fetchall()
+        )
+    if result_types is None or "fact" in result_types:
+        rows.extend(
+            dict(row)
+            for row in connection.execute(
+                """
+                SELECT 'fact' AS result_type, fact_id AS result_id, source_doc_id AS doc_id,
+                       json_extract(qualifiers_json, '$.page_no') AS page_no,
+                       predicate || ' ' || object_value AS snippet
+                FROM facts
+                ORDER BY confidence DESC
+                LIMIT ?
+                """,
+                (limit,),
+            ).fetchall()
+        )
+    if result_types is None or "wiki" in result_types:
+        rows.extend(
+            dict(row)
+            for row in connection.execute(
+                """
+                SELECT 'wiki' AS result_type, w.page_id AS result_id,
+                       json_extract(w.source_doc_ids_json, '$[0]') AS doc_id,
+                       NULL AS page_no,
+                       w.title || ' ' || w.slug AS snippet
+                FROM wiki_pages w
+                LEFT JOIN entities e ON e.entity_id = w.entity_id
+                WHERE COALESCE(w.trust_status, '') != 'stale'
+                  AND (w.entity_id IS NULL OR e.entity_status = 'ready')
+                LIMIT ?
+                """,
+                (limit,),
+            ).fetchall()
+        )
+    return rows
 
 
 def _semantic_vector(text: str) -> dict[str, float]:

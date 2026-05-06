@@ -3,9 +3,7 @@ from __future__ import annotations
 import base64
 import json
 import os
-import sys
 import tempfile
-import unicodedata
 import uuid
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -53,40 +51,6 @@ def _shared_workspace_root() -> Path:
 
 def _project_root() -> Path:
     return Path(__file__).resolve().parents[2]
-
-
-def _find_java_bin_dir() -> Path | None:
-    candidates: list[Path] = []
-    java_home = os.environ.get("JAVA_HOME")
-    if java_home:
-        candidates.append(Path(java_home) / "bin")
-
-    candidates.extend(
-        [
-            Path(r"C:\Program Files\Eclipse Adoptium\jdk-21.0.10.7-hotspot\bin"),
-            Path(r"C:\Users\000043ce\.cache\opencode\bin\kotlin-ls\jre\bin"),
-        ]
-    )
-
-    for candidate in candidates:
-        java_exe = candidate / "java.exe"
-        if java_exe.exists():
-            return candidate
-    return None
-
-
-def _load_opendataloader_convert():
-    package_root = _shared_workspace_root() / "opendataloader-pdf"
-    if package_root.exists():
-        root_str = str(package_root)
-        if root_str not in sys.path:
-            sys.path.insert(0, root_str)
-
-    try:
-        from opendataloader_pdf import convert
-    except ImportError:
-        return None
-    return convert
 
 
 def _page_dimensions_from_pdf(source_path: Path) -> dict[int, tuple[float, float]]:
@@ -141,145 +105,6 @@ def _load_astron_settings() -> tuple[str, str]:
     if not auth_token:
         raise RuntimeError("astron-code-latest configuration unavailable (ANTHROPIC_AUTH_TOKEN)")
     return api_base.rstrip("/"), auth_token
-
-
-def _summarize_parsed_text(parsed_pages: list[dict[str, object]]) -> tuple[int, int]:
-    block_count = 0
-    total_chars = 0
-    for page in parsed_pages:
-        for block in page["blocks"]:
-            text = str(block.get("text", "")).strip()
-            if text:
-                block_count += 1
-                total_chars += len(text)
-    return block_count, total_chars
-
-
-def _estimate_text_anomaly(parsed_pages: list[dict[str, object]]) -> dict[str, float]:
-    sample_text_parts: list[str] = []
-    sampled_blocks = 0
-    for page in parsed_pages[:5]:
-        for block in page["blocks"][:20]:
-            text = str(block.get("text", "")).strip()
-            if text:
-                sample_text_parts.append(text)
-                sampled_blocks += 1
-            if sampled_blocks >= 40:
-                break
-        if sampled_blocks >= 40:
-            break
-
-    sample_text = "\n".join(sample_text_parts)
-    if not sample_text:
-        return {"anomaly_ratio": 1.0, "fullwidth_ratio": 0.0}
-
-    anomaly_chars = 0
-    fullwidth_chars = 0
-    counted_chars = 0
-
-    for ch in sample_text:
-        if ch.isspace():
-            continue
-        counted_chars += 1
-        codepoint = ord(ch)
-        if 0xFF01 <= codepoint <= 0xFF5E:
-            fullwidth_chars += 1
-        name = unicodedata.name(ch, "")
-        if name.startswith("CJK UNIFIED IDEOGRAPH-") and ch not in {
-            "中", "华", "人", "民", "共", "和", "国", "电", "动", "汽", "车", "用", "传", "导",
-            "式", "车", "载", "充", "电", "机", "标", "准", "前", "言", "目", "次", "范", "围",
-        }:
-            anomaly_chars += 1
-        elif "MATHEMATICAL" in name:
-            anomaly_chars += 1
-
-    if counted_chars == 0:
-        return {"anomaly_ratio": 1.0, "fullwidth_ratio": 0.0}
-
-    return {
-        "anomaly_ratio": anomaly_chars / counted_chars,
-        "fullwidth_ratio": fullwidth_chars / counted_chars,
-    }
-
-
-def _is_text_sparse(parsed_pages: list[dict[str, object]]) -> bool:
-    page_count = len(parsed_pages)
-    block_count, total_chars = _summarize_parsed_text(parsed_pages)
-    anomaly = _estimate_text_anomaly(parsed_pages)
-    if block_count == 0:
-        return True
-    if page_count >= 5 and block_count < max(5, page_count // 2):
-        return True
-    if page_count >= 5 and total_chars < page_count * 40:
-        return True
-    if anomaly["anomaly_ratio"] > 0.08:
-        return True
-    if anomaly["fullwidth_ratio"] > 0.35:
-        return True
-    return False
-
-
-def _parse_pdf_with_opendataloader(source_path: Path) -> tuple[str, list[dict[str, object]]]:
-    convert = _load_opendataloader_convert()
-    java_bin_dir = _find_java_bin_dir()
-    if convert is None or java_bin_dir is None:
-        raise RuntimeError("opendataloader-pdf or java runtime unavailable")
-
-    os.environ["PATH"] = str(java_bin_dir) + os.pathsep + os.environ.get("PATH", "")
-    os.environ.setdefault(
-        "JAVA_TOOL_OPTIONS",
-        "-Xms128m -Xmx768m -XX:+UseSerialGC",
-    )
-    page_dimensions = _page_dimensions_from_pdf(source_path)
-
-    temp_root = _project_root() / "tmp"
-    temp_root.mkdir(parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory(prefix="eakb_odl_", dir=str(temp_root)) as tmp_dir:
-        output_dir = Path(tmp_dir)
-        convert(
-            input_path=str(source_path),
-            output_dir=str(output_dir),
-            format=["json"],
-            quiet=True,
-            reading_order="xycut",
-            table_method="cluster",
-        )
-
-        json_path = output_dir / f"{source_path.stem}.json"
-        data = json.loads(json_path.read_text(encoding="utf-8"))
-
-    grouped_blocks: dict[int, list[dict[str, object]]] = {}
-    for index, item in enumerate(data.get("kids", []), start=1):
-        page_no = int(item.get("page number", 1))
-        grouped_blocks.setdefault(page_no, []).append(
-            {
-                "reading_order": index,
-                "block_type": item.get("type", "text"),
-                "text": item.get("content", "").strip(),
-                "raw_text": item.get("content", ""),
-                "bbox": item.get("bounding box"),
-            }
-        )
-
-    parsed_pages: list[dict[str, object]] = []
-    total_pages = int(data.get("number of pages", len(page_dimensions)))
-    for page_no in range(1, total_pages + 1):
-        width, height = page_dimensions.get(page_no, (None, None))
-        blocks = [block for block in grouped_blocks.get(page_no, []) if block["text"]]
-        parsed_pages.append(
-            {
-                "page_no": page_no,
-                "width": width,
-                "height": height,
-                "parser_confidence": 1.0,
-                "ocr_confidence": None,
-                "risk_level": "unknown",
-                "page_status": "parsed",
-                "blocks": blocks,
-            }
-        )
-
-    return "opendataloader", parsed_pages
 
 
 def _parse_pdf_with_paddlevl(source_path: Path) -> tuple[str, list[dict[str, object]]]:
@@ -554,13 +379,13 @@ def _parse_pdf_with_minimax_and_paddlevl(source_path: Path) -> tuple[str, list[d
     ocr_cache_dir.mkdir(parents=True, exist_ok=True)
     page_count_for_prompt = max(len(page_dimensions), sum(len(batch) for batch in page_batches))
 
-    # 尝试加载 astron-code-latest 配置
+    # 尝试加载 astron-code-latest 备用配置
     astron_api_base = None
     astron_auth_token = None
     try:
         astron_api_base, astron_auth_token = _load_astron_settings()
     except RuntimeError:
-        pass  # 使用 MiniMax 作为默认
+        pass
 
     def _run_page(page_no: int, image_url: str) -> tuple[int, str]:
         cache_path = ocr_cache_dir / f"page_{page_no:03d}.md"
@@ -568,17 +393,13 @@ def _parse_pdf_with_minimax_and_paddlevl(source_path: Path) -> tuple[str, list[d
             return page_no, cache_path.read_text(encoding="utf-8")
         prompt = _minimax_ocr_prompt(page_no, page_count_for_prompt)
 
-        # 优先使用 astron-code-latest，超时后 fallback 到 MiniMax
-        text = None
-        if astron_api_base and astron_auth_token:
-            try:
-                text = _call_astron_vlm(astron_api_base, astron_auth_token, prompt, image_url)
-            except Exception as e:
-                # 超时或失败，fallback 到 MiniMax
-                pass
-
-        if text is None:
+        # MiniMax is the primary VLM; astron is only used as backup.
+        try:
             text = _call_minimax_vlm(api_host, api_key, prompt, image_url)
+        except Exception:
+            if not astron_api_base or not astron_auth_token:
+                raise
+            text = _call_astron_vlm(astron_api_base, astron_auth_token, prompt, image_url)
 
         cache_path.write_text(text, encoding="utf-8")
         return page_no, text
@@ -587,15 +408,14 @@ def _parse_pdf_with_minimax_and_paddlevl(source_path: Path) -> tuple[str, list[d
         first_page_no, first_image_url = page_batches[0][0]
         preflight_cache = ocr_cache_dir / f"page_{first_page_no:03d}.md"
         if not preflight_cache.exists():
-            # Preflight 测试：优先尝试 astron
-            preflight_text = None
-            if astron_api_base and astron_auth_token:
-                try:
-                    preflight_text = _call_astron_vlm(astron_api_base, astron_auth_token, _minimax_ocr_prompt(first_page_no, page_count_for_prompt), first_image_url)
-                except Exception:
-                    pass
-            if preflight_text is None:
-                preflight_text = _call_minimax_vlm(api_host, api_key, _minimax_ocr_prompt(first_page_no, page_count_for_prompt), first_image_url)
+            # Preflight uses the same MiniMax-primary order as page parsing.
+            prompt = _minimax_ocr_prompt(first_page_no, page_count_for_prompt)
+            try:
+                preflight_text = _call_minimax_vlm(api_host, api_key, prompt, first_image_url)
+            except Exception:
+                if not astron_api_base or not astron_auth_token:
+                    raise
+                preflight_text = _call_astron_vlm(astron_api_base, astron_auth_token, prompt, first_image_url)
             preflight_cache.write_text(preflight_text, encoding="utf-8")
             minimax_results[first_page_no] = preflight_text
 
@@ -676,9 +496,10 @@ def _parse_pdf_with_minimax_and_paddlevl(source_path: Path) -> tuple[str, list[d
             }
         )
 
-    engine = "minimax+paddlevl" if paddle_pages else "minimax"
-    if astron_api_base and astron_auth_token and minimax_results:
-        engine = "astron+paddlevl" if paddle_pages else "astron"
+    if astron_api_base and astron_auth_token:
+        engine = "minimax_primary+astron_backup+paddlevl" if paddle_pages else "minimax_primary+astron_backup"
+    else:
+        engine = "minimax+paddlevl" if paddle_pages else "minimax"
     return engine, parsed_pages
 
 
@@ -727,15 +548,9 @@ def _parse_pdf(source_path: Path) -> tuple[str, list[dict[str, object]]]:
         return _parse_pdf_with_minimax_and_paddlevl(source_path)
     except Exception:
         try:
-            engine, parsed_pages = _parse_pdf_with_opendataloader(source_path)
-            if _is_text_sparse(parsed_pages):
-                return _parse_pdf_with_paddlevl(source_path)
-            return engine, parsed_pages
+            return _parse_pdf_with_paddlevl(source_path)
         except Exception:
-            try:
-                return _parse_pdf_with_paddlevl(source_path)
-            except Exception:
-                return _parse_pdf_with_pymupdf(source_path)
+            return _parse_pdf_with_pymupdf(source_path)
 
 
 def _parse_text(source_path: Path) -> list[dict[str, object]]:

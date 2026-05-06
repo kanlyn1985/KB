@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import re
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -40,13 +39,10 @@ def _confidence_for_block(block_type: str, risk_level: str) -> float:
     return max(0.1, round(confidence, 3))
 
 
-def _looks_like_cover_metadata(page_no: int, block_type: str, text: str) -> bool:
-    if page_no > 3 or block_type != "ocr_markdown":
-        return False
-    has_standard = bool(re.search(r"(?:GB/T|GB|ISO|IEC)\s*[\d.]+(?:[-—]\d{2,4})?", text, re.I))
-    has_date = bool(re.search(r"\d{4}[-—]\d{2}[-—]\d{2}\s*(发布|实施)", text))
-    has_title = any(token in text for token in ("国家标准", "电动汽车", "charger", "充电机", "系统"))
-    return has_standard or has_date or has_title
+def _should_skip_block(page_status: str, text: str) -> bool:
+    if not text:
+        return True
+    return page_status == "blocked"
 
 
 def build_evidence_for_document(workspace_root: Path, doc_id: str) -> EvidenceBuildResult:
@@ -85,12 +81,7 @@ def build_evidence_for_document(workspace_root: Path, doc_id: str) -> EvidenceBu
                 skipped_block_count += 1
                 continue
             text = (row["text_content"] or "").strip()
-            allow_high_risk_metadata = _looks_like_cover_metadata(
-                int(row["page_no"]),
-                str(row["block_type"]),
-                text,
-            )
-            if (row["page_status"] != "ready" and not allow_high_risk_metadata) or not text:
+            if _should_skip_block(str(row["page_status"]), text):
                 skipped_block_count += 1
                 continue
 

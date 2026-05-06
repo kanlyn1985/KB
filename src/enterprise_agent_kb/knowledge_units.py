@@ -24,6 +24,11 @@ class KnowledgeUnit:
     table_no: str | None = None
     headers: list[str] | None = None
     rows: list[list[str]] | None = None
+    canonical_title: str | None = None
+    canonical_table_title: str | None = None
+    canonical_process_code: str | None = None
+    content_role: str | None = None
+    quality_flags: list[str] | None = None
 
 
 @dataclass(frozen=True)
@@ -83,7 +88,7 @@ def extract_knowledge_units(cleaned_doc_ir_path: Path) -> KnowledgeUnitBundle:
                 else:
                     headers, rows = _parse_html_table(text)
                 units.append(
-                    KnowledgeUnit(
+                    _knowledge_unit(
                         id=f"{doc_id}_table_{page_no}_{index+1}",
                         type="table_requirement",
                         title=title,
@@ -105,7 +110,7 @@ def extract_knowledge_units(cleaned_doc_ir_path: Path) -> KnowledgeUnitBundle:
                 topic = _infer_requirement_topic(title, subject, current_heading)
                 scope_type = _infer_requirement_scope_type(title, text, current_section)
                 units.append(
-                    KnowledgeUnit(
+                    _knowledge_unit(
                         id=f"{doc_id}_requirement_{page_no}_{index+1}",
                         type="requirement",
                         title=title,
@@ -123,6 +128,129 @@ def extract_knowledge_units(cleaned_doc_ir_path: Path) -> KnowledgeUnitBundle:
             index += 1
 
     return KnowledgeUnitBundle(doc_id=doc_id, unit_count=len(units), units=units)
+
+
+def _knowledge_unit(**kwargs: object) -> KnowledgeUnit:
+    normalized = _normalize_unit_metadata(
+        unit_type=str(kwargs.get("type") or ""),
+        title=str(kwargs.get("title") or ""),
+        content=str(kwargs.get("content") or ""),
+        table_title=str(kwargs.get("table_title") or "") or None,
+        section=str(kwargs.get("section") or "") or None,
+        scope_type=str(kwargs.get("scope_type") or "") or None,
+        headers=kwargs.get("headers") if isinstance(kwargs.get("headers"), list) else None,
+    )
+    return KnowledgeUnit(
+        **kwargs,
+        canonical_title=normalized["canonical_title"],
+        canonical_table_title=normalized["canonical_table_title"],
+        canonical_process_code=normalized["canonical_process_code"],
+        content_role=normalized["content_role"],
+        quality_flags=normalized["quality_flags"],
+    )
+
+
+def _normalize_unit_metadata(
+    *,
+    unit_type: str,
+    title: str,
+    content: str,
+    table_title: str | None = None,
+    section: str | None = None,
+    scope_type: str | None = None,
+    headers: list[object] | None = None,
+) -> dict[str, object]:
+    flags: list[str] = []
+    raw_title = _clean_unit_title(title)
+    raw_table_title = _clean_unit_title(table_title or "")
+    title_is_noise = _is_layout_noise_title(raw_title)
+    table_title_is_noise = _is_layout_noise_title(raw_table_title)
+    if title_is_noise:
+        flags.append("layout_title_noise")
+    if table_title and table_title_is_noise:
+        flags.append("layout_table_title_noise")
+
+    process_code = _process_code_from_text(content)
+    if process_code:
+        flags.append("process_code_extracted")
+
+    canonical_title = "" if title_is_noise else raw_title
+    canonical_table_title = "" if table_title_is_noise else raw_table_title
+    content_role = unit_type
+
+    if unit_type == "procedure":
+        content_role = "process_practice" if process_code else "procedure"
+        if process_code and not canonical_title:
+            canonical_title = f"{process_code} 基本实践"
+            flags.append("canonical_title_from_process_code")
+    elif unit_type == "table_requirement":
+        header_blob = " ".join(str(item or "") for item in (headers or []))
+        if any(token in f"{canonical_table_title} {canonical_title} {header_blob}" for token in ("时序", "状态", "条件", "时间", "控制时序")):
+            content_role = "timing_table"
+        elif "参数" in f"{canonical_table_title} {canonical_title} {header_blob}":
+            content_role = "parameter_table"
+        else:
+            content_role = "table_requirement"
+        if not canonical_title and canonical_table_title:
+            canonical_title = canonical_table_title
+            flags.append("canonical_title_from_table_title")
+    elif unit_type == "requirement":
+        content_role = scope_type or "requirement"
+    elif unit_type == "definition":
+        content_role = "definition"
+
+    if not canonical_title:
+        canonical_title = section or unit_type
+        flags.append("canonical_title_fallback")
+
+    return {
+        "canonical_title": canonical_title,
+        "canonical_table_title": canonical_table_title or None,
+        "canonical_process_code": process_code or None,
+        "content_role": content_role,
+        "quality_flags": flags,
+    }
+
+
+PROCESS_BP_PATTERN = re.compile(
+    r"\b((?:ACQ|SYS|SWE|SUP|MAN|HWE|VAL|REU|PIM|MLE|SPL)\.\d+)\.BP\d+\b",
+    re.I,
+)
+
+
+def _process_code_from_text(value: str) -> str:
+    match = PROCESS_BP_PATTERN.search(str(value or ""))
+    return match.group(1).upper() if match else ""
+
+
+def _clean_unit_title(value: str) -> str:
+    text = _strip_inline_markup(str(value or ""))
+    text = re.sub(r"\s+", " ", text).strip()
+    text = re.sub(r"^[.。:：;；,，、\-–—•·]+\s*(?=(?:[A-Z]{2,4}|PA\s*\d|\d))", "", text, flags=re.I).strip()
+    return text
+
+
+def _is_layout_noise_title(value: str) -> bool:
+    text = str(value or "").strip()
+    compact = re.sub(r"\s+", "", text).upper()
+    if not compact:
+        return True
+    if compact in {
+        "PUBLIC",
+        "BASEPRACTICES",
+        "基本实践",
+        "VDAQMC",
+        "AUTOMOTIVESPICE",
+        "AUTOMOTIVESPICE®",
+    }:
+        return True
+    if re.fullmatch(r"\d{1,4}PUBLIC", compact):
+        return True
+    if re.fullmatch(r"\d{1,4}", compact):
+        return True
+    if "VDAQMC" in compact and len(compact) <= 80:
+        return True
+    return False
 
 
 def save_knowledge_units(bundle: KnowledgeUnitBundle, output_path: Path) -> Path:
@@ -145,6 +273,14 @@ def _looks_like_definition_term(blocks: list[dict[str, object]], index: int) -> 
         return False
     if current.startswith("#"):
         return False
+    if _looks_like_caption_or_note(current) or _looks_like_process_practice(current):
+        return False
+    if _looks_like_section_heading_label(current):
+        return False
+    if not _looks_like_definition_label(current):
+        return False
+    if _looks_like_caption_or_note(nxt) or _looks_like_process_practice(nxt):
+        return False
     if len(current) > 120:
         return False
     if _looks_like_reference_line(current):
@@ -162,6 +298,61 @@ def _looks_like_definition_term(blocks: list[dict[str, object]], index: int) -> 
     return any(token in nxt for token in ("是", "指", "用于", "能够", "通过", "作为", "实现"))
 
 
+def _looks_like_definition_label(text: str) -> bool:
+    compact = _strip_inline_markup(text)
+    if len(compact) > 80:
+        return False
+    if _is_layout_noise_title(compact):
+        return False
+    if any(token in compact for token in ("。", "；", ";", "：", ":")):
+        return False
+    if compact.startswith(("——", "-", "•", "*")):
+        return False
+    if re.match(r"^[a-z]\)", compact, re.I):
+        return False
+    if any(token in compact for token in ("应", "不应", "不得", "宜", "可采用", "可通过")):
+        return False
+    return True
+
+
+def _looks_like_section_heading_label(text: str) -> bool:
+    raw = _strip_inline_markup(text)
+    if raw.startswith("."):
+        return True
+    compact = raw.lstrip(". ").strip()
+    if re.match(r"^\d+(?:\.\d+){0,5}\.?\s+\S+", compact):
+        return True
+    if re.match(r"^[A-Z]{1,5}\.\d+(?:\.\d+)*\.?\s+\S+", compact):
+        return True
+    return False
+
+
+def _looks_like_caption_or_note(text: str) -> bool:
+    compact = _strip_inline_markup(text)
+    if re.match(r"^(?:表|图)\s*(?:[A-Z]\s*\.?\s*)?\d+(?:\.\d+)*(?:[—\-:：\s]|$)", compact):
+        return True
+    if re.match(r"^注\s*\d*\s*[:：]", compact):
+        return True
+    return False
+
+
+def _looks_like_process_practice(text: str) -> bool:
+    compact = _strip_inline_markup(text)
+    return bool(
+        re.match(
+            r"^[A-Z]{2,5}\.\d+\.(?:BP|GP|PA)\d+(?::|：|\s|$)",
+            compact,
+            re.I,
+        )
+    )
+
+
+def _strip_inline_markup(text: str) -> str:
+    compact = text.replace("**", "").replace("__", "").strip()
+    compact = compact.strip("*`_ ")
+    return compact
+
+
 def _definition_unit(
     doc_id: str,
     blocks: list[dict[str, object]],
@@ -173,7 +364,7 @@ def _definition_unit(
     definition = str(blocks[index + 1].get("text") or "").strip()
     if not term or not definition:
         return None
-    return KnowledgeUnit(
+    return _knowledge_unit(
         id=f"{doc_id}_definition_{page_no}_{index+1}",
         type="definition",
         title=term,
@@ -197,7 +388,7 @@ def _procedure_unit(
     if not _looks_like_procedure(text, current_heading, current_section):
         return None
     title = current_heading or f"page_{page_no}_procedure"
-    return KnowledgeUnit(
+    return _knowledge_unit(
         id=f"{doc_id}_procedure_{page_no}_{index+1}",
         type="procedure",
         title=title,
@@ -296,7 +487,9 @@ def _looks_like_procedure(text: str, current_heading: str, current_section: str 
     heading = current_heading or ""
     if any(token in heading for token in ("前言", "规范性引用文件", "范围", "术语和定义", "要求", "检验规则", "标志、包装、运输和贮存")):
         return False
-    if text.startswith("注") or text.startswith("关键词") or _looks_like_reference_line(text):
+    if _looks_like_process_practice(text):
+        return True
+    if _looks_like_caption_or_note(text) or text.startswith("关键词") or _looks_like_reference_line(text):
         return False
 
     in_test_chapter = current_section == "5" or (current_section or "").startswith("5.")

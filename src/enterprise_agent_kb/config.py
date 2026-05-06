@@ -12,6 +12,7 @@ class AppPaths:
     evidence: Path
     facts: Path
     wiki: Path
+    coverage_reports: Path
     review_queue: Path
     quality_reports: Path
     logs: Path
@@ -29,6 +30,7 @@ class AppPaths:
             evidence=root / "evidence",
             facts=root / "facts",
             wiki=root / "wiki",
+            coverage_reports=root / "coverage_reports",
             review_queue=root / "review_queue",
             quality_reports=root / "quality_reports",
             logs=root / "logs",
@@ -44,9 +46,9 @@ class AppPaths:
             self.evidence,
             self.facts,
             self.wiki,
+            self.coverage_reports,
             self.review_queue,
             self.quality_reports,
             self.logs,
             self.db_dir,
         ]
-

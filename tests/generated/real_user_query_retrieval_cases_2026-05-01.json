@@ -1,0 +1,75 @@
+{
+  "suite": "user_query_retrieval",
+  "cases": [
+    {
+      "name": "aspice_sys4_activities",
+      "query": "系统集成测试过程域有哪些活动",
+      "expected_query_type": "lifecycle_lookup",
+      "expected_top_entity_contains": "SYS.4 系统集成与集成验证",
+      "expected_min_graph_candidates": 1,
+      "expected_doc_id": "DOC-000005",
+      "retrieval_must_hit": ["SYS.4.BP1", "SYS.4.BP2", "SYS.4.BP3", "SYS.4.BP4", "SYS.4.BP5"],
+      "negative_expected": ["table_requirement", "VDA QMC"]
+    },
+    {
+      "name": "aspice_swe2_analysis_activity",
+      "query": "软件架构分析有哪些活动",
+      "expected_query_type": "lifecycle_lookup",
+      "expected_top_entity_contains": "SWE.2 软件架构设计",
+      "expected_min_graph_candidates": 1,
+      "expected_doc_id": "DOC-000005",
+      "retrieval_must_hit": ["SWE.2.BP3", "分析软件架构"],
+      "negative_expected": ["SYS.3", "table_requirement"]
+    },
+    {
+      "name": "aspice_swe2_design_activities",
+      "query": "软件架构设计有哪些活动要做",
+      "expected_query_type": "lifecycle_lookup",
+      "expected_top_entity_contains": "SWE.2 软件架构设计",
+      "expected_min_graph_candidates": 1,
+      "expected_doc_id": "DOC-000005",
+      "retrieval_must_hit": ["SWE.2.BP1", "SWE.2.BP2", "SWE.2.BP3"],
+      "negative_expected": ["工作电压范围", "能量传输阶段"]
+    },
+    {
+      "name": "cc_resistance_definition",
+      "query": "CC电阻有哪些定义",
+      "expected_query_type": "parameter_lookup",
+      "expected_top_entity_contains": "CC阻值",
+      "expected_min_graph_candidates": 1,
+      "retrieval_must_hit": ["CC", "等效电阻"],
+      "negative_expected": ["GB：代替", "GB/T 18487.1—2015"]
+    },
+    {
+      "name": "cp_timing",
+      "query": "CP的时序是什么样的",
+      "expected_query_type": "timing_lookup",
+      "expected_min_graph_candidates": 1,
+      "retrieval_must_hit": ["表 A.7", "控制时序"],
+      "negative_expected": ["Charge Pump", "Control Pin"]
+    },
+    {
+      "name": "cp_9v_pwm_state",
+      "query": "cp 9V PWM是什么意思",
+      "expected_query_type": "parameter_lookup",
+      "expected_min_graph_candidates": 1,
+      "retrieval_must_hit": ["9V", "PWM", "状态 2"],
+      "negative_expected": ["Charge Pump", "Clock Pulse"]
+    },
+    {
+      "name": "obc_input_overvoltage_test",
+      "query": "OBC输入过压怎么测",
+      "expected_query_type": "test_method_lookup",
+      "expected_doc_id": "DOC-000009",
+      "retrieval_must_hit": ["交流输入过", "欠压保护试验", "逐步调节交流输入电压"],
+      "negative_expected": ["&nbsp;", "；；", "。。"]
+    },
+    {
+      "name": "cc_plain_acronym_requires_clarification_context",
+      "query": "CC是什么意思",
+      "expected_query_type": "definition",
+      "retrieval_must_hit": ["连接确认功能"],
+      "negative_expected": ["GB：代替"]
+    }
+  ]
+}

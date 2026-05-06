@@ -1,0 +1,126 @@
+{
+  "doc_id": "DOC-000013",
+  "draft_case_count": 2,
+  "status_counts": {
+    "reject": 2
+  },
+  "flag_counts": {
+    "abstract_or_reference_noise": 1,
+    "overlong_semantic_key": 1,
+    "weak_anchor": 1
+  },
+  "source_draft_path": "E:\\AI_Project\\opencode_workspace\\KB1\\tests\\generated\\DOC-000013.coverage_test_drafts.json",
+  "cases": [
+    {
+      "name": "coverage_requirement_doc_000013_requirement_1_11",
+      "status": "draft",
+      "unit_id": "DOC-000013_requirement_1_11",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 1,
+      "semantic_key": "Abstract Vehicle-to-Grid (V2G) technology, as an innovative energy solution, facilitates bidirectional energy exchanges",
+      "query": "Abstract Vehicle-to-Grid (V2G) technology, as an innovative energy solution, facilitates bidirectional energy exchanges有哪些要求？",
+      "must_include": [
+        "Abstract Vehicle-to-Grid (V2G) technology, as an innovative energy solution, facilitates bidirectional energy exchanges"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "文章引用：山博轩, 杨郁",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-005308"
+        ],
+        "fact_ids": [
+          "FACT-057194",
+          "FACT-057196",
+          "FACT-057200",
+          "FACT-057217"
+        ],
+        "entity_ids": [
+          "ENT-000425",
+          "ENT-000427",
+          "ENT-000684"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000425",
+          "WPAGE-000427",
+          "WPAGE-000684"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "Abstract Vehicle-to-Grid (V2G) technology, as an innovative energy solution, facilitates bidirectional energy exchanges有哪些要求？",
+        "must_include": "Abstract Vehicle-to-Grid (V2G) technology, as an innovative energy solution, facilitates bidirectional energy exchanges",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000013",
+        "page_no": 1
+      },
+      "validation_status": "passed",
+      "readiness_status": "reject",
+      "readiness_score": 30,
+      "quality_flags": [
+        "abstract_or_reference_noise",
+        "overlong_semantic_key"
+      ],
+      "readiness_reasons": [
+        "query or anchor looks like document noise rather than user intent",
+        "query needs human review before it becomes a stable golden case"
+      ]
+    },
+    {
+      "name": "coverage_requirement_doc_000013_requirement_2_7",
+      "status": "draft",
+      "unit_id": "DOC-000013_requirement_2_7",
+      "unit_type": "requirement_unit",
+      "importance": "low",
+      "page_no": 2,
+      "semantic_key": "引言",
+      "query": "引言有哪些要求？",
+      "must_include": [
+        "引言"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "regression",
+      "source_excerpt": "新型电力系统具有清洁低碳、安全可控、灵活高效、智能友好、开放互动的特征",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-005309"
+        ],
+        "fact_ids": [
+          "FACT-057201",
+          "FACT-057218"
+        ],
+        "entity_ids": [
+          "ENT-000425"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000013-constraint-doc-000013-引言-a69963c2",
+          "WPAGE-000425"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "引言有哪些要求？",
+        "must_include": "引言",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000013",
+        "page_no": 2
+      },
+      "validation_status": "passed",
+      "readiness_status": "reject",
+      "readiness_score": 80,
+      "quality_flags": [
+        "weak_anchor"
+      ],
+      "readiness_reasons": [
+        "must-hit anchor is too short, too symbolic, or too noisy"
+      ]
+    }
+  ]
+}

@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import re
 import unicodedata
+from html import unescape
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -26,11 +27,23 @@ def _utc_now() -> str:
 
 
 def _clean_text(value: str) -> str:
+    value = unescape(str(value or "")).replace("\xa0", " ")
     value = _normalize_ocr_text(value)
+    value = re.sub(r"&nbsp;?", " ", value, flags=re.I)
     value = value.replace("\r\n", "\n").replace("\r", "\n").strip()
     lines = [line.strip() for line in value.split("\n")]
     lines = [line for line in lines if line]
     return "\n".join(lines).strip()
+
+
+def _sanitize_payload(value: object) -> object:
+    if isinstance(value, dict):
+        return {str(key): _sanitize_payload(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_sanitize_payload(item) for item in value]
+    if isinstance(value, str):
+        return _clean_text(value)
+    return value
 
 
 def _normalize_ocr_text(value: str) -> str:
@@ -55,6 +68,10 @@ def _normalize_ocr_text(value: str) -> str:
 
 STANDARD_CODE_PATTERN = re.compile(
     r"(?:GB/T|GB|ISO|IEC|SAE|QC/T|QC)\s*[A-Z]?\s*[\d.]+(?:[-—]\d{2,4})?",
+    re.I,
+)
+PROCESS_BP_PATTERN = re.compile(
+    r"\b((?:ACQ|SYS|SWE|SUP|MAN|HWE|VAL|REU|PIM|MLE|SPL)\.\d+)\.BP\d+\b",
     re.I,
 )
 
@@ -215,13 +232,26 @@ def _extract_section_headings(text: str) -> list[tuple[str, str, dict[str, objec
 
 def _extract_term_definitions(text: str) -> list[tuple[str, str, dict[str, object]]]:
     results: list[tuple[str, str, dict[str, object]]] = []
+    results.extend(_extract_inline_heading_definitions(text))
+    results.extend(_extract_process_attribute_scope_definitions(text))
+    results.extend(_extract_process_group_definitions(text))
     looks_like_term_page = (
         text.count("## ") >= 2 and text.count("#### ") >= 2 and re.search(r"####\s*\d+\.\d+\.\d+", text)
+    )
+    looks_like_numeric_glossary_page = (
+        len(
+            re.findall(
+                r"(?:^|\n)\s*\d+\.\d+\.\d+\s*\n[^\n]{2,80}\n[^\n]{8,}",
+                text,
+            )
+        )
+        >= 2
     )
     if (
         "术语和定义" not in text
         and "下列术语和定义适用于本文件" not in text
         and not looks_like_term_page
+        and not looks_like_numeric_glossary_page
     ):
         return results
 
@@ -348,6 +378,86 @@ def _extract_term_definitions(text: str) -> list[tuple[str, str, dict[str, objec
     return results
 
 
+def _extract_inline_heading_definitions(text: str) -> list[tuple[str, str, dict[str, object]]]:
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    if len(lines) < 3:
+        return []
+    if not re.fullmatch(r"\d+(?:\.\d+){1,4}", lines[0]):
+        return []
+
+    term = _clean_definition_term(lines[1])
+    definition = _clean_text("\n".join(lines[2:]))
+    if not _is_publishable_definition_entry(term, definition):
+        return []
+    return [
+        (
+            _definition_fact_type_for_term(term),
+            _definition_predicate_for_term(term),
+            {"term": term, "definition": definition},
+        )
+    ]
+
+
+def _extract_process_attribute_scope_definitions(text: str) -> list[tuple[str, str, dict[str, object]]]:
+    normalized = _clean_text(text)
+    if "过程属性范围" not in normalized:
+        return []
+    results: list[tuple[str, str, dict[str, object]]] = []
+    seen: set[tuple[str, str]] = set()
+    patterns = [
+        re.compile(
+            r"过程属性名称\s*\n+(?P<term>[^\n]{2,80}?过程属性)\s*\n+过程属性范围\s*\n+(?P<definition>(?P=term)是[:：][^\n]+)",
+            re.S,
+        ),
+        re.compile(r"(?P<term>[\u4e00-\u9fffA-Za-z0-9 ._-]{2,80}?过程属性)是[:：](?P<body>[^\n。]+(?:。)?)"),
+    ]
+    for pattern in patterns:
+        for match in pattern.finditer(normalized):
+            term = _clean_definition_term(match.group("term"))
+            definition = _clean_text(match.group("definition") if "definition" in match.groupdict() else f"{term}是：{match.group('body')}")
+            key = (term, definition[:100])
+            if key in seen or not _is_publishable_definition_entry(term, definition):
+                continue
+            seen.add(key)
+            results.append(
+                (
+                    _definition_fact_type_for_term(term),
+                    _definition_predicate_for_term(term),
+                    {"term": term, "definition": definition, "definition_label": "过程属性范围"},
+                )
+            )
+    return results
+
+
+def _extract_process_group_definitions(text: str) -> list[tuple[str, str, dict[str, object]]]:
+    normalized = _clean_text(text)
+    if "过程组" not in normalized:
+        return []
+    results: list[tuple[str, str, dict[str, object]]] = []
+    seen: set[tuple[str, str]] = set()
+    pattern = re.compile(
+        r"(?P<term>[\u4e00-\u9fffA-Za-z ]{2,40}过程组)(?:（(?P<code>[A-Z]{2,5})）|\((?P<code_ascii>[A-Z]{2,5})\))?"
+        r"(?P<definition>(?:包括|由|是|执行)[^。]{8,220}。)",
+        re.S,
+    )
+    for match in pattern.finditer(normalized):
+        term = _clean_definition_term(match.group("term"))
+        code = str(match.group("code") or match.group("code_ascii") or "").strip()
+        definition = _clean_text(f"{term}{f'（{code}）' if code else ''}{match.group('definition')}")
+        key = (term, definition[:100])
+        if key in seen or not _is_publishable_definition_entry(term, definition):
+            continue
+        seen.add(key)
+        results.append(
+            (
+                "concept_definition",
+                "defines_concept",
+                {"term": f"{term}（{code}）" if code else term, "definition": definition, "concept_type": "process_group"},
+            )
+        )
+    return results
+
+
 def _extract_markdown_bilingual_terms(
     text: str,
     seen: set[tuple[str, str]],
@@ -414,7 +524,7 @@ def _extract_numeric_term_definitions(
 
     while index < len(lines):
         stripped = lines[index].strip()
-        if not re.match(r"^\d+\.\d+$", stripped):
+        if not re.match(r"^\d+(?:\.\d+){1,4}$", stripped):
             index += 1
             continue
 
@@ -477,6 +587,9 @@ def _extract_numeric_term_definitions(
 
 
 def _strip_bilingual_tail(value: str) -> str:
+    value = value.strip()
+    if re.search(r"[\u4e00-\u9fff]", value) and re.search(r"[A-Za-z]", value):
+        return re.sub(r"\s{2,}", " ", value)
     match = re.match(r"^(.*?)(?:\s+[A-Za-z][A-Za-z0-9\-()/ ]+)?$", value.strip())
     cleaned = match.group(1).strip() if match else value.strip()
     return re.sub(r"\s{2,}", " ", cleaned)
@@ -616,13 +729,16 @@ def _knowledge_unit_fact_payloads(
 
     payloads: list[dict[str, object]] = []
     for unit in bundle.units:
-        if unit.type == "requirement":
+        if unit.type == "definition":
+            payloads.extend(_definition_fact_payloads(unit))
+        elif unit.type == "requirement":
+            title = _unit_canonical_title(unit)
             payloads.append(
                 {
                     "fact_type": "requirement",
                     "predicate": "states_requirement",
                     "payload": {
-                        "title": unit.title,
+                        "title": title,
                         "content": unit.content,
                         "subject": unit.subject,
                         "topic": unit.topic,
@@ -651,13 +767,15 @@ def _knowledge_unit_fact_payloads(
                     }
                 )
         elif unit.type == "table_requirement":
+            title = _unit_canonical_title(unit)
+            table_title = _unit_canonical_table_title(unit)
             payloads.append(
                 {
                     "fact_type": "table_requirement",
                     "predicate": "has_table_requirement",
                     "payload": {
-                        "title": unit.title,
-                        "table_title": unit.table_title,
+                        "title": title,
+                        "table_title": table_title,
                         "table_no": unit.table_no,
                         "headers": unit.headers,
                         "rows": unit.rows[:20] if unit.rows else [],
@@ -669,13 +787,14 @@ def _knowledge_unit_fact_payloads(
             payloads.extend(_table_parameter_fact_payloads(unit))
             payloads.extend(_timing_fact_payloads(unit))
         elif unit.type == "procedure":
+            process_title = _unit_canonical_title(unit) or _process_title_for_procedure_unit(unit)
             payloads.append(
                 {
                     "fact_type": "process_fact",
                     "predicate": "describes_process",
                     "payload": {
-                        "title": unit.title,
-                        "process_name": unit.title,
+                        "title": process_title,
+                        "process_name": process_title,
                         "step_text": unit.content,
                         "section": unit.section,
                     },
@@ -684,6 +803,163 @@ def _knowledge_unit_fact_payloads(
                 }
             )
     return payloads
+
+
+def _definition_fact_payloads(unit) -> list[dict[str, object]]:
+    payloads: list[dict[str, object]] = []
+    seen: set[tuple[str, str]] = set()
+
+    title = _clean_definition_term(_unit_canonical_title(unit) or str(unit.title or ""))
+    content = _clean_text(str(unit.content or ""))
+    if _is_publishable_definition_entry(title, content):
+        seen.add((title, content[:120]))
+        payloads.append(
+            {
+                "fact_type": _definition_fact_type_for_term(title),
+                "predicate": _definition_predicate_for_term(title),
+                "payload": {
+                    "term": title,
+                    "definition": content,
+                },
+                "page_no": unit.page,
+                "base_confidence": 0.8 if str(unit.section or "").startswith("3") else 0.76,
+            }
+        )
+
+    for fact_type, predicate, payload in _extract_numeric_term_definitions(content, seen):
+        payloads.append(
+            {
+                "fact_type": fact_type,
+                "predicate": predicate,
+                "payload": payload,
+                "page_no": unit.page,
+                "base_confidence": 0.78,
+            }
+        )
+
+    return payloads
+
+
+def _clean_definition_term(value: str) -> str:
+    text = _clean_text(value)
+    text = text.replace("**", "").replace("__", "")
+    text = re.sub(r"^\d+(?:\.\d+){0,8}\s*", "", text)
+    text = re.sub(r"^(?:图|表)\s*[A-Z]?\d+(?:\.\d+)*\s*", "", text)
+    text = re.sub(r"^(?:附录|附 录)\s*[A-Z]\s*", "", text)
+    text = re.sub(r"\s+", " ", text).strip(" ：:;；-")
+    return text[:120]
+
+
+def _is_publishable_definition_entry(term: str, definition: str) -> bool:
+    if not term or not definition:
+        return False
+    if len(term) > 50 or len(definition) < 12:
+        return False
+    if term[0] in {".", ",", "，", "。", ";", "；", "-", "—", "*"}:
+        return False
+    if any(token in term for token in ("前言", "引言", "规范性引用文件", "术语和定义")):
+        return False
+    if term in {"范围", "适用范围", "过程评估模型范围"} or re.fullmatch(r"条款\s*\d+(?:\.\d+)*[,“”\"'\s]*.*范围.*", term):
+        return False
+    if any(token in term for token in ("原理图", "示意图", "状态转换", "时序", "参数", "图 ", "表 ")):
+        return False
+    if any(token in term for token in ("。", "，", ";", "；")):
+        return False
+    if re.match(r"^(?:图|表|附录|附 录)", term):
+        return False
+    if re.search(r"[，。；]$", term):
+        return False
+    if term.count(" ") > 8:
+        return False
+    if term.count("——") > 0:
+        return False
+    if any(token in definition for token in ("增加了", "更改了", "删除了", "见2015年版")):
+        return False
+    if not any(token in definition for token in ("是", "指", "用于", "通过", "为", "装置", "电路", "系统", "功能", "过程", "时间段")):
+        return len(definition) >= 40
+    return True
+
+
+def _definition_fact_type_for_term(term: str) -> str:
+    upper = term.upper().strip()
+    if re.fullmatch(r"[A-Z][A-Z0-9/\-]{1,}", upper) or upper.startswith("V2"):
+        return "concept_definition"
+    return "term_definition"
+
+
+def _definition_predicate_for_term(term: str) -> str:
+    if _definition_fact_type_for_term(term) == "concept_definition":
+        return "defines_concept"
+    return "defines_term"
+
+
+def _unit_canonical_title(unit) -> str:
+    return str(getattr(unit, "canonical_title", None) or getattr(unit, "title", "") or "").strip()
+
+
+def _unit_canonical_table_title(unit) -> str | None:
+    value = getattr(unit, "canonical_table_title", None)
+    if value:
+        return str(value).strip()
+    value = getattr(unit, "table_title", None)
+    return str(value).strip() if value else None
+
+
+def _process_title_for_procedure_unit(unit) -> str:
+    title = _clean_process_payload_title(_unit_canonical_title(unit))
+    content = str(getattr(unit, "content", "") or "")
+    process_code = _process_code_from_text(content)
+    if process_code and _is_low_quality_process_payload_title(title):
+        return f"{process_code} 基本实践"
+    if title:
+        return title
+    if process_code:
+        return f"{process_code} 基本实践"
+    section = str(getattr(unit, "section", "") or "").strip()
+    return section if section else "过程事实"
+
+
+def _process_title_for_table_unit(unit) -> tuple[str, str]:
+    table_title = _clean_process_payload_title(_unit_canonical_table_title(unit) or "")
+    title = _clean_process_payload_title(_unit_canonical_title(unit))
+    if _is_low_quality_process_payload_title(title) and table_title:
+        title = table_title
+    return title, table_title
+
+
+def _clean_process_payload_title(value: str) -> str:
+    text = _clean_text(str(value or ""))
+    text = re.sub(r"^\*+|\*+$", "", text).strip()
+    text = re.sub(r"\s+", " ", text)
+    return "" if _is_low_quality_process_payload_title(text) else text
+
+
+def _is_low_quality_process_payload_title(value: str) -> bool:
+    text = str(value or "").strip()
+    compact = re.sub(r"\s+", "", text).upper()
+    if not compact:
+        return True
+    if compact in {
+        "PUBLIC",
+        "BASEPRACTICES",
+        "基本实践",
+        "VDAQMC",
+        "AUTOMOTIVESPICE",
+        "AUTOMOTIVESPICE®",
+    }:
+        return True
+    if re.fullmatch(r"\d{1,4}PUBLIC", compact):
+        return True
+    if re.fullmatch(r"\d{1,4}", compact):
+        return True
+    if "VDAQMC" in compact and len(compact) <= 80:
+        return True
+    return False
+
+
+def _process_code_from_text(value: str) -> str:
+    match = PROCESS_BP_PATTERN.search(str(value or ""))
+    return match.group(1).upper() if match else ""
 
 
 def _table_parameter_fact_payloads(unit) -> list[dict[str, object]]:
@@ -816,6 +1092,7 @@ def _timing_fact_payloads(unit) -> list[dict[str, object]]:
         return []
 
     payloads: list[dict[str, object]] = []
+    title, table_title = _process_title_for_table_unit(unit)
     normalized_headers = [_normalize_header_name(header) for header in headers]
     column_map = {name: idx for idx, name in enumerate(normalized_headers)}
 
@@ -844,8 +1121,8 @@ def _timing_fact_payloads(unit) -> list[dict[str, object]]:
                 "fact_type": "process_fact",
                 "predicate": "describes_process",
                 "payload": {
-                    "title": unit.title,
-                    "table_title": unit.table_title,
+                    "title": title,
+                    "table_title": table_title,
                     "section": unit.section,
                     "sequence": sequence,
                     "state": state,
@@ -864,8 +1141,8 @@ def _timing_fact_payloads(unit) -> list[dict[str, object]]:
                     "fact_type": "transition_fact",
                     "predicate": "has_transition",
                     "payload": {
-                        "title": unit.title,
-                        "table_title": unit.table_title,
+                        "title": title,
+                        "table_title": table_title,
                         "section": unit.section,
                         "sequence": sequence,
                         "state": state,
@@ -1010,6 +1287,7 @@ def build_facts_for_document(workspace_root: Path, doc_id: str) -> FactsBuildRes
             chosen_metadata.append((row, item))
 
         for row, (fact_type, predicate, payload) in chosen_metadata:
+            payload = _sanitize_payload(payload)
             dedupe_key = json.dumps([fact_type, predicate, payload], ensure_ascii=False, sort_keys=True)
             if dedupe_key in seen_facts:
                 continue
@@ -1072,6 +1350,7 @@ def build_facts_for_document(workspace_root: Path, doc_id: str) -> FactsBuildRes
 
         for row, extracted in page_payloads:
             for fact_type, predicate, payload in extracted:
+                payload = _sanitize_payload(payload)
                 dedupe_key = json.dumps([fact_type, predicate, payload], ensure_ascii=False, sort_keys=True)
                 if dedupe_key in seen_facts:
                     continue
@@ -1138,6 +1417,7 @@ def build_facts_for_document(workspace_root: Path, doc_id: str) -> FactsBuildRes
         export_path = paths.facts / f"{doc_id}.facts.json"
         row_by_page = {int(row["page_no"]): row for row in rows}
         for item in _knowledge_unit_fact_payloads(workspace_root, doc_id):
+            item = {**item, "payload": _sanitize_payload(item["payload"])}
             row = row_by_page.get(int(item["page_no"])) or _nearest_evidence_row(rows, int(item["page_no"]))
             if row is None:
                 continue

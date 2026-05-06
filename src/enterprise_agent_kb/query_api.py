@@ -2,13 +2,21 @@ from __future__ import annotations
 
 import json
 import re
+from dataclasses import replace
 from pathlib import Path
 
+from .advanced_query_planner import advanced_terms_for_retrieval, plan_advanced_query
 from .config import AppPaths
+from .closed_loop_store import record_retrieval_run
 from .db import connect
+from .evidence_judge import judge_evidence
+from .graph_retrieval import retrieve_graph_candidates
+from .query_expansion import expand_query, expansion_terms_for_retrieval
 from .query_rewrite import rewrite_query
 from .reranker import rerank_candidates
 from .retrieval_router import route_retrieval
+from .routing_summary import direct_routing_hits
+from .topic_resolution import resolve_topic_entities
 
 
 def _safe_json(value: str | None) -> object:
@@ -20,6 +28,99 @@ def _safe_json(value: str | None) -> object:
         return value
 
 
+def _rewrite_with_expansion(rewritten, expansion_terms: list[str]):
+    if not expansion_terms:
+        return rewritten
+    must_terms = list(rewritten.must_terms)
+    should_terms = list(rewritten.should_terms)
+    aliases = list(rewritten.aliases)
+    protected = list(rewritten.protected_anchor_terms)
+    for term in expansion_terms:
+        cleaned = str(term or "").strip()
+        if not cleaned:
+            continue
+        if _is_disallowed_expansion_term(rewritten.original_query, cleaned):
+            continue
+        if cleaned in protected or cleaned in must_terms or cleaned in should_terms or cleaned in aliases:
+            continue
+        if _is_hard_anchor_term(cleaned):
+            must_terms.append(cleaned)
+        elif len(cleaned) <= 48:
+            should_terms.append(cleaned)
+        else:
+            aliases.append(cleaned)
+    return replace(
+        rewritten,
+        must_terms=must_terms[:16],
+        should_terms=should_terms[:24],
+        aliases=aliases[:16],
+    )
+
+
+def _is_hard_anchor_term(value: str) -> bool:
+    return bool(
+        re.fullmatch(r"[A-Z]{1,6}\d*", value, re.I)
+        or re.fullmatch(r"[+-]?\d+(?:\.\d+)?\s*(?:V|A|Ω|kΩ|Hz|%)", value, re.I)
+        or re.fullmatch(r"表\s*[A-Z]?\d+(?:\.\d+)*", value, re.I)
+        or re.fullmatch(r"检测点\s*\d+", value)
+    )
+
+
+def _is_disallowed_expansion_term(original_query: str, term: str) -> bool:
+    if not _looks_like_cp_control_pilot_context(original_query):
+        return False
+    normalized = re.sub(r"\s+", "", term).upper()
+    return any(
+        drift in normalized
+        for drift in ("CHARGEPUMP", "CONTROLPIN", "CLOCKPULSE", "CHARGINGPROTOCOL")
+    )
+
+
+def _looks_like_cp_control_pilot_context(query: str) -> bool:
+    return bool(
+        re.search(r"(?<![A-Za-z0-9])CP(?![A-Za-z0-9])|控制导引", query, re.I)
+        and re.search(r"PWM|检测点|电压|时序|流程|状态转换|控制时序|握手|预充|启动|停止|停机", query, re.I)
+    )
+
+
+def _merge_runtime_hits(hits: list[dict[str, object]]) -> list[dict[str, object]]:
+    merged: dict[tuple[str, str], dict[str, object]] = {}
+    for hit in hits:
+        key = (str(hit.get("result_type") or ""), str(hit.get("result_id") or ""))
+        if not key[0] or not key[1]:
+            continue
+        existing = merged.get(key)
+        if existing is None or float(hit.get("score") or 0) > float(existing.get("score") or 0):
+            merged[key] = dict(hit)
+            if existing is not None:
+                _merge_hit_metadata(merged[key], existing)
+            continue
+        _merge_hit_metadata(existing, hit)
+        existing_channels = list(existing.get("channels") or [])
+        for channel in hit.get("channels") or [hit.get("channel")]:
+            if channel and channel not in existing_channels:
+                existing_channels.append(channel)
+        if existing_channels:
+            existing["channels"] = existing_channels
+    result = list(merged.values())
+    result.sort(key=lambda item: float(item.get("score") or 0), reverse=True)
+    return result
+
+
+def _merge_hit_metadata(target: dict[str, object], source: dict[str, object]) -> None:
+    for key in ("graph_source", "graph_path", "edge_id", "relation", "trust_tier", "evidence_ids", "fact_id"):
+        if key not in target and key in source:
+            target[key] = source[key]
+    if source.get("graph_source"):
+        target["graph_source"] = True
+    channels = list(target.get("channels") or [])
+    for channel in source.get("channels") or [source.get("channel")]:
+        if channel and channel not in channels:
+            channels.append(channel)
+    if channels:
+        target["channels"] = channels
+
+
 def build_query_context(
     workspace_root: Path,
     query: str,
@@ -28,10 +129,23 @@ def build_query_context(
 ) -> dict[str, object]:
     query = query.strip()
     rewritten = rewrite_query(query)
+    expansion = expand_query(query)
+    advanced_plan = plan_advanced_query(
+        query,
+        json.dumps(rewritten.to_dict(), ensure_ascii=False),
+        json.dumps(expansion.to_dict(), ensure_ascii=False),
+    )
+    retrieval_terms = [
+        *expansion_terms_for_retrieval(expansion),
+        *advanced_terms_for_retrieval(advanced_plan),
+    ]
+    retrieval_rewritten = _rewrite_with_expansion(rewritten, retrieval_terms)
     if not query:
         return {
             "query": query,
             "rewrite": rewritten.to_dict(),
+            "query_expansion": expansion.to_dict(),
+            "advanced_query_plan": advanced_plan.to_dict(),
             "hit_count": 0,
             "documents": [],
             "hits": [],
@@ -46,19 +160,60 @@ def build_query_context(
     connection = connect(paths.db_file)
 
     try:
-        routed = route_retrieval(paths.root, rewritten, limit=max(limit * 3, 20), connection=connection)
-        reranked_hits = rerank_candidates(paths.root, rewritten, routed["hits"], limit=max(limit * 3, 20), connection=connection)
+        topic_resolution = resolve_topic_entities(
+            paths.root,
+            rewritten,
+            preferred_doc_id=preferred_doc_id,
+            limit=max(limit, 8),
+        )
+        graph_candidates = retrieve_graph_candidates(
+            connection,
+            rewritten,
+            topic_resolution.candidate_entity_ids,
+            limit=max(limit * 2, 16),
+        )
+        graph_hits = [candidate.to_hit() for candidate in graph_candidates]
+        routed = route_retrieval(paths.root, retrieval_rewritten, limit=max(limit * 3, 20), connection=connection)
+        routed_hits = routed["hits"]
+        routing_hits = direct_routing_hits(
+            paths.root,
+            query,
+            expansion.to_dict(),
+            limit=max(limit, 8),
+            connection=connection,
+        )
+        routed_hits = _merge_runtime_hits([*graph_hits, *routing_hits, *routed_hits])
+        if preferred_doc_id:
+            scoped_routed_hits = [hit for hit in routed_hits if hit.get("doc_id") == preferred_doc_id]
+            if scoped_routed_hits:
+                routed_hits = scoped_routed_hits
+        reranked_hits = rerank_candidates(paths.root, retrieval_rewritten, routed_hits, limit=max(limit * 3, 20), connection=connection)
         hits = [hit for hit in reranked_hits if hit["result_type"] != "document"]
         if preferred_doc_id:
             preferred_doc_id = preferred_doc_id.strip()
             filtered_hits = [hit for hit in hits if hit.get("doc_id") == preferred_doc_id]
             if filtered_hits:
                 hits = filtered_hits
-        hits = _filter_hits_for_exact_terms(rewritten, hits)
+        hits = _filter_hits_for_exact_terms(retrieval_rewritten, hits)
         hits = _inject_exact_standard_hits(connection, query, hits, max(limit * 3, 20))
-        hits = _inject_direct_wiki_hits(connection, rewritten, hits, max(limit * 3, 20))
+        hits = _inject_direct_term_definition_hits(connection, retrieval_rewritten, hits, max(limit * 3, 20))
+        hits = _inject_direct_wiki_hits(connection, retrieval_rewritten, hits, max(limit * 3, 20))
+        if preferred_doc_id:
+            scoped_hits = [hit for hit in hits if hit.get("doc_id") == preferred_doc_id]
+            if scoped_hits:
+                hits = scoped_hits
         hits.sort(key=lambda item: float(item["score"] or 0), reverse=True)
         hits = hits[:limit]
+        graph_hit_by_fact_id = {
+            str(hit.get("result_id")): hit
+            for hit in hits
+            if hit.get("result_type") == "fact" and hit.get("graph_source")
+        }
+        graph_hit_by_evidence_id = {
+            str(hit.get("result_id")): hit
+            for hit in hits
+            if hit.get("result_type") == "evidence" and hit.get("graph_source")
+        }
         doc_ids = sorted({
             *(hit["doc_id"] for hit in hits if hit.get("doc_id")),
             *(hit["doc_id"] for hit in reranked_hits if hit.get("result_type") == "document" and hit.get("doc_id")),
@@ -83,9 +238,16 @@ def build_query_context(
                 evidence_ids,
             ).fetchall()
             evidence_items = [dict(row) for row in rows]
+            for item in evidence_items:
+                graph_hit = graph_hit_by_evidence_id.get(str(item.get("evidence_id")))
+                if graph_hit:
+                    item["graph_path"] = graph_hit.get("graph_path")
+                    item["graph_relation"] = graph_hit.get("relation")
+                    item["graph_trust_tier"] = graph_hit.get("trust_tier")
 
         fact_items: list[dict[str, object]] = []
         if fact_ids:
+            fact_rank = {fact_id: index for index, fact_id in enumerate(fact_ids)}
             placeholders = ",".join("?" for _ in fact_ids)
             rows = connection.execute(
                 f"""
@@ -101,11 +263,18 @@ def build_query_context(
                 item = dict(row)
                 item["object_value"] = _safe_json(item["object_value"])
                 item["qualifiers_json"] = _safe_json(item["qualifiers_json"])
+                graph_hit = graph_hit_by_fact_id.get(str(item.get("fact_id")))
+                if graph_hit:
+                    item["graph_path"] = graph_hit.get("graph_path")
+                    item["graph_relation"] = graph_hit.get("relation")
+                    item["graph_trust_tier"] = graph_hit.get("trust_tier")
+                    item["graph_evidence_ids"] = graph_hit.get("evidence_ids")
                 fact_items.append(item)
                 if item.get("subject_entity_id"):
                     entity_ids.add(item["subject_entity_id"])
                 if item.get("object_entity_id"):
                     entity_ids.add(item["object_entity_id"])
+            fact_items.sort(key=lambda item: fact_rank.get(item.get("fact_id"), 9999))
 
         fact_items = _augment_standard_facts(connection, query, fact_items)
         for item in fact_items:
@@ -119,9 +288,12 @@ def build_query_context(
             placeholders = ",".join("?" for _ in wiki_page_ids)
             rows = connection.execute(
                 f"""
-                SELECT page_id, page_type, title, slug, entity_id, trust_status, file_path, source_fact_ids_json
-                FROM wiki_pages
-                WHERE page_id IN ({placeholders})
+                SELECT w.page_id, w.page_type, w.title, w.slug, w.entity_id, w.trust_status,
+                       w.file_path, w.source_fact_ids_json
+                FROM wiki_pages w
+                LEFT JOIN entities e ON e.entity_id = w.entity_id
+                WHERE w.page_id IN ({placeholders})
+                  AND (w.entity_id IS NULL OR e.entity_status = 'ready')
                 ORDER BY trust_status DESC, title ASC
                 """,
                 wiki_page_ids,
@@ -130,18 +302,37 @@ def build_query_context(
             for item in wiki_items:
                 if item.get("entity_id"):
                     entity_ids.add(item["entity_id"])
-        wiki_items = _augment_query_wiki_items(connection, rewritten, wiki_items, doc_ids, limit)
+        if topic_resolution.confidence < 0.8 or not topic_resolution.candidate_wiki_pages:
+            wiki_items = _augment_query_wiki_items(connection, rewritten, wiki_items, doc_ids, limit)
+        candidate_page_ids = {str(item.get("page_id") or "") for item in topic_resolution.candidate_wiki_pages}
+        candidate_wiki_items = [dict(item) for item in topic_resolution.candidate_wiki_pages]
+        residual_wiki_items = [
+            item for item in wiki_items
+            if str(item.get("page_id") or "") not in candidate_page_ids
+        ]
+        if candidate_wiki_items:
+            wiki_items = candidate_wiki_items + residual_wiki_items
+            if topic_resolution.confidence >= 0.8:
+                wiki_items = wiki_items[:max(limit, len(candidate_wiki_items))]
         for item in wiki_items:
             if item.get("entity_id"):
                 entity_ids.add(item["entity_id"])
 
-        topic_objects = _resolve_topic_objects(rewritten, wiki_items)
-        topic_objects = _hydrate_topic_object_entities(connection, topic_objects)
+        for entity_id in topic_resolution.candidate_entity_ids:
+            if entity_id:
+                entity_ids.add(entity_id)
+
+        topic_objects = _hydrate_topic_object_entities(connection, candidate_wiki_items)
+        if not topic_objects:
+            topic_objects = _resolve_topic_objects(rewritten, wiki_items)
+            topic_objects = _hydrate_topic_object_entities(connection, topic_objects)
+        topic_objects = _compact_topic_objects(rewritten, topic_objects)
         topic_entity_ids = {
             str(item.get("entity_id") or "").strip()
             for item in topic_objects
             if str(item.get("entity_id") or "").strip()
         }
+        topic_entity_ids |= set(topic_resolution.candidate_entity_ids)
         for item in topic_objects:
             if item.get("entity_id"):
                 entity_ids.add(item["entity_id"])
@@ -152,6 +343,10 @@ def build_query_context(
                 entity_ids.add(item["subject_entity_id"])
             if item.get("object_entity_id"):
                 entity_ids.add(item["object_entity_id"])
+        linked_evidence_ids = _linked_evidence_ids_for_facts(
+            connection,
+            [str(item.get("fact_id") or "") for item in fact_items if item.get("fact_id")],
+        )
 
         entity_items: list[dict[str, object]] = []
         if entity_ids:
@@ -161,6 +356,7 @@ def build_query_context(
                 SELECT entity_id, canonical_name, entity_type, description, source_confidence
                 FROM entities
                 WHERE entity_id IN ({placeholders})
+                  AND entity_status = 'ready'
                 ORDER BY entity_type, canonical_name
                 """,
                 list(entity_ids),
@@ -171,6 +367,7 @@ def build_query_context(
             item for item in entity_items
             if str(item.get("entity_id") or "") in topic_entity_ids
         ]
+        topic_entity_items = _order_topic_entities(topic_entity_items, topic_objects)
 
         edge_items: list[dict[str, object]] = []
         edge_seed_ids = topic_entity_ids or entity_ids
@@ -205,6 +402,12 @@ def build_query_context(
             "wiki_count": len(wiki_items),
             "topic_count": len(topic_objects),
         }
+        evidence_judgement = judge_evidence(query, {
+            "facts": fact_items,
+            "evidence": evidence_items,
+            "rewrite": rewritten.to_dict(),
+            "retrieval_plan": {"query_type": routed["query_type"]},
+        }, expansion.to_dict())
 
         document_items: list[dict[str, object]] = []
         if doc_ids:
@@ -220,23 +423,93 @@ def build_query_context(
             ).fetchall()
             document_items = [dict(row) for row in rows]
 
+        retrieval_plan = {
+            "query_type": routed["query_type"],
+            "channels": [
+                *(["graph"] if graph_hits else []),
+                *(["routing_summary"] if routing_hits else []),
+                *routed["channels"],
+            ],
+            "routing_summary_hit_count": len(routing_hits),
+            "graph_candidate_count": len(graph_hits),
+            "advanced_query_plan_used": advanced_plan.enabled and advanced_plan.used_llm,
+        }
+        rerank_explanations = [
+            {
+                "result_type": hit["result_type"],
+                "result_id": hit["result_id"],
+                "doc_id": hit.get("doc_id"),
+                "graph_source": bool(hit.get("graph_source")),
+                "graph_relation": hit.get("graph_relation"),
+                "rerank": hit.get("rerank", {}),
+            }
+            for hit in hits[: min(8, len(hits))]
+        ]
+        direct_evidence_hit_ids = [
+            hit["result_id"]
+            for hit in hits
+            if hit.get("result_type") == "evidence" and hit.get("result_id")
+        ]
+        retrieval_run_id = record_retrieval_run(
+            connection,
+            query=query,
+            query_type=rewritten.query_type,
+            doc_scope=preferred_doc_id or "global",
+            retrieved_evidence_ids=direct_evidence_hit_ids,
+            reranked_ids=[
+                f"{hit.get('result_type')}:{hit.get('result_id')}"
+                for hit in hits
+                if hit.get("result_type") and hit.get("result_id")
+            ],
+            scores={
+                f"{hit.get('result_type')}:{hit.get('result_id')}": hit.get("score")
+                for hit in hits
+                if hit.get("result_type") and hit.get("result_id")
+            },
+            metadata={
+                "limit": limit,
+                "retrieval_plan": retrieval_plan,
+                "topic_resolution": topic_resolution.to_dict(),
+                "hit_count": len(hits),
+                "candidate_count_before_limit": len(reranked_hits),
+                "direct_routing_hit_count": len(routing_hits),
+                "graph_hit_count": len(graph_hits),
+                "direct_evidence_hit_ids": direct_evidence_hit_ids,
+                "linked_evidence_ids": linked_evidence_ids,
+                "linked_evidence_count": len(linked_evidence_ids),
+                "rewrite": rewritten.to_dict(),
+                "retrieval_rewrite": retrieval_rewritten.to_dict(),
+                "rerank_explanations": rerank_explanations,
+            },
+        )
+        connection.commit()
+
         return {
             "query": query,
             "rewrite": rewritten.to_dict(),
-            "preferred_doc_id": preferred_doc_id,
-            "retrieval_plan": {
-                "query_type": routed["query_type"],
-                "channels": routed["channels"],
+            "query_expansion": expansion.to_dict(),
+            "advanced_query_plan": advanced_plan.to_dict(),
+            "retrieval_rewrite": retrieval_rewritten.to_dict(),
+            "debug_query": {
+                "final_query_type": rewritten.query_type,
+                "final_normalized_query": rewritten.normalized_query,
+                "final_target_topic": rewritten.target_topic,
+                "protected_anchor_terms": rewritten.protected_anchor_terms,
+                "rewrite_override_applied": rewritten.rewrite_override_applied,
+                "semantic_quality_flags": rewritten.semantic_quality_flags,
+                "expansion_used_llm": expansion.used_llm,
+                "expansion_intent_candidates": expansion.intent_candidates,
+                "expansion_confidence": expansion.confidence,
+                "advanced_planner_enabled": advanced_plan.enabled,
+                "advanced_planner_used_llm": advanced_plan.used_llm,
+                "advanced_planner_confidence": advanced_plan.confidence,
+                "advanced_planner_skip_reason": advanced_plan.skip_reason,
             },
-            "rerank_explanations": [
-                {
-                    "result_type": hit["result_type"],
-                    "result_id": hit["result_id"],
-                    "doc_id": hit.get("doc_id"),
-                    "rerank": hit.get("rerank", {}),
-                }
-                for hit in hits[: min(8, len(hits))]
-            ],
+            "preferred_doc_id": preferred_doc_id,
+            "topic_resolution": topic_resolution.to_dict(),
+            "retrieval_run_id": retrieval_run_id,
+            "retrieval_plan": retrieval_plan,
+            "rerank_explanations": rerank_explanations,
             "hit_count": len(hits),
             "documents": document_items,
             "hits": hits,
@@ -245,9 +518,11 @@ def build_query_context(
             "entities": entity_items,
             "topic_entities": topic_entity_items,
             "graph_edges": edge_items,
+            "graph_candidates": [candidate.to_hit() for candidate in graph_candidates],
             "wiki_pages": wiki_items,
             "topic_objects": topic_objects,
             "knowledge_subgraph": knowledge_subgraph,
+            "evidence_judgement": evidence_judgement.to_dict(),
         }
     finally:
         connection.close()
@@ -363,6 +638,82 @@ def _augment_standard_facts(connection, query: str, fact_items: list[dict[str, o
     return augmented
 
 
+def _inject_direct_term_definition_hits(connection, rewritten, hits: list[dict[str, object]], limit: int) -> list[dict[str, object]]:
+    if rewritten.query_type != "definition":
+        return hits
+    acronyms = _short_definition_acronyms(rewritten)
+    if not acronyms:
+        return hits
+
+    direct_hits: list[dict[str, object]] = []
+    for acronym in acronyms[:4]:
+        rows = connection.execute(
+            """
+            SELECT fact_id, source_doc_id, json_extract(qualifiers_json, '$.page_no') AS page_no,
+                   object_value, confidence
+            FROM facts
+            WHERE fact_type IN ('term_definition', 'concept_definition')
+              AND (
+                object_value LIKE ?
+                OR object_value LIKE ?
+                OR object_value LIKE ?
+              )
+            ORDER BY confidence DESC, fact_id ASC
+            LIMIT ?
+            """,
+            (
+                f"%; {acronym}%",
+                f"%；{acronym}%",
+                f"% {acronym}%定义%",
+                limit,
+            ),
+        ).fetchall()
+        for row in rows:
+            payload = _safe_json(row["object_value"])
+            blob = json.dumps(payload, ensure_ascii=False)
+            score = 2.4
+            if acronym == "CC" and "连接确认" in blob:
+                score += 1.2
+            direct_hits.append(
+                {
+                    "result_type": "fact",
+                    "result_id": row["fact_id"],
+                    "doc_id": row["source_doc_id"],
+                    "page_no": row["page_no"],
+                    "score": score,
+                    "snippet": f"direct_term_definition {blob[:1200]}",
+                    "channel": "direct_term_definition",
+                    "channels": ["direct_term_definition"],
+                }
+            )
+
+    merged: dict[tuple[str, str], dict[str, object]] = {(hit["result_type"], hit["result_id"]): hit for hit in hits}
+    for hit in direct_hits:
+        key = (hit["result_type"], hit["result_id"])
+        existing = merged.get(key)
+        if existing is None or float(hit["score"]) > float(existing.get("score") or 0):
+            merged[key] = hit
+    merged_hits = list(merged.values())
+    merged_hits.sort(key=lambda item: float(item.get("score") or 0), reverse=True)
+    return merged_hits[:limit]
+
+
+def _short_definition_acronyms(rewritten) -> list[str]:
+    values = [
+        str(getattr(rewritten, "target_topic", "") or ""),
+        str(getattr(rewritten, "normalized_query", "") or ""),
+        *[str(item) for item in getattr(rewritten, "must_terms", [])],
+        *[str(item) for item in getattr(rewritten, "protected_anchor_terms", [])],
+    ]
+    acronyms: list[str] = []
+    for value in values:
+        cleaned = value.strip().upper()
+        if re.fullmatch(r"[A-Z]{2,6}", cleaned) and cleaned not in {"GB", "GBT", "ISO", "IEC", "QC"}:
+            if cleaned not in acronyms:
+                acronyms.append(cleaned)
+    return acronyms
+
+
 def _row_to_fact(row) -> dict[str, object]:
     return {
         "fact_id": row["fact_id"],
@@ -378,7 +729,7 @@ def _row_to_fact(row) -> dict[str, object]:
 
 
 def _filter_hits_for_exact_terms(rewritten, hits: list[dict[str, object]]) -> list[dict[str, object]]:
-    exact_terms = [term for term in rewritten.must_terms if re.fullmatch(r"[A-Z][A-Z0-9/-]{2,}", str(term or ""))]
+    exact_terms = [term for term in rewritten.must_terms if re.fullmatch(r"[A-Z][A-Z0-9/-]{1,}", str(term or ""))]
     if not exact_terms:
         return hits
     if rewritten.query_type not in {"definition", "comparison", "general_search"}:
@@ -409,9 +760,11 @@ def _inject_direct_wiki_hits(connection, rewritten, hits: list[dict[str, object]
     for term in search_terms[:10]:
         rows = connection.execute(
             """
-            SELECT page_id, page_type, title, slug, json_extract(source_doc_ids_json, '$[0]') AS doc_id
-            FROM wiki_pages
-            WHERE title LIKE ? OR slug LIKE ?
+            SELECT w.page_id, w.page_type, w.title, w.slug, json_extract(w.source_doc_ids_json, '$[0]') AS doc_id
+            FROM wiki_pages w
+            LEFT JOIN entities e ON e.entity_id = w.entity_id
+            WHERE (w.title LIKE ? OR w.slug LIKE ?)
+              AND (w.entity_id IS NULL OR e.entity_status = 'ready')
             LIMIT ?
             """,
             (f"%{term}%", f"%{term}%", limit),
@@ -422,8 +775,12 @@ def _inject_direct_wiki_hits(connection, rewritten, hits: list[dict[str, object]
                 bonus = 1.08
             elif rewritten.query_type == "parameter_lookup" and row["page_type"] == "parameter_group":
                 bonus = 1.08
+            elif rewritten.query_type == "parameter_lookup" and row["page_type"] == "parameter":
+                bonus = 1.16
             elif rewritten.query_type == "definition" and row["page_type"] in {"term", "concept", "document"}:
                 bonus = 1.02
+            elif rewritten.query_type == "definition":
+                bonus = 0.18
             elif rewritten.query_type == "comparison" and row["page_type"] in {"term", "concept"}:
                 bonus = 1.0
             elif rewritten.query_type == "comparison" and row["page_type"] == "comparison":
@@ -479,10 +836,13 @@ def _augment_query_wiki_items(connection, rewritten, wiki_items: list[dict[str, 
     for term in search_terms[:10]:
         rows = connection.execute(
             """
-            SELECT page_id, page_type, title, slug, entity_id, trust_status, file_path, source_fact_ids_json,
-                   json_extract(source_doc_ids_json, '$[0]') AS doc_id
-            FROM wiki_pages
-            WHERE (title LIKE ? OR slug LIKE ?)
+            SELECT w.page_id, w.page_type, w.title, w.slug, w.entity_id, w.trust_status,
+                   w.file_path, w.source_fact_ids_json,
+                   json_extract(w.source_doc_ids_json, '$[0]') AS doc_id
+            FROM wiki_pages w
+            LEFT JOIN entities e ON e.entity_id = w.entity_id
+            WHERE (w.title LIKE ? OR w.slug LIKE ?)
+              AND (w.entity_id IS NULL OR e.entity_status = 'ready')
             LIMIT ?
             """,
             (f"%{term}%", f"%{term}%", limit),
@@ -503,6 +863,17 @@ def _augment_query_wiki_items(connection, rewritten, wiki_items: list[dict[str, 
                 0 if any(term and str(item.get("title") or "") == term for term in topic_terms) else
                 1 if any(term and term in str(item.get("title") or "") for term in topic_terms) else
                 2,
+                str(item.get("title") or ""),
+            )
+        )
+    elif rewritten.query_type == "parameter_lookup":
+        topic_terms = _query_topic_terms(rewritten)
+        extra_items.sort(
+            key=lambda item: (
+                0 if str(item.get("page_type") or "") == "parameter" and any(term and str(item.get("title") or "") == term for term in topic_terms) else
+                1 if str(item.get("page_type") or "") == "parameter" else
+                2 if str(item.get("page_type") or "") == "parameter_group" else
+                3,
                 str(item.get("title") or ""),
             )
         )
@@ -546,6 +917,23 @@ def _augment_facts_from_wiki(connection, fact_items: list[dict[str, object]], wi
     return augmented
 
 
+def _linked_evidence_ids_for_facts(connection, fact_ids: list[str]) -> list[str]:
+    cleaned = sorted({str(fact_id).strip() for fact_id in fact_ids if str(fact_id).strip()})
+    if not cleaned:
+        return []
+    placeholders = ",".join("?" for _ in cleaned)
+    rows = connection.execute(
+        f"""
+        SELECT DISTINCT evidence_id
+        FROM fact_evidence_map
+        WHERE fact_id IN ({placeholders})
+        ORDER BY evidence_id ASC
+        """,
+        cleaned,
+    ).fetchall()
+    return [str(row["evidence_id"]) for row in rows if row["evidence_id"]]
+
+
 def _query_topic_terms(rewritten) -> list[str]:
     values = [
         str(getattr(rewritten, "target_topic", "") or "").strip(),
@@ -569,31 +957,56 @@ def _resolve_topic_objects(rewritten, wiki_items: list[dict[str, object]]) -> li
     if not topic_terms:
         return []
 
-    scored: list[tuple[int, dict[str, object]]] = []
+    parameter_anchor_terms = {
+        term.upper()
+        for term in topic_terms
+        if re.fullmatch(r"[A-Z]{1,4}\d*", term.upper())
+    }
+    scored: list[tuple[tuple[int, int], dict[str, object]]] = []
     for item in wiki_items:
         title = str(item.get("title") or "").strip()
         page_type = str(item.get("page_type") or "").strip()
+        entity_id = str(item.get("entity_id") or "").strip()
         if not title:
             continue
         score = 0
+        priority = 2
         if any(term and title == term for term in topic_terms):
             score += 4
         if any(term and term in title for term in topic_terms):
             score += 2
         if rewritten.query_type == "constraint" and page_type == "constraint":
             score += 2
+            priority = min(priority, 0)
         elif rewritten.query_type == "comparison" and page_type == "comparison":
             score += 2
+            priority = min(priority, 0)
         elif rewritten.query_type == "timing_lookup" and page_type == "process":
             score += 2
+            priority = min(priority, 0)
         elif rewritten.query_type == "parameter_lookup" and page_type == "parameter_group":
             score += 2
+            priority = min(priority, 1)
+        elif rewritten.query_type == "parameter_lookup" and page_type == "parameter":
+            score += 4
+            priority = min(priority, 0)
+        elif rewritten.query_type == "parameter_lookup" and page_type == "term":
+            if title.upper() in parameter_anchor_terms:
+                score += 5
+                priority = min(priority, 0)
+            elif any(term and term in title for term in topic_terms):
+                score += 2
+                priority = min(priority, 1)
         elif rewritten.query_type == "definition" and page_type in {"term", "concept"}:
             score += 2
+            priority = min(priority, 0)
+        if entity_id and rewritten.query_type == "parameter_lookup" and title.upper() in parameter_anchor_terms:
+            score += 2
+            priority = min(priority, 0)
         if score > 0:
-            scored.append((score, item))
+            scored.append(((priority, -score), item))
 
-    scored.sort(key=lambda pair: (-pair[0], str(pair[1].get("title") or "")))
+    scored.sort(key=lambda pair: (pair[0][0], pair[0][1], str(pair[1].get("title") or "")))
     topic_objects: list[dict[str, object]] = []
     seen: set[str] = set()
     for _, item in scored:
@@ -619,6 +1032,8 @@ def _hydrate_topic_object_entities(connection, topic_objects: list[dict[str, obj
                     entity_type = "comparison_topic"
                 elif page_type == "process":
                     entity_type = "process"
+                elif page_type == "parameter":
+                    entity_type = "parameter_topic"
                 elif page_type == "parameter_group":
                     entity_type = "parameter_group"
                 elif page_type in {"term", "concept"}:
@@ -637,3 +1052,55 @@ def _hydrate_topic_object_entities(connection, topic_objects: list[dict[str, obj
                         cloned["entity_id"] = row["entity_id"]
         hydrated.append(cloned)
     return hydrated
+
+
+def _compact_topic_objects(rewritten, topic_objects: list[dict[str, object]]) -> list[dict[str, object]]:
+    page_type_priority_by_query = {
+        "definition": {"term": 0, "concept": 1, "document": 2},
+        "comparison": {"comparison": 0, "term": 1},
+        "constraint": {"constraint": 0, "term": 1, "process": 2},
+        "timing_lookup": {"process": 0, "term": 1, "parameter_group": 2},
+        "parameter_lookup": {"parameter": 0, "parameter_group": 1, "term": 2},
+    }
+    priority_map = page_type_priority_by_query.get(rewritten.query_type, {})
+
+    deduped_by_entity: dict[str, dict[str, object]] = {}
+    passthrough: list[dict[str, object]] = []
+    for item in topic_objects:
+        entity_id = str(item.get("entity_id") or "").strip()
+        if not entity_id:
+            passthrough.append(item)
+            continue
+        existing = deduped_by_entity.get(entity_id)
+        if existing is None:
+            deduped_by_entity[entity_id] = item
+            continue
+        current_priority = priority_map.get(str(item.get("page_type") or ""), 9)
+        existing_priority = priority_map.get(str(existing.get("page_type") or ""), 9)
+        if current_priority < existing_priority:
+            deduped_by_entity[entity_id] = item
+
+    ordered = list(deduped_by_entity.values()) + passthrough
+    ordered.sort(
+        key=lambda item: (
+            priority_map.get(str(item.get("page_type") or ""), 9),
+            str(item.get("title") or ""),
+        )
+    )
+    return ordered[:8]
+
+
+def _order_topic_entities(topic_entities: list[dict[str, object]], topic_objects: list[dict[str, object]]) -> list[dict[str, object]]:
+    entity_order = [
+        str(item.get("entity_id") or "").strip()
+        for item in topic_objects
+        if str(item.get("entity_id") or "").strip()
+    ]
+    order_index = {entity_id: index for index, entity_id in enumerate(entity_order)}
+    return sorted(
+        topic_entities,
+        key=lambda item: (
+            order_index.get(str(item.get("entity_id") or "").strip(), 99),
+            str(item.get("canonical_name") or ""),
+        ),
+    )

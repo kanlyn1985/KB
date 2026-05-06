@@ -1,0 +1,531 @@
+{
+  "documents": [
+    {
+      "doc_id": "DOC-000003",
+      "source_filename": "GBT+18487.1-2023.pdf",
+      "parse_status": "parsed",
+      "quality_status": "review_required",
+      "is_active": 1,
+      "counts": {
+        "pages": 157,
+        "blocks": 157,
+        "evidence": 157,
+        "facts": 1278,
+        "wiki_pages": 372,
+        "quality_reports": 1
+      },
+      "artifact_exists": {
+        "source_units": true,
+        "coverage_summary": true,
+        "coverage_matrix": true,
+        "uncovered_report": true,
+        "uncovered_units": true,
+        "test_gap_candidates": true,
+        "golden_json": true,
+        "golden_pytest": true
+      },
+      "coverage_summary": {
+        "doc_id": "DOC-000003",
+        "source_filename": "GBT+18487.1-2023.pdf",
+        "generated_at": "2026-04-26T04:43:53+00:00",
+        "version": "coverage-v0",
+        "source_unit_count": 784,
+        "unit_types": [
+          "definition_unit",
+          "parameter_row_unit",
+          "requirement_unit"
+        ],
+        "text_coverage_rate": 1.0,
+        "semantic_coverage_rate": 1.0,
+        "object_coverage_rate": 1.0,
+        "knowledge_page_coverage_rate": 0.9987,
+        "test_coverage_rate": 0.3023,
+        "uncovered_counts": {
+          "u0_full_miss": 0,
+          "u1_text_only": 0,
+          "u2_fact_no_object": 0,
+          "u3_not_tested": 547,
+          "u4_misaligned": 0
+        },
+        "unit_type_summary": {
+          "definition_unit": {
+            "count": 56,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 0.1429
+          },
+          "parameter_row_unit": {
+            "count": 258,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 0.5698
+          },
+          "requirement_unit": {
+            "count": 470,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 0.1745
+          }
+        },
+        "importance_summary": {
+          "high": {
+            "count": 715,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 0.3217
+          },
+          "low": {
+            "count": 4,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 1.0
+          },
+          "medium": {
+            "count": 65,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 0.0462
+          }
+        }
+      },
+      "complete": true
+    },
+    {
+      "doc_id": "DOC-000004",
+      "source_filename": "QC_T 1036-2016 汽车电源逆变器-免费标准网_www.upbz.net.pdf",
+      "parse_status": "parsed",
+      "quality_status": "review_required",
+      "is_active": 1,
+      "counts": {
+        "pages": 24,
+        "blocks": 48,
+        "evidence": 24,
+        "facts": 338,
+        "wiki_pages": 201,
+        "quality_reports": 1
+      },
+      "artifact_exists": {
+        "source_units": true,
+        "coverage_summary": true,
+        "coverage_matrix": true,
+        "uncovered_report": true,
+        "uncovered_units": true,
+        "test_gap_candidates": true,
+        "golden_json": true,
+        "golden_pytest": true
+      },
+      "coverage_summary": {
+        "doc_id": "DOC-000004",
+        "source_filename": "QC_T 1036-2016 汽车电源逆变器-免费标准网_www.upbz.net.pdf",
+        "generated_at": "2026-04-26T04:44:24+00:00",
+        "version": "coverage-v0",
+        "source_unit_count": 167,
+        "unit_types": [
+          "definition_unit",
+          "parameter_row_unit",
+          "requirement_unit"
+        ],
+        "text_coverage_rate": 1.0,
+        "semantic_coverage_rate": 1.0,
+        "object_coverage_rate": 1.0,
+        "knowledge_page_coverage_rate": 1.0,
+        "test_coverage_rate": 0.2455,
+        "uncovered_counts": {
+          "u0_full_miss": 0,
+          "u1_text_only": 0,
+          "u2_fact_no_object": 0,
+          "u3_not_tested": 126,
+          "u4_misaligned": 0
+        },
+        "unit_type_summary": {
+          "definition_unit": {
+            "count": 1,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 1.0
+          },
+          "parameter_row_unit": {
+            "count": 14,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 0.2857
+          },
+          "requirement_unit": {
+            "count": 152,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 0.2368
+          }
+        },
+        "importance_summary": {
+          "high": {
+            "count": 156,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 0.2308
+          },
+          "medium": {
+            "count": 11,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 0.4545
+          }
+        }
+      },
+      "complete": true
+    },
+    {
+      "doc_id": "DOC-000005",
+      "source_filename": "AutomotiveSPICE_PAM_40_Chinese.pdf",
+      "parse_status": "parsed",
+      "quality_status": "review_required",
+      "is_active": 1,
+      "counts": {
+        "pages": 346,
+        "blocks": 339,
+        "evidence": 339,
+        "facts": 947,
+        "wiki_pages": 153,
+        "quality_reports": 1
+      },
+      "artifact_exists": {
+        "source_units": true,
+        "coverage_summary": true,
+        "coverage_matrix": true,
+        "uncovered_report": true,
+        "uncovered_units": true,
+        "test_gap_candidates": true,
+        "golden_json": true,
+        "golden_pytest": true
+      },
+      "coverage_summary": {
+        "doc_id": "DOC-000005",
+        "source_filename": "AutomotiveSPICE_PAM_40_Chinese.pdf",
+        "generated_at": "2026-04-26T04:44:33+00:00",
+        "version": "coverage-v0",
+        "source_unit_count": 344,
+        "unit_types": [
+          "definition_unit",
+          "parameter_row_unit",
+          "requirement_unit"
+        ],
+        "text_coverage_rate": 1.0,
+        "semantic_coverage_rate": 0.9884,
+        "object_coverage_rate": 0.9884,
+        "knowledge_page_coverage_rate": 0.9971,
+        "test_coverage_rate": 0.343,
+        "uncovered_counts": {
+          "u0_full_miss": 0,
+          "u1_text_only": 4,
+          "u2_fact_no_object": 0,
+          "u3_not_tested": 222,
+          "u4_misaligned": 0
+        },
+        "unit_type_summary": {
+          "definition_unit": {
+            "count": 22,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 0.8182,
+            "object_coverage_rate": 0.8182,
+            "test_coverage_rate": 0.4545
+          },
+          "parameter_row_unit": {
+            "count": 9,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 1.0
+          },
+          "requirement_unit": {
+            "count": 313,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 0.3163
+          }
+        },
+        "importance_summary": {
+          "high": {
+            "count": 74,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 0.9459,
+            "object_coverage_rate": 0.9459,
+            "test_coverage_rate": 0.4324
+          },
+          "medium": {
+            "count": 270,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 0.3185
+          }
+        }
+      },
+      "complete": true
+    },
+    {
+      "doc_id": "DOC-000009",
+      "source_filename": "GBT+40432-2021.pdf",
+      "parse_status": "parsed",
+      "quality_status": "review_required",
+      "is_active": 1,
+      "counts": {
+        "pages": 25,
+        "blocks": 50,
+        "evidence": 25,
+        "facts": 537,
+        "wiki_pages": 240,
+        "quality_reports": 1
+      },
+      "artifact_exists": {
+        "source_units": true,
+        "coverage_summary": true,
+        "coverage_matrix": true,
+        "uncovered_report": true,
+        "uncovered_units": true,
+        "test_gap_candidates": true,
+        "golden_json": true,
+        "golden_pytest": true
+      },
+      "coverage_summary": {
+        "doc_id": "DOC-000009",
+        "source_filename": "GBT+40432-2021.pdf",
+        "generated_at": "2026-04-26T04:44:39+00:00",
+        "version": "coverage-v0",
+        "source_unit_count": 197,
+        "unit_types": [
+          "definition_unit",
+          "parameter_row_unit",
+          "requirement_unit"
+        ],
+        "text_coverage_rate": 1.0,
+        "semantic_coverage_rate": 1.0,
+        "object_coverage_rate": 1.0,
+        "knowledge_page_coverage_rate": 1.0,
+        "test_coverage_rate": 0.2132,
+        "uncovered_counts": {
+          "u0_full_miss": 0,
+          "u1_text_only": 0,
+          "u2_fact_no_object": 0,
+          "u3_not_tested": 155,
+          "u4_misaligned": 0
+        },
+        "unit_type_summary": {
+          "requirement_unit": {
+            "count": 197,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 0.2132
+          }
+        },
+        "importance_summary": {
+          "high": {
+            "count": 183,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 0.2077
+          },
+          "low": {
+            "count": 2,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 0.0
+          },
+          "medium": {
+            "count": 12,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 0.3333
+          }
+        }
+      },
+      "complete": true
+    },
+    {
+      "doc_id": "DOC-000012",
+      "source_filename": "GB_T 18487.5-2024 电动汽车传导充电系统   第5部分：用于GB_T 20234.3直流充电系统.pdf",
+      "parse_status": "parsed",
+      "quality_status": "review_required",
+      "is_active": 1,
+      "counts": {
+        "pages": 55,
+        "blocks": 53,
+        "evidence": 53,
+        "facts": 696,
+        "wiki_pages": 127,
+        "quality_reports": 1
+      },
+      "artifact_exists": {
+        "source_units": true,
+        "coverage_summary": true,
+        "coverage_matrix": true,
+        "uncovered_report": true,
+        "uncovered_units": true,
+        "test_gap_candidates": true,
+        "golden_json": true,
+        "golden_pytest": true
+      },
+      "coverage_summary": {
+        "doc_id": "DOC-000012",
+        "source_filename": "GB_T 18487.5-2024 电动汽车传导充电系统   第5部分：用于GB_T 20234.3直流充电系统.pdf",
+        "generated_at": "2026-04-26T04:44:48+00:00",
+        "version": "coverage-v0",
+        "source_unit_count": 387,
+        "unit_types": [
+          "definition_unit",
+          "parameter_row_unit",
+          "requirement_unit"
+        ],
+        "text_coverage_rate": 1.0,
+        "semantic_coverage_rate": 1.0,
+        "object_coverage_rate": 1.0,
+        "knowledge_page_coverage_rate": 1.0,
+        "test_coverage_rate": 0.4703,
+        "uncovered_counts": {
+          "u0_full_miss": 0,
+          "u1_text_only": 0,
+          "u2_fact_no_object": 0,
+          "u3_not_tested": 205,
+          "u4_misaligned": 0
+        },
+        "unit_type_summary": {
+          "parameter_row_unit": {
+            "count": 143,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 0.7902
+          },
+          "requirement_unit": {
+            "count": 244,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 0.2828
+          }
+        },
+        "importance_summary": {
+          "high": {
+            "count": 363,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 0.4904
+          },
+          "low": {
+            "count": 1,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 1.0
+          },
+          "medium": {
+            "count": 23,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 0.1304
+          }
+        }
+      },
+      "complete": true
+    },
+    {
+      "doc_id": "DOC-000013",
+      "source_filename": "V2G相关.pdf",
+      "parse_status": "parsed",
+      "quality_status": "passed",
+      "is_active": 1,
+      "counts": {
+        "pages": 10,
+        "blocks": 10,
+        "evidence": 10,
+        "facts": 61,
+        "wiki_pages": 81,
+        "quality_reports": 1
+      },
+      "artifact_exists": {
+        "source_units": true,
+        "coverage_summary": true,
+        "coverage_matrix": true,
+        "uncovered_report": true,
+        "uncovered_units": true,
+        "test_gap_candidates": true,
+        "golden_json": true,
+        "golden_pytest": true
+      },
+      "coverage_summary": {
+        "doc_id": "DOC-000013",
+        "source_filename": "V2G相关.pdf",
+        "generated_at": "2026-04-26T04:44:57+00:00",
+        "version": "coverage-v0",
+        "source_unit_count": 37,
+        "unit_types": [
+          "definition_unit",
+          "parameter_row_unit",
+          "requirement_unit"
+        ],
+        "text_coverage_rate": 1.0,
+        "semantic_coverage_rate": 1.0,
+        "object_coverage_rate": 1.0,
+        "knowledge_page_coverage_rate": 1.0,
+        "test_coverage_rate": 0.1081,
+        "uncovered_counts": {
+          "u0_full_miss": 0,
+          "u1_text_only": 0,
+          "u2_fact_no_object": 0,
+          "u3_not_tested": 33,
+          "u4_misaligned": 0
+        },
+        "unit_type_summary": {
+          "definition_unit": {
+            "count": 3,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 1.0
+          },
+          "requirement_unit": {
+            "count": 34,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 0.0294
+          }
+        },
+        "importance_summary": {
+          "high": {
+            "count": 36,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 0.1111
+          },
+          "low": {
+            "count": 1,
+            "text_coverage_rate": 1.0,
+            "semantic_coverage_rate": 1.0,
+            "object_coverage_rate": 1.0,
+            "test_coverage_rate": 0.0
+          }
+        }
+      },
+      "complete": true
+    }
+  ]
+}

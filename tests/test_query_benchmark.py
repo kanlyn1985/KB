@@ -7,6 +7,7 @@ import pytest
 from enterprise_agent_kb.answer_api import answer_query
 from enterprise_agent_kb.agent_tools import run_agent_query
 from enterprise_agent_kb.query_api import build_query_context
+from test_helpers import resolve_doc_id_by_filename
 
 
 WORKSPACE = Path("knowledge_base")
@@ -29,16 +30,17 @@ def test_query_context_standard_doc3_returns_expected_fact() -> None:
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_query_context_standard_doc4_returns_expected_fact() -> None:
+    doc_id = resolve_doc_id_by_filename("18487.5", ".pdf")
     context = build_query_context(WORKSPACE, "GB/T 18487.5—2024", limit=6)
 
     assert context["hit_count"] > 0
-    assert any(doc["doc_id"] == "DOC-000004" for doc in context["documents"])
+    assert any(doc["doc_id"] == doc_id for doc in context["documents"])
     assert any(
         fact["fact_type"] == "document_standard"
         and fact["object_value"].get("value") == "GB/T 18487.5—2024"
         for fact in context["facts"]
     ) or any(
-        item["doc_id"] == "DOC-000004" and "GB/T18487.5—2024" in item["normalized_text"]
+        item["doc_id"] == doc_id and "GB/T18487.5—2024" in item["normalized_text"]
         for item in context["evidence"]
     )
 

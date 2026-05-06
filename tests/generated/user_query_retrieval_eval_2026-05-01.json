@@ -1,0 +1,1529 @@
+{
+  "eval_run_id": "EVAL-F5EE1FE7190AC622",
+  "suite_id": "regression:user_query_retrieval",
+  "generated_at": "2026-05-01T11:49:18+00:00",
+  "case_file": "E:\\AI_Project\\opencode_workspace\\KB1\\tests\\generated\\real_user_query_retrieval_cases_2026-05-01.json",
+  "summary": {
+    "suite": "user_query_retrieval",
+    "case_file": "E:\\AI_Project\\opencode_workspace\\KB1\\tests\\generated\\real_user_query_retrieval_cases_2026-05-01.json",
+    "total": 8,
+    "passed": 8,
+    "failed": 0,
+    "pass_rate": 1.0,
+    "graph_engagement_rate": 0.875,
+    "failure_counts": {},
+    "query_type_counts": {
+      "definition": 1,
+      "lifecycle_lookup": 3,
+      "parameter_lookup": 2,
+      "test_method_lookup": 1,
+      "timing_lookup": 1
+    }
+  },
+  "results": [
+    {
+      "case_id": "UQRET-aspice_sys4_activities",
+      "passed": true,
+      "failure_reason": null,
+      "retrieved_items": [
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098420",
+          "doc_id": "DOC-000005",
+          "page_no": 90,
+          "score": 3.289975,
+          "snippet": "knowledge_unit_fact {\"title\": \"SYS.4 基本实践\", \"process_name\": \"SYS.4 基本实践\", \"step_text\": \"**SYS.4.BP3: 集成系统要素并执行集成验证。**根据系统要素之间定义的接口和交互，以及定义的顺序和定义的前提条件，将系统要素集成为完整系统。执行选定的系统集成验证措施。记录验证结果，包括通过/失败状态和相应验证措施数据。\", \"section\": \"45\"}",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098418",
+          "doc_id": "DOC-000005",
+          "page_no": 90,
+          "score": 3.289975,
+          "snippet": "knowledge_unit_fact {\"title\": \"SYS.4 基本实践\", \"process_name\": \"SYS.4 基本实践\", \"step_text\": \"**SYS.4.BP1: 定义系统集成的验证措施。**依照系统架构的静态和动态方面，基于已定义的系统要素集成顺序和前提条件，定义验证措施，包括：\", \"section\": \"45\"}",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098424",
+          "doc_id": "DOC-000005",
+          "page_no": 92,
+          "score": 3.289975,
+          "snippet": "knowledge_unit_fact {\"title\": \"SYS.4 基本实践\", \"process_name\": \"SYS.4 基本实践\", \"step_text\": \"SYS.4.BP5: 总结和沟通结果。总结系统集成与集成验证结果，并与所有受影响方沟通。\\n• 注 6: 在总结中提供来自测试用例执行的所有必要信息，以便其他方可以判断结果。\", \"section\": \"46\"}",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098414",
+          "doc_id": "DOC-000005",
+          "page_no": 89,
+          "score": 3.089975,
+          "snippet": "process_sibling_fact {\"title\": \"SYS.4 基本实践\", \"process_name\": \"SYS.4 基本实践\", \"step_text\": \"**SYS.4.BP1: Specify verification measures for system integration.** Specify the verification measures, based on a defined sequence and preconditions for the integration of system elements against the system static and dynamic aspects of the system architecture, including\", \"section\": null}",
+          "graph_source": true,
+          "channel": "facts",
+          "channels": [
+            "facts",
+            "graph"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098415",
+          "doc_id": "DOC-000005",
+          "page_no": 89,
+          "score": 3.089975,
+          "snippet": "process_sibling_fact {\"title\": \"SYS.4 基本实践\", \"process_name\": \"SYS.4 基本实践\", \"step_text\": \"**SYS.4.BP2: Select verification measures.** Document the selection of verification measures for each integration step considering selection criteria including criteria for regression verification. The documented selection of verification measures shall have sufficient coverage according to the release scope.\", \"section\": null}",
+          "graph_source": true,
+          "channel": "facts",
+          "channels": [
+            "facts",
+            "graph"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098416",
+          "doc_id": "DOC-000005",
+          "page_no": 89,
+          "score": 3.089975,
+          "snippet": "process_sibling_fact {\"title\": \"SYS.4 基本实践\", \"process_name\": \"SYS.4 基本实践\", \"step_text\": \"**SYS.4.BP3: Integrate system elements and perform integration verification.** Integrate the system elements until the system is fully integrated according to the specified interfaces and interactions between the system elements, and according to the defined sequence and defined preconditions. Perform the selected system integration verification measures. Record the verification measure data including pass/fail status and corresponding verification measure data.\", \"section\": null}",
+          "graph_source": true,
+          "channel": "facts",
+          "channels": [
+            "facts",
+            "graph"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098417",
+          "doc_id": "DOC-000005",
+          "page_no": 89,
+          "score": 3.089975,
+          "snippet": "process_sibling_fact {\"title\": \"SYS.4 基本实践\", \"process_name\": \"SYS.4 基本实践\", \"step_text\": \"**SYS.4.BP4: Ensure consistency and establish bidirectional traceability.** Ensure consistency and establish bidirectional traceability between verification measures and the system architecture. Establish bidirectional traceability between verification results and verification measures.\", \"section\": null}",
+          "graph_source": true,
+          "channel": "facts",
+          "channels": [
+            "facts",
+            "graph"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098419",
+          "doc_id": "DOC-000005",
+          "page_no": 90,
+          "score": 3.089975,
+          "snippet": "process_sibling_fact {\"title\": \"SYS.4 基本实践\", \"process_name\": \"SYS.4 基本实践\", \"step_text\": \"**SYS.4.BP2: 选择验证措施。**考虑选择准则（包括回归验证准则），记录每个集成步骤的验证措施选择。所记录的验证措施选择应根据发布范围具备足够的覆盖率。\", \"section\": \"45\"}",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        }
+      ],
+      "answer": "",
+      "metrics": {
+        "query_type": "lifecycle_lookup",
+        "retrieval_channels": [
+          "graph",
+          "document",
+          "facts",
+          "wiki",
+          "evidence"
+        ],
+        "graph_candidate_count": 8,
+        "routing_summary_hit_count": 0,
+        "topic_resolution_confidence": 0.55,
+        "topic_candidate_names": [
+          "4.3.4. SYS.4 系统集成与集成验证"
+        ],
+        "top_hit_ids": [
+          "FACT-098420",
+          "FACT-098418",
+          "FACT-098424",
+          "FACT-098414",
+          "FACT-098415"
+        ],
+        "top_hit_doc_ids": [
+          "DOC-000005",
+          "DOC-000005",
+          "DOC-000005",
+          "DOC-000005",
+          "DOC-000005"
+        ],
+        "retrieval_run_id": "RET-81D5B1BAAFFDB2C2",
+        "retrieval_quality": {
+          "must_hit_total": 5,
+          "must_hit_found": 5,
+          "must_hit_missing": [],
+          "must_hit_best_rank": 1,
+          "mrr": 1.0,
+          "negative_hit_count": 0,
+          "negative_hits": [],
+          "negative_hit_rate": 0.0,
+          "top_k": 10,
+          "hit_count": 8,
+          "failure_attribution": "ok",
+          "recall_at_5": 0.8,
+          "recall_at_10": 1.0
+        },
+        "contract": {
+          "passed": true,
+          "failures": [],
+          "expected_query_type": "lifecycle_lookup",
+          "actual_query_type": "lifecycle_lookup",
+          "expected_min_graph_candidates": 1,
+          "actual_graph_candidate_count": 8,
+          "expected_top_entity_contains": "SYS.4 系统集成与集成验证",
+          "actual_top_entity": "4.3.4. SYS.4 系统集成与集成验证",
+          "expected_doc_id": "DOC-000005",
+          "top_doc_ids": [
+            "DOC-000005",
+            "DOC-000005",
+            "DOC-000005",
+            "DOC-000005",
+            "DOC-000005"
+          ],
+          "forbidden_result_ids": [],
+          "top_result_ids": [
+            "FACT-098420",
+            "FACT-098418",
+            "FACT-098424",
+            "FACT-098414",
+            "FACT-098415"
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "UQRET-aspice_swe2_analysis_activity",
+      "passed": true,
+      "failure_reason": null,
+      "retrieved_items": [
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098462",
+          "doc_id": "DOC-000005",
+          "page_no": 105,
+          "score": 1.902475,
+          "snippet": "graph_fact process_fact: {\"title\": \"4.4.2. SWE.2 软件架构设计\", \"process_name\": \"4.4.2. SWE.2 软件架构设计\", \"step_text\": \"**SWE.2.BP2: Specify dynamic aspects of the software architecture.** Specify and document the dynamic aspects of the software architecture with respect to the functional and non-functional software requirements, including the behavior of the software components and their interaction in different software modes, and concurrency aspects.\", \"section\": \"4.4.2\"}",
+          "graph_source": true,
+          "channel": "graph",
+          "channels": [
+            "graph"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098463",
+          "doc_id": "DOC-000005",
+          "page_no": 105,
+          "score": 1.902475,
+          "snippet": "graph_fact process_fact: {\"title\": \"4.4.2. SWE.2 软件架构设计\", \"process_name\": \"4.4.2. SWE.2 软件架构设计\", \"step_text\": \"**SWE.2.BP3: Analyze software architecture.** Analyze the software architecture regarding relevant technical design aspects and to support project management regarding project estimates. Document a rationale for the software architectural design decision.\", \"section\": \"4.4.2\"}",
+          "graph_source": true,
+          "channel": "graph",
+          "channels": [
+            "graph"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098464",
+          "doc_id": "DOC-000005",
+          "page_no": 105,
+          "score": 1.902475,
+          "snippet": "graph_fact process_fact: {\"title\": \"4.4.2. SWE.2 软件架构设计\", \"process_name\": \"4.4.2. SWE.2 软件架构设计\", \"step_text\": \"**SWE.2.BP4: Ensure consistency and establish bidirectional traceability.** Ensure consistency and establish bidirectional traceability between the software architecture and the software requirements.\", \"section\": \"4.4.2\"}",
+          "graph_source": true,
+          "channel": "graph",
+          "channels": [
+            "graph"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098465",
+          "doc_id": "DOC-000005",
+          "page_no": 105,
+          "score": 1.902475,
+          "snippet": "graph_fact process_fact: {\"title\": \"4.4.2. SWE.2 软件架构设计\", \"process_name\": \"4.4.2. SWE.2 软件架构设计\", \"step_text\": \"**SWE.2.BP5: Communicate agreed software architecture.** Communicate the agreed software architecture to all affected parties.\", \"section\": \"4.4.2\"}",
+          "graph_source": true,
+          "channel": "graph",
+          "channels": [
+            "graph"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098377",
+          "doc_id": "DOC-000005",
+          "page_no": 76,
+          "score": 1.589975,
+          "snippet": "describes_process {\"title\": \"sys.1 基本实践\", \"process_name\": \"sys.1 基本实践\", \"step_text\": \"**sys.1.bp3:分析利益相关方需求变更。** 依照约定的利益相关方需求，分析利益相关方需求的所有变更。评估影响和风险，并启动适当的变更控制和缓解措施。\\n* *注 4: 需求变更可能有不同的来源，例如技术变化、利益相关方需要变化、法律约束。*\\n* *注 5: 如有需要，参见 sup.10 变更请求管理。*\", \"section\": \"38\"} describes process title sys.1 基本实践 process name sys.1 基本实践 step text sys.1.bp3 分析利益相关方需求变更 依照约定的利益相关方需求 分析利益相关方需求的所有变更 评估影响和风险 并启动适当的变更控制和缓解措施 n 注 4 需求变更可能有不同的来源 例如技术变化 利益相关方需要变化 法律约束 n 注 5 如有需要 参见 sup.10 变更请求管理 section 38 基本 本实 实践 践基 基本 本实 实践 践分 分析 析利 利益 益相 相关 关方 方需 需求 求变 变更 更依 依照 照约 约定 定的 的利 利益 益相 相关 关方 方需 需求 求分 分析 析利 利益 益相 相关 关方 方需 需求 求的 的所 所有 有变 变更 更评 评估 估影 影响 响和 和风 风险 险并 并启 启动 动适 适当 当的 的变 变更 更控 控制 制和 和缓 缓解 解措 措施 施注 注需 需求 求变 变更 更可 可能 能有 有不 不同 同的 的来 来源 源例 例如 如技 技术 术变 变化 化利 利益 益相 相关 关方 方需 需要 要变 变化 化法 法律 律约 约束 束注 注如 如有 有需 需要 要参 参",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098385",
+          "doc_id": "DOC-000005",
+          "page_no": 78,
+          "score": 1.589975,
+          "snippet": "describes_process {\"title\": \"4.3.2. sys.2 系统需求分析\", \"process_name\": \"4.3.2. sys.2 系统需求分析\", \"step_text\": \"**sys.2.bp2: 结构化系统需求。** 结构化系统需求并进行优先级排序。\", \"section\": \"4.3.2\"} describes process title 4.3.2. sys.2 系统需求分析 process name 4.3.2. sys.2 系统需求分析 step text sys.2.bp2 结构化系统需求 结构化系统需求并进行优先级排序 section 4.3.2 系统 统需 需求 求分 分析 析系 系统 统需 需求 求分 分析 析结 结构 构化 化系 系统 统需 需求 求结 结构 构化 化系 系统 统需 需求 求并 并进 进行 行优 优先 先级 级排 排序 系统需 统需求 需求分 求分析 分析系 析系统 系统需 统需求 需求分 求分析 分析结 析结构 结构化 构化系 化系统 系统需 统需求 需求结 求结构 结构化 构化系 化系统 系统需 统需求 需求并 求并进 并进行 进行优 行优先 优先级 先级排 级排序",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098384",
+          "doc_id": "DOC-000005",
+          "page_no": 78,
+          "score": 1.589975,
+          "snippet": "describes_process {\"title\": \"4.3.2. sys.2 系统需求分析\", \"process_name\": \"4.3.2. sys.2 系统需求分析\", \"step_text\": \"**sys.2.bp1: 定义系统需求。** 根据定义的需求特性，使用利益相关方需求来识别和文档化系统的功能性和非功能性需求。\", \"section\": \"4.3.2\"} describes process title 4.3.2. sys.2 系统需求分析 process name 4.3.2. sys.2 系统需求分析 step text sys.2.bp1 定义系统需求 根据定义的需求特性 使用利益相关方需求来识别和文档化系统的功能性和非功能性需求 section 4.3.2 系统 统需 需求 求分 分析 析系 系统 统需 需求 求分 分析 析定 定义 义系 系统 统需 需求 求根 根据 据定 定义 义的 的需 需求 求特 特性 性使 使用 用利 利益 益相 相关 关方 方需 需求 求来 来识 识别 别和 和文 文档 档化 化系 系统 统的 的功 功能 能性 性和 和非 非功 功能 能性 性需 需求 系统需 统需求 需求分 求分析 分析系 析系统 系统需 统需求 需求分 求分析 分析定 析定义 定义系 义系统 系统需 统需求 需求根 求根据 根据定 据定义 定义的 义的需 的需求 需求特 求特性 特性使 性使用 使用利 用利益 利益相 益相关 相关方 关方需 方需求 需求来 求来识 来识别 识别和 别和文 和文档 文档化 档化系 化系统 系统的 统的功 的功能 功能性 能性和 性和非 和非功 非功能 功能性 能性需 性需求",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098387",
+          "doc_id": "DOC-000005",
+          "page_no": 79,
+          "score": 1.589975,
+          "snippet": "describes_process {\"title\": \"4.3.2. sys.2 系统需求分析\", \"process_name\": \"4.3.2. sys.2 系统需求分析\", \"step_text\": \"**sys.2.bp4: analyze the impact on the system context.** analyze the impact that the system requirements will have on elements in the relevant system context.\", \"section\": \"4.3.2\"} describes process title 4.3.2. sys.2 系统需求分析 process name 4.3.2. sys.2 系统需求分析 step text sys.2.bp4 analyze the impact on the system context. analyze the impact that the system requirements will have on elements in the relevant system context. section 4.3.2 系统 统需 需求 求分 分析 析系 系统 统需 需求 求分 分析 系统需 统需求 需求分 求分析 分析系 析系统 系统需 统需求 需求分 求分析",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        }
+      ],
+      "answer": "",
+      "metrics": {
+        "query_type": "lifecycle_lookup",
+        "retrieval_channels": [
+          "graph",
+          "document",
+          "facts",
+          "wiki",
+          "evidence"
+        ],
+        "graph_candidate_count": 9,
+        "routing_summary_hit_count": 0,
+        "topic_resolution_confidence": 0.82,
+        "topic_candidate_names": [
+          "4.4.2. SWE.2 软件架构设计"
+        ],
+        "top_hit_ids": [
+          "FACT-098462",
+          "FACT-098463",
+          "FACT-098464",
+          "FACT-098465",
+          "FACT-098377"
+        ],
+        "top_hit_doc_ids": [
+          "DOC-000005",
+          "DOC-000005",
+          "DOC-000005",
+          "DOC-000005",
+          "DOC-000005"
+        ],
+        "retrieval_run_id": "RET-A7FEBD0CABD71913",
+        "retrieval_quality": {
+          "must_hit_total": 2,
+          "must_hit_found": 1,
+          "must_hit_missing": [
+            "分析软件架构"
+          ],
+          "must_hit_best_rank": 2,
+          "mrr": 0.5,
+          "negative_hit_count": 0,
+          "negative_hits": [],
+          "negative_hit_rate": 0.0,
+          "top_k": 10,
+          "hit_count": 8,
+          "failure_attribution": "ok",
+          "recall_at_5": 0.5,
+          "recall_at_10": 0.5
+        },
+        "contract": {
+          "passed": true,
+          "failures": [],
+          "expected_query_type": "lifecycle_lookup",
+          "actual_query_type": "lifecycle_lookup",
+          "expected_min_graph_candidates": 1,
+          "actual_graph_candidate_count": 9,
+          "expected_top_entity_contains": "SWE.2 软件架构设计",
+          "actual_top_entity": "4.4.2. SWE.2 软件架构设计",
+          "expected_doc_id": "DOC-000005",
+          "top_doc_ids": [
+            "DOC-000005",
+            "DOC-000005",
+            "DOC-000005",
+            "DOC-000005",
+            "DOC-000005"
+          ],
+          "forbidden_result_ids": [],
+          "top_result_ids": [
+            "FACT-098462",
+            "FACT-098463",
+            "FACT-098464",
+            "FACT-098465",
+            "FACT-098377"
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "UQRET-aspice_swe2_design_activities",
+      "passed": true,
+      "failure_reason": null,
+      "retrieved_items": [
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098462",
+          "doc_id": "DOC-000005",
+          "page_no": 105,
+          "score": 3.769975,
+          "snippet": "knowledge_unit_fact {\"title\": \"4.4.2. SWE.2 软件架构设计\", \"process_name\": \"4.4.2. SWE.2 软件架构设计\", \"step_text\": \"**SWE.2.BP2: Specify dynamic aspects of the software architecture.** Specify and document the dynamic aspects of the software architecture with respect to the functional and non-functional software requirements, including the behavior of the software components and their interaction in different software modes, and concurrency aspects.\", \"section\": \"4.4.2\"}",
+          "graph_source": true,
+          "channel": "facts",
+          "channels": [
+            "facts",
+            "graph"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098463",
+          "doc_id": "DOC-000005",
+          "page_no": 105,
+          "score": 3.769975,
+          "snippet": "knowledge_unit_fact {\"title\": \"4.4.2. SWE.2 软件架构设计\", \"process_name\": \"4.4.2. SWE.2 软件架构设计\", \"step_text\": \"**SWE.2.BP3: Analyze software architecture.** Analyze the software architecture regarding relevant technical design aspects and to support project management regarding project estimates. Document a rationale for the software architectural design decision.\", \"section\": \"4.4.2\"}",
+          "graph_source": true,
+          "channel": "facts",
+          "channels": [
+            "facts",
+            "graph"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098464",
+          "doc_id": "DOC-000005",
+          "page_no": 105,
+          "score": 3.769975,
+          "snippet": "knowledge_unit_fact {\"title\": \"4.4.2. SWE.2 软件架构设计\", \"process_name\": \"4.4.2. SWE.2 软件架构设计\", \"step_text\": \"**SWE.2.BP4: Ensure consistency and establish bidirectional traceability.** Ensure consistency and establish bidirectional traceability between the software architecture and the software requirements.\", \"section\": \"4.4.2\"}",
+          "graph_source": true,
+          "channel": "facts",
+          "channels": [
+            "facts",
+            "graph"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098465",
+          "doc_id": "DOC-000005",
+          "page_no": 105,
+          "score": 3.769975,
+          "snippet": "knowledge_unit_fact {\"title\": \"4.4.2. SWE.2 软件架构设计\", \"process_name\": \"4.4.2. SWE.2 软件架构设计\", \"step_text\": \"**SWE.2.BP5: Communicate agreed software architecture.** Communicate the agreed software architecture to all affected parties.\", \"section\": \"4.4.2\"}",
+          "graph_source": true,
+          "channel": "facts",
+          "channels": [
+            "facts",
+            "graph"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098468",
+          "doc_id": "DOC-000005",
+          "page_no": 106,
+          "score": 3.769975,
+          "snippet": "knowledge_unit_fact {\"title\": \"SWE.2 基本实践\", \"process_name\": \"SWE.2 基本实践\", \"step_text\": \"**SWE.2.BP3: 分析软件架构。** 就相关技术设计方面分析软件架构，并支持项目管理的项目估算。文档化软件架构设计决策的依据。\\n*   注 4: 项目可行性参见 MAN.3.BP3，项目估算参见 MAN.3.BP5。\\n*   注 5: 分析可包括现有软件组件对既有应用的适用性。\\n*   注 6: 适用于分析技术方面的方法的示例如，原型、仿真、定性分析。\\n*   注 7: 技术方面的示例如，功能、时间和资源消耗(例如 ROM、RAM、外部/内部 EEPROM或数据 Flash 或 CPU 负载)。\\n*   注 8: 设计依据可以包括一些论据，如在用证明、软件框架或软件产品线的复用、自制或外购 (make-or-buy) 的决策、或以演变的方式进行呈现(如集合设计)。\", \"section\": \"53\"}",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098469",
+          "doc_id": "DOC-000005",
+          "page_no": 106,
+          "score": 3.769975,
+          "snippet": "knowledge_unit_fact {\"title\": \"SWE.2 基本实践\", \"process_name\": \"SWE.2 基本实践\", \"step_text\": \"**SWE.2.BP4: 确保一致性和建立双向可追溯性。** 确保软件架构与软件需求之间的一致性并建立双向可追溯性。\\n*   注 9: 可能存在软件架构设计无法追溯的非功能性软件需求。例如开发过程需求。这些需求仍然需要验证。\\n*   注 10: 双向可追溯性支持一致性，并有助于对变更请求的影响分析和验证覆盖率的证明。仅有可追溯性本身 (如存在两者之间的链接)，并不一定意味着两者之间的信息是一致的。\", \"section\": \"53\"}",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098402",
+          "doc_id": "DOC-000005",
+          "page_no": 85,
+          "score": 3.089975,
+          "snippet": "process_sibling_fact {\"title\": \"4.3.3. SYS.3 系统架构设计\", \"process_name\": \"4.3.3. SYS.3 系统架构设计\", \"step_text\": \"**SYS.3.BP3: Analyze system architecture.** Analyze the system architecture regarding relevant technical design aspects related to the product lifecycle, and to support project management regarding project estimates, and derive special characteristics for non-software system elements. Document a rationale for the system architectural design decisions.\\nNote 2: See MAN.3.BP3 for project feasibility and MAN.3.BP5 for project estimates.\\nNote 3: Examples for product lifecycle phases are production, maintenance & repair, decommissioning.\\nNote 4: Examples for technical aspects are manufacturability for production, suitability of pre-existing system elements to be reused, or availability o",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098406",
+          "doc_id": "DOC-000005",
+          "page_no": 86,
+          "score": 3.089975,
+          "snippet": "process_sibling_fact {\"title\": \"4.3.3. SYS.3 系统架构设计\", \"process_name\": \"4.3.3. SYS.3 系统架构设计\", \"step_text\": \"**SYS.3.BP3: 分析系统架构。**基于产品生命周期相关的技术方面，来分析系统架构，并支持项目管理的项目估算，以及导出非软件系统要素的特殊特性。文档化系统架构设计决策的依据。\\n* 注 2: 项目可行性参见 MAN.3.BP3，项目估算参见 MAN.3.BP5。\\n* 注 3: 产品生命周期阶段的示例如，生产、维护和维修、报废。\\n* 注 4: 技术方面的示例如，生产的可制造性、被复用的既有系统要素的适用性，或系统要素的可用性。\\n* 注 5: 适合分析技术方面方法的示例如，原型、仿真和定性分析(例如 FMEA 方法)\\n* 注 6:设计依据的示例如，在用证明、产品平台或产品线的复用、自制或外购 (make-or-buy)的决策、或以演变的方式进行呈现(如集合设计)。\", \"section\": \"4.3.3\"}",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        }
+      ],
+      "answer": "",
+      "metrics": {
+        "query_type": "lifecycle_lookup",
+        "retrieval_channels": [
+          "graph",
+          "document",
+          "facts",
+          "wiki",
+          "evidence"
+        ],
+        "graph_candidate_count": 9,
+        "routing_summary_hit_count": 0,
+        "topic_resolution_confidence": 0.55,
+        "topic_candidate_names": [
+          "4.4.2. SWE.2 软件架构设计"
+        ],
+        "top_hit_ids": [
+          "FACT-098462",
+          "FACT-098463",
+          "FACT-098464",
+          "FACT-098465",
+          "FACT-098468"
+        ],
+        "top_hit_doc_ids": [
+          "DOC-000005",
+          "DOC-000005",
+          "DOC-000005",
+          "DOC-000005",
+          "DOC-000005"
+        ],
+        "retrieval_run_id": "RET-F12EE19D0E57289D",
+        "retrieval_quality": {
+          "must_hit_total": 3,
+          "must_hit_found": 2,
+          "must_hit_missing": [
+            "SWE.2.BP1"
+          ],
+          "must_hit_best_rank": 1,
+          "mrr": 1.0,
+          "negative_hit_count": 0,
+          "negative_hits": [],
+          "negative_hit_rate": 0.0,
+          "top_k": 10,
+          "hit_count": 8,
+          "failure_attribution": "ok",
+          "recall_at_5": 0.666667,
+          "recall_at_10": 0.666667
+        },
+        "contract": {
+          "passed": true,
+          "failures": [],
+          "expected_query_type": "lifecycle_lookup",
+          "actual_query_type": "lifecycle_lookup",
+          "expected_min_graph_candidates": 1,
+          "actual_graph_candidate_count": 9,
+          "expected_top_entity_contains": "SWE.2 软件架构设计",
+          "actual_top_entity": "4.4.2. SWE.2 软件架构设计",
+          "expected_doc_id": "DOC-000005",
+          "top_doc_ids": [
+            "DOC-000005",
+            "DOC-000005",
+            "DOC-000005",
+            "DOC-000005",
+            "DOC-000005"
+          ],
+          "forbidden_result_ids": [],
+          "top_result_ids": [
+            "FACT-098462",
+            "FACT-098463",
+            "FACT-098464",
+            "FACT-098465",
+            "FACT-098468"
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "UQRET-cc_resistance_definition",
+      "passed": true,
+      "failure_reason": null,
+      "retrieved_items": [
+        {
+          "result_type": "fact",
+          "result_id": "FACT-054506",
+          "doc_id": "DOC-000003",
+          "page_no": 129,
+          "score": 1.733523,
+          "snippet": "graph_fact requirement: {\"title\": \"附录B 充电桩  车辆插头  GB 车辆适配器  车辆插座  附录D 电动汽车\\n二选一\\nRCD  电流测量  C1  FUSE  DC+  DC+  C5  FUSE\\n泄放电路  电压测量  Rload  C  可充电储能系统\\nC2  DC-  DC-  C6  Rload\\nIMD\\n设备地  PE  PE  车身地\\nRCD  控制电源  设备控制器  S+  S+  车辆控制器\\nS-  S-\\nU1  S  R3  Re'  R4'  R4c  R4  U2\\nR1  检测点1  R2  CC1  CC1  R3'  检测点2  S2  Rv\\nCC2  Re''  CC2  检测点3  Sv  热管理系统\\nS3  A+  可选\\nS4  A-\", \"content\": \"表 G.2 规定了对应于图 G.2 的具备充电兼容的电动汽车控制导引电路参数。\", \"subject\": \"附录B 充电桩  车辆插头  GB 车辆适配器  车辆插座  附录D 电动汽车\\n二选一\\nRCD  电流测量  C1  FUSE  DC+  DC+  C5  FUSE\\n泄放电路  电压测量  Rload  C  可充电储能系统\\nC2  DC\", \"topic\": \"附录B 充电桩  车辆插头  GB 车辆适配器  车辆插座  附录D 电动汽车\\n二选一\\nRC",
+          "graph_source": true,
+          "channel": "graph",
+          "channels": [
+            "graph"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-054541",
+          "doc_id": "DOC-000003",
+          "page_no": 140,
+          "score": 1.733523,
+          "snippet": "graph_fact requirement: {\"title\": \"附录B充电机  车辆插头  GB车辆适配器  车辆插座  全球通用版本电动汽车\\nPE  PE  PE  车身地\\nU1, 12.0V  S\\nR1, 1.0kΩ  R2, 1.0kΩ  R3, 1.0kΩ  Rc', 1.0kΩ\\nCC1  CC1  D1\\n检测点1  CC2  Rc'', 1.5kΩ  CC2  检测点2  检测点3\\nR3', 100kΩ  S2'  R4', 2.74kΩ  R4c', 830Ω  R4c, 130Ω  R4, 1.3kΩ  U2, 12V\\nS2  3 2 1 0\\nRv', 1.59kΩ  Sv'  Rv, 1.0kΩ\\nSv\", \"content\": \"表 H.1 给出了对应于图 H.1～H.3 的具备充电兼容的电动汽车控制导引电路参数。\", \"subject\": \"附录B充电机  车辆插头  GB车辆适配器  车辆插座  全球通用版本电动汽车\\nPE  PE  PE  车身地\\nU1, 12.0V  S\\nR1, 1.0kΩ  R2, 1.0kΩ  R3, 1.0kΩ  Rc', 1.0kΩ\\nCC1  CC\", \"topic\": \"附录B充电机  车辆插头  GB车辆适配器  车辆插座  全球通用版本电动汽车\\nPE  PE  PE  车身地\\nU1, 12.0V  S\\nR1, 1.0kΩ  R2, 1.0",
+          "graph_source": true,
+          "channel": "graph",
+          "channels": [
+            "graph"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-054507",
+          "doc_id": "DOC-000003",
+          "page_no": 129,
+          "score": 1.728523,
+          "snippet": "graph_fact table_requirement: {\"title\": \"附录B 充电桩  车辆插头  GB 车辆适配器  车辆插座  附录D 电动汽车\\n二选一\\nRCD  电流测量  C1  FUSE  DC+  DC+  C5  FUSE\\n泄放电路  电压测量  Rload  C  可充电储能系统\\nC2  DC-  DC-  C6  Rload\\nIMD\\n设备地  PE  PE  车身地\\nRCD  控制电源  设备控制器  S+  S+  车辆控制器\\nS-  S-\\nU1  S  R3  Re'  R4'  R4c  R4  U2\\nR1  检测点1  R2  CC1  CC1  R3'  检测点2  S2  Rv\\nCC2  Re''  CC2  检测点3  Sv  热管理系统\\nS3  A+  可选\\nS4  A-\", \"table_title\": \"表 G.2 具备充电兼容的电动汽车控制导引电路参数\", \"table_no\": null, \"headers\": [\"参数^a\", \"符号\", \"单位\", \"标称值\", \"最大值\", \"最小值\", \"备注\"], \"rows\": [[\"R3'等效电阻\", \"R3'\", \"Ω\", \"100 000\", \"101 000\", \"99 000\", \"\"], [\"R4 等效电阻\", \"R4\", \"Ω\", \"1 300\", \"1 313\", \"1 287\", \"\"], [\"R4",
+          "graph_source": true,
+          "channel": "graph",
+          "channels": [
+            "graph"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-054542",
+          "doc_id": "DOC-000003",
+          "page_no": 140,
+          "score": 1.728523,
+          "snippet": "graph_fact table_requirement: {\"title\": \"附录B充电机  车辆插头  GB车辆适配器  车辆插座  全球通用版本电动汽车\\nPE  PE  PE  车身地\\nU1, 12.0V  S\\nR1, 1.0kΩ  R2, 1.0kΩ  R3, 1.0kΩ  Rc', 1.0kΩ\\nCC1  CC1  D1\\n检测点1  CC2  Rc'', 1.5kΩ  CC2  检测点2  检测点3\\nR3', 100kΩ  S2'  R4', 2.74kΩ  R4c', 830Ω  R4c, 130Ω  R4, 1.3kΩ  U2, 12V\\nS2  3 2 1 0\\nRv', 1.59kΩ  Sv'  Rv, 1.0kΩ\\nSv\", \"table_title\": \"**表 H.1 具备充电兼容的电动汽车控制导引电路参数**\", \"table_no\": null, \"headers\": [\"参数^a\", \"符号\", \"单位\", \"标称值\", \"最大值\", \"最小值\", \"电路版本\"], \"rows\": [[\"R3'等效电阻\", \"R3'\", \"\\\\Omega\", \"100 000\", \"101 000\", \"99 000\", \"通用\"], [\"R4等效电阻\", \"R4\", \"\\\\Omega\", \"1 300\", \"1 313\", \"1 287\", \"通用\"], [\"R4'等效电阻\", \"R4'\", \"\\\\Omega\",",
+          "graph_source": true,
+          "channel": "graph",
+          "channels": [
+            "graph"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-054508",
+          "doc_id": "DOC-000003",
+          "page_no": 129,
+          "score": 1.726023,
+          "snippet": "graph_fact parameter_value: {\"table_title\": \"表 G.2 具备充电兼容的电动汽车控制导引电路参数\", \"table_no\": null, \"object\": \"\", \"parameter\": \"R3'等效电阻\", \"symbol\": \"R3'\", \"unit\": \"Ω\", \"nominal_value\": \"100 000\", \"max_value\": \"101 000\", \"min_value\": \"99 000\", \"state\": \"\", \"focus_tags\": [\"CC1\", \"CC2\", \"R1\", \"R2\", \"R3\", \"R4\", \"R4C\", \"RV\", \"控制导引\", \"检测点1\", \"检测点2\", \"检测点3\", \"车辆插头\", \"车辆插座\", \"电动汽车\"], \"row_focus_tags\": [\"R3\"], \"table_focus_tags\": [\"CC1\", \"CC2\", \"R1\", \"R2\", \"R4\", \"R4C\", \"RV\", \"控制导引\", \"检测点1\", \"检测点2\", \"检测点3\", \"车辆插头\", \"车辆插座\", \"电动汽车\"], \"loop_scope\": \"cc\", \"detection_points\": [\"检测点1\", \"检测点2\", \"检测点3\"], \"interface_scope\": [\"车辆插头\", \"车辆插座\", \"电动汽车\"]",
+          "graph_source": true,
+          "channel": "graph",
+          "channels": [
+            "graph"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-054509",
+          "doc_id": "DOC-000003",
+          "page_no": 129,
+          "score": 1.726023,
+          "snippet": "graph_fact parameter_value: {\"table_title\": \"表 G.2 具备充电兼容的电动汽车控制导引电路参数\", \"table_no\": null, \"object\": \"\", \"parameter\": \"R4 等效电阻\", \"symbol\": \"R4\", \"unit\": \"Ω\", \"nominal_value\": \"1 300\", \"max_value\": \"1 313\", \"min_value\": \"1 287\", \"state\": \"\", \"focus_tags\": [\"CC1\", \"CC2\", \"R1\", \"R2\", \"R3\", \"R4\", \"R4C\", \"RV\", \"控制导引\", \"检测点1\", \"检测点2\", \"检测点3\", \"车辆插头\", \"车辆插座\", \"电动汽车\"], \"row_focus_tags\": [\"R4\"], \"table_focus_tags\": [\"CC1\", \"CC2\", \"R1\", \"R2\", \"R3\", \"R4C\", \"RV\", \"控制导引\", \"检测点1\", \"检测点2\", \"检测点3\", \"车辆插头\", \"车辆插座\", \"电动汽车\"], \"loop_scope\": \"cc\", \"detection_points\": [\"检测点1\", \"检测点2\", \"检测点3\"], \"interface_scope\": [\"车辆插头\", \"车辆插座\", \"电动汽车\"], \"sco",
+          "graph_source": true,
+          "channel": "graph",
+          "channels": [
+            "graph"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-054510",
+          "doc_id": "DOC-000003",
+          "page_no": 129,
+          "score": 1.726023,
+          "snippet": "graph_fact parameter_value: {\"table_title\": \"表 G.2 具备充电兼容的电动汽车控制导引电路参数\", \"table_no\": null, \"object\": \"\", \"parameter\": \"R4'等效电阻\", \"symbol\": \"R4'\", \"unit\": \"Ω\", \"nominal_value\": \"2 740\", \"max_value\": \"2 767\", \"min_value\": \"2 713\", \"state\": \"\", \"focus_tags\": [\"CC1\", \"CC2\", \"R1\", \"R2\", \"R3\", \"R4\", \"R4C\", \"RV\", \"控制导引\", \"检测点1\", \"检测点2\", \"检测点3\", \"车辆插头\", \"车辆插座\", \"电动汽车\"], \"row_focus_tags\": [\"R4\"], \"table_focus_tags\": [\"CC1\", \"CC2\", \"R1\", \"R2\", \"R3\", \"R4C\", \"RV\", \"控制导引\", \"检测点1\", \"检测点2\", \"检测点3\", \"车辆插头\", \"车辆插座\", \"电动汽车\"], \"loop_scope\": \"cc\", \"detection_points\": [\"检测点1\", \"检测点2\", \"检测点3\"], \"interface_scope\": [\"车辆插头\", \"车辆插座\", \"电动汽车\"], \"sc",
+          "graph_source": true,
+          "channel": "graph",
+          "channels": [
+            "graph"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098356",
+          "doc_id": "DOC-000005",
+          "page_no": 69,
+          "score": 1.649975,
+          "snippet": "knowledge_unit_fact {\"title\": \"4.2.1. SPL.2 产品发布\", \"process_name\": \"4.2.1. SPL.2 产品发布\", \"step_text\": \"**SPL.2.BP6: Provide a release note.** A release is accompanied by information detailing key characteristics of the release.\\n*Note 5: The release note may include information about legal aspects like relevant target markets, legislation that is considered etc. See also VAL.1 Validation.*\", \"section\": \"4.2.1\"}",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        }
+      ],
+      "answer": "",
+      "metrics": {
+        "query_type": "parameter_lookup",
+        "retrieval_channels": [
+          "graph",
+          "routing_summary",
+          "wiki",
+          "facts",
+          "evidence",
+          "document"
+        ],
+        "graph_candidate_count": 16,
+        "routing_summary_hit_count": 8,
+        "topic_resolution_confidence": 0.95,
+        "topic_candidate_names": [
+          "CC阻值",
+          "控制导引电路",
+          "G.2.1 控制导引电路设计",
+          "控制导引电路 control pilot circuit",
+          "控制导引功能 control pilot function;"
+        ],
+        "top_hit_ids": [
+          "FACT-054506",
+          "FACT-054541",
+          "FACT-054507",
+          "FACT-054542",
+          "FACT-054508"
+        ],
+        "top_hit_doc_ids": [
+          "DOC-000003",
+          "DOC-000003",
+          "DOC-000003",
+          "DOC-000003",
+          "DOC-000003"
+        ],
+        "retrieval_run_id": "RET-957D74CE7DAE0670",
+        "retrieval_quality": {
+          "must_hit_total": 2,
+          "must_hit_found": 2,
+          "must_hit_missing": [],
+          "must_hit_best_rank": 1,
+          "mrr": 1.0,
+          "negative_hit_count": 0,
+          "negative_hits": [],
+          "negative_hit_rate": 0.0,
+          "top_k": 10,
+          "hit_count": 8,
+          "failure_attribution": "ok",
+          "recall_at_5": 1.0,
+          "recall_at_10": 1.0
+        },
+        "contract": {
+          "passed": true,
+          "failures": [],
+          "expected_query_type": "parameter_lookup",
+          "actual_query_type": "parameter_lookup",
+          "expected_min_graph_candidates": 1,
+          "actual_graph_candidate_count": 16,
+          "expected_top_entity_contains": "CC阻值",
+          "actual_top_entity": "CC阻值",
+          "expected_doc_id": "",
+          "top_doc_ids": [
+            "DOC-000003",
+            "DOC-000003",
+            "DOC-000003",
+            "DOC-000003",
+            "DOC-000003"
+          ],
+          "forbidden_result_ids": [],
+          "top_result_ids": [
+            "FACT-054506",
+            "FACT-054541",
+            "FACT-054507",
+            "FACT-054542",
+            "FACT-054508"
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "UQRET-cp_timing",
+      "passed": true,
+      "failure_reason": null,
+      "retrieved_items": [
+        {
+          "result_type": "fact",
+          "result_id": "FACT-054025",
+          "doc_id": "DOC-000003",
+          "page_no": 71,
+          "score": 4.807273,
+          "snippet": "routing_summary {\"title\": \"A.5 控制导引电路状态转换图和控制时序列表\", \"table_title\": \"表 A.7 交流充电控制时序表（续）\", \"section\": null, \"sequence\": \"12V 9V 6V 检测点1 0V -12V AC电压 ON OFF S2开关 open closed AC电流 ON OFF T9 T10 触发条件：调整 PWM 占空比\", \"state\": \"状态 3'\", \"condition\": \"(9)当电网负载变化或人为更改供电设备输出设置时，供电设备需要调整其输出功率。 供电设备可以在任意时间在有效范围内调整 PWM 占空比。 在能量传输阶段，允许调整时间 5 s 内(T10-T9)，供电设备不应再次触发调整占空比\", \"action\": \"12V 9V 6V 检测点1 0V -12V AC电压 ON OFF S2开关 open closed AC电流 ON OFF T9 T10 触发条件：调整 PWM 占空比 状态 3' (9)当电网负载变化或人为更改供电设备输出设置时，供电设备需要调整其输出功率。 供电设备可以在任意时间在有效范围内调整 PWM 占空比。 在能量传输阶段，允许调整时间 5 s 内(T10-T9)，供电设备不应再次触发调整占空比 最大 10 s 从供电设备收到占空比指令至响应输出占空比的时间\", \"time_constraint\": \"最大 10 s 从供电设备收到占空比指令至响应输出占空比的时间\"}",
+          "graph_source": false,
+          "channel": "routing_summary",
+          "channels": [
+            "routing_summary"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-054023",
+          "doc_id": "DOC-000003",
+          "page_no": 71,
+          "score": 4.727273,
+          "snippet": "routing_summary {\"title\": \"A.5 控制导引电路状态转换图和控制时序列表\", \"table_title\": \"表 A.7 交流充电控制时序表（续）\", \"section\": null, \"sequence\": \"12V 9V 6V 检测点1 0V -12V AC电压 ON OFF S2开关 open closed AC电流 ON OFF T7 T8 触发条件：电动汽车启动充电\", \"state\": \"状态 3'\", \"condition\": \"(8)电动汽车启动充电，充电电流不应超过表 A.3 规定的对应占空比定义的电流值\", \"action\": \"12V 9V 6V 检测点1 0V -12V AC电压 ON OFF S2开关 open closed AC电流 ON OFF T7 T8 触发条件：电动汽车启动充电 状态 3' (8)电动汽车启动充电，充电电流不应超过表 A.3 规定的对应占空比定义的电流值 (T8-T7) 无要求\", \"time_constraint\": \"(T8-T7) 无要求\"}",
+          "graph_source": false,
+          "channel": "routing_summary",
+          "channels": [
+            "routing_summary"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-054029",
+          "doc_id": "DOC-000003",
+          "page_no": 71,
+          "score": 4.727273,
+          "snippet": "routing_summary {\"title\": \"A.5 控制导引电路状态转换图和控制时序列表\", \"table_title\": \"表 A.7 交流充电控制时序表（续）\", \"section\": null, \"sequence\": \"12V 9V 6V 检测点1 0V -12V AC电压 ON OFF S2开关 open closed AC电流 ON OFF T11 T12 触发条件：结束停机或 S3 开关断开\", \"state\": \"状态 3'\", \"condition\": \"(11) 正常操作状态下(达到了电动汽车设定的充电终止条件或已充满)，在断开 S2 之前，电动汽车应将充电电流减小至最低(< 1A)。 当人为按下车辆插头上联动开关，电动汽车应在 1 s 内断开 S2 且将充电电流减小至最低(< 1 A)。 故障状态下，电动汽车可立即断开 S2\", \"action\": \"12V 9V 6V 检测点1 0V -12V AC电压 ON OFF S2开关 open closed AC电流 ON OFF T11 T12 触发条件：结束停机或 S3 开关断开 状态 3' (11) 正常操作状态下(达到了电动汽车设定的充电终止条件或已充满)，在断开 S2 之前，电动汽车应将充电电流减小至最低(< 1A)。 当人为按下车辆插头上联动开关，电动汽车应在 1 s 内断开 S2 且将充电电流减小至最低(< 1 A)。 故障状态下，电动汽车可立即断开 S2 (T12-T11) 无要求 从按下 S3 开关起 1 s 内\", \"time_constraint\": \"(T12-T11) 无要求 从按下 S3 开关起 1 s 内\"}",
+          "graph_source": false,
+          "channel": "routing_summary",
+          "channels": [
+            "routing_summary"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-054027",
+          "doc_id": "DOC-000003",
+          "page_no": 71,
+          "score": 4.687273,
+          "snippet": "routing_summary {\"title\": \"A.5 控制导引电路状态转换图和控制时序列表\", \"table_title\": \"表 A.7 交流充电控制时序表（续）\", \"section\": null, \"sequence\": \"\", \"state\": \"\", \"condition\": \"(10)电动汽车检测到 PWM 占空比变化后调整充电电流，调整后的充电电流不能大于 PWM 占空比显示的最大允许充电电流值\", \"action\": \"(10)电动汽车检测到 PWM 占空比变化后调整充电电流，调整后的充电电流不能大于 PWM 占空比显示的最大允许充电电流值 (T10-T9) ≤ 5 s\", \"time_constraint\": \"(T10-T9) ≤ 5 s\"}",
+          "graph_source": false,
+          "channel": "routing_summary",
+          "channels": [
+            "routing_summary"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-054031",
+          "doc_id": "DOC-000003",
+          "page_no": 71,
+          "score": 4.607273,
+          "snippet": "routing_summary {\"title\": \"A.5 控制导引电路状态转换图和控制时序列表\", \"table_title\": \"表 A.7 交流充电控制时序表（续）\", \"section\": null, \"sequence\": \"\", \"state\": \"状态 3' → 状态 2'\", \"condition\": \"(12) 电动汽车可断开 S2\", \"action\": \"状态 3' → 状态 2' (12) 电动汽车可断开 S2\", \"time_constraint\": \"\"}",
+          "graph_source": false,
+          "channel": "routing_summary",
+          "channels": [
+            "routing_summary"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-054024",
+          "doc_id": "DOC-000003",
+          "page_no": 71,
+          "score": 4.527273,
+          "snippet": "routing_summary {\"title\": \"A.5 控制导引电路状态转换图和控制时序列表\", \"table_title\": \"表 A.7 交流充电控制时序表（续）\", \"section\": null, \"sequence\": \"12V 9V 6V 检测点1 0V -12V AC电压 ON OFF S2开关 open closed AC电流 ON OFF T7 T8 触发条件：电动汽车启动充电\", \"state\": \"状态 3'\", \"condition\": \"(8)电动汽车启动充电，充电电流不应超过表 A.3 规定的对应占空比定义的电流值\", \"action\": \"\", \"time_constraint\": \"(T8-T7) 无要求\"}",
+          "graph_source": false,
+          "channel": "routing_summary",
+          "channels": [
+            "routing_summary"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-053676",
+          "doc_id": "DOC-000003",
+          "page_no": 32,
+          "score": 4.487273,
+          "snippet": "routing_summary {\"title\": \"5.2.1.2 保护接地导体连续性的持续监测\", \"process_name\": \"5.2.1.2 保护接地导体连续性的持续监测\", \"step_text\": \"模式 2 和模式 3 下，在充电连接装置完全连接后，休眠的电动汽车应具备被交流供电设备唤醒的功\\n能。通过 PWM 信号实现的唤醒功能符合表 A.7 中时序 3.1 的规定。\", \"section\": \"5.2.1.2\"}",
+          "graph_source": false,
+          "channel": "routing_summary",
+          "channels": [
+            "routing_summary"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-054022",
+          "doc_id": "DOC-000003",
+          "page_no": 71,
+          "score": 4.307273,
+          "snippet": "routing_summary {\"title\": \"A.5 控制导引电路状态转换图和控制时序列表\", \"table_title\": \"表 A.7 交流充电控制时序表（续）\", \"table_no\": null, \"headers\": [\"时序\", \"时序图例\", \"状态\", \"条件\", \"时间\"], \"rows\": [[\"5 电动汽车启动充电\", \"12V 9V 6V 检测点1 0V -12V AC电压 ON OFF S2开关 open closed AC电流 ON OFF T7 T8 触发条件：电动汽车启动充电\", \"状态 3'\", \"(8)电动汽车启动充电，充电电流不应超过表 A.3 规定的对应占空比定义的电流值\", \"(T8-T7) 无要求\"], [\"6 能量传输阶段供电设备调节输出功率\", \"12V 9V 6V 检测点1 0V -12V AC电压 ON OFF S2开关 open closed AC电流 ON OFF T9 T10 触发条件：调整 PWM 占空比\", \"状态 3'\", \"(9)当电网负载变化或人为更改供电设备输出设置时，供电设备需要调整其输出功率。 供电设备可以在任意时间在有效范围内调整 PWM 占空比。 在能量传输阶段，允许调整时间 5 s 内(T10-T9)，供电设备不应再次触发调整占空比\", \"最大 10 s 从供电设备收到占空比指令至响应输出占空比的时间\"], [\"\", \"\", \"\", \"(10)电动汽车检测到 PWM 占空比变化后调整充电电流，调整后的充电电流不能大于 PWM 占空比显示的最大允许充电电流值\", \"(T10-T9) ≤ 5 s\"], [\"7 电动汽车停止充电\", \"12V 9V 6V 检测点1 0V -12V AC电压 ON OFF S2开关 open closed AC电流 ON OFF T11 T12 触发条件：结束停",
+          "graph_source": false,
+          "channel": "routing_summary",
+          "channels": [
+            "routing_summary"
+          ]
+        }
+      ],
+      "answer": "",
+      "metrics": {
+        "query_type": "timing_lookup",
+        "retrieval_channels": [
+          "graph",
+          "routing_summary",
+          "wiki",
+          "facts",
+          "evidence",
+          "document"
+        ],
+        "graph_candidate_count": 16,
+        "routing_summary_hit_count": 8,
+        "topic_resolution_confidence": 0.95,
+        "topic_candidate_names": [
+          "**表 C.3 控制导引电路状态转换表（续）**",
+          "A.4.1 正常启动",
+          "B.2.3 充电电路原理",
+          "B.3.4 充电连接控制时序",
+          "**表 A.4 检测点 1 的电压状态及对应的充电过程状态**"
+        ],
+        "top_hit_ids": [
+          "FACT-054025",
+          "FACT-054023",
+          "FACT-054029",
+          "FACT-054027",
+          "FACT-054031"
+        ],
+        "top_hit_doc_ids": [
+          "DOC-000003",
+          "DOC-000003",
+          "DOC-000003",
+          "DOC-000003",
+          "DOC-000003"
+        ],
+        "retrieval_run_id": "RET-20637E628B7EECDB",
+        "retrieval_quality": {
+          "must_hit_total": 2,
+          "must_hit_found": 2,
+          "must_hit_missing": [],
+          "must_hit_best_rank": 1,
+          "mrr": 1.0,
+          "negative_hit_count": 0,
+          "negative_hits": [],
+          "negative_hit_rate": 0.0,
+          "top_k": 10,
+          "hit_count": 8,
+          "failure_attribution": "ok",
+          "recall_at_5": 1.0,
+          "recall_at_10": 1.0
+        },
+        "contract": {
+          "passed": true,
+          "failures": [],
+          "expected_query_type": "timing_lookup",
+          "actual_query_type": "timing_lookup",
+          "expected_min_graph_candidates": 1,
+          "actual_graph_candidate_count": 16,
+          "expected_top_entity_contains": "",
+          "actual_top_entity": "**表 C.3 控制导引电路状态转换表（续）**",
+          "expected_doc_id": "",
+          "top_doc_ids": [
+            "DOC-000003",
+            "DOC-000003",
+            "DOC-000003",
+            "DOC-000003",
+            "DOC-000003"
+          ],
+          "forbidden_result_ids": [],
+          "top_result_ids": [
+            "FACT-054025",
+            "FACT-054023",
+            "FACT-054029",
+            "FACT-054027",
+            "FACT-054031"
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "UQRET-cp_9v_pwm_state",
+      "passed": true,
+      "failure_reason": null,
+      "retrieved_items": [
+        {
+          "result_type": "fact",
+          "result_id": "FACT-053859",
+          "doc_id": "DOC-000003",
+          "page_no": 57,
+          "score": 4.077273,
+          "snippet": "routing_summary {\"title\": \"A.1.1 模式 3\", \"table_title\": \"表 A.4 检测点 1 的电压状态及对应的充电过程状态（续）\", \"table_no\": null, \"headers\": [\"检测点 1 电压值ᵃ / V\", \"\", \"\", \"是否输出 PWMᵇ\", \"充电过程状态\", \"充电连接装置是否连接\", \"S2 状态ᶜ\", \"车辆是否充电准备就绪ᵈ\", \"供电设备是否充电准备就绪ᵉ\", \"备注\"], \"rows\": [[\"最小值\", \"标称值\", \"最大值\", \"\", \"\", \"\", \"\", \"\", \"\", \"\"], [\"8\", \"9\", \"10\", \"否\", \"状态 2\", \"是\", \"断开\", \"否\", \"否\", \"R3 被检测到\"], [\"8\", \"9\", \"10\", \"是\", \"状态 2'ᶠ\", \"是\", \"断开\", \"否\", \"是\", \"R3 被检测到\"], [\"7\", \"\", \"8\", \"是/否\", \"状态 2/2' 或状态 3/3'\", \"是\", \"断开/闭合\", \"取决于当前功能需要\", \"\", \"\"], [\"5\", \"6\", \"7\", \"否\", \"状态 3\", \"是\", \"闭合\", \"是\", \"否\", \"R2 被检测到\"], [\"5\", \"6\", \"7\", \"是\", \"状态 3'ᶠ\", \"是\", \"闭合\", \"是\", \"是\", \"R2 被检测到\"], [\"4\", \"\", \"5\", \"是/否\", \"状态 3/3'ᶠ\", \"是\", \"闭合\", \"是\", \"取决于当前功能需要\", \"\"], [\"1\", \"\", \"4\", \"是/否\", \"状态 0 或无效\", \"\", \"断开/闭合\", \"取决于当前功能需要\", \"\", \"\"], [\"-1\", \"0\", \"1\", \"否\", \"状态 0\", \"不适用\", \"不适",
+          "graph_source": false,
+          "channel": "routing_summary",
+          "channels": [
+            "routing_summary",
+            "facts"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-054022",
+          "doc_id": "DOC-000003",
+          "page_no": 71,
+          "score": 3.957273,
+          "snippet": "routing_summary {\"title\": \"A.5 控制导引电路状态转换图和控制时序列表\", \"table_title\": \"表 A.7 交流充电控制时序表（续）\", \"table_no\": null, \"headers\": [\"时序\", \"时序图例\", \"状态\", \"条件\", \"时间\"], \"rows\": [[\"5 电动汽车启动充电\", \"12V 9V 6V 检测点1 0V -12V AC电压 ON OFF S2开关 open closed AC电流 ON OFF T7 T8 触发条件：电动汽车启动充电\", \"状态 3'\", \"(8)电动汽车启动充电，充电电流不应超过表 A.3 规定的对应占空比定义的电流值\", \"(T8-T7) 无要求\"], [\"6 能量传输阶段供电设备调节输出功率\", \"12V 9V 6V 检测点1 0V -12V AC电压 ON OFF S2开关 open closed AC电流 ON OFF T9 T10 触发条件：调整 PWM 占空比\", \"状态 3'\", \"(9)当电网负载变化或人为更改供电设备输出设置时，供电设备需要调整其输出功率。 供电设备可以在任意时间在有效范围内调整 PWM 占空比。 在能量传输阶段，允许调整时间 5 s 内(T10-T9)，供电设备不应再次触发调整占空比\", \"最大 10 s 从供电设备收到占空比指令至响应输出占空比的时间\"], [\"\", \"\", \"\", \"(10)电动汽车检测到 PWM 占空比变化后调整充电电流，调整后的充电电流不能大于 PWM 占空比显示的最大允许充电电流值\", \"(T10-T9) ≤ 5 s\"], [\"7 电动汽车停止充电\", \"12V 9V 6V 检测点1 0V -12V AC电压 ON OFF S2开关 open closed AC电流 ON OFF T11 T12 触发条件：结束停",
+          "graph_source": false,
+          "channel": "routing_summary",
+          "channels": [
+            "routing_summary"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-054002",
+          "doc_id": "DOC-000003",
+          "page_no": 69,
+          "score": 3.957273,
+          "snippet": "routing_summary {\"title\": \"A.5 控制导引电路状态转换图和控制时序列表\", \"table_title\": \"表 A.7 交流充电控制时序表（续）\", \"table_no\": null, \"headers\": [\"时序\", \"时序图例\", \"状态\", \"条件\", \"时间\"], \"rows\": [[\"2.2 在充电过程中断开连接\", \"12V 9V 6V 检测点1 0 V -12V AC电压 ON OFF S2开关 closed open AC电流 ON OFF T19 T20 触发条件:状态 3' → 状态 1'\", \"状态 3' → 状态 1'\", \"(19)在能量传输阶段,发生以下故障时,供电设备应断开交流供电回路： ——控制导引电路断路； ——供电接口带载断开连接； ——车辆接口带载断开连接。 车辆应在发生故障后 3 s 内断开其 S2 开关(如有)\", \"( T20-T19 ) ≤ 100 ms 从 T19 起, ≤ 3 s\"], [\"\", \"\", \"状态 3' → 状态 1'\", \"(19)在能量传输阶段,发生以下故障时,供电设备应断开交流供电回路： ——控制导引电路断路； ——供电接口带载断开连接； ——车辆接口带载断开连接。 车辆应在发生故障后 3 s 内断开其 S2 开关(如有)\", \"( T20-T19 ) ≤ 100 ms 从 T19 起, ≤ 3 s\"], [\"\", \"触发条件:状态 3 → 状态 1\", \"状态 3' → 状态 1' 或 状态 3 → 状态 1\", \"(20)电动汽车未连接 当进入状态 1 的 100 ms 后 5 s 内,供电设备的锁止装置应解锁供电插座(对于连接方式 A 和 B)。 如果锁止装置由用户授权触发,则只有同时满足进入状态 1 及再次获得用户的授权两个条件,方能解锁供电插座\", \"\"], [\"3",
+          "graph_source": false,
+          "channel": "routing_summary",
+          "channels": [
+            "routing_summary"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-054011",
+          "doc_id": "DOC-000003",
+          "page_no": 70,
+          "score": 3.957273,
+          "snippet": "routing_summary {\"title\": \"A.5 控制导引电路状态转换图和控制时序列表\", \"table_title\": \"**表 A.7 交流充电控制时序表（续）**\", \"table_no\": null, \"headers\": [\"时序\", \"时序图例\", \"状态\", \"条件\", \"时间\"], \"rows\": [[\"3.1 供电设备可以充电(状态 2)\", \"![时序图例3.1] 12V 9V 6V 检测点1 0V -12V AC电压 ON OFF closed S2开关 open ON AC电流 OFF T4 T5 触发条件：充电准备就绪\", \"状态 2 → 状态 2'\", \"（5）供电设备可以充电，并通过 PWM 占空比显示其最大供电电流。 电动汽车此时应检测出状态 2 转变到状态 2'，可以被唤醒。 该时序在充电过程的初始阶段出现或充电被中断后重新启动充电过程时出现\", \"(T5-T4) 无要求\"], [\"3.2 供电设备可以充电(状态 3)\", \"![时序图例3.2] 12V 9V 6V 检测点1 0V -12V AC电压 ON OFF closed S2开关 open ON AC电流 OFF T4 T5 T6 T7 触发条件：充电准备就绪\", \"状态 3 → 状态 3'\", \"（5）供电设备可以充电，并通过 PWM 占空比显示其最大供电电流。 电动汽车此时应检测出状态 3 转变到状态 3'。 该时序在充电过程的初始阶段出现或充电被中断后重新启动充电过程时出现\", \"(T5-T4) 无要求\"], [\"\", \"\", \"\", \"（6）电动汽车可以充电。 （7）供电设备闭合交流供电回路。 如果占空比为 5%，供电设备在未接收到数字通信的条件下不会闭合交流供电回路\", \"(T6-T5) = 0 s (T7-T6) ≤ 3 s\"], [\"4 电动汽车充电准备就",
+          "graph_source": false,
+          "channel": "routing_summary",
+          "channels": [
+            "routing_summary"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-054033",
+          "doc_id": "DOC-000003",
+          "page_no": 72,
+          "score": 3.957273,
+          "snippet": "routing_summary {\"title\": \"A.5 控制导引电路状态转换图和控制时序列表\", \"table_title\": \"表 A.7 交流充电控制时序表（续）\", \"table_no\": null, \"headers\": [\"时序\", \"时序图例\", \"状态\", \"条件\", \"时间\"], \"rows\": [[\"8.1 S2 断开后，供电设备做出响应(有 PWM)\", \"![时序图例8.1] 12V 9V 6V 检测点1 0V -12V ON AC电压 OFF closed S2开关 open ON AC电流 OFF T12 T13 触发条件:状态 3'→状态 2'\", \"状态 2'\", \"(13)当状态 3'转换到状态 2'时,供电设备应断开交流供电回路。异常状态下(如急停),供电设备可带载断开交流供电回路\", \"(T13-T12) ≤ 100 ms\"], [\"8.2 S2 断开后，供电设备做出响应(无 PWM)\", \"![时序图例8.2] 12V 9V 6V 检测点1 0V -12V ON AC电压 OFF closed S2开关 open ON AC电流 OFF T12 T13 触发条件:状态 3→状态 2\", \"状态 2\", \"(13)当状态 3 转换到状态 2 时,供电设备应断开交流供电回路。 注：不具备 S2 开关的电动汽车没有该状态变化。\", \"(T13-T12) ≤ 100 ms\"], [\"9.1 供电设备停止充电断开交流供电回路\", \"![时序图例9.1] 12V 9V 6V 检测点1 0V -12V ON AC电压 OFF closed S2开关 open B AC电流 OFF T13 T14 触发条件:状态 3'→状态 3\", \"状态 3' → 状态 3\", \"(13)在达到供电设备设定的充电终止条件或实施了充电结束指令时,设备控制器可以控",
+          "graph_source": false,
+          "channel": "routing_summary",
+          "channels": [
+            "routing_summary"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-054044",
+          "doc_id": "DOC-000003",
+          "page_no": 73,
+          "score": 3.957273,
+          "snippet": "routing_summary {\"title\": \"A.5 控制导引电路状态转换图和控制时序列表\", \"table_title\": \"**表 A.7 交流充电控制时序表（续）**\", \"table_no\": null, \"headers\": [\"时序\", \"时序图例\", \"状态\", \"条件\", \"时间\"], \"rows\": [[\"9.2 供电设备在状态 2' 时停止发送 PWM\", \"12V 9V 6V 检测点1 0 V -12V AC电压 ON OFF S2开关 closed open AC电流 ON OFF T21 T22 触发条件：无\", \"状态 2' → 状态 2\", \"(22)供电设备停止输出 PWM，电动汽车无需做出任何响应。如果 3 s 后 3.1 所示时序未出现，供电设备将继续保持 S1 在 +12 V 连接状态。 该时序可能会对电动汽车启动充电或预处理造成干扰。\", \"(T22-T21) 无要求\"], [\"9.3 供电设备在状态 1' 时停止发送 PWM\", \"12V 9V 6V 检测点1 0 V -12V AC电压 ON OFF S2开关 closed open AC电流 ON OFF T23 T24 触发条件：状态 2'/状态 3' → 状态 1'\", \"状态 1' → 状态 1\", \"(23)供电设备停止输出 PWM。 (24)电动汽车无需做出任何响应\", \"(T24-T23) ≤ 100 ms\"], [\"10.1 电动汽车对供电设备的终止充电状态做出响应\", \"12V 9V 6V 检测点1 0 V -12V AC电压 ON OFF S2开关 closed open AC电流 ON OFF T13 T14 T15 触发条件：电动汽车停止充电\", \"状态 3 → 状态 2\", \"该时序出现在时序 9.1 之后，电动汽车做出响应，将充电电流减小至最低 ",
+          "graph_source": false,
+          "channel": "routing_summary",
+          "channels": [
+            "routing_summary"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-053926",
+          "doc_id": "DOC-000003",
+          "page_no": 61,
+          "score": 3.477273,
+          "snippet": "routing_summary {\"title\": \"A.1.1 模式 3\", \"table_title\": \"A.1.1 模式 3\", \"table_no\": null, \"headers\": [\"信号/测量/系统条件\", \"状态/对象\", \"确认连接\", \"准备就绪\", \"能量传输和结束停机\", \"断开连接\"], \"rows\": [[\"状态\", \"状态1 状态2 状态3\", \"\", \"\", \"\", \"\"], [\"时序\", \"\", \"T1 T2(T4) T5\", \"T5' T6 T7 T8\", \"T9 T10 T11 T12 T13 (T19)\", \"(T20) T23 T24\"], [\"开关S1\", \"供电设备\", \"+12V\", \"PWM\", \"\", \"+12V\"], [\"开关S2\", \"电动汽车\", \"打开\", \"自定义\", \"闭合\", \"打开\"], [\"机械锁S3\", \"车辆插头\", \"闭合 打开\", \"\", \"闭合\", \"打开\"], [\"电子锁（如有）\", \"供电插座\", \"解锁\", \"自定义\", \"锁止\", \"自定义\"], [\"电子锁（如有）\", \"车辆插座\", \"解锁\", \"自定义\", \"锁止\", \"自定义 解锁\"], [\"检测点1\", \"供电设备\", \"+12V +9V +6V 0V -12V\", \"数字通信（可支持，占空比5%）\", \"调整占空比（如支持）\", \"\"], [\"检测点2ᵃ\", \"电动汽车\", \"+9V-Vd1 +6V-Vd1 0V\", \"\", \"\", \"\"], [\"检测点3\", \"车辆插头\", \"∞ R4+Rc Rc\", \"\", \"\", \"\"], [\"输出电压\", \"供电设备\", \"0V\", \"\", \"\", \"\"], [\"输入电流\", \"电动汽车\", \"0A\", \"\", \"降至1A及以下\", \"\"]]}",
+          "graph_source": false,
+          "channel": "routing_summary",
+          "channels": [
+            "routing_summary"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-053952",
+          "doc_id": "DOC-000003",
+          "page_no": 62,
+          "score": 3.477273,
+          "snippet": "routing_summary {\"title\": \"A.1.1 模式 3\", \"table_title\": \"A.1.1 模式 3\", \"table_no\": null, \"headers\": [\"信号/测量/系统条件\", \"状态/对象\", \"确认连接\", \"准备就绪\", \"能量传输和结束停机\", \"断开连接\"], \"rows\": [[\"状态\", \"状态1\", \"\", \"\", \"\", \"\"], [\"\", \"状态2\", \"\", \"\", \"\", \"\"], [\"\", \"状态3\", \"\", \"\", \"\", \"\"], [\"时序\", \"\", \"T1\", \"T2(T4) T5\", \"T5' T6 T7 T8 T9 T10 T13\", \"T14 T15 T16 T20\"], [\"开关S1\", \"供电设备\", \"+12V\", \"PWM\", \"\", \"\"], [\"开关S2\", \"电动汽车\", \"打开\", \"自定义\", \"闭合\", \"\"], [\"机械锁S3\", \"车辆插头\", \"闭合\", \"打开\", \"闭合\", \"打开\", \"闭合\"], [\"电子锁（如有）\", \"供电插座\", \"解锁\", \"自定义\", \"锁定\", \"自定义\"], [\"电子锁（如有）\", \"车辆插座\", \"解锁\", \"自定义\", \"锁定\", \"自定义 解锁\"], [\"检测点1\", \"供电设备\", \"+12V +9V +6V 0V -12V\", \"数字通信（如支持，占空比5%）\", \"调整占空比（如支持）\", \"\"], [\"检测点2*\", \"电动汽车\", \"+9V-Vd1 +6V-Vd1 0V\", \"\", \"\", \"\"], [\"检测点3\", \"车辆插头\", \"∞ R4+Rc Rc\", \"\", \"\", \"\"], [\"输出电压\", \"供电设备\", \"0V\", \"\", \"\", \"\"], [\"输入电流\", \"电动汽车\", \"0A\", \"\"",
+          "graph_source": false,
+          "channel": "routing_summary",
+          "channels": [
+            "routing_summary"
+          ]
+        }
+      ],
+      "answer": "",
+      "metrics": {
+        "query_type": "parameter_lookup",
+        "retrieval_channels": [
+          "graph",
+          "routing_summary",
+          "wiki",
+          "facts",
+          "evidence",
+          "document"
+        ],
+        "graph_candidate_count": 16,
+        "routing_summary_hit_count": 8,
+        "topic_resolution_confidence": 0.95,
+        "topic_candidate_names": [
+          "控制导引功能 control pilot function; CP",
+          "控制导引电路",
+          "控制导引电路 control pilot circuit",
+          "G.2.1 控制导引电路设计",
+          "控制导引功能 control pilot function;"
+        ],
+        "top_hit_ids": [
+          "FACT-053859",
+          "FACT-054022",
+          "FACT-054002",
+          "FACT-054011",
+          "FACT-054033"
+        ],
+        "top_hit_doc_ids": [
+          "DOC-000003",
+          "DOC-000003",
+          "DOC-000003",
+          "DOC-000003",
+          "DOC-000003"
+        ],
+        "retrieval_run_id": "RET-DC54659EBB33E26A",
+        "retrieval_quality": {
+          "must_hit_total": 3,
+          "must_hit_found": 3,
+          "must_hit_missing": [],
+          "must_hit_best_rank": 1,
+          "mrr": 1.0,
+          "negative_hit_count": 0,
+          "negative_hits": [],
+          "negative_hit_rate": 0.0,
+          "top_k": 10,
+          "hit_count": 8,
+          "failure_attribution": "ok",
+          "recall_at_5": 1.0,
+          "recall_at_10": 1.0
+        },
+        "contract": {
+          "passed": true,
+          "failures": [],
+          "expected_query_type": "parameter_lookup",
+          "actual_query_type": "parameter_lookup",
+          "expected_min_graph_candidates": 1,
+          "actual_graph_candidate_count": 16,
+          "expected_top_entity_contains": "",
+          "actual_top_entity": "控制导引功能 control pilot function; CP",
+          "expected_doc_id": "",
+          "top_doc_ids": [
+            "DOC-000003",
+            "DOC-000003",
+            "DOC-000003",
+            "DOC-000003",
+            "DOC-000003"
+          ],
+          "forbidden_result_ids": [],
+          "top_result_ids": [
+            "FACT-053859",
+            "FACT-054022",
+            "FACT-054002",
+            "FACT-054011",
+            "FACT-054033"
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "UQRET-obc_input_overvoltage_test",
+      "passed": true,
+      "failure_reason": null,
+      "retrieved_items": [
+        {
+          "result_type": "fact",
+          "result_id": "FACT-102621",
+          "doc_id": "DOC-000009",
+          "page_no": 16,
+          "score": 6.776435,
+          "snippet": "knowledge_unit_fact {\"title\": \"5.4.1 交流输入过、欠压保护试验\", \"process_name\": \"5.4.1 交流输入过、欠压保护试验\", \"step_text\": \"c) 逐步调节交流输入电压至过压保护值或欠压保护值,观察车载充电机的输出状态;\", \"section\": \"5.4.1\"}",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-102611",
+          "doc_id": "DOC-000009",
+          "page_no": 16,
+          "score": 6.776435,
+          "snippet": "knowledge_unit_fact {\"title\": \"5.4.1 交流输入过、欠压保护试验\", \"process_name\": \"5.4.1 交流输入过、欠压保护试验\", \"step_text\": \"试验方法及步骤:\\na) 按照图 1 接好试验电路,电子负载设置为恒压负载模式,电压设置为车载充电机的额定输出\\n电压;\\nb) 在额定的输入条件下开启车载充电机,使其工作在额定功率状态下;\\nc) 逐步调节交流输入电压至过压保护值或欠压保护值,观察车载充电机的输出状态;\\nd) 逐步调节交流输入电压从过压保护值或欠压保护值恢复至额定输入电压的±15%范围内,观\\n察车载充电机工作状态。\", \"section\": \"5.4.1\"}",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-102622",
+          "doc_id": "DOC-000009",
+          "page_no": 16,
+          "score": 6.776435,
+          "snippet": "knowledge_unit_fact {\"title\": \"5.4.1 交流输入过、欠压保护试验\", \"process_name\": \"5.4.1 交流输入过、欠压保护试验\", \"step_text\": \"d) 逐步调节交流输入电压从过压保护值或欠压保护值恢复至额定输入电压的 $ \\\\pm15\\\\% $范围内,观察车载充电机工作状态。\", \"section\": \"5.4.1\"}",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-102620",
+          "doc_id": "DOC-000009",
+          "page_no": 16,
+          "score": 6.656435,
+          "snippet": "knowledge_unit_fact {\"title\": \"5.4.1 交流输入过、欠压保护试验\", \"process_name\": \"5.4.1 交流输入过、欠压保护试验\", \"step_text\": \"a)按照图1接好试验电路,电子负载设置为恒压负载模式,电压设置为车载充电机的额定输出电压;\", \"section\": \"5.4.1\"}",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-102746",
+          "doc_id": "DOC-000009",
+          "page_no": 24,
+          "score": 5.236435,
+          "snippet": "knowledge_unit_fact {\"title\": \"A.2.3.1 直流输入过、欠压保护试验\", \"process_name\": \"A.2.3.1 直流输入过、欠压保护试验\", \"step_text\": \"c)调节直流输入电压值至过压保护值或欠压保护值,逆变应停止输出。\", \"section\": null}",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-102745",
+          "doc_id": "DOC-000009",
+          "page_no": 24,
+          "score": 5.116435,
+          "snippet": "knowledge_unit_fact {\"title\": \"A.2.3.1 直流输入过、欠压保护试验\", \"process_name\": \"A.2.3.1 直流输入过、欠压保护试验\", \"step_text\": \"a)按照图 A.1 接好试验电路,电子负载设置为恒阻负载模式;\", \"section\": null}",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-102434",
+          "doc_id": "DOC-000009",
+          "page_no": 7,
+          "score": 3.176435,
+          "snippet": "knowledge_unit_fact {\"title\": \"4.3.1 交流输入过压、欠压保护\", \"content\": \"车载充电机的交流输入电压大于等于过压保护值或小于等于欠压保护值时,应停止功率输出。故障排除后,可自动恢复输出或经过必要的人为干预后恢复输出。\", \"subject\": \"交流输入过压、欠压保护\", \"topic\": \"交流输入过压、欠压保护\", \"scope_type\": \"normative_requirement\", \"condition\": null, \"threshold\": null}",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts",
+            "routing_summary"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-102228",
+          "doc_id": "DOC-000009",
+          "page_no": 1,
+          "score": 2.476435,
+          "snippet": "has_section {\"title\": \"电动汽车用传导式车载充电机\", \"heading_level\": 1} has section title 电动汽车用传导式车载充电机 heading level 1 电动 动汽 汽车 车用 用传 传导 导式 式车 车载 载充 充电 电机 电动汽 动汽车 汽车用 车用传 用传导 传导式 导式车 式车载 车载充 载充电 充电机",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        }
+      ],
+      "answer": "",
+      "metrics": {
+        "query_type": "test_method_lookup",
+        "retrieval_channels": [
+          "routing_summary",
+          "facts",
+          "evidence",
+          "wiki",
+          "document"
+        ],
+        "graph_candidate_count": 0,
+        "routing_summary_hit_count": 8,
+        "topic_resolution_confidence": 0.0,
+        "topic_candidate_names": [],
+        "top_hit_ids": [
+          "FACT-102621",
+          "FACT-102611",
+          "FACT-102622",
+          "FACT-102620",
+          "FACT-102746"
+        ],
+        "top_hit_doc_ids": [
+          "DOC-000009",
+          "DOC-000009",
+          "DOC-000009",
+          "DOC-000009",
+          "DOC-000009"
+        ],
+        "retrieval_run_id": "RET-83C41A2AF2C11218",
+        "retrieval_quality": {
+          "must_hit_total": 3,
+          "must_hit_found": 3,
+          "must_hit_missing": [],
+          "must_hit_best_rank": 1,
+          "mrr": 1.0,
+          "negative_hit_count": 0,
+          "negative_hits": [],
+          "negative_hit_rate": 0.0,
+          "top_k": 10,
+          "hit_count": 8,
+          "failure_attribution": "ok",
+          "recall_at_5": 1.0,
+          "recall_at_10": 1.0
+        },
+        "contract": {
+          "passed": true,
+          "failures": [],
+          "expected_query_type": "test_method_lookup",
+          "actual_query_type": "test_method_lookup",
+          "expected_min_graph_candidates": null,
+          "actual_graph_candidate_count": 0,
+          "expected_top_entity_contains": "",
+          "actual_top_entity": "",
+          "expected_doc_id": "DOC-000009",
+          "top_doc_ids": [
+            "DOC-000009",
+            "DOC-000009",
+            "DOC-000009",
+            "DOC-000009",
+            "DOC-000009"
+          ],
+          "forbidden_result_ids": [],
+          "top_result_ids": [
+            "FACT-102621",
+            "FACT-102611",
+            "FACT-102622",
+            "FACT-102620",
+            "FACT-102746"
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "UQRET-cc_plain_acronym_requires_clarification_context",
+      "passed": true,
+      "failure_reason": null,
+      "retrieved_items": [
+        {
+          "result_type": "fact",
+          "result_id": "FACT-053455",
+          "doc_id": "DOC-000003",
+          "page_no": 20,
+          "score": 3.5999999999999996,
+          "snippet": "direct_term_definition {\"term\": \"连接确认功能 connection confirm function; CC\", \"definition\": \"通过电子或者机械的方式,反映车辆插头连接到车辆和/或供电插头连接到供电设备上的状态的功能。\"}",
+          "graph_source": false,
+          "channel": "direct_term_definition",
+          "channels": [
+            "direct_term_definition"
+          ]
+        },
+        {
+          "result_type": "evidence",
+          "result_id": "EV-004836",
+          "doc_id": "DOC-000003",
+          "page_no": 127,
+          "score": 1.907273,
+          "snippet": "graph_evidence GB/T 18487.1—2023\n\n附 录 G\n(规范性)\n采用 GB/T 20234.4 规定的车辆适配器的直流充电兼容技术方案\n\nG.1 概述\n\n本附录适用于采用 GB/T 20234.4 规定的车辆适配器连接附录 C 规定的电动汽车和附录 B 的直流供电设备（即传导式非车载充电机，以下简称“充电机”）的充电兼容解决方案。\n\n本附录还给出了适用于附录 C 充电系统的扩展兼容解决方案。\n\nG.2 车辆适配器\n\nG.2.1 控制导引电路设计\n\n车辆适配器内控制导引电路如图 G.1 所示。其中 Rc' 和 Rc'' 组合作为硬件编码（等效于附录 C 中车辆插头内的 Rc）。\n\n![图 G.1 车辆适配器电路原理](image_url)\n\n标引序号说明：\nCC1、CC2 —— 控制导引回路；\nRc' —— 车辆适配器内 CC2 与 PE 之间的电阻；\nRc'' —— 车辆适配器内 CC2 线路上的电阻；\n检测点 1 —— 充电机内部对 CC1 与 PE 之间电压进行检测的位置；\n检测点 2 —— 车辆内部对 CC1 与 PE 之间电压进行检测的位置；\n检测点 3 —— 车辆内部对 CC2",
+          "graph_source": true,
+          "channel": "graph",
+          "channels": [
+            "graph"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098356",
+          "doc_id": "DOC-000005",
+          "page_no": 69,
+          "score": 1.709975,
+          "snippet": "knowledge_unit_fact {\"title\": \"4.2.1. SPL.2 产品发布\", \"process_name\": \"4.2.1. SPL.2 产品发布\", \"step_text\": \"**SPL.2.BP6: Provide a release note.** A release is accompanied by information detailing key characteristics of the release.\\n*Note 5: The release note may include information about legal aspects like relevant target markets, legislation that is considered etc. See also VAL.1 Validation.*\", \"section\": \"4.2.1\"}",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098415",
+          "doc_id": "DOC-000005",
+          "page_no": 89,
+          "score": 1.709975,
+          "snippet": "knowledge_unit_fact {\"title\": \"SYS.4 基本实践\", \"process_name\": \"SYS.4 基本实践\", \"step_text\": \"**SYS.4.BP2: Select verification measures.** Document the selection of verification measures for each integration step considering selection criteria including criteria for regression verification. The documented selection of verification measures shall have sufficient coverage according to the release scope.\", \"section\": null}",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098416",
+          "doc_id": "DOC-000005",
+          "page_no": 89,
+          "score": 1.709975,
+          "snippet": "knowledge_unit_fact {\"title\": \"SYS.4 基本实践\", \"process_name\": \"SYS.4 基本实践\", \"step_text\": \"**SYS.4.BP3: Integrate system elements and perform integration verification.** Integrate the system elements until the system is fully integrated according to the specified interfaces and interactions between the system elements, and according to the defined sequence and defined preconditions. Perform the selected system integration verification measures. Record the verification measure data including pass/fail status and corresponding verification measure data.\", \"section\": null}",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098430",
+          "doc_id": "DOC-000005",
+          "page_no": 95,
+          "score": 1.709975,
+          "snippet": "knowledge_unit_fact {\"title\": \"4.3.5. SYS.5 系统验证\", \"process_name\": \"4.3.5. SYS.5 系统验证\", \"step_text\": \"**SYS.5.BP2: Select verification measures.** Document the selection of verification measures\\nconsidering selection criteria including criteria for regression verification. The selection of\\nverification measures shall have sufficient coverage according to the release scope.\", \"section\": \"4.3.5\"}",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098444",
+          "doc_id": "DOC-000005",
+          "page_no": 101,
+          "score": 1.709975,
+          "snippet": "knowledge_unit_fact {\"title\": \"4.4.1. SWE.1 软件需求分析\", \"process_name\": \"4.4.1. SWE.1 软件需求分析\", \"step_text\": \"**SWE.1.BP2: Structure software requirements.** Structure and prioritize the software requirements.\\n> Note 5: Examples for structuring criteria can be grouping (e.g., by functionality) or expressing product variants.\\n> Note 6: Prioritization can be done according to project or stakeholder needs via e.g., definition of release scopes. Refer to SPL.2.BP1.\", \"section\": \"4.4.1\"}",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        },
+        {
+          "result_type": "fact",
+          "result_id": "FACT-098478",
+          "doc_id": "DOC-000005",
+          "page_no": 109,
+          "score": 1.709975,
+          "snippet": "knowledge_unit_fact {\"title\": \"SWE.3 基本实践\", \"process_name\": \"SWE.3 基本实践\", \"step_text\": \"**SWE.3.BP3: Develop software units.** Develop and document the software units consistent with the detailed design, and according to coding principles.\", \"section\": null}",
+          "graph_source": false,
+          "channel": "facts",
+          "channels": [
+            "facts"
+          ]
+        }
+      ],
+      "answer": "",
+      "metrics": {
+        "query_type": "definition",
+        "retrieval_channels": [
+          "graph",
+          "routing_summary",
+          "facts",
+          "wiki",
+          "evidence",
+          "document"
+        ],
+        "graph_candidate_count": 16,
+        "routing_summary_hit_count": 8,
+        "topic_resolution_confidence": 0.95,
+        "topic_candidate_names": [
+          "控制导引电路",
+          "G.2.1 控制导引电路设计",
+          "控制导引电路 control pilot circuit",
+          "控制导引功能 control pilot function;",
+          "控制导引功能 control pilot function; CP"
+        ],
+        "top_hit_ids": [
+          "FACT-053455",
+          "EV-004836",
+          "FACT-098356",
+          "FACT-098415",
+          "FACT-098416"
+        ],
+        "top_hit_doc_ids": [
+          "DOC-000003",
+          "DOC-000003",
+          "DOC-000005",
+          "DOC-000005",
+          "DOC-000005"
+        ],
+        "retrieval_run_id": "RET-02DEF4D2CFD85623",
+        "retrieval_quality": {
+          "must_hit_total": 1,
+          "must_hit_found": 1,
+          "must_hit_missing": [],
+          "must_hit_best_rank": 1,
+          "mrr": 1.0,
+          "negative_hit_count": 0,
+          "negative_hits": [],
+          "negative_hit_rate": 0.0,
+          "top_k": 10,
+          "hit_count": 8,
+          "failure_attribution": "ok",
+          "recall_at_5": 1.0,
+          "recall_at_10": 1.0
+        },
+        "contract": {
+          "passed": true,
+          "failures": [],
+          "expected_query_type": "definition",
+          "actual_query_type": "definition",
+          "expected_min_graph_candidates": null,
+          "actual_graph_candidate_count": 16,
+          "expected_top_entity_contains": "",
+          "actual_top_entity": "控制导引电路",
+          "expected_doc_id": "",
+          "top_doc_ids": [
+            "DOC-000003",
+            "DOC-000003",
+            "DOC-000005",
+            "DOC-000005",
+            "DOC-000005"
+          ],
+          "forbidden_result_ids": [],
+          "top_result_ids": [
+            "FACT-053455",
+            "EV-004836",
+            "FACT-098356",
+            "FACT-098415",
+            "FACT-098416"
+          ]
+        }
+      }
+    }
+  ]
+}
