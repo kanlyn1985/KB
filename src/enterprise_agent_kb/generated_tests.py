@@ -1506,6 +1506,87 @@ def _build_retrieval_quality_cases(
                 difficulty="hard",
             )
 
+    requirement_facts = [
+        f for f in local_context.get("facts", [])
+        if f.get("fact_type") == "requirement"
+        and isinstance(_safe_json(f.get("object_value")), dict)
+    ]
+    seen_req_keys: set[str] = set()
+    for fact in requirement_facts[:40]:
+        payload = _safe_json(fact.get("object_value"))
+        if not isinstance(payload, dict):
+            continue
+        subject = str(payload.get("subject") or payload.get("topic") or "").strip()
+        content = str(payload.get("content") or "").strip()
+        section_title = str(payload.get("title") or "").strip()
+        qualifiers = _safe_json(fact.get("qualifiers_json"))
+        page_no = int(qualifiers.get("page_no", 0)) if isinstance(qualifiers, dict) else 0
+        if not subject or subject in seen_req_keys:
+            continue
+        if len(subject) < 3 or len(subject) > 30:
+            continue
+        seen_req_keys.add(subject)
+        _add_rq(
+            query=f"{subject}有什么要求？",
+            must_hit=[subject],
+            expected_pages=[page_no] if page_no else [],
+            expected_sections=[section_title] if section_title else [],
+            query_type="general_search",
+        )
+
+    process_facts = [
+        f for f in local_context.get("facts", [])
+        if f.get("fact_type") == "process_fact"
+        and isinstance(_safe_json(f.get("object_value")), dict)
+    ]
+    seen_proc_keys: set[str] = set()
+    for fact in process_facts[:30]:
+        payload = _safe_json(fact.get("object_value"))
+        if not isinstance(payload, dict):
+            continue
+        proc_name = str(payload.get("process_name") or payload.get("title") or "").strip()
+        section = str(payload.get("section") or "").strip()
+        qualifiers = _safe_json(fact.get("qualifiers_json"))
+        page_no = int(qualifiers.get("page_no", 0)) if isinstance(qualifiers, dict) else 0
+        clean_name = re.sub(r"^\d+[\.\s]+", "", proc_name).strip()
+        if not clean_name or clean_name in seen_proc_keys or len(clean_name) < 3:
+            continue
+        seen_proc_keys.add(clean_name)
+        _add_rq(
+            query=f"{clean_name}的流程是什么？",
+            must_hit=[clean_name],
+            expected_pages=[page_no] if page_no else [],
+            expected_sections=[section] if section else [],
+            query_type="timing_lookup",
+        )
+
+    threshold_facts = [
+        f for f in local_context.get("facts", [])
+        if f.get("fact_type") == "threshold"
+        and isinstance(_safe_json(f.get("object_value")), dict)
+    ]
+    seen_thr_keys: set[str] = set()
+    for fact in threshold_facts[:20]:
+        payload = _safe_json(fact.get("object_value"))
+        if not isinstance(payload, dict):
+            continue
+        parameter = str(payload.get("parameter") or "").strip()
+        condition = str(payload.get("condition") or "").strip()
+        section_title = str(payload.get("title") or "").strip()
+        qualifiers = _safe_json(fact.get("qualifiers_json"))
+        page_no = int(qualifiers.get("page_no", 0)) if isinstance(qualifiers, dict) else 0
+        label = parameter or condition
+        if not label or label in seen_thr_keys or len(label) < 3:
+            continue
+        seen_thr_keys.add(label)
+        _add_rq(
+            query=f"{label}的限值是多少？",
+            must_hit=[label],
+            expected_pages=[page_no] if page_no else [],
+            expected_sections=[section_title] if section_title else [],
+            query_type="parameter_lookup",
+        )
+
     return _dedupe_cases(cases)[:target_count]
 
 

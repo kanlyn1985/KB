@@ -7,7 +7,7 @@
   "network_enabled": false,
   "network_candidate_count": 0,
   "network_case_count": 0,
-  "local_case_count": 32,
+  "local_case_count": 23,
   "page_coverage_count": 20,
   "covered_pages": [
     1,
@@ -68,6 +68,177 @@
       ],
       "difficulty": "medium",
       "query_type": "definition",
+      "target_doc_id": "DOC-000004"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "规范性引用文件有什么要求？",
+      "must_include": "规范性引用文件",
+      "retrieval_must_hit": [
+        "规范性引用文件"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        8
+      ],
+      "expected_sections": [
+        "2 规范性引用文件"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000004"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "工作环境条件有什么要求？",
+      "must_include": "工作环境条件",
+      "retrieval_must_hit": [
+        "工作环境条件"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        9
+      ],
+      "expected_sections": [
+        "4.1.2 工作环境条件。"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000004"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "外观及安装尺寸有什么要求？",
+      "must_include": "外观及安装尺寸",
+      "retrieval_must_hit": [
+        "外观及安装尺寸"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        10
+      ],
+      "expected_sections": [
+        "4.2 外观及安装尺寸"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000004"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "输出特性参数允差有什么要求？",
+      "must_include": "输出特性参数允差",
+      "retrieval_must_hit": [
+        "输出特性参数允差"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        10
+      ],
+      "expected_sections": [
+        "4.5.2 输出特性参数允差。"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000004"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "额定输出效率有什么要求？",
+      "must_include": "额定输出效率",
+      "retrieval_must_hit": [
+        "额定输出效率"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        10
+      ],
+      "expected_sections": [
+        "4.5.3 额定输出效率。"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000004"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "过载输出能力有什么要求？",
+      "must_include": "过载输出能力",
+      "retrieval_must_hit": [
+        "过载输出能力"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        10
+      ],
+      "expected_sections": [
+        "4.5.4 过载输出能力。"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000004"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "和 4.5.2 的规定有什么要求？",
+      "must_include": "和 4.5.2 的规定",
+      "retrieval_must_hit": [
+        "和 4.5.2 的规定"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        11
+      ],
+      "expected_sections": [
+        "4.5.1 和 4.5.2 的规定。"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000004"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "持续输出能力有什么要求？",
+      "must_include": "持续输出能力",
+      "retrieval_must_hit": [
+        "持续输出能力"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        11
+      ],
+      "expected_sections": [
+        "4.5.5 持续输出能力。"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000004"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "爬电距离、电气间隙和穿通绝缘距离有什么要求？",
+      "must_include": "爬电距离、电气间隙和穿通绝缘距离",
+      "retrieval_must_hit": [
+        "爬电距离、电气间隙和穿通绝缘距离"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        11
+      ],
+      "expected_sections": [
+        "4.6.2 爬电距离、电气间隙和穿通绝缘距离。"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
       "target_doc_id": "DOC-000004"
     },
     {
@@ -275,86 +446,6 @@
       "source": "local",
       "assert_mode": "context_contains",
       "page_no": 2,
-      "target_doc_id": "DOC-000004"
-    },
-    {
-      "kind": "evidence",
-      "query": "QC_T 1036-2016 汽车电源逆变器-免费标准网_www.upbz.net：附件：35 项汽车行业标准编号、标准名称和起始实施日期 中华人民共和国工业和信息化部",
-      "must_include": "附件：35 项汽车行业标准编号、标准名称和起始实施日期 中华人民共和国工业和信息化部",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 2,
-      "target_doc_id": "DOC-000004"
-    },
-    {
-      "kind": "evidence",
-      "query": "QC_T 1036-2016 汽车电源逆变器-免费标准网_www.upbz.net：附件： ### 35 项汽车行业标准编号、标准名称和起始实施日期 | 序号 | 标准",
-      "must_include": "附件： ### 35 项汽车行业标准编号、标准名称和起始实施日期 | 序号 | 标准",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 3,
-      "target_doc_id": "DOC-000004"
-    },
-    {
-      "kind": "evidence",
-      "query": "QC_T 1036-2016 汽车电源逆变器-免费标准网_www.upbz.net：| 序号 | 标准编号 | 标准名称 | 被代替标准编号 | 起始实施日期 | |",
-      "must_include": "| 序号 | 标准编号 | 标准名称 | 被代替标准编号 | 起始实施日期 | |",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 4,
-      "target_doc_id": "DOC-000004"
-    },
-    {
-      "kind": "evidence",
-      "query": "QC_T 1036-2016 汽车电源逆变器-免费标准网_www.upbz.net：QC/T 1036—2016 # 前 言 本标准按照 GB/T 1.1—2009《标",
-      "must_include": "QC/T 1036—2016 # 前 言 本标准按照 GB/T 1.1—2009《标",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 7,
-      "target_doc_id": "DOC-000004"
-    },
-    {
-      "kind": "evidence",
-      "query": "QC_T 1036-2016 汽车电源逆变器-免费标准网_www.upbz.net：本标准的起草参考了国内外相关标准。",
-      "must_include": "本标准的起草参考了国内外相关标准。",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 7,
-      "target_doc_id": "DOC-000004"
-    },
-    {
-      "kind": "evidence",
-      "query": "QC_T 1036-2016 汽车电源逆变器-免费标准网_www.upbz.net：本标准由全国汽车标准化技术委员会(SAC/TC 114)提出并归口。",
-      "must_include": "本标准由全国汽车标准化技术委员会(SAC/TC 114)提出并归口。",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 7,
-      "target_doc_id": "DOC-000004"
-    },
-    {
-      "kind": "evidence",
-      "query": "QC_T 1036-2016 汽车电源逆变器-免费标准网_www.upbz.net：本标准起草单位:上海汽车集团股份有限公司技术中心、长沙汽车电器研究所、上海坤浦电子科",
-      "must_include": "本标准起草单位:上海汽车集团股份有限公司技术中心、长沙汽车电器研究所、上海坤浦电子科",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 7,
-      "target_doc_id": "DOC-000004"
-    },
-    {
-      "kind": "evidence",
-      "query": "QC_T 1036-2016 汽车电源逆变器-免费标准网_www.upbz.net：本标准起草人:邓恒、胡梦蛟、李伟阳、周建浩、杨红娟、谢勇。",
-      "must_include": "本标准起草人:邓恒、胡梦蛟、李伟阳、周建浩、杨红娟、谢勇。",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 7,
-      "target_doc_id": "DOC-000004"
-    },
-    {
-      "kind": "definition",
-      "query": "QC_T 1036-2016 汽车电源逆变器-免费标准网_www.upbz.net：在QC/T 1036—2016中，什么是保护门 shutter？",
-      "must_include": "保护门 shutter",
-      "source": "local",
-      "assert_mode": "context_contains",
       "target_doc_id": "DOC-000004"
     }
   ]

@@ -7,7 +7,7 @@
   "network_enabled": false,
   "network_candidate_count": 0,
   "network_case_count": 0,
-  "local_case_count": 34,
+  "local_case_count": 23,
   "page_coverage_count": 19,
   "covered_pages": [
     1,
@@ -39,6 +39,215 @@
     24
   ],
   "cases": [
+    {
+      "kind": "retrieval_quality",
+      "query": "规范性引用文件有什么要求？",
+      "must_include": "规范性引用文件",
+      "retrieval_must_hit": [
+        "规范性引用文件"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        4
+      ],
+      "expected_sections": [
+        "2 规范性引用文件"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000009"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "启动输入冲击电流有什么要求？",
+      "must_include": "启动输入冲击电流",
+      "retrieval_must_hit": [
+        "启动输入冲击电流"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        5
+      ],
+      "expected_sections": [
+        "4.2.2 启动输入冲击电流"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000009"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "直流输出限压特性有什么要求？",
+      "must_include": "直流输出限压特性",
+      "retrieval_must_hit": [
+        "直流输出限压特性"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        6
+      ],
+      "expected_sections": [
+        "4.2.3 直流输出限压特性"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000009"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "直流输出限流特性有什么要求？",
+      "must_include": "直流输出限流特性",
+      "retrieval_must_hit": [
+        "直流输出限流特性"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        6
+      ],
+      "expected_sections": [
+        "4.2.4 直流输出限流特性"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000009"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "直流输出电压误差有什么要求？",
+      "must_include": "直流输出电压误差",
+      "retrieval_must_hit": [
+        "直流输出电压误差"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        6
+      ],
+      "expected_sections": [
+        "4.2.6 直流输出电压误差"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000009"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "直流输出电流误差有什么要求？",
+      "must_include": "直流输出电流误差",
+      "retrieval_must_hit": [
+        "直流输出电流误差"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        6
+      ],
+      "expected_sections": [
+        "4.2.7 直流输出电流误差"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000009"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "输出电压纹波因数有什么要求？",
+      "must_include": "输出电压纹波因数",
+      "retrieval_must_hit": [
+        "输出电压纹波因数"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        6
+      ],
+      "expected_sections": [
+        "4.2.8 输出电压纹波因数"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000009"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "输出抛载要求有什么要求？",
+      "must_include": "输出抛载要求",
+      "retrieval_must_hit": [
+        "输出抛载要求"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        6
+      ],
+      "expected_sections": [
+        "4.2.10 输出抛载要求"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000009"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "交流输入过压、欠压保护有什么要求？",
+      "must_include": "交流输入过压、欠压保护",
+      "retrieval_must_hit": [
+        "交流输入过压、欠压保护"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        7
+      ],
+      "expected_sections": [
+        "4.3.1 交流输入过压、欠压保护"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000009"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "直流输出过压、欠压保护有什么要求？",
+      "must_include": "直流输出过压、欠压保护",
+      "retrieval_must_hit": [
+        "直流输出过压、欠压保护"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        7
+      ],
+      "expected_sections": [
+        "4.3.3 直流输出过压、欠压保护"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000009"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "输出短路保护有什么要求？",
+      "must_include": "输出短路保护",
+      "retrieval_must_hit": [
+        "输出短路保护"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        7
+      ],
+      "expected_sections": [
+        "4.3.4 输出短路保护"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000009"
+    },
     {
       "kind": "page_coverage",
       "query": "GBT+40432-2021：第1页 ICS 43.040 CCS T 35 # GB # 中华人民共和国国家标准",
@@ -244,105 +453,6 @@
       "source": "local",
       "assert_mode": "context_contains",
       "page_no": 3,
-      "target_doc_id": "DOC-000009"
-    },
-    {
-      "kind": "evidence",
-      "query": "GBT+40432-2021：本文件由全国汽车标准化技术委员会(SAC/TC 114)归口。",
-      "must_include": "本文件由全国汽车标准化技术委员会(SAC/TC 114)归口。",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 3,
-      "target_doc_id": "DOC-000009"
-    },
-    {
-      "kind": "evidence",
-      "query": "GBT+40432-2021：本文件起草单位:北京新能源汽车股份有限公司、苏州汇川联合动力系统有限公司、华为技术有",
-      "must_include": "本文件起草单位:北京新能源汽车股份有限公司、苏州汇川联合动力系统有限公司、华为技术有",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 3,
-      "target_doc_id": "DOC-000009"
-    },
-    {
-      "kind": "evidence",
-      "query": "GBT+40432-2021：本文件主要起草人:赵春阳、符志辉、许晓、曹冬冬、叶铱塬、闫亚江、赵凌霄、徐枭、张晓彬",
-      "must_include": "本文件主要起草人:赵春阳、符志辉、许晓、曹冬冬、叶铱塬、闫亚江、赵凌霄、徐枭、张晓彬",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 3,
-      "target_doc_id": "DOC-000009"
-    },
-    {
-      "kind": "evidence",
-      "query": "GBT+40432-2021：GB/T 40432—2021 # 电动汽车用传导式车载充电机 ### 1 范围 本",
-      "must_include": "GB/T 40432—2021 # 电动汽车用传导式车载充电机 ### 1 范围 本",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 4,
-      "target_doc_id": "DOC-000009"
-    },
-    {
-      "kind": "evidence",
-      "query": "GBT+40432-2021：本文件适用于标称输入电压为 220 V(AC)(单相)或 380 V(AC)(三相)",
-      "must_include": "本文件适用于标称输入电压为 220 V(AC)(单相)或 380 V(AC)(三相)",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 4,
-      "target_doc_id": "DOC-000009"
-    },
-    {
-      "kind": "evidence",
-      "query": "GBT+40432-2021：### 2 规范性引用文件 下列文件中的内容通过文中的规范性引用而构成本文件必不可少",
-      "must_include": "### 2 规范性引用文件 下列文件中的内容通过文中的规范性引用而构成本文件必不可少",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 4,
-      "target_doc_id": "DOC-000009"
-    },
-    {
-      "kind": "evidence",
-      "query": "GBT+40432-2021：GB 4824—2019 工业、科学和医疗设备 射频骚扰特性 限值和测量方法 GB/",
-      "must_include": "GB 4824—2019 工业、科学和医疗设备 射频骚扰特性 限值和测量方法 GB/",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 4,
-      "target_doc_id": "DOC-000009"
-    },
-    {
-      "kind": "evidence",
-      "query": "GBT+40432-2021：GB/T 40432—2021 3.1 **车载充电机 on-board charg",
-      "must_include": "GB/T 40432—2021 3.1 **车载充电机 on-board charg",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 5,
-      "target_doc_id": "DOC-000009"
-    },
-    {
-      "kind": "evidence",
-      "query": "GBT+40432-2021：3.3 **充电效率 charging efficiency** 输出功率与输入有功",
-      "must_include": "3.3 **充电效率 charging efficiency** 输出功率与输入有功",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 5,
-      "target_doc_id": "DOC-000009"
-    },
-    {
-      "kind": "evidence",
-      "query": "GBT+40432-2021：3.4 **输出电压误差 output voltage tolerance** 实际",
-      "must_include": "3.4 **输出电压误差 output voltage tolerance** 实际",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 5,
-      "target_doc_id": "DOC-000009"
-    },
-    {
-      "kind": "evidence",
-      "query": "GBT+40432-2021：3.5 **输出电流误差 output current tolerance** 实际",
-      "must_include": "3.5 **输出电流误差 output current tolerance** 实际",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 5,
       "target_doc_id": "DOC-000009"
     }
   ]

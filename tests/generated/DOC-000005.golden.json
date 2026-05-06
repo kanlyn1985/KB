@@ -7,8 +7,8 @@
   "network_enabled": false,
   "network_candidate_count": 0,
   "network_case_count": 0,
-  "local_case_count": 166,
-  "page_coverage_count": 166,
+  "local_case_count": 154,
+  "page_coverage_count": 154,
   "covered_pages": [
     1,
     2,
@@ -163,19 +163,7 @@
     227,
     229,
     230,
-    231,
-    235,
-    237,
-    238,
-    240,
-    241,
-    242,
-    243,
-    244,
-    245,
-    246,
-    247,
-    248
+    231
   ],
   "uncovered_pages": [
     5,
@@ -258,8 +246,20 @@
     232,
     233,
     234,
+    235,
     236,
+    237,
+    238,
     239,
+    240,
+    241,
+    242,
+    243,
+    244,
+    245,
+    246,
+    247,
+    248,
     249,
     250,
     251,
@@ -1183,6 +1183,234 @@
       "source": "local_rq",
       "difficulty": "hard",
       "query_type": "comparison",
+      "target_doc_id": "DOC-000005"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": ". 主要生命周期过程类别有什么要求？",
+      "must_include": ". 主要生命周期过程类别",
+      "retrieval_must_hit": [
+        ". 主要生命周期过程类别"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        32
+      ],
+      "expected_sections": [
+        "3.1.1. 主要生命周期过程类别"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000005"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": ". 评定和聚合的方法有什么要求？",
+      "must_include": ". 评定和聚合的方法",
+      "retrieval_must_hit": [
+        ". 评定和聚合的方法"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        46
+      ],
+      "expected_sections": [
+        "3.2.3. 评定和聚合的方法"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000005"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": ". 过程能力等级模型有什么要求？",
+      "must_include": ". 过程能力等级模型",
+      "retrieval_must_hit": [
+        ". 过程能力等级模型"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        50
+      ],
+      "expected_sections": [
+        "3.2.4. 过程能力等级模型"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000005"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": ". 信息项与工作产品有什么要求？",
+      "must_include": ". 信息项与工作产品",
+      "retrieval_must_hit": [
+        ". 信息项与工作产品"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        56
+      ],
+      "expected_sections": [
+        "3.3.2.1. 信息项与工作产品"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000005"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "Base Practices有什么要求？",
+      "must_include": "Base Practices",
+      "retrieval_must_hit": [
+        "Base Practices"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        110
+      ],
+      "expected_sections": [
+        "requirement"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000005"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "Annex C.1 “插件”的概念有什么要求？",
+      "must_include": "Annex C.1 “插件”的概念",
+      "retrieval_must_hit": [
+        "Annex C.1 “插件”的概念"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        326
+      ],
+      "expected_sections": [
+        "Annex C.1 “插件”的概念"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000005"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "Annex C.3 机器学习工程过程的整合有什么要求？",
+      "must_include": "Annex C.3 机器学习工程过程的整合",
+      "retrieval_must_hit": [
+        "Annex C.3 机器学习工程过程的整合"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        330
+      ],
+      "expected_sections": [
+        "Annex C.3 机器学习工程过程的整合"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000005"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "ACQ.4 基本实践的流程是什么？",
+      "must_include": "ACQ.4 基本实践",
+      "retrieval_must_hit": [
+        "ACQ.4 基本实践"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        65
+      ],
+      "expected_sections": [
+        "32"
+      ],
+      "difficulty": "medium",
+      "query_type": "timing_lookup",
+      "target_doc_id": "DOC-000005"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "2.1. SPL.2 产品发布的流程是什么？",
+      "must_include": "2.1. SPL.2 产品发布",
+      "retrieval_must_hit": [
+        "2.1. SPL.2 产品发布"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        69
+      ],
+      "expected_sections": [
+        "4.2.1"
+      ],
+      "difficulty": "medium",
+      "query_type": "timing_lookup",
+      "target_doc_id": "DOC-000005"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "SPL.2 基本实践的流程是什么？",
+      "must_include": "SPL.2 基本实践",
+      "retrieval_must_hit": [
+        "SPL.2 基本实践"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        70
+      ],
+      "expected_sections": [
+        "35"
+      ],
+      "difficulty": "medium",
+      "query_type": "timing_lookup",
+      "target_doc_id": "DOC-000005"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "SYS.1 基本实践的流程是什么？",
+      "must_include": "SYS.1 基本实践",
+      "retrieval_must_hit": [
+        "SYS.1 基本实践"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        75
+      ],
+      "expected_sections": [
+        "37"
+      ],
+      "difficulty": "medium",
+      "query_type": "timing_lookup",
+      "target_doc_id": "DOC-000005"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "3.2. SYS.2 系统需求分析的流程是什么？",
+      "must_include": "3.2. SYS.2 系统需求分析",
+      "retrieval_must_hit": [
+        "3.2. SYS.2 系统需求分析"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        78
+      ],
+      "expected_sections": [
+        "4.3.2"
+      ],
+      "difficulty": "medium",
+      "query_type": "timing_lookup",
       "target_doc_id": "DOC-000005"
     },
     {
@@ -2623,114 +2851,6 @@
       "source": "local",
       "assert_mode": "context_contains",
       "page_no": 231,
-      "target_doc_id": "DOC-000005"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "AutomotiveSPICE_PAM_40_Chinese：第235页 PA 2.2 Work product management process",
-      "must_include": "PA 2.2 Work product management process",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 235,
-      "target_doc_id": "DOC-000005"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "AutomotiveSPICE_PAM_40_Chinese：第237页 *Note 3: Possible sources for the iden",
-      "must_include": "*Note 3: Possible sources for the iden",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 237,
-      "target_doc_id": "DOC-000005"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "AutomotiveSPICE_PAM_40_Chinese：第238页 *注 3：存储和控制要求识别的来源可以是法律要求、数据政策、其他项目的最佳实",
-      "must_include": "*注 3：存储和控制要求识别的来源可以是法律要求、数据政策、其他项目的最佳实",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 238,
-      "target_doc_id": "DOC-000005"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "AutomotiveSPICE_PAM_40_Chinese：第240页 过程能力等级 3 级：已建立的过程 以下过程属性结合先前已定义的过程属性，证",
-      "must_include": "过程能力等级 3 级：已建立的过程 以下过程属性结合先前已定义的过程属性，证",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 240,
-      "target_doc_id": "DOC-000005"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "AutomotiveSPICE_PAM_40_Chinese：第241页 ## Generic practices #### GP 3.1.1 Est",
-      "must_include": "## Generic practices #### GP 3.1.1 Est",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 241,
-      "target_doc_id": "DOC-000005"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "AutomotiveSPICE_PAM_40_Chinese：第242页 定义了标准过程的输入和输出，包括相应的准入和准出准则，以确定与其它过程的交互",
-      "must_include": "定义了标准过程的输入和输出，包括相应的准入和准出准则，以确定与其它过程的交互",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 242,
-      "target_doc_id": "DOC-000005"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "AutomotiveSPICE_PAM_40_Chinese：第243页 Note 7: Methods and activities to gath",
-      "must_include": "Note 7: Methods and activities to gath",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 243,
-      "target_doc_id": "DOC-000005"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "AutomotiveSPICE_PAM_40_Chinese：第244页 定义了监控标准过程所需的适当准则和信息。",
-      "must_include": "定义了监控标准过程所需的适当准则和信息。",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 244,
-      "target_doc_id": "DOC-000005"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "AutomotiveSPICE_PAM_40_Chinese：第245页 Note 1: Changes in the standard proces",
-      "must_include": "Note 1: Changes in the standard proces",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 245,
-      "target_doc_id": "DOC-000005"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "AutomotiveSPICE_PAM_40_Chinese：第246页 过程属性成就 1）基于适当的已选择的 和/或 裁剪的标准过程部署了已定义过程",
-      "must_include": "过程属性成就 1）基于适当的已选择的 和/或 裁剪的标准过程部署了已定义过程",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 246,
-      "target_doc_id": "DOC-000005"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "AutomotiveSPICE_PAM_40_Chinese：第247页 Results of the analysis are made avail",
-      "must_include": "Results of the analysis are made avail",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 247,
-      "target_doc_id": "DOC-000005"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "AutomotiveSPICE_PAM_40_Chinese：第248页 根据确定的过程监控方法收集和分析信息，以理解已定义过程的有效性和充分性。提供",
-      "must_include": "根据确定的过程监控方法收集和分析信息，以理解已定义过程的有效性和充分性。提供",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 248,
       "target_doc_id": "DOC-000005"
     }
   ]

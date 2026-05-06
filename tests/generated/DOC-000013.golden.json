@@ -7,7 +7,7 @@
   "network_enabled": false,
   "network_candidate_count": 0,
   "network_case_count": 0,
-  "local_case_count": 18,
+  "local_case_count": 14,
   "page_coverage_count": 10,
   "covered_pages": [
     1,
@@ -53,6 +53,82 @@
       ],
       "difficulty": "medium",
       "query_type": "definition",
+      "target_doc_id": "DOC-000013"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": ". 充电与逆变技术有什么要求？",
+      "must_include": ". 充电与逆变技术",
+      "retrieval_must_hit": [
+        ". 充电与逆变技术"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        2
+      ],
+      "expected_sections": [
+        "2.1. 充电与逆变技术"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000013"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": ". 地区性综合示范实践有什么要求？",
+      "must_include": ". 地区性综合示范实践",
+      "retrieval_must_hit": [
+        ". 地区性综合示范实践"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        6
+      ],
+      "expected_sections": [
+        "3.3.4. 地区性综合示范实践"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000013"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": ". 问题与限制有什么要求？",
+      "must_include": ". 问题与限制",
+      "retrieval_must_hit": [
+        ". 问题与限制"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        7
+      ],
+      "expected_sections": [
+        "3.4. 问题与限制"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
+      "target_doc_id": "DOC-000013"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": ". 商业模式不成熟有什么要求？",
+      "must_include": ". 商业模式不成熟",
+      "retrieval_must_hit": [
+        ". 商业模式不成熟"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_pages": [
+        7
+      ],
+      "expected_sections": [
+        "3.4.1. 商业模式不成熟"
+      ],
+      "difficulty": "medium",
+      "query_type": "general_search",
       "target_doc_id": "DOC-000013"
     },
     {
@@ -179,42 +255,6 @@
       "source": "local",
       "assert_mode": "context_contains",
       "page_no": 1,
-      "target_doc_id": "DOC-000013"
-    },
-    {
-      "kind": "evidence",
-      "query": "V2G相关：27ᵗʰ, 2024 ### Abstract Vehicle-to-Grid (V",
-      "must_include": "27ᵗʰ, 2024 ### Abstract Vehicle-to-Grid (V",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 1,
-      "target_doc_id": "DOC-000013"
-    },
-    {
-      "kind": "evidence",
-      "query": "V2G相关：Not only does it optimize the use of elect",
-      "must_include": "Not only does it optimize the use of elect",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 1,
-      "target_doc_id": "DOC-000013"
-    },
-    {
-      "kind": "evidence",
-      "query": "V2G相关：山博轩，杨郁 comprehensive energy systems, and r",
-      "must_include": "山博轩，杨郁 comprehensive energy systems, and r",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 2,
-      "target_doc_id": "DOC-000013"
-    },
-    {
-      "kind": "evidence",
-      "query": "V2G相关：The limitations and problems in the pilot",
-      "must_include": "The limitations and problems in the pilot",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 2,
       "target_doc_id": "DOC-000013"
     }
   ]
