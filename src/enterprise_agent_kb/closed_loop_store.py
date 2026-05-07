@@ -239,10 +239,16 @@ def record_eval_run(
     eval_run_id = _stable_id("EVAL", suite_id, now, command)
     config_hash = _short_hash({"suite_id": suite_id, "case_count": len(cases), "command": command})
     summary_with_quality = dict(summary)
-    summary_with_quality.setdefault("retrieval_quality", _retrieval_quality_summary(case_results or []))
-    summary_with_quality.setdefault("answer_quality", _answer_quality_summary(case_results or []))
-    summary_with_quality.setdefault("evidence_shape_quality", _evidence_shape_quality_summary(case_results or []))
-    summary_with_quality.setdefault("shape_contract_quality", _shape_contract_quality_summary(case_results or []))
+    if case_results:
+        summary_with_quality["retrieval_quality"] = _retrieval_quality_summary(case_results)
+        summary_with_quality["answer_quality"] = _answer_quality_summary(case_results)
+        summary_with_quality["evidence_shape_quality"] = _evidence_shape_quality_summary(case_results)
+        summary_with_quality["shape_contract_quality"] = _shape_contract_quality_summary(case_results)
+    else:
+        summary_with_quality.setdefault("retrieval_quality", _retrieval_quality_summary([]))
+        summary_with_quality.setdefault("answer_quality", _answer_quality_summary([]))
+        summary_with_quality.setdefault("evidence_shape_quality", _evidence_shape_quality_summary([]))
+        summary_with_quality.setdefault("shape_contract_quality", _shape_contract_quality_summary([]))
     summary_with_quality.setdefault("pytest_counts", _pytest_output_counts(output))
     summary_with_quality.setdefault("eval_scope", _eval_scope_summary(cases, case_results or [], output))
     connection.execute(
