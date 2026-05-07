@@ -250,7 +250,7 @@
     },
     {
       "kind": "page_coverage",
-      "query": "GBT+40432-2021：第1页 ICS 43.040 CCS T 35 # GB # 中华人民共和国国家标准",
+      "query": "第1页 ICS 43.040 CCS T 35 # GB # 中华人民共和国国家标准",
       "must_include": "ICS 43.040 CCS T 35 # GB # 中华人民共和国国家标准",
       "source": "local",
       "assert_mode": "context_contains",
@@ -259,7 +259,7 @@
     },
     {
       "kind": "page_coverage",
-      "query": "GBT+40432-2021：第3页 GB/T 40432—2021 # 前 言 本文件按照GB/T 1.1—20",
+      "query": "第3页 GB/T 40432—2021 # 前 言 本文件按照GB/T 1.1—20",
       "must_include": "GB/T 40432—2021 # 前 言 本文件按照GB/T 1.1—20",
       "source": "local",
       "assert_mode": "context_contains",
@@ -268,7 +268,7 @@
     },
     {
       "kind": "page_coverage",
-      "query": "GBT+40432-2021：第4页 GB 4824—2019 工业、科学和医疗设备 射频骚扰特性 限值和测量方法",
+      "query": "第4页 GB 4824—2019 工业、科学和医疗设备 射频骚扰特性 限值和测量方法",
       "must_include": "GB 4824—2019 工业、科学和医疗设备 射频骚扰特性 限值和测量方法",
       "source": "local",
       "assert_mode": "context_contains",
@@ -277,7 +277,7 @@
     },
     {
       "kind": "page_coverage",
-      "query": "GBT+40432-2021：第5页 3.3 **充电效率 charging efficiency** 输出功率与",
+      "query": "第5页 3.3 **充电效率 charging efficiency** 输出功率与",
       "must_include": "3.3 **充电效率 charging efficiency** 输出功率与",
       "source": "local",
       "assert_mode": "context_contains",
@@ -286,7 +286,7 @@
     },
     {
       "kind": "page_coverage",
-      "query": "GBT+40432-2021：第6页 GB/T 40432—2021 4.2.3 直流输出限压特性 具有恒压输出特",
+      "query": "第6页 GB/T 40432—2021 4.2.3 直流输出限压特性 具有恒压输出特",
       "must_include": "GB/T 40432—2021 4.2.3 直流输出限压特性 具有恒压输出特",
       "source": "local",
       "assert_mode": "context_contains",
@@ -295,7 +295,7 @@
     },
     {
       "kind": "page_coverage",
-      "query": "GBT+40432-2021：第8页 4.4.2 耐电压性 在车载充电机的各独立带电端口回路与地(外壳)之间、彼此",
+      "query": "第8页 4.4.2 耐电压性 在车载充电机的各独立带电端口回路与地(外壳)之间、彼此",
       "must_include": "4.4.2 耐电压性 在车载充电机的各独立带电端口回路与地(外壳)之间、彼此",
       "source": "local",
       "assert_mode": "context_contains",
@@ -304,7 +304,7 @@
     },
     {
       "kind": "page_coverage",
-      "query": "GBT+40432-2021：第9页 表 6 浪涌(冲击)抗扰度试验项目及功能等级要求 | 试验项目 | 试验严酷",
+      "query": "第9页 表 6 浪涌(冲击)抗扰度试验项目及功能等级要求 | 试验项目 | 试验严酷",
       "must_include": "表 6 浪涌(冲击)抗扰度试验项目及功能等级要求 | 试验项目 | 试验严酷",
       "source": "local",
       "assert_mode": "context_contains",
@@ -313,7 +313,7 @@
     },
     {
       "kind": "page_coverage",
-      "query": "GBT+40432-2021：第10页 GB/T 40432—2021 **表 7 电压暂降和短时中断试验项目及功能",
+      "query": "第10页 GB/T 40432—2021 **表 7 电压暂降和短时中断试验项目及功能",
       "must_include": "GB/T 40432—2021 **表 7 电压暂降和短时中断试验项目及功能",
       "source": "local",
       "assert_mode": "context_contains",
@@ -322,7 +322,7 @@
     },
     {
       "kind": "page_coverage",
-      "query": "GBT+40432-2021：第11页 GB/T 40432—2021 4.6 环境适应性 4.6.1 环境条件 4",
+      "query": "第11页 GB/T 40432—2021 4.6 环境适应性 4.6.1 环境条件 4",
       "must_include": "GB/T 40432—2021 4.6 环境适应性 4.6.1 环境条件 4",
       "source": "local",
       "assert_mode": "context_contains",
@@ -331,7 +331,7 @@
     },
     {
       "kind": "page_coverage",
-      "query": "GBT+40432-2021：第12页 5.1.2 仪器设备要求 试验用设备应采用比受试设备技术指标至少高一个等级",
+      "query": "第12页 5.1.2 仪器设备要求 试验用设备应采用比受试设备技术指标至少高一个等级",
       "must_include": "5.1.2 仪器设备要求 试验用设备应采用比受试设备技术指标至少高一个等级",
       "source": "local",
       "assert_mode": "context_contains",
@@ -340,7 +340,7 @@
     },
     {
       "kind": "page_coverage",
-      "query": "GBT+40432-2021：第13页 GB/T 40432—2021 ![图 1 充电试验基本原理图](https",
+      "query": "第13页 GB/T 40432—2021 ![图 1 充电试验基本原理图](https",
       "must_include": "GB/T 40432—2021 ![图 1 充电试验基本原理图](https",
       "source": "local",
       "assert_mode": "context_contains",
@@ -349,7 +349,7 @@
     },
     {
       "kind": "page_coverage",
-      "query": "GBT+40432-2021：第14页 5.3.4 直流输出限压特性试验 试验方法及步骤： a) 按照图 1 接好试",
+      "query": "第14页 5.3.4 直流输出限压特性试验 试验方法及步骤： a) 按照图 1 接好试",
       "must_include": "5.3.4 直流输出限压特性试验 试验方法及步骤： a) 按照图 1 接好试",
       "source": "local",
       "assert_mode": "context_contains",
@@ -358,7 +358,7 @@
     },
     {
       "kind": "page_coverage",
-      "query": "GBT+40432-2021：第17页 5.4.3.2 直流输出欠压保护试验 试验方法及步骤: a) 按照图 1 接",
+      "query": "第17页 5.4.3.2 直流输出欠压保护试验 试验方法及步骤: a) 按照图 1 接",
       "must_include": "5.4.3.2 直流输出欠压保护试验 试验方法及步骤: a) 按照图 1 接",
       "source": "local",
       "assert_mode": "context_contains",
@@ -367,7 +367,7 @@
     },
     {
       "kind": "page_coverage",
-      "query": "GBT+40432-2021：第18页 5.6 电磁兼容试验 5.6.1 工作状态 车载充电机在充电工作状态下进行电",
+      "query": "第18页 5.6 电磁兼容试验 5.6.1 工作状态 车载充电机在充电工作状态下进行电",
       "must_include": "5.6 电磁兼容试验 5.6.1 工作状态 车载充电机在充电工作状态下进行电",
       "source": "local",
       "assert_mode": "context_contains",
@@ -376,7 +376,7 @@
     },
     {
       "kind": "page_coverage",
-      "query": "GBT+40432-2021：第19页 5.6.3.6 电压波动和闪烁试验 5.6.3.6.1 当车载充电机额定输入",
+      "query": "第19页 5.6.3.6 电压波动和闪烁试验 5.6.3.6.1 当车载充电机额定输入",
       "must_include": "5.6.3.6 电压波动和闪烁试验 5.6.3.6.1 当车载充电机额定输入",
       "source": "local",
       "assert_mode": "context_contains",
@@ -385,7 +385,7 @@
     },
     {
       "kind": "page_coverage",
-      "query": "GBT+40432-2021：第20页 5.7.4 耐振动试验 车载充电机的振动试验根据其在车辆中的安装部位，按 G",
+      "query": "第20页 5.7.4 耐振动试验 车载充电机的振动试验根据其在车辆中的安装部位，按 G",
       "must_include": "5.7.4 耐振动试验 车载充电机的振动试验根据其在车辆中的安装部位，按 G",
       "source": "local",
       "assert_mode": "context_contains",
@@ -394,7 +394,7 @@
     },
     {
       "kind": "page_coverage",
-      "query": "GBT+40432-2021：第22页 GB/T 40432—2021 A.1.1.9 交流输出带非阻性负载能力 逆",
+      "query": "第22页 GB/T 40432—2021 A.1.1.9 交流输出带非阻性负载能力 逆",
       "must_include": "GB/T 40432—2021 A.1.1.9 交流输出带非阻性负载能力 逆",
       "source": "local",
       "assert_mode": "context_contains",
@@ -403,7 +403,7 @@
     },
     {
       "kind": "page_coverage",
-      "query": "GBT+40432-2021：第23页 ![放电试验基本原理图](A.1) 功率分析仪 电流取样装置 电压取样装置",
+      "query": "第23页 ![放电试验基本原理图](A.1) 功率分析仪 电流取样装置 电压取样装置",
       "must_include": "![放电试验基本原理图](A.1) 功率分析仪 电流取样装置 电压取样装置",
       "source": "local",
       "assert_mode": "context_contains",
@@ -412,7 +412,7 @@
     },
     {
       "kind": "page_coverage",
-      "query": "GBT+40432-2021：第25页 GB/T 40432—2021 a) 按照图 A.1 接好试验电路,电子负载",
+      "query": "第25页 GB/T 40432—2021 a) 按照图 A.1 接好试验电路,电子负载",
       "must_include": "GB/T 40432—2021 a) 按照图 A.1 接好试验电路,电子负载",
       "source": "local",
       "assert_mode": "context_contains",
