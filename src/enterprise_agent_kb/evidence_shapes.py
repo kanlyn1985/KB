@@ -34,6 +34,10 @@ SHAPE_CONTRACTS: dict[str, EvidenceShapeContract] = {
     "parameter_meaning": EvidenceShapeContract("parameter_meaning", ("parameter_definition", "signal_state_table")),
     "signal_state_lookup": EvidenceShapeContract("signal_state_lookup", ("signal_state_table",)),
     "definition": EvidenceShapeContract("definition", ("term_definition", "parameter_definition")),
+    "general_search": EvidenceShapeContract("general_search", ("term_definition", "parameter_definition", "process_activity", "timing_table", "signal_state_table"), required=False),
+    "comparison": EvidenceShapeContract("comparison", ("parameter_definition", "signal_state_table")),
+    "constraint": EvidenceShapeContract("constraint", ("parameter_definition", "process_activity")),
+    "standard_lookup": EvidenceShapeContract("standard_lookup", ("term_definition",), required=False),
 }
 
 

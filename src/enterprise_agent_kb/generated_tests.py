@@ -1357,7 +1357,7 @@ def _build_page_coverage_cases(local_context: dict[str, object]) -> list[dict[st
         anchor = _definition_anchor(sentence, max_chars=38)
         if not _is_usable_golden_anchor(anchor):
             continue
-        query = _scope_query(local_context, f"第{page_no}页 {anchor}")
+        query = f"第{page_no}页 {anchor}"
         cases.append(
             _case(
                 "page_coverage",
