@@ -151,7 +151,7 @@ def build_direct_answer(
         if isinstance(first.get("object"), dict):
             obj = first["object"]
             if "title" in obj:
-                return f"最相关的结构化结果是章节《{obj['title']}》。"
+                return f"最相关的结构化结果是章节《{obj['title']}。"
             if "value" in obj:
                 return f"最相关的结构化结果是 {obj['value']}。"
 

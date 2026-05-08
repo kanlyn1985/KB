@@ -2,68 +2,17 @@
   "doc_id": "DOC-000009",
   "source": "coverage_u3_not_tested",
   "candidate_count": 2,
-  "source_gap_count": 261,
-  "skipped_candidate_count": 165,
+  "source_gap_count": 293,
+  "skipped_candidate_count": 190,
   "draft_case_count": 2,
   "validated": true,
   "coverage_candidates_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\coverage_reports\\DOC-000009.test_gap_candidates.json",
   "coverage_candidates_report_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\coverage_reports\\DOC-000009.test_gap_candidates.md",
   "cases": [
     {
-      "name": "coverage_requirement_doc_000009_requirement_4_fact_112218",
+      "name": "coverage_requirement_doc_000009_requirement_6_fact_114581",
       "status": "draft",
-      "unit_id": "DOC-000009:requirement:4:FACT-112218",
-      "unit_type": "requirement_unit",
-      "importance": "high",
-      "page_no": 4,
-      "semantic_key": "范围",
-      "query": "范围有哪些要求？",
-      "must_include": [
-        "范围"
-      ],
-      "assert_mode": "rich_answer",
-      "recommended_suite": "golden",
-      "source_excerpt": "不超过 1 500 V (DC)的电动汽车传导充电用车载充电机",
-      "covered_by": {
-        "evidence_ids": [
-          "EV-007913",
-          "EV-007914"
-        ],
-        "fact_ids": [
-          "FACT-112072",
-          "FACT-112083",
-          "FACT-112084",
-          "FACT-112085",
-          "FACT-112217",
-          "FACT-112218",
-          "FACT-112220",
-          "FACT-112221"
-        ],
-        "entity_ids": [
-          "ENT-000265"
-        ],
-        "wiki_page_ids": [
-          "WCON-DOC-000009-constraint-doc-000009-范围-e789283e",
-          "WPAGE-000265"
-        ],
-        "golden_case_ids": [],
-        "regression_case_ids": []
-      },
-      "golden_case": {
-        "kind": "coverage_requirement",
-        "query": "范围有哪些要求？",
-        "must_include": "范围",
-        "source": "coverage",
-        "assert_mode": "rich_answer",
-        "target_doc_id": "DOC-000009",
-        "page_no": 4
-      },
-      "validation_status": "passed"
-    },
-    {
-      "name": "coverage_requirement_doc_000009_requirement_6_fact_112239",
-      "status": "draft",
-      "unit_id": "DOC-000009:requirement:6:FACT-112239",
+      "unit_id": "DOC-000009:requirement:6:FACT-114581",
       "unit_type": "requirement_unit",
       "importance": "high",
       "page_no": 6,
@@ -77,15 +26,15 @@
       "source_excerpt": "应符合表 2 的要求",
       "covered_by": {
         "evidence_ids": [
-          "EV-007915"
+          "EV-008122"
         ],
         "fact_ids": [
-          "FACT-112099",
-          "FACT-112238",
-          "FACT-112239",
-          "FACT-112240",
-          "FACT-112247",
-          "FACT-112248"
+          "FACT-114441",
+          "FACT-114580",
+          "FACT-114581",
+          "FACT-114582",
+          "FACT-114589",
+          "FACT-114590"
         ],
         "entity_ids": [
           "ENT-000265",
@@ -109,6 +58,56 @@
         "assert_mode": "rich_answer",
         "target_doc_id": "DOC-000009",
         "page_no": 6
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000009_requirement_7_23",
+      "status": "draft",
+      "unit_id": "DOC-000009_requirement_7_23",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 7,
+      "semantic_key": "输出反接保护",
+      "query": "输出反接保护有哪些要求？",
+      "must_include": [
+        "输出反接保护"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "对于输出端口回路未做任何结构防反处理的车载充电机，直流输出端正负极与车载储能装置的正负极反接时，通电后应无输出功率",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-008123"
+        ],
+        "fact_ids": [
+          "FACT-114449",
+          "FACT-114604"
+        ],
+        "entity_ids": [
+          "ENT-000265",
+          "ENT-000279"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000009-constraint-doc-000009-输出反接保护-c0124dca",
+          "WCONTOP-DOC-000009-constraint-topic-doc-000009-输出反接保护-6ec72ffd",
+          "WCONTOP-DOC-000009-constraint-topic-doc-000009-输出反接保护试验-ad44c6d3",
+          "WPAGE-000265",
+          "WPAGE-000279",
+          "WPAGE-000323",
+          "WPROC-DOC-000009-process-doc-000009-5-4-6-输出反接保护试验"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "输出反接保护有哪些要求？",
+        "must_include": "输出反接保护",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000009",
+        "page_no": 7
       },
       "validation_status": "passed"
     }

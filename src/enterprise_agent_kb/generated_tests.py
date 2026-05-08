@@ -370,8 +370,7 @@ def generate_golden_tests_for_document(
         aq_target = max(3, math.ceil(target_case_count * 0.1))
         answer_quality_cases = _build_answer_quality_cases(local_context, aq_target)
 
-        page_cases = _build_page_coverage_cases(local_context)
-        candidate_pool = _dedupe_cases([*retrieval_quality_cases, *answer_quality_cases, *page_cases, *network_cases, *local_cases, *supplemental_cases])
+        candidate_pool = _dedupe_cases([*retrieval_quality_cases, *answer_quality_cases, *network_cases, *local_cases, *supplemental_cases])
         cases = (
             _select_validated_cases(workspace_root, candidate_pool, target_case_count)
             if validate_cases
@@ -1225,6 +1224,8 @@ def _build_local_cases(
         definition = str(item["definition"]).strip()
         if not term or not definition or not _is_usable_golden_anchor(term) or not _is_usable_golden_anchor(definition):
             continue
+        if _looks_like_person_name(term):
+            continue
         definition_query_prefix = f"在{standard_code}中，" if standard_code else ""
         cases.append(
             _case(
@@ -1319,15 +1320,15 @@ def _cases_from_evidence(
 
 
 def _doc_scope_label(local_context: dict[str, object]) -> str:
-    source_filename = str(local_context.get("source_filename", "")).strip()
-    if source_filename:
-        return Path(source_filename).stem
+    standard_code = str(local_context.get("standard_code", "")).strip()
+    if standard_code and _is_valid_standard_code(standard_code):
+        return standard_code
     title = str(local_context.get("title", "")).strip()
     if title:
         return title
-    standard_code = str(local_context.get("standard_code", "")).strip()
-    if standard_code:
-        return standard_code
+    source_filename = str(local_context.get("source_filename", "")).strip()
+    if source_filename:
+        return Path(source_filename).stem
     return str(local_context.get("doc_id", "")).strip()
 
 
@@ -1439,9 +1440,11 @@ def _build_retrieval_quality_cases(
         cases.append(case)
 
     for item in list(local_context.get("term_definitions", [])):
-        term = str(item.get("term", "")).strip()
-        definition = str(item.get("definition", "")).strip()
-        if not term or len(term) < 2:
+        term = str(item["term"]).strip()
+        definition = str(item["definition"]).strip()
+        if not term or not definition or not _is_usable_golden_anchor(term) or not _is_usable_golden_anchor(definition):
+            continue
+        if _looks_like_person_name(term):
             continue
         _add_rq(
             query=f"什么是{term}？",
@@ -1690,6 +1693,21 @@ def _is_usable_golden_anchor(value: str) -> bool:
 
 def _is_valid_standard_code(value: str) -> bool:
     return bool(re.search(r"\b(?:GB/T|GBT|GB|QC/T|QC|ISO|IEC)\s*[\d.]+(?:[-—]\d{2,4})?\b", value, re.I))
+
+
+def _looks_like_person_name(term: str) -> bool:
+    if not term:
+        return False
+    cleaned = re.sub(r"\s+", "", term)
+    parts = re.split(r"[,，、;；]", cleaned)
+    if len(parts) >= 2:
+        all_cjk = all(re.fullmatch(r"[\u4e00-\u9fff]{2,4}", p) for p in parts if p)
+        if all_cjk and len(parts) >= 2:
+            return True
+    if re.fullmatch(r"[\u4e00-\u9fff]{2,4}", cleaned):
+        if not re.search(r"[技术方法系统设备装置器电压电流功率温度]", cleaned):
+            pass
+    return False
 
 
 def _case(
@@ -1952,10 +1970,9 @@ def _select_validated_cases(
     selected_keys: set[tuple[str, str, str]] = set()
 
     network_candidates = [case for case in prioritized if case.get("source") == "network"]
-    page_candidates = [case for case in prioritized if case.get("kind") == "page_coverage"]
     other_candidates = [
         case for case in prioritized
-        if case.get("source") != "network" and case.get("kind") != "page_coverage"
+        if case.get("source") != "network"
     ]
 
     network_quota = 0
@@ -1963,7 +1980,6 @@ def _select_validated_cases(
         network_quota = max(1, min(6, math.ceil(target_count * 0.2)))
 
     validated.extend(_validate_into(workspace_root, network_candidates, network_quota, selected_keys))
-    validated.extend(_validate_page_coverage(workspace_root, page_candidates, target_count - len(validated), selected_keys))
     if len(validated) < target_count:
         validated.extend(_validate_into(workspace_root, other_candidates, target_count - len(validated), selected_keys))
     if len(validated) < target_count:
@@ -1983,8 +1999,7 @@ def _select_cases_without_validation(
 
     rq_candidates = [c for c in prioritized if c.get("kind") == "retrieval_quality"]
     aq_candidates = [c for c in prioritized if c.get("kind") == "answer_quality"]
-    page_candidates = [c for c in prioritized if c.get("kind") == "page_coverage"]
-    other_candidates = [c for c in prioritized if c.get("kind") not in {"retrieval_quality", "answer_quality", "page_coverage"}]
+    other_candidates = [c for c in prioritized if c.get("kind") not in {"retrieval_quality", "answer_quality"}]
 
     rq_quota = max(5, math.ceil(target_count * 0.3)) if rq_candidates else 0
     aq_quota = max(3, math.ceil(target_count * 0.1)) if aq_candidates else 0
@@ -2002,20 +2017,6 @@ def _select_cases_without_validation(
         key = (case.get("query", ""), _normalize_compare(case.get("must_include", "")), case.get("assert_mode", ""))
         if key in selected_keys:
             continue
-        selected.append(case)
-        selected_keys.add(key)
-
-    for case in page_candidates:
-        if len(selected) >= target_count:
-            break
-        key = (case.get("query", ""), _normalize_compare(case.get("must_include", "")), case.get("assert_mode", ""))
-        if key in selected_keys:
-            continue
-        page_no = int(case.get("page_no") or 0)
-        if page_no > 0 and page_no in covered_pages:
-            continue
-        if page_no > 0:
-            covered_pages.add(page_no)
         selected.append(case)
         selected_keys.add(key)
 

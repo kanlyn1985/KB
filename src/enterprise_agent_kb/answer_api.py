@@ -75,13 +75,13 @@ def answer_query(
     wiki_pages = _filter_wiki_pages(context.get("wiki_pages", []), facts, query, intent)
 
     fact_summaries = _summarize_facts(facts[:5], intent=intent)
-    summary_lines = build_summary_lines(
+    summary_lines = [_clean_render_artifacts(line) for line in build_summary_lines(
         policy=answer_mode,
         documents=documents,
         facts=facts,
         evidence=evidence,
         fact_summaries=fact_summaries,
-    )
+    )]
 
     fallback_reason = ""
     warnings: list[str] = []
@@ -186,6 +186,7 @@ def answer_query(
         )
         if topic_evidence_answer:
             direct_answer = topic_evidence_answer
+    direct_answer = _clean_render_artifacts(direct_answer)
     aligned_topic_objects, aligned_topic_entities = _align_topics_to_answer(
         rewritten.to_dict(),
         answer_facts,
@@ -2816,6 +2817,25 @@ def _truncate(value: str, max_chars: int) -> str:
     if len(value) <= max_chars:
         return value
     return value[: max_chars - 3] + "..."
+
+
+def _clean_render_artifacts(text: str) -> str:
+    if not text:
+        return text
+    text = re.sub(r"\*\*([^*]{1,200})\*\*", r"\1", text)
+    text = re.sub(r"\$([^$]{1,200})\$", r"\1", text)
+    text = re.sub(r"\\%", "%", text)
+    text = re.sub(r"\\sim", "~", text)
+    text = re.sub(r"\\text\{([^}]*)\}", r"\1", text)
+    text = re.sub(r"\\[a-zA-Z]+", "", text)
+    text = re.sub(r"[{}]", "", text)
+    text = re.sub(r"&nbsp;|&#160;|&ensp;|&emsp;", " ", text, flags=re.IGNORECASE)
+    text = re.sub(r"<br\s*/?>", "\n", text, flags=re.IGNORECASE)
+    text = re.sub(r"</?(?:p|div|span|table|tr|td|th)\b[^>]*>", "", text, flags=re.IGNORECASE)
+    text = re.sub(r"；；|;;", "；", text)
+    text = re.sub(r"。。", "。", text)
+    text = re.sub(r"([\u4e00-\u9fff])\s*\n\s*([\u4e00-\u9fff])", r"\1\2", text)
+    return text
 
 
 def _summarize_facts(facts: list[dict[str, object]], intent: str = "general") -> list[str]:

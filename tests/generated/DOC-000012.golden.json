@@ -8,7 +8,7 @@
   "network_candidate_count": 0,
   "network_case_count": 0,
   "local_case_count": 32,
-  "page_coverage_count": 32,
+  "page_coverage_count": 10,
   "covered_pages": [
     1,
     5,
@@ -16,9 +16,16 @@
     7,
     8,
     9,
-    10,
     11,
+    27,
+    38,
+    42
+  ],
+  "uncovered_pages": [
+    3,
+    10,
     12,
+    13,
     14,
     15,
     16,
@@ -26,10 +33,12 @@
     18,
     19,
     20,
+    21,
     22,
     23,
     24,
     25,
+    26,
     28,
     29,
     30,
@@ -37,22 +46,13 @@
     32,
     33,
     34,
-    36,
-    38,
-    40,
-    41,
-    43
-  ],
-  "uncovered_pages": [
-    3,
-    13,
-    21,
-    26,
-    27,
     35,
+    36,
     37,
     39,
-    42,
+    40,
+    41,
+    43,
     44,
     45,
     46,
@@ -502,291 +502,283 @@
       "target_doc_id": "DOC-000012"
     },
     {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第1页 # 中华人民共和国国家标准 GB/T 18487.5—2024 # 电动汽车",
-      "must_include": "# 中华人民共和国国家标准 GB/T 18487.5—2024 # 电动汽车",
+      "kind": "evidence",
+      "query": "# 中华人民共和国国家标准 GB/T 18487.5—2024 # 电动汽车传导充电",
+      "must_include": "# 中华人民共和国国家标准 GB/T 18487.5—2024 # 电动汽车传导充电",
       "source": "local",
       "assert_mode": "context_contains",
       "page_no": 1,
       "target_doc_id": "DOC-000012"
     },
     {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第5页 本文件是 GB/T 18487《电动汽车传导充电系统》的第 5 部分。GB/",
-      "must_include": "本文件是 GB/T 18487《电动汽车传导充电系统》的第 5 部分。GB/",
+      "kind": "evidence",
+      "query": "GB/T 18487.5—2024：## 前言 本文件按照 GB/T 1.1—2020《标准化工作导则 第1部分：标准化",
+      "must_include": "## 前言 本文件按照 GB/T 1.1—2020《标准化工作导则 第1部分：标准化",
       "source": "local",
       "assert_mode": "context_contains",
       "page_no": 5,
       "target_doc_id": "DOC-000012"
     },
     {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第6页 ## 引言 随着电动汽车相关产业与消费市场规模的快速扩大，行业迫切需求大功率",
-      "must_include": "## 引言 随着电动汽车相关产业与消费市场规模的快速扩大，行业迫切需求大功率",
+      "kind": "evidence",
+      "query": "GB/T 18487.5—2024：本文件是 GB/T 18487《电动汽车传导充电系统》的第 5 部分。GB/T 18",
+      "must_include": "本文件是 GB/T 18487《电动汽车传导充电系统》的第 5 部分。GB/T 18",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 5,
+      "target_doc_id": "DOC-000012"
+    },
+    {
+      "kind": "evidence",
+      "query": "GB/T 18487.5—2024：——电动车辆传导充电系统 电动车辆交流/直流充电机（站）；",
+      "must_include": "——电动车辆传导充电系统 电动车辆交流/直流充电机（站）；",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 5,
+      "target_doc_id": "DOC-000012"
+    },
+    {
+      "kind": "evidence",
+      "query": "GB/T 18487.5—2024：——电动汽车传导充电系统 第5部分：用于GB/T20234.3的直流充电系统。",
+      "must_include": "——电动汽车传导充电系统 第5部分：用于GB/T20234.3的直流充电系统。",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 5,
+      "target_doc_id": "DOC-000012"
+    },
+    {
+      "kind": "evidence",
+      "query": "GB/T 18487.5—2024：请注意本文件的某些内容可能涉及专利。本文件的发布机构不承担识别专利的责任。",
+      "must_include": "请注意本文件的某些内容可能涉及专利。本文件的发布机构不承担识别专利的责任。",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 5,
+      "target_doc_id": "DOC-000012"
+    },
+    {
+      "kind": "evidence",
+      "query": "GB/T 18487.5—2024：本文件由中华人民共和国工业和信息化部提出。",
+      "must_include": "本文件由中华人民共和国工业和信息化部提出。",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 5,
+      "target_doc_id": "DOC-000012"
+    },
+    {
+      "kind": "evidence",
+      "query": "GB/T 18487.5—2024：## 引言 随着电动汽车相关产业与消费市场规模的快速扩大，行业迫切需求大功率充电、即",
+      "must_include": "## 引言 随着电动汽车相关产业与消费市场规模的快速扩大，行业迫切需求大功率充电、即",
       "source": "local",
       "assert_mode": "context_contains",
       "page_no": 6,
       "target_doc_id": "DOC-000012"
     },
     {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第7页 # 电动汽车传导充电系统 第 5 部分: 用于 GB/T 20234.3 的",
-      "must_include": "# 电动汽车传导充电系统 第 5 部分: 用于 GB/T 20234.3 的",
+      "kind": "evidence",
+      "query": "GB/T 18487.5—2024：GB/T 18487 拟由 5 个部分构成。",
+      "must_include": "GB/T 18487 拟由 5 个部分构成。",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 6,
+      "target_doc_id": "DOC-000012"
+    },
+    {
+      "kind": "evidence",
+      "query": "GB/T 18487.5—2024：——第1部分：通用要求。目的在于规范电动汽车与非车载传导式电能传输设备需要满足的安全",
+      "must_include": "——第1部分：通用要求。目的在于规范电动汽车与非车载传导式电能传输设备需要满足的安全",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 6,
+      "target_doc_id": "DOC-000012"
+    },
+    {
+      "kind": "evidence",
+      "query": "GB/T 18487.5—2024：——第2部分：非车载传导供电设备电磁兼容要求。目的在于规范电动汽车非车载传导供电设备",
+      "must_include": "——第2部分：非车载传导供电设备电磁兼容要求。目的在于规范电动汽车非车载传导供电设备",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 6,
+      "target_doc_id": "DOC-000012"
+    },
+    {
+      "kind": "evidence",
+      "query": "GB/T 18487.5—2024：——第3部分：电动车辆交流直流充电机（站）。目的在于规范电动汽车充电机（站）的具体要",
+      "must_include": "——第3部分：电动车辆交流直流充电机（站）。目的在于规范电动汽车充电机（站）的具体要",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 6,
+      "target_doc_id": "DOC-000012"
+    },
+    {
+      "kind": "evidence",
+      "query": "GB/T 18487.5—2024：——第4部分：车辆对外放电要求。目的在于规定电动汽车通过充电接口为车外负荷提供电能的",
+      "must_include": "——第4部分：车辆对外放电要求。目的在于规定电动汽车通过充电接口为车外负荷提供电能的",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 6,
+      "target_doc_id": "DOC-000012"
+    },
+    {
+      "kind": "evidence",
+      "query": "GB/T 18487.5—2024：# 电动汽车传导充电系统 第 5 部分: 用于 GB/T 20234.3 的直流 充",
+      "must_include": "# 电动汽车传导充电系统 第 5 部分: 用于 GB/T 20234.3 的直流 充",
       "source": "local",
       "assert_mode": "context_contains",
       "page_no": 7,
       "target_doc_id": "DOC-000012"
     },
     {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第8页 ## 3 术语和定义 GB/T 18487.1—2023、GB/T 1959",
-      "must_include": "## 3 术语和定义 GB/T 18487.1—2023、GB/T 1959",
+      "kind": "evidence",
+      "query": "GB/T 18487.5—2024：本文件适用于数字通信协议符合 GB/T 27930.2 的电动汽车（简称“车辆”）和",
+      "must_include": "本文件适用于数字通信协议符合 GB/T 27930.2 的电动汽车（简称“车辆”）和",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 7,
+      "target_doc_id": "DOC-000012"
+    },
+    {
+      "kind": "evidence",
+      "query": "GB/T 18487.5—2024：本文件适用于采用隔离式系统的非车载传导式充电机，其供电网侧额定电压不超过AC1000",
+      "must_include": "本文件适用于采用隔离式系统的非车载传导式充电机，其供电网侧额定电压不超过AC1000",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 7,
+      "target_doc_id": "DOC-000012"
+    },
+    {
+      "kind": "evidence",
+      "query": "GB/T 18487.5—2024：注 $ ^{1} $：非限制场所的非车载传导式充电机车辆接口处推荐直流工作电压范围为",
+      "must_include": "注 $ ^{1} $：非限制场所的非车载传导式充电机车辆接口处推荐直流工作电压范围为",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 7,
+      "target_doc_id": "DOC-000012"
+    },
+    {
+      "kind": "standard",
+      "query": "GB/T 18487.5—2024 的标准号和实施日期是什么？",
+      "must_include": "GB/T 18487.5—2024",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "target_doc_id": "DOC-000012"
+    },
+    {
+      "kind": "standard",
+      "query": "GB/T 18487.5—2024 对应的标准编号是什么？",
+      "must_include": "GB/T 18487.5—2024",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "target_doc_id": "DOC-000012"
+    },
+    {
+      "kind": "standard",
+      "query": "GB/T 18487.5—2024 的现行标准号是什么？",
+      "must_include": "GB/T 18487.5—2024",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "target_doc_id": "DOC-000012"
+    },
+    {
+      "kind": "publication_date",
+      "query": "GB/T 18487.5—2024 的发布日期是什么？",
+      "must_include": "2024-12-31",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "target_doc_id": "DOC-000012"
+    },
+    {
+      "kind": "publication_date",
+      "query": "GB/T 18487.5—2024 是哪一天发布的？",
+      "must_include": "2024-12-31",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "target_doc_id": "DOC-000012"
+    },
+    {
+      "kind": "effective_date",
+      "query": "GB/T 18487.5—2024 的实施日期是什么？",
+      "must_include": "2024-12-31",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "target_doc_id": "DOC-000012"
+    },
+    {
+      "kind": "effective_date",
+      "query": "GB/T 18487.5—2024 从哪一天开始实施？",
+      "must_include": "2024-12-31",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "target_doc_id": "DOC-000012"
+    },
+    {
+      "kind": "section",
+      "query": "在GB/T 18487.5—2024中，是否包含“中华人民共和国国家标准”这一章节？",
+      "must_include": "中华人民共和国国家标准",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 1,
+      "target_doc_id": "DOC-000012"
+    },
+    {
+      "kind": "section",
+      "query": "在GB/T 18487.5—2024中，是否包含“5.2 模式 4 提供的功能”这一章节？",
+      "must_include": "5.2 模式 4 提供的功能",
       "source": "local",
       "assert_mode": "context_contains",
       "page_no": 8,
       "target_doc_id": "DOC-000012"
     },
     {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第9页 ## 8 电动汽车和供电设备之间的连接 ### 8.1 通用要求 8.1.1",
-      "must_include": "## 8 电动汽车和供电设备之间的连接 ### 8.1 通用要求 8.1.1",
+      "kind": "section",
+      "query": "在GB/T 18487.5—2024中，是否包含“直流充电系统应提供附加防护，如按 A.5.5 的规定配置绝缘监测装置 (IMD) 等。”这一章节？",
+      "must_include": "直流充电系统应提供附加防护，如按 A.5.5 的规定配置绝缘监测装置 (IMD) 等。",
       "source": "local",
       "assert_mode": "context_contains",
       "page_no": 9,
       "target_doc_id": "DOC-000012"
     },
     {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第10页 ## 11 过载保护、短路保护和急停 直流供电设备的过载保护、短路保护和急停",
-      "must_include": "## 11 过载保护、短路保护和急停 直流供电设备的过载保护、短路保护和急停",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 10,
-      "target_doc_id": "DOC-000012"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第11页 ### A.2 充电控制导引电路 A.2.1 直流充电控制导引电路的基本方案",
-      "must_include": "### A.2 充电控制导引电路 A.2.1 直流充电控制导引电路的基本方案",
+      "kind": "section",
+      "query": "在GB/T 18487.5—2024中，是否包含“A.2 充电控制导引电路”这一章节？",
+      "must_include": "A.2 充电控制导引电路",
       "source": "local",
       "assert_mode": "context_contains",
       "page_no": 11,
       "target_doc_id": "DOC-000012"
     },
     {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第12页 非车载充电机中电流测量、泄放电路与短路保护装置（如熔断器 FUSE）位置仅供",
-      "must_include": "非车载充电机中电流测量、泄放电路与短路保护装置（如熔断器 FUSE）位置仅供",
+      "kind": "section",
+      "query": "在GB/T 18487.5—2024中，是否包含“A.4 充电连接控制时序”这一章节？",
+      "must_include": "A.4 充电连接控制时序",
       "source": "local",
       "assert_mode": "context_contains",
-      "page_no": 12,
+      "page_no": 27,
       "target_doc_id": "DOC-000012"
     },
     {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第14页 A.3.2.4 从车辆接口未连接到检测点1电压值变为4 V之前，非车载充电机",
-      "must_include": "A.3.2.4 从车辆接口未连接到检测点1电压值变为4 V之前，非车载充电机",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 14,
-      "target_doc_id": "DOC-000012"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第15页 注：车辆控制器发送的车辆最大允许充电电流、车辆最高允许充电总电压等需求值和测",
-      "must_include": "注：车辆控制器发送的车辆最大允许充电电流、车辆最高允许充电总电压等需求值和测",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 15,
-      "target_doc_id": "DOC-000012"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第16页 A.3.6.5 充电机应检测直流充电回路 DC+ 与 PE 之间、DC- 与",
-      "must_include": "A.3.6.5 充电机应检测直流充电回路 DC+ 与 PE 之间、DC- 与",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 16,
-      "target_doc_id": "DOC-000012"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第17页 A.3.7.8 供电模式中，当充电机需要降低输出功率，应先更新充电机当前最大",
-      "must_include": "A.3.7.8 供电模式中，当充电机需要降低输出功率，应先更新充电机当前最大",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 17,
-      "target_doc_id": "DOC-000012"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第18页 A.3.9.4 在恒压充电模式下，充电机的输出电压应满足车辆电压需求值，输出",
-      "must_include": "A.3.9.4 在恒压充电模式下，充电机的输出电压应满足车辆电压需求值，输出",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 18,
-      "target_doc_id": "DOC-000012"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第19页 A.3.9.9 能量传输阶段完成后，充电机停止输出、断开接触器 K1、K2",
-      "must_include": "A.3.9.9 能量传输阶段完成后，充电机停止输出、断开接触器 K1、K2",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 19,
-      "target_doc_id": "DOC-000012"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第20页 A.3.10.1.2.2 充电机正常结束时，应停止输出并断开接触器 K1、K",
-      "must_include": "A.3.10.1.2.2 充电机正常结束时，应停止输出并断开接触器 K1、K",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 20,
-      "target_doc_id": "DOC-000012"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第22页 造厂规定的限值，故障检测时间由制造厂自定义。",
-      "must_include": "造厂规定的限值，故障检测时间由制造厂自定义。",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 22,
-      "target_doc_id": "DOC-000012"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第23页 ## h）预充及能量传输失败： 1）预充电压不匹配：充电机检测的接触器K1、",
-      "must_include": "## h）预充及能量传输失败： 1）预充电压不匹配：充电机检测的接触器K1、",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 23,
-      "target_doc_id": "DOC-000012"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第24页 f) 放电电压过低：在放电模式，车辆输出电压低于车辆制造厂规定的欠压保护值",
-      "must_include": "f) 放电电压过低：在放电模式，车辆输出电压低于车辆制造厂规定的欠压保护值",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 24,
-      "target_doc_id": "DOC-000012"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第25页 f) 电压过高：在供电模式、预充电或能量传输阶段，充电机输出电压高于表 A.",
-      "must_include": "f) 电压过高：在供电模式、预充电或能量传输阶段，充电机输出电压高于表 A.",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 25,
-      "target_doc_id": "DOC-000012"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第28页 3电压均变为4V",
-      "must_include": "3电压均变为4V",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 28,
-      "target_doc_id": "DOC-000012"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第29页 注2：时序图中网格填充区域状态由制造厂自定义，网格填充区域粗实线为推荐值。",
-      "must_include": "注2：时序图中网格填充区域状态由制造厂自定义，网格填充区域粗实线为推荐值。",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 29,
-      "target_doc_id": "DOC-000012"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第30页 2电压变为6V（U2为12V时）",
-      "must_include": "2电压变为6V（U2为12V时）",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 30,
-      "target_doc_id": "DOC-000012"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第31页 注2：时序图中网格填充区域状态由制造厂自定义，网格填充区域粗实线为推荐值。",
-      "must_include": "注2：时序图中网格填充区域状态由制造厂自定义，网格填充区域粗实线为推荐值。",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 31,
-      "target_doc_id": "DOC-000012"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第32页 3电压变为10V",
-      "must_include": "3电压变为10V",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 32,
-      "target_doc_id": "DOC-000012"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第33页 注2：时序图中网格填充区域状态由制造厂自定义，网格填充区域粗实线为推荐值。",
-      "must_include": "注2：时序图中网格填充区域状态由制造厂自定义，网格填充区域粗实线为推荐值。",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 33,
-      "target_doc_id": "DOC-000012"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第34页 #### A.5.4 手动应急解锁装置 若车辆插头配备手动应急解锁装置，则可",
-      "must_include": "#### A.5.4 手动应急解锁装置 若车辆插头配备手动应急解锁装置，则可",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 34,
-      "target_doc_id": "DOC-000012"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第36页 注：充电机绝缘监测装置在输出回路检测阶段完成前进行自诊断可避免功能冲突。车辆",
-      "must_include": "注：充电机绝缘监测装置在输出回路检测阶段完成前进行自诊断可避免功能冲突。车辆",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 36,
-      "target_doc_id": "DOC-000012"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第38页 #### A.5.9 负载突降 在能量传输阶段，由于故障出现负载突降的情况时",
-      "must_include": "#### A.5.9 负载突降 在能量传输阶段，由于故障出现负载突降的情况时",
+      "kind": "section",
+      "query": "在GB/T 18487.5—2024中，是否包含“A.5.8 接触器检测”这一章节？",
+      "must_include": "A.5.8 接触器检测",
       "source": "local",
       "assert_mode": "context_contains",
       "page_no": 38,
       "target_doc_id": "DOC-000012"
     },
     {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第40页 A.5.14.3 若仅使用一个车辆插座进行充电，另一个车辆插座的 B 级电压",
-      "must_include": "A.5.14.3 若仅使用一个车辆插座进行充电，另一个车辆插座的 B 级电压",
+      "kind": "section",
+      "query": "在GB/T 18487.5—2024中，是否包含“B.2.1 充电控制导引电路”这一章节？",
+      "must_include": "B.2.1 充电控制导引电路",
       "source": "local",
       "assert_mode": "context_contains",
-      "page_no": 40,
+      "page_no": 42,
       "target_doc_id": "DOC-000012"
     },
     {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第41页 A.5.14.9 可双车辆插座充电的车辆，每个车辆插座绝缘监测应符合 A.5",
-      "must_include": "A.5.14.9 可双车辆插座充电的车辆，每个车辆插座绝缘监测应符合 A.5",
+      "kind": "title",
+      "query": "GB/T 18487.5—2024 这份文档的标题是什么？",
+      "must_include": "# 电动汽车传导充电系统 第 5 部分: 用于 GB/T 20234.3 的直流 充电系统",
       "source": "local",
       "assert_mode": "context_contains",
-      "page_no": 41,
-      "target_doc_id": "DOC-000012"
-    },
-    {
-      "kind": "page_coverage",
-      "query": "GB_T 18487.5-2024 电动汽车传导充电系统 第5部分：用于GB_T 20234.3直流充电系统：第43页 非车载充电机中电流测量、泄放电路与短路保护装置（如熔断器 FUSE）位置仅供",
-      "must_include": "非车载充电机中电流测量、泄放电路与短路保护装置（如熔断器 FUSE）位置仅供",
-      "source": "local",
-      "assert_mode": "context_contains",
-      "page_no": 43,
       "target_doc_id": "DOC-000012"
     }
   ]

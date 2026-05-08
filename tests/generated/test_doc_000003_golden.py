@@ -184,145 +184,145 @@ def test_doc_000003_golden_24() -> None:
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000003_golden_25() -> None:
-    case = '{"kind": "retrieval_quality", "query": "什么是**保护接地导体** **protective earthing conductor**？", "must_include": "**保护接地导体** **protective earthing conductor**", "retrieval_must_hit": ["**保护接地导体** **protective earthing conductor**"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["**保护接地导体** **protective earthing conductor**"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-def test_doc_000003_golden_26() -> None:
-    case = '{"kind": "retrieval_quality", "query": "GB/T 18487.1—2023中**保护接地导体** **protective earthing conductor**的定义是什么？", "must_include": "**保护接地导体** **protective earthing conductor**", "retrieval_must_hit": ["**保护接地导体** **protective earthing conductor**"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["**保护接地导体** **protective earthing conductor**"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-def test_doc_000003_golden_27() -> None:
     case = '{"kind": "retrieval_quality", "query": "什么是电气隔离 galvanic separation？", "must_include": "电气隔离 galvanic separation", "retrieval_must_hit": ["电气隔离 galvanic separation"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["电气隔离 galvanic separation"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-def test_doc_000003_golden_28() -> None:
+def test_doc_000003_golden_26() -> None:
     case = '{"kind": "retrieval_quality", "query": "GB/T 18487.1—2023中电气隔离 galvanic separation的定义是什么？", "must_include": "电气隔离 galvanic separation", "retrieval_must_hit": ["电气隔离 galvanic separation"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["电气隔离 galvanic separation"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-def test_doc_000003_golden_29() -> None:
+def test_doc_000003_golden_27() -> None:
     case = '{"kind": "retrieval_quality", "query": "什么是保护接地 protective earthing？", "must_include": "保护接地 protective earthing", "retrieval_must_hit": ["保护接地 protective earthing"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["保护接地 protective earthing"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-def test_doc_000003_golden_30() -> None:
+def test_doc_000003_golden_28() -> None:
     case = '{"kind": "retrieval_quality", "query": "GB/T 18487.1—2023中保护接地 protective earthing的定义是什么？", "must_include": "保护接地 protective earthing", "retrieval_must_hit": ["保护接地 protective earthing"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["保护接地 protective earthing"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-def test_doc_000003_golden_31() -> None:
+def test_doc_000003_golden_29() -> None:
     case = '{"kind": "retrieval_quality", "query": "什么是电涌保护器 surge protective device; SPD？", "must_include": "电涌保护器 surge protective device; SPD", "retrieval_must_hit": ["电涌保护器 surge protective device; SPD"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["电涌保护器 surge protective device; SPD"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-def test_doc_000003_golden_32() -> None:
+def test_doc_000003_golden_30() -> None:
     case = '{"kind": "retrieval_quality", "query": "GB/T 18487.1—2023中电涌保护器 surge protective device; SPD的定义是什么？", "must_include": "电涌保护器 surge protective device; SPD", "retrieval_must_hit": ["电涌保护器 surge protective device; SPD"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["电涌保护器 surge protective device; SPD"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-def test_doc_000003_golden_33() -> None:
+def test_doc_000003_golden_31() -> None:
     case = '{"kind": "retrieval_quality", "query": "什么是感知阈 threshold of perception？", "must_include": "感知阈 threshold of perception", "retrieval_must_hit": ["感知阈 threshold of perception"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["感知阈 threshold of perception"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-def test_doc_000003_golden_34() -> None:
+def test_doc_000003_golden_32() -> None:
     case = '{"kind": "retrieval_quality", "query": "GB/T 18487.1—2023中感知阈 threshold of perception的定义是什么？", "must_include": "感知阈 threshold of perception", "retrieval_must_hit": ["感知阈 threshold of perception"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["感知阈 threshold of perception"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-def test_doc_000003_golden_35() -> None:
+def test_doc_000003_golden_33() -> None:
     case = '{"kind": "retrieval_quality", "query": "什么是控制导引电路 control pilot circuit？", "must_include": "控制导引电路 control pilot circuit", "retrieval_must_hit": ["控制导引电路 control pilot circuit"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["控制导引电路 control pilot circuit"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-def test_doc_000003_golden_36() -> None:
+def test_doc_000003_golden_34() -> None:
     case = '{"kind": "retrieval_quality", "query": "GB/T 18487.1—2023中控制导引电路 control pilot circuit的定义是什么？", "must_include": "控制导引电路 control pilot circuit", "retrieval_must_hit": ["控制导引电路 control pilot circuit"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["控制导引电路 control pilot circuit"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-def test_doc_000003_golden_37() -> None:
+def test_doc_000003_golden_35() -> None:
     case = '{"kind": "retrieval_quality", "query": "什么是控制导引功能 control pilot function; CP？", "must_include": "控制导引功能 control pilot function; CP", "retrieval_must_hit": ["控制导引功能 control pilot function; CP"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["控制导引功能 control pilot function; CP"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-def test_doc_000003_golden_38() -> None:
+def test_doc_000003_golden_36() -> None:
     case = '{"kind": "retrieval_quality", "query": "GB/T 18487.1—2023中控制导引功能 control pilot function; CP的定义是什么？", "must_include": "控制导引功能 control pilot function; CP", "retrieval_must_hit": ["控制导引功能 control pilot function; CP"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["控制导引功能 control pilot function; CP"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-def test_doc_000003_golden_39() -> None:
+def test_doc_000003_golden_37() -> None:
     case = '{"kind": "retrieval_quality", "query": "什么是连接确认功能 connection confirm function; CC？", "must_include": "连接确认功能 connection confirm function; CC", "retrieval_must_hit": ["连接确认功能 connection confirm function; CC"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["连接确认功能 connection confirm function; CC"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-def test_doc_000003_golden_40() -> None:
+def test_doc_000003_golden_38() -> None:
     case = '{"kind": "retrieval_quality", "query": "GB/T 18487.1—2023中连接确认功能 connection confirm function; CC的定义是什么？", "must_include": "连接确认功能 connection confirm function; CC", "retrieval_must_hit": ["连接确认功能 connection confirm function; CC"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["连接确认功能 connection confirm function; CC"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-def test_doc_000003_golden_41() -> None:
+def test_doc_000003_golden_39() -> None:
     case = '{"kind": "retrieval_quality", "query": "什么是燃料电池混合动力电动汽车 fuel cell hybrid electric vehicle; FCHEV？", "must_include": "燃料电池混合动力电动汽车 fuel cell hybrid electric vehicle; FCHEV", "retrieval_must_hit": ["燃料电池混合动力电动汽车 fuel cell hybrid electric vehicle; FCHEV"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["燃料电池混合动力电动汽车 fuel cell hybrid electric vehicle; FCHEV"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-def test_doc_000003_golden_42() -> None:
+def test_doc_000003_golden_40() -> None:
     case = '{"kind": "retrieval_quality", "query": "GB/T 18487.1—2023中燃料电池混合动力电动汽车 fuel cell hybrid electric vehicle; FCHEV的定义是什么？", "must_include": "燃料电池混合动力电动汽车 fuel cell hybrid electric vehicle; FCHEV", "retrieval_must_hit": ["燃料电池混合动力电动汽车 fuel cell hybrid electric vehicle; FCHEV"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["燃料电池混合动力电动汽车 fuel cell hybrid electric vehicle; FCHEV"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-def test_doc_000003_golden_43() -> None:
+def test_doc_000003_golden_41() -> None:
     case = '{"kind": "retrieval_quality", "query": "什么是车辆断开装置 EV disconnection device？", "must_include": "车辆断开装置 EV disconnection device", "retrieval_must_hit": ["车辆断开装置 EV disconnection device"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["车辆断开装置 EV disconnection device"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-def test_doc_000003_golden_44() -> None:
+def test_doc_000003_golden_42() -> None:
     case = '{"kind": "retrieval_quality", "query": "GB/T 18487.1—2023中车辆断开装置 EV disconnection device的定义是什么？", "must_include": "车辆断开装置 EV disconnection device", "retrieval_must_hit": ["车辆断开装置 EV disconnection device"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["车辆断开装置 EV disconnection device"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-def test_doc_000003_golden_45() -> None:
+def test_doc_000003_golden_43() -> None:
     case = '{"kind": "retrieval_quality", "query": "什么是电动汽车模拟器 EV simulator？", "must_include": "电动汽车模拟器 EV simulator", "retrieval_must_hit": ["电动汽车模拟器 EV simulator"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["电动汽车模拟器 EV simulator"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-def test_doc_000003_golden_46() -> None:
+def test_doc_000003_golden_44() -> None:
     case = '{"kind": "retrieval_quality", "query": "GB/T 18487.1—2023中电动汽车模拟器 EV simulator的定义是什么？", "must_include": "电动汽车模拟器 EV simulator", "retrieval_must_hit": ["电动汽车模拟器 EV simulator"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["电动汽车模拟器 EV simulator"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-def test_doc_000003_golden_47() -> None:
+def test_doc_000003_golden_45() -> None:
     case = '{"kind": "retrieval_quality", "query": "什么是**车辆插座 vehicle inlet**？", "must_include": "**车辆插座 vehicle inlet**", "retrieval_must_hit": ["**车辆插座 vehicle inlet**"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["**车辆插座 vehicle inlet**"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-def test_doc_000003_golden_48() -> None:
+def test_doc_000003_golden_46() -> None:
     case = '{"kind": "retrieval_quality", "query": "GB/T 18487.1—2023中**车辆插座 vehicle inlet**的定义是什么？", "must_include": "**车辆插座 vehicle inlet**", "retrieval_must_hit": ["**车辆插座 vehicle inlet**"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["**车辆插座 vehicle inlet**"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+def test_doc_000003_golden_47() -> None:
+    case = '{"kind": "retrieval_quality", "query": "什么是**车辆适配器 vehicle adaptor**？", "must_include": "**车辆适配器 vehicle adaptor**", "retrieval_must_hit": ["**车辆适配器 vehicle adaptor**"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["**车辆适配器 vehicle adaptor**"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+def test_doc_000003_golden_48() -> None:
+    case = '{"kind": "retrieval_quality", "query": "GB/T 18487.1—2023中**车辆适配器 vehicle adaptor**的定义是什么？", "must_include": "**车辆适配器 vehicle adaptor**", "retrieval_must_hit": ["**车辆适配器 vehicle adaptor**"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["**车辆适配器 vehicle adaptor**"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
@@ -423,651 +423,276 @@ def test_doc_000003_golden_64() -> None:
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_65() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第1页 ICS 43.040.99 CCS T 35 # GB # 中华人民共和国国", "must_include": "ICS 43.040.99 CCS T 35 # GB # 中华人民共和国国", "source": "local", "assert_mode": "context_contains", "page_no": 1, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "evidence", "query": "GB/T 18487.1—2023：ICS 43.040.99 CCS T 35 # GB # 中华人民共和国国家标准", "must_include": "ICS 43.040.99 CCS T 35 # GB # 中华人民共和国国家标准", "source": "local", "assert_mode": "context_contains", "page_no": 1, "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_66() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第3页 本文件代替 GB/T 18487.1—2015《电动汽车传导充电系统 第 1", "must_include": "本文件代替 GB/T 18487.1—2015《电动汽车传导充电系统 第 1", "source": "local", "assert_mode": "context_contains", "page_no": 3, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "evidence", "query": "GB/T 18487.1—2023 # 前 言 本文件按照 GB/T 1.1—202", "must_include": "GB/T 18487.1—2023 # 前 言 本文件按照 GB/T 1.1—202", "source": "local", "assert_mode": "context_contains", "page_no": 3, "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_67() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第4页 GB/T 18487.1—2023 年版的 3.1.4)、“电动汽车直流充电", "must_include": "GB/T 18487.1—2023 年版的 3.1.4)、“电动汽车直流充电", "source": "local", "assert_mode": "context_contains", "page_no": 4, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "evidence", "query": "GB/T 18487.1—2023：本文件是 GB/T 18487 的第 1 部分。GB/T 18487 已经发布了以下", "must_include": "本文件是 GB/T 18487 的第 1 部分。GB/T 18487 已经发布了以下", "source": "local", "assert_mode": "context_contains", "page_no": 3, "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_68() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第5页 GB/T 18487.1—2023 电要求(见 8.1); z) 更改了连接", "must_include": "GB/T 18487.1—2023 电要求(见 8.1); z) 更改了连接", "source": "local", "assert_mode": "context_contains", "page_no": 5, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "evidence", "query": "GB/T 18487.1—2023：——电动汽车传导充电系统 第 2 部分：非车载传导供电设备电磁兼容要求（GB/T 1", "must_include": "——电动汽车传导充电系统 第 2 部分：非车载传导供电设备电磁兼容要求（GB/T 1", "source": "local", "assert_mode": "context_contains", "page_no": 3, "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_69() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第6页 GB/T 18487.1—2023 “采用 GB/T 20234.4 规定的", "must_include": "GB/T 18487.1—2023 “采用 GB/T 20234.4 规定的", "source": "local", "assert_mode": "context_contains", "page_no": 6, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "evidence", "query": "GB/T 18487.1—2023：——电动车辆传导充电系统 第 3 部分：电动车辆交流/直流充电机(站)(GB/T 1", "must_include": "——电动车辆传导充电系统 第 3 部分：电动车辆交流/直流充电机(站)(GB/T 1", "source": "local", "assert_mode": "context_contains", "page_no": 3, "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_70() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第7页 ——第 2 部分:非车载传导供电设备电磁兼容要求。目的在于规范电动汽车非车载", "must_include": "——第 2 部分:非车载传导供电设备电磁兼容要求。目的在于规范电动汽车非车载", "source": "local", "assert_mode": "context_contains", "page_no": 7, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "evidence", "query": "GB/T 18487.1—2023：本文件代替 GB/T 18487.1—2015《电动汽车传导充电系统 第 1 部分：", "must_include": "本文件代替 GB/T 18487.1—2015《电动汽车传导充电系统 第 1 部分：", "source": "local", "assert_mode": "context_contains", "page_no": 3, "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_71() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第8页 GB/T 18487.1—2023 # 电动汽车传导充电系统 # 第 1 部", "must_include": "GB/T 18487.1—2023 # 电动汽车传导充电系统 # 第 1 部", "source": "local", "assert_mode": "context_contains", "page_no": 8, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "evidence", "query": "GB/T 18487.1—2023 电要求(见 8.1); z) 更改了连接方式 B", "must_include": "GB/T 18487.1—2023 电要求(见 8.1); z) 更改了连接方式 B", "source": "local", "assert_mode": "context_contains", "page_no": 5, "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_72() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第9页 GB/T 18487.1—2023 GB/T 11918.1 工业用插头插座", "must_include": "GB/T 18487.1—2023 GB/T 11918.1 工业用插头插座", "source": "local", "assert_mode": "context_contains", "page_no": 9, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "evidence", "query": "GB/T 18487.1—2023 “采用 GB/T 20234.4 规定的充电连接", "must_include": "GB/T 18487.1—2023 “采用 GB/T 20234.4 规定的充电连接", "source": "local", "assert_mode": "context_contains", "page_no": 6, "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_73() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第12页 图 3 连接方式 C 3.1.5.4 连接方式 D case D conne", "must_include": "图 3 连接方式 C 3.1.5.4 连接方式 D case D conne", "source": "local", "assert_mode": "context_contains", "page_no": 12, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "evidence", "query": "GB/T 18487.1—2023：本文件由中国电力企业联合会提出并归口。", "must_include": "本文件由中国电力企业联合会提出并归口。", "source": "local", "assert_mode": "context_contains", "page_no": 6, "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_74() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第13页 图 4 连接方式 D 示意图 3.1.5.5 连接方式 E case E c", "must_include": "图 4 连接方式 D 示意图 3.1.5.5 连接方式 E case E c", "source": "local", "assert_mode": "context_contains", "page_no": 13, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "evidence", "query": "GB/T 18487.1—2023：本文件起草单位:国网电力科学研究院有限公司、中国电力企业联合会、国家电网有限公司、南", "must_include": "本文件起草单位:国网电力科学研究院有限公司、中国电力企业联合会、国家电网有限公司、南", "source": "local", "assert_mode": "context_contains", "page_no": 6, "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_75() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第14页 GB/T 18487.1—2023 3.1.6 **电动汽车电能传输设备 E", "must_include": "GB/T 18487.1—2023 3.1.6 **电动汽车电能传输设备 E", "source": "local", "assert_mode": "context_contains", "page_no": 14, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "evidence", "query": "GB/T 18487.1—2023：本文件主要起草人:张萱、倪峰、刘永东、栗文涛、董新生、李志刚、梁晓芳、武亨、郑隽一、", "must_include": "本文件主要起草人:张萱、倪峰、刘永东、栗文涛、董新生、李志刚、梁晓芳、武亨、郑隽一、", "source": "local", "assert_mode": "context_contains", "page_no": 6, "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_76() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第16页 图 8 本文件规定的电动汽车交流充电系统范围 3.1.8 电动汽车充放电系统", "must_include": "图 8 本文件规定的电动汽车交流充电系统范围 3.1.8 电动汽车充放电系统", "source": "local", "assert_mode": "context_contains", "page_no": 16, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "evidence", "query": "GB/T 18487.1—2023：本文件及其所代替文件的历次版本发布情况为: ——2001 年首次发布为 GB/T 1", "must_include": "本文件及其所代替文件的历次版本发布情况为: ——2001 年首次发布为 GB/T 1", "source": "local", "assert_mode": "context_contains", "page_no": 6, "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_77() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第17页 3.1.9.2 能量传输（阶段） energy transfer (stag", "must_include": "3.1.9.2 能量传输（阶段） energy transfer (stag", "source": "local", "assert_mode": "context_contains", "page_no": 17, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "evidence", "query": "GB/T 18487.1—2023 # 引 言 GB/T 18487 旨在确立电动汽", "must_include": "GB/T 18487.1—2023 # 引 言 GB/T 18487 旨在确立电动汽", "source": "local", "assert_mode": "context_contains", "page_no": 7, "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_78() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第18页 3.2 **电击、保护措施、隔离、开关、接地和连接 electric sho", "must_include": "3.2 **电击、保护措施、隔离、开关、接地和连接 electric sho", "source": "local", "assert_mode": "context_contains", "page_no": 18, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "evidence", "query": "GB/T 18487.1—2023：——第 1 部分:通用要求。目的在于规范电动汽车与非车载传导式电能传输设备需要满足的", "must_include": "——第 1 部分:通用要求。目的在于规范电动汽车与非车载传导式电能传输设备需要满足的", "source": "local", "assert_mode": "context_contains", "page_no": 7, "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_79() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第20页 3.2.20 剩余电流保护器 residual current device", "must_include": "3.2.20 剩余电流保护器 residual current device", "source": "local", "assert_mode": "context_contains", "page_no": 20, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "evidence", "query": "GB/T 18487.1—2023：——第 2 部分:非车载传导供电设备电磁兼容要求。目的在于规范电动汽车非车载传导式供", "must_include": "——第 2 部分:非车载传导供电设备电磁兼容要求。目的在于规范电动汽车非车载传导式供", "source": "local", "assert_mode": "context_contains", "page_no": 7, "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_80() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第22页 **3.5.2 电缆储存装置 cable management system", "must_include": "**3.5.2 电缆储存装置 cable management system", "source": "local", "assert_mode": "context_contains", "page_no": 22, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "definition", "query": "在GB/T 18487.1—2023中，什么是充电 charging？", "must_include": "充电 charging", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_81() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第23页 **注：** 在不引起混淆的情况下，本文件中未指定类型的车辆适配器是指适用于", "must_include": "**注：** 在不引起混淆的情况下，本文件中未指定类型的车辆适配器是指适用于", "source": "local", "assert_mode": "context_contains", "page_no": 23, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "definition_detail", "query": "在GB/T 18487.1—2023中，充电 charging 的定义是什么？", "must_include": "将交流或直流供电网(电源)调整为适当的电压/电流,为电动汽车可充电储能系统提供电能。", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_82() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第26页 GB/T 18487.1—2023 ![]() 图 10 直流供电设备工作点", "must_include": "GB/T 18487.1—2023 ![]() 图 10 直流供电设备工作点", "source": "local", "assert_mode": "context_contains", "page_no": 26, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "definition", "query": "在GB/T 18487.1—2023中，什么是充放电 bi-directional charging？", "must_include": "充放电 bi-directional charging", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_83() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第27页 3.7.13 **电压需求值（电动汽车） target voltage (E", "must_include": "3.7.13 **电压需求值（电动汽车） target voltage (E", "source": "local", "assert_mode": "context_contains", "page_no": 27, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "definition_detail", "query": "在GB/T 18487.1—2023中，充放电 bi-directional charging 的定义是什么？", "must_include": "将交流或直流供电网(电源)调整为适当的电压/电流,为电动汽车可充电储能系统提供电能", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_84() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第28页 3.8.13 **正脉冲限制电压 discharging pulse lim", "must_include": "3.8.13 **正脉冲限制电压 discharging pulse lim", "source": "local", "assert_mode": "context_contains", "page_no": 28, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "definition", "query": "在GB/T 18487.1—2023中，什么是传导充电 conductive charge？", "must_include": "传导充电 conductive charge", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_85() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第29页 4.4.2 特殊使用环境 可根据 15.2 规定的特殊使用条件进行分类。", "must_include": "4.4.2 特殊使用环境 可根据 15.2 规定的特殊使用条件进行分类。", "source": "local", "assert_mode": "context_contains", "page_no": 29, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "definition_detail", "query": "在GB/T 18487.1—2023中，传导充电 conductive charge 的定义是什么？", "must_include": "利用电传导给蓄电池进行充电的方式。 [来源:GB/T 19596—2017,3.4.", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_86() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第31页 GB/T 18487.1—2023 地导体的标准插座，并且采用缆上控制与保护", "must_include": "GB/T 18487.1—2023 地导体的标准插座，并且采用缆上控制与保护", "source": "local", "assert_mode": "context_contains", "page_no": 31, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "definition", "query": "在GB/T 18487.1—2023中，什么是充电模式 charging modes？", "must_include": "充电模式 charging modes", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_87() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第32页 若在能量传输阶段检测到失去保护接地导体电气连续性，供电设备应切断供电回路，且", "must_include": "若在能量传输阶段检测到失去保护接地导体电气连续性，供电设备应切断供电回路，且", "source": "local", "assert_mode": "context_contains", "page_no": 32, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "definition_detail", "query": "在GB/T 18487.1—2023中，充电模式 charging modes 的定义是什么？", "must_include": "连接电动汽车到供电网(电源)给电动汽车供电的方法。 注:模式 1、模式 2、模式 3", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_88() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第33页 注：附录 D 提供了一种适用于采用附录 B 控制导引功能的直流充电系统的车辆", "must_include": "注：附录 D 提供了一种适用于采用附录 B 控制导引功能的直流充电系统的车辆", "source": "local", "assert_mode": "context_contains", "page_no": 33, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "definition", "query": "在GB/T 18487.1—2023中，什么是模式 1 mode 1？", "must_include": "模式 1 mode 1", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_89() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第34页 #### 7.1.4 感知阈和惊跳反应 在预期使用过程和合理可预见的误用时", "must_include": "#### 7.1.4 感知阈和惊跳反应 在预期使用过程和合理可预见的误用时", "source": "local", "assert_mode": "context_contains", "page_no": 34, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "definition_detail", "query": "在GB/T 18487.1—2023中，模式 1 mode 1 的定义是什么？", "must_include": "将电动汽车连接到供电网(电源)时,在电源侧使用了符合 GB/T 2099.1 和 G", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_90() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第36页 保护阻抗的设计和测试应能承受 IEC 62477-1:2016 中 5.2.", "must_include": "保护阻抗的设计和测试应能承受 IEC 62477-1:2016 中 5.2.", "source": "local", "assert_mode": "context_contains", "page_no": 36, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "definition", "query": "在GB/T 18487.1—2023中，什么是**电动汽车电能传输设备 EV energy transfer equipment**？", "must_include": "**电动汽车电能传输设备 EV energy transfer equipment**", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_91() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第37页 7.5 补充措施 为防止由于基本防护和/或故障防护失效、或由用户大意引起的电", "must_include": "7.5 补充措施 为防止由于基本防护和/或故障防护失效、或由用户大意引起的电", "source": "local", "assert_mode": "context_contains", "page_no": 37, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "definition_detail", "query": "在GB/T 18487.1—2023中，**电动汽车电能传输设备 EV energy transfer equipment** 的定义是什么？", "must_include": "连接于电动汽车与供电网(电源)之间,可实现能量流动的设备。 注 1:电动汽车电能传输", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_92() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第38页 8 电动汽车和电动汽车电能传输之间的连接 8.1 通用要求 第 8 章规定了", "must_include": "8 电动汽车和电动汽车电能传输之间的连接 8.1 通用要求 第 8 章规定了", "source": "local", "assert_mode": "context_contains", "page_no": 38, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "definition", "query": "在GB/T 18487.1—2023中，什么是**充电设备 charging equipment**？", "must_include": "**充电设备 charging equipment**", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_93() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第39页 ### 9 车辆适配器 对于模式 4,可使用车辆适配器连接车辆插头和车辆插座", "must_include": "### 9 车辆适配器 对于模式 4,可使用车辆适配器连接车辆插头和车辆插座", "source": "local", "assert_mode": "context_contains", "page_no": 39, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "definition_detail", "query": "在GB/T 18487.1—2023中，**充电设备 charging equipment** 的定义是什么？", "must_include": "以传导或无线方式与电动汽车或动力蓄电池连接,为其提供电能的设备。 注:根据电动汽车与", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_94() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第40页 10.7 冲击电流 10.7.1 模式 2 和模式 3 的冲击电流 在模式", "must_include": "10.7 冲击电流 10.7.1 模式 2 和模式 3 的冲击电流 在模式", "source": "local", "assert_mode": "context_contains", "page_no": 40, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "definition", "query": "在GB/T 18487.1—2023中，什么是**充放电设备 charging and discharging equipment**？", "must_include": "**充放电设备 charging and discharging equipment**", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_95() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第41页 对于模式 3 连接方式 B 的交流供电设备结构设计应满足 GB/T 2023", "must_include": "对于模式 3 连接方式 B 的交流供电设备结构设计应满足 GB/T 2023", "source": "local", "assert_mode": "context_contains", "page_no": 41, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "definition_detail", "query": "在GB/T 18487.1—2023中，**充放电设备 charging and discharging equipment** 的定义是什么？", "must_include": "连接于电动汽车或动力蓄电池与电网(或负荷)之间,可实现能量双向流动的设备。 注:根据", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_96() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第42页 ### 11.3.2 直流供电设备的剩余电流保护器 直流供电设备的交流侧主回", "must_include": "### 11.3.2 直流供电设备的剩余电流保护器 直流供电设备的交流侧主回", "source": "local", "assert_mode": "context_contains", "page_no": 42, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "standard", "query": "GB/T 18487.1—2023 的标准号和实施日期是什么？", "must_include": "GB/T 18487.1—2023", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_97() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第43页 GB/T 18487.1—2023 11.7 电涌保护器(SPD) 11.7", "must_include": "GB/T 18487.1—2023 11.7 电涌保护器(SPD) 11.7", "source": "local", "assert_mode": "context_contains", "page_no": 43, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "standard", "query": "GB/T 18487.1—2023 对应的标准编号是什么？", "must_include": "GB/T 18487.1—2023", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_98() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第45页 GB/T 18487.1—2023 表 3 接触电流限值 | 接触位置 |", "must_include": "GB/T 18487.1—2023 表 3 接触电流限值 | 接触位置 |", "source": "local", "assert_mode": "context_contains", "page_no": 45, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "standard", "query": "GB/T 18487.1—2023 的现行标准号是什么？", "must_include": "GB/T 18487.1—2023", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_99() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第46页 GB/T 18487.1—2023 结束后1 h内进行接触电流测量。供电设备", "must_include": "GB/T 18487.1—2023 结束后1 h内进行接触电流测量。供电设备", "source": "local", "assert_mode": "context_contains", "page_no": 46, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "publication_date", "query": "GB/T 18487.1—2023 的发布日期是什么？", "must_include": "2023-09-07", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_100() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第47页 12.4 冲击耐压 在供电设备非电气连接的各带电回路之间、各独立带电回路与地", "must_include": "12.4 冲击耐压 在供电设备非电气连接的各带电回路之间、各独立带电回路与地", "source": "local", "assert_mode": "context_contains", "page_no": 47, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "publication_date", "query": "GB/T 18487.1—2023 是哪一天发布的？", "must_include": "2023-09-07", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_101() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第48页 ### 13 过载保护和短路保护 #### 13.1 通则 过流保护装置应符", "must_include": "### 13 过载保护和短路保护 #### 13.1 通则 过流保护装置应符", "source": "local", "assert_mode": "context_contains", "page_no": 48, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "effective_date", "query": "GB/T 18487.1—2023 的实施日期是什么？", "must_include": "2024-04-01", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_102() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第49页 GB/T 18487.1—2023 流输出或交流输出)，以防止进一步造成电击", "must_include": "GB/T 18487.1—2023 流输出或交流输出)，以防止进一步造成电击", "source": "local", "assert_mode": "context_contains", "page_no": 49, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "effective_date", "query": "GB/T 18487.1—2023 从哪一天开始实施？", "must_include": "2024-04-01", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_103() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第50页 GB/T 18487.1—2023 a) 与 15.1 规定的温度、相对湿度", "must_include": "GB/T 18487.1—2023 a) 与 15.1 规定的温度、相对湿度", "source": "local", "assert_mode": "context_contains", "page_no": 50, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "section", "query": "在GB/T 18487.1—2023中，是否包含“功能 function”这一章节？", "must_include": "功能 function", "source": "local", "assert_mode": "context_contains", "page_no": 20, "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_104() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第52页 GB/T 18487.1—2023 电动汽车供电设备&emsp;&emsp", "must_include": "GB/T 18487.1—2023 电动汽车供电设备&emsp;&emsp", "source": "local", "assert_mode": "context_contains", "page_no": 52, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "section", "query": "在GB/T 18487.1—2023中，是否包含“模式 2、模式 3 和模式 4 提供的功能”这一章节？", "must_include": "模式 2、模式 3 和模式 4 提供的功能", "source": "local", "assert_mode": "context_contains", "page_no": 31, "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_105() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第53页 GB/T 18487.1—2023 **表 A.1 控制导引电路的参数**", "must_include": "GB/T 18487.1—2023 **表 A.1 控制导引电路的参数**", "source": "local", "assert_mode": "context_contains", "page_no": 53, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "section", "query": "在GB/T 18487.1—2023中，是否包含“7.1.4 感知阈和惊跳反应”这一章节？", "must_include": "7.1.4 感知阈和惊跳反应", "source": "local", "assert_mode": "context_contains", "page_no": 34, "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_106() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第54页 GB/T 18487.1—2023 缆上控制与保护装置 | 车辆接口 | 电", "must_include": "GB/T 18487.1—2023 缆上控制与保护装置 | 车辆接口 | 电", "source": "local", "assert_mode": "context_contains", "page_no": 54, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "section", "query": "在GB/T 18487.1—2023中，是否包含“10.4 IP 防护等级”这一章节？", "must_include": "10.4 IP 防护等级", "source": "local", "assert_mode": "context_contains", "page_no": 39, "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_107() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第55页 图 A.5 振荡器电压 占空比与充电电流限值的映射关系见表 A.2 和表 A", "must_include": "图 A.5 振荡器电压 占空比与充电电流限值的映射关系见表 A.2 和表 A", "source": "local", "assert_mode": "context_contains", "page_no": 55, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "section", "query": "在GB/T 18487.1—2023中，是否包含“10.3 分断能力”这一章节？", "must_include": "10.3 分断能力", "source": "local", "assert_mode": "context_contains", "page_no": 39, "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_108() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第56页 充电过程状态之间没有未定义的检测点 1 电压范围,如果检测点 1 电压状态在", "must_include": "充电过程状态之间没有未定义的检测点 1 电压范围,如果检测点 1 电压状态在", "source": "local", "assert_mode": "context_contains", "page_no": 56, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "section", "query": "在GB/T 18487.1—2023中，是否包含“接触电流限值超过 3.5 mA 的特殊情况”这一章节？", "must_include": "接触电流限值超过 3.5 mA 的特殊情况", "source": "local", "assert_mode": "context_contains", "page_no": 45, "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_109() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第57页 GB/T 18487.1—2023 表 A.4 检测点 1 的电压状态及对应", "must_include": "GB/T 18487.1—2023 表 A.4 检测点 1 的电压状态及对应", "source": "local", "assert_mode": "context_contains", "page_no": 57, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "section", "query": "在GB/T 18487.1—2023中，是否包含“A.5 控制导引电路状态转换图和控制时序列表”这一章节？", "must_include": "A.5 控制导引电路状态转换图和控制时序列表", "source": "local", "assert_mode": "context_contains", "page_no": 65, "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
-@pytest.mark.page_coverage
 def test_doc_000003_golden_110() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第58页 **A.3.5 供电设备准备就绪** 如供电设备无故障,且检测点 1 的电压", "must_include": "**A.3.5 供电设备准备就绪** 如供电设备无故障,且检测点 1 的电压", "source": "local", "assert_mode": "context_contains", "page_no": 58, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_111() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第59页 A.3.8.2 车辆控制器对检测点 2 的 PWM 信号进行不间断检测，当占", "must_include": "A.3.8.2 车辆控制器对检测点 2 的 PWM 信号进行不间断检测，当占", "source": "local", "assert_mode": "context_contains", "page_no": 59, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_112() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第60页 A.3.10.5 在能量传输阶段, 如果检测点 1 的电压值为 $12\\\\te", "must_include": "A.3.10.5 在能量传输阶段, 如果检测点 1 的电压值为 $12\\\\te", "source": "local", "assert_mode": "context_contains", "page_no": 60, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_113() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第61页 GB/T 18487.1—2023 | 信号/测量/系统条件 | 状态/对象", "must_include": "GB/T 18487.1—2023 | 信号/测量/系统条件 | 状态/对象", "source": "local", "assert_mode": "context_contains", "page_no": 61, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_114() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第62页 GB/T 18487.1—2023 | 信号/测量/系统条件 | 状态/对象", "must_include": "GB/T 18487.1—2023 | 信号/测量/系统条件 | 状态/对象", "source": "local", "assert_mode": "context_contains", "page_no": 62, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_115() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第63页 注 2: 连接装置连接后,车辆准备就绪后在(T2-T6)期间闭合 S2 开关", "must_include": "注 2: 连接装置连接后,车辆准备就绪后在(T2-T6)期间闭合 S2 开关", "source": "local", "assert_mode": "context_contains", "page_no": 63, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_116() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第64页 GB/T 18487.1—2023 | 信号/测量/ 系统条件 | 状态/对", "must_include": "GB/T 18487.1—2023 | 信号/测量/ 系统条件 | 状态/对", "source": "local", "assert_mode": "context_contains", "page_no": 64, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_117() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第65页 GB/T 18487.1—2023 | 信号/测量/系统条件 | 状态/对象", "must_include": "GB/T 18487.1—2023 | 信号/测量/系统条件 | 状态/对象", "source": "local", "assert_mode": "context_contains", "page_no": 65, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_118() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第67页 注 2：图中括号内的数字对应于表 A.7 中规定的时序。", "must_include": "注 2：图中括号内的数字对应于表 A.7 中规定的时序。", "source": "local", "assert_mode": "context_contains", "page_no": 67, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_119() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第68页 GB/T 18487.1—2023 表 A.7 交流充电控制时序表 | 时序", "must_include": "GB/T 18487.1—2023 表 A.7 交流充电控制时序表 | 时序", "source": "local", "assert_mode": "context_contains", "page_no": 68, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_120() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第69页 GB/T 18487.1—2023 表 A.7 交流充电控制时序表（续） |", "must_include": "GB/T 18487.1—2023 表 A.7 交流充电控制时序表（续） |", "source": "local", "assert_mode": "context_contains", "page_no": 69, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_121() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第70页 GB/T 18487.1—2023 **表 A.7 交流充电控制时序表（续）", "must_include": "GB/T 18487.1—2023 **表 A.7 交流充电控制时序表（续）", "source": "local", "assert_mode": "context_contains", "page_no": 70, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_122() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第71页 GB/T 18487.1—2023 表 A.7 交流充电控制时序表（续） |", "must_include": "GB/T 18487.1—2023 表 A.7 交流充电控制时序表（续） |", "source": "local", "assert_mode": "context_contains", "page_no": 71, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_123() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第74页 GB/T 18487.1—2023 表 A.7 交流充电控制时序表（续） |", "must_include": "GB/T 18487.1—2023 表 A.7 交流充电控制时序表（续） |", "source": "local", "assert_mode": "context_contains", "page_no": 74, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_124() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第75页 **B.2 直流充电安全保护系统** 直流充电安全保护系统基本方案的示意图如", "must_include": "**B.2 直流充电安全保护系统** 直流充电安全保护系统基本方案的示意图如", "source": "local", "assert_mode": "context_contains", "page_no": 75, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_125() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第76页 U1 —— 充电机内部控制导引上拉电压；", "must_include": "U1 —— 充电机内部控制导引上拉电压；", "source": "local", "assert_mode": "context_contains", "page_no": 76, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_126() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第77页 **B.4.4 充电准备就绪** 车辆控制器与设备控制器在配置阶段时，车辆控", "must_include": "**B.4.4 充电准备就绪** 车辆控制器与设备控制器在配置阶段时，车辆控", "source": "local", "assert_mode": "context_contains", "page_no": 77, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_127() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第78页 在能量传输阶段,充电机和电动汽车均可发起暂停。暂停开始时,充电机应确认充电电", "must_include": "在能量传输阶段,充电机和电动汽车均可发起暂停。暂停开始时,充电机应确认充电电", "source": "local", "assert_mode": "context_contains", "page_no": 78, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_128() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第79页 **B.4.7.8** 在充电准备就绪过程中，如果充电机检测到车辆接口当前电", "must_include": "**B.4.7.8** 在充电准备就绪过程中，如果充电机检测到车辆接口当前电", "source": "local", "assert_mode": "context_contains", "page_no": 79, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_129() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第81页 GB/T 18487.1—2023 | 信号/信息/系统 条件 | 发射方", "must_include": "GB/T 18487.1—2023 | 信号/信息/系统 条件 | 发射方", "source": "local", "assert_mode": "context_contains", "page_no": 81, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_130() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第83页 GB/T 18487.1—2023 表 B.4 直流充电控制时序表（续） |", "must_include": "GB/T 18487.1—2023 表 B.4 直流充电控制时序表（续） |", "source": "local", "assert_mode": "context_contains", "page_no": 83, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_131() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第85页 U1 —— 充电机内部控制导引上拉电压；", "must_include": "U1 —— 充电机内部控制导引上拉电压；", "source": "local", "assert_mode": "context_contains", "page_no": 85, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_132() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第86页 <sup>d</sup> 车辆厂家可自定义，上拉电压 U2 不应大于 28", "must_include": "<sup>d</sup> 车辆厂家可自定义，上拉电压 U2 不应大于 28", "source": "local", "assert_mode": "context_contains", "page_no": 86, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_133() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第87页 **GB/T 18487.1—2023** 的充电机类型：当检测点 3 电压", "must_include": "**GB/T 18487.1—2023** 的充电机类型：当检测点 3 电压", "source": "local", "assert_mode": "context_contains", "page_no": 87, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_134() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第88页 C.4.6.4 设备控制器开始调整输出供电电压,应具备软启动功能(1 s~8", "must_include": "C.4.6.4 设备控制器开始调整输出供电电压,应具备软启动功能(1 s~8", "source": "local", "assert_mode": "context_contains", "page_no": 88, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_135() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第89页 C.4.8.3 车辆接口温升能力检测(可选功能) 为确认车辆接口直流供电回路", "must_include": "C.4.8.3 车辆接口温升能力检测(可选功能) 为确认车辆接口直流供电回路", "source": "local", "assert_mode": "context_contains", "page_no": 89, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_136() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第90页 在能量传输阶段，当充电机确认发生故障情况时，设备控制器应同时开始以下动作，具", "must_include": "在能量传输阶段，当充电机确认发生故障情况时，设备控制器应同时开始以下动作，具", "source": "local", "assert_mode": "context_contains", "page_no": 90, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_137() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第91页 GB/T 18487.1—2023 开 C5 和 C6；或者当车辆控制器测量", "must_include": "GB/T 18487.1—2023 开 C5 和 C6；或者当车辆控制器测量", "source": "local", "assert_mode": "context_contains", "page_no": 91, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_138() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第92页 GB/T 18487.1—2023 表 C.2 控制导引电路状态 | 充电过", "must_include": "GB/T 18487.1—2023 表 C.2 控制导引电路状态 | 充电过", "source": "local", "assert_mode": "context_contains", "page_no": 92, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_139() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第93页 GB/T 18487.1—2023 表 C.2 控制导引电路状态（续） |", "must_include": "GB/T 18487.1—2023 表 C.2 控制导引电路状态（续） |", "source": "local", "assert_mode": "context_contains", "page_no": 93, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_140() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第94页 表 C.3 控制引导电路状态转换表 | 时序 | 状态 | 条件 | 备注", "must_include": "表 C.3 控制引导电路状态转换表 | 时序 | 状态 | 条件 | 备注", "source": "local", "assert_mode": "context_contains", "page_no": 94, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_141() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第96页 GB/T 18487.1—2023 **表 C.3 控制导引电路状态转换表（", "must_include": "GB/T 18487.1—2023 **表 C.3 控制导引电路状态转换表（", "source": "local", "assert_mode": "context_contains", "page_no": 96, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_142() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第97页 GB/T 18487.1—2023 表 C.3 控制导引电路状态转换表 (续", "must_include": "GB/T 18487.1—2023 表 C.3 控制导引电路状态转换表 (续", "source": "local", "assert_mode": "context_contains", "page_no": 97, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_143() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第98页 GB/T 18487.1—2023 | 信号参数系统条件 | 代号 | 发送", "must_include": "GB/T 18487.1—2023 | 信号参数系统条件 | 代号 | 发送", "source": "local", "assert_mode": "context_contains", "page_no": 98, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_144() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第99页 GB/T 18487.1—2023 表 C.4 直流充电控制时序表（正常结束", "must_include": "GB/T 18487.1—2023 表 C.4 直流充电控制时序表（正常结束", "source": "local", "assert_mode": "context_contains", "page_no": 99, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_145() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第100页 GB/T 18487.1—2023 表 C.4 直流充电控制时序表(正常结束", "must_include": "GB/T 18487.1—2023 表 C.4 直流充电控制时序表(正常结束", "source": "local", "assert_mode": "context_contains", "page_no": 100, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_146() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第101页 GB/T 18487.1—2023 | 信号参数 系统条件 | 代号 | 发", "must_include": "GB/T 18487.1—2023 | 信号参数 系统条件 | 代号 | 发", "source": "local", "assert_mode": "context_contains", "page_no": 101, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_147() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第102页 GB/T 18487.1—2023 **表 C.5 直流充电控制时序表（故障", "must_include": "GB/T 18487.1—2023 **表 C.5 直流充电控制时序表（故障", "source": "local", "assert_mode": "context_contains", "page_no": 102, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_148() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第104页 GB/T 18487.1—2023 **表 C.6 直流充电控制时序表（紧急", "must_include": "GB/T 18487.1—2023 **表 C.6 直流充电控制时序表（紧急", "source": "local", "assert_mode": "context_contains", "page_no": 104, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_149() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第105页 GB/T 18487.1—2023 ![图 C.6 接地故障检测电路示意图]", "must_include": "GB/T 18487.1—2023 ![图 C.6 接地故障检测电路示意图]", "source": "local", "assert_mode": "context_contains", "page_no": 105, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_150() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第106页 充电机输出回路的绝缘试验要求应符合表 C.8 中的规定。", "must_include": "充电机输出回路的绝缘试验要求应符合表 C.8 中的规定。", "source": "local", "assert_mode": "context_contains", "page_no": 106, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_151() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第107页 GB/T 18487.1—2023 **表 C.8 输出回路的绝缘试验要求（", "must_include": "GB/T 18487.1—2023 **表 C.8 输出回路的绝缘试验要求（", "source": "local", "assert_mode": "context_contains", "page_no": 107, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_152() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第108页 C.7.6.2 充电暂停及恢复 在能量传输阶段，充电机和电动汽车均可发起暂停", "must_include": "C.7.6.2 充电暂停及恢复 在能量传输阶段，充电机和电动汽车均可发起暂停", "source": "local", "assert_mode": "context_contains", "page_no": 108, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_153() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第109页 C.7.6.4 输出过流保护 当发生以下一种或多种情况持续 500 ms 时", "must_include": "C.7.6.4 输出过流保护 当发生以下一种或多种情况持续 500 ms 时", "source": "local", "assert_mode": "context_contains", "page_no": 109, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_154() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第111页 **表 C.13 充电机的绝缘性能/防护措施的最低要求** | 项目 | 绝", "must_include": "**表 C.13 充电机的绝缘性能/防护措施的最低要求** | 项目 | 绝", "source": "local", "assert_mode": "context_contains", "page_no": 111, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_155() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第113页 表 C.15 充电机紧急停机要求 | 故障项目 | 触发时间 | 动作时间(", "must_include": "表 C.15 充电机紧急停机要求 | 故障项目 | 触发时间 | 动作时间(", "source": "local", "assert_mode": "context_contains", "page_no": 113, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_156() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第114页 GB/T 18487.1—2023 表 C.16 电动汽车紧急停机要求 |", "must_include": "GB/T 18487.1—2023 表 C.16 电动汽车紧急停机要求 |", "source": "local", "assert_mode": "context_contains", "page_no": 114, "target_doc_id": "DOC-000003"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.page_coverage
-def test_doc_000003_golden_157() -> None:
-    case = '{"kind": "page_coverage", "query": "GBT+18487.1-2023：第115页 **D.2.2** 车辆控制器与设备控制器在配置阶段时，当收到充电机最大输出", "must_include": "**D.2.2** 车辆控制器与设备控制器在配置阶段时，当收到充电机最大输出", "source": "local", "assert_mode": "context_contains", "page_no": 115, "target_doc_id": "DOC-000003"}'
+    case = '{"kind": "title", "query": "GB/T 18487.1—2023 这份文档的标题是什么？", "must_include": "# 电动汽车传导充电系统", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000003"}'
     _assert_case(json.loads(case))
