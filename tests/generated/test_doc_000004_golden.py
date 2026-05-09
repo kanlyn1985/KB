@@ -40,203 +40,203 @@ def _assert_case(case: dict[str, str]) -> None:
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_1() -> None:
-    case = '{"kind": "retrieval_quality", "query": "什么是保护门 shutter？", "must_include": "保护门 shutter", "retrieval_must_hit": ["保护门 shutter"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["保护门 shutter"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"retrieval_quality\", \"query\": \"什么是保护门 shutter？\", \"must_include\": \"保护门 shutter\", \"retrieval_must_hit\": [\"保护门 shutter\"], \"assert_mode\": \"rich_answer\", \"source\": \"local_rq\", \"expected_sections\": [\"保护门 shutter\"], \"difficulty\": \"medium\", \"query_type\": \"definition\", \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_2() -> None:
-    case = '{"kind": "retrieval_quality", "query": "QC/T 1036—2016中保护门 shutter的定义是什么？", "must_include": "保护门 shutter", "retrieval_must_hit": ["保护门 shutter"], "assert_mode": "rich_answer", "source": "local_rq", "expected_sections": ["保护门 shutter"], "difficulty": "medium", "query_type": "definition", "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"retrieval_quality\", \"query\": \"QC/T 1036—2016中保护门 shutter的定义是什么？\", \"must_include\": \"保护门 shutter\", \"retrieval_must_hit\": [\"保护门 shutter\"], \"assert_mode\": \"rich_answer\", \"source\": \"local_rq\", \"expected_sections\": [\"保护门 shutter\"], \"difficulty\": \"medium\", \"query_type\": \"definition\", \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_3() -> None:
-    case = '{"kind": "retrieval_quality", "query": "规范性引用文件有什么要求？", "must_include": "规范性引用文件", "retrieval_must_hit": ["规范性引用文件"], "assert_mode": "rich_answer", "source": "local_rq", "expected_pages": [8], "expected_sections": ["2 规范性引用文件"], "difficulty": "medium", "query_type": "general_search", "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"retrieval_quality\", \"query\": \"规范性引用文件有什么要求？\", \"must_include\": \"规范性引用文件\", \"retrieval_must_hit\": [\"规范性引用文件\"], \"assert_mode\": \"rich_answer\", \"source\": \"local_rq\", \"expected_pages\": [8], \"expected_sections\": [\"2 规范性引用文件\"], \"difficulty\": \"medium\", \"query_type\": \"general_search\", \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_4() -> None:
-    case = '{"kind": "retrieval_quality", "query": "工作环境条件有什么要求？", "must_include": "工作环境条件", "retrieval_must_hit": ["工作环境条件"], "assert_mode": "rich_answer", "source": "local_rq", "expected_pages": [9], "expected_sections": ["4.1.2 工作环境条件。"], "difficulty": "medium", "query_type": "general_search", "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"retrieval_quality\", \"query\": \"工作环境条件有什么要求？\", \"must_include\": \"工作环境条件\", \"retrieval_must_hit\": [\"工作环境条件\"], \"assert_mode\": \"rich_answer\", \"source\": \"local_rq\", \"expected_pages\": [9], \"expected_sections\": [\"4.1.2 工作环境条件。\"], \"difficulty\": \"medium\", \"query_type\": \"general_search\", \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_5() -> None:
-    case = '{"kind": "retrieval_quality", "query": "外观及安装尺寸有什么要求？", "must_include": "外观及安装尺寸", "retrieval_must_hit": ["外观及安装尺寸"], "assert_mode": "rich_answer", "source": "local_rq", "expected_pages": [10], "expected_sections": ["4.2 外观及安装尺寸"], "difficulty": "medium", "query_type": "general_search", "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"retrieval_quality\", \"query\": \"外观及安装尺寸有什么要求？\", \"must_include\": \"外观及安装尺寸\", \"retrieval_must_hit\": [\"外观及安装尺寸\"], \"assert_mode\": \"rich_answer\", \"source\": \"local_rq\", \"expected_pages\": [10], \"expected_sections\": [\"4.2 外观及安装尺寸\"], \"difficulty\": \"medium\", \"query_type\": \"general_search\", \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_6() -> None:
-    case = '{"kind": "retrieval_quality", "query": "输出特性参数允差有什么要求？", "must_include": "输出特性参数允差", "retrieval_must_hit": ["输出特性参数允差"], "assert_mode": "rich_answer", "source": "local_rq", "expected_pages": [10], "expected_sections": ["4.5.2 输出特性参数允差。"], "difficulty": "medium", "query_type": "general_search", "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"retrieval_quality\", \"query\": \"输出特性参数允差有什么要求？\", \"must_include\": \"输出特性参数允差\", \"retrieval_must_hit\": [\"输出特性参数允差\"], \"assert_mode\": \"rich_answer\", \"source\": \"local_rq\", \"expected_pages\": [10], \"expected_sections\": [\"4.5.2 输出特性参数允差。\"], \"difficulty\": \"medium\", \"query_type\": \"general_search\", \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_7() -> None:
-    case = '{"kind": "retrieval_quality", "query": "额定输出效率有什么要求？", "must_include": "额定输出效率", "retrieval_must_hit": ["额定输出效率"], "assert_mode": "rich_answer", "source": "local_rq", "expected_pages": [10], "expected_sections": ["4.5.3 额定输出效率。"], "difficulty": "medium", "query_type": "general_search", "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"retrieval_quality\", \"query\": \"额定输出效率有什么要求？\", \"must_include\": \"额定输出效率\", \"retrieval_must_hit\": [\"额定输出效率\"], \"assert_mode\": \"rich_answer\", \"source\": \"local_rq\", \"expected_pages\": [10], \"expected_sections\": [\"4.5.3 额定输出效率。\"], \"difficulty\": \"medium\", \"query_type\": \"general_search\", \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_8() -> None:
-    case = '{"kind": "retrieval_quality", "query": "过载输出能力有什么要求？", "must_include": "过载输出能力", "retrieval_must_hit": ["过载输出能力"], "assert_mode": "rich_answer", "source": "local_rq", "expected_pages": [10], "expected_sections": ["4.5.4 过载输出能力。"], "difficulty": "medium", "query_type": "general_search", "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"retrieval_quality\", \"query\": \"过载输出能力有什么要求？\", \"must_include\": \"过载输出能力\", \"retrieval_must_hit\": [\"过载输出能力\"], \"assert_mode\": \"rich_answer\", \"source\": \"local_rq\", \"expected_pages\": [10], \"expected_sections\": [\"4.5.4 过载输出能力。\"], \"difficulty\": \"medium\", \"query_type\": \"general_search\", \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_9() -> None:
-    case = '{"kind": "retrieval_quality", "query": "和 4.5.2 的规定有什么要求？", "must_include": "和 4.5.2 的规定", "retrieval_must_hit": ["和 4.5.2 的规定"], "assert_mode": "rich_answer", "source": "local_rq", "expected_pages": [11], "expected_sections": ["4.5.1 和 4.5.2 的规定。"], "difficulty": "medium", "query_type": "general_search", "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"retrieval_quality\", \"query\": \"和 4.5.2 的规定有什么要求？\", \"must_include\": \"和 4.5.2 的规定\", \"retrieval_must_hit\": [\"和 4.5.2 的规定\"], \"assert_mode\": \"rich_answer\", \"source\": \"local_rq\", \"expected_pages\": [11], \"expected_sections\": [\"4.5.1 和 4.5.2 的规定。\"], \"difficulty\": \"medium\", \"query_type\": \"general_search\", \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_10() -> None:
-    case = '{"kind": "retrieval_quality", "query": "持续输出能力有什么要求？", "must_include": "持续输出能力", "retrieval_must_hit": ["持续输出能力"], "assert_mode": "rich_answer", "source": "local_rq", "expected_pages": [11], "expected_sections": ["4.5.5 持续输出能力。"], "difficulty": "medium", "query_type": "general_search", "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"retrieval_quality\", \"query\": \"持续输出能力有什么要求？\", \"must_include\": \"持续输出能力\", \"retrieval_must_hit\": [\"持续输出能力\"], \"assert_mode\": \"rich_answer\", \"source\": \"local_rq\", \"expected_pages\": [11], \"expected_sections\": [\"4.5.5 持续输出能力。\"], \"difficulty\": \"medium\", \"query_type\": \"general_search\", \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_11() -> None:
-    case = '{"kind": "retrieval_quality", "query": "爬电距离、电气间隙和穿通绝缘距离有什么要求？", "must_include": "爬电距离、电气间隙和穿通绝缘距离", "retrieval_must_hit": ["爬电距离、电气间隙和穿通绝缘距离"], "assert_mode": "rich_answer", "source": "local_rq", "expected_pages": [11], "expected_sections": ["4.6.2 爬电距离、电气间隙和穿通绝缘距离。"], "difficulty": "medium", "query_type": "general_search", "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"retrieval_quality\", \"query\": \"爬电距离、电气间隙和穿通绝缘距离有什么要求？\", \"must_include\": \"爬电距离、电气间隙和穿通绝缘距离\", \"retrieval_must_hit\": [\"爬电距离、电气间隙和穿通绝缘距离\"], \"assert_mode\": \"rich_answer\", \"source\": \"local_rq\", \"expected_pages\": [11], \"expected_sections\": [\"4.6.2 爬电距离、电气间隙和穿通绝缘距离。\"], \"difficulty\": \"medium\", \"query_type\": \"general_search\", \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_12() -> None:
-    case = '{"kind": "evidence", "query": "QC/T 1036—2016：ICS 43.040.10 T 36 # QC # 中华人民共和国汽车行业标准 QC", "must_include": "ICS 43.040.10 T 36 # QC # 中华人民共和国汽车行业标准 QC", "source": "local", "assert_mode": "context_contains", "page_no": 1, "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"evidence\", \"query\": \"QC/T 1036—2016：ICS 43.040.10 T 36 # QC # 中华人民共和国汽车行业标准 QC\", \"must_include\": \"ICS 43.040.10 T 36 # QC # 中华人民共和国汽车行业标准 QC\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"page_no\": 1, \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_13() -> None:
-    case = '{"kind": "evidence", "query": "QC/T 1036—2016：中华人民共和国工业和信息化部 公 告 2016年 第17号 工业和信息化部批准《不锈", "must_include": "中华人民共和国工业和信息化部 公 告 2016年 第17号 工业和信息化部批准《不锈", "source": "local", "assert_mode": "context_contains", "page_no": 2, "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"evidence\", \"query\": \"QC/T 1036—2016：中华人民共和国工业和信息化部 公 告 2016年 第17号 工业和信息化部批准《不锈\", \"must_include\": \"中华人民共和国工业和信息化部 公 告 2016年 第17号 工业和信息化部批准《不锈\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"page_no\": 2, \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_14() -> None:
-    case = '{"kind": "evidence", "query": "QC/T 1036—2016：以上机械行业标准由机械工业出版社出版，汽车行业标准由科 学技术文献出版社出版，船舶行", "must_include": "以上机械行业标准由机械工业出版社出版，汽车行业标准由科 学技术文献出版社出版，船舶行", "source": "local", "assert_mode": "context_contains", "page_no": 2, "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"evidence\", \"query\": \"QC/T 1036—2016：以上机械行业标准由机械工业出版社出版，汽车行业标准由科 学技术文献出版社出版，船舶行\", \"must_include\": \"以上机械行业标准由机械工业出版社出版，汽车行业标准由科 学技术文献出版社出版，船舶行\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"page_no\": 2, \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_15() -> None:
-    case = '{"kind": "evidence", "query": "QC/T 1036—2016：附件：35 项汽车行业标准编号、标准名称和起始实施日期 中华人民共和国工业和信息化部", "must_include": "附件：35 项汽车行业标准编号、标准名称和起始实施日期 中华人民共和国工业和信息化部", "source": "local", "assert_mode": "context_contains", "page_no": 2, "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"evidence\", \"query\": \"QC/T 1036—2016：附件：35 项汽车行业标准编号、标准名称和起始实施日期 中华人民共和国工业和信息化部\", \"must_include\": \"附件：35 项汽车行业标准编号、标准名称和起始实施日期 中华人民共和国工业和信息化部\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"page_no\": 2, \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_16() -> None:
-    case = '{"kind": "evidence", "query": "QC/T 1036—2016：附件： ### 35 项汽车行业标准编号、标准名称和起始实施日期 | 序号 | 标准", "must_include": "附件： ### 35 项汽车行业标准编号、标准名称和起始实施日期 | 序号 | 标准", "source": "local", "assert_mode": "context_contains", "page_no": 3, "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"evidence\", \"query\": \"QC/T 1036—2016：附件： ### 35 项汽车行业标准编号、标准名称和起始实施日期 | 序号 | 标准\", \"must_include\": \"附件： ### 35 项汽车行业标准编号、标准名称和起始实施日期 | 序号 | 标准\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"page_no\": 3, \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_17() -> None:
-    case = '{"kind": "evidence", "query": "QC/T 1036—2016：| 序号 | 标准编号 | 标准名称 | 被代替标准编号 | 起始实施日期 | |", "must_include": "| 序号 | 标准编号 | 标准名称 | 被代替标准编号 | 起始实施日期 | |", "source": "local", "assert_mode": "context_contains", "page_no": 4, "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"evidence\", \"query\": \"QC/T 1036—2016：| 序号 | 标准编号 | 标准名称 | 被代替标准编号 | 起始实施日期 | |\", \"must_include\": \"| 序号 | 标准编号 | 标准名称 | 被代替标准编号 | 起始实施日期 | |\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"page_no\": 4, \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_18() -> None:
-    case = '{"kind": "evidence", "query": "QC/T 1036—2016 # 前 言 本标准按照 GB/T 1.1—2009《标", "must_include": "QC/T 1036—2016 # 前 言 本标准按照 GB/T 1.1—2009《标", "source": "local", "assert_mode": "context_contains", "page_no": 7, "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"evidence\", \"query\": \"QC/T 1036—2016 # 前 言 本标准按照 GB/T 1.1—2009《标\", \"must_include\": \"QC/T 1036—2016 # 前 言 本标准按照 GB/T 1.1—2009《标\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"page_no\": 7, \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_19() -> None:
-    case = '{"kind": "evidence", "query": "QC/T 1036—2016：本标准的起草参考了国内外相关标准。", "must_include": "本标准的起草参考了国内外相关标准。", "source": "local", "assert_mode": "context_contains", "page_no": 7, "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"evidence\", \"query\": \"QC/T 1036—2016：本标准的起草参考了国内外相关标准。\", \"must_include\": \"本标准的起草参考了国内外相关标准。\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"page_no\": 7, \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_20() -> None:
-    case = '{"kind": "evidence", "query": "QC/T 1036—2016：本标准由全国汽车标准化技术委员会(SAC/TC 114)提出并归口。", "must_include": "本标准由全国汽车标准化技术委员会(SAC/TC 114)提出并归口。", "source": "local", "assert_mode": "context_contains", "page_no": 7, "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"evidence\", \"query\": \"QC/T 1036—2016：本标准由全国汽车标准化技术委员会(SAC/TC 114)提出并归口。\", \"must_include\": \"本标准由全国汽车标准化技术委员会(SAC/TC 114)提出并归口。\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"page_no\": 7, \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_21() -> None:
-    case = '{"kind": "evidence", "query": "QC/T 1036—2016：本标准起草单位:上海汽车集团股份有限公司技术中心、长沙汽车电器研究所、上海坤浦电子科", "must_include": "本标准起草单位:上海汽车集团股份有限公司技术中心、长沙汽车电器研究所、上海坤浦电子科", "source": "local", "assert_mode": "context_contains", "page_no": 7, "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"evidence\", \"query\": \"QC/T 1036—2016：本标准起草单位:上海汽车集团股份有限公司技术中心、长沙汽车电器研究所、上海坤浦电子科\", \"must_include\": \"本标准起草单位:上海汽车集团股份有限公司技术中心、长沙汽车电器研究所、上海坤浦电子科\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"page_no\": 7, \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_22() -> None:
-    case = '{"kind": "evidence", "query": "QC/T 1036—2016：本标准起草人:邓恒、胡梦蛟、李伟阳、周建浩、杨红娟、谢勇。", "must_include": "本标准起草人:邓恒、胡梦蛟、李伟阳、周建浩、杨红娟、谢勇。", "source": "local", "assert_mode": "context_contains", "page_no": 7, "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"evidence\", \"query\": \"QC/T 1036—2016：本标准起草人:邓恒、胡梦蛟、李伟阳、周建浩、杨红娟、谢勇。\", \"must_include\": \"本标准起草人:邓恒、胡梦蛟、李伟阳、周建浩、杨红娟、谢勇。\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"page_no\": 7, \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_23() -> None:
-    case = '{"kind": "definition", "query": "在QC/T 1036—2016中，什么是保护门 shutter？", "must_include": "保护门 shutter", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"definition\", \"query\": \"在QC/T 1036—2016中，什么是保护门 shutter？\", \"must_include\": \"保护门 shutter\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_24() -> None:
-    case = '{"kind": "definition_detail", "query": "在QC/T 1036—2016中，保护门 shutter 的定义是什么？", "must_include": "装在交流输出插座里,用于在插销拔出时能自动地将插孔遮蔽起来的活动部件。", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"definition_detail\", \"query\": \"在QC/T 1036—2016中，保护门 shutter 的定义是什么？\", \"must_include\": \"装在交流输出插座里,用于在插销拔出时能自动地将插孔遮蔽起来的活动部件。\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_25() -> None:
-    case = '{"kind": "standard", "query": "QC/T 1036—2016 的标准号和实施日期是什么？", "must_include": "QC/T 1036—2016", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"standard\", \"query\": \"QC/T 1036—2016 的标准号和实施日期是什么？\", \"must_include\": \"QC/T 1036—2016\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_26() -> None:
-    case = '{"kind": "standard", "query": "QC/T 1036—2016 对应的标准编号是什么？", "must_include": "QC/T 1036—2016", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"standard\", \"query\": \"QC/T 1036—2016 对应的标准编号是什么？\", \"must_include\": \"QC/T 1036—2016\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_27() -> None:
-    case = '{"kind": "standard", "query": "QC/T 1036—2016 的现行标准号是什么？", "must_include": "QC/T 1036—2016", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"standard\", \"query\": \"QC/T 1036—2016 的现行标准号是什么？\", \"must_include\": \"QC/T 1036—2016\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_28() -> None:
-    case = '{"kind": "publication_date", "query": "QC/T 1036—2016 的发布日期是什么？", "must_include": "2016-04-05", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"publication_date\", \"query\": \"QC/T 1036—2016 的发布日期是什么？\", \"must_include\": \"2016-04-05\", \"source\": \"local\", \"assert_mode\": \"rich_answer\", \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_29() -> None:
-    case = '{"kind": "publication_date", "query": "QC/T 1036—2016 是哪一天发布的？", "must_include": "2016-04-05", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"publication_date\", \"query\": \"QC/T 1036—2016 是哪一天发布的？\", \"must_include\": \"2016-04-05\", \"source\": \"local\", \"assert_mode\": \"rich_answer\", \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_30() -> None:
-    case = '{"kind": "effective_date", "query": "QC/T 1036—2016 的实施日期是什么？", "must_include": "2016-09-01", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"effective_date\", \"query\": \"QC/T 1036—2016 的实施日期是什么？\", \"must_include\": \"2016-09-01\", \"source\": \"local\", \"assert_mode\": \"rich_answer\", \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_31() -> None:
-    case = '{"kind": "effective_date", "query": "QC/T 1036—2016 从哪一天开始实施？", "must_include": "2016-09-01", "source": "local", "assert_mode": "context_contains", "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"effective_date\", \"query\": \"QC/T 1036—2016 从哪一天开始实施？\", \"must_include\": \"2016-09-01\", \"source\": \"local\", \"assert_mode\": \"rich_answer\", \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_32() -> None:
-    case = '{"kind": "section", "query": "在QC/T 1036—2016中，是否包含“2 规范性引用文件”这一章节？", "must_include": "2 规范性引用文件", "source": "local", "assert_mode": "context_contains", "page_no": 8, "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"section\", \"query\": \"在QC/T 1036—2016中，是否包含“2 规范性引用文件”这一章节？\", \"must_include\": \"2 规范性引用文件\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"page_no\": 8, \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_33() -> None:
-    case = '{"kind": "section", "query": "在QC/T 1036—2016中，是否包含“爬电距离、电气间隙和穿通绝缘距离。”这一章节？", "must_include": "爬电距离、电气间隙和穿通绝缘距离。", "source": "local", "assert_mode": "context_contains", "page_no": 11, "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"section\", \"query\": \"在QC/T 1036—2016中，是否包含“爬电距离、电气间隙和穿通绝缘距离。”这一章节？\", \"must_include\": \"爬电距离、电气间隙和穿通绝缘距离。\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"page_no\": 11, \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000004_golden_34() -> None:
-    case = '{"kind": "section", "query": "在QC/T 1036—2016中，是否包含“危险性放电防护。”这一章节？", "must_include": "危险性放电防护。", "source": "local", "assert_mode": "context_contains", "page_no": 11, "target_doc_id": "DOC-000004"}'
-    _assert_case(json.loads(case))
+    case = json.loads("{\"kind\": \"section\", \"query\": \"在QC/T 1036—2016中，是否包含“危险性放电防护。”这一章节？\", \"must_include\": \"危险性放电防护。\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"page_no\": 11, \"target_doc_id\": \"DOC-000004\"}")
+    _assert_case(case)

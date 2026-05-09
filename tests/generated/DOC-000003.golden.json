@@ -1,175 +1,10 @@
 {
   "doc_id": "DOC-000003",
-  "source_filename": "GBT+18487.1-2023.pdf",
-  "page_count": 157,
-  "target_case_count": 157,
+  "source_filename": "",
+  "page_count": 0,
+  "target_case_count": 108,
   "validated_during_generation": false,
   "network_enabled": false,
-  "network_candidate_count": 0,
-  "network_case_count": 0,
-  "local_case_count": 46,
-  "page_coverage_count": 11,
-  "covered_pages": [
-    1,
-    3,
-    5,
-    6,
-    7,
-    20,
-    31,
-    34,
-    39,
-    45,
-    65
-  ],
-  "uncovered_pages": [
-    2,
-    4,
-    8,
-    9,
-    10,
-    11,
-    12,
-    13,
-    14,
-    15,
-    16,
-    17,
-    18,
-    19,
-    21,
-    22,
-    23,
-    24,
-    25,
-    26,
-    27,
-    28,
-    29,
-    30,
-    32,
-    33,
-    35,
-    36,
-    37,
-    38,
-    40,
-    41,
-    42,
-    43,
-    44,
-    46,
-    47,
-    48,
-    49,
-    50,
-    51,
-    52,
-    53,
-    54,
-    55,
-    56,
-    57,
-    58,
-    59,
-    60,
-    61,
-    62,
-    63,
-    64,
-    66,
-    67,
-    68,
-    69,
-    70,
-    71,
-    72,
-    73,
-    74,
-    75,
-    76,
-    77,
-    78,
-    79,
-    80,
-    81,
-    82,
-    83,
-    84,
-    85,
-    86,
-    87,
-    88,
-    89,
-    90,
-    91,
-    92,
-    93,
-    94,
-    95,
-    96,
-    97,
-    98,
-    99,
-    100,
-    101,
-    102,
-    103,
-    104,
-    105,
-    106,
-    107,
-    108,
-    109,
-    110,
-    111,
-    112,
-    113,
-    114,
-    115,
-    116,
-    117,
-    118,
-    119,
-    120,
-    121,
-    122,
-    123,
-    124,
-    125,
-    126,
-    127,
-    128,
-    129,
-    130,
-    131,
-    132,
-    133,
-    134,
-    135,
-    136,
-    137,
-    138,
-    139,
-    140,
-    141,
-    142,
-    143,
-    144,
-    145,
-    146,
-    147,
-    148,
-    149,
-    150,
-    151,
-    152,
-    153,
-    154,
-    155,
-    156,
-    157
-  ],
   "cases": [
     {
       "kind": "retrieval_quality",
@@ -333,15 +168,15 @@
     },
     {
       "kind": "retrieval_quality",
-      "query": "什么是**电动汽车电能传输设备 EV energy transfer equipment**？",
-      "must_include": "**电动汽车电能传输设备 EV energy transfer equipment**",
+      "query": "什么是电动汽车电能传输设备 EV energy transfer equipment？",
+      "must_include": "电动汽车电能传输设备 EV energy transfer equipment",
       "retrieval_must_hit": [
-        "**电动汽车电能传输设备 EV energy transfer equipment**"
+        "电动汽车电能传输设备 EV energy transfer equipment"
       ],
       "assert_mode": "rich_answer",
       "source": "local_rq",
       "expected_sections": [
-        "**电动汽车电能传输设备 EV energy transfer equipment**"
+        "电动汽车电能传输设备 EV energy transfer equipment"
       ],
       "difficulty": "medium",
       "query_type": "definition",
@@ -349,15 +184,15 @@
     },
     {
       "kind": "retrieval_quality",
-      "query": "GB/T 18487.1—2023中**电动汽车电能传输设备 EV energy transfer equipment**的定义是什么？",
-      "must_include": "**电动汽车电能传输设备 EV energy transfer equipment**",
+      "query": "GB/T 18487.1—2023中电动汽车电能传输设备 EV energy transfer equipment的定义是什么？",
+      "must_include": "电动汽车电能传输设备 EV energy transfer equipment",
       "retrieval_must_hit": [
-        "**电动汽车电能传输设备 EV energy transfer equipment**"
+        "电动汽车电能传输设备 EV energy transfer equipment"
       ],
       "assert_mode": "rich_answer",
       "source": "local_rq",
       "expected_sections": [
-        "**电动汽车电能传输设备 EV energy transfer equipment**"
+        "电动汽车电能传输设备 EV energy transfer equipment"
       ],
       "difficulty": "medium",
       "query_type": "definition",
@@ -365,15 +200,15 @@
     },
     {
       "kind": "retrieval_quality",
-      "query": "什么是**充电设备 charging equipment**？",
-      "must_include": "**充电设备 charging equipment**",
+      "query": "什么是充电设备 charging equipment？",
+      "must_include": "充电设备 charging equipment",
       "retrieval_must_hit": [
-        "**充电设备 charging equipment**"
+        "充电设备 charging equipment"
       ],
       "assert_mode": "rich_answer",
       "source": "local_rq",
       "expected_sections": [
-        "**充电设备 charging equipment**"
+        "充电设备 charging equipment"
       ],
       "difficulty": "medium",
       "query_type": "definition",
@@ -381,15 +216,15 @@
     },
     {
       "kind": "retrieval_quality",
-      "query": "GB/T 18487.1—2023中**充电设备 charging equipment**的定义是什么？",
-      "must_include": "**充电设备 charging equipment**",
+      "query": "GB/T 18487.1—2023中充电设备 charging equipment的定义是什么？",
+      "must_include": "充电设备 charging equipment",
       "retrieval_must_hit": [
-        "**充电设备 charging equipment**"
+        "充电设备 charging equipment"
       ],
       "assert_mode": "rich_answer",
       "source": "local_rq",
       "expected_sections": [
-        "**充电设备 charging equipment**"
+        "充电设备 charging equipment"
       ],
       "difficulty": "medium",
       "query_type": "definition",
@@ -397,15 +232,15 @@
     },
     {
       "kind": "retrieval_quality",
-      "query": "什么是**充放电设备 charging and discharging equipment**？",
-      "must_include": "**充放电设备 charging and discharging equipment**",
+      "query": "什么是充放电设备 charging and discharging equipment？",
+      "must_include": "充放电设备 charging and discharging equipment",
       "retrieval_must_hit": [
-        "**充放电设备 charging and discharging equipment**"
+        "充放电设备 charging and discharging equipment"
       ],
       "assert_mode": "rich_answer",
       "source": "local_rq",
       "expected_sections": [
-        "**充放电设备 charging and discharging equipment**"
+        "充放电设备 charging and discharging equipment"
       ],
       "difficulty": "medium",
       "query_type": "definition",
@@ -413,15 +248,15 @@
     },
     {
       "kind": "retrieval_quality",
-      "query": "GB/T 18487.1—2023中**充放电设备 charging and discharging equipment**的定义是什么？",
-      "must_include": "**充放电设备 charging and discharging equipment**",
+      "query": "GB/T 18487.1—2023中充放电设备 charging and discharging equipment的定义是什么？",
+      "must_include": "充放电设备 charging and discharging equipment",
       "retrieval_must_hit": [
-        "**充放电设备 charging and discharging equipment**"
+        "充放电设备 charging and discharging equipment"
       ],
       "assert_mode": "rich_answer",
       "source": "local_rq",
       "expected_sections": [
-        "**充放电设备 charging and discharging equipment**"
+        "充放电设备 charging and discharging equipment"
       ],
       "difficulty": "medium",
       "query_type": "definition",
@@ -429,15 +264,15 @@
     },
     {
       "kind": "retrieval_quality",
-      "query": "什么是**基本绝缘 basic insulation**？",
-      "must_include": "**基本绝缘 basic insulation**",
+      "query": "什么是绝缘[性能] insulation？",
+      "must_include": "绝缘[性能] insulation",
       "retrieval_must_hit": [
-        "**基本绝缘 basic insulation**"
+        "绝缘[性能] insulation"
       ],
       "assert_mode": "rich_answer",
       "source": "local_rq",
       "expected_sections": [
-        "**基本绝缘 basic insulation**"
+        "绝缘[性能] insulation"
       ],
       "difficulty": "medium",
       "query_type": "definition",
@@ -445,15 +280,15 @@
     },
     {
       "kind": "retrieval_quality",
-      "query": "GB/T 18487.1—2023中**基本绝缘 basic insulation**的定义是什么？",
-      "must_include": "**基本绝缘 basic insulation**",
+      "query": "GB/T 18487.1—2023中绝缘[性能] insulation的定义是什么？",
+      "must_include": "绝缘[性能] insulation",
       "retrieval_must_hit": [
-        "**基本绝缘 basic insulation**"
+        "绝缘[性能] insulation"
       ],
       "assert_mode": "rich_answer",
       "source": "local_rq",
       "expected_sections": [
-        "**基本绝缘 basic insulation**"
+        "绝缘[性能] insulation"
       ],
       "difficulty": "medium",
       "query_type": "definition",
@@ -461,15 +296,15 @@
     },
     {
       "kind": "retrieval_quality",
-      "query": "什么是**附加绝缘 supplementary insulation**？",
-      "must_include": "**附加绝缘 supplementary insulation**",
+      "query": "什么是基本绝缘 basic insulation？",
+      "must_include": "基本绝缘 basic insulation",
       "retrieval_must_hit": [
-        "**附加绝缘 supplementary insulation**"
+        "基本绝缘 basic insulation"
       ],
       "assert_mode": "rich_answer",
       "source": "local_rq",
       "expected_sections": [
-        "**附加绝缘 supplementary insulation**"
+        "基本绝缘 basic insulation"
       ],
       "difficulty": "medium",
       "query_type": "definition",
@@ -477,15 +312,15 @@
     },
     {
       "kind": "retrieval_quality",
-      "query": "GB/T 18487.1—2023中**附加绝缘 supplementary insulation**的定义是什么？",
-      "must_include": "**附加绝缘 supplementary insulation**",
+      "query": "GB/T 18487.1—2023中基本绝缘 basic insulation的定义是什么？",
+      "must_include": "基本绝缘 basic insulation",
       "retrieval_must_hit": [
-        "**附加绝缘 supplementary insulation**"
+        "基本绝缘 basic insulation"
       ],
       "assert_mode": "rich_answer",
       "source": "local_rq",
       "expected_sections": [
-        "**附加绝缘 supplementary insulation**"
+        "基本绝缘 basic insulation"
       ],
       "difficulty": "medium",
       "query_type": "definition",
@@ -493,15 +328,15 @@
     },
     {
       "kind": "retrieval_quality",
-      "query": "什么是**保护导体** **protective conductor(identification: PE)**？",
-      "must_include": "**保护导体** **protective conductor(identification: PE)**",
+      "query": "什么是附加绝缘 supplementary insulation？",
+      "must_include": "附加绝缘 supplementary insulation",
       "retrieval_must_hit": [
-        "**保护导体** **protective conductor(identification: PE)**"
+        "附加绝缘 supplementary insulation"
       ],
       "assert_mode": "rich_answer",
       "source": "local_rq",
       "expected_sections": [
-        "**保护导体** **protective conductor(identification: PE)**"
+        "附加绝缘 supplementary insulation"
       ],
       "difficulty": "medium",
       "query_type": "definition",
@@ -509,15 +344,15 @@
     },
     {
       "kind": "retrieval_quality",
-      "query": "GB/T 18487.1—2023中**保护导体** **protective conductor(identification: PE)**的定义是什么？",
-      "must_include": "**保护导体** **protective conductor(identification: PE)**",
+      "query": "GB/T 18487.1—2023中附加绝缘 supplementary insulation的定义是什么？",
+      "must_include": "附加绝缘 supplementary insulation",
       "retrieval_must_hit": [
-        "**保护导体** **protective conductor(identification: PE)**"
+        "附加绝缘 supplementary insulation"
       ],
       "assert_mode": "rich_answer",
       "source": "local_rq",
       "expected_sections": [
-        "**保护导体** **protective conductor(identification: PE)**"
+        "附加绝缘 supplementary insulation"
       ],
       "difficulty": "medium",
       "query_type": "definition",
@@ -525,15 +360,15 @@
     },
     {
       "kind": "retrieval_quality",
-      "query": "什么是**保护联结导体** **protective bonding conductor**？",
-      "must_include": "**保护联结导体** **protective bonding conductor**",
+      "query": "什么是保护导体 protective conductor(identification: PE)？",
+      "must_include": "保护导体 protective conductor(identification: PE)",
       "retrieval_must_hit": [
-        "**保护联结导体** **protective bonding conductor**"
+        "保护导体 protective conductor(identification: PE)"
       ],
       "assert_mode": "rich_answer",
       "source": "local_rq",
       "expected_sections": [
-        "**保护联结导体** **protective bonding conductor**"
+        "保护导体 protective conductor(identification: PE)"
       ],
       "difficulty": "medium",
       "query_type": "definition",
@@ -541,15 +376,79 @@
     },
     {
       "kind": "retrieval_quality",
-      "query": "GB/T 18487.1—2023中**保护联结导体** **protective bonding conductor**的定义是什么？",
-      "must_include": "**保护联结导体** **protective bonding conductor**",
+      "query": "GB/T 18487.1—2023中保护导体 protective conductor(identification: PE)的定义是什么？",
+      "must_include": "保护导体 protective conductor(identification: PE)",
       "retrieval_must_hit": [
-        "**保护联结导体** **protective bonding conductor**"
+        "保护导体 protective conductor(identification: PE)"
       ],
       "assert_mode": "rich_answer",
       "source": "local_rq",
       "expected_sections": [
-        "**保护联结导体** **protective bonding conductor**"
+        "保护导体 protective conductor(identification: PE)"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000003"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "什么是保护联结导体 protective bonding conductor？",
+      "must_include": "保护联结导体 protective bonding conductor",
+      "retrieval_must_hit": [
+        "保护联结导体 protective bonding conductor"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "保护联结导体 protective bonding conductor"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000003"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "GB/T 18487.1—2023中保护联结导体 protective bonding conductor的定义是什么？",
+      "must_include": "保护联结导体 protective bonding conductor",
+      "retrieval_must_hit": [
+        "保护联结导体 protective bonding conductor"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "保护联结导体 protective bonding conductor"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000003"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "什么是接地端子 earthing terminal？",
+      "must_include": "接地端子 earthing terminal",
+      "retrieval_must_hit": [
+        "接地端子 earthing terminal"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "接地端子 earthing terminal"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000003"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "GB/T 18487.1—2023中接地端子 earthing terminal的定义是什么？",
+      "must_include": "接地端子 earthing terminal",
+      "retrieval_must_hit": [
+        "接地端子 earthing terminal"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "接地端子 earthing terminal"
       ],
       "difficulty": "medium",
       "query_type": "definition",
@@ -838,102 +737,6 @@
       "source": "local_rq",
       "expected_sections": [
         "车辆断开装置 EV disconnection device"
-      ],
-      "difficulty": "medium",
-      "query_type": "definition",
-      "target_doc_id": "DOC-000003"
-    },
-    {
-      "kind": "retrieval_quality",
-      "query": "什么是电动汽车模拟器 EV simulator？",
-      "must_include": "电动汽车模拟器 EV simulator",
-      "retrieval_must_hit": [
-        "电动汽车模拟器 EV simulator"
-      ],
-      "assert_mode": "rich_answer",
-      "source": "local_rq",
-      "expected_sections": [
-        "电动汽车模拟器 EV simulator"
-      ],
-      "difficulty": "medium",
-      "query_type": "definition",
-      "target_doc_id": "DOC-000003"
-    },
-    {
-      "kind": "retrieval_quality",
-      "query": "GB/T 18487.1—2023中电动汽车模拟器 EV simulator的定义是什么？",
-      "must_include": "电动汽车模拟器 EV simulator",
-      "retrieval_must_hit": [
-        "电动汽车模拟器 EV simulator"
-      ],
-      "assert_mode": "rich_answer",
-      "source": "local_rq",
-      "expected_sections": [
-        "电动汽车模拟器 EV simulator"
-      ],
-      "difficulty": "medium",
-      "query_type": "definition",
-      "target_doc_id": "DOC-000003"
-    },
-    {
-      "kind": "retrieval_quality",
-      "query": "什么是**车辆插座 vehicle inlet**？",
-      "must_include": "**车辆插座 vehicle inlet**",
-      "retrieval_must_hit": [
-        "**车辆插座 vehicle inlet**"
-      ],
-      "assert_mode": "rich_answer",
-      "source": "local_rq",
-      "expected_sections": [
-        "**车辆插座 vehicle inlet**"
-      ],
-      "difficulty": "medium",
-      "query_type": "definition",
-      "target_doc_id": "DOC-000003"
-    },
-    {
-      "kind": "retrieval_quality",
-      "query": "GB/T 18487.1—2023中**车辆插座 vehicle inlet**的定义是什么？",
-      "must_include": "**车辆插座 vehicle inlet**",
-      "retrieval_must_hit": [
-        "**车辆插座 vehicle inlet**"
-      ],
-      "assert_mode": "rich_answer",
-      "source": "local_rq",
-      "expected_sections": [
-        "**车辆插座 vehicle inlet**"
-      ],
-      "difficulty": "medium",
-      "query_type": "definition",
-      "target_doc_id": "DOC-000003"
-    },
-    {
-      "kind": "retrieval_quality",
-      "query": "什么是**车辆适配器 vehicle adaptor**？",
-      "must_include": "**车辆适配器 vehicle adaptor**",
-      "retrieval_must_hit": [
-        "**车辆适配器 vehicle adaptor**"
-      ],
-      "assert_mode": "rich_answer",
-      "source": "local_rq",
-      "expected_sections": [
-        "**车辆适配器 vehicle adaptor**"
-      ],
-      "difficulty": "medium",
-      "query_type": "definition",
-      "target_doc_id": "DOC-000003"
-    },
-    {
-      "kind": "retrieval_quality",
-      "query": "GB/T 18487.1—2023中**车辆适配器 vehicle adaptor**的定义是什么？",
-      "must_include": "**车辆适配器 vehicle adaptor**",
-      "retrieval_must_hit": [
-        "**车辆适配器 vehicle adaptor**"
-      ],
-      "assert_mode": "rich_answer",
-      "source": "local_rq",
-      "expected_sections": [
-        "**车辆适配器 vehicle adaptor**"
       ],
       "difficulty": "medium",
       "query_type": "definition",
@@ -1460,15 +1263,15 @@
     },
     {
       "kind": "definition",
-      "query": "在GB/T 18487.1—2023中，什么是**电动汽车电能传输设备 EV energy transfer equipment**？",
-      "must_include": "**电动汽车电能传输设备 EV energy transfer equipment**",
+      "query": "在GB/T 18487.1—2023中，什么是电动汽车电能传输设备 EV energy transfer equipment？",
+      "must_include": "电动汽车电能传输设备 EV energy transfer equipment",
       "source": "local",
       "assert_mode": "context_contains",
       "target_doc_id": "DOC-000003"
     },
     {
       "kind": "definition_detail",
-      "query": "在GB/T 18487.1—2023中，**电动汽车电能传输设备 EV energy transfer equipment** 的定义是什么？",
+      "query": "在GB/T 18487.1—2023中，电动汽车电能传输设备 EV energy transfer equipment 的定义是什么？",
       "must_include": "连接于电动汽车与供电网(电源)之间,可实现能量流动的设备。 注 1:电动汽车电能传输",
       "source": "local",
       "assert_mode": "context_contains",
@@ -1476,15 +1279,15 @@
     },
     {
       "kind": "definition",
-      "query": "在GB/T 18487.1—2023中，什么是**充电设备 charging equipment**？",
-      "must_include": "**充电设备 charging equipment**",
+      "query": "在GB/T 18487.1—2023中，什么是充电设备 charging equipment？",
+      "must_include": "充电设备 charging equipment",
       "source": "local",
       "assert_mode": "context_contains",
       "target_doc_id": "DOC-000003"
     },
     {
       "kind": "definition_detail",
-      "query": "在GB/T 18487.1—2023中，**充电设备 charging equipment** 的定义是什么？",
+      "query": "在GB/T 18487.1—2023中，充电设备 charging equipment 的定义是什么？",
       "must_include": "以传导或无线方式与电动汽车或动力蓄电池连接,为其提供电能的设备。 注:根据电动汽车与",
       "source": "local",
       "assert_mode": "context_contains",
@@ -1492,15 +1295,15 @@
     },
     {
       "kind": "definition",
-      "query": "在GB/T 18487.1—2023中，什么是**充放电设备 charging and discharging equipment**？",
-      "must_include": "**充放电设备 charging and discharging equipment**",
+      "query": "在GB/T 18487.1—2023中，什么是充放电设备 charging and discharging equipment？",
+      "must_include": "充放电设备 charging and discharging equipment",
       "source": "local",
       "assert_mode": "context_contains",
       "target_doc_id": "DOC-000003"
     },
     {
       "kind": "definition_detail",
-      "query": "在GB/T 18487.1—2023中，**充放电设备 charging and discharging equipment** 的定义是什么？",
+      "query": "在GB/T 18487.1—2023中，充放电设备 charging and discharging equipment 的定义是什么？",
       "must_include": "连接于电动汽车或动力蓄电池与电网(或负荷)之间,可实现能量双向流动的设备。 注:根据",
       "source": "local",
       "assert_mode": "context_contains",
@@ -1535,7 +1338,7 @@
       "query": "GB/T 18487.1—2023 的发布日期是什么？",
       "must_include": "2023-09-07",
       "source": "local",
-      "assert_mode": "context_contains",
+      "assert_mode": "rich_answer",
       "target_doc_id": "DOC-000003"
     },
     {
@@ -1543,7 +1346,7 @@
       "query": "GB/T 18487.1—2023 是哪一天发布的？",
       "must_include": "2023-09-07",
       "source": "local",
-      "assert_mode": "context_contains",
+      "assert_mode": "rich_answer",
       "target_doc_id": "DOC-000003"
     },
     {
@@ -1551,7 +1354,7 @@
       "query": "GB/T 18487.1—2023 的实施日期是什么？",
       "must_include": "2024-04-01",
       "source": "local",
-      "assert_mode": "context_contains",
+      "assert_mode": "rich_answer",
       "target_doc_id": "DOC-000003"
     },
     {
@@ -1559,7 +1362,7 @@
       "query": "GB/T 18487.1—2023 从哪一天开始实施？",
       "must_include": "2024-04-01",
       "source": "local",
-      "assert_mode": "context_contains",
+      "assert_mode": "rich_answer",
       "target_doc_id": "DOC-000003"
     },
     {

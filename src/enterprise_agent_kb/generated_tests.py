@@ -963,6 +963,8 @@ def _build_answer_quality_cases(
         seen_param_keys.add(key)
         if not parameter or not symbol:
             continue
+        if not _is_usable_parameter_label(parameter):
+            continue
         _add_aq(
             query=f"{parameter}是多少",
             must_include=[parameter, unit] if unit else [parameter],
@@ -1207,21 +1209,21 @@ def _build_local_cases(
             f"{standard_code or title} 的发布日期是什么？",
             f"{standard_code or title} 是哪一天发布的？",
         ]:
-            cases.append(_case("publication_date", _scope_query(local_context, query), publication_date, source="local", assert_mode="context_contains"))
+            cases.append(_case("publication_date", _scope_query(local_context, query), publication_date, source="local", assert_mode="rich_answer"))
 
     if effective_date:
         for query in [
             f"{standard_code or title} 的实施日期是什么？",
             f"{standard_code or title} 从哪一天开始实施？",
         ]:
-            cases.append(_case("effective_date", _scope_query(local_context, query), effective_date, source="local", assert_mode="context_contains"))
+            cases.append(_case("effective_date", _scope_query(local_context, query), effective_date, source="local", assert_mode="rich_answer"))
 
     if title and _is_usable_golden_anchor(title):
         cases.append(_case("title", _scope_query(local_context, f"{standard_code or title} 这份文档的标题是什么？"), title, source="local", assert_mode="context_contains"))
 
     for item in list(local_context.get("term_definitions", []))[:8]:
-        term = str(item["term"]).strip()
-        definition = str(item["definition"]).strip()
+        term = _strip_markdown_bold(str(item["term"]).strip())
+        definition = _strip_markdown_bold(str(item["definition"]).strip())
         if not term or not definition or not _is_usable_golden_anchor(term) or not _is_usable_golden_anchor(definition):
             continue
         if _looks_like_person_name(term):
@@ -1440,8 +1442,8 @@ def _build_retrieval_quality_cases(
         cases.append(case)
 
     for item in list(local_context.get("term_definitions", [])):
-        term = str(item["term"]).strip()
-        definition = str(item["definition"]).strip()
+        term = _strip_markdown_bold(str(item["term"]).strip())
+        definition = _strip_markdown_bold(str(item["definition"]).strip())
         if not term or not definition or not _is_usable_golden_anchor(term) or not _is_usable_golden_anchor(definition):
             continue
         if _looks_like_person_name(term):
@@ -1482,6 +1484,8 @@ def _build_retrieval_quality_cases(
             continue
         seen_param_keys.add(key)
         label = key_parts[0]
+        if not _is_usable_parameter_label(label):
+            continue
         _add_rq(
             query=f"{label}的参数要求是什么？",
             must_hit=[label],
@@ -1708,6 +1712,22 @@ def _looks_like_person_name(term: str) -> bool:
         if not re.search(r"[技术方法系统设备装置器电压电流功率温度]", cleaned):
             pass
     return False
+
+
+def _strip_markdown_bold(text: str) -> str:
+    stripped = re.sub(r"\*\*([^*]{1,300})\*\*", r"\1", text)
+    stripped = re.sub(r"\*([^*]{1,100})\*", r"\1", stripped)
+    return stripped.strip()
+
+
+def _is_usable_parameter_label(label: str) -> bool:
+    if not label or len(label) < 2 or len(label) > 50:
+        return False
+    if re.search(r"[·•\u2022\u2023\u25E6\uff65]", label):
+        return False
+    if label.startswith(")") or label.startswith("-"):
+        return False
+    return True
 
 
 def _case(
