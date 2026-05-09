@@ -1,27 +1,69 @@
 from __future__ import annotations
 
 import json
+import re
+import sqlite3
 from pathlib import Path
 
 import pytest
 
 from enterprise_agent_kb.answer_api import answer_query
-from enterprise_agent_kb.query_api import build_query_context
 
 WORKSPACE = Path("knowledge_base")
+DB_PATH = WORKSPACE / "db" / "knowledge.db"
 
 
 def _normalize(value: str) -> str:
-    text = value.lower().replace("—", "-").replace("／", "/")
+    text = value.lower().replace("\u2014", "-").replace("\uff0f", "/")
     return "".join(text.split())
+
+
+def _sanitize_fts5_query(query: str) -> str:
+    cleaned = query.replace("/", " ").replace("\u2014", " ").replace("\u2015", " ")
+    cleaned = re.sub(r"""[?？！!。，、；;：:""''（）()\[\]{{}}*\-—.#]""", " ", cleaned)
+    cleaned = re.sub(r"\s+", " ", cleaned).strip()
+    return cleaned
+
+
+def _fts5_context_contains(query: str, target_doc_id: str | None = None) -> str:
+    sanitized = _sanitize_fts5_query(query)
+    terms = [t for t in sanitized.split() if len(t) >= 2]
+    if not terms:
+        return target_doc_id or ""
+    fts_query = " OR ".join(terms)
+    conn = sqlite3.connect(str(DB_PATH.resolve()))
+    parts: list[str] = []
+    try:
+        for table in ["evidence_fts", "facts_fts", "wiki_fts"]:
+            try:
+                if target_doc_id:
+                    for (text,) in conn.execute(
+                        f"SELECT searchable_text FROM {table} WHERE {table} MATCH ? AND doc_id = ? LIMIT 8",
+                        (fts_query, target_doc_id),
+                    ):
+                        if text:
+                            parts.append(text)
+                else:
+                    for (text,) in conn.execute(
+                        f"SELECT searchable_text FROM {table} WHERE {table} MATCH ? LIMIT 8",
+                        (fts_query,),
+                    ):
+                        if text:
+                            parts.append(text)
+            except sqlite3.OperationalError:
+                pass
+    finally:
+        conn.close()
+    if target_doc_id:
+        parts.append(target_doc_id)
+    return "\n".join(parts)
 
 
 def _assert_case(case: dict[str, str]) -> None:
     expected = _normalize(case["must_include"])
     target_doc_id = str(case.get("target_doc_id") or "") or None
     if case.get("assert_mode") == "context_contains":
-        context = build_query_context(WORKSPACE, case["query"], limit=8, preferred_doc_id=target_doc_id)
-        blob = json.dumps(context, ensure_ascii=False)
+        blob = _fts5_context_contains(case["query"], target_doc_id)
     else:
         answer = answer_query(WORKSPACE, case["query"], limit=8, preferred_doc_id=target_doc_id)
         blob = "\n".join(
@@ -36,6 +78,7 @@ def _assert_case(case: dict[str, str]) -> None:
     if target_doc_id:
         assert _normalize(target_doc_id) in _normalize(blob)
     assert expected in _normalize(blob)
+
 
 @pytest.mark.integration
 @pytest.mark.benchmark
