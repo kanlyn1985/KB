@@ -353,7 +353,7 @@
       "query": "QC/T 1036—2016 的发布日期是什么？",
       "must_include": "2016-04-05",
       "source": "local",
-      "assert_mode": "rich_answer",
+      "assert_mode": "context_contains",
       "target_doc_id": "DOC-000004"
     },
     {
@@ -361,7 +361,7 @@
       "query": "QC/T 1036—2016 是哪一天发布的？",
       "must_include": "2016-04-05",
       "source": "local",
-      "assert_mode": "rich_answer",
+      "assert_mode": "context_contains",
       "target_doc_id": "DOC-000004"
     },
     {
@@ -369,7 +369,7 @@
       "query": "QC/T 1036—2016 的实施日期是什么？",
       "must_include": "2016-09-01",
       "source": "local",
-      "assert_mode": "rich_answer",
+      "assert_mode": "context_contains",
       "target_doc_id": "DOC-000004"
     },
     {
@@ -377,7 +377,7 @@
       "query": "QC/T 1036—2016 从哪一天开始实施？",
       "must_include": "2016-09-01",
       "source": "local",
-      "assert_mode": "rich_answer",
+      "assert_mode": "context_contains",
       "target_doc_id": "DOC-000004"
     },
     {

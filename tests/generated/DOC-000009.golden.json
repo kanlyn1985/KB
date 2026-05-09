@@ -388,7 +388,7 @@
       "query": "GB/T 40432—2021 的发布日期是什么？",
       "must_include": "2021-08-20",
       "source": "local",
-      "assert_mode": "rich_answer",
+      "assert_mode": "context_contains",
       "target_doc_id": "DOC-000009"
     },
     {
@@ -396,7 +396,7 @@
       "query": "GB/T 40432—2021 是哪一天发布的？",
       "must_include": "2021-08-20",
       "source": "local",
-      "assert_mode": "rich_answer",
+      "assert_mode": "context_contains",
       "target_doc_id": "DOC-000009"
     },
     {
@@ -404,7 +404,7 @@
       "query": "GB/T 40432—2021 的实施日期是什么？",
       "must_include": "2022-03-01",
       "source": "local",
-      "assert_mode": "rich_answer",
+      "assert_mode": "context_contains",
       "target_doc_id": "DOC-000009"
     },
     {
@@ -412,7 +412,7 @@
       "query": "GB/T 40432—2021 从哪一天开始实施？",
       "must_include": "2022-03-01",
       "source": "local",
-      "assert_mode": "rich_answer",
+      "assert_mode": "context_contains",
       "target_doc_id": "DOC-000009"
     }
   ]

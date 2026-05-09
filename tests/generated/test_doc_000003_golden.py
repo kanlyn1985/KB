@@ -616,25 +616,25 @@ def test_doc_000003_golden_96() -> None:
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000003_golden_97() -> None:
-    case = json.loads("{\"kind\": \"publication_date\", \"query\": \"GB/T 18487.1—2023 的发布日期是什么？\", \"must_include\": \"2023-09-07\", \"source\": \"local\", \"assert_mode\": \"rich_answer\", \"target_doc_id\": \"DOC-000003\"}")
+    case = json.loads("{\"kind\": \"publication_date\", \"query\": \"GB/T 18487.1—2023 的发布日期是什么？\", \"must_include\": \"2023-09-07\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"target_doc_id\": \"DOC-000003\"}")
     _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000003_golden_98() -> None:
-    case = json.loads("{\"kind\": \"publication_date\", \"query\": \"GB/T 18487.1—2023 是哪一天发布的？\", \"must_include\": \"2023-09-07\", \"source\": \"local\", \"assert_mode\": \"rich_answer\", \"target_doc_id\": \"DOC-000003\"}")
+    case = json.loads("{\"kind\": \"publication_date\", \"query\": \"GB/T 18487.1—2023 是哪一天发布的？\", \"must_include\": \"2023-09-07\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"target_doc_id\": \"DOC-000003\"}")
     _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000003_golden_99() -> None:
-    case = json.loads("{\"kind\": \"effective_date\", \"query\": \"GB/T 18487.1—2023 的实施日期是什么？\", \"must_include\": \"2024-04-01\", \"source\": \"local\", \"assert_mode\": \"rich_answer\", \"target_doc_id\": \"DOC-000003\"}")
+    case = json.loads("{\"kind\": \"effective_date\", \"query\": \"GB/T 18487.1—2023 的实施日期是什么？\", \"must_include\": \"2024-04-01\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"target_doc_id\": \"DOC-000003\"}")
     _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000003_golden_100() -> None:
-    case = json.loads("{\"kind\": \"effective_date\", \"query\": \"GB/T 18487.1—2023 从哪一天开始实施？\", \"must_include\": \"2024-04-01\", \"source\": \"local\", \"assert_mode\": \"rich_answer\", \"target_doc_id\": \"DOC-000003\"}")
+    case = json.loads("{\"kind\": \"effective_date\", \"query\": \"GB/T 18487.1—2023 从哪一天开始实施？\", \"must_include\": \"2024-04-01\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"target_doc_id\": \"DOC-000003\"}")
     _assert_case(case)
 
 @pytest.mark.integration

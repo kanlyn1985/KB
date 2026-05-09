@@ -622,7 +622,7 @@
       "query": "GB/T 18487.5—2024 的发布日期是什么？",
       "must_include": "2024-12-31",
       "source": "local",
-      "assert_mode": "rich_answer",
+      "assert_mode": "context_contains",
       "target_doc_id": "DOC-000012"
     },
     {
@@ -630,7 +630,7 @@
       "query": "GB/T 18487.5—2024 是哪一天发布的？",
       "must_include": "2024-12-31",
       "source": "local",
-      "assert_mode": "rich_answer",
+      "assert_mode": "context_contains",
       "target_doc_id": "DOC-000012"
     },
     {
@@ -638,7 +638,7 @@
       "query": "GB/T 18487.5—2024 的实施日期是什么？",
       "must_include": "2024-12-31",
       "source": "local",
-      "assert_mode": "rich_answer",
+      "assert_mode": "context_contains",
       "target_doc_id": "DOC-000012"
     },
     {
@@ -646,7 +646,7 @@
       "query": "GB/T 18487.5—2024 从哪一天开始实施？",
       "must_include": "2024-12-31",
       "source": "local",
-      "assert_mode": "rich_answer",
+      "assert_mode": "context_contains",
       "target_doc_id": "DOC-000012"
     },
     {

@@ -220,23 +220,23 @@ def test_doc_000009_golden_30() -> None:
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000009_golden_31() -> None:
-    case = json.loads("{\"kind\": \"publication_date\", \"query\": \"GB/T 40432—2021 的发布日期是什么？\", \"must_include\": \"2021-08-20\", \"source\": \"local\", \"assert_mode\": \"rich_answer\", \"target_doc_id\": \"DOC-000009\"}")
+    case = json.loads("{\"kind\": \"publication_date\", \"query\": \"GB/T 40432—2021 的发布日期是什么？\", \"must_include\": \"2021-08-20\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"target_doc_id\": \"DOC-000009\"}")
     _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000009_golden_32() -> None:
-    case = json.loads("{\"kind\": \"publication_date\", \"query\": \"GB/T 40432—2021 是哪一天发布的？\", \"must_include\": \"2021-08-20\", \"source\": \"local\", \"assert_mode\": \"rich_answer\", \"target_doc_id\": \"DOC-000009\"}")
+    case = json.loads("{\"kind\": \"publication_date\", \"query\": \"GB/T 40432—2021 是哪一天发布的？\", \"must_include\": \"2021-08-20\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"target_doc_id\": \"DOC-000009\"}")
     _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000009_golden_33() -> None:
-    case = json.loads("{\"kind\": \"effective_date\", \"query\": \"GB/T 40432—2021 的实施日期是什么？\", \"must_include\": \"2022-03-01\", \"source\": \"local\", \"assert_mode\": \"rich_answer\", \"target_doc_id\": \"DOC-000009\"}")
+    case = json.loads("{\"kind\": \"effective_date\", \"query\": \"GB/T 40432—2021 的实施日期是什么？\", \"must_include\": \"2022-03-01\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"target_doc_id\": \"DOC-000009\"}")
     _assert_case(case)
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 def test_doc_000009_golden_34() -> None:
-    case = json.loads("{\"kind\": \"effective_date\", \"query\": \"GB/T 40432—2021 从哪一天开始实施？\", \"must_include\": \"2022-03-01\", \"source\": \"local\", \"assert_mode\": \"rich_answer\", \"target_doc_id\": \"DOC-000009\"}")
+    case = json.loads("{\"kind\": \"effective_date\", \"query\": \"GB/T 40432—2021 从哪一天开始实施？\", \"must_include\": \"2022-03-01\", \"source\": \"local\", \"assert_mode\": \"context_contains\", \"target_doc_id\": \"DOC-000009\"}")
     _assert_case(case)

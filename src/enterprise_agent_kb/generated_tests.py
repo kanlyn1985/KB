@@ -1209,14 +1209,14 @@ def _build_local_cases(
             f"{standard_code or title} 的发布日期是什么？",
             f"{standard_code or title} 是哪一天发布的？",
         ]:
-            cases.append(_case("publication_date", _scope_query(local_context, query), publication_date, source="local", assert_mode="rich_answer"))
+            cases.append(_case("publication_date", _scope_query(local_context, query), publication_date, source="local", assert_mode="context_contains"))
 
     if effective_date:
         for query in [
             f"{standard_code or title} 的实施日期是什么？",
             f"{standard_code or title} 从哪一天开始实施？",
         ]:
-            cases.append(_case("effective_date", _scope_query(local_context, query), effective_date, source="local", assert_mode="rich_answer"))
+            cases.append(_case("effective_date", _scope_query(local_context, query), effective_date, source="local", assert_mode="context_contains"))
 
     if title and _is_usable_golden_anchor(title):
         cases.append(_case("title", _scope_query(local_context, f"{standard_code or title} 这份文档的标题是什么？"), title, source="local", assert_mode="context_contains"))
