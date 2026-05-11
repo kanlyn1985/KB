@@ -213,13 +213,13 @@ _kb_index_cache: dict[str, list[Sense]] | None = None
 _kb_index_path: str | None = None
 
 
-def _load_kb_index() -> dict[str, list[Sense]]:
+def _load_kb_index(path: str | Path | None = None) -> dict[str, list[Sense]]:
     global _kb_index_cache, _kb_index_path
     default_path = str(Path(__file__).resolve().parent.parent.parent / "knowledge_base" / "ambiguity_index.json")
-    path = _kb_index_path or default_path
-    if _kb_index_cache is None or _kb_index_path != path:
-        _kb_index_cache = load_ambiguity_index(path)
-        _kb_index_path = path
+    selected_path = str(path or _kb_index_path or default_path)
+    if _kb_index_cache is None or _kb_index_path != selected_path:
+        _kb_index_cache = load_ambiguity_index(selected_path)
+        _kb_index_path = selected_path
     return _kb_index_cache
 
 
@@ -230,7 +230,10 @@ def reload_kb_index(path: str | None = None) -> None:
     _kb_index_cache = None
 
 
-def detect_query_ambiguity_with_kb(query: str) -> QueryAmbiguity | None:
+def detect_query_ambiguity_with_kb(
+    query: str,
+    index_path: str | Path | None = None,
+) -> QueryAmbiguity | None:
     stripped = query.strip()
     if not stripped:
         return None
@@ -238,7 +241,7 @@ def detect_query_ambiguity_with_kb(query: str) -> QueryAmbiguity | None:
     if not acronym:
         return None
 
-    kb_index = _load_kb_index()
+    kb_index = _load_kb_index(index_path)
     kb_senses = kb_index.get(acronym)
 
     if kb_senses and len(kb_senses) >= 2:
@@ -273,3 +276,129 @@ def _has_kb_disambiguating_context(query: str, senses: list[Sense]) -> bool:
         for sense in senses
         for term in sense.context_terms
     )
+
+
+def build_clarification_context(
+    query: str,
+    preferred_doc_id: str | None,
+    ambiguity: QueryAmbiguity,
+) -> dict[str, object]:
+    clarification = ambiguity.to_dict()
+    rewrite = {
+        "original_query": query.strip(),
+        "normalized_query": ambiguity.anchor,
+        "query_type": "clarification",
+        "target_topic": ambiguity.anchor,
+        "aliases": [],
+        "must_terms": [ambiguity.anchor],
+        "should_terms": [],
+        "negative_terms": [],
+        "protected_anchor_terms": [ambiguity.anchor],
+        "rewrite_override_applied": False,
+        "semantic_quality_flags": ["ambiguous_short_acronym"],
+    }
+    debug_query = {
+        "final_query_type": "clarification",
+        "final_normalized_query": ambiguity.anchor,
+        "final_target_topic": ambiguity.anchor,
+        "protected_anchor_terms": [ambiguity.anchor],
+        "rewrite_override_applied": False,
+        "semantic_quality_flags": ["ambiguous_short_acronym"],
+    }
+    evidence_judgement = {
+        "sufficient": False,
+        "confidence": 0.0,
+        "matched_anchors": [],
+        "missing_anchors": [ambiguity.anchor],
+        "best_evidence_ids": [],
+        "best_fact_ids": [],
+        "rejected_reasons": [ambiguity.reason],
+        "suggested_followup_queries": [option.example_query for option in ambiguity.options],
+        "reason": "query requires user clarification before retrieval",
+        "evidence_shape": "clarification_required",
+        "shape_diagnostics": {
+            "required": "user_disambiguation",
+            "matched": False,
+            "allowed": ["clarification_option"],
+        },
+        "judge_source": "ambiguity_detector",
+        "used_llm": False,
+        "prompt_version": "",
+    }
+    return {
+        "query": query,
+        "rewrite": rewrite,
+        "query_expansion": {
+            "original_query": query.strip(),
+            "preserved_anchors": [ambiguity.anchor],
+            "expanded_terms": [],
+            "expanded_queries": [],
+            "risk_notes": [ambiguity.reason],
+            "intent_candidates": ["clarification"],
+            "quality_flags": ["ambiguous_short_acronym"],
+            "used_llm": False,
+            "fallback_used": True,
+            "confidence": 0.0,
+        },
+        "advanced_query_plan": {
+            "enabled": False,
+            "used_llm": False,
+            "query_type": "clarification",
+            "target_topic": ambiguity.anchor,
+            "must_terms": [ambiguity.anchor],
+            "should_terms": [],
+            "expanded_queries": [],
+            "risk_notes": [ambiguity.reason],
+            "confidence": 0.0,
+            "skip_reason": "clarification_required",
+        },
+        "retrieval_rewrite": rewrite,
+        "debug_query": debug_query,
+        "preferred_doc_id": preferred_doc_id,
+        "topic_resolution": {
+            "query_type": "clarification",
+            "target_topic": ambiguity.anchor,
+            "candidate_entities": [],
+            "candidate_entity_ids": [],
+            "candidate_wiki_pages": [],
+            "confidence": 0.0,
+        },
+        "retrieval_run_id": None,
+        "retrieval_plan": {
+            "query_type": "clarification",
+            "channels": ["clarification"],
+            "routing_summary_hit_count": 0,
+            "graph_candidate_count": 0,
+            "advanced_query_plan_used": False,
+            "retrieval_skipped": True,
+            "skip_reason": "clarification_required",
+        },
+        "rerank_explanations": [],
+        "hit_count": 0,
+        "documents": [],
+        "hits": [],
+        "evidence": [],
+        "facts": [],
+        "entities": [],
+        "topic_entities": [],
+        "graph_edges": [],
+        "graph_candidates": [],
+        "wiki_pages": [],
+        "topic_objects": [],
+        "knowledge_subgraph": {
+            "seed_wiki_page_ids": [],
+            "seed_entity_ids": [],
+            "seed_fact_ids": [],
+            "seed_edge_ids": [],
+            "wiki_page_types": [],
+            "topic_object_ids": [],
+            "topic_entity_ids": [],
+            "fact_count": 0,
+            "edge_count": 0,
+            "wiki_count": 0,
+            "topic_count": 0,
+        },
+        "evidence_judgement": evidence_judgement,
+        "clarification_required": True,
+        "clarification": clarification,
+    }

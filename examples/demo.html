@@ -1358,7 +1358,8 @@
 
     function renderMain() {
       const container = $("mainContent");
-      if (!state.detail?.document) {
+      const documentScopedTabs = new Set(["overview", "coverage", "gaps", "drafts", "golden"]);
+      if (!state.detail?.document && documentScopedTabs.has(state.activeTab)) {
         container.innerHTML = '<div class="empty">选择左侧文档开始。</div>';
         return;
       }
@@ -1422,6 +1423,8 @@
       const answer = dashboard.answer_loop || {};
       const regression = dashboard.regression_loop || {};
       const contract = answer.shape_contract_quality || {};
+      const graph = retrieval.graph_contribution || {};
+      const currentGraph = graph.current_version_graph || {};
       const pytestCounts = regression.latest_run?.result_summary?.pytest_counts || {};
       const evalScope = regression.latest_run?.result_summary?.eval_scope || {};
       return `
@@ -1434,6 +1437,7 @@
             <div class="metrics" style="margin-bottom:0">
               ${metric("入库", ingestion.source_unit_count ?? 0, `evidence ${ingestion.evidence_count ?? 0} / facts ${ingestion.fact_count ?? 0}`)}
               ${metric("召回", retrieval.retrieval_run_count ?? 0, `R@5 ${retrieval.recall_at_5 ?? "n/a"} / MRR ${retrieval.mrr ?? "n/a"}`)}
+              ${metric("Graph", currentGraph.graph_top_runs ?? graph.graph_top_runs ?? 0, `current retention ${currentGraph.graph_retention_rate ?? "n/a"} / lost ${currentGraph.graph_lost_after_rerank_runs ?? 0} / runs ${graph.current_code_version_runs ?? 0}`)}
               ${metric("答案", answer.answer_pass_rate ?? "n/a", `mode ${answer.answer_mode_accuracy ?? "n/a"} / artifact ${answer.render_artifact_rate ?? "n/a"}`)}
               ${metric("契约", contract.contract_match_rate ?? "n/a", `mismatch ${contract.contract_mismatch_count ?? 0}`)}
               ${metric("回归", regression.eval_run_count ?? 0, `eval ${evalScope.evaluated_case_count ?? "n/a"}/${evalScope.declared_case_count ?? "n/a"} / deselected ${pytestCounts.deselected ?? 0}`)}
@@ -1764,7 +1768,9 @@
               <h3>召回诊断</h3>
               <div class="tags">
                 <span class="tag ${String(diagnostics.graph_status || "").includes("engaged") ? "ok" : "warn"}">graph ${escapeHtml(diagnostics.graph_status || "unknown")}</span>
-                <span class="tag ${diagnostics.evidence_status === "present" ? "ok" : "warn"}">evidence ${escapeHtml(diagnostics.evidence_status || "unknown")}</span>
+                <span class="tag ${["direct", "linked"].includes(diagnostics.evidence_status) ? "ok" : "warn"}">evidence ${escapeHtml(diagnostics.evidence_status || "unknown")}</span>
+                <span class="tag info">direct evidence ${escapeHtml(detail.direct_evidence_hit_count ?? counts.evidence ?? 0)}</span>
+                <span class="tag info">linked evidence ${escapeHtml(detail.linked_evidence_hit_count ?? diagnostics.linked_evidence_count ?? 0)}</span>
                 <span class="tag dark">topic ${escapeHtml(diagnostics.topic_resolution_confidence ?? 0)}</span>
                 <span class="tag info">candidates ${escapeHtml(diagnostics.candidate_count_before_limit ?? 0)}</span>
               </div>
@@ -1813,7 +1819,10 @@
           <div class="panel">
             <div class="panel-head">
               <strong>Failure Analysis</strong>
-              ${analysis ? `<span class="tag ${analysis.failure_count ? "bad" : "ok"}">${escapeHtml(analysis.failure_count || 0)} failed</span>` : '<span class="tag dark">no run selected</span>'}
+              ${analysis ? `
+                <span class="tag ${analysis.failure_count ? "bad" : "ok"}">${escapeHtml(analysis.failure_count || 0)} failed</span>
+                ${analysis.failure_count ? '<button class="button" data-action="draftAllGoldenFailures">生成全部 Golden 草案</button>' : ''}
+              ` : '<span class="tag dark">no run selected</span>'}
             </div>
             <div class="panel-body">
               ${analysis ? renderFailureAnalysis(analysis, counts) : '<div class="empty">选择一次 eval run 后显示失败归因。</div>'}
@@ -2398,6 +2407,10 @@
         await loadFailureRuns();
         return;
       }
+      if (action === "draftAllGoldenFailures") {
+        await draftGoldenFromFailures();
+        return;
+      }
       if (action === "refreshDashboard") {
         await loadClosedLoopDashboard();
         return;
@@ -2572,6 +2585,24 @@
         setStatus("golden draft ready");
       } catch (error) {
         setStatus(`golden draft failed: ${error.message}`);
+      }
+      renderMain();
+    }
+
+    async function draftGoldenFromFailures() {
+      const evalRunId = String(state.selectedEvalRunId || state.failureAnalysis?.eval_run?.eval_run_id || "").trim();
+      if (!evalRunId) return;
+      try {
+        setStatus("drafting golden cases from failures");
+        const payload = await api("/draft-golden-from-failures", {
+          method: "POST",
+          body: JSON.stringify({ eval_run_id: evalRunId }),
+        });
+        $("rawPanel").textContent = pretty(payload);
+        await loadFailureAnalysis(evalRunId, false);
+        setStatus(`golden drafts ready: ${payload.drafted_count || 0} new, ${payload.existing_count || 0} existing`);
+      } catch (error) {
+        setStatus(`golden drafts failed: ${error.message}`);
       }
       renderMain();
     }

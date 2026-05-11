@@ -12,6 +12,7 @@ from .db import connect
 from .evidence_judge import judge_evidence
 from .graph_retrieval import retrieve_graph_candidates
 from .query_expansion import expand_query, expansion_terms_for_retrieval
+from .query_ambiguity import build_clarification_context, detect_query_ambiguity_with_kb
 from .query_rewrite import rewrite_query
 from .reranker import rerank_candidates
 from .retrieval_router import route_retrieval
@@ -121,6 +122,42 @@ def _merge_hit_metadata(target: dict[str, object], source: dict[str, object]) ->
         target["channels"] = channels
 
 
+def _merge_injected_hits(
+    hits: list[dict[str, object]],
+    injected_hits: list[dict[str, object]],
+    limit: int,
+    *,
+    force_injected: bool = False,
+    minimum_limit: int | None = None,
+) -> list[dict[str, object]]:
+    merged: dict[tuple[str, str], dict[str, object]] = {}
+    for hit in hits:
+        key = (str(hit.get("result_type") or ""), str(hit.get("result_id") or ""))
+        if key[0] and key[1]:
+            merged[key] = dict(hit)
+
+    for hit in injected_hits:
+        key = (str(hit.get("result_type") or ""), str(hit.get("result_id") or ""))
+        if not key[0] or not key[1]:
+            continue
+        existing = merged.get(key)
+        should_replace = (
+            existing is None
+            or force_injected
+            or float(hit.get("score") or 0) > float(existing.get("score") or 0)
+        )
+        if should_replace:
+            merged[key] = dict(hit)
+            if existing is not None:
+                _merge_hit_metadata(merged[key], existing)
+            continue
+        _merge_hit_metadata(existing, hit)
+
+    merged_hits = list(merged.values())
+    merged_hits.sort(key=lambda item: float(item.get("score") or 0), reverse=True)
+    return merged_hits[: max(limit, minimum_limit or 0)]
+
+
 def build_query_context(
     workspace_root: Path,
     query: str,
@@ -128,6 +165,11 @@ def build_query_context(
     preferred_doc_id: str | None = None,
 ) -> dict[str, object]:
     query = query.strip()
+    paths = AppPaths.from_root(workspace_root)
+    ambiguity = detect_query_ambiguity_with_kb(query, paths.root / "ambiguity_index.json")
+    if ambiguity:
+        return build_clarification_context(query, preferred_doc_id, ambiguity)
+
     rewritten = rewrite_query(query)
     expansion = expand_query(query)
     advanced_plan = plan_advanced_query(
@@ -156,7 +198,6 @@ def build_query_context(
             "wiki_pages": [],
         }
 
-    paths = AppPaths.from_root(workspace_root)
     connection = connect(paths.db_file)
 
     try:
@@ -440,7 +481,7 @@ def build_query_context(
                 "result_id": hit["result_id"],
                 "doc_id": hit.get("doc_id"),
                 "graph_source": bool(hit.get("graph_source")),
-                "graph_relation": hit.get("graph_relation"),
+                "graph_relation": hit.get("graph_relation") or hit.get("relation"),
                 "rerank": hit.get("rerank", {}),
             }
             for hit in hits[: min(8, len(hits))]
@@ -559,13 +600,7 @@ def _inject_exact_standard_hits(connection, query: str, hits: list[dict[str, obj
                     }
                 )
 
-    merged: dict[tuple[str, str], dict[str, object]] = {(hit["result_type"], hit["result_id"]): hit for hit in hits}
-    for hit in exact_hits:
-        merged[(hit["result_type"], hit["result_id"])] = hit
-
-    merged_hits = list(merged.values())
-    merged_hits.sort(key=lambda item: float(item["score"] or 0), reverse=True)
-    return merged_hits[: max(limit, len(exact_hits))]
+    return _merge_injected_hits(hits, exact_hits, limit, force_injected=True, minimum_limit=len(exact_hits))
 
 
 def _safe_json(value: str | None) -> object:
@@ -687,15 +722,7 @@ def _inject_direct_term_definition_hits(connection, rewritten, hits: list[dict[s
                 }
             )
 
-    merged: dict[tuple[str, str], dict[str, object]] = {(hit["result_type"], hit["result_id"]): hit for hit in hits}
-    for hit in direct_hits:
-        key = (hit["result_type"], hit["result_id"])
-        existing = merged.get(key)
-        if existing is None or float(hit["score"]) > float(existing.get("score") or 0):
-            merged[key] = hit
-    merged_hits = list(merged.values())
-    merged_hits.sort(key=lambda item: float(item.get("score") or 0), reverse=True)
-    return merged_hits[:limit]
+    return _merge_injected_hits(hits, direct_hits, limit)
 
 
 def _short_definition_acronyms(rewritten) -> list[str]:
@@ -807,15 +834,7 @@ def _inject_direct_wiki_hits(connection, rewritten, hits: list[dict[str, object]
                 }
             )
 
-    merged: dict[tuple[str, str], dict[str, object]] = {(hit["result_type"], hit["result_id"]): hit for hit in hits}
-    for hit in wiki_hits:
-        key = (hit["result_type"], hit["result_id"])
-        existing = merged.get(key)
-        if existing is None or float(hit["score"]) > float(existing.get("score") or 0):
-            merged[key] = hit
-    merged_hits = list(merged.values())
-    merged_hits.sort(key=lambda item: float(item["score"] or 0), reverse=True)
-    return merged_hits[:limit]
+    return _merge_injected_hits(hits, wiki_hits, limit)
 
 
 def _augment_query_wiki_items(connection, rewritten, wiki_items: list[dict[str, object]], doc_ids: list[str], limit: int) -> list[dict[str, object]]:

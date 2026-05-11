@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import html
 import re
 from pathlib import Path
 
@@ -11,7 +12,7 @@ from .config import AppPaths
 from .db import connect
 from .evidence_shapes import is_test_method_query, looks_like_test_method_blob
 from .query_api import build_query_context
-from .query_ambiguity import QueryAmbiguity, detect_query_ambiguity
+from .query_ambiguity import QueryAmbiguity, build_clarification_context, detect_query_ambiguity_with_kb
 from .query_rewrite import RewrittenQuery, rewrite_query
 
 
@@ -21,7 +22,8 @@ def answer_query(
     limit: int = 8,
     preferred_doc_id: str | None = None,
 ) -> dict[str, object]:
-    ambiguity = detect_query_ambiguity(query)
+    paths = AppPaths.from_root(workspace_root)
+    ambiguity = detect_query_ambiguity_with_kb(query, paths.root / "ambiguity_index.json")
     if ambiguity:
         return _clarification_response(query, preferred_doc_id, ambiguity)
 
@@ -97,7 +99,7 @@ def answer_query(
             "doc_id": item["doc_id"],
             "page_no": item["page_no"],
             "confidence": item["confidence"],
-            "snippet": _truncate(item["normalized_text"], 600),
+            "snippet": _truncate(_clean_render_artifacts(str(item["normalized_text"] or "")), 600),
         }
         for item in evidence[:5]
     ]
@@ -237,33 +239,15 @@ def _clarification_response(
     ambiguity: QueryAmbiguity,
 ) -> dict[str, object]:
     clarification = ambiguity.to_dict()
+    context = build_clarification_context(query, preferred_doc_id, ambiguity)
     direct_answer = ambiguity.question + "\n" + "\n".join(
         f"{index}. {option.label}：{option.description}"
         for index, option in enumerate(ambiguity.options, 1)
     )
     return {
         "query": query,
-        "rewrite": {
-            "original_query": query.strip(),
-            "normalized_query": ambiguity.anchor,
-            "query_type": "clarification",
-            "target_topic": ambiguity.anchor,
-            "aliases": [],
-            "must_terms": [ambiguity.anchor],
-            "should_terms": [],
-            "negative_terms": [],
-            "protected_anchor_terms": [ambiguity.anchor],
-            "rewrite_override_applied": False,
-            "semantic_quality_flags": ["ambiguous_short_acronym"],
-        },
-        "debug_query": {
-            "final_query_type": "clarification",
-            "final_normalized_query": ambiguity.anchor,
-            "final_target_topic": ambiguity.anchor,
-            "protected_anchor_terms": [ambiguity.anchor],
-            "rewrite_override_applied": False,
-            "semantic_quality_flags": ["ambiguous_short_acronym"],
-        },
+        "rewrite": context["rewrite"],
+        "debug_query": context["debug_query"],
         "preferred_doc_id": preferred_doc_id,
         "answer_mode": "clarification",
         "confidence_score": {
@@ -283,33 +267,7 @@ def _clarification_response(
         "fallback_reason": "clarification_required",
         "clarification_required": True,
         "clarification": clarification,
-        "context": {
-            "query": query,
-            "hit_count": 0,
-            "documents": [],
-            "hits": [],
-            "evidence": [],
-            "facts": [],
-            "entities": [],
-            "graph_edges": [],
-            "wiki_pages": [],
-            "evidence_judgement": {
-                "sufficient": False,
-                "confidence": 0.0,
-                "matched_anchors": [],
-                "missing_anchors": [ambiguity.anchor],
-                "best_evidence_ids": [],
-                "best_fact_ids": [],
-                "rejected_reasons": [ambiguity.reason],
-                "suggested_followup_queries": [option.example_query for option in ambiguity.options],
-                "reason": "query requires user clarification before retrieval",
-                "judge_source": "ambiguity_detector",
-                "used_llm": False,
-                "prompt_version": "",
-            },
-            "clarification_required": True,
-            "clarification": clarification,
-        },
+        "context": context,
     }
 
 
@@ -2348,6 +2306,11 @@ def _select_process_answer_facts(
                     return grouped
             return test_methods[:6]
 
+    if _is_timing_query(query):
+        timing_items = [item for item in ranked if _matches_timing_answer_shape(query, item)]
+        if timing_items:
+            ranked = timing_items
+
     def process_score(item: dict[str, object]) -> tuple[float, float]:
         confidence = float(item.get("confidence") or 0.0)
         bonus = float(item.get("_subgraph_bonus") or 0.0)
@@ -2378,6 +2341,19 @@ def _select_process_answer_facts(
     if _is_activity_process_query(query) and not _is_timing_query(query):
         return processes + others + transitions
     return transitions + processes + others
+
+
+def _matches_timing_answer_shape(query: str, item: dict[str, object]) -> bool:
+    payload = item.get("object_value")
+    blob = json.dumps(payload, ensure_ascii=False) if isinstance(payload, (dict, list)) else str(payload or "")
+    normalized = re.sub(r"\s+", "", blob)
+    if _special_appendix_c_requested(query):
+        return "表C.3" in normalized or "状态转换" in normalized or "控制导引电路状态转换" in normalized
+    return (
+        "表A.7" in normalized
+        or "控制时序" in normalized
+        or ("状态转换" in normalized and "表C.3" not in normalized)
+    )
 
 
 def _test_method_group_key(item: dict[str, object]) -> str:
@@ -2822,6 +2798,8 @@ def _truncate(value: str, max_chars: int) -> str:
 def _clean_render_artifacts(text: str) -> str:
     if not text:
         return text
+    text = html.unescape(str(text))
+    text = text.replace("\xa0", " ")
     text = re.sub(r"\*\*([^*]{1,200})\*\*", r"\1", text)
     text = re.sub(r"\$([^$]{1,200})\$", r"\1", text)
     text = re.sub(r"\\%", "%", text)

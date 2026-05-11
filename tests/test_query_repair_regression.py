@@ -16,6 +16,7 @@ from enterprise_agent_kb import query_semantic_parser
 from enterprise_agent_kb.query_ambiguity import detect_query_ambiguity
 from enterprise_agent_kb.knowledge_units import _knowledge_unit, _normalize_unit_metadata
 from enterprise_agent_kb.query_api import build_query_context
+from enterprise_agent_kb.query_api import _merge_injected_hits
 from enterprise_agent_kb.query_api import _rewrite_with_expansion
 from enterprise_agent_kb.query_rewrite import rewrite_query
 
@@ -129,6 +130,41 @@ def test_text_llm_uses_minimax_before_astron(monkeypatch: pytest.MonkeyPatch) ->
     assert dict(calls[0]["json"] or {})["model"] == "MiniMax-M2.7"
 
 
+def test_injected_hit_merge_preserves_graph_provenance_on_replacement() -> None:
+    graph_hit = {
+        "result_type": "fact",
+        "result_id": "FACT-1",
+        "doc_id": "DOC-1",
+        "score": 1.1,
+        "channel": "graph",
+        "channels": ["graph"],
+        "graph_source": True,
+        "graph_path": [{"edge_id": "EDGE-1"}],
+        "relation": "defines_term",
+        "trust_tier": "strong",
+        "evidence_ids": ["EV-1"],
+    }
+    injected_hit = {
+        "result_type": "fact",
+        "result_id": "FACT-1",
+        "doc_id": "DOC-1",
+        "score": 2.4,
+        "channel": "direct_term_definition",
+        "channels": ["direct_term_definition"],
+    }
+
+    merged = _merge_injected_hits([graph_hit], [injected_hit], 8)
+
+    assert len(merged) == 1
+    assert merged[0]["score"] == 2.4
+    assert merged[0]["graph_source"] is True
+    assert merged[0]["graph_path"] == [{"edge_id": "EDGE-1"}]
+    assert merged[0]["relation"] == "defines_term"
+    assert merged[0]["trust_tier"] == "strong"
+    assert merged[0]["evidence_ids"] == ["EV-1"]
+    assert merged[0]["channels"] == ["direct_term_definition", "graph"]
+
+
 def test_text_llm_falls_back_to_astron_after_minimax_failure(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("OPENAI_BASE_URL", "https://minimax.example/anthropic")
     monkeypatch.setenv("OPENAI_API_KEY", "minimax-key")
@@ -234,6 +270,20 @@ def test_detects_ambiguous_cp_short_acronym_definition_query() -> None:
     assert detect_query_ambiguity("CP占空比是什么意思") is None
 
 
+def test_query_expansion_uses_rule_gate_for_short_acronym_definition(monkeypatch: pytest.MonkeyPatch) -> None:
+    query_expansion.expand_query.cache_clear()
+
+    def fail_llm(*args, **kwargs) -> str:
+        raise AssertionError("short acronym definition queries must not call LLM expansion")
+
+    monkeypatch.setattr(query_expansion, "_call_astron_text", fail_llm)
+    expansion = query_expansion.expand_query("CP是什么意思")
+
+    assert expansion.used_llm is False
+    assert expansion.possible_answer_shape == "definition"
+    assert expansion.preserved_anchors == ["CP"]
+
+
 def test_rewrite_keeps_timing_intent_for_cp_sequence_query() -> None:
     rewritten = rewrite_query("CP的时序是什么样的")
     assert rewritten.query_type == "timing_lookup"
@@ -311,6 +361,13 @@ def test_answer_query_answers_obc_input_overvoltage_test_method(monkeypatch: pyt
     assert "；；" not in answer["direct_answer"]
     assert "。。" not in answer["direct_answer"]
     assert "输出负载突然断开" not in answer["direct_answer"]
+    rendered_evidence = json.dumps(answer["supporting_evidence"], ensure_ascii=False)
+    assert "&nbsp;" not in rendered_evidence
+    assert "&#160;" not in rendered_evidence
+    assert "&emsp;" not in rendered_evidence
+    assert "$" not in rendered_evidence
+    assert "；；" not in rendered_evidence
+    assert "。。" not in rendered_evidence
 
 
 def test_answer_query_asks_for_clarification_on_ambiguous_cc() -> None:
@@ -676,6 +733,19 @@ def test_query_context_prefers_parameter_topic_for_detection_point_voltage() -> 
 
 
 @pytest.mark.integration
+def test_query_context_honors_explicit_table_and_parameter_row_anchor() -> None:
+    context = build_query_context(WORKSPACE, "表 A.1 控制导引电路的参数供电设备容抗参数是什么", limit=8)
+
+    assert context["rewrite"]["query_type"] == "parameter_lookup"
+    hit_ids = [item["result_id"] for item in context["hits"][:5]]
+    assert hit_ids[0] == "FACT-113543"
+    assert "FACT-113571" not in hit_ids[:3]
+    judgement = context["evidence_judgement"]
+    assert judgement["sufficient"] is True
+    assert judgement["evidence_shape"] == "parameter_definition"
+
+
+@pytest.mark.integration
 def test_topic_resolution_keeps_software_architecture_activity_in_aspice_domain(monkeypatch: pytest.MonkeyPatch) -> None:
     _disable_query_llms(monkeypatch)
     context = build_query_context(WORKSPACE, "软件架构设计有哪些活动要做", limit=8)
@@ -691,6 +761,33 @@ def test_topic_resolution_keeps_software_architecture_activity_in_aspice_domain(
     graph_candidates = context["graph_candidates"]
     assert graph_candidates
     assert all(item["doc_id"] == "DOC-000005" for item in graph_candidates[:5])
+
+
+@pytest.mark.integration
+def test_topic_resolution_uses_exact_standard_anchor_for_lifecycle_query(monkeypatch: pytest.MonkeyPatch) -> None:
+    _disable_query_llms(monkeypatch)
+    context = build_query_context(WORKSPACE, "GB/T 40432—2021 的实施日期是什么？", limit=8)
+
+    candidates = context["topic_resolution"]["candidate_entities"]
+    assert candidates
+    candidate_names = [item["canonical_name"] for item in candidates[:3]]
+    assert "GB/T 40432—2021" in candidate_names
+    assert any("GBT+40432-2021.pdf" in name for name in candidate_names)
+    assert all("20234.3" not in name for name in candidate_names)
+
+
+@pytest.mark.integration
+def test_graph_retrieval_does_not_use_process_edges_for_standard_lifecycle_query(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _disable_query_llms(monkeypatch)
+    context = build_query_context(WORKSPACE, "GB/T 40432—2021 的实施日期是什么？", limit=8)
+
+    graph_candidates = context["graph_candidates"]
+    assert graph_candidates
+    assert all(item["doc_id"] == "DOC-000009" for item in graph_candidates)
+    assert all(item["relation"] in {"references_standard", "replaces_standard"} for item in graph_candidates)
+    assert all(item["relation"] != "has_process" for item in graph_candidates)
 
 
 @pytest.mark.integration
@@ -719,8 +816,10 @@ def test_topic_resolution_uses_process_activity_alias_for_software_architecture_
     assert "graph" in context["retrieval_plan"]["channels"]
     assert all(item["doc_id"] == "DOC-000005" for item in context["hits"][:8])
     top_blob = json.dumps(context["hits"][:8], ensure_ascii=False)
+    assert "graph_fact process_fact" in top_blob
     assert "SWE.2.BP3" in top_blob
     assert "Analyze software architecture" in top_blob or "分析软件架构" in top_blob
+    assert "table_requirement" not in top_blob
 
 
 @pytest.mark.integration
@@ -887,16 +986,29 @@ def test_answer_query_treats_process_domain_definition_as_lifecycle_lookup(
 
 
 @pytest.mark.integration
-def test_query_context_prefers_term_for_short_cc_definition() -> None:
+def test_query_context_requires_clarification_for_short_cc_definition() -> None:
     context = build_query_context(WORKSPACE, "CC是什么意思", limit=6)
-    candidates = context["topic_resolution"]["candidate_entities"]
-    assert candidates
-    names = [item["canonical_name"] for item in candidates[:3]]
-    assert "连接确认功能 connection confirm function; CC" in names
-    assert all(not str(item["canonical_name"]).startswith("--- Page") for item in candidates[:3])
-    wiki_titles = [item["title"] for item in context["topic_resolution"]["candidate_wiki_pages"][:3]]
-    assert wiki_titles[0] == "连接确认功能 connection confirm function; CC"
-    assert context["evidence_judgement"]["evidence_shape"] == "term_definition"
+    assert context["clarification_required"] is True
+    assert context["rewrite"]["query_type"] == "clarification"
+    assert context["retrieval_plan"]["retrieval_skipped"] is True
+    assert context["retrieval_run_id"] is None
+    assert context["hit_count"] == 0
+    assert context["facts"] == []
+    assert context["evidence_judgement"]["evidence_shape"] == "clarification_required"
+    labels = [item["label"] for item in context["clarification"]["options"]]
+    assert any("连接确认" in label for label in labels)
+
+
+@pytest.mark.integration
+def test_query_context_requires_clarification_for_short_cp_definition() -> None:
+    context = build_query_context(WORKSPACE, "CP是什么意思", limit=6)
+    assert context["clarification_required"] is True
+    assert context["rewrite"]["query_type"] == "clarification"
+    assert context["retrieval_plan"]["retrieval_skipped"] is True
+    assert context["retrieval_run_id"] is None
+    assert context["hit_count"] == 0
+    labels = [item["label"] for item in context["clarification"]["options"]]
+    assert any("控制导引" in label for label in labels)
 
 
 @pytest.mark.integration

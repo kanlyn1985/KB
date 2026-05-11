@@ -425,6 +425,8 @@ def _test_method_sufficient(query: str, scored: list[SCORED_ROW]) -> bool:
 def _parameter_definition_score(query: str, _kind: str, item: dict[str, object], blob: str) -> float:
     if not _looks_like_parameter_definition_blob(query, blob):
         return 0.0
+    if str(item.get("fact_type") or "") == "parameter_value":
+        return _parameter_value_shape_score(query, item)
     relation = str(item.get("graph_relation") or "")
     if relation in {"has_parameter_topic", "has_parameter_group"}:
         return 1.45
@@ -454,8 +456,10 @@ def _term_definition_sufficient(query: str, scored: list[SCORED_ROW]) -> bool:
 
 def _query_anchor_tokens(query: str) -> list[str]:
     tokens: list[str] = []
-    for match in re.finditer(r"(?<![A-Za-z0-9])([A-Z]{1,8}\d*)(?![A-Za-z0-9])", str(query or ""), re.I):
+    for match in re.finditer(r"(?<![A-Za-z0-9.])([A-Z]{2,8}\d*)(?![A-Za-z0-9.])", str(query or ""), re.I):
         value = match.group(1).upper()
+        if value == "CP":
+            value = "控制导引"
         if value not in tokens:
             tokens.append(value)
     for match in re.finditer(r"(检测点\s*\d+|[A-Z]{1,8}阻值|[A-Z]{1,8}占空比)", str(query or ""), re.I):
@@ -463,6 +467,92 @@ def _query_anchor_tokens(query: str) -> list[str]:
         if value not in tokens:
             tokens.append(value)
     return tokens[:8]
+
+
+def _parameter_value_shape_score(query: str, item: dict[str, object]) -> float:
+    payload = item.get("object_value")
+    if not isinstance(payload, dict):
+        return 0.7
+    query_norm = normalize(query)
+    query_upper = str(query or "").upper()
+    requested_tables = _table_numbers(query)
+    payload_tables = _table_numbers(
+        " ".join(str(payload.get(key) or "") for key in ("table_title", "source_caption", "table_no"))
+    )
+    table_match = bool(requested_tables and payload_tables and requested_tables & payload_tables)
+    table_mismatch = bool(requested_tables and payload_tables and not requested_tables & payload_tables)
+    parameter_match = _query_contains_field(query_norm, _clean_parameter_field(payload.get("parameter")))
+    symbol_match = _query_contains_symbol(query_upper, _clean_parameter_field(payload.get("symbol")))
+    object_match = _query_contains_field(query_norm, _clean_parameter_field(payload.get("object")))
+    row_focus_match = _query_contains_any_tag(query_norm, query_upper, payload.get("row_focus_tags") or payload.get("focus_tags") or [])
+    table_focus_match = _query_contains_any_tag(query_norm, query_upper, payload.get("table_focus_tags") or [])
+
+    score = 0.75
+    if table_match:
+        score += 0.45
+    if table_mismatch:
+        score -= 0.6
+    if parameter_match:
+        score += 1.1
+    if symbol_match:
+        score += 0.9
+    if row_focus_match:
+        score += 0.45
+    if object_match:
+        score += 0.35
+    if table_focus_match:
+        score += 0.1
+    relation = str(item.get("graph_relation") or "")
+    if relation in {"has_parameter_topic", "has_parameter_group"} and (parameter_match or symbol_match or row_focus_match):
+        score += 0.25
+    return max(0.0, score)
+
+
+def _table_numbers(value: str) -> set[str]:
+    return {
+        f"{match.group(1).upper()}.{match.group(2)}"
+        for match in re.finditer(r"表\s*([A-Z])\s*[.．]\s*(\d+)", str(value or ""), re.I)
+    }
+
+
+def _clean_parameter_field(value: object) -> str:
+    text = str(value or "").strip()
+    text = re.sub(r"\^[A-Za-z0-9]+", "", text)
+    text = re.sub(r"[（(][^)）]*[)）]", "", text)
+    return text.strip(" *:：;；,，")
+
+
+def _query_contains_field(query_norm: str, value: str) -> bool:
+    if not value:
+        return False
+    normalized = normalize(value)
+    if normalized in {"参数", "定义", "是什么", "什么意思", "控制导引", "控制导引电路", "电路", "表", "table"}:
+        return False
+    if re.fullmatch(r"[a-z0-9+\-/'_.]{1,2}", normalized, re.I):
+        return False
+    return normalized in query_norm
+
+
+def _query_contains_symbol(query_upper: str, symbol: str) -> bool:
+    if len(symbol) < 2:
+        return False
+    return bool(re.search(rf"(?<![A-Z0-9]){re.escape(symbol.upper())}(?![A-Z0-9])", query_upper))
+
+
+def _query_contains_any_tag(query_norm: str, query_upper: str, tags: list[object]) -> bool:
+    for tag in tags:
+        text = _clean_parameter_field(tag)
+        if not text:
+            continue
+        upper = text.upper()
+        if upper in {"CP", "CC", "PE", "PWM"} and re.search(rf"(?<![A-Z0-9]){re.escape(upper)}(?![A-Z0-9])", query_upper):
+            return True
+        if re.fullmatch(r"CC\d", upper) and re.search(r"(?<![A-Z0-9])CC(?![A-Z0-9])", query_upper):
+            return True
+        normalized = normalize(text)
+        if len(normalized) > 1 and normalized not in {"控制导引", "控制导引电路", "电路"} and normalized in query_norm:
+            return True
+    return False
 
 
 def _test_method_topic_tokens(query: str) -> list[str]:

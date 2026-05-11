@@ -390,19 +390,23 @@ def _anchors(query: str, expansion: dict[str, object]) -> list[str]:
 
     def add(value: str) -> None:
         text = str(value or "").strip()
+        if re.fullmatch(r"[A-Z]", text, re.I):
+            return
         if text and text not in anchors:
             anchors.append(text)
 
     for pattern in [
         r"([+-]?\d+(?:\.\d+)?\s*V)",
-        r"(?<![A-Za-z0-9])([A-Z]{1,6}\d*)(?![A-Za-z0-9])",
+        r"(?<![A-Za-z0-9.])([A-Z]{2,6}\d*)(?![A-Za-z0-9.])",
         r"(检测点\s*\d+)",
-        r"(表\s*[A-Z]?\d+(?:\.\d+)*)",
+        r"(表\s*[A-Z]\s*[.．]\s*\d+|表\s*\d+(?:\.\d+)*)",
     ]:
         for match in re.finditer(pattern, query, re.I):
             value = match.group(1)
             if value.upper() == "OBC":
                 add("车载充电机")
+            elif value.upper() == "CP":
+                add("控制导引")
             else:
                 add(value)
     for value in expansion.get("preserved_anchors") or []:

@@ -60,6 +60,7 @@ def resolve_topic_entities(
 
         core_terms = _core_topic_terms(topic_terms)
         entity_types = _entity_types_for_query_type(rewritten)
+        standard_anchor = _standard_anchor(rewritten)
         scoring_terms = _merge_terms(topic_terms, core_terms)
         scored_entities: dict[str, tuple[float, dict[str, object]]] = {}
         for entity_type in entity_types:
@@ -78,6 +79,8 @@ def resolve_topic_entities(
                 name = str(item.get("canonical_name") or "").strip()
                 aliases = _entity_aliases(item)
                 searchable_names = [name, *aliases]
+                if standard_anchor and not _matches_standard_anchor(item, standard_anchor):
+                    continue
                 if core_terms and not any(_matches_core_topic(candidate, core_terms) for candidate in searchable_names):
                     continue
                 score = max(
@@ -150,6 +153,8 @@ def resolve_topic_entities(
 def _entity_types_for_query_type(rewritten) -> list[str]:
     query_type = str(getattr(rewritten, "query_type", "") or "")
     original = str(getattr(rewritten, "original_query", "") or "")
+    if query_type in {"standard_lookup", "lifecycle_lookup"} and _standard_anchor(rewritten):
+        return ["standard", "document"]
     mapping = {
         "definition": ["term", "parameter_topic"],
         "comparison": ["comparison_topic", *(["process"] if re.search(r"(活动|任务|步骤|流程|过程|要做|做什么)", original) else []), "term"],
@@ -317,6 +322,10 @@ def _entity_match_score(name: str, topic_terms: list[str], query_type: str, enti
 
     if query_type == "parameter_lookup" and entity_type == "parameter_topic":
         score += 4.5
+    elif query_type in {"standard_lookup", "lifecycle_lookup"} and entity_type == "standard":
+        score += 5.0
+    elif query_type in {"standard_lookup", "lifecycle_lookup"} and entity_type == "document":
+        score += 4.0
     elif query_type == "parameter_lookup" and entity_type == "parameter_group":
         score -= 2.0
     elif query_type == "constraint" and entity_type == "constraint_topic":
@@ -389,4 +398,36 @@ def _term_has_suffix_acronym(name: str, acronym: str) -> bool:
 
 
 def _compact_topic_text(value: str) -> str:
-    return re.sub(r"[\s\-_/·:：;；,，.。()（）]+", "", str(value or "")).upper()
+    return re.sub(r"[\s\-_+/·:：;；,，.。()（）]+", "", str(value or "")).upper()
+
+
+def _standard_anchor(rewritten) -> str | None:
+    values = [
+        str(getattr(rewritten, "original_query", "") or ""),
+        str(getattr(rewritten, "target_topic", "") or ""),
+        str(getattr(rewritten, "normalized_query", "") or ""),
+        *[str(item) for item in getattr(rewritten, "must_terms", [])],
+        *[str(item) for item in getattr(rewritten, "protected_anchor_terms", [])],
+    ]
+    for value in values:
+        match = re.search(r"(?:GB/T|GBT|GB|ISO|IEC)\s*[\d.]+(?:[-—]\d{2,4})?", value, re.I)
+        if match:
+            return _normalize_standard_anchor(match.group(0))
+    return None
+
+
+def _matches_standard_anchor(item: dict[str, object], anchor: str) -> bool:
+    aliases = _entity_aliases(item)
+    values = [
+        str(item.get("canonical_name") or ""),
+        str(item.get("description") or ""),
+        *aliases,
+    ]
+    return any(anchor and anchor in _normalize_standard_anchor(value) for value in values)
+
+
+def _normalize_standard_anchor(value: str) -> str:
+    text = str(value or "").upper()
+    text = text.replace("GB T", "GB/T").replace("GBT", "GB/T")
+    text = text.replace("QC T", "QC/T")
+    return re.sub(r"[^A-Z0-9]+", "", text)

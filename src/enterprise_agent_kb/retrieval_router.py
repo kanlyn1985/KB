@@ -224,10 +224,194 @@ def _direct_fact_hits(connection, rewritten: RewrittenQuery, limit: int) -> list
                     "snippet": f"knowledge_unit_fact {row['object_value']}",
                 }
             )
+    if rewritten.query_type == "parameter_lookup":
+        hit_index = {str(hit.get("result_id")): index for index, hit in enumerate(hits) if hit.get("result_id")}
+        for hit in _direct_parameter_fact_hits(connection, rewritten, limit):
+            result_id = str(hit.get("result_id") or "")
+            if not result_id:
+                continue
+            existing_index = hit_index.get(result_id)
+            if existing_index is None:
+                seen.add(result_id)
+                hit_index[result_id] = len(hits)
+                hits.append(hit)
+                continue
+            if float(hit.get("score") or 0.0) > float(hits[existing_index].get("score") or 0.0):
+                hits[existing_index] = hit
     if rewritten.query_type in {"lifecycle_lookup", "timing_lookup"}:
         hits = _augment_process_code_siblings(connection, hits, limit)
     hits.sort(key=lambda item: float(item.get("score") or 0.0), reverse=True)
     return hits[:limit]
+
+
+def _direct_parameter_fact_hits(connection, rewritten: RewrittenQuery, limit: int) -> list[dict[str, object]]:
+    rows = connection.execute(
+        """
+        SELECT fact_id, source_doc_id, json_extract(qualifiers_json, '$.page_no') AS page_no,
+               object_value, confidence
+        FROM facts
+        WHERE fact_type = 'parameter_value'
+        ORDER BY confidence DESC, fact_id ASC
+        """
+    ).fetchall()
+    hits: list[dict[str, object]] = []
+    requested_tables = _requested_table_numbers(rewritten)
+    query_text = _parameter_query_text(rewritten)
+    query_norm = _normalize_document_blob(query_text)
+    query_upper = query_text.upper()
+    for row in rows:
+        payload = _safe_json_object(str(row["object_value"] or ""))
+        if not payload:
+            continue
+        score = _structured_parameter_score(
+            payload,
+            query_norm=query_norm,
+            query_upper=query_upper,
+            requested_tables=requested_tables,
+            confidence=float(row["confidence"] or 0),
+        )
+        if score <= 0:
+            continue
+        hits.append(
+            {
+                "result_type": "fact",
+                "result_id": row["fact_id"],
+                "doc_id": row["source_doc_id"],
+                "page_no": row["page_no"],
+                "score": round(score, 6),
+                "snippet": f"knowledge_unit_fact {row['object_value']}",
+            }
+        )
+    hits.sort(key=lambda item: float(item.get("score") or 0.0), reverse=True)
+    return hits[: max(limit, 12)]
+
+
+def _structured_parameter_score(
+    payload: dict[str, object],
+    *,
+    query_norm: str,
+    query_upper: str,
+    requested_tables: set[str],
+    confidence: float,
+) -> float:
+    table_title = str(payload.get("table_title") or payload.get("source_caption") or "")
+    payload_tables = _table_numbers(table_title)
+    table_match = bool(requested_tables and payload_tables and requested_tables & payload_tables)
+    table_mismatch = bool(requested_tables and payload_tables and not requested_tables & payload_tables)
+    parameter_match = _query_contains_field(query_norm, _clean_parameter_field(payload.get("parameter")))
+    symbol_match = _query_contains_symbol(query_upper, _clean_parameter_field(payload.get("symbol")))
+    object_match = _query_contains_field(query_norm, _clean_parameter_field(payload.get("object")))
+    row_focus_match = _query_contains_any_tag(query_norm, query_upper, payload.get("row_focus_tags") or payload.get("focus_tags") or [])
+    table_focus_match = _query_contains_any_tag(query_norm, query_upper, payload.get("table_focus_tags") or [])
+    has_row_anchor = parameter_match or symbol_match or row_focus_match
+    has_context_anchor = table_match or object_match or table_focus_match
+    if requested_tables and table_mismatch and not has_row_anchor:
+        return 0.0
+    if not requested_tables and not (has_row_anchor or object_match):
+        return 0.0
+
+    score = max(0.85, confidence) + 0.55
+    if table_match:
+        score += 1.2
+    if table_mismatch:
+        score -= 1.0
+    if parameter_match:
+        score += 1.25
+    if symbol_match:
+        score += 1.1
+    if row_focus_match:
+        score += 0.55
+    if object_match:
+        score += 0.45
+    if table_focus_match:
+        score += 0.15
+    if has_context_anchor and not has_row_anchor:
+        score -= 0.25
+    return score if score >= 1.0 else 0.0
+
+
+def _parameter_query_text(rewritten: RewrittenQuery) -> str:
+    return " ".join(
+        str(item or "")
+        for item in [
+            rewritten.original_query,
+            rewritten.normalized_query,
+            rewritten.target_topic,
+            *rewritten.must_terms,
+            *rewritten.protected_anchor_terms,
+        ]
+    )
+
+
+def _requested_table_numbers(rewritten: RewrittenQuery) -> set[str]:
+    return _table_numbers(
+        " ".join(
+            str(item or "")
+            for item in [
+                rewritten.original_query,
+                rewritten.normalized_query,
+                rewritten.target_topic,
+                *rewritten.must_terms,
+                *rewritten.should_terms,
+                *rewritten.aliases,
+            ]
+        )
+    )
+
+
+def _table_numbers(value: str) -> set[str]:
+    return {
+        f"{match.group(1).upper()}.{match.group(2)}"
+        for match in re.finditer(r"表\s*([A-Z])\s*[.．]\s*(\d+)", str(value or ""), re.I)
+    }
+
+
+def _safe_json_object(value: str) -> dict[str, object] | None:
+    try:
+        payload = json.loads(value)
+    except (TypeError, json.JSONDecodeError):
+        return None
+    return payload if isinstance(payload, dict) else None
+
+
+def _clean_parameter_field(value: object) -> str:
+    text = str(value or "").strip()
+    text = re.sub(r"\^[A-Za-z0-9]+", "", text)
+    text = re.sub(r"[（(][^)）]*[)）]", "", text)
+    return text.strip(" *:：;；,，")
+
+
+def _query_contains_field(query_norm: str, value: str) -> bool:
+    if not value:
+        return False
+    normalized = _normalize_document_blob(value)
+    if normalized in {"参数", "定义", "是什么", "什么意思", "控制导引", "控制导引电路", "电路", "表", "table"}:
+        return False
+    if re.fullmatch(r"[a-z0-9+\-/'_.]{1,2}", normalized, re.I):
+        return False
+    return normalized in query_norm
+
+
+def _query_contains_symbol(query_upper: str, symbol: str) -> bool:
+    if len(symbol) < 2:
+        return False
+    return bool(re.search(rf"(?<![A-Z0-9]){re.escape(symbol.upper())}(?![A-Z0-9])", query_upper))
+
+
+def _query_contains_any_tag(query_norm: str, query_upper: str, tags: list[object]) -> bool:
+    for tag in tags:
+        text = _clean_parameter_field(tag)
+        if not text:
+            continue
+        upper = text.upper()
+        if upper in {"CP", "CC", "PE", "PWM"} and re.search(rf"(?<![A-Z0-9]){re.escape(upper)}(?![A-Z0-9])", query_upper):
+            return True
+        if re.fullmatch(r"CC\d", upper) and re.search(r"(?<![A-Z0-9])CC(?![A-Z0-9])", query_upper):
+            return True
+        normalized = _normalize_document_blob(text)
+        if len(normalized) > 1 and normalized not in {"控制导引", "控制导引电路", "电路"} and normalized in query_norm:
+            return True
+    return False
 
 
 def _process_alias_terms(rewritten: RewrittenQuery) -> list[str]:

@@ -44,6 +44,7 @@ def direct_routing_hits(
 
 def _routing_terms(query: str, expansion: dict[str, object]) -> list[str]:
     terms: list[str] = []
+    signal_state_context = _signal_state_requested(query)
 
     def add(value: str) -> None:
         text = str(value or "").strip()
@@ -51,6 +52,8 @@ def _routing_terms(query: str, expansion: dict[str, object]) -> list[str]:
             terms.append(text)
 
     add(query)
+    for value in _explicit_query_terms(query):
+        add(value)
     for key in ("preserved_anchors", "expanded_terms", "must_not_change"):
         for value in expansion.get(key) or []:
             add(str(value))
@@ -60,8 +63,9 @@ def _routing_terms(query: str, expansion: dict[str, object]) -> list[str]:
 
     if re.search(r"\bCP\b|控制导引", query, re.I):
         add("控制导引")
-        add("检测点 1")
-        add("检测点1")
+        if signal_state_context or re.search(r"检测点\s*1", query, re.I):
+            add("检测点 1")
+            add("检测点1")
     if _is_timing_query(query):
         add("控制时序")
         add("控制时序表")
@@ -81,6 +85,49 @@ def _routing_terms(query: str, expansion: dict[str, object]) -> list[str]:
         add("电压状态")
         add("充电过程状态")
     return terms[:32]
+
+
+def _explicit_query_terms(query: str) -> list[str]:
+    text = str(query or "")
+    terms: list[str] = []
+    for match in re.finditer(r"表\s*[A-Z]\s*[.．]\s*\d+|表\s*\d+", text, re.I):
+        _append_query_term(terms, match.group(0))
+    if "参数" not in text:
+        return terms
+    cleaned = re.sub(r"表\s*[A-Z]\s*[.．]\s*\d+|表\s*\d+", " ", text, flags=re.I)
+    cleaned = re.sub(
+        r"(有哪些定义|定义有哪些|参数有哪些|参数是什么|哪些参数|参数值|是什么意思|是什么|代表什么|表示什么|指什么|含义|如何理解|怎么理解|[？?])",
+        " ",
+        cleaned,
+    )
+    cleaned = cleaned.replace("的参数", " ").replace("参数", " ")
+    for chunk in re.split(r"[\s,，;；:：/|]+", cleaned):
+        chunk = chunk.strip()
+        if not chunk or not re.search(r"[\u4e00-\u9fff]", chunk):
+            continue
+        for part in re.split(r"的|和|与", chunk):
+            part = part.strip()
+            if not part:
+                continue
+            _append_query_term(terms, part)
+            if len(part) > 2:
+                for size in range(2, min(6, len(part)) + 1):
+                    _append_query_term(terms, part[-size:])
+    return terms[:16]
+
+
+def _append_query_term(terms: list[str], term: str) -> None:
+    cleaned = str(term or "").strip()
+    if not cleaned or cleaned in terms:
+        return
+    if _is_generic_query_term(cleaned):
+        return
+    terms.append(cleaned)
+
+
+def _is_generic_query_term(term: str) -> bool:
+    normalized = _normalize(term)
+    return normalized in {"参数", "定义", "是什么", "什么意思", "控制导引", "控制导引电路", "电路", "表", "table"}
 
 
 def _table_fact_hits(connection, terms: list[str], limit: int) -> list[dict[str, object]]:
@@ -137,23 +184,26 @@ def _table_fact_hits(connection, terms: list[str], limit: int) -> list[dict[str,
         score = _summary_match_score(blob, terms)
         if score <= 0:
             continue
+        explicit_table_mismatch = _explicit_table_mismatch(blob, terms)
         if row["fact_type"] == "table_requirement":
             score += 0.18
-        if _looks_like_signal_state_table(blob, terms):
+        table_score, table_priority = _explicit_table_adjustment(blob, terms)
+        score += table_score
+        if not explicit_table_mismatch and _looks_like_signal_state_table(blob, terms):
             score += 2.4
-        if _looks_like_exact_voltage_pwm_state_row(blob, terms):
+        if not explicit_table_mismatch and _looks_like_exact_voltage_pwm_state_row(blob, terms):
             score += 1.8
-        if _looks_like_timing_table(blob, terms):
+        if not explicit_table_mismatch and _looks_like_timing_table(blob, terms):
             score += 2.6
             if "表 A.7" in blob:
                 score += 2.2
             elif "表 C.3" in blob and not _special_appendix_c_requested(terms):
                 score -= 1.0
-        if "表 A.4" in blob or "检测点 1 的电压状态" in blob:
+        if not explicit_table_mismatch and ("表 A.4" in blob or "检测点 1 的电压状态" in blob):
             score += 0.8
         if re.search(r"表 [GH]\.", blob):
             score -= 0.35
-        routing_priority = _routing_priority(blob, terms)
+        routing_priority = _routing_priority(blob, terms) + table_priority
         hits.append(
             {
                 "result_type": "fact",
@@ -280,6 +330,8 @@ def _looks_like_exact_voltage_pwm_state_row(blob: str, terms: list[str]) -> bool
 
 
 def _routing_priority(blob: str, terms: list[str]) -> float:
+    if _explicit_table_mismatch(blob, terms):
+        return -3.0
     priority = 0.0
     if _looks_like_timing_table(blob, terms):
         priority += 4.0
@@ -296,8 +348,34 @@ def _routing_priority(blob: str, terms: list[str]) -> float:
     return priority
 
 
+def _explicit_table_adjustment(blob: str, terms: list[str]) -> tuple[float, float]:
+    requested = _requested_table_numbers(terms)
+    if not requested:
+        return (0.0, 0.0)
+    blob_tables = _table_numbers(blob)
+    if not blob_tables:
+        return (0.0, 0.0)
+    if any(table in blob_tables for table in requested):
+        return (1.35, 6.0)
+    return (-1.2, -6.0)
+
+
+def _explicit_table_mismatch(blob: str, terms: list[str]) -> bool:
+    requested = _requested_table_numbers(terms)
+    if not requested:
+        return False
+    blob_tables = _table_numbers(blob)
+    return bool(blob_tables and not requested & blob_tables)
+
+
 def _is_timing_query(query: str) -> bool:
     return bool(re.search(r"(时序|流程|状态转换|控制时序|握手|预充|启动|停止|停机)", str(query or "")))
+
+
+def _signal_state_requested(query: str) -> bool:
+    return bool(
+        re.search(r"PWM|检测点\s*1|[+-]?\d+(?:\.\d+)?\s*V|电压状态|充电过程状态", str(query or ""), re.I)
+    )
 
 
 def _looks_like_timing_table(blob: str, terms: list[str]) -> bool:
@@ -330,6 +408,21 @@ def _requested_voltage(terms: list[str]) -> str:
         if match:
             return match.group(1)
     return ""
+
+
+def _requested_table_numbers(terms: list[str]) -> set[str]:
+    tables: set[str] = set()
+    for term in terms:
+        for match in re.finditer(r"表\s*([A-Z])\s*[.．]\s*(\d+)", str(term or ""), re.I):
+            tables.add(f"{match.group(1).upper()}.{match.group(2)}")
+    return tables
+
+
+def _table_numbers(blob: str) -> set[str]:
+    return {
+        f"{match.group(1).upper()}.{match.group(2)}"
+        for match in re.finditer(r"表\s*([A-Z])\s*[.．]\s*(\d+)", str(blob or ""), re.I)
+    }
 
 
 def _summary_text(payload: object) -> str:

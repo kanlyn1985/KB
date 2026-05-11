@@ -452,6 +452,7 @@ def _extract_domain_terms(query: str) -> list[str]:
     terms: list[str] = []
     query = _canonicalize_parameter_anchor(query)
     for pattern in [
+        r"(表\s*[A-Z]\s*[.．]\s*\d+)",
         r"(表\s*\d+)",
         r"(输出特性参数允差)",
         r"(输入过压)",
@@ -485,7 +486,57 @@ def _extract_domain_terms(query: str) -> list[str]:
             term = match.group(1).strip()
             if term and term not in terms:
                 terms.append(term)
+    if "参数" in query:
+        for term in _extract_parameter_query_terms(query):
+            if term and term not in terms:
+                terms.append(term)
     return terms
+
+
+def _extract_parameter_query_terms(query: str) -> list[str]:
+    text = _canonicalize_parameter_anchor(query)
+    text = re.sub(r"(?:GB|GBT|GB/T|ISO|IEC|QC|QC/T)[/—\-\s]*\d+(?:\.\d+)?(?:—\d{4})?", " ", text, flags=re.I)
+    text = re.sub(r"表\s*[A-Z]\s*[.．]\s*\d+|表\s*\d+", " ", text, flags=re.I)
+    text = re.sub(
+        r"(有哪些定义|定义有哪些|参数有哪些|参数是什么|哪些参数|参数值|是什么意思|是什么|代表什么|表示什么|指什么|含义|如何理解|怎么理解|[？?])",
+        " ",
+        text,
+    )
+    text = text.replace("的参数", " ").replace("参数", " ")
+    chunks = [chunk.strip() for chunk in re.split(r"[\s,，;；:：/|]+", text) if chunk.strip()]
+    terms: list[str] = []
+    for chunk in chunks:
+        for part in re.split(r"的|和|与", chunk):
+            part = part.strip()
+            if not part:
+                continue
+            _append_parameter_query_term(terms, part)
+            if re.search(r"[\u4e00-\u9fff]", part) and len(part) > 2:
+                for size in range(2, min(6, len(part)) + 1):
+                    _append_parameter_query_term(terms, part[-size:])
+    return terms[:12]
+
+
+def _append_parameter_query_term(terms: list[str], term: str) -> None:
+    cleaned = term.strip()
+    if not cleaned or cleaned in terms or _is_generic_parameter_query_term(cleaned):
+        return
+    terms.append(cleaned)
+
+
+def _is_generic_parameter_query_term(term: str) -> bool:
+    normalized = re.sub(r"\s+", "", term.lower())
+    return normalized in {
+        "参数",
+        "定义",
+        "是什么",
+        "什么意思",
+        "控制导引",
+        "控制导引电路",
+        "电路",
+        "表",
+        "table",
+    }
 
 
 def _extract_compound_terms(query: str) -> list[str]:

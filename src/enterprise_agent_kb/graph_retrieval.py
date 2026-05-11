@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import asdict, dataclass
 
+from .evidence_shapes import looks_like_process_activity_blob
 from .query_rewrite import RewrittenQuery
 
 
@@ -64,11 +66,11 @@ def retrieve_graph_candidates(
     if not seed_entity_ids:
         return []
 
-    strong_relations = STRONG_RELATIONS_BY_QUERY_TYPE.get(
-        rewritten.query_type,
-        ("defines_term", "has_parameter_topic", "has_process", "has_constraint"),
-    )
-    allowed_relations = [*strong_relations, *WEAK_RELATIONS]
+    strong_relations = _strong_relations_for_query(rewritten)
+    if rewritten.query_type in {"standard_lookup", "lifecycle_lookup"} and _has_standard_anchor(rewritten):
+        allowed_relations = list(strong_relations)
+    else:
+        allowed_relations = [*strong_relations, *WEAK_RELATIONS]
     placeholders = ",".join("?" for _ in seed_entity_ids)
     relation_placeholders = ",".join("?" for _ in allowed_relations)
     edge_rows = connection.execute(
@@ -103,11 +105,12 @@ def retrieve_graph_candidates(
     if not edge_rows:
         return []
 
-    entity_names = _load_entity_names(connection, {
+    entity_info = _load_entity_info(connection, {
         str(row["src_entity_id"]) for row in edge_rows
     } | {
         str(row["dst_entity_id"]) for row in edge_rows
     })
+    entity_names = {entity_id: item["canonical_name"] for entity_id, item in entity_info.items()}
 
     candidates: dict[tuple[str, str], GraphCandidate] = {}
     for edge in edge_rows:
@@ -123,6 +126,15 @@ def retrieve_graph_candidates(
             for fact in fact_rows:
                 candidate = _candidate_from_fact(edge, evidence, fact, entity_names, trust_tier)
                 _keep_best(candidates, candidate)
+        for candidate in _topic_fact_candidates_for_edge(
+            connection,
+            rewritten,
+            edge,
+            entity_info,
+            entity_names,
+            trust_tier,
+        ):
+            _keep_best(candidates, candidate)
 
     ranked = sorted(
         candidates.values(),
@@ -142,19 +154,197 @@ def _keep_best(candidates: dict[tuple[str, str], GraphCandidate], candidate: Gra
         candidates[key] = candidate
 
 
-def _load_entity_names(connection, entity_ids: set[str]) -> dict[str, str]:
+def _strong_relations_for_query(rewritten: RewrittenQuery) -> tuple[str, ...]:
+    if rewritten.query_type == "lifecycle_lookup" and _has_standard_anchor(rewritten):
+        return ("references_standard", "replaces_standard")
+    return STRONG_RELATIONS_BY_QUERY_TYPE.get(
+        rewritten.query_type,
+        ("defines_term", "has_parameter_topic", "has_process", "has_constraint"),
+    )
+
+
+def _has_standard_anchor(rewritten: RewrittenQuery) -> bool:
+    values = [
+        rewritten.original_query,
+        rewritten.normalized_query,
+        rewritten.target_topic,
+        *rewritten.must_terms,
+        *rewritten.protected_anchor_terms,
+    ]
+    return any(
+        re.search(r"(?:GB/T|GBT|GB|ISO|IEC)\s*[\d.]+(?:[-—]\d{2,4})?", str(value or ""), re.I)
+        for value in values
+    )
+
+
+def _load_entity_info(connection, entity_ids: set[str]) -> dict[str, dict[str, str]]:
     if not entity_ids:
         return {}
     placeholders = ",".join("?" for _ in entity_ids)
     rows = connection.execute(
         f"""
-        SELECT entity_id, canonical_name
+        SELECT entity_id, canonical_name, entity_type
         FROM entities
         WHERE entity_id IN ({placeholders})
         """,
         list(entity_ids),
     ).fetchall()
-    return {str(row["entity_id"]): str(row["canonical_name"] or "") for row in rows}
+    return {
+        str(row["entity_id"]): {
+            "canonical_name": str(row["canonical_name"] or ""),
+            "entity_type": str(row["entity_type"] or ""),
+        }
+        for row in rows
+    }
+
+
+def _topic_fact_candidates_for_edge(
+    connection,
+    rewritten: RewrittenQuery,
+    edge,
+    entity_info: dict[str, dict[str, str]],
+    entity_names: dict[str, str],
+    trust_tier: str,
+) -> list[GraphCandidate]:
+    if not _should_expand_topic_facts(rewritten, str(edge["relation"] or "")):
+        return []
+
+    process_entity_ids = [
+        entity_id
+        for entity_id in (str(edge["src_entity_id"]), str(edge["dst_entity_id"]))
+        if entity_info.get(entity_id, {}).get("entity_type") == "process"
+    ]
+    if not process_entity_ids:
+        return []
+
+    source_fact_ids = _load_source_fact_ids_for_entities(connection, process_entity_ids, page_type="process")
+    if not source_fact_ids:
+        return []
+
+    placeholders = ",".join("?" for _ in source_fact_ids)
+    rows = connection.execute(
+        f"""
+        SELECT fact_id, fact_type, source_doc_id, confidence,
+               json_extract(qualifiers_json, '$.page_no') AS page_no,
+               object_value
+        FROM facts
+        WHERE fact_id IN ({placeholders})
+        ORDER BY confidence DESC, fact_id ASC
+        LIMIT ?
+        """,
+        [*source_fact_ids, max(len(source_fact_ids), 24)],
+    ).fetchall()
+
+    candidates: list[GraphCandidate] = []
+    for row in rows:
+        fact = dict(row)
+        shape_bonus = _topic_fact_shape_bonus(rewritten, fact)
+        if shape_bonus <= 0:
+            continue
+        candidates.append(_candidate_from_topic_fact(connection, edge, fact, entity_names, trust_tier, shape_bonus))
+    return candidates
+
+
+def _should_expand_topic_facts(rewritten: RewrittenQuery, relation: str) -> bool:
+    return relation == "has_process" and rewritten.query_type == "lifecycle_lookup"
+
+
+def _load_source_fact_ids_for_entities(connection, entity_ids: list[str], page_type: str) -> list[str]:
+    placeholders = ",".join("?" for _ in entity_ids)
+    rows = connection.execute(
+        f"""
+        SELECT source_fact_ids_json
+        FROM wiki_pages
+        WHERE entity_id IN ({placeholders})
+          AND page_type = ?
+          AND COALESCE(trust_status, '') != 'stale'
+        ORDER BY trust_status DESC, page_id ASC
+        """,
+        [*entity_ids, page_type],
+    ).fetchall()
+
+    fact_ids: list[str] = []
+    for row in rows:
+        try:
+            parsed = json.loads(row["source_fact_ids_json"] or "[]")
+        except json.JSONDecodeError:
+            parsed = []
+        if not isinstance(parsed, list):
+            continue
+        for item in parsed:
+            fact_id = str(item or "").strip()
+            if fact_id and fact_id not in fact_ids:
+                fact_ids.append(fact_id)
+    return fact_ids
+
+
+def _topic_fact_shape_bonus(rewritten: RewrittenQuery, fact: dict[str, object]) -> float:
+    fact_type = str(fact.get("fact_type") or "")
+    blob = json.dumps(fact, ensure_ascii=False)
+    if rewritten.query_type == "lifecycle_lookup":
+        if fact_type != "process_fact":
+            return 0.0
+        if not looks_like_process_activity_blob(_query_shape_text(rewritten), blob):
+            return 0.0
+        return 1.1
+    return 0.0
+
+
+def _query_shape_text(rewritten: RewrittenQuery) -> str:
+    return " ".join(
+        str(item or "")
+        for item in [
+            rewritten.original_query,
+            rewritten.normalized_query,
+            rewritten.target_topic,
+            *rewritten.must_terms,
+            *rewritten.should_terms,
+            *rewritten.aliases,
+        ]
+    )
+
+
+def _candidate_from_topic_fact(
+    connection,
+    edge,
+    fact: dict[str, object],
+    entity_names: dict[str, str],
+    trust_tier: str,
+    shape_bonus: float,
+) -> GraphCandidate:
+    relation = str(edge["relation"] or "")
+    confidence = max(float(edge["confidence"] or 0.0), float(fact.get("confidence") or 0.0))
+    score = round(RELATION_SCORE.get(relation, 0.5) + confidence * 0.25 + shape_bonus, 6)
+    fact_id = str(fact["fact_id"])
+    evidence_ids = _load_evidence_ids_for_fact(connection, fact_id)
+    return GraphCandidate(
+        result_type="fact",
+        result_id=fact_id,
+        doc_id=str(fact["source_doc_id"] or ""),
+        page_no=_as_int(fact.get("page_no")),
+        score=score,
+        snippet=_fact_snippet(fact),
+        edge_id=str(edge["edge_id"]),
+        relation=relation,
+        graph_path=_graph_path(edge, entity_names, evidence_id=evidence_ids[0] if evidence_ids else "", fact_id=fact_id),
+        evidence_ids=evidence_ids,
+        fact_id=fact_id,
+        trust_tier=trust_tier,
+    )
+
+
+def _load_evidence_ids_for_fact(connection, fact_id: str) -> list[str]:
+    rows = connection.execute(
+        """
+        SELECT evidence_id
+        FROM fact_evidence_map
+        WHERE fact_id = ?
+        ORDER BY evidence_id ASC
+        LIMIT 4
+        """,
+        (fact_id,),
+    ).fetchall()
+    return [str(row["evidence_id"]) for row in rows if row["evidence_id"]]
 
 
 def _load_edge_evidence(connection, edge_id: str) -> list[dict[str, object]]:

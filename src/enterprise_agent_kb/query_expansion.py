@@ -160,6 +160,8 @@ def expand_query(query: str) -> QueryExpansion:
 
 
 def _should_use_rule_expansion(query: str, anchors: list[str]) -> bool:
+    if _is_short_acronym_definition_query(query):
+        return True
     if re.search(r"(GB/T|GBT|GB|ISO|IEC|QC/T|QC)\s*[A-Z]?\s*[\d.]+", query, re.I):
         return True
     if re.search(r"(有哪些活动|要做哪些活动|活动要做|有哪些任务|有哪些步骤|步骤有哪些|任务有哪些|过程域.*(?:是什么|定义|含义))", query, re.I):
@@ -169,6 +171,16 @@ def _should_use_rule_expansion(query: str, anchors: list[str]) -> bool:
     if anchors and re.search(r"[+-]?\d+(?:\.\d+)?\s*(?:V|A|Ω|kΩ|Hz|%)", query, re.I):
         return True
     return False
+
+
+def _is_short_acronym_definition_query(query: str) -> bool:
+    return bool(
+        re.fullmatch(
+            r"\s*[A-Z]{1,6}\d*\s*(?:的)?\s*(?:是什么意思|什么是|定义是什么|含义是什么|代表什么意思|表示什么)\s*[？?]?\s*",
+            query,
+            re.I,
+        )
+    )
 
 
 def expansion_terms_for_retrieval(expansion: QueryExpansion) -> list[str]:

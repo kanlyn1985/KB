@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from enterprise_agent_kb.retrieval_quality import evaluate_retrieval_quality
+from enterprise_agent_kb.user_query_retrieval_eval import _case_contract_result, _clarification_retrieval_quality
 
 
 def test_retrieval_quality_scores_rank_and_recall() -> None:
@@ -102,3 +103,40 @@ def test_retrieval_quality_does_not_overmatch_process_code_tokens() -> None:
 
     assert quality["negative_hit_count"] == 0
     assert quality["failure_attribution"] == "ok"
+
+
+def test_user_query_eval_treats_clarification_as_non_retrieval_contract() -> None:
+    context = {
+        "clarification_required": True,
+        "rewrite": {"query_type": "clarification"},
+        "retrieval_plan": {"channels": ["clarification"], "graph_candidate_count": 0},
+        "topic_resolution": {"confidence": 0.0, "candidate_entities": []},
+        "hits": [],
+        "clarification": {
+            "options": [
+                {"option_id": "connection_confirm", "label": "连接确认功能 / connection confirm"},
+                {"option_id": "constant_current", "label": "恒流 / constant current"},
+            ]
+        },
+    }
+    trace_metrics = {
+        "query_type": "clarification",
+        "retrieval_channels": ["clarification"],
+        "graph_candidate_count": 0,
+        "topic_resolution_confidence": 0.0,
+        "topic_candidate_names": [],
+        "top_hit_ids": [],
+    }
+    case = {
+        "expected_query_type": "clarification",
+        "expected_clarification_required": True,
+        "expected_clarification_options": ["连接确认功能", "恒流"],
+        "retrieval_must_hit": ["连接确认功能"],
+    }
+
+    contract = _case_contract_result(case, context, trace_metrics, [])
+    quality = _clarification_retrieval_quality()
+
+    assert contract["passed"] is True
+    assert quality["failure_attribution"] == "ok"
+    assert quality["recall_at_5"] is None

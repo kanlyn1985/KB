@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 
@@ -137,7 +138,7 @@ def _type_bonus(query_type: str, result_type: str) -> float:
 
 
 def _subtype_bonus(connection, rewritten: RewrittenQuery, candidate: dict[str, object]) -> float:
-    if rewritten.query_type not in {"definition", "lifecycle_lookup", "timing_lookup", "test_method_lookup"}:
+    if rewritten.query_type not in {"definition", "lifecycle_lookup", "timing_lookup", "test_method_lookup", "parameter_lookup"}:
         return 0.0
 
     result_type = str(candidate.get("result_type", "") or "")
@@ -156,7 +157,10 @@ def _subtype_bonus(connection, rewritten: RewrittenQuery, candidate: dict[str, o
         if row is None:
             return 0.0
         fact_type = str(row["fact_type"] or "")
-        payload_blob = _norm(str(row["object_value"] or ""))
+        payload = str(row["object_value"] or "")
+        payload_blob = _norm(payload)
+        if rewritten.query_type == "parameter_lookup":
+            return _parameter_subtype_bonus(rewritten, fact_type, payload)
         if rewritten.query_type in {"lifecycle_lookup", "timing_lookup"}:
             if fact_type == "process_fact":
                 if rewritten.query_type == "lifecycle_lookup" and not re.search(
@@ -220,6 +224,216 @@ def _subtype_bonus(connection, rewritten: RewrittenQuery, candidate: dict[str, o
     return 0.0
 
 
+def _parameter_subtype_bonus(rewritten: RewrittenQuery, fact_type: str, payload: str) -> float:
+    normalized_payload = _norm(payload)
+    if not normalized_payload:
+        return 0.0
+    requested_tables = _requested_table_numbers(rewritten)
+    payload_tables = _table_numbers(payload)
+    table_match = bool(requested_tables and payload_tables and requested_tables & payload_tables)
+    table_mismatch = bool(requested_tables and payload_tables and not requested_tables & payload_tables)
+    parameter_terms = _parameter_anchor_terms(rewritten)
+    matched_terms = [term for term in parameter_terms if _norm(term) in normalized_payload]
+    field_matches = _parameter_field_matches(rewritten, payload)
+
+    bonus = 0.0
+    if fact_type == "parameter_value":
+        bonus += 0.38
+        if table_match:
+            bonus += 0.95
+        if table_mismatch:
+            bonus -= 1.05
+        if field_matches["parameter"]:
+            bonus += 1.15
+        if field_matches["symbol"]:
+            bonus += 1.05
+        if field_matches["row_focus"]:
+            bonus += 0.45
+        if field_matches["object"]:
+            bonus += 0.45
+        if field_matches["table_focus"]:
+            bonus += 0.12
+        if matched_terms and not any(field_matches[key] for key in ("parameter", "symbol", "row_focus")):
+            bonus += min(0.35, 0.12 * len(matched_terms))
+        if requested_tables and (field_matches["object"] or field_matches["table_focus"]) and not any(
+            field_matches[key] for key in ("parameter", "symbol", "row_focus")
+        ):
+            bonus -= 0.18
+        return bonus
+    if fact_type == "table_requirement":
+        if table_match:
+            bonus += 0.55
+        if matched_terms:
+            bonus += min(0.5, 0.18 * len(matched_terms))
+        if table_mismatch:
+            bonus -= 0.85
+        return bonus
+    if fact_type in {"term_definition", "concept_definition"}:
+        return 0.08 if matched_terms else -0.12
+    if fact_type in {"process_fact", "transition_fact", "section_heading"}:
+        return -0.18
+    return 0.0
+
+
+def _parameter_anchor_terms(rewritten: RewrittenQuery) -> list[str]:
+    values = [
+        rewritten.original_query,
+        rewritten.normalized_query,
+        rewritten.target_topic,
+        *rewritten.must_terms,
+        *rewritten.protected_anchor_terms,
+    ]
+    text = " ".join(str(item or "") for item in values)
+    terms: list[str] = []
+    for match in re.finditer(r"表\s*[A-Z]\s*[.．]\s*\d+", text, re.I):
+        _append_parameter_anchor_term(terms, match.group(0))
+    for term in re.findall(r"[A-Za-z][A-Za-z0-9+'/-]{1,10}", text):
+        _append_parameter_anchor_term(terms, term)
+    cleaned_text = re.sub(r"(?:GB|GBT|GB/T|ISO|IEC|QC|QC/T)[/—\-\s]*\d+(?:\.\d+)?(?:—\d{4})?", " ", text, flags=re.I)
+    cleaned_text = re.sub(r"表\s*[A-Z]\s*[.．]\s*\d+|表\s*\d+", " ", cleaned_text, flags=re.I)
+    cleaned_text = re.sub(
+        r"(有哪些定义|定义有哪些|参数有哪些|参数是什么|哪些参数|参数值|是什么意思|是什么|代表什么|表示什么|指什么|含义|如何理解|怎么理解|[？?])",
+        " ",
+        cleaned_text,
+    )
+    cleaned_text = cleaned_text.replace("的参数", " ").replace("参数", " ")
+    for chunk in re.split(r"[\s,，;；:：/|]+", cleaned_text):
+        chunk = chunk.strip()
+        if not chunk or not re.search(r"[\u4e00-\u9fff]", chunk):
+            continue
+        for part in re.split(r"的|和|与", chunk):
+            part = part.strip()
+            if not part:
+                continue
+            _append_parameter_anchor_term(terms, part)
+            if len(part) > 2:
+                for size in range(2, min(6, len(part)) + 1):
+                    _append_parameter_anchor_term(terms, part[-size:])
+    return terms[:12]
+
+
+def _append_parameter_anchor_term(terms: list[str], term: str) -> None:
+    cleaned = str(term or "").strip()
+    if not cleaned or cleaned in terms:
+        return
+    if _is_generic_parameter_anchor(cleaned):
+        return
+    terms.append(cleaned)
+
+
+def _is_generic_parameter_anchor(term: str) -> bool:
+    normalized = _norm(term)
+    return normalized in {
+        "参数",
+        "定义",
+        "是什么",
+        "什么意思",
+        "控制导引",
+        "控制导引电路",
+        "电路",
+        "表",
+        "table",
+    }
+
+
+def _parameter_field_matches(rewritten: RewrittenQuery, payload: str) -> dict[str, bool]:
+    data = _safe_json_object(payload)
+    query_text = " ".join(
+        str(item or "")
+        for item in [
+            rewritten.original_query,
+            rewritten.normalized_query,
+            rewritten.target_topic,
+            *rewritten.must_terms,
+            *rewritten.protected_anchor_terms,
+        ]
+    )
+    query_norm = _norm(query_text)
+    query_upper = query_text.upper()
+    if not isinstance(data, dict):
+        return {"parameter": False, "symbol": False, "object": False, "row_focus": False, "table_focus": False}
+    parameter = _clean_parameter_field(data.get("parameter"))
+    symbol = _clean_parameter_field(data.get("symbol"))
+    object_name = _clean_parameter_field(data.get("object"))
+    return {
+        "parameter": _query_contains_field(query_norm, parameter),
+        "symbol": _query_contains_symbol(query_text, symbol),
+        "object": _query_contains_field(query_norm, object_name),
+        "row_focus": _query_contains_any_tag(query_norm, query_upper, data.get("row_focus_tags") or data.get("focus_tags") or []),
+        "table_focus": _query_contains_any_tag(query_norm, query_upper, data.get("table_focus_tags") or []),
+    }
+
+
+def _safe_json_object(value: str) -> dict[str, object] | None:
+    try:
+        payload = json.loads(value)
+    except (TypeError, json.JSONDecodeError):
+        return None
+    return payload if isinstance(payload, dict) else None
+
+
+def _clean_parameter_field(value: object) -> str:
+    text = str(value or "").strip()
+    text = re.sub(r"\^[A-Za-z0-9]+", "", text)
+    text = re.sub(r"[（(][^)）]*[)）]", "", text)
+    text = text.strip(" *:：;；,，")
+    return text
+
+
+def _query_contains_field(query_norm: str, value: str) -> bool:
+    if not value or _is_generic_parameter_anchor(value):
+        return False
+    normalized = _norm(value)
+    if not normalized:
+        return False
+    if re.fullmatch(r"[a-z0-9+\-/'_.]{1,2}", normalized, re.I):
+        return False
+    return normalized in query_norm
+
+
+def _query_contains_symbol(query_text: str, symbol: str) -> bool:
+    if not symbol:
+        return False
+    if len(symbol) < 2:
+        return False
+    return bool(re.search(rf"(?<![A-Za-z0-9]){re.escape(symbol)}(?![A-Za-z0-9])", query_text, re.I))
+
+
+def _query_contains_any_tag(query_norm: str, query_upper: str, tags: list[object]) -> bool:
+    for tag in tags:
+        text = _clean_parameter_field(tag)
+        if not text or _is_generic_parameter_anchor(text):
+            continue
+        upper = text.upper()
+        if upper in {"CP", "CC", "PE", "PWM"} and re.search(rf"(?<![A-Z0-9]){re.escape(upper)}(?![A-Z0-9])", query_upper):
+            return True
+        if re.fullmatch(r"CC\d", upper) and re.search(r"(?<![A-Z0-9])CC(?![A-Z0-9])", query_upper):
+            return True
+        normalized = _norm(text)
+        if len(normalized) > 1 and normalized in query_norm:
+            return True
+    return False
+
+
+def _requested_table_numbers(rewritten: RewrittenQuery) -> set[str]:
+    values = [
+        rewritten.original_query,
+        rewritten.normalized_query,
+        rewritten.target_topic,
+        *rewritten.must_terms,
+        *rewritten.should_terms,
+        *rewritten.aliases,
+    ]
+    return _table_numbers(" ".join(str(item or "") for item in values))
+
+
+def _table_numbers(value: str) -> set[str]:
+    return {
+        f"{match.group(1).upper()}.{match.group(2)}"
+        for match in re.finditer(r"表\s*([A-Z])\s*[.．]\s*(\d+)", str(value or ""), re.I)
+    }
+
+
 def _object_anchor_adjustment(connection, rewritten: RewrittenQuery, candidate: dict[str, object], snippet: str) -> tuple[float, float]:
     positives, negatives = _object_anchor_terms(rewritten)
     if not positives and not negatives:
@@ -248,8 +462,7 @@ def _object_anchor_terms(rewritten: RewrittenQuery) -> tuple[list[str], list[str
             rewritten.normalized_query,
             rewritten.target_topic,
             *rewritten.must_terms,
-            *rewritten.should_terms,
-            *rewritten.aliases,
+            *rewritten.protected_anchor_terms,
         ]
     )
     if re.search(r"\bOBC\b|车载充电机|on-?board charger", text, re.I):
