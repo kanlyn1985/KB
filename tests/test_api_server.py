@@ -9,11 +9,17 @@ from pathlib import Path
 import pytest
 
 from enterprise_agent_kb.api_server import ApiServer
+from enterprise_agent_kb.api_server import _attach_ingestion_health
 from enterprise_agent_kb.api_server import _attach_regression_health
+from enterprise_agent_kb.api_server import _attach_retrieval_health
+from enterprise_agent_kb.api_server import _graph_contribution_snapshot
 from enterprise_agent_kb.api_server import _latest_eval_with_quality
 from enterprise_agent_kb.api_server import _latest_uncovered_priority_snapshot
+from enterprise_agent_kb.api_server import _repair_task_status_counts_from_tasks
+from enterprise_agent_kb.api_server import _workspace_coverage_snapshot
+from enterprise_agent_kb.api_server import _workspace_parse_risk_snapshot
 from enterprise_agent_kb.bootstrap import initialize_workspace
-from enterprise_agent_kb.closed_loop_store import record_eval_run, record_retrieval_run, sync_golden_cases
+from enterprise_agent_kb.closed_loop_store import _runtime_code_version, record_eval_run, record_retrieval_run, sync_golden_cases
 from enterprise_agent_kb.config import AppPaths
 from enterprise_agent_kb.db import connect
 from test_helpers import resolve_doc_id_by_filename
@@ -75,6 +81,144 @@ def test_dashboard_quality_eval_selection_does_not_cross_loop_pollute(tmp_path: 
         assert retrieval_eval["suite_id"] == "regression:user_query_retrieval"
         assert answer_eval is not None
         assert answer_eval["suite_id"] == "regression:query_repair_smoke"
+    finally:
+        connection.close()
+
+
+@pytest.mark.unit
+def test_dashboard_quality_eval_selection_can_require_current_code_version(tmp_path: Path) -> None:
+    paths = initialize_workspace(tmp_path / "kb", Path("src/enterprise_agent_kb/schema.sql"))
+    connection = connect(paths.db_file)
+    try:
+        current_code_version = _runtime_code_version()
+        stale_answer_case = {"case_id": "CASE-ANS-OLD", "query": "Q1", "assert_mode": "rich_answer"}
+        current_retrieval_case = {"case_id": "CASE-RET", "query": "Q2", "assert_mode": "context_contains"}
+        record_eval_run(
+            connection,
+            suite_id="golden:DOC-OLD",
+            cases=[stale_answer_case],
+            summary={"suite": "old_answer"},
+            command="answer",
+            success=True,
+            output="",
+            code_version="legacy-unknown",
+            case_results=[
+                {
+                    "case_id": "CASE-ANS-OLD",
+                    "passed": False,
+                    "failure_reason": "answer_render_artifact",
+                    "metrics": {
+                        "answer_quality": {
+                            "answer_pass": False,
+                            "failure_attribution": "answer_render_artifact",
+                            "forbidden_hit_count": 0,
+                            "render_artifact_count": 1,
+                        }
+                    },
+                }
+            ],
+        )
+        record_eval_run(
+            connection,
+            suite_id="regression:user_query_retrieval:current-code",
+            cases=[current_retrieval_case],
+            summary={"suite": "current_retrieval"},
+            command="retrieval",
+            success=True,
+            output="",
+            code_version=current_code_version,
+            case_results=[
+                {
+                    "case_id": "CASE-RET",
+                    "passed": True,
+                    "metrics": {
+                        "retrieval_quality": {
+                            "recall_at_5": 1.0,
+                            "recall_at_10": 1.0,
+                            "mrr": 1.0,
+                            "negative_hit_rate": 0.0,
+                            "failure_attribution": "ok",
+                        }
+                    },
+                }
+            ],
+        )
+        connection.commit()
+
+        historical_answer_eval = _latest_eval_with_quality(connection, "answer_quality")
+        current_answer_eval = _latest_eval_with_quality(
+            connection,
+            "answer_quality",
+            code_version=current_code_version,
+        )
+        current_retrieval_eval = _latest_eval_with_quality(
+            connection,
+            "retrieval_quality",
+            code_version=current_code_version,
+        )
+
+        assert historical_answer_eval is not None
+        assert historical_answer_eval["suite_id"] == "golden:DOC-OLD"
+        assert current_answer_eval is None
+        assert current_retrieval_eval is not None
+        assert current_retrieval_eval["suite_id"] == "regression:user_query_retrieval:current-code"
+    finally:
+        connection.close()
+
+
+@pytest.mark.unit
+def test_dashboard_retrieval_eval_selection_prefers_user_query_suite(tmp_path: Path) -> None:
+    paths = initialize_workspace(tmp_path / "kb", Path("src/enterprise_agent_kb/schema.sql"))
+    connection = connect(paths.db_file)
+    try:
+        current_code_version = _runtime_code_version()
+        user_case = {"case_id": "CASE-UQ", "query": "Q1", "assert_mode": "context_contains"}
+        smoke_case = {"case_id": "CASE-SMOKE", "query": "Q2", "assert_mode": "rich_answer"}
+        record_eval_run(
+            connection,
+            suite_id="regression:user_query_retrieval:current-code",
+            cases=[user_case],
+            summary={"suite": "user_query_retrieval"},
+            command="retrieval",
+            success=True,
+            output="",
+            code_version=current_code_version,
+            case_results=[
+                {
+                    "case_id": "CASE-UQ",
+                    "passed": True,
+                    "metrics": {"retrieval_quality": {"recall_at_5": 0.8, "failure_attribution": "ok"}},
+                }
+            ],
+        )
+        record_eval_run(
+            connection,
+            suite_id="regression:query_repair_smoke",
+            cases=[smoke_case],
+            summary={"suite": "query_repair_smoke"},
+            command="smoke",
+            success=True,
+            output="",
+            code_version=current_code_version,
+            case_results=[
+                {
+                    "case_id": "CASE-SMOKE",
+                    "passed": True,
+                    "metrics": {"retrieval_quality": {"recall_at_5": 1.0, "failure_attribution": "ok"}},
+                }
+            ],
+        )
+        connection.commit()
+
+        retrieval_eval = _latest_eval_with_quality(
+            connection,
+            "retrieval_quality",
+            code_version=current_code_version,
+            suite_id_prefix="regression:user_query_retrieval",
+        )
+
+        assert retrieval_eval is not None
+        assert retrieval_eval["suite_id"] == "regression:user_query_retrieval:current-code"
     finally:
         connection.close()
 
@@ -449,6 +593,19 @@ def test_api_lists_eval_runs_and_details(tmp_path: Path) -> None:
         assert filtered["failure_count"] == 1
         assert filtered["failures"][0]["case_id"] == case_id
 
+        body = json.dumps({"eval_run_id": eval_run_id})
+        conn.request(
+            "POST",
+            "/draft-golden-from-failures",
+            body=body.encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+        )
+        response = conn.getresponse()
+        assert response.status == 200
+        batch_payload = json.loads(response.read().decode("utf-8"))
+        assert batch_payload["drafted_count"] == 1
+        assert batch_payload["total_failure_draft_count"] == 1
+
         body = json.dumps({"eval_run_id": eval_run_id, "case_id": case_id})
         conn.request(
             "POST",
@@ -526,6 +683,9 @@ def test_api_lists_retrieval_runs_and_details(tmp_path: Path) -> None:
         assert payload["runs"][0]["run_id"] == run_id
         assert payload["runs"][0]["channels"] == ["graph", "facts"]
         assert payload["runs"][0]["hit_count"] == 2
+        assert payload["runs"][0]["evidence_hit_count"] == 1
+        assert payload["runs"][0]["direct_evidence_hit_count"] == 1
+        assert payload["runs"][0]["linked_evidence_hit_count"] == 0
 
         body = json.dumps({"run_id": run_id})
         conn.request(
@@ -539,6 +699,9 @@ def test_api_lists_retrieval_runs_and_details(tmp_path: Path) -> None:
         detail = json.loads(response.read().decode("utf-8"))
         assert detail["run_id"] == run_id
         assert detail["retrieved_evidence_ids"] == ["EV-1"]
+        assert detail["evidence_hit_count"] == 1
+        assert detail["direct_evidence_hit_count"] == 1
+        assert detail["linked_evidence_hit_count"] == 0
         assert detail["reranked_ids"] == ["fact:FACT-1", "evidence:EV-1"]
         assert detail["scores"]["fact:FACT-1"] == 0.91
     finally:
@@ -708,6 +871,446 @@ def test_regression_health_flags_missing_pytest_counts() -> None:
     assert loop["status"] == "warn"
     assert any(risk["code"] == "missing_pytest_counts" for risk in loop["risks"])
     assert any(risk["code"] == "missing_eval_scope" for risk in loop["risks"])
+
+
+@pytest.mark.unit
+def test_workspace_coverage_snapshot_keeps_source_unit_and_evidence_metrics_separate(tmp_path: Path) -> None:
+    schema_path = Path("src/enterprise_agent_kb/schema.sql")
+    paths = initialize_workspace(tmp_path / "knowledge_base", schema_path)
+    now = "2026-05-10T00:00:00+00:00"
+    connection = connect(paths.db_file)
+    try:
+        connection.execute(
+            """
+            INSERT INTO source_units (
+                unit_id, doc_id, page_no, block_id, unit_type, text,
+                normalized_text, importance, expected_knowledge_type,
+                status, metadata_json, created_at, updated_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            ("SU-1", "DOC-TEST", 1, "BLK-1", "definition", "a", "a", "high", "term", "covered", "{}", now, now),
+        )
+        connection.execute(
+            """
+            INSERT INTO source_units (
+                unit_id, doc_id, page_no, block_id, unit_type, text,
+                normalized_text, importance, expected_knowledge_type,
+                status, metadata_json, created_at, updated_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            ("SU-2", "DOC-TEST", 2, "BLK-2", "definition", "b", "b", "high", "term", "u3_not_tested", "{}", now, now),
+        )
+        connection.execute(
+            """
+            INSERT INTO source_unit_fact_map (
+                unit_id, fact_id, doc_id, support_type, created_at
+            )
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            ("SU-1", "FACT-1", "DOC-TEST", "unit_test", now),
+        )
+        connection.execute(
+            """
+            INSERT INTO source_unit_evidence_map (
+                unit_id, evidence_id, doc_id, support_type, created_at
+            )
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            ("SU-1", "EV-1", "DOC-TEST", "unit_test", now),
+        )
+        connection.commit()
+
+        snapshot = _workspace_coverage_snapshot(connection)
+    finally:
+        connection.close()
+
+    assert snapshot["source_unit_count"] == 2
+    assert snapshot["source_unit_coverage_rate"] == 0.5
+    assert snapshot["legacy_evidence_coverage_rate"] == 0.5
+    assert snapshot["evidence_coverage_rate"] == 0.5
+    assert snapshot["fact_coverage_rate"] == 0.5
+    assert snapshot["metric_contract"]["legacy_evidence_coverage_rate"] == "deprecated_alias_for_source_unit_coverage_rate"
+    assert snapshot["metric_contract"]["evidence_coverage_rate"] == "source_unit_evidence_map distinct unit_id / source_units"
+    assert snapshot["metric_contract"]["fact_coverage_rate"] == "source_unit_fact_map distinct unit_id / source_units"
+
+
+@pytest.mark.unit
+def test_workspace_parse_risk_snapshot_separates_raw_quality_from_actionable_parse_gaps(tmp_path: Path) -> None:
+    schema_path = Path("src/enterprise_agent_kb/schema.sql")
+    paths = initialize_workspace(tmp_path / "parse_risk_runtime", schema_path)
+    now = "2026-05-10T00:00:00+00:00"
+    connection = connect(paths.db_file)
+    try:
+        for page_no in [1, 2, 3]:
+            connection.execute(
+                """
+                INSERT INTO pages (
+                    page_id, doc_id, page_no, width, height, parser_confidence,
+                    ocr_confidence, risk_level, page_status, screenshot_path, created_at, updated_at
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    f"PAGE-{page_no}",
+                    "DOC-TEST",
+                    page_no,
+                    None,
+                    None,
+                    None,
+                    None,
+                    "high",
+                    "review_required",
+                    None,
+                    now,
+                    now,
+                ),
+            )
+        for evidence_id, page_no in [("EV-2", 2), ("EV-3", 3)]:
+            connection.execute(
+                """
+                INSERT INTO evidence (
+                    evidence_id, doc_id, page_id, block_id, block_type, raw_text, normalized_text,
+                    image_ref, table_ref, page_no, confidence, risk_level, evidence_status, created_at, updated_at
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    evidence_id,
+                    "DOC-TEST",
+                    f"PAGE-{page_no}",
+                    f"BLK-{page_no}",
+                    "text",
+                    "raw",
+                    "normalized",
+                    None,
+                    None,
+                    page_no,
+                    0.8,
+                    "high",
+                    "ready",
+                    now,
+                    now,
+                ),
+            )
+        connection.execute(
+            """
+            INSERT INTO source_units (
+                unit_id, doc_id, page_no, block_id, unit_type, text, normalized_text,
+                importance, expected_knowledge_type, status, metadata_json, created_at, updated_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            ("SU-3", "DOC-TEST", 3, "BLK-3", "requirement", "text", "normalized", "high", "requirement", "covered", "{}", now, now),
+        )
+        connection.execute(
+            """
+            INSERT INTO facts (
+                fact_id, fact_type, predicate, object_value, confidence, fact_status,
+                source_doc_id, created_at, updated_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            ("FACT-3", "requirement", "states", "normalized", 0.9, "active", "DOC-TEST", now, now),
+        )
+        connection.execute(
+            "INSERT INTO fact_evidence_map (fact_id, evidence_id, support_type) VALUES (?, ?, ?)",
+            ("FACT-3", "EV-3", "unit_test"),
+        )
+        report = {
+            "pages": [
+                {"page_no": 1, "risk_flags": ["no_text"]},
+                {"page_no": 2, "risk_flags": ["symbol_noise"]},
+                {"page_no": 3, "risk_flags": ["low_readability"]},
+            ]
+        }
+        connection.execute(
+            """
+            INSERT INTO quality_reports (
+                doc_id, overall_score, ocr_avg_confidence, structure_score, table_score,
+                fact_alignment_score, conflict_count, high_risk_page_count, review_required_count,
+                blocked_count, report_json, created_at, updated_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            ("DOC-TEST", 0.5, 0.8, 0.5, None, None, 0, 3, 3, 0, json.dumps(report), now, now),
+        )
+        connection.commit()
+
+        snapshot = _workspace_parse_risk_snapshot(connection)
+    finally:
+        connection.close()
+
+    assert snapshot["high_risk_page_count"] == 3
+    assert snapshot["actionable_parse_risk_pages"] == 1
+    assert snapshot["evidence_backed_high_risk_pages"] == 2
+    assert snapshot["source_unit_backed_high_risk_pages"] == 1
+    assert snapshot["fact_backed_high_risk_pages"] == 1
+    assert snapshot["fully_backed_high_risk_pages"] == 1
+    assert snapshot["root_cause_counts"] == {
+        "no_evidence": 1,
+        "evidence_without_source_unit": 1,
+        "source_unit_without_fact": 0,
+        "fully_backed": 1,
+    }
+    assert snapshot["samples"]["no_evidence"][0]["risk_flags"] == ["no_text"]
+
+
+@pytest.mark.unit
+def test_ingestion_health_flags_unavailable_evidence_and_fact_coverage() -> None:
+    loop = {
+        "document_count": 1,
+        "source_unit_count": 2,
+        "evidence_count": 3,
+        "fact_count": 4,
+        "parse_risk_pages": 0,
+        "source_unit_coverage": {
+            "source_unit_count": 2,
+            "source_unit_coverage_rate": 0.5,
+            "evidence_coverage_rate": None,
+            "fact_coverage_rate": None,
+            "uncovered_units": 1,
+        },
+        "uncovered_priority": {"root_cause_counts": {}},
+    }
+
+    _attach_ingestion_health(loop)
+
+    risk_codes = {risk["code"] for risk in loop["risks"]}
+    assert "evidence_coverage_unlinked" in risk_codes
+    assert "fact_coverage_unlinked" in risk_codes
+
+
+@pytest.mark.unit
+def test_ingestion_health_uses_actionable_ingestion_risks() -> None:
+    loop = {
+        "document_count": 1,
+        "source_unit_count": 2,
+        "evidence_count": 2,
+        "fact_count": 2,
+        "parse_risk_pages": 5,
+        "actionable_parse_risk_pages": 0,
+        "parse_risk_profile": {
+            "high_risk_page_count": 5,
+            "actionable_parse_risk_pages": 0,
+            "root_cause_counts": {"fully_backed": 5},
+        },
+        "source_unit_coverage": {
+            "source_unit_count": 2,
+            "source_unit_coverage_rate": 0.5,
+            "evidence_coverage_rate": 1.0,
+            "fact_coverage_rate": 1.0,
+            "uncovered_units": 1,
+        },
+        "uncovered_priority": {"root_cause_counts": {"test_gap_rejected": 1}},
+    }
+
+    _attach_ingestion_health(loop)
+
+    assert loop["status"] == "ok"
+    assert loop["actionable_uncovered_units"] == 0
+    assert {risk["code"] for risk in loop["risks"]} == set()
+
+
+@pytest.mark.unit
+def test_graph_contribution_snapshot_tracks_retained_and_lost_candidates(tmp_path: Path) -> None:
+    schema_path = Path("src/enterprise_agent_kb/schema.sql")
+    paths = initialize_workspace(tmp_path / "knowledge_base", schema_path)
+    connection = connect(paths.db_file)
+    try:
+        retained_id = record_retrieval_run(
+            connection,
+            query="CP是什么意思",
+            query_type="definition",
+            doc_scope="global",
+            retrieved_evidence_ids=[],
+            reranked_ids=["fact:FACT-1", "wiki:WPAGE-1"],
+            scores={"fact:FACT-1": 1.0},
+            metadata={
+                "retrieval_plan": {"channels": ["graph", "facts"], "graph_candidate_count": 2},
+                "graph_hit_count": 2,
+                "rerank_explanations": [
+                    {"id": "fact:FACT-1", "graph_source": True},
+                    {"id": "wiki:WPAGE-1", "graph_source": False},
+                ],
+            },
+        )
+        lost_id = record_retrieval_run(
+            connection,
+            query="软件架构分析有哪些活动",
+            query_type="lifecycle_lookup",
+            doc_scope="global",
+            retrieved_evidence_ids=[],
+            reranked_ids=["fact:FACT-2"],
+            scores={"fact:FACT-2": 0.9},
+            metadata={
+                "retrieval_plan": {"channels": ["graph", "facts"], "graph_candidate_count": 3},
+                "graph_hit_count": 3,
+                "rerank_explanations": [{"id": "fact:FACT-2", "graph_source": False}],
+            },
+        )
+        record_retrieval_run(
+            connection,
+            query="OBC输入过压怎么测",
+            query_type="test_method_lookup",
+            doc_scope="global",
+            retrieved_evidence_ids=["EV-1"],
+            reranked_ids=["evidence:EV-1"],
+            scores={"evidence:EV-1": 1.0},
+            metadata={
+                "retrieval_plan": {"channels": ["facts", "evidence"]},
+                "rerank_explanations": [{"id": "evidence:EV-1", "graph_source": False}],
+            },
+        )
+        connection.commit()
+
+        snapshot = _graph_contribution_snapshot(connection)
+    finally:
+        connection.close()
+
+    assert retained_id is not None
+    assert lost_id is not None
+    assert snapshot["sample_size"] == 3
+    assert snapshot["graph_requested_runs"] == 2
+    assert snapshot["graph_candidate_runs"] == 2
+    assert snapshot["graph_top_runs"] == 1
+    assert snapshot["graph_lost_after_rerank_runs"] == 1
+    assert snapshot["graph_top_hit_count"] == 1
+    assert snapshot["graph_candidate_count_total"] == 5
+    assert snapshot["graph_request_rate"] == 0.666667
+    assert snapshot["graph_candidate_rate"] == 1.0
+    assert snapshot["graph_retention_rate"] == 0.5
+    assert snapshot["current_code_version_runs"] == 3
+    assert snapshot["stale_or_unknown_runs"] == 0
+    assert snapshot["current_code_version"] in snapshot["code_version_counts"]
+    assert snapshot["current_version_graph"]["sample_size"] == 3
+    assert snapshot["current_version_graph"]["graph_candidate_runs"] == 2
+    assert snapshot["current_version_graph"]["graph_top_runs"] == 1
+    assert snapshot["current_version_graph"]["graph_lost_after_rerank_runs"] == 1
+    assert snapshot["current_version_graph"]["graph_retention_rate"] == 0.5
+    assert snapshot["by_query_type"]["definition"]["graph_top_runs"] == 1
+    assert snapshot["by_query_type"]["lifecycle_lookup"]["graph_lost_after_rerank_runs"] == 1
+    assert snapshot["lost_after_rerank_samples"][0]["run_id"] == lost_id
+    assert snapshot["lost_after_rerank_samples"][0]["reranked_ids"] == ["fact:FACT-2"]
+
+
+@pytest.mark.unit
+def test_retrieval_health_flags_graph_lost_after_rerank() -> None:
+    loop = {
+        "retrieval_run_count": 4,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "negative_hit_rate": 0.0,
+        "graph_contribution": {
+            "graph_candidate_runs": 4,
+            "graph_top_runs": 1,
+            "graph_lost_after_rerank_runs": 3,
+            "graph_retention_rate": 0.25,
+        },
+    }
+
+    _attach_retrieval_health(loop)
+
+    risk_codes = {risk["code"] for risk in loop["risks"]}
+    assert "graph_lost_after_rerank_dominates" in risk_codes
+
+
+@pytest.mark.unit
+def test_retrieval_health_flags_mixed_retrieval_run_code_versions() -> None:
+    loop = {
+        "retrieval_run_count": 10,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "negative_hit_rate": 0.0,
+        "graph_contribution": {
+            "graph_candidate_runs": 3,
+            "graph_top_runs": 2,
+            "graph_lost_after_rerank_runs": 1,
+            "graph_retention_rate": 0.666667,
+            "current_code_version_runs": 0,
+            "stale_or_unknown_runs": 8,
+        },
+    }
+
+    _attach_retrieval_health(loop)
+
+    risk_codes = {risk["code"] for risk in loop["risks"]}
+    assert "retrieval_runs_mixed_code_versions" in risk_codes
+
+
+@pytest.mark.unit
+def test_retrieval_health_uses_current_version_graph_when_available() -> None:
+    loop = {
+        "retrieval_run_count": 10,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "negative_hit_rate": 0.0,
+        "graph_contribution": {
+            "graph_candidate_runs": 10,
+            "graph_top_runs": 1,
+            "graph_lost_after_rerank_runs": 9,
+            "graph_retention_rate": 0.1,
+            "current_code_version_runs": 6,
+            "stale_or_unknown_runs": 400,
+            "current_version_graph": {
+                "graph_candidate_runs": 6,
+                "graph_top_runs": 6,
+                "graph_lost_after_rerank_runs": 0,
+                "graph_retention_rate": 1.0,
+            },
+        },
+    }
+
+    _attach_retrieval_health(loop)
+
+    risk_codes = {risk["code"] for risk in loop["risks"]}
+    assert "retrieval_runs_mixed_code_versions" not in risk_codes
+    assert "graph_lost_after_rerank_dominates" not in risk_codes
+
+
+@pytest.mark.unit
+def test_regression_health_uses_current_eval_repair_tasks_not_historical_backlog() -> None:
+    current_counts = _repair_task_status_counts_from_tasks([])
+    loop = {
+        "eval_run_count": 4,
+        "latest_run": {
+            "status": "passed",
+            "result_summary": {
+                "total": 8,
+                "passed": 8,
+                "failed": 0,
+                "pytest_counts": {"deselected": 0},
+                "eval_scope": {
+                    "declared_case_count": 8,
+                    "evaluated_case_count": 8,
+                    "unevaluated_case_count": 0,
+                },
+            },
+        },
+        "draft_golden_case_count": 0,
+        "repair_task_count": int(current_counts["open"]),
+        "repair_task_status_counts": current_counts,
+        "historical_repair_task_status_counts": {"open": 21, "reopened": 2, "proposed": 19},
+        "repair_task_coverage": {
+            "failure_case_count": 0,
+            "covered_failure_case_count": 0,
+            "uncovered_failure_case_count": 0,
+            "coverage_rate": None,
+            "uncovered_case_ids": [],
+        },
+        "artifacts": {"comparison": {}},
+    }
+
+    _attach_regression_health(loop)
+
+    risk_codes = {risk["code"] for risk in loop["risks"]}
+    assert "reopened_repair_tasks" not in risk_codes
+    assert "open_repair_tasks" not in risk_codes
+    assert loop["status"] == "ok"
 
 
 @pytest.mark.unit

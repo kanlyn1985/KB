@@ -37,5 +37,19 @@ def test_demo_page_exists() -> None:
     assert "renderGoldenResult" in content
     assert "覆盖召回" in content
     assert "答案质量" in content
+    assert "documentScopedTabs" in content
+    assert '["overview", "coverage", "gaps", "drafts", "golden"]' in content
+    assert "renderFailureAnalysis" in content
+    assert "生成 Golden 草案" in content
+    assert "生成全部 Golden 草案" in content
+    assert "/draft-golden-from-failures" in content
+    assert "direct evidence" in content
+    assert "linked evidence" in content
+    assert 'metric("Graph"' in content
+    assert "graph_retention_rate" in content
+    assert "graph_lost_after_rerank_runs" in content
+    assert "current_code_version_runs" in content
+    assert "current_version_graph" in content
+    assert "current retention" in content
     assert "renderCards" in content
     assert "<details>" in content

@@ -6,9 +6,11 @@ from enterprise_agent_kb.bootstrap import initialize_workspace
 from enterprise_agent_kb.closed_loop_store import (
     activate_golden_case_draft,
     backfill_eval_run_scope_metadata,
+    backfill_source_unit_mappings_from_metadata,
     build_failure_analysis,
     compare_eval_runs,
     draft_golden_case_from_failure,
+    draft_golden_cases_from_eval_failures,
     get_retrieval_run_detail,
     list_repair_tasks,
     list_retrieval_runs,
@@ -32,6 +34,8 @@ def test_closed_loop_tables_are_initialized(tmp_path: Path) -> None:
         tables = set(list_tables(connection))
         assert {
             "source_units",
+            "source_unit_fact_map",
+            "source_unit_evidence_map",
             "retrieval_runs",
             "golden_cases",
             "eval_runs",
@@ -55,6 +59,20 @@ def test_closed_loop_tables_are_initialized(tmp_path: Path) -> None:
             "importance",
             "expected_knowledge_type",
             "status",
+        }
+        assert _columns(connection, "source_unit_fact_map") >= {
+            "unit_id",
+            "fact_id",
+            "doc_id",
+            "support_type",
+            "created_at",
+        }
+        assert _columns(connection, "source_unit_evidence_map") >= {
+            "unit_id",
+            "evidence_id",
+            "doc_id",
+            "support_type",
+            "created_at",
         }
         assert _columns(connection, "retrieval_runs") >= {
             "run_id",
@@ -137,6 +155,10 @@ def test_sync_source_units_persists_canonical_metadata(tmp_path: Path) -> None:
                     "source_text": "SWE.2.BP1: 开发软件架构设计。",
                     "source_locator": {"block_id": "BLK-PROC-1"},
                     "metadata": {"knowledge_unit_type": "procedure", "process_code": "SWE.2"},
+                    "covered_by": {
+                        "fact_ids": ["FACT-PROC-1"],
+                        "evidence_ids": ["EV-PROC-1"],
+                    },
                     "coverage_status": "u3_not_tested",
                 }
             ],
@@ -159,6 +181,68 @@ def test_sync_source_units_persists_canonical_metadata(tmp_path: Path) -> None:
         assert row["canonical_key"] == "SWE.2"
         assert row["content_role"] == "process_activity"
         assert "layout_title_noise" in row["quality_flags_json"]
+        fact_link = connection.execute(
+            """
+            SELECT support_type
+            FROM source_unit_fact_map
+            WHERE unit_id = ? AND fact_id = ?
+            """,
+            ("UNIT-PROC-1", "FACT-PROC-1"),
+        ).fetchone()
+        evidence_link = connection.execute(
+            """
+            SELECT support_type
+            FROM source_unit_evidence_map
+            WHERE unit_id = ? AND evidence_id = ?
+            """,
+            ("UNIT-PROC-1", "EV-PROC-1"),
+        ).fetchone()
+        assert fact_link is not None
+        assert fact_link["support_type"] == "coverage_matrix"
+        assert evidence_link is not None
+        assert evidence_link["support_type"] == "coverage_matrix"
+    finally:
+        connection.close()
+
+
+def test_backfill_source_unit_mappings_from_metadata(tmp_path: Path) -> None:
+    paths = initialize_workspace(tmp_path / "kb", SCHEMA_PATH)
+    connection = connect(paths.db_file)
+    now = "2026-04-29T00:00:00+00:00"
+    try:
+        connection.execute(
+            """
+            INSERT INTO source_units (
+                unit_id, doc_id, page_no, block_id, unit_type, text,
+                normalized_text, importance, expected_knowledge_type,
+                status, metadata_json, created_at, updated_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                "UNIT-BACKFILL-1",
+                "DOC-TEST",
+                1,
+                "BLK-1",
+                "requirement_unit",
+                "source",
+                "source",
+                "high",
+                "requirement",
+                "covered",
+                '{"covered_by":{"fact_ids":["FACT-BACKFILL-1"],"evidence_ids":["EV-BACKFILL-1"]}}',
+                now,
+                now,
+            ),
+        )
+        result = backfill_source_unit_mappings_from_metadata(connection, generated_at=now)
+        connection.commit()
+
+        assert result["source_unit_count"] == 1
+        assert result["fact_link_count"] == 1
+        assert result["evidence_link_count"] == 1
+        assert connection.execute("SELECT COUNT(*) FROM source_unit_fact_map").fetchone()[0] == 1
+        assert connection.execute("SELECT COUNT(*) FROM source_unit_evidence_map").fetchone()[0] == 1
     finally:
         connection.close()
 
@@ -203,6 +287,24 @@ def test_reset_workspace_data_clears_closed_loop_tables(tmp_path: Path) -> None:
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             ("RUN-TEST", "CP是什么意思", "definition", "all", "[]", "[]", "{}", "{}", now),
+        )
+        connection.execute(
+            """
+            INSERT INTO source_unit_fact_map (
+                unit_id, fact_id, doc_id, support_type, created_at
+            )
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            ("UNIT-TEST", "FACT-TEST", "DOC-TEST", "unit_test", now),
+        )
+        connection.execute(
+            """
+            INSERT INTO source_unit_evidence_map (
+                unit_id, evidence_id, doc_id, support_type, created_at
+            )
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            ("UNIT-TEST", "EV-TEST", "DOC-TEST", "unit_test", now),
         )
         connection.execute(
             """
@@ -288,6 +390,8 @@ def test_reset_workspace_data_clears_closed_loop_tables(tmp_path: Path) -> None:
     result = reset_workspace_data(paths.root, keep_raw=True)
 
     assert result.deleted_rows["source_units"] == 1
+    assert result.deleted_rows["source_unit_fact_map"] == 1
+    assert result.deleted_rows["source_unit_evidence_map"] == 1
     assert result.deleted_rows["retrieval_runs"] == 1
     assert result.deleted_rows["golden_cases"] == 1
     assert result.deleted_rows["eval_runs"] == 1
@@ -416,6 +520,9 @@ def test_retrieval_run_detail_derives_quality_diagnostics(tmp_path: Path) -> Non
 
         assert detail is not None
         diagnostics = detail["diagnostics"]
+        assert detail["evidence_hit_count"] == 0
+        assert detail["direct_evidence_hit_count"] == 0
+        assert detail["linked_evidence_hit_count"] == 0
         assert diagnostics["channel_hit_counts"]["facts"] == 2
         assert diagnostics["channel_hit_counts"]["wiki"] == 1
         assert diagnostics["graph_status"] == "no_topic_entities"
@@ -454,8 +561,15 @@ def test_retrieval_diagnostics_distinguish_linked_evidence_from_empty_evidence(t
 
         assert run_id is not None
         detail = get_retrieval_run_detail(connection, run_id)
+        runs = list_retrieval_runs(connection, limit=1)
         assert detail is not None
         diagnostics = detail["diagnostics"]
+        assert detail["evidence_hit_count"] == 2
+        assert detail["direct_evidence_hit_count"] == 0
+        assert detail["linked_evidence_hit_count"] == 2
+        assert runs[0]["evidence_hit_count"] == 2
+        assert runs[0]["direct_evidence_hit_count"] == 0
+        assert runs[0]["linked_evidence_hit_count"] == 2
         assert diagnostics["evidence_status"] == "linked"
         assert diagnostics["channel_hit_counts"]["linked_evidence"] == 2
         assert "evidence_only_linked_to_facts" in diagnostics["risk_flags"]
@@ -892,6 +1006,81 @@ def test_failure_can_be_drafted_then_activated_as_golden_case(tmp_path: Path) ->
         ).fetchone()
         assert row["status"] == "active"
         assert row["source"] == "failure_analysis"
+    finally:
+        connection.close()
+
+
+def test_batch_drafts_all_eval_failures_without_using_wrong_actual_hits_as_anchors(tmp_path: Path) -> None:
+    paths = initialize_workspace(tmp_path / "kb", SCHEMA_PATH)
+    cases = [
+        {
+            "case_id": "CASE-FAIL-1",
+            "query": "OBC输入过压怎么测",
+            "must_include": "试验方法及步骤",
+            "assert_mode": "rich_answer",
+            "expected_evidence_shape": "test_method",
+        },
+        {
+            "case_id": "CASE-FAIL-2",
+            "query": "没有明确锚点的问题",
+            "assert_mode": "rich_answer",
+        },
+    ]
+    connection = connect(paths.db_file)
+    try:
+        sync_golden_cases(connection, "DOC-TEST", cases, source="unit_test")
+        eval_run_id = record_eval_run(
+            connection,
+            suite_id="golden:DOC-TEST",
+            cases=cases,
+            summary={"total": 2, "passed": 0, "failed": 2},
+            command="pytest generated",
+            success=False,
+            output="2 failed",
+            code_version="test",
+            case_results=[
+                {
+                    "case_id": "CASE-FAIL-1",
+                    "passed": False,
+                    "failure_reason": "answer_render_artifact",
+                    "retrieved_items": [{"result_type": "fact", "result_id": "FACT-GOOD", "doc_id": "DOC-000009"}],
+                    "answer": "dirty",
+                    "metrics": {
+                        "top_hit_doc_ids": ["DOC-000009"],
+                        "evidence_shape": "test_method",
+                        "answer_quality": {"failure_attribution": "answer_render_artifact", "forbidden_hits": ["&nbsp;"]},
+                    },
+                },
+                {
+                    "case_id": "CASE-FAIL-2",
+                    "passed": False,
+                    "failure_reason": "retrieval_miss",
+                    "retrieved_items": [{"result_type": "fact", "result_id": "FACT-WRONG", "doc_id": "DOC-WRONG"}],
+                    "answer": "wrong",
+                    "metrics": {"retrieval_quality": {"failure_attribution": "retrieval_miss"}},
+                },
+            ],
+        )
+        connection.commit()
+
+        result = draft_golden_cases_from_eval_failures(connection, eval_run_id)
+        connection.commit()
+
+        assert result is not None
+        assert result["drafted_count"] == 2
+        assert result["existing_count"] == 0
+        drafts = {item["source_case_id"]: item for item in result["draft_cases"]}
+        assert drafts["CASE-FAIL-1"]["readiness_status"] == "ready"
+        assert drafts["CASE-FAIL-1"]["must_hit"] == ["试验方法及步骤"]
+        assert drafts["CASE-FAIL-2"]["readiness_status"] == "blocked"
+        assert drafts["CASE-FAIL-2"]["must_hit"] == []
+        assert "FACT-WRONG" not in drafts["CASE-FAIL-2"]["must_hit"]
+        assert "missing_assertion_signal" in drafts["CASE-FAIL-2"]["readiness_blockers"]
+
+        second = draft_golden_cases_from_eval_failures(connection, eval_run_id)
+        assert second is not None
+        assert second["drafted_count"] == 0
+        assert second["existing_count"] == 2
     finally:
         connection.close()
 

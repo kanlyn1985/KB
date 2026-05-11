@@ -10,7 +10,9 @@ from enterprise_agent_kb.bootstrap import initialize_workspace
 from enterprise_agent_kb.cli import build_parser
 from enterprise_agent_kb.coverage import (
     _is_actionable_test_gap_row,
+    _is_source_unit_inventory_noise,
     _soft_contains,
+    _stable_fact_fallback_unit_id,
     build_coverage_for_document,
     build_test_gap_candidates_for_document,
 )
@@ -21,6 +23,7 @@ from enterprise_agent_kb.generated_tests import (
     _trace_metrics_from_context,
     assess_all_coverage_test_draft_readiness,
     assess_coverage_test_draft_readiness_for_document,
+    close_coverage_test_gaps,
     generate_coverage_test_drafts_for_document,
     promote_coverage_test_drafts_for_document,
     run_coverage_promoted_tests_for_document,
@@ -436,6 +439,53 @@ def test_build_test_gap_candidates_can_limit_output(tmp_path: Path) -> None:
 
 
 @pytest.mark.unit
+def test_build_test_gap_candidates_can_exclude_rejected_units(tmp_path: Path) -> None:
+    temp_path, workspace = _make_runtime(tmp_path)
+    doc_id = "DOC-TEST-0001"
+    _seed_minimal_coverage_chain(workspace, doc_id)
+    generated_dir = temp_path / "tests" / "generated"
+    _write_generated_cases(generated_dir, doc_id)
+    build_coverage_for_document(workspace, doc_id, tests_generated_dir=generated_dir)
+
+    first = build_test_gap_candidates_for_document(workspace, doc_id, limit=1)
+    first_payload = json.loads(first.candidates_path.read_text(encoding="utf-8"))
+    excluded_unit_id = first_payload["items"][0]["unit_id"]
+
+    second = build_test_gap_candidates_for_document(
+        workspace,
+        doc_id,
+        limit=10,
+        excluded_unit_ids={excluded_unit_id},
+    )
+    second_payload = json.loads(second.candidates_path.read_text(encoding="utf-8"))
+
+    assert second_payload["excluded_candidate_count"] == 1
+    assert all(item["unit_id"] != excluded_unit_id for item in second_payload["items"])
+
+
+@pytest.mark.unit
+def test_fact_fallback_source_unit_ids_do_not_embed_fact_ids() -> None:
+    first = _stable_fact_fallback_unit_id(
+        "DOC-TEST",
+        "definition_unit",
+        12,
+        "控制导引功能",
+        "通过电子或者机械的方式反映连接状态。",
+    )
+    second = _stable_fact_fallback_unit_id(
+        "DOC-TEST",
+        "definition_unit",
+        12,
+        "控制导引功能",
+        "通过电子或者机械的方式反映连接状态。",
+    )
+
+    assert first == second
+    assert "FACT-" not in first
+    assert first.startswith("DOC-TEST:definition:12:")
+
+
+@pytest.mark.unit
 def test_coverage_soft_contains_normalizes_roman_numerals_and_cjk_punctuation() -> None:
     assert _soft_contains("状态Ⅱ：试验中不能完成设计功能", "状态 II :试验中不能完成设计功能")
     assert _soft_contains(
@@ -453,6 +503,52 @@ def test_coverage_test_gap_filters_low_value_candidates() -> None:
     assert not _is_actionable_test_gap_row({"unit_type": "parameter_row_unit", "semantic_key": "Vdc (C1/C2前)"})
     assert not _is_actionable_test_gap_row({"unit_type": "definition_unit", "semantic_key": "VDA QMC [space] AUTOMOTIVE SPICE®"})
     assert _is_actionable_test_gap_row({"unit_type": "definition_unit", "semantic_key": "控制导引电路 control pilot circuit"})
+
+
+@pytest.mark.unit
+def test_source_unit_inventory_filters_structural_and_symbol_noise() -> None:
+    assert _is_source_unit_inventory_noise(
+        unit_type="requirement_unit",
+        semantic_key="目 次",
+        source_text="前言 1 范围 2 规范性引用文件",
+        quality_flags=[],
+    )
+    assert _is_source_unit_inventory_noise(
+        unit_type="requirement_unit",
+        semantic_key="概述",
+        source_text="应符合表1的规定",
+        quality_flags=[],
+    )
+    assert _is_source_unit_inventory_noise(
+        unit_type="definition_unit",
+        semantic_key="车辆插座 车辆插头 充电电缆 供电插头 车辆接口 供电插座",
+        source_text="标引序号说明： ☆——连接点。",
+        quality_flags=[],
+    )
+    assert _is_source_unit_inventory_noise(
+        unit_type="parameter_row_unit",
+        semantic_key="U1b",
+        source_text="U1b | V | 6 | 6.8 | 5.2",
+        quality_flags=[],
+    )
+    assert _is_source_unit_inventory_noise(
+        unit_type="requirement_unit",
+        semantic_key="3",
+        source_text="从这个方面讲，PRM 或 PAM 也不应该表示产品要素的层次结构。",
+        quality_flags=[],
+    )
+    assert _is_source_unit_inventory_noise(
+        unit_type="definition_unit",
+        semantic_key="条款 6.2，“过程评估模型范围”",
+        source_text="Automotive SPICE 过程参考模型满足 ISO/IEC 33004:2015 条款 5 的要求。",
+        quality_flags=[],
+    )
+    assert not _is_source_unit_inventory_noise(
+        unit_type="requirement_unit",
+        semantic_key="噪声",
+        source_text="逆变器在 40 dB(A)～45 dB(A) 的环境中人耳距离逆变器 30 cm 应不能明显感觉到逆变器的运行声音。",
+        quality_flags=[],
+    )
 
 
 @pytest.mark.unit
@@ -707,6 +803,34 @@ def test_build_all_docs_uncovered_priority_report(tmp_path: Path) -> None:
 
 
 @pytest.mark.unit
+def test_uncovered_priority_report_classifies_rejected_test_gaps(tmp_path: Path) -> None:
+    temp_path, workspace = _make_runtime(tmp_path)
+    doc_id = "DOC-TEST-0001"
+    _seed_minimal_coverage_chain(workspace, doc_id)
+    generated_dir = temp_path / "tests" / "generated"
+    _write_generated_cases(generated_dir, doc_id)
+    build_coverage_for_document(workspace, doc_id, tests_generated_dir=generated_dir)
+    matrix_path = workspace / "coverage_reports" / f"{doc_id}.coverage_matrix.json"
+    matrix = json.loads(matrix_path.read_text(encoding="utf-8"))
+    rejected_unit_id = next(
+        item["unit_id"]
+        for item in matrix["items"]
+        if item.get("coverage_status") == "u3_not_tested"
+    )
+    (workspace / "coverage_reports" / "coverage_test_gap_rejections.json").write_text(
+        json.dumps({"documents": {doc_id: {rejected_unit_id: {"quality_flags": ["weak_anchor"]}}}}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+    result = build_all_docs_uncovered_priority_report(workspace, output_dir=temp_path / "reports")
+    payload = json.loads(result.json_path.read_text(encoding="utf-8"))
+
+    issue = next(item for item in payload["top_issues"] if item["unit_id"] == rejected_unit_id)
+    assert issue["root_cause"] == "test_gap_rejected"
+    assert payload["root_cause_counts"]["test_gap_rejected"] >= 1
+
+
+@pytest.mark.unit
 def test_uncovered_priority_report_classifies_low_value_parameter_rows_as_noise(tmp_path: Path) -> None:
     temp_path, workspace = _make_runtime(tmp_path)
     doc_id = "DOC-TEST-0001"
@@ -813,6 +937,36 @@ def test_promote_coverage_test_drafts_into_golden_suite(tmp_path: Path) -> None:
     assert run_result["case_count"] >= 1
     assert run_result["validation_mode"] == "trace"
     assert run_result["success"] is True
+
+
+@pytest.mark.unit
+def test_close_coverage_test_gaps_runs_full_golden_gap_loop(tmp_path: Path) -> None:
+    temp_path, workspace = _make_runtime(tmp_path)
+    doc_id = "DOC-TEST-0001"
+    _seed_minimal_coverage_chain(workspace, doc_id)
+    generated_dir = temp_path / "tests" / "generated"
+    _write_generated_cases(generated_dir, doc_id)
+    build_coverage_for_document(workspace, doc_id, tests_generated_dir=generated_dir)
+
+    result = close_coverage_test_gaps(
+        workspace,
+        doc_ids=[doc_id],
+        limit_per_doc=2,
+        validation_mode="trace",
+        promote=True,
+    )
+
+    assert result["document_count"] == 1
+    assert result["totals"]["draft_case_count"] >= 1
+    assert result["totals"]["validation_passed_count"] >= 1
+    assert result["totals"]["promoted_case_count"] >= 1
+    assert "pruned_obsolete_case_count" in result["documents"][0]
+    assert result["totals"]["coverage_test_failed"] == 0
+    assert Path(str(result["json_path"])).exists()
+    assert Path(str(result["uncovered_priority_report"]["json_path"])).exists()
+
+    golden_payload = json.loads((generated_dir / f"{doc_id}.golden.json").read_text(encoding="utf-8"))
+    assert any(case.get("source") == "coverage" for case in golden_payload["cases"])
 
 
 @pytest.mark.unit
@@ -943,6 +1097,7 @@ def test_cli_parser_contains_build_coverage_command() -> None:
     assert "build-coverage" in commands
     assert "build-test-gaps" in commands
     assert "generate-coverage-test-drafts" in commands
+    assert "close-coverage-test-gaps" in commands
     assert "validate-coverage-test-drafts" in commands
     assert "assess-coverage-test-draft-readiness" in commands
     assert "promote-coverage-test-drafts" in commands

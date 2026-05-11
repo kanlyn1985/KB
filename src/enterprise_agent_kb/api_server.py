@@ -17,11 +17,15 @@ from .answer_api import answer_query
 from .closed_loop_store import (
     activate_golden_case_draft,
     backfill_eval_run_scope_metadata,
+    backfill_source_unit_mappings_from_metadata,
     build_failure_analysis,
     compare_eval_runs,
     draft_golden_case_from_failure,
+    draft_golden_cases_from_eval_failures,
     get_eval_run_detail,
     get_retrieval_run_detail,
+    ensure_source_unit_mapping_tables,
+    _runtime_code_version,
     list_eval_runs,
     list_repair_tasks,
     list_retrieval_runs,
@@ -161,6 +165,7 @@ class ApiRequestHandler(BaseHTTPRequestHandler):
             "/repair-tasks": self._handle_repair_tasks,
             "/update-repair-task": self._handle_update_repair_task,
             "/draft-golden-from-failure": self._handle_draft_golden_from_failure,
+            "/draft-golden-from-failures": self._handle_draft_golden_from_failures,
             "/activate-golden-draft": self._handle_activate_golden_draft,
         }
         handler = routes.get(parsed.path)
@@ -662,6 +667,33 @@ class ApiRequestHandler(BaseHTTPRequestHandler):
             return
         self._write_json(HTTPStatus.OK, result)
 
+    def _handle_draft_golden_from_failures(self, body: dict[str, Any]) -> None:
+        eval_run_id = str(body.get("eval_run_id", "")).strip()
+        if not eval_run_id:
+            self._write_json(HTTPStatus.BAD_REQUEST, {"error": "eval_run_id_required"})
+            return
+        case_ids = [str(item).strip() for item in body.get("case_ids", []) if str(item).strip()] if isinstance(body.get("case_ids"), list) else None
+        failure_types = [str(item).strip() for item in body.get("failure_types", []) if str(item).strip()] if isinstance(body.get("failure_types"), list) else None
+        limit_value = body.get("limit")
+        limit = int(limit_value) if limit_value is not None else None
+        connection = connect(AppPaths.from_root(self.server.workspace_root).db_file)
+        try:
+            result = draft_golden_cases_from_eval_failures(
+                connection,
+                eval_run_id,
+                case_ids=case_ids,
+                failure_types=failure_types,
+                limit=limit,
+            )
+            if result is not None:
+                connection.commit()
+        finally:
+            connection.close()
+        if result is None:
+            self._write_json(HTTPStatus.NOT_FOUND, {"error": "eval_run_not_found"})
+            return
+        self._write_json(HTTPStatus.OK, result)
+
     def _handle_activate_golden_draft(self, body: dict[str, Any]) -> None:
         case_id = str(body.get("case_id", "")).strip()
         if not case_id:
@@ -993,8 +1025,26 @@ class ApiRequestHandler(BaseHTTPRequestHandler):
             if int(backfill_result.get("updated_count") or 0):
                 connection.commit()
             latest_eval = list_eval_runs(connection, limit=1)
-            latest_retrieval_eval = _latest_eval_with_quality(connection, "retrieval_quality")
-            latest_answer_eval = _latest_eval_with_quality(connection, "answer_quality")
+            current_code_version = _runtime_code_version()
+            latest_retrieval_eval = _latest_eval_with_quality(
+                connection,
+                "retrieval_quality",
+                code_version=current_code_version,
+                suite_id_prefix="regression:user_query_retrieval",
+            )
+            if latest_retrieval_eval is None:
+                latest_retrieval_eval = _latest_eval_with_quality(
+                    connection,
+                    "retrieval_quality",
+                    code_version=current_code_version,
+                )
+            latest_answer_eval = _latest_eval_with_quality(
+                connection,
+                "answer_quality",
+                code_version=current_code_version,
+            )
+            latest_historical_retrieval_eval = _latest_eval_with_quality(connection, "retrieval_quality")
+            latest_historical_answer_eval = _latest_eval_with_quality(connection, "answer_quality")
             latest_retrieval = list_retrieval_runs(connection, limit=1)
             latest_retrieval_eval_summary = latest_retrieval_eval.get("result_summary", {}) if latest_retrieval_eval else {}
             latest_answer_eval_summary = latest_answer_eval.get("result_summary", {}) if latest_answer_eval else {}
@@ -1013,18 +1063,45 @@ class ApiRequestHandler(BaseHTTPRequestHandler):
                 if isinstance(latest_answer_eval_summary, dict)
                 else {}
             )
+            source_unit_mapping_backfill = backfill_source_unit_mappings_from_metadata(connection, only_missing=True)
+            if (
+                int(source_unit_mapping_backfill.get("fact_link_count") or 0)
+                or int(source_unit_mapping_backfill.get("evidence_link_count") or 0)
+            ):
+                connection.commit()
             coverage = _workspace_coverage_snapshot(connection)
+            coverage["mapping_backfill"] = source_unit_mapping_backfill
+            graph_contribution = _graph_contribution_snapshot(connection)
             uncovered_priority = _latest_uncovered_priority_snapshot(paths)
             latest_failure_analysis: dict[str, Any] | None = None
-            repair_tasks: list[Any] = []
+            latest_answer_failure_analysis: dict[str, Any] | None = None
+            current_repair_tasks: list[Any] = []
+            current_answer_repair_tasks: list[Any] = []
+            historical_repair_tasks: list[Any] = []
             repair_task_count = 0
             if latest_eval:
                 latest_failure_analysis = build_failure_analysis(connection, str(latest_eval[0].get("eval_run_id") or ""))
                 if latest_failure_analysis:
                     connection.commit()
-            repair_tasks = list_repair_tasks(connection, limit=5)
-            repair_task_status_counts = _repair_task_status_counts(connection)
+                    raw_tasks = latest_failure_analysis.get("repair_tasks")
+                    if isinstance(raw_tasks, list):
+                        current_repair_tasks = raw_tasks
+            if latest_answer_eval:
+                latest_answer_failure_analysis = build_failure_analysis(
+                    connection,
+                    str(latest_answer_eval.get("eval_run_id") or ""),
+                )
+                if latest_answer_failure_analysis:
+                    connection.commit()
+                    raw_answer_tasks = latest_answer_failure_analysis.get("repair_tasks")
+                    if isinstance(raw_answer_tasks, list):
+                        current_answer_repair_tasks = raw_answer_tasks
+            historical_repair_tasks = list_repair_tasks(connection, limit=5)
+            historical_repair_task_status_counts = _repair_task_status_counts(connection)
+            repair_task_status_counts = _repair_task_status_counts_from_tasks(current_repair_tasks)
+            answer_repair_task_status_counts = _repair_task_status_counts_from_tasks(current_answer_repair_tasks)
             repair_task_count = int(repair_task_status_counts.get("open", 0))
+            parse_risk_profile = _workspace_parse_risk_snapshot(connection)
             ingestion_loop = {
                 "document_count": _count_rows(connection, "documents"),
                 "page_count": _count_rows(connection, "pages"),
@@ -1034,7 +1111,9 @@ class ApiRequestHandler(BaseHTTPRequestHandler):
                 "source_unit_count": _count_rows(connection, "source_units"),
                 "source_unit_coverage": coverage,
                 "uncovered_priority": uncovered_priority,
-                "parse_risk_pages": _sum_column(connection, "quality_reports", "high_risk_page_count"),
+                "parse_risk_pages": parse_risk_profile["high_risk_page_count"],
+                "actionable_parse_risk_pages": parse_risk_profile["actionable_parse_risk_pages"],
+                "parse_risk_profile": parse_risk_profile,
                 "artifacts": {
                     "coverage_snapshot_available": bool(coverage.get("source_unit_count")),
                     "coverage_report": "source_units",
@@ -1049,11 +1128,20 @@ class ApiRequestHandler(BaseHTTPRequestHandler):
                 "recall_at_10": retrieval_quality.get("recall_at_10"),
                 "mrr": retrieval_quality.get("mrr"),
                 "negative_hit_rate": retrieval_quality.get("negative_hit_rate"),
+                "graph_contribution": graph_contribution,
                 "artifacts": {
                     "latest_retrieval_run_id": latest_retrieval[0].get("run_id") if latest_retrieval else None,
                     "retrieval_runs_available": bool(latest_retrieval),
                     "latest_eval_run_id": latest_retrieval_eval.get("eval_run_id") if latest_retrieval_eval else None,
                     "latest_eval_suite_id": latest_retrieval_eval.get("suite_id") if latest_retrieval_eval else None,
+                    "current_code_version": current_code_version,
+                    "latest_historical_eval_run_id": (
+                        latest_historical_retrieval_eval.get("eval_run_id") if latest_historical_retrieval_eval else None
+                    ),
+                    "latest_historical_eval_code_version": (
+                        latest_historical_retrieval_eval.get("code_version") if latest_historical_retrieval_eval else None
+                    ),
+                    "graph_contribution": graph_contribution,
                 },
             }
             answer_loop = {
@@ -1065,9 +1153,17 @@ class ApiRequestHandler(BaseHTTPRequestHandler):
                 "artifacts": {
                     "latest_eval_run_id": latest_answer_eval.get("eval_run_id") if latest_answer_eval else None,
                     "latest_eval_suite_id": latest_answer_eval.get("suite_id") if latest_answer_eval else None,
-                    "failure_analysis_available": bool(latest_failure_analysis),
-                    "failure_count": latest_failure_analysis.get("failure_count") if latest_failure_analysis else None,
-                    "repair_task_count": repair_task_count,
+                    "current_code_version": current_code_version,
+                    "latest_historical_eval_run_id": (
+                        latest_historical_answer_eval.get("eval_run_id") if latest_historical_answer_eval else None
+                    ),
+                    "latest_historical_eval_code_version": (
+                        latest_historical_answer_eval.get("code_version") if latest_historical_answer_eval else None
+                    ),
+                    "failure_analysis_available": bool(latest_answer_failure_analysis),
+                    "failure_count": latest_answer_failure_analysis.get("failure_count") if latest_answer_failure_analysis else None,
+                    "repair_task_count": int(answer_repair_task_status_counts.get("open", 0)),
+                    "historical_repair_task_count": int(historical_repair_task_status_counts.get("open", 0)),
                 },
             }
             regression_loop = {
@@ -1076,6 +1172,7 @@ class ApiRequestHandler(BaseHTTPRequestHandler):
                 "new_failures": None,
                 "repair_task_count": repair_task_count,
                 "repair_task_status_counts": repair_task_status_counts,
+                "historical_repair_task_status_counts": historical_repair_task_status_counts,
                 "repair_task_coverage": latest_failure_analysis.get("repair_task_coverage") if latest_failure_analysis else None,
                 "golden_case_count": _count_rows(connection, "golden_cases"),
                 "active_golden_case_count": _count_rows(connection, "golden_cases", "status = 'active'"),
@@ -1085,8 +1182,10 @@ class ApiRequestHandler(BaseHTTPRequestHandler):
                     "failure_analysis_available": bool(latest_failure_analysis),
                     "failure_count": latest_failure_analysis.get("failure_count") if latest_failure_analysis else None,
                     "repair_task_coverage": latest_failure_analysis.get("repair_task_coverage") if latest_failure_analysis else None,
-                    "repair_tasks": repair_tasks[:5],
+                    "repair_tasks": current_repair_tasks[:5],
+                    "historical_repair_tasks": historical_repair_tasks[:5],
                     "repair_task_status_counts": repair_task_status_counts,
+                    "historical_repair_task_status_counts": historical_repair_task_status_counts,
                     "comparison": latest_failure_analysis.get("comparison") if latest_failure_analysis else None,
                 },
             }
@@ -1109,6 +1208,7 @@ def _attach_ingestion_health(loop: dict[str, Any]) -> None:
     coverage = loop.get("source_unit_coverage") if isinstance(loop.get("source_unit_coverage"), dict) else {}
     priority = loop.get("uncovered_priority") if isinstance(loop.get("uncovered_priority"), dict) else {}
     root_causes = priority.get("root_cause_counts") if isinstance(priority.get("root_cause_counts"), dict) else {}
+    parse_risk_profile = loop.get("parse_risk_profile") if isinstance(loop.get("parse_risk_profile"), dict) else {}
     risks: list[dict[str, Any]] = []
     actions: list[str] = []
     if not int(loop.get("document_count") or 0):
@@ -1118,8 +1218,19 @@ def _attach_ingestion_health(loop: dict[str, Any]) -> None:
         risks.append(_loop_risk("warn", "no_source_units", "文档已存在但没有 source_units，覆盖闭环缺少可追踪单元。", "source_unit_count", 0))
         actions.append("重新运行入库流水线，确认 source_units 表和 coverage 报告生成。")
     uncovered_units = int(coverage.get("uncovered_units") or 0)
-    if uncovered_units:
-        risks.append(_loop_risk("warn", "uncovered_source_units", "存在未覆盖 source units。", "uncovered_units", uncovered_units))
+    rejected_test_gap_units = int(root_causes.get("test_gap_rejected") or 0)
+    actionable_uncovered_units = max(uncovered_units - rejected_test_gap_units, 0)
+    loop["actionable_uncovered_units"] = actionable_uncovered_units
+    if actionable_uncovered_units:
+        risks.append(
+            _loop_risk(
+                "warn",
+                "uncovered_source_units",
+                "存在需要处理的未覆盖 source units。",
+                "actionable_uncovered_units",
+                actionable_uncovered_units,
+            )
+        )
         if int(root_causes.get("extraction_gap") or 0):
             actions.append("优先处理 uncovered priority report 中的 extraction_gap，它表示文本有了但事实/对象抽取未闭合。")
         if int(root_causes.get("golden_gap") or 0):
@@ -1128,15 +1239,43 @@ def _attach_ingestion_health(loop: dict[str, Any]) -> None:
             actions.append("对 source_unit_noise 修 source unit inventory 过滤，不把低价值噪声当召回失败处理。")
         if not root_causes:
             actions.append("打开 Coverage / Test Gaps，按 source_unit 补 evidence、fact 或测试草案。")
-    parse_risk_pages = int(loop.get("parse_risk_pages") or 0)
-    if parse_risk_pages:
-        risks.append(_loop_risk("warn", "parse_risk_pages", "解析质量报告中存在高风险页面。", "parse_risk_pages", parse_risk_pages))
-        actions.append("查看 Document Diagnostics，优先修复表格、标题层级和 OCR/分页风险。")
+    if coverage.get("evidence_coverage_rate") is None and int(loop.get("evidence_count") or 0):
+        risks.append(_loop_risk("warn", "evidence_coverage_unlinked", "Dashboard 尚未具备 source_unit 到 evidence 的覆盖映射，不能证明 evidence 级覆盖率。", "evidence_coverage_rate", None))
+        actions.append("补 source_unit 与 evidence 的可追踪映射，再启用 evidence_coverage_rate。")
+    if coverage.get("fact_coverage_rate") is None and int(loop.get("fact_count") or 0):
+        risks.append(_loop_risk("warn", "fact_coverage_unlinked", "Dashboard 尚未具备 source_unit 到 fact 的覆盖映射，不能证明 fact 级覆盖率。", "fact_coverage_rate", None))
+        actions.append("补 source_unit 与 facts 的可追踪映射，再启用 fact_coverage_rate。")
+    actionable_parse_risk_pages = int(
+        loop.get("actionable_parse_risk_pages")
+        or parse_risk_profile.get("actionable_parse_risk_pages")
+        or 0
+    )
+    if actionable_parse_risk_pages:
+        risks.append(
+            _loop_risk(
+                "warn",
+                "actionable_parse_risk_pages",
+                "存在没有 evidence 支撑的高风险页面，入库闭环无法证明这些页面已被解析。",
+                "actionable_parse_risk_pages",
+                actionable_parse_risk_pages,
+            )
+        )
+        actions.append("查看 parse_risk_profile.samples.no_evidence，先确认页面是否为空白页；若不是空白页，再修解析/OCR。")
     _attach_loop_health(loop, risks, actions, has_data=bool(loop.get("document_count")))
 
 
-def _latest_eval_with_quality(connection, quality_key: str) -> dict[str, Any] | None:
+def _latest_eval_with_quality(
+    connection,
+    quality_key: str,
+    *,
+    code_version: str | None = None,
+    suite_id_prefix: str | None = None,
+) -> dict[str, Any] | None:
     for run in list_eval_runs(connection, limit=100):
+        if code_version is not None and str(run.get("code_version") or "") != code_version:
+            continue
+        if suite_id_prefix is not None and not str(run.get("suite_id") or "").startswith(suite_id_prefix):
+            continue
         summary = run.get("result_summary") if isinstance(run.get("result_summary"), dict) else {}
         quality = summary.get(quality_key) if isinstance(summary.get(quality_key), dict) else {}
         if int(quality.get("total") or 0) > 0:
@@ -1163,6 +1302,28 @@ def _attach_retrieval_health(loop: dict[str, Any]) -> None:
     if negative_hit_rate is not None and negative_hit_rate > 0:
         risks.append(_loop_risk("warn", "negative_hits", "召回结果包含负例命中。", "negative_hit_rate", negative_hit_rate))
         actions.append("补充 negative_expected 并检查检索通道的主题约束。")
+    graph = loop.get("graph_contribution") if isinstance(loop.get("graph_contribution"), dict) else {}
+    current_graph = graph.get("current_version_graph") if isinstance(graph.get("current_version_graph"), dict) else {}
+    current_code_runs = int(graph.get("current_code_version_runs") or 0)
+    stale_or_unknown_runs = int(graph.get("stale_or_unknown_runs") or 0)
+    graph_scope = current_graph if current_code_runs else graph
+    graph_candidate_runs = int(graph_scope.get("graph_candidate_runs") or 0)
+    graph_top_runs = int(graph_scope.get("graph_top_runs") or 0)
+    graph_lost_runs = int(graph_scope.get("graph_lost_after_rerank_runs") or 0)
+    retention_rate = _as_float(graph_scope.get("graph_retention_rate"))
+    if stale_or_unknown_runs and current_code_runs <= 0:
+        risks.append(_loop_risk("warn", "retrieval_runs_mixed_code_versions", "召回统计混有旧代码版本或未知版本运行，修复效果需要优先看 current_code_version_runs。", "stale_or_unknown_runs", stale_or_unknown_runs))
+        actions.append("重新跑关键 query/golden suite，让 retrieval_runs 形成当前代码版本样本后再判断 graph retention。")
+    elif stale_or_unknown_runs:
+        actions.append("Dashboard 已按 current_version_graph 判断 graph 健康；旧版本 retrieval_runs 仅作为历史背景。")
+    if graph_candidate_runs and graph_top_runs == 0:
+        risks.append(_loop_risk("warn", "graph_candidates_never_retained", "Graph 有候选但没有进入 top rerank，贡献未被最终召回使用。", "graph_top_runs", 0))
+        actions.append("检查 rerank 对 graph_source、graph_relation、trust_tier 的权重，避免 graph 候选全被后续排序挤掉。")
+    elif graph_candidate_runs and retention_rate is not None and retention_rate < 0.25:
+        risks.append(_loop_risk("warn", "low_graph_retention", "Graph 候选进入 top rerank 的比例偏低。", "graph_retention_rate", retention_rate))
+        actions.append("抽样查看 graph_candidates_lost_after_rerank 的 query_type，按定义/生命周期/约束类分别调 rerank 特征。")
+    if graph_lost_runs > graph_top_runs and graph_candidate_runs:
+        risks.append(_loop_risk("warn", "graph_lost_after_rerank_dominates", "Graph 候选更多时候在 rerank 后丢失。", "graph_lost_after_rerank_runs", graph_lost_runs))
     _attach_loop_health(loop, risks, actions, has_data=bool(run_count))
 
 
@@ -1301,6 +1462,15 @@ def _as_float(value: object) -> float | None:
         return None
 
 
+def _as_int(value: object) -> int | None:
+    if value is None:
+        return None
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
+
+
 def _unique_strings(values: list[str]) -> list[str]:
     seen: set[str] = set()
     result: list[str] = []
@@ -1358,6 +1528,28 @@ def _repair_task_status_counts(connection) -> dict[str, int]:
     return counts
 
 
+def _repair_task_status_counts_from_tasks(tasks: list[Any]) -> dict[str, int]:
+    counts = {
+        "total": 0,
+        "open": 0,
+        "proposed": 0,
+        "in_progress": 0,
+        "reopened": 0,
+        "blocked": 0,
+        "done": 0,
+        "dismissed": 0,
+    }
+    for task in tasks:
+        if not isinstance(task, dict):
+            continue
+        status = str(task.get("status") or "unknown")
+        counts[status] = int(counts.get(status, 0)) + 1
+        counts["total"] += 1
+        if status not in {"done", "dismissed"}:
+            counts["open"] += 1
+    return counts
+
+
 def _sum_column(connection, table: str, column: str) -> int:
     if not _table_exists(connection, table):
         return 0
@@ -1375,15 +1567,235 @@ def _table_exists(connection, table: str) -> bool:
     return row is not None
 
 
+def _safe_json(value: object, default: Any) -> Any:
+    if not value:
+        return default
+    try:
+        return json.loads(str(value))
+    except (TypeError, json.JSONDecodeError):
+        return default
+
+
+def _workspace_parse_risk_snapshot(connection, *, sample_limit: int = 10) -> dict[str, Any]:
+    empty = {
+        "high_risk_page_count": 0,
+        "actionable_parse_risk_pages": 0,
+        "evidence_backed_high_risk_pages": 0,
+        "source_unit_backed_high_risk_pages": 0,
+        "fact_backed_high_risk_pages": 0,
+        "fully_backed_high_risk_pages": 0,
+        "root_cause_counts": {},
+        "top_documents": [],
+        "samples": {
+            "no_evidence": [],
+            "evidence_without_source_unit": [],
+            "source_unit_without_fact": [],
+            "fully_backed": [],
+        },
+        "metric_contract": {
+            "high_risk_page_count": "pages.risk_level = high",
+            "actionable_parse_risk_pages": "high-risk pages with no evidence rows",
+            "fully_backed_high_risk_pages": "high-risk pages with evidence + source_units + linked facts",
+        },
+    }
+    if not _table_exists(connection, "pages"):
+        return empty
+
+    high_pages = connection.execute(
+        """
+        SELECT doc_id, page_no, page_status
+        FROM pages
+        WHERE risk_level = 'high'
+        ORDER BY doc_id, page_no
+        """
+    ).fetchall()
+    if not high_pages:
+        return empty
+
+    evidence_counts = _doc_page_counts(connection, "evidence")
+    source_unit_counts = _doc_page_counts(connection, "source_units")
+    fact_counts = _doc_page_fact_counts(connection)
+    quality_flags = _quality_page_flags(connection)
+
+    root_causes = {
+        "no_evidence": 0,
+        "evidence_without_source_unit": 0,
+        "source_unit_without_fact": 0,
+        "fully_backed": 0,
+    }
+    doc_counts: dict[str, dict[str, int]] = {}
+    samples: dict[str, list[dict[str, Any]]] = {
+        "no_evidence": [],
+        "evidence_without_source_unit": [],
+        "source_unit_without_fact": [],
+        "fully_backed": [],
+    }
+    evidence_backed = 0
+    source_unit_backed = 0
+    fact_backed = 0
+
+    for row in high_pages:
+        doc_id = str(row["doc_id"] or "")
+        page_no = int(row["page_no"] or 0)
+        key = (doc_id, page_no)
+        evidence_count = evidence_counts.get(key, 0)
+        source_unit_count = source_unit_counts.get(key, 0)
+        fact_count = fact_counts.get(key, 0)
+        if evidence_count:
+            evidence_backed += 1
+        if source_unit_count:
+            source_unit_backed += 1
+        if fact_count:
+            fact_backed += 1
+
+        if evidence_count == 0:
+            category = "no_evidence"
+        elif source_unit_count == 0:
+            category = "evidence_without_source_unit"
+        elif fact_count == 0:
+            category = "source_unit_without_fact"
+        else:
+            category = "fully_backed"
+        root_causes[category] += 1
+
+        doc_entry = doc_counts.setdefault(
+            doc_id,
+            {
+                "high_risk_page_count": 0,
+                "actionable_parse_risk_pages": 0,
+                "fully_backed_high_risk_pages": 0,
+                "evidence_without_source_unit": 0,
+                "source_unit_without_fact": 0,
+            },
+        )
+        doc_entry["high_risk_page_count"] += 1
+        if category == "no_evidence":
+            doc_entry["actionable_parse_risk_pages"] += 1
+        elif category == "fully_backed":
+            doc_entry["fully_backed_high_risk_pages"] += 1
+        elif category in {"evidence_without_source_unit", "source_unit_without_fact"}:
+            doc_entry[category] += 1
+
+        if len(samples[category]) < sample_limit:
+            samples[category].append(
+                {
+                    "doc_id": doc_id,
+                    "page_no": page_no,
+                    "page_status": row["page_status"],
+                    "risk_flags": quality_flags.get(key, []),
+                    "evidence_count": evidence_count,
+                    "source_unit_count": source_unit_count,
+                    "linked_fact_count": fact_count,
+                }
+            )
+
+    top_documents = [
+        {"doc_id": doc_id, **counts}
+        for doc_id, counts in sorted(
+            doc_counts.items(),
+            key=lambda item: (
+                item[1]["actionable_parse_risk_pages"],
+                item[1]["high_risk_page_count"],
+            ),
+            reverse=True,
+        )
+    ][:5]
+    high_risk_count = len(high_pages)
+    fully_backed = root_causes["fully_backed"]
+    return {
+        "high_risk_page_count": high_risk_count,
+        "actionable_parse_risk_pages": root_causes["no_evidence"],
+        "evidence_backed_high_risk_pages": evidence_backed,
+        "source_unit_backed_high_risk_pages": source_unit_backed,
+        "fact_backed_high_risk_pages": fact_backed,
+        "fully_backed_high_risk_pages": fully_backed,
+        "evidence_backed_rate": round(evidence_backed / high_risk_count, 6),
+        "source_unit_backed_rate": round(source_unit_backed / high_risk_count, 6),
+        "fully_backed_rate": round(fully_backed / high_risk_count, 6),
+        "root_cause_counts": root_causes,
+        "top_documents": top_documents,
+        "samples": samples,
+        "metric_contract": empty["metric_contract"],
+    }
+
+
+def _doc_page_counts(connection, table: str) -> dict[tuple[str, int], int]:
+    if not _table_exists(connection, table):
+        return {}
+    columns = {str(row["name"]) for row in connection.execute(f"PRAGMA table_info({table})").fetchall()}
+    if not {"doc_id", "page_no"}.issubset(columns):
+        return {}
+    rows = connection.execute(
+        f"""
+        SELECT doc_id, page_no, count(*) AS count
+        FROM {table}
+        WHERE page_no IS NOT NULL
+        GROUP BY doc_id, page_no
+        """
+    ).fetchall()
+    return {
+        (str(row["doc_id"] or ""), int(row["page_no"] or 0)): int(row["count"] or 0)
+        for row in rows
+    }
+
+
+def _doc_page_fact_counts(connection) -> dict[tuple[str, int], int]:
+    if not _table_exists(connection, "fact_evidence_map") or not _table_exists(connection, "evidence"):
+        return {}
+    rows = connection.execute(
+        """
+        SELECT e.doc_id, e.page_no, count(DISTINCT fem.fact_id) AS count
+        FROM evidence e
+        JOIN fact_evidence_map fem ON fem.evidence_id = e.evidence_id
+        WHERE e.page_no IS NOT NULL
+        GROUP BY e.doc_id, e.page_no
+        """
+    ).fetchall()
+    return {
+        (str(row["doc_id"] or ""), int(row["page_no"] or 0)): int(row["count"] or 0)
+        for row in rows
+    }
+
+
+def _quality_page_flags(connection) -> dict[tuple[str, int], list[str]]:
+    if not _table_exists(connection, "quality_reports"):
+        return {}
+    rows = connection.execute("SELECT doc_id, report_json FROM quality_reports").fetchall()
+    flags_by_page: dict[tuple[str, int], list[str]] = {}
+    for row in rows:
+        doc_id = str(row["doc_id"] or "")
+        payload = _safe_json(row["report_json"], {})
+        pages = payload.get("pages") if isinstance(payload, dict) else None
+        if not isinstance(pages, list):
+            continue
+        for page in pages:
+            if not isinstance(page, dict):
+                continue
+            page_no = _as_int(page.get("page_no"))
+            if page_no is None:
+                continue
+            raw_flags = page.get("risk_flags")
+            flags = raw_flags if isinstance(raw_flags, list) else []
+            flags_by_page[(doc_id, page_no)] = [str(flag) for flag in flags if str(flag).strip()]
+    return flags_by_page
+
+
 def _workspace_coverage_snapshot(connection) -> dict[str, Any]:
+    ensure_source_unit_mapping_tables(connection)
     source_units = _count_rows(connection, "source_units")
     if not source_units:
         return {
             "source_unit_count": 0,
+            "source_unit_coverage_rate": None,
             "evidence_coverage_rate": None,
             "fact_coverage_rate": None,
             "tested_rate": None,
             "uncovered_units": 0,
+            "metric_contract": {
+                "source_unit_coverage_rate": "source_units.status in covered/tested/partial",
+                "evidence_coverage_rate": "source_unit_evidence_map distinct unit_id / source_units",
+                "fact_coverage_rate": "source_unit_fact_map distinct unit_id / source_units",
+            },
         }
     rows = connection.execute(
         """
@@ -1395,13 +1807,180 @@ def _workspace_coverage_snapshot(connection) -> dict[str, Any]:
     ).fetchone()
     covered = int(rows["covered"] or 0)
     tested = int(rows["tested"] or 0)
+    source_unit_coverage_rate = round(covered / source_units, 6)
+    evidence_covered = _count_distinct_source_unit_links(connection, "source_unit_evidence_map")
+    fact_covered = _count_distinct_source_unit_links(connection, "source_unit_fact_map")
     return {
         "source_unit_count": source_units,
-        "evidence_coverage_rate": round(covered / source_units, 6),
-        "fact_coverage_rate": None,
+        "source_unit_coverage_rate": source_unit_coverage_rate,
+        "evidence_coverage_rate": round(evidence_covered / source_units, 6),
+        "fact_coverage_rate": round(fact_covered / source_units, 6),
         "tested_rate": round(tested / source_units, 6),
         "uncovered_units": max(source_units - covered, 0),
+        "legacy_evidence_coverage_rate": source_unit_coverage_rate,
+        "metric_contract": {
+            "source_unit_coverage_rate": "source_units.status in covered/tested/partial",
+            "evidence_coverage_rate": "source_unit_evidence_map distinct unit_id / source_units",
+            "fact_coverage_rate": "source_unit_fact_map distinct unit_id / source_units",
+            "legacy_evidence_coverage_rate": "deprecated_alias_for_source_unit_coverage_rate",
+        },
     }
+
+
+def _count_distinct_source_unit_links(connection, table: str) -> int:
+    if not _table_exists(connection, table):
+        return 0
+    row = connection.execute(
+        f"""
+        SELECT count(DISTINCT map.unit_id)
+        FROM {table} map
+        JOIN source_units su ON su.unit_id = map.unit_id
+        """
+    ).fetchone()
+    return int(row[0] or 0)
+
+
+def _graph_contribution_snapshot(connection, *, limit: int = 500) -> dict[str, Any]:
+    _ensure_retrieval_runs_code_version_column(connection)
+    rows = connection.execute(
+        """
+        SELECT run_id, query, query_type, reranked_ids_json, metadata_json, code_version, created_at
+        FROM retrieval_runs
+        ORDER BY created_at DESC
+        LIMIT ?
+        """,
+        (limit,),
+    ).fetchall()
+    total_runs = len(rows)
+    graph_requested_runs = 0
+    graph_candidate_runs = 0
+    graph_top_runs = 0
+    graph_lost_after_rerank_runs = 0
+    graph_top_hit_count = 0
+    graph_candidate_count_total = 0
+    by_query_type: dict[str, dict[str, int]] = {}
+    lost_samples: list[dict[str, Any]] = []
+    current_code_version = _runtime_code_version()
+    current_code_version_runs = 0
+    stale_or_unknown_runs = 0
+    code_version_counts: dict[str, int] = {}
+    current_graph_requested_runs = 0
+    current_graph_candidate_runs = 0
+    current_graph_top_runs = 0
+    current_graph_lost_after_rerank_runs = 0
+
+    for row in rows:
+        code_version = str(row["code_version"] or "unknown")
+        is_current_code_version = code_version == current_code_version
+        code_version_counts[code_version] = code_version_counts.get(code_version, 0) + 1
+        if is_current_code_version:
+            current_code_version_runs += 1
+        else:
+            stale_or_unknown_runs += 1
+        metadata = _safe_json(row["metadata_json"], {})
+        if not isinstance(metadata, dict):
+            metadata = {}
+        retrieval_plan = metadata.get("retrieval_plan") if isinstance(metadata.get("retrieval_plan"), dict) else {}
+        channels = [str(item) for item in retrieval_plan.get("channels") or []]
+        graph_requested = "graph" in channels
+        graph_candidate_count = _as_int(metadata.get("graph_hit_count"))
+        if graph_candidate_count is None:
+            graph_candidate_count = _as_int(retrieval_plan.get("graph_candidate_count")) or 0
+        rerank_explanations = metadata.get("rerank_explanations") if isinstance(metadata.get("rerank_explanations"), list) else []
+        top_graph_source_count = sum(
+            1
+            for item in rerank_explanations
+            if isinstance(item, dict) and item.get("graph_source")
+        )
+        query_type = str(row["query_type"] or "unknown")
+        bucket = by_query_type.setdefault(
+            query_type,
+            {
+                "total_runs": 0,
+                "graph_requested_runs": 0,
+                "graph_candidate_runs": 0,
+                "graph_top_runs": 0,
+                "graph_lost_after_rerank_runs": 0,
+            },
+        )
+        bucket["total_runs"] += 1
+        if graph_requested:
+            graph_requested_runs += 1
+            bucket["graph_requested_runs"] += 1
+            if is_current_code_version:
+                current_graph_requested_runs += 1
+        if graph_candidate_count > 0:
+            graph_candidate_runs += 1
+            graph_candidate_count_total += graph_candidate_count
+            bucket["graph_candidate_runs"] += 1
+            if is_current_code_version:
+                current_graph_candidate_runs += 1
+        if top_graph_source_count > 0:
+            graph_top_runs += 1
+            graph_top_hit_count += top_graph_source_count
+            bucket["graph_top_runs"] += 1
+            if is_current_code_version:
+                current_graph_top_runs += 1
+        if graph_requested and graph_candidate_count > 0 and top_graph_source_count <= 0:
+            graph_lost_after_rerank_runs += 1
+            bucket["graph_lost_after_rerank_runs"] += 1
+            if is_current_code_version:
+                current_graph_lost_after_rerank_runs += 1
+            if len(lost_samples) < 5:
+                reranked_ids = _safe_json(row["reranked_ids_json"], [])
+                if not isinstance(reranked_ids, list):
+                    reranked_ids = []
+                lost_samples.append(
+                    {
+                        "run_id": row["run_id"],
+                        "query": row["query"],
+                        "query_type": query_type,
+                        "graph_candidate_count": graph_candidate_count,
+                        "reranked_ids": reranked_ids[:5],
+                    }
+                )
+
+    graph_retention_rate = round(graph_top_runs / graph_candidate_runs, 6) if graph_candidate_runs else None
+    graph_request_rate = round(graph_requested_runs / total_runs, 6) if total_runs else None
+    graph_candidate_rate = round(graph_candidate_runs / graph_requested_runs, 6) if graph_requested_runs else None
+    current_graph_retention_rate = (
+        round(current_graph_top_runs / current_graph_candidate_runs, 6)
+        if current_graph_candidate_runs
+        else None
+    )
+    return {
+        "sample_size": total_runs,
+        "graph_requested_runs": graph_requested_runs,
+        "graph_candidate_runs": graph_candidate_runs,
+        "graph_top_runs": graph_top_runs,
+        "graph_lost_after_rerank_runs": graph_lost_after_rerank_runs,
+        "graph_top_hit_count": graph_top_hit_count,
+        "graph_candidate_count_total": graph_candidate_count_total,
+        "graph_request_rate": graph_request_rate,
+        "graph_candidate_rate": graph_candidate_rate,
+        "graph_retention_rate": graph_retention_rate,
+        "current_code_version": current_code_version,
+        "current_code_version_runs": current_code_version_runs,
+        "stale_or_unknown_runs": stale_or_unknown_runs,
+        "code_version_counts": dict(sorted(code_version_counts.items())),
+        "current_version_graph": {
+            "sample_size": current_code_version_runs,
+            "graph_requested_runs": current_graph_requested_runs,
+            "graph_candidate_runs": current_graph_candidate_runs,
+            "graph_top_runs": current_graph_top_runs,
+            "graph_lost_after_rerank_runs": current_graph_lost_after_rerank_runs,
+            "graph_retention_rate": current_graph_retention_rate,
+        },
+        "by_query_type": dict(sorted(by_query_type.items())),
+        "lost_after_rerank_samples": lost_samples,
+    }
+
+
+def _ensure_retrieval_runs_code_version_column(connection) -> None:
+    rows = connection.execute("PRAGMA table_info(retrieval_runs)").fetchall()
+    columns = {str(row["name"]) for row in rows}
+    if "code_version" not in columns:
+        connection.execute("ALTER TABLE retrieval_runs ADD COLUMN code_version TEXT")
 
 
 def _latest_uncovered_priority_snapshot(paths: AppPaths) -> dict[str, Any]:

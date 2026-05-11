@@ -64,6 +64,92 @@ def _page_dimensions_from_pdf(source_path: Path) -> dict[int, tuple[float, float
         document.close()
 
 
+def _normalize_pdf_text_fallback(text: str) -> str:
+    lines: list[str] = []
+    previous_blank = False
+    for raw_line in text.replace("\r\n", "\n").replace("\r", "\n").split("\n"):
+        line = raw_line.rstrip()
+        if not line.strip():
+            if not previous_blank:
+                lines.append("")
+            previous_blank = True
+            continue
+        lines.append(line)
+        previous_blank = False
+    return "\n".join(lines).strip()
+
+
+def _page_has_text_blocks(page_payload: dict[str, object]) -> bool:
+    for block in page_payload.get("blocks", []):
+        if isinstance(block, dict) and str(block.get("text") or "").strip():
+            return True
+    return False
+
+
+def _pdf_page_is_visually_blank(page) -> bool:
+    pix = page.get_pixmap(matrix=fitz.Matrix(0.2, 0.2), alpha=False)
+    pixel_count = int(pix.width * pix.height)
+    if pixel_count <= 0:
+        return True
+    channel_count = max(1, int(pix.n))
+    step = max(1, pixel_count // 5000)
+    sampled = 0
+    nonwhite = 0
+    data = pix.samples
+    for pixel_index in range(0, pixel_count, step):
+        offset = pixel_index * channel_count
+        first = data[offset]
+        second = data[offset + 1] if channel_count > 1 else first
+        third = data[offset + 2] if channel_count > 2 else first
+        sampled += 1
+        if min(first, second, third) < 245:
+            nonwhite += 1
+    return (nonwhite / max(sampled, 1)) < 0.002
+
+
+def _backfill_empty_pdf_pages_from_text(
+    source_path: Path,
+    parsed_pages: list[dict[str, object]],
+) -> tuple[list[dict[str, object]], dict[str, int]]:
+    stats = {"text_backfilled_pages": 0, "blank_pages": 0}
+    if not parsed_pages:
+        return parsed_pages, stats
+
+    document = fitz.open(source_path)
+    try:
+        for page_payload in parsed_pages:
+            if _page_has_text_blocks(page_payload):
+                continue
+            page_no = int(page_payload.get("page_no") or 0)
+            if page_no <= 0 or page_no > len(document):
+                continue
+            pdf_page = document[page_no - 1]
+            fallback_text = _normalize_pdf_text_fallback(pdf_page.get_text("text") or "")
+            if fallback_text:
+                page_payload["blocks"] = [
+                    {
+                        "reading_order": 1,
+                        "block_type": "pdf_text_fallback",
+                        "text": fallback_text,
+                        "raw_text": fallback_text,
+                        "bbox": None,
+                    }
+                ]
+                page_payload["parser_confidence"] = max(float(page_payload.get("parser_confidence") or 0.0), 0.78)
+                page_payload["ocr_confidence"] = page_payload.get("ocr_confidence")
+                page_payload["page_status"] = "parsed"
+                stats["text_backfilled_pages"] += 1
+            elif _pdf_page_is_visually_blank(pdf_page):
+                page_payload["risk_level"] = "low"
+                page_payload["page_status"] = "blank"
+                page_payload["parser_confidence"] = max(float(page_payload.get("parser_confidence") or 0.0), 0.99)
+                stats["blank_pages"] += 1
+    finally:
+        document.close()
+
+    return parsed_pages, stats
+
+
 def _load_env_file(env_path: Path) -> None:
     if not env_path.exists():
         return
@@ -611,6 +697,9 @@ def parse_document(workspace_root: Path, doc_id: str) -> ParseResult:
         parser_engine = "text"
         if document_row["source_type"] == "pdf":
             parser_engine, parsed_pages = parser(source_path)
+            parsed_pages, fallback_stats = _backfill_empty_pdf_pages_from_text(source_path, parsed_pages)
+            if int(fallback_stats.get("text_backfilled_pages") or 0):
+                parser_engine = f"{parser_engine}+pdf_text_fallback"
         else:
             parsed_pages = parser(source_path)
 
@@ -701,6 +790,10 @@ def parse_document(workspace_root: Path, doc_id: str) -> ParseResult:
                     "page_no": page_payload["page_no"],
                     "width": page_payload["width"],
                     "height": page_payload["height"],
+                    "parser_confidence": page_payload["parser_confidence"],
+                    "ocr_confidence": page_payload["ocr_confidence"],
+                    "risk_level": page_payload["risk_level"],
+                    "page_status": page_payload["page_status"],
                     "blocks": persisted_blocks,
                 }
             )

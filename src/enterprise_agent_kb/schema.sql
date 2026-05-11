@@ -167,6 +167,24 @@ CREATE TABLE IF NOT EXISTS source_units (
     updated_at TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS source_unit_fact_map (
+    unit_id TEXT NOT NULL,
+    fact_id TEXT NOT NULL,
+    doc_id TEXT NOT NULL,
+    support_type TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    PRIMARY KEY (unit_id, fact_id)
+);
+
+CREATE TABLE IF NOT EXISTS source_unit_evidence_map (
+    unit_id TEXT NOT NULL,
+    evidence_id TEXT NOT NULL,
+    doc_id TEXT NOT NULL,
+    support_type TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    PRIMARY KEY (unit_id, evidence_id)
+);
+
 CREATE TABLE IF NOT EXISTS retrieval_runs (
     run_id TEXT PRIMARY KEY,
     query TEXT NOT NULL,
@@ -175,6 +193,7 @@ CREATE TABLE IF NOT EXISTS retrieval_runs (
     retrieved_evidence_ids_json TEXT NOT NULL DEFAULT '[]',
     reranked_ids_json TEXT NOT NULL DEFAULT '[]',
     scores_json TEXT NOT NULL DEFAULT '{}',
+    code_version TEXT,
     metadata_json TEXT,
     created_at TEXT NOT NULL
 );
@@ -280,6 +299,10 @@ CREATE INDEX IF NOT EXISTS idx_documents_sha256 ON documents(sha256);
 CREATE INDEX IF NOT EXISTS idx_source_units_doc_id ON source_units(doc_id);
 CREATE INDEX IF NOT EXISTS idx_source_units_status ON source_units(status);
 CREATE INDEX IF NOT EXISTS idx_source_units_type ON source_units(unit_type);
+CREATE INDEX IF NOT EXISTS idx_source_unit_fact_map_doc_id ON source_unit_fact_map(doc_id);
+CREATE INDEX IF NOT EXISTS idx_source_unit_fact_map_fact_id ON source_unit_fact_map(fact_id);
+CREATE INDEX IF NOT EXISTS idx_source_unit_evidence_map_doc_id ON source_unit_evidence_map(doc_id);
+CREATE INDEX IF NOT EXISTS idx_source_unit_evidence_map_evidence_id ON source_unit_evidence_map(evidence_id);
 CREATE INDEX IF NOT EXISTS idx_retrieval_runs_created_at ON retrieval_runs(created_at);
 CREATE INDEX IF NOT EXISTS idx_retrieval_runs_query_type ON retrieval_runs(query_type);
 CREATE INDEX IF NOT EXISTS idx_golden_cases_doc_id ON golden_cases(doc_id);

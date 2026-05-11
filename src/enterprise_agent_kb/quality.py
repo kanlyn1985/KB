@@ -26,6 +26,26 @@ def _utc_now() -> str:
 
 
 def _page_metrics(page: dict[str, object]) -> dict[str, object]:
+    if str(page.get("page_status") or "").lower() == "blank":
+        return {
+            "page_no": page.get("page_no"),
+            "text_blocks": 0,
+            "total_chars": 0,
+            "has_ocr_markdown": False,
+            "has_html_or_images": False,
+            "anomaly_ratio": 0.0,
+            "control_ratio": 0.0,
+            "symbol_ratio": 0.0,
+            "semantic_ratio": 0.0,
+            "rare_ocr_glyph_ratio": 0.0,
+            "singleton_token_ratio": 0.0,
+            "language_run_count": 0,
+            "readability_score": 1.0,
+            "risk_flags": ["blank_page"],
+            "risk_level": "low",
+            "page_status": "blank",
+        }
+
     blocks = page.get("blocks", [])
     text_blocks = 0
     total_chars = 0

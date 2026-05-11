@@ -4,7 +4,7 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 
-from .closed_loop_store import record_eval_run, sync_golden_cases, utc_now
+from .closed_loop_store import _runtime_code_version, record_eval_run, sync_golden_cases, utc_now
 from .config import AppPaths
 from .db import connect
 from .query_api import build_query_context
@@ -28,7 +28,7 @@ def run_user_query_retrieval_eval(
     *,
     case_file: Path | None = None,
     suite_id: str = "regression:user_query_retrieval",
-    limit: int = 8,
+    limit: int = 10,
     output_dir: Path | None = None,
 ) -> UserQueryRetrievalEvalResult:
     paths = AppPaths.from_root(workspace_root)
@@ -54,6 +54,7 @@ def run_user_query_retrieval_eval(
             command=f"eakb run-user-query-retrieval-eval --case-file {cases_path} --limit {limit}",
             success=failed == 0,
             output=json.dumps(summary, ensure_ascii=False),
+            code_version=_runtime_code_version(),
             case_results=case_results,
         )
         connection.commit()
@@ -133,11 +134,14 @@ def _evaluate_case(workspace_root: Path, case: dict[str, object], *, index: int,
 
     retrieved_items = _retrieved_items_from_context(context)
     trace_metrics = _trace_metrics_from_context(context)
-    retrieval_quality = evaluate_retrieval_quality(
-        case=case,
-        retrieved_items=retrieved_items,
-        trace_metrics=trace_metrics,
-    )
+    if context.get("clarification_required"):
+        retrieval_quality = _clarification_retrieval_quality()
+    else:
+        retrieval_quality = evaluate_retrieval_quality(
+            case=case,
+            retrieved_items=retrieved_items,
+            trace_metrics=trace_metrics,
+        )
     contract = _case_contract_result(case, context, trace_metrics, retrieved_items)
     passed = bool(retrieval_quality.get("failure_attribution") == "ok" and contract["passed"])
     failure_reason = None if passed else _failure_reason(retrieval_quality, contract)
@@ -166,8 +170,17 @@ def _case_contract_result(
     if expected_query_type and trace_metrics.get("query_type") != expected_query_type:
         failures.append("query_type_mismatch")
 
+    clarification_required = bool(context.get("clarification_required"))
+    expected_clarification_required = _bool_or_none(case.get("expected_clarification_required"))
+    if expected_clarification_required is not None and clarification_required != expected_clarification_required:
+        failures.append("clarification_requirement_mismatch")
+
+    expected_clarification_options = _string_list(case.get("expected_clarification_options"))
+    if expected_clarification_options and not _clarification_options_cover(context, expected_clarification_options):
+        failures.append("clarification_options_missing")
+
     min_graph = _int_or_none(case.get("expected_min_graph_candidates"))
-    if min_graph is not None and int(trace_metrics.get("graph_candidate_count") or 0) < min_graph:
+    if not clarification_required and min_graph is not None and int(trace_metrics.get("graph_candidate_count") or 0) < min_graph:
         failures.append("graph_missing")
 
     expected_top_entity = str(case.get("expected_top_entity_contains") or "").strip()
@@ -191,6 +204,9 @@ def _case_contract_result(
         "failures": failures,
         "expected_query_type": expected_query_type,
         "actual_query_type": trace_metrics.get("query_type"),
+        "expected_clarification_required": expected_clarification_required,
+        "actual_clarification_required": clarification_required,
+        "expected_clarification_options": expected_clarification_options,
         "expected_min_graph_candidates": min_graph,
         "actual_graph_candidate_count": trace_metrics.get("graph_candidate_count"),
         "expected_top_entity_contains": expected_top_entity,
@@ -207,6 +223,8 @@ def _failure_reason(retrieval_quality: dict[str, object], contract: dict[str, ob
     if failures:
         priority = [
             "query_type_mismatch",
+            "clarification_requirement_mismatch",
+            "clarification_options_missing",
             "topic_resolution_wrong",
             "graph_missing",
             "expected_doc_missing",
@@ -217,6 +235,31 @@ def _failure_reason(retrieval_quality: dict[str, object], contract: dict[str, ob
                 return item
         return failures[0]
     return str(retrieval_quality.get("failure_attribution") or "retrieval_quality_failed")
+
+
+def _clarification_retrieval_quality() -> dict[str, object]:
+    return {
+        "must_hit_total": 0,
+        "must_hit_found": 0,
+        "must_hit_missing": [],
+        "must_hit_best_rank": None,
+        "mrr": None,
+        "negative_hit_count": 0,
+        "negative_hits": [],
+        "negative_hit_rate": 0.0,
+        "top_k": 0,
+        "hit_count": 0,
+        "failure_attribution": "ok",
+        "recall_at_5": None,
+        "recall_at_10": None,
+    }
+
+
+def _clarification_options_cover(context: dict[str, object], expected_options: list[str]) -> bool:
+    clarification = context.get("clarification") if isinstance(context.get("clarification"), dict) else {}
+    options = clarification.get("options") if isinstance(clarification.get("options"), list) else []
+    option_blob = json.dumps(options, ensure_ascii=False).lower()
+    return all(str(option).strip().lower() in option_blob for option in expected_options if str(option).strip())
 
 
 def _retrieved_items_from_context(context: dict[str, object]) -> list[dict[str, object]]:
@@ -359,3 +402,16 @@ def _int_or_none(value: object) -> int | None:
         return int(value)
     except (TypeError, ValueError):
         return None
+
+
+def _bool_or_none(value: object) -> bool | None:
+    if value in (None, ""):
+        return None
+    if isinstance(value, bool):
+        return value
+    text = str(value).strip().lower()
+    if text in {"1", "true", "yes", "y"}:
+        return True
+    if text in {"0", "false", "no", "n"}:
+        return False
+    return None

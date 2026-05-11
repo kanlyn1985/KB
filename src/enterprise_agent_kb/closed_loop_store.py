@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import sqlite3
 from datetime import UTC, datetime
+from functools import lru_cache
 from pathlib import Path
 
 from .evidence_shapes import contract_reason_actions
@@ -23,11 +25,15 @@ def sync_source_units_from_matrix(
 ) -> int:
     now = generated_at or utc_now()
     _ensure_source_units_columns(connection)
+    ensure_source_unit_mapping_tables(connection)
+    connection.execute("DELETE FROM source_unit_fact_map WHERE doc_id = ?", (doc_id,))
+    connection.execute("DELETE FROM source_unit_evidence_map WHERE doc_id = ?", (doc_id,))
     connection.execute("DELETE FROM source_units WHERE doc_id = ?", (doc_id,))
     for row in matrix_rows:
         metadata = row.get("metadata") if isinstance(row.get("metadata"), dict) else {}
         locator = row.get("source_locator") if isinstance(row.get("source_locator"), dict) else {}
         source_text = str(row.get("source_text") or "")
+        unit_id = str(row.get("unit_id") or _stable_id("UNIT", doc_id, row))
         canonical_title = _optional_text(row.get("canonical_title") or metadata.get("canonical_title"))
         canonical_key = _optional_text(row.get("canonical_key") or row.get("semantic_key"))
         content_role = _optional_text(row.get("content_role") or metadata.get("content_role"))
@@ -43,7 +49,7 @@ def sync_source_units_from_matrix(
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
-                str(row.get("unit_id") or _stable_id("UNIT", doc_id, row)),
+                unit_id,
                 doc_id,
                 _as_int(row.get("page_no")),
                 _optional_text(locator.get("block_id")),
@@ -73,6 +79,7 @@ def sync_source_units_from_matrix(
                 now,
             ),
         )
+        _persist_source_unit_links(connection, unit_id, doc_id, row, now)
     return len(matrix_rows)
 
 
@@ -88,6 +95,229 @@ def _ensure_source_units_columns(connection) -> None:
     for column, statement in additions.items():
         if column not in columns:
             connection.execute(statement)
+
+
+def ensure_source_unit_mapping_tables(connection) -> None:
+    connection.execute(
+        """
+        CREATE TABLE IF NOT EXISTS source_unit_fact_map (
+            unit_id TEXT NOT NULL,
+            fact_id TEXT NOT NULL,
+            doc_id TEXT NOT NULL,
+            support_type TEXT NOT NULL,
+            created_at TEXT NOT NULL,
+            PRIMARY KEY (unit_id, fact_id)
+        )
+        """
+    )
+    connection.execute(
+        """
+        CREATE TABLE IF NOT EXISTS source_unit_evidence_map (
+            unit_id TEXT NOT NULL,
+            evidence_id TEXT NOT NULL,
+            doc_id TEXT NOT NULL,
+            support_type TEXT NOT NULL,
+            created_at TEXT NOT NULL,
+            PRIMARY KEY (unit_id, evidence_id)
+        )
+        """
+    )
+    connection.execute("CREATE INDEX IF NOT EXISTS idx_source_unit_fact_map_doc_id ON source_unit_fact_map(doc_id)")
+    connection.execute("CREATE INDEX IF NOT EXISTS idx_source_unit_fact_map_fact_id ON source_unit_fact_map(fact_id)")
+    connection.execute("CREATE INDEX IF NOT EXISTS idx_source_unit_evidence_map_doc_id ON source_unit_evidence_map(doc_id)")
+    connection.execute("CREATE INDEX IF NOT EXISTS idx_source_unit_evidence_map_evidence_id ON source_unit_evidence_map(evidence_id)")
+
+
+def backfill_source_unit_mappings_from_metadata(
+    connection,
+    *,
+    doc_id: str | None = None,
+    generated_at: str | None = None,
+    only_missing: bool = False,
+) -> dict[str, int]:
+    ensure_source_unit_mapping_tables(connection)
+    now = generated_at or utc_now()
+    missing_filter = """
+        AND (
+            NOT EXISTS (
+                SELECT 1
+                FROM source_unit_fact_map sfm
+                WHERE sfm.unit_id = su.unit_id
+            )
+            OR NOT EXISTS (
+                SELECT 1
+                FROM source_unit_evidence_map sem
+                WHERE sem.unit_id = su.unit_id
+            )
+        )
+    """
+    if doc_id:
+        rows = connection.execute(
+            f"""
+            SELECT su.unit_id, su.doc_id, su.metadata_json
+            FROM source_units su
+            WHERE su.doc_id = ?
+            {missing_filter if only_missing else ""}
+            ORDER BY unit_id
+            """,
+            (doc_id,),
+        ).fetchall()
+    else:
+        rows = connection.execute(
+            f"""
+            SELECT su.unit_id, su.doc_id, su.metadata_json
+            FROM source_units su
+            WHERE 1 = 1
+            {missing_filter if only_missing else ""}
+            ORDER BY doc_id, unit_id
+            """
+        ).fetchall()
+
+    fact_link_count = 0
+    evidence_link_count = 0
+    for row in rows:
+        metadata = _json_object(row["metadata_json"])
+        covered_by = metadata.get("covered_by") if isinstance(metadata.get("covered_by"), dict) else {}
+        fact_ids = _string_ids(covered_by.get("fact_ids"))
+        evidence_ids = _string_ids(covered_by.get("evidence_ids"))
+        if not evidence_ids and fact_ids:
+            evidence_ids = _linked_evidence_ids_for_facts(connection, fact_ids)
+        fact_link_count += _insert_source_unit_fact_links(
+            connection,
+            unit_id=str(row["unit_id"]),
+            doc_id=str(row["doc_id"]),
+            fact_ids=fact_ids,
+            support_type="coverage_metadata",
+            now=now,
+        )
+        evidence_link_count += _insert_source_unit_evidence_links(
+            connection,
+            unit_id=str(row["unit_id"]),
+            doc_id=str(row["doc_id"]),
+            evidence_ids=evidence_ids,
+            support_type="coverage_metadata",
+            now=now,
+        )
+    return {
+        "source_unit_count": len(rows),
+        "fact_link_count": fact_link_count,
+        "evidence_link_count": evidence_link_count,
+    }
+
+
+def _persist_source_unit_links(connection, unit_id: str, doc_id: str, row: dict[str, object], now: str) -> None:
+    covered_by = row.get("covered_by") if isinstance(row.get("covered_by"), dict) else {}
+    fact_ids = _string_ids(covered_by.get("fact_ids"))
+    evidence_ids = _string_ids(covered_by.get("evidence_ids"))
+    if not evidence_ids and fact_ids:
+        evidence_ids = _linked_evidence_ids_for_facts(connection, fact_ids)
+    _insert_source_unit_fact_links(
+        connection,
+        unit_id=unit_id,
+        doc_id=doc_id,
+        fact_ids=fact_ids,
+        support_type="coverage_matrix",
+        now=now,
+    )
+    _insert_source_unit_evidence_links(
+        connection,
+        unit_id=unit_id,
+        doc_id=doc_id,
+        evidence_ids=evidence_ids,
+        support_type="coverage_matrix",
+        now=now,
+    )
+
+
+def _insert_source_unit_fact_links(
+    connection,
+    *,
+    unit_id: str,
+    doc_id: str,
+    fact_ids: list[str],
+    support_type: str,
+    now: str,
+) -> int:
+    inserted = 0
+    for fact_id in fact_ids:
+        cursor = connection.execute(
+            """
+            INSERT OR IGNORE INTO source_unit_fact_map (
+                unit_id, fact_id, doc_id, support_type, created_at
+            )
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            (unit_id, fact_id, doc_id, support_type, now),
+        )
+        inserted += max(int(cursor.rowcount or 0), 0)
+    return inserted
+
+
+def _insert_source_unit_evidence_links(
+    connection,
+    *,
+    unit_id: str,
+    doc_id: str,
+    evidence_ids: list[str],
+    support_type: str,
+    now: str,
+) -> int:
+    inserted = 0
+    for evidence_id in evidence_ids:
+        cursor = connection.execute(
+            """
+            INSERT OR IGNORE INTO source_unit_evidence_map (
+                unit_id, evidence_id, doc_id, support_type, created_at
+            )
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            (unit_id, evidence_id, doc_id, support_type, now),
+        )
+        inserted += max(int(cursor.rowcount or 0), 0)
+    return inserted
+
+
+def _linked_evidence_ids_for_facts(connection, fact_ids: list[str]) -> list[str]:
+    evidence_ids: set[str] = set()
+    for fact_id in fact_ids:
+        rows = connection.execute(
+            """
+            SELECT evidence_id
+            FROM fact_evidence_map
+            WHERE fact_id = ?
+            ORDER BY evidence_id
+            """,
+            (fact_id,),
+        ).fetchall()
+        evidence_ids.update(str(row["evidence_id"]) for row in rows if row["evidence_id"])
+    return sorted(evidence_ids)
+
+
+def _json_object(value: object) -> dict[str, object]:
+    if not value:
+        return {}
+    try:
+        payload = json.loads(str(value))
+    except (TypeError, json.JSONDecodeError):
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def _string_ids(value: object) -> list[str]:
+    if isinstance(value, str):
+        values = [value]
+    elif isinstance(value, (list, tuple, set)):
+        values = [str(item) for item in value]
+    else:
+        values = []
+    seen: set[str] = set()
+    result: list[str] = []
+    for item in values:
+        item = item.strip()
+        if item and item not in seen:
+            seen.add(item)
+            result.append(item)
+    return result
 
 
 def sync_golden_cases(
@@ -197,14 +427,15 @@ def record_retrieval_run(
     now = utc_now()
     run_id = _stable_id("RET", query, query_type, doc_scope, reranked_ids[:20], now)
     try:
+        _ensure_retrieval_runs_columns(connection)
         connection.execute(
             """
             INSERT INTO retrieval_runs (
                 run_id, query, query_type, doc_scope,
                 retrieved_evidence_ids_json, reranked_ids_json, scores_json,
-                metadata_json, created_at
+                code_version, metadata_json, created_at
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 run_id,
@@ -214,6 +445,7 @@ def record_retrieval_run(
                 json.dumps(retrieved_evidence_ids, ensure_ascii=False),
                 json.dumps(reranked_ids, ensure_ascii=False),
                 json.dumps(scores, ensure_ascii=False, sort_keys=True, default=str),
+                _runtime_code_version(),
                 json.dumps(metadata or {}, ensure_ascii=False, sort_keys=True, default=str),
                 now,
             ),
@@ -221,6 +453,31 @@ def record_retrieval_run(
     except sqlite3.DatabaseError:
         return None
     return run_id
+
+
+def _ensure_retrieval_runs_columns(connection) -> None:
+    rows = connection.execute("PRAGMA table_info(retrieval_runs)").fetchall()
+    columns = {str(row["name"]) for row in rows}
+    if "code_version" not in columns:
+        connection.execute("ALTER TABLE retrieval_runs ADD COLUMN code_version TEXT")
+
+
+@lru_cache(maxsize=1)
+def _runtime_code_version() -> str:
+    explicit = os.environ.get("EAKB_CODE_VERSION")
+    if explicit:
+        return explicit.strip()
+    try:
+        digest = hashlib.sha1()
+        root = Path(__file__).resolve().parents[2]
+        for path in sorted((root / "src" / "enterprise_agent_kb").glob("*.py")):
+            stat = path.stat()
+            digest.update(path.name.encode("utf-8"))
+            digest.update(str(int(stat.st_mtime)).encode("ascii"))
+            digest.update(str(stat.st_size).encode("ascii"))
+        return f"src-{digest.hexdigest()[:12]}"
+    except Exception:
+        return "runtime-unavailable"
 
 
 def record_eval_run(
@@ -236,6 +493,7 @@ def record_eval_run(
     case_results: list[dict[str, object]] | None = None,
 ) -> str:
     now = utc_now()
+    stored_code_version = code_version if code_version is not None else _runtime_code_version()
     eval_run_id = _stable_id("EVAL", suite_id, now, command)
     config_hash = _short_hash({"suite_id": suite_id, "case_count": len(cases), "command": command})
     summary_with_quality = dict(summary)
@@ -265,7 +523,7 @@ def record_eval_run(
             now,
             now,
             config_hash,
-            code_version,
+            stored_code_version,
             json.dumps(summary_with_quality, ensure_ascii=False),
             "passed" if success else "failed",
         ),
@@ -381,6 +639,7 @@ def list_retrieval_runs(
     query_type: str | None = None,
     limit: int = 30,
 ) -> list[dict[str, object]]:
+    _ensure_retrieval_runs_columns(connection)
     clauses: list[str] = []
     params: list[object] = []
     if query:
@@ -395,7 +654,7 @@ def list_retrieval_runs(
         f"""
         SELECT run_id, query, query_type, doc_scope,
                retrieved_evidence_ids_json, reranked_ids_json, scores_json,
-               metadata_json, created_at
+               code_version, metadata_json, created_at
         FROM retrieval_runs
         {where}
         ORDER BY created_at DESC
@@ -407,11 +666,12 @@ def list_retrieval_runs(
 
 
 def get_retrieval_run_detail(connection, run_id: str) -> dict[str, object] | None:
+    _ensure_retrieval_runs_columns(connection)
     row = connection.execute(
         """
         SELECT run_id, query, query_type, doc_scope,
                retrieved_evidence_ids_json, reranked_ids_json, scores_json,
-               metadata_json, created_at
+               code_version, metadata_json, created_at
         FROM retrieval_runs
         WHERE run_id = ?
         """,
@@ -528,6 +788,72 @@ def draft_golden_case_from_failure(connection, eval_run_id: str, case_id: str) -
         "draft_case": draft,
         "failure": failure,
         "status": "drafted",
+    }
+
+
+def draft_golden_cases_from_eval_failures(
+    connection,
+    eval_run_id: str,
+    *,
+    case_ids: list[str] | None = None,
+    failure_types: list[str] | None = None,
+    limit: int | None = None,
+) -> dict[str, object] | None:
+    detail = get_eval_run_detail(connection, eval_run_id)
+    if detail is None:
+        return None
+    requested_case_ids = {
+        str(case_id or "").strip()
+        for case_id in (case_ids or [])
+        if str(case_id or "").strip()
+    }
+    requested_failure_types = {
+        str(failure_type or "").strip()
+        for failure_type in (failure_types or [])
+        if str(failure_type or "").strip()
+    }
+    drafted: list[dict[str, object]] = []
+    existing: list[dict[str, object]] = []
+    skipped: list[dict[str, object]] = []
+    for result in detail.get("results", []):
+        if not isinstance(result, dict) or result.get("passed"):
+            continue
+        source_case_id = str(result.get("case_id") or "").strip()
+        if requested_case_ids and source_case_id not in requested_case_ids:
+            continue
+        failure = _failure_analysis_item(connection, result, eval_run_id=eval_run_id)
+        failure_type = str(failure.get("failure_type") or "").strip()
+        if requested_failure_types and failure_type not in requested_failure_types:
+            continue
+        draft_case = failure.get("golden_draft") if isinstance(failure.get("golden_draft"), dict) else None
+        if draft_case:
+            existing.append(draft_case)
+        else:
+            draft_case = _draft_case_from_failure(failure, eval_run_id=eval_run_id)
+            _upsert_golden_case(connection, draft_case)
+            drafted.append(draft_case)
+        if limit is not None and limit > 0 and len(drafted) + len(existing) >= limit:
+            break
+
+    for case_id in sorted(requested_case_ids):
+        if not any(str(item.get("source_case_id") or item.get("metadata", {}).get("source_case_id") or "") == case_id for item in [*drafted, *existing]):
+            skipped.append({"case_id": case_id, "reason": "failure_case_not_found_or_passed"})
+
+    all_cases = [*drafted, *existing]
+    readiness_counts: dict[str, int] = {}
+    for item in all_cases:
+        status = str(item.get("readiness_status") or item.get("metadata", {}).get("readiness_status") or item.get("status") or "unknown")
+        readiness_counts[status] = readiness_counts.get(status, 0) + 1
+    return {
+        "eval_run_id": eval_run_id,
+        "status": "drafted",
+        "drafted_count": len(drafted),
+        "existing_count": len(existing),
+        "skipped_count": len(skipped),
+        "total_failure_draft_count": len(all_cases),
+        "readiness_counts": dict(sorted(readiness_counts.items())),
+        "draft_cases": all_cases,
+        "skipped": skipped,
     }
 
 
@@ -875,14 +1201,19 @@ def _retrieval_run_row(row, *, include_detail: bool) -> dict[str, object]:
         retrieved_evidence_ids=retrieved_evidence_ids if isinstance(retrieved_evidence_ids, list) else [],
         metadata=metadata if isinstance(metadata, dict) else {},
     )
+    direct_evidence_hit_count = len(retrieved_evidence_ids) if isinstance(retrieved_evidence_ids, list) else 0
+    linked_evidence_hit_count = int(diagnostics.get("linked_evidence_count") or 0)
     summary = {
         "run_id": row["run_id"],
         "query": row["query"],
         "query_type": row["query_type"],
         "doc_scope": row["doc_scope"],
         "created_at": row["created_at"],
+        "code_version": row["code_version"] if "code_version" in row.keys() else None,
         "hit_count": len(reranked_ids) if isinstance(reranked_ids, list) else 0,
-        "evidence_hit_count": len(retrieved_evidence_ids) if isinstance(retrieved_evidence_ids, list) else 0,
+        "evidence_hit_count": direct_evidence_hit_count + linked_evidence_hit_count,
+        "direct_evidence_hit_count": direct_evidence_hit_count,
+        "linked_evidence_hit_count": linked_evidence_hit_count,
         "diagnostics": diagnostics,
     }
     if not include_detail:
@@ -1788,8 +2119,6 @@ def _draft_case_from_failure(failure: dict[str, object], *, eval_run_id: str) ->
     source_case_id = str(failure.get("case_id") or "").strip()
     doc_id = _failure_target_doc_id(failure)
     must_hit = _text_values(expected.get("must_hit"))
-    if not must_hit:
-        must_hit = _must_hit_from_retrieved_items(retrieved_items)
     negative_expected = _text_values(expected.get("negative_expected"))
     answer_quality = metrics.get("answer_quality") if isinstance(metrics.get("answer_quality"), dict) else {}
     if not negative_expected:
@@ -1972,18 +2301,6 @@ def _failure_target_doc_id(failure: dict[str, object]) -> str:
             if text:
                 return text
     return "FAILURE-ANALYSIS"
-
-
-def _must_hit_from_retrieved_items(retrieved_items: list[object]) -> list[str]:
-    values: list[str] = []
-    for item in retrieved_items[:5]:
-        if not isinstance(item, dict):
-            continue
-        for key in ("result_id", "fact_id", "evidence_id"):
-            value = str(item.get(key) or "").strip()
-            if value and value not in values:
-                values.append(value)
-    return values[:5]
 
 
 def _evaluate_golden_draft_readiness(

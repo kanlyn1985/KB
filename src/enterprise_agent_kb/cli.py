@@ -9,6 +9,7 @@ from .answer_api import answer_query
 from .api_server import serve_api
 from .mcp_server import run_mcp_stdio
 from .bootstrap import initialize_workspace, workspace_status
+from .corpus_eval import generate_corpus_eval_cases, run_corpus_retrieval_eval
 from .coverage import build_coverage_for_document, build_test_gap_candidates_for_document
 from .coverage_diagnostics import build_all_docs_uncovered_priority_report
 from .doc_diagnostics import build_document_diagnostics
@@ -18,6 +19,7 @@ from .facts import build_facts_for_document
 from .generated_tests import (
     assess_all_coverage_test_draft_readiness,
     assess_coverage_test_draft_readiness_for_document,
+    close_coverage_test_gaps,
     generate_coverage_test_drafts_for_document,
     promote_coverage_test_drafts_for_document,
     run_coverage_promoted_pytest_for_document,
@@ -233,6 +235,39 @@ def build_parser() -> argparse.ArgumentParser:
         help="Run each draft through the answer/query validator.",
     )
 
+    close_gaps_parser = subparsers.add_parser(
+        "close-coverage-test-gaps",
+        help="Generate, validate, promote, and rebuild coverage tests for golden-gap source units.",
+    )
+    close_gaps_parser.add_argument(
+        "--doc-id",
+        action="append",
+        default=None,
+        help="Document ID to process. Repeat to process multiple docs. Defaults to all active documents.",
+    )
+    close_gaps_parser.add_argument(
+        "--limit-per-doc",
+        type=int,
+        default=25,
+        help="Maximum number of draft cases to emit per document.",
+    )
+    close_gaps_parser.add_argument(
+        "--mode",
+        choices=["trace", "answer", "hybrid"],
+        default="trace",
+        help="Validation mode for generated coverage drafts.",
+    )
+    close_gaps_parser.add_argument(
+        "--rebuild-coverage",
+        action="store_true",
+        help="Rebuild each document's coverage before deriving draft tests.",
+    )
+    close_gaps_parser.add_argument(
+        "--no-promote",
+        action="store_true",
+        help="Only generate and validate drafts; do not promote them into golden tests.",
+    )
+
     validate_draft_tests_parser = subparsers.add_parser(
         "validate-coverage-test-drafts",
         help="Validate existing coverage test drafts for a document.",
@@ -332,10 +367,91 @@ def build_parser() -> argparse.ArgumentParser:
     user_query_retrieval_parser.add_argument(
         "--limit",
         type=int,
-        default=8,
+        default=10,
         help="Retrieval hit limit per query.",
     )
     user_query_retrieval_parser.add_argument(
+        "--output-dir",
+        type=Path,
+        default=None,
+        help="Directory for JSON and Markdown reports.",
+    )
+
+    corpus_cases_parser = subparsers.add_parser(
+        "generate-corpus-eval-cases",
+        help="Generate source-unit driven corpus retrieval evaluation cases.",
+    )
+    corpus_cases_parser.add_argument(
+        "--doc-id",
+        action="append",
+        default=None,
+        help="Document ID to sample from. Repeat to include multiple docs. Defaults to all active documents.",
+    )
+    corpus_cases_parser.add_argument(
+        "--limit-per-type",
+        type=int,
+        default=20,
+        help="Maximum generated cases per corpus case type.",
+    )
+    corpus_cases_parser.add_argument(
+        "--case-type",
+        action="append",
+        default=None,
+        help="Case type to generate: definition, parameter, or process_activity. Repeat for multiple types.",
+    )
+    corpus_cases_parser.add_argument(
+        "--output-dir",
+        type=Path,
+        default=None,
+        help="Directory for JSON and Markdown reports.",
+    )
+
+    corpus_eval_parser = subparsers.add_parser(
+        "run-corpus-retrieval-eval",
+        help="Run source-unit driven corpus retrieval evaluation and record an eval run.",
+    )
+    corpus_eval_parser.add_argument(
+        "--case-file",
+        type=Path,
+        default=None,
+        help="JSON file containing corpus retrieval cases. Omit to generate cases first.",
+    )
+    corpus_eval_parser.add_argument(
+        "--suite-id",
+        default="regression:corpus_retrieval",
+        help="Eval suite ID to record.",
+    )
+    corpus_eval_parser.add_argument(
+        "--limit",
+        type=int,
+        default=10,
+        help="Retrieval hit limit per query.",
+    )
+    corpus_eval_parser.add_argument(
+        "--case-limit",
+        type=int,
+        default=None,
+        help="Maximum cases to run after loading or generation.",
+    )
+    corpus_eval_parser.add_argument(
+        "--doc-id",
+        action="append",
+        default=None,
+        help="Document ID to generate cases from when --case-file is omitted. Repeat for multiple docs.",
+    )
+    corpus_eval_parser.add_argument(
+        "--generation-limit-per-type",
+        type=int,
+        default=20,
+        help="Maximum generated cases per corpus case type when --case-file is omitted.",
+    )
+    corpus_eval_parser.add_argument(
+        "--case-type",
+        action="append",
+        default=None,
+        help="Case type to generate when --case-file is omitted: definition, parameter, or process_activity.",
+    )
+    corpus_eval_parser.add_argument(
         "--output-dir",
         type=Path,
         default=None,
@@ -765,6 +881,33 @@ def main() -> None:
         )
         return
 
+    if args.command == "close-coverage-test-gaps":
+        result = close_coverage_test_gaps(
+            args.root,
+            doc_ids=args.doc_id,
+            limit_per_doc=args.limit_per_doc,
+            validation_mode=args.mode,
+            rebuild_coverage=args.rebuild_coverage,
+            promote=not args.no_promote,
+        )
+        print(
+            json.dumps(
+                {
+                    "document_count": result["document_count"],
+                    "limit_per_doc": result["limit_per_doc"],
+                    "validation_mode": result["validation_mode"],
+                    "promote": result["promote"],
+                    "totals": result["totals"],
+                    "success": result["success"],
+                    "json_path": result["json_path"],
+                    "uncovered_priority_report": result["uncovered_priority_report"],
+                },
+                indent=2,
+                ensure_ascii=False,
+            )
+        )
+        return
+
     if args.command == "validate-coverage-test-drafts":
         result = validate_coverage_test_drafts_for_document(args.root, args.doc_id, mode=args.mode)
         print(
@@ -868,6 +1011,59 @@ def main() -> None:
                     "passed": result.passed,
                     "failed": result.failed,
                     "success": result.success,
+                    "json_path": str(result.json_path),
+                    "report_path": str(result.report_path),
+                },
+                indent=2,
+                ensure_ascii=False,
+            )
+        )
+        return
+
+    if args.command == "generate-corpus-eval-cases":
+        result = generate_corpus_eval_cases(
+            args.root,
+            doc_ids=args.doc_id,
+            limit_per_type=args.limit_per_type,
+            output_dir=args.output_dir,
+            case_types=args.case_type,
+        )
+        print(
+            json.dumps(
+                {
+                    "case_count": result.case_count,
+                    "summary": result.summary,
+                    "json_path": str(result.json_path),
+                    "report_path": str(result.report_path),
+                },
+                indent=2,
+                ensure_ascii=False,
+            )
+        )
+        return
+
+    if args.command == "run-corpus-retrieval-eval":
+        result = run_corpus_retrieval_eval(
+            args.root,
+            case_file=args.case_file,
+            suite_id=args.suite_id,
+            limit=args.limit,
+            output_dir=args.output_dir,
+            doc_ids=args.doc_id,
+            generation_limit_per_type=args.generation_limit_per_type,
+            case_limit=args.case_limit,
+            case_types=args.case_type,
+        )
+        print(
+            json.dumps(
+                {
+                    "eval_run_id": result.eval_run_id,
+                    "suite_id": result.suite_id,
+                    "case_count": result.case_count,
+                    "passed": result.passed,
+                    "failed": result.failed,
+                    "success": result.success,
+                    "case_file": str(result.case_file),
                     "json_path": str(result.json_path),
                     "report_path": str(result.report_path),
                 },

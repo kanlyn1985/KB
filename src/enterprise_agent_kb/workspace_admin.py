@@ -25,6 +25,8 @@ def reset_workspace_data(workspace_root: Path, *, keep_raw: bool = True) -> Rese
             preferred_order = [
                 "edge_evidence_map",
                 "fact_evidence_map",
+                "source_unit_evidence_map",
+                "source_unit_fact_map",
                 "repair_tasks",
                 "eval_results",
                 "eval_runs",

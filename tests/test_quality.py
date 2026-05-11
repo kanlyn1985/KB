@@ -42,3 +42,11 @@ def test_page_metrics_keeps_readable_standard_text_ready() -> None:
     assert metrics["risk_level"] == "low"
     assert metrics["page_status"] == "ready"
     assert metrics["readability_score"] >= 0.35
+
+
+def test_page_metrics_treats_confirmed_blank_pages_as_non_actionable() -> None:
+    metrics = _page_metrics({"page_no": 1, "page_status": "blank", "blocks": []})
+
+    assert metrics["risk_level"] == "low"
+    assert metrics["page_status"] == "blank"
+    assert metrics["risk_flags"] == ["blank_page"]

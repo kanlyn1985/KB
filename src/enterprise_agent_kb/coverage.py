@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import re
 import unicodedata
 from dataclasses import asdict, dataclass
@@ -292,6 +293,7 @@ def build_test_gap_candidates_for_document(
     *,
     limit: int | None = None,
     rebuild: bool = False,
+    excluded_unit_ids: set[str] | None = None,
 ) -> TestGapCandidateBuildResult:
     paths = AppPaths.from_root(workspace_root)
     paths.coverage_reports.mkdir(parents=True, exist_ok=True)
@@ -306,6 +308,7 @@ def build_test_gap_candidates_for_document(
         generated_at,
         list(payload.get("items") or []),
         limit=limit,
+        excluded_unit_ids=excluded_unit_ids,
     )
     candidates_path = paths.coverage_reports / f"{doc_id}.test_gap_candidates.json"
     report_path = paths.coverage_reports / f"{doc_id}.test_gap_candidates.md"
@@ -375,7 +378,7 @@ def _augment_source_units_from_facts(
             ):
                 continue
             unit = SourceUnit(
-                unit_id=f"{doc_id}:definition:{page_no}:{fact['fact_id']}",
+                unit_id=_stable_fact_fallback_unit_id(doc_id, "definition_unit", page_no, semantic_key, source_text),
                 unit_type="definition_unit",
                 page_no=page_no,
                 semantic_key=semantic_key,
@@ -409,7 +412,7 @@ def _augment_source_units_from_facts(
             ):
                 continue
             unit = SourceUnit(
-                unit_id=f"{doc_id}:requirement:{page_no}:{fact['fact_id']}",
+                unit_id=_stable_fact_fallback_unit_id(doc_id, "requirement_unit", page_no, semantic_key, source_text),
                 unit_type="requirement_unit",
                 page_no=page_no,
                 semantic_key=semantic_key,
@@ -458,8 +461,15 @@ def _augment_source_units_from_facts(
                 ]
                 if item
             )
+            if _is_source_unit_inventory_noise(
+                unit_type="parameter_row_unit",
+                semantic_key=semantic_key,
+                source_text=source_text,
+                quality_flags=[],
+            ):
+                continue
             unit = SourceUnit(
-                unit_id=f"{doc_id}:parameter-row:{page_no}:{fact['fact_id']}",
+                unit_id=_stable_fact_fallback_unit_id(doc_id, "parameter_row_unit", page_no, semantic_key, source_text),
                 unit_type="parameter_row_unit",
                 page_no=page_no,
                 semantic_key=semantic_key,
@@ -500,6 +510,28 @@ def _augment_source_units_from_facts(
         augmented.append(unit)
 
     return augmented
+
+
+def _stable_fact_fallback_unit_id(
+    doc_id: str,
+    unit_type: str,
+    page_no: int,
+    semantic_key: str,
+    source_text: str,
+) -> str:
+    unit_label = unit_type.replace("_unit", "").replace("_", "-")
+    digest = hashlib.sha1(
+        "|".join(
+            [
+                doc_id,
+                unit_type,
+                str(page_no),
+                _compare_key(semantic_key),
+                _compare_key(source_text[:220]),
+            ]
+        ).encode("utf-8")
+    ).hexdigest()[:12].upper()
+    return f"{doc_id}:{unit_label}:{page_no}:{digest}"
 
 
 def _definition_source_unit(unit: dict[str, object]) -> SourceUnit | None:
@@ -1188,14 +1220,18 @@ def _build_test_gap_candidates(
     matrix_rows: list[dict[str, object]],
     *,
     limit: int | None = None,
+    excluded_unit_ids: set[str] | None = None,
 ) -> dict[str, object]:
+    excluded_unit_ids = excluded_unit_ids or set()
     raw_rows = [
         row
         for row in matrix_rows
         if row.get("coverage_status") == "u3_not_tested"
     ]
     rows = _dedupe_test_gap_rows([
-        row for row in raw_rows if _is_actionable_test_gap_row(row)
+        row
+        for row in raw_rows
+        if str(row.get("unit_id") or "") not in excluded_unit_ids and _is_actionable_test_gap_row(row)
     ])
     sorted_rows = _sort_test_gap_rows(rows)
     if limit is not None and limit >= 0:
@@ -1207,6 +1243,7 @@ def _build_test_gap_candidates(
         "version": SOURCE_UNIT_EXPORT_VERSION,
         "source_gap_count": len(raw_rows),
         "skipped_candidate_count": len(raw_rows) - len(rows),
+        "excluded_candidate_count": sum(1 for row in raw_rows if str(row.get("unit_id") or "") in excluded_unit_ids),
         "candidate_count": len(sorted_rows),
         "items": [_test_gap_candidate_from_row(row) for row in sorted_rows],
     }
@@ -1274,6 +1311,7 @@ def _render_test_gap_report(payload: dict[str, object]) -> str:
         f"- doc_id: {payload['doc_id']}",
         f"- source_gap_count: {payload.get('source_gap_count', payload['candidate_count'])}",
         f"- skipped_candidate_count: {payload.get('skipped_candidate_count', 0)}",
+        f"- excluded_candidate_count: {payload.get('excluded_candidate_count', 0)}",
         f"- candidate_count: {payload['candidate_count']}",
         f"- generated_at: {payload['generated_at']}",
         "",
@@ -1356,15 +1394,84 @@ def _is_source_unit_inventory_noise(
     quality_flags: list[str],
 ) -> bool:
     """Filter non-knowledge inventory before it becomes a coverage obligation."""
+    raw_key = re.sub(r"\s+", "", str(semantic_key or "")).strip()
+    if raw_key and re.fullmatch(r"\d+", raw_key):
+        return True
     cleaned_key = _clean_test_gap_label(semantic_key)
     cleaned_text = _clean_test_gap_label(source_text)
     if "layout_title_noise" in quality_flags:
         return True
     if _looks_like_test_gap_noise(cleaned_key):
         return True
+    if _looks_like_structural_inventory_noise(cleaned_key, cleaned_text):
+        return True
     if unit_type == "parameter_row_unit" and _looks_like_low_value_parameter_gap(cleaned_key):
         return True
     if unit_type == "definition_unit" and _looks_like_boilerplate_definition_pair(cleaned_key, cleaned_text):
+        return True
+    if unit_type == "definition_unit" and _looks_like_figure_legend_definition(cleaned_key, cleaned_text):
+        return True
+    if unit_type in {"definition_unit", "requirement_unit"} and _looks_like_table_syntax_source(cleaned_text):
+        return True
+    if unit_type in {"definition_unit", "requirement_unit"} and _looks_like_clause_reference_noise(cleaned_key, cleaned_text):
+        return True
+    return False
+
+
+def _looks_like_structural_inventory_noise(semantic_key: str, source_text: str) -> bool:
+    key = re.sub(r"\s+", " ", semantic_key).strip()
+    text = re.sub(r"\s+", " ", source_text).strip()
+    compact_key = re.sub(r"\s+", "", key)
+    structural_titles = {
+        "概述",
+        "概述。",
+        "术语",
+        "引言",
+        "结语",
+        "分类",
+        "目次",
+        "目录",
+        "材料",
+        "结构",
+    }
+    if compact_key in {"目次", "目录", "引言", "结语"}:
+        return True
+    if compact_key in structural_titles and len(text) <= 80:
+        return True
+    if compact_key in {"概述", "材料", "结构", "分类"} and re.fullmatch(r"(?:应)?符合.+(?:规定|要求)", text):
+        return True
+    if compact_key == "3":
+        return True
+    if key.startswith("Abstract ") and len(key) > 80:
+        return True
+    if key.startswith("Process reference model and performance indicators") and len(key) > 80:
+        return True
+    if "文章引用" in text and len(key) > 40:
+        return True
+    return False
+
+
+def _looks_like_figure_legend_definition(semantic_key: str, source_text: str) -> bool:
+    key_tokens = [token for token in re.split(r"\s+", semantic_key) if token]
+    if len(key_tokens) >= 5 and ("标引序号说明" in source_text or "☆" in source_text):
+        return True
+    return False
+
+
+def _looks_like_table_syntax_source(source_text: str) -> bool:
+    if source_text.count("|") >= 6 and re.search(r"\|\s*:?-{2,}:?\s*\|", source_text):
+        return True
+    if source_text.count("|") >= 10:
+        return True
+    return False
+
+
+def _looks_like_clause_reference_noise(semantic_key: str, source_text: str) -> bool:
+    key = re.sub(r"\s+", " ", semantic_key).strip()
+    text = re.sub(r"\s+", " ", source_text).strip()
+    if re.match(r"^条款\s*\d+(?:\.\d+)*", key) and (
+        "过程评估模型" in text or "过程参考模型" in text or "ISO/IEC" in text
+    ):
         return True
     return False
 
@@ -1435,12 +1542,17 @@ def _looks_like_low_value_parameter_gap(label: str) -> bool:
         "输出电流",
         "DP3",
         "S0",
+        "SAC",
         "SV",
         "SV'",
         "S+/S-",
         "S+/S",
         "C1,C2",
         "C5,C6",
+        "U1B",
+        "U1C",
+        "U2B",
+        "信号设置时间^{B,C}",
         "VDC",
         "ADC",
         "—",
@@ -1449,6 +1561,10 @@ def _looks_like_low_value_parameter_gap(label: str) -> bool:
     if upper in generic_labels or compact in generic_labels:
         return True
     if re.fullmatch(r"(?:DP|S|C)\d+(?:[,/](?:DP|S|C)?\d+)*", upper):
+        return True
+    if re.fullmatch(r"U\d+[A-Zᵃ-ᶻ]*", compact, re.I):
+        return True
+    if "^{" in compact or "}^{ " in compact:
         return True
     if re.fullmatch(r"S[Vv]'?|S[+-]/S-?", compact):
         return True

@@ -15,6 +15,7 @@ from .answer_api import answer_query
 from .closed_loop_store import load_golden_cases_from_file, record_eval_run, sync_golden_cases
 from .config import AppPaths
 from .coverage import build_coverage_for_document, build_test_gap_candidates_for_document
+from .coverage_diagnostics import build_all_docs_uncovered_priority_report
 from .answer_quality import evaluate_answer_quality
 from .db import connect
 from .query_api import build_query_context
@@ -24,6 +25,7 @@ from .retrieval_quality import evaluate_retrieval_quality
 NETWORK_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0 Safari/537.36"
 MIN_CASE_COUNT = 20
 MAX_CASE_COUNT = 220
+EVAL_RETRIEVAL_LIMIT = 10
 
 QUERY_REPAIR_SMOKE_CASES: list[dict[str, object]] = [
     {
@@ -79,6 +81,7 @@ def generate_coverage_test_drafts_for_document(
     limit: int | None = 50,
     rebuild_coverage: bool = False,
     validate: bool = False,
+    excluded_unit_ids: set[str] | None = None,
 ) -> dict[str, object]:
     paths = AppPaths.from_root(workspace_root)
     tests_dir = paths.root.parent / "tests" / "generated"
@@ -89,6 +92,7 @@ def generate_coverage_test_drafts_for_document(
         doc_id,
         limit=limit,
         rebuild=rebuild_coverage,
+        excluded_unit_ids=excluded_unit_ids,
     )
     gap_payload = json.loads(gap_result.candidates_path.read_text(encoding="utf-8"))
     cases = [_draft_case_from_gap_candidate(item, doc_id) for item in gap_payload.get("items", []) if isinstance(item, dict)]
@@ -107,6 +111,7 @@ def generate_coverage_test_drafts_for_document(
         "candidate_count": gap_payload.get("candidate_count", len(cases)),
         "source_gap_count": gap_payload.get("source_gap_count", len(cases)),
         "skipped_candidate_count": gap_payload.get("skipped_candidate_count", 0),
+        "excluded_candidate_count": gap_payload.get("excluded_candidate_count", 0),
         "draft_case_count": len(cases),
         "validated": validate,
         "coverage_candidates_path": str(gap_result.candidates_path),
@@ -254,6 +259,188 @@ def assess_all_coverage_test_draft_readiness(
     }
 
 
+def close_coverage_test_gaps(
+    workspace_root: Path,
+    *,
+    doc_ids: list[str] | None = None,
+    limit_per_doc: int | None = 25,
+    validation_mode: str = "trace",
+    rebuild_coverage: bool = False,
+    promote: bool = True,
+) -> dict[str, object]:
+    paths = AppPaths.from_root(workspace_root)
+    selected_doc_ids = doc_ids or _active_document_ids(paths)
+    documents: list[dict[str, object]] = []
+    totals = {
+        "draft_case_count": 0,
+        "validation_passed_count": 0,
+        "validation_failed_count": 0,
+        "promoted_case_count": 0,
+        "added_case_count": 0,
+        "coverage_test_passed": 0,
+        "coverage_test_failed": 0,
+    }
+
+    for doc_id in selected_doc_ids:
+        rejected_units = _load_coverage_test_rejections(paths).get(doc_id, {})
+        draft = generate_coverage_test_drafts_for_document(
+            workspace_root,
+            doc_id,
+            limit=limit_per_doc,
+            rebuild_coverage=rebuild_coverage,
+            validate=False,
+            excluded_unit_ids=set(rejected_units),
+        )
+        validation = validate_coverage_test_drafts_for_document(
+            workspace_root,
+            doc_id,
+            mode=validation_mode,
+        )
+        readiness = assess_coverage_test_draft_readiness_for_document(workspace_root, doc_id)
+        rejection_update = _record_coverage_test_rejections(
+            paths,
+            doc_id,
+            readiness.get("cases", []),
+        )
+        promotion: dict[str, object] | None = None
+        coverage_run: dict[str, object] | None = None
+        coverage_rebuild: dict[str, object] | None = None
+        if promote:
+            promotion = promote_coverage_test_drafts_for_document(
+                workspace_root,
+                doc_id,
+                require_validated=True,
+            )
+            coverage_run = run_coverage_promoted_tests_for_document(
+                workspace_root,
+                doc_id,
+                validation_mode=validation_mode,
+            )
+            coverage_rebuild_result = build_coverage_for_document(workspace_root, doc_id)
+            coverage_rebuild = {
+                "source_unit_count": coverage_rebuild_result.source_unit_count,
+                "test_coverage_rate": coverage_rebuild_result.test_coverage_rate,
+                "uncovered_counts": coverage_rebuild_result.uncovered_counts,
+                "summary_path": str(coverage_rebuild_result.summary_path),
+            }
+
+        document_result = {
+            "doc_id": doc_id,
+            "draft_case_count": int(draft.get("draft_case_count") or 0),
+            "source_gap_count": int(draft.get("source_gap_count") or 0),
+            "skipped_candidate_count": int(draft.get("skipped_candidate_count") or 0),
+            "excluded_candidate_count": int(draft.get("excluded_candidate_count") or 0),
+            "validation_passed_count": int(validation.get("passed_count") or 0),
+            "validation_failed_count": int(validation.get("failed_count") or 0),
+            "new_rejection_count": int(rejection_update.get("new_rejection_count") or 0),
+            "total_rejection_count": int(rejection_update.get("total_rejection_count") or 0),
+            "promoted_case_count": int(promotion.get("promoted_case_count") or 0) if promotion else 0,
+            "added_case_count": int(promotion.get("added_case_count") or 0) if promotion else 0,
+            "pruned_obsolete_case_count": int(promotion.get("pruned_obsolete_case_count") or 0) if promotion else 0,
+            "coverage_test_passed": int(coverage_run.get("passed") or 0) if coverage_run else 0,
+            "coverage_test_failed": int(coverage_run.get("failed") or 0) if coverage_run else 0,
+            "draft_path": draft.get("json_path"),
+            "validation_path": validation.get("json_path"),
+            "golden_path": promotion.get("json_path") if promotion else None,
+            "coverage_summary_path": coverage_rebuild.get("summary_path") if coverage_rebuild else None,
+        }
+        documents.append(document_result)
+        totals["draft_case_count"] += document_result["draft_case_count"]
+        totals["validation_passed_count"] += document_result["validation_passed_count"]
+        totals["validation_failed_count"] += document_result["validation_failed_count"]
+        totals["promoted_case_count"] += document_result["promoted_case_count"]
+        totals["added_case_count"] += document_result["added_case_count"]
+        totals["coverage_test_passed"] += document_result["coverage_test_passed"]
+        totals["coverage_test_failed"] += document_result["coverage_test_failed"]
+
+    priority_report = build_all_docs_uncovered_priority_report(
+        workspace_root,
+        rebuild_missing_coverage=False,
+    )
+    payload = {
+        "document_count": len(selected_doc_ids),
+        "limit_per_doc": limit_per_doc,
+        "validation_mode": validation_mode,
+        "promote": promote,
+        "totals": totals,
+        "documents": documents,
+        "uncovered_priority_report": {
+            "document_count": priority_report.document_count,
+            "issue_count": priority_report.issue_count,
+            "json_path": str(priority_report.json_path),
+            "report_path": str(priority_report.report_path),
+        },
+        "success": totals["validation_failed_count"] == 0 and totals["coverage_test_failed"] == 0,
+    }
+    output_path = paths.coverage_reports / "coverage_test_gap_closure_latest.json"
+    output_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    payload["json_path"] = str(output_path)
+    return payload
+
+
+def _coverage_test_rejections_path(paths: AppPaths) -> Path:
+    return paths.coverage_reports / "coverage_test_gap_rejections.json"
+
+
+def _load_coverage_test_rejections(paths: AppPaths) -> dict[str, dict[str, object]]:
+    path = _coverage_test_rejections_path(paths)
+    if not path.exists():
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}
+    docs = payload.get("documents") if isinstance(payload.get("documents"), dict) else {}
+    result: dict[str, dict[str, object]] = {}
+    for doc_id, units in docs.items():
+        if isinstance(units, dict):
+            result[str(doc_id)] = dict(units)
+    return result
+
+
+def _record_coverage_test_rejections(
+    paths: AppPaths,
+    doc_id: str,
+    assessed_cases: object,
+) -> dict[str, int]:
+    existing = _load_coverage_test_rejections(paths)
+    doc_rejections = dict(existing.get(doc_id, {}))
+    before_count = len(doc_rejections)
+    for case in assessed_cases if isinstance(assessed_cases, list) else []:
+        if not isinstance(case, dict):
+            continue
+        status = str(case.get("readiness_status") or "")
+        if status in {"promotable", "ready_for_validation"}:
+            continue
+        unit_id = str(case.get("unit_id") or "").strip()
+        if not unit_id:
+            continue
+        doc_rejections[unit_id] = {
+            "readiness_status": status,
+            "semantic_key": case.get("semantic_key"),
+            "query": case.get("query"),
+            "quality_flags": case.get("quality_flags") or [],
+            "readiness_reasons": case.get("readiness_reasons") or [],
+        }
+    existing[doc_id] = doc_rejections
+    path = _coverage_test_rejections_path(paths)
+    path.write_text(
+        json.dumps(
+            {
+                "documents": existing,
+                "total_rejection_count": sum(len(units) for units in existing.values()),
+            },
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+    return {
+        "new_rejection_count": max(len(doc_rejections) - before_count, 0),
+        "total_rejection_count": len(doc_rejections),
+    }
+
+
 def promote_coverage_test_drafts_for_document(
     workspace_root: Path,
     doc_id: str,
@@ -274,6 +461,11 @@ def promote_coverage_test_drafts_for_document(
     golden_path = tests_dir / f"{doc_id}.golden.json"
     golden_payload = _load_or_create_golden_payload(paths, doc_id, golden_path)
     existing_cases = [case for case in golden_payload.get("cases", []) if isinstance(case, dict)]
+    existing_cases, pruned_obsolete_count = _prune_obsolete_coverage_cases(
+        workspace_root,
+        doc_id,
+        existing_cases,
+    )
     merged_cases = _dedupe_cases([*existing_cases, *promoted_cases])
     added_count = len(merged_cases) - len(_dedupe_cases(existing_cases))
     golden_payload["cases"] = merged_cases
@@ -294,6 +486,7 @@ def promote_coverage_test_drafts_for_document(
         "doc_id": doc_id,
         "promoted_case_count": len(promoted_cases),
         "added_case_count": added_count,
+        "pruned_obsolete_case_count": pruned_obsolete_count,
         "total_case_count": len(merged_cases),
         "json_path": str(golden_path),
         "pytest_path": str(py_path),
@@ -509,6 +702,7 @@ def _render_coverage_test_draft_report(payload: dict[str, object]) -> str:
         f"- doc_id: {payload['doc_id']}",
         f"- source_gap_count: {payload['source_gap_count']}",
         f"- skipped_candidate_count: {payload['skipped_candidate_count']}",
+        f"- excluded_candidate_count: {payload.get('excluded_candidate_count', 0)}",
         f"- draft_case_count: {payload['draft_case_count']}",
         f"- validated: {payload['validated']}",
         f"- passed_count: {payload.get('passed_count', 0)}",
@@ -755,6 +949,53 @@ def _promotable_draft_cases(draft_payload: dict[str, object]) -> list[dict[str, 
         case["coverage_semantic_key"] = str(draft_case.get("semantic_key") or "")
         promoted.append(case)
     return _dedupe_cases(promoted)
+
+
+def _prune_obsolete_coverage_cases(
+    workspace_root: Path,
+    doc_id: str,
+    cases: list[dict[str, object]],
+) -> tuple[list[dict[str, object]], int]:
+    active_unit_ids, active_semantic_keys = _active_coverage_unit_identity(workspace_root, doc_id)
+    if not active_unit_ids and not active_semantic_keys:
+        return cases, 0
+    kept: list[dict[str, object]] = []
+    pruned = 0
+    for case in cases:
+        unit_id = str(case.get("coverage_unit_id") or "").strip()
+        is_coverage_case = case.get("source") == "coverage" or str(case.get("kind") or "").startswith("coverage_")
+        semantic_key = _normalize_compare(str(case.get("coverage_semantic_key") or case.get("must_include") or ""))
+        has_active_trace = bool(unit_id and unit_id in active_unit_ids) or bool(semantic_key and semantic_key in active_semantic_keys)
+        if is_coverage_case and unit_id and not has_active_trace:
+            pruned += 1
+            continue
+        kept.append(case)
+    return kept, pruned
+
+
+def _active_coverage_unit_identity(workspace_root: Path, doc_id: str) -> tuple[set[str], set[str]]:
+    paths = AppPaths.from_root(workspace_root)
+    matrix_path = paths.coverage_reports / f"{doc_id}.coverage_matrix.json"
+    if not matrix_path.exists():
+        build_coverage_for_document(workspace_root, doc_id)
+    if not matrix_path.exists():
+        return set(), set()
+    try:
+        payload = json.loads(matrix_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return set(), set()
+    unit_ids: set[str] = set()
+    semantic_keys: set[str] = set()
+    for row in payload.get("items", []):
+        if not isinstance(row, dict):
+            continue
+        unit_id = str(row.get("unit_id") or "").strip()
+        if unit_id:
+            unit_ids.add(unit_id)
+        semantic_key = _normalize_compare(str(row.get("semantic_key") or ""))
+        if semantic_key:
+            semantic_keys.add(semantic_key)
+    return unit_ids, semantic_keys
 
 
 def _load_or_create_golden_payload(paths: AppPaths, doc_id: str, golden_path: Path) -> dict[str, object]:
@@ -1935,10 +2176,10 @@ def _render_pytest_file(doc_id: str, cases: list[dict[str, str]]) -> str:
         '    expected = _normalize(case["must_include"])',
         '    target_doc_id = str(case.get("target_doc_id") or "") or None',
         '    if case.get("assert_mode") == "context_contains":',
-        '        context = build_query_context(WORKSPACE, case["query"], limit=8, preferred_doc_id=target_doc_id)',
+        f'        context = build_query_context(WORKSPACE, case["query"], limit={EVAL_RETRIEVAL_LIMIT}, preferred_doc_id=target_doc_id)',
         '        blob = json.dumps(context, ensure_ascii=False)',
         '    else:',
-        '        answer = answer_query(WORKSPACE, case["query"], limit=8, preferred_doc_id=target_doc_id)',
+        f'        answer = answer_query(WORKSPACE, case["query"], limit={EVAL_RETRIEVAL_LIMIT}, preferred_doc_id=target_doc_id)',
         '        blob = "\\n".join(',
         '            [',
         '                str(answer.get("direct_answer", "")),',
@@ -2166,10 +2407,10 @@ def _validate_case(workspace_root: Path, case: dict[str, str]) -> bool:
 
     try:
         if case.get("assert_mode") == "context_contains":
-            context = build_query_context(workspace_root, case["query"], limit=8, preferred_doc_id=target_doc_id)
+            context = build_query_context(workspace_root, case["query"], limit=EVAL_RETRIEVAL_LIMIT, preferred_doc_id=target_doc_id)
             blob = json.dumps(context, ensure_ascii=False)
         else:
-            answer = answer_query(workspace_root, case["query"], limit=8, preferred_doc_id=target_doc_id)
+            answer = answer_query(workspace_root, case["query"], limit=EVAL_RETRIEVAL_LIMIT, preferred_doc_id=target_doc_id)
             blob = "\n".join(
                 [
                     str(answer.get("direct_answer", "")),
@@ -2480,14 +2721,14 @@ def _evaluate_single_golden_case(workspace_root: Path, case: dict[str, object]) 
         }
     try:
         if case.get("assert_mode") == "context_contains":
-            context = build_query_context(workspace_root, str(case.get("query") or ""), limit=8, preferred_doc_id=target_doc_id)
+            context = build_query_context(workspace_root, str(case.get("query") or ""), limit=EVAL_RETRIEVAL_LIMIT, preferred_doc_id=target_doc_id)
             blob = json.dumps(context, ensure_ascii=False)
             retrieved_items = _retrieved_items_from_context(context)
             answer_text = ""
             answer_mode = "context_contains"
             trace_metrics = _trace_metrics_from_context(context)
         else:
-            answer = answer_query(workspace_root, str(case.get("query") or ""), limit=8, preferred_doc_id=target_doc_id)
+            answer = answer_query(workspace_root, str(case.get("query") or ""), limit=EVAL_RETRIEVAL_LIMIT, preferred_doc_id=target_doc_id)
             context = answer.get("context") if isinstance(answer.get("context"), dict) else {}
             blob = "\n".join(
                 [
@@ -2816,22 +3057,34 @@ def _validate_coverage_case_trace(workspace_root: Path, doc_id: str, case: dict[
         return {"passed": False, "mode": "trace_missing_matrix"}
 
     payload = json.loads(matrix_path.read_text(encoding="utf-8"))
-    for row in payload.get("items", []):
-        if not isinstance(row, dict) or str(row.get("unit_id") or "") != unit_id:
+    rows = [row for row in payload.get("items", []) if isinstance(row, dict)]
+    for row in rows:
+        if str(row.get("unit_id") or "") != unit_id:
             continue
-        covered_by = row.get("covered_by") if isinstance(row.get("covered_by"), dict) else {}
-        has_trace = bool(covered_by.get("evidence_ids")) and bool(covered_by.get("fact_ids"))
-        has_object = bool(covered_by.get("entity_ids") or covered_by.get("wiki_page_ids"))
-        row_semantic_key = str(row.get("semantic_key") or "")
-        semantic_match = not semantic_key or _matches_expected_anchor(
-            _normalize_compare(semantic_key),
-            _normalize_compare(row_semantic_key),
-        )
-        return {
-            "passed": has_trace and has_object and semantic_match,
-            "mode": "trace_matrix",
-        }
+        return _validate_coverage_matrix_row(row, semantic_key, mode="trace_matrix")
+
+    semantic_anchor = _normalize_compare(semantic_key)
+    if semantic_anchor:
+        for row in rows:
+            row_semantic_key = _normalize_compare(str(row.get("semantic_key") or ""))
+            if _matches_expected_anchor(semantic_anchor, row_semantic_key):
+                return _validate_coverage_matrix_row(row, semantic_key, mode="trace_matrix_semantic_fallback")
     return {"passed": False, "mode": "trace_unit_not_found"}
+
+
+def _validate_coverage_matrix_row(row: dict[str, object], semantic_key: str, *, mode: str) -> dict[str, object]:
+    covered_by = row.get("covered_by") if isinstance(row.get("covered_by"), dict) else {}
+    has_trace = bool(covered_by.get("evidence_ids")) and bool(covered_by.get("fact_ids"))
+    has_object = bool(covered_by.get("entity_ids") or covered_by.get("wiki_page_ids"))
+    row_semantic_key = str(row.get("semantic_key") or "")
+    semantic_match = not semantic_key or _matches_expected_anchor(
+        _normalize_compare(semantic_key),
+        _normalize_compare(row_semantic_key),
+    )
+    return {
+        "passed": has_trace and has_object and semantic_match,
+        "mode": mode,
+    }
 
 
 def _parse_pytest_counts(output: str) -> tuple[int, int]:

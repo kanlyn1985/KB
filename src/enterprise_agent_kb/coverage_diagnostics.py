@@ -61,6 +61,7 @@ def build_all_docs_uncovered_priority_report(
         page_block_counts = _load_page_block_counts(connection)
     finally:
         connection.close()
+    rejected_units = _load_coverage_test_rejections(paths)
 
     generated_at = datetime.now(UTC).isoformat(timespec="seconds")
     doc_reports: list[dict[str, object]] = []
@@ -83,6 +84,7 @@ def build_all_docs_uncovered_priority_report(
                 row=row,
                 page_evidence_counts=page_evidence_counts,
                 page_block_counts=page_block_counts,
+                rejected_units=rejected_units.get(doc_id, set()),
             )
             for row in items
             if row.get("coverage_status") != "covered"
@@ -166,6 +168,7 @@ def _classify_issue(
     row: dict[str, object],
     page_evidence_counts: dict[tuple[str, int], int],
     page_block_counts: dict[tuple[str, int], int],
+    rejected_units: set[str],
 ) -> dict[str, object]:
     status = str(row.get("coverage_status") or "unknown")
     page_no = int(row.get("page_no") or 0)
@@ -176,6 +179,7 @@ def _classify_issue(
     page_exists = page_block_counts.get((doc_id, page_no), 0) > 0
     root_cause = _root_cause_for_status(
         status=status,
+        unit_id=str(row.get("unit_id") or ""),
         unit_type=str(row.get("unit_type") or ""),
         semantic_key=semantic_key,
         page_exists=page_exists,
@@ -183,6 +187,7 @@ def _classify_issue(
         covered_by=covered_by,
         semantic_misaligned=bool(row.get("semantic_misaligned")),
         text=text,
+        rejected_units=rejected_units,
     )
     return {
         "doc_id": doc_id,
@@ -212,6 +217,7 @@ def _classify_issue(
 def _root_cause_for_status(
     *,
     status: str,
+    unit_id: str,
     unit_type: str,
     semantic_key: str,
     page_exists: bool,
@@ -219,7 +225,10 @@ def _root_cause_for_status(
     covered_by: dict[str, object],
     semantic_misaligned: bool,
     text: str,
+    rejected_units: set[str],
 ) -> str:
+    if status == "u3_not_tested" and unit_id in rejected_units:
+        return "test_gap_rejected"
     if unit_type == "parameter_row_unit" and (
         _looks_like_low_value_parameter_gap(_clean_test_gap_label(semantic_key))
         or _looks_like_low_value_parameter_gap(_clean_test_gap_label(text))
@@ -254,7 +263,25 @@ def _priority_score(status: str, root_cause: str, importance: str) -> int:
         score += 15
     if root_cause == "source_unit_noise":
         score -= 30
+    if root_cause == "test_gap_rejected":
+        score -= 35
     return max(score, 1)
+
+
+def _load_coverage_test_rejections(paths: AppPaths) -> dict[str, set[str]]:
+    path = paths.coverage_reports / "coverage_test_gap_rejections.json"
+    if not path.exists():
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}
+    documents = payload.get("documents") if isinstance(payload.get("documents"), dict) else {}
+    result: dict[str, set[str]] = {}
+    for doc_id, units in documents.items():
+        if isinstance(units, dict):
+            result[str(doc_id)] = {str(unit_id) for unit_id in units}
+    return result
 
 
 def _looks_like_noise(text: str) -> bool:
