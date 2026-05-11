@@ -1,0 +1,37 @@
+doc_type: feature-checklist
+feature: 2026-05-10-graph-contribution-dashboard
+status: done
+steps:
+  - id: identify-observability-gap
+    title: 定位 graph 贡献只能看单次 Raw metadata 的闭环缺口
+    status: done
+    exit_signal: 根因明确为缺少跨 retrieval_runs 的 graph contribution 聚合
+  - id: dashboard-snapshot
+    title: 增加 graph contribution dashboard 快照
+    status: done
+    exit_signal: _graph_contribution_snapshot 可从 retrieval_runs 聚合 retained/lost 指标
+  - id: health-risks
+    title: 将 graph retention 纳入召回健康风险
+    status: done
+    exit_signal: graph lost 多于 retained 时输出健康风险
+  - id: workbench-summary
+    title: Workbench 展示 Graph retained/lost 摘要
+    status: done
+    exit_signal: demo 页面闭环指标包含 Graph retention 和 lost
+  - id: regression-tests
+    title: 补充 graph contribution 和 UI 资产回归
+    status: done
+    exit_signal: api_server 和 delivery_assets 相关测试通过
+checks:
+  - id: snapshot-counts-retained-and-lost
+    description: graph retained/lost retrieval run 能被正确聚合
+    status: passed
+  - id: health-risk-for-lost-dominates
+    description: graph lost 多于 retained 时触发召回健康风险
+    status: passed
+  - id: ui-exposes-graph-metric
+    description: Workbench 闭环 dashboard 暴露 Graph retention/lost
+    status: passed
+  - id: syntax-check
+    description: api_server 语法检查通过
+    status: passed

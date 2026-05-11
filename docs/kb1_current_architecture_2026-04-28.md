@@ -103,6 +103,10 @@ document
 - `source_unit_coverage`
 - `uncovered_units`
 - `parse_risk_pages`
+- `actionable_parse_risk_pages`
+- `parse_risk_profile`
+
+注意：`parse_risk_pages` 是原始质量 backlog，不能直接等同于解析失败。当前 Dashboard 使用 `parse_risk_profile` 将 high-risk 页面分解为 `no_evidence`、`evidence_without_source_unit`、`source_unit_without_fact`、`fully_backed`，只有 `actionable_parse_risk_pages` 才进入入库闭环健康告警。PDF 主解析器输出空 blocks 时，解析层会用 PDF 原生文本层回填；确认空白页标记为 `blank`，不再计为解析失败。
 
 ### 3.2 召回闭环
 
@@ -424,6 +428,84 @@ documents
 - golden case 生成的来源。
 - 入库完成度的可查询事实。
 
+#### source_unit_fact_map / source_unit_evidence_map
+
+这两张表已经从“建议对象”进入当前实现，是入库闭环证明链的核心关系表。
+
+```mermaid
+flowchart LR
+  SU["source_units"] --> SUF["source_unit_fact_map"]
+  SUF --> F["facts"]
+  SU --> SUE["source_unit_evidence_map"]
+  SUE --> E["evidence"]
+```
+
+`source_unit_fact_map` 字段：
+
+| 字段 | 说明 |
+|---|---|
+| `unit_id` | source unit ID |
+| `fact_id` | 覆盖该 source unit 的 fact ID |
+| `doc_id` | 所属文档 |
+| `support_type` | 映射来源，例如 `coverage_matrix` 或 `coverage_metadata` |
+| `created_at` | 写入时间 |
+
+`source_unit_evidence_map` 字段：
+
+| 字段 | 说明 |
+|---|---|
+| `unit_id` | source unit ID |
+| `evidence_id` | 覆盖该 source unit 的 evidence ID |
+| `doc_id` | 所属文档 |
+| `support_type` | 映射来源，例如 `coverage_matrix` 或 `coverage_metadata` |
+| `created_at` | 写入时间 |
+
+用途：
+
+- `evidence_coverage_rate` 按 `source_unit_evidence_map` 中 distinct `unit_id` 计算。
+- `fact_coverage_rate` 按 `source_unit_fact_map` 中 distinct `unit_id` 计算。
+- 历史 coverage matrix 可从 `source_units.metadata_json.covered_by` 幂等回填。
+- 新 coverage 构建在 `sync_source_units_from_matrix` 阶段直接写入映射表。
+- fact fallback source unit ID 不允许嵌入 `FACT-*`，必须基于语义键和原文稳定生成。
+
+#### coverage_test_gap_rejections
+
+`coverage_test_gap_rejections.json` 是 golden-gap 自动治理的拒绝账本，用于记录验证失败、弱锚点、噪声标题、过长图表文本等不适合自动提升的 source units。
+
+```mermaid
+flowchart LR
+  C["test gap candidates"] --> D["draft cases"]
+  D --> V["trace validation"]
+  V -->|"pass"| G["golden cases"]
+  V -->|"reject/fail"| R["coverage_test_gap_rejections"]
+  R --> C
+```
+
+用途：
+
+- 防止同一失败草案在后续批次反复占用生成预算。
+- 保留为什么不能自动进入 golden 的可解释原因。
+- 让 `close-coverage-test-gaps` 可以按批次稳定推进，而不是人工挑选单个 case。
+
+当前实现还包含两条保护：
+
+- source unit inventory 会在 coverage 义务形成前过滤目录/目次/引言/结语、短结构标题、图例标引说明、表格语法残片、纯符号参数行。
+- promotion 会剪掉 obsolete coverage case，但只有当 `coverage_unit_id` 和 `coverage_semantic_key` 都无法匹配当前 coverage matrix 时才剪掉。
+
+当前全库基线：
+
+| 指标 | 值 |
+|---|---:|
+| `source_unit_count` | 2145 |
+| `source_unit_coverage_rate` | 0.987879 |
+| `evidence_coverage_rate` | 1.0 |
+| `fact_coverage_rate` | 1.0 |
+| `uncovered_units` | 26 |
+| `actionable_uncovered_units` | 0 |
+| `parse_risk_pages` | 120 |
+| `actionable_parse_risk_pages` | 0 |
+| remaining uncovered root cause | `test_gap_rejected` only |
+
 #### retrieval_runs
 
 `retrieval_runs` 用于记录每次查询的召回结果，支撑 Query Debug 和 Failure Analysis。
@@ -571,6 +653,7 @@ answer_query()
        -> plan_advanced_query()
        -> resolve_topic_entities()
        -> retrieve_graph_candidates()
+            -> expand topic source facts by evidence shape
        -> route_retrieval()
        -> direct_routing_hits()
        -> merge graph/routing/retrieval hits
@@ -853,8 +936,16 @@ topic entity ids
   -> graph_edges by relation whitelist
   -> edge_evidence_map
   -> fact_evidence_map
+  -> topic wiki source_fact_ids_json
+  -> evidence shape filter
   -> graph candidates
 ```
+
+说明：
+
+- Graph candidate 不只表示“关系存在”，还必须尽量成为可进入 top context 的证据候选。
+- 对 `lifecycle_lookup`，`has_process` 命中 process entity 后，会沿 process wiki 的 `source_fact_ids_json` 取回 topic source facts，并用 `process_activity` 证据形状过滤。
+- 生命周期/活动类查询优先返回带 BP 锚点的 `process_fact`；过程概览表、章节标题和宽泛表格不能压过活动事实。
 
 每个 graph candidate 保留：
 
@@ -893,6 +984,7 @@ topic entity ids
 - `context.graph_candidates` 会输出。
 - `retrieval_plan.channels` 会包含 `graph`。
 - facts/evidence 会携带 `graph_path`、`graph_relation`、`graph_trust_tier`。
+- Raw retrieval metadata 中的 graph 命中必须能在 `rerank_explanations` 里看到是否留在 top context；不能只看 `graph_candidate_count`。
 
 ### 15.3 Graph 当前边界
 

@@ -16,3 +16,14 @@ eakb_test_*/
 test_runtime_*/
 tmp/
 .env
+
+# Runtime logs and local debug artifacts
+api-server*.log
+tmp_dashboard.json
+
+# Generated local reports / deliverables
+output/
+
+# Ad-hoc generated eval reports; checked-in golden baselines stay explicit.
+tests/generated/user_query_retrieval_eval_*.json
+tests/generated/user_query_retrieval_eval_*.md
