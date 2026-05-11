@@ -1,60 +1,16 @@
 {
   "doc_id": "DOC-000012",
   "source": "coverage_u3_not_tested",
-  "candidate_count": 1,
-  "source_gap_count": 2,
-  "skipped_candidate_count": 1,
-  "draft_case_count": 1,
-  "validated": false,
+  "candidate_count": 0,
+  "source_gap_count": 0,
+  "skipped_candidate_count": 0,
+  "excluded_candidate_count": 0,
+  "draft_case_count": 0,
+  "validated": true,
   "coverage_candidates_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\coverage_reports\\DOC-000012.test_gap_candidates.json",
   "coverage_candidates_report_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\coverage_reports\\DOC-000012.test_gap_candidates.md",
-  "cases": [
-    {
-      "name": "coverage_requirement_doc_000012_requirement_8_fact_056641",
-      "status": "draft",
-      "unit_id": "DOC-000012:requirement:8:FACT-056641",
-      "unit_type": "requirement_unit",
-      "importance": "high",
-      "page_no": 8,
-      "semantic_key": "分类",
-      "query": "分类有哪些要求？",
-      "must_include": [
-        "分类"
-      ],
-      "assert_mode": "rich_answer",
-      "recommended_suite": "golden",
-      "source_excerpt": "应符合 GB/T 18487",
-      "covered_by": {
-        "evidence_ids": [
-          "EV-005260"
-        ],
-        "fact_ids": [
-          "FACT-056526",
-          "FACT-056640",
-          "FACT-056641"
-        ],
-        "entity_ids": [
-          "ENT-000368",
-          "ENT-000370"
-        ],
-        "wiki_page_ids": [
-          "WCON-DOC-000012-constraint-doc-000012-分类-273617f3",
-          "WPAGE-000368",
-          "WPAGE-000370"
-        ],
-        "golden_case_ids": [],
-        "regression_case_ids": []
-      },
-      "golden_case": {
-        "kind": "coverage_requirement",
-        "query": "分类有哪些要求？",
-        "must_include": "分类",
-        "source": "coverage",
-        "assert_mode": "rich_answer",
-        "target_doc_id": "DOC-000012",
-        "page_no": 8
-      },
-      "validation_status": "not_validated"
-    }
-  ]
+  "cases": [],
+  "validation_mode": "trace",
+  "passed_count": 0,
+  "failed_count": 0
 }

@@ -67,8 +67,9 @@
     {
       "name": "cc_plain_acronym_requires_clarification_context",
       "query": "CC是什么意思",
-      "expected_query_type": "definition",
-      "retrieval_must_hit": ["连接确认功能"],
+      "expected_query_type": "clarification",
+      "expected_clarification_required": true,
+      "expected_clarification_options": ["连接确认功能", "恒流"],
       "negative_expected": ["GB：代替"]
     }
   ]

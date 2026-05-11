@@ -245,6 +245,51 @@
       "assert_mode": "context_contains",
       "page_no": 3,
       "target_doc_id": "DOC-000013"
+    },
+    {
+      "kind": "coverage_requirement",
+      "query": "发展展望与建议有哪些要求？",
+      "must_include": "发展展望与建议",
+      "source": "coverage",
+      "assert_mode": "rich_answer",
+      "target_doc_id": "DOC-000013",
+      "page_no": 7,
+      "coverage_unit_id": "DOC-000013_requirement_7_15",
+      "coverage_semantic_key": "发展展望与建议"
+    },
+    {
+      "kind": "coverage_requirement",
+      "query": "深化电池技术与寿命管理研究有哪些要求？",
+      "must_include": "深化电池技术与寿命管理研究",
+      "source": "coverage",
+      "assert_mode": "rich_answer",
+      "target_doc_id": "DOC-000013",
+      "page_no": 7,
+      "coverage_unit_id": "DOC-000013_requirement_7_17",
+      "coverage_semantic_key": "深化电池技术与寿命管理研究"
+    },
+    {
+      "kind": "coverage_requirement",
+      "query": "电网互动与能源管理有哪些要求？",
+      "must_include": "电网互动与能源管理",
+      "source": "coverage",
+      "assert_mode": "rich_answer",
+      "target_doc_id": "DOC-000013",
+      "page_no": 8,
+      "coverage_unit_id": "DOC-000013_requirement_8_3",
+      "coverage_semantic_key": "电网互动与能源管理"
+    },
+    {
+      "kind": "coverage_requirement",
+      "query": "参考文献有哪些要求？",
+      "must_include": "参考文献",
+      "source": "coverage",
+      "assert_mode": "rich_answer",
+      "target_doc_id": "DOC-000013",
+      "page_no": 9,
+      "coverage_unit_id": "DOC-000013_requirement_9_6",
+      "coverage_semantic_key": "参考文献"
     }
-  ]
+  ],
+  "coverage_promoted_case_count": 4
 }
