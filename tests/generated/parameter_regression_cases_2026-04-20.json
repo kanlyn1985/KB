@@ -1,0 +1,58 @@
+[
+  {
+    "name": "doc000002_cc_resistance_group",
+    "doc_id": "DOC-000002",
+    "query": "CC阻值有哪些",
+    "must_include_all": ["R3'", "R4", "R4c'", "Rv"],
+    "must_not_include": ["目 次", "前言"]
+  },
+  {
+    "name": "doc000002_detection_point_voltage",
+    "doc_id": "DOC-000002",
+    "query": "检测点2相关参数有哪些",
+    "must_include_any": ["检测点2", "U2", "CC2"],
+    "must_not_include": ["目 次", "前言"]
+  },
+  {
+    "name": "doc000003_cc_connection_state",
+    "doc_id": "DOC-000003",
+    "query": "CC2连接时有哪些参数",
+    "must_include_any": ["CC2", "检测点", "R4", "Rv"],
+    "must_not_include": ["目 次", "前言"]
+  },
+  {
+    "name": "doc000003_r4c_value",
+    "doc_id": "DOC-000003",
+    "query": "R4c阻值是多少",
+    "must_include_any": ["R4c", "Ω", "130"],
+    "must_not_include": ["目 次", "前言"]
+  },
+  {
+    "name": "doc000002_cc_parameter_table",
+    "doc_id": "DOC-000002",
+    "query": "CC相关参数表是哪一个",
+    "must_include_any": ["表 G.2", "控制导引电路参数"],
+    "must_not_include": ["目 次", "前言"]
+  },
+  {
+    "name": "doc000002_cc1_cc2_focus",
+    "doc_id": "DOC-000002",
+    "query": "CC1和CC2相关阻值有哪些",
+    "must_include_any": ["R3'", "R4c'", "Rv"],
+    "must_not_include": ["目 次", "前言"]
+  },
+  {
+    "name": "doc000003_r1_value",
+    "doc_id": "DOC-000003",
+    "query": "R1等效电阻是多少",
+    "must_include_any": ["R1", "2 000", "A.2 充电控制导引电路"],
+    "must_not_include": ["目 次", "前言"]
+  },
+  {
+    "name": "doc000003_table_a2_detect",
+    "doc_id": "DOC-000003",
+    "query": "充电控制导引电路参数表是什么",
+    "must_include_any": ["A.2 充电控制导引电路", "字段包括", "R1等效电阻"],
+    "must_not_include": ["目 次", "前言"]
+  }
+]

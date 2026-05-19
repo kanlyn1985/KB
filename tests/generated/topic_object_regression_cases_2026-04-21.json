@@ -1,0 +1,37 @@
+[
+  {
+    "name": "constraint_topic_estop",
+    "doc_id": "DOC-000002",
+    "query": "急停有什么要求",
+    "expected_topic_titles_any": ["急停", "表 C.15 充电机紧急停机要求"],
+    "expected_topic_entity_types_any": ["constraint_topic", "process"]
+  },
+  {
+    "name": "comparison_topic_v2x",
+    "doc_id": "DOC-000002",
+    "query": "V2X包括哪些类型",
+    "expected_topic_titles_any": ["V2X"],
+    "expected_topic_entity_types_any": ["comparison_topic"]
+  },
+  {
+    "name": "process_topic_cp",
+    "doc_id": "DOC-000002",
+    "query": "CP时序",
+    "expected_topic_titles_any": ["表 A.7 交流充电控制时序表（续）", "表 C.3 控制导引电路状态转换表 (续)"],
+    "expected_topic_entity_types_any": ["process"]
+  },
+  {
+    "name": "parameter_topic_cc",
+    "doc_id": "DOC-000002",
+    "query": "CC阻值",
+    "expected_topic_titles_any": ["CC"],
+    "expected_topic_entity_types_any": ["parameter_topic"]
+  },
+  {
+    "name": "definition_topic_v2g",
+    "doc_id": "DOC-000002",
+    "query": "V2G的定义是什么",
+    "expected_topic_titles_any": ["电动汽车与电网充放电双向互动 vehicle to grid;V2G"],
+    "expected_topic_entity_types_any": ["term"]
+  }
+]

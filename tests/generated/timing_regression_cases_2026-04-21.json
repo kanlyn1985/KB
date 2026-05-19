@@ -1,0 +1,23 @@
+[
+  {
+    "name": "doc000002_cp_timing",
+    "doc_id": "DOC-000002",
+    "query": "CP时序",
+    "must_include_any": ["时序", "状态", "控制时序", "握手"],
+    "must_not_include": ["目 次", "前言"]
+  },
+  {
+    "name": "doc000002_handshake_process",
+    "doc_id": "DOC-000002",
+    "query": "握手流程是什么",
+    "must_include_any": ["握手", "状态", "时序"],
+    "must_not_include": ["目 次", "前言"]
+  },
+  {
+    "name": "doc000003_cp_timing",
+    "doc_id": "DOC-000003",
+    "query": "CP时序",
+    "must_include_any": ["控制导引", "状态", "检测点", "时序"],
+    "must_not_include": ["目 次", "前言"]
+  }
+]

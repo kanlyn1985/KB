@@ -1,0 +1,50 @@
+[
+  {
+    "name": "definition_v2g",
+    "doc_id": "DOC-000002",
+    "query": "V2G的定义是什么",
+    "must_include_any": ["V2G", "双向能量流动", "公共电网"],
+    "must_not_include": ["目 次", "前言"],
+    "subgraph_expect": {
+      "wiki_count_min": 1
+    }
+  },
+  {
+    "name": "parameter_cc_resistance",
+    "doc_id": "DOC-000002",
+    "query": "CC阻值",
+    "must_include_any": ["R4", "R4c", "Rv", "控制导引电路参数"],
+    "must_not_include": ["目 次", "前言"],
+    "subgraph_expect": {
+      "wiki_count_min": 1,
+      "fact_count_min": 1,
+      "edge_count_min": 1
+    }
+  },
+  {
+    "name": "process_cp_timing",
+    "doc_id": "DOC-000002",
+    "query": "CP时序",
+    "must_include_any": ["状态", "时序", "检测点", "控制导引"],
+    "must_not_include": ["目 次", "前言"],
+    "subgraph_expect": {
+      "wiki_count_min": 1,
+      "fact_count_min": 1,
+      "edge_count_min": 1
+    }
+  },
+  {
+    "name": "constraint_emergency_stop",
+    "doc_id": "DOC-000002",
+    "query": "急停有什么要求",
+    "must_include_any": ["急停", "切断", "电气连接"],
+    "must_not_include": ["目 次", "前言"]
+  },
+  {
+    "name": "comparison_v2x_types",
+    "doc_id": "DOC-000002",
+    "query": "V2X包括哪些类型",
+    "must_include_any": ["公共电网", "楼宇供配电系统", "住宅供配电系统"],
+    "must_not_include": ["目 次", "前言"]
+  }
+]
