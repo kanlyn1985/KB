@@ -1,0 +1,87 @@
+{
+  "doc_id": "DOC-000015",
+  "source_filename": "IEC 61851-1-2017.pdf",
+  "page_count": 292,
+  "target_case_count": 0,
+  "network_candidate_count": 0,
+  "network_case_count": 0,
+  "local_case_count": 0,
+  "page_coverage_count": 0,
+  "covered_pages": [],
+  "uncovered_pages": [],
+  "cases": [
+    {
+      "kind": "coverage_definition",
+      "query": "什么是vehicle connector？",
+      "must_include": "vehicle connector",
+      "source": "coverage",
+      "assert_mode": "rich_answer",
+      "target_doc_id": "DOC-000015",
+      "page_no": 25,
+      "coverage_unit_id": "DOC-000015:definition:25:EAD7093805EC",
+      "coverage_semantic_key": "vehicle connector",
+      "expected_evidence_shape": "term_definition"
+    },
+    {
+      "kind": "coverage_definition",
+      "query": "什么是vehicle inlet？",
+      "must_include": "vehicle inlet",
+      "source": "coverage",
+      "assert_mode": "rich_answer",
+      "target_doc_id": "DOC-000015",
+      "page_no": 25,
+      "coverage_unit_id": "DOC-000015:definition:25:5D5FB4A87209",
+      "coverage_semantic_key": "vehicle inlet",
+      "expected_evidence_shape": "term_definition"
+    },
+    {
+      "kind": "coverage_requirement",
+      "query": "Switch and switch-disconnector有哪些要求？",
+      "must_include": "Switch and switch-disconnector",
+      "source": "coverage",
+      "assert_mode": "rich_answer",
+      "target_doc_id": "DOC-000015",
+      "page_no": 46,
+      "coverage_unit_id": "DOC-000015:requirement:46:D3854AD9B945",
+      "coverage_semantic_key": "Switch and switch-disconnector",
+      "expected_evidence_shape": "requirement"
+    },
+    {
+      "kind": "coverage_requirement",
+      "query": "A.3 Requirements for parameters and system behaviour有哪些要求？",
+      "must_include": "A.3 Requirements for parameters and system behaviour",
+      "source": "coverage",
+      "assert_mode": "rich_answer",
+      "target_doc_id": "DOC-000015",
+      "page_no": 57,
+      "coverage_unit_id": "DOC-000015:requirement:57:C4504A88E550",
+      "coverage_semantic_key": "A.3 Requirements for parameters and system behaviour",
+      "expected_evidence_shape": "requirement"
+    },
+    {
+      "kind": "coverage_requirement",
+      "query": "Table A.6: Sequence 1.2 Plug-in (w/o S2 or S2 always in close position)有哪些要求？",
+      "must_include": "Table A.6: Sequence 1.2 Plug-in (w/o S2 or S2 always in close position)",
+      "source": "coverage",
+      "assert_mode": "rich_answer",
+      "target_doc_id": "DOC-000015",
+      "page_no": 64,
+      "coverage_unit_id": "DOC-000015:requirement:64:B4D4F58736AF",
+      "coverage_semantic_key": "Table A.6: Sequence 1.2 Plug-in (w/o S2 or S2 always in close position)",
+      "expected_evidence_shape": "requirement"
+    },
+    {
+      "kind": "coverage_requirement",
+      "query": "Table A.8 - Maximum current to be drawn by vehicle有哪些要求？",
+      "must_include": "Table A.8 - Maximum current to be drawn by vehicle",
+      "source": "coverage",
+      "assert_mode": "rich_answer",
+      "target_doc_id": "DOC-000015",
+      "page_no": 73,
+      "coverage_unit_id": "DOC-000015:requirement:73:B2AC41092BF1",
+      "coverage_semantic_key": "Table A.8 - Maximum current to be drawn by vehicle",
+      "expected_evidence_shape": "requirement"
+    }
+  ],
+  "coverage_promoted_case_count": 6
+}

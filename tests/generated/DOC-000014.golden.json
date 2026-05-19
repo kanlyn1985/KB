@@ -1,0 +1,1379 @@
+{
+  "doc_id": "DOC-000014",
+  "source_filename": "182-ISO 14229-1-2013 Road vehicles -- Unified diagnostic services (UDS) -- Part 1 Specification and requirements.pdf",
+  "page_count": 402,
+  "target_case_count": 220,
+  "validated_during_generation": false,
+  "network_enabled": false,
+  "network_candidate_count": 0,
+  "network_case_count": 0,
+  "local_case_count": 41,
+  "page_coverage_count": 7,
+  "covered_pages": [
+    9,
+    10,
+    11,
+    23,
+    47,
+    81,
+    244
+  ],
+  "uncovered_pages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99,
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119,
+    120,
+    121,
+    122,
+    123,
+    124,
+    125,
+    126,
+    127,
+    128,
+    129,
+    130,
+    131,
+    132,
+    133,
+    134,
+    135,
+    136,
+    137,
+    138,
+    139,
+    140,
+    141,
+    142,
+    143,
+    144,
+    145,
+    146,
+    147,
+    148,
+    149,
+    150,
+    151,
+    152,
+    153,
+    154,
+    155,
+    156,
+    157,
+    158,
+    159,
+    160,
+    161,
+    162,
+    163,
+    164,
+    165,
+    166,
+    167,
+    168,
+    169,
+    170,
+    171,
+    172,
+    173,
+    174,
+    175,
+    176,
+    177,
+    178,
+    179,
+    180,
+    181,
+    182,
+    183,
+    184,
+    185,
+    186,
+    187,
+    188,
+    189,
+    190,
+    191,
+    192,
+    193,
+    194,
+    195,
+    196,
+    197,
+    198,
+    199,
+    200,
+    201,
+    202,
+    203,
+    204,
+    205,
+    206,
+    207,
+    208,
+    209,
+    210,
+    211,
+    212,
+    213,
+    214,
+    215,
+    216,
+    217,
+    218,
+    219,
+    220,
+    221,
+    222,
+    223,
+    224,
+    225,
+    226,
+    227,
+    228,
+    229,
+    230,
+    231,
+    232,
+    233,
+    234,
+    235,
+    236,
+    237,
+    238,
+    239,
+    240,
+    241,
+    242,
+    243,
+    245,
+    246,
+    247,
+    248,
+    249,
+    250,
+    251,
+    252,
+    253,
+    254,
+    255,
+    256,
+    257,
+    258,
+    259,
+    260,
+    261,
+    262,
+    263,
+    264,
+    265,
+    266,
+    267,
+    268,
+    269,
+    270,
+    271,
+    272,
+    273,
+    274,
+    275,
+    276,
+    277,
+    278,
+    279,
+    280,
+    281,
+    282,
+    283,
+    284,
+    285,
+    286,
+    287,
+    288,
+    289,
+    290,
+    291,
+    292,
+    293,
+    294,
+    295,
+    296,
+    297,
+    298,
+    299,
+    300,
+    301,
+    302,
+    303,
+    304,
+    305,
+    306,
+    307,
+    308,
+    309,
+    310,
+    311,
+    312,
+    313,
+    314,
+    315,
+    316,
+    317,
+    318,
+    319,
+    320,
+    321,
+    322,
+    323,
+    324,
+    325,
+    326,
+    327,
+    328,
+    329,
+    330,
+    331,
+    332,
+    333,
+    334,
+    335,
+    336,
+    337,
+    338,
+    339,
+    340,
+    341,
+    342,
+    343,
+    344,
+    345,
+    346,
+    347,
+    348,
+    349,
+    350,
+    351,
+    352,
+    353,
+    354,
+    355,
+    356,
+    357,
+    358,
+    359,
+    360,
+    361,
+    362,
+    363,
+    364,
+    365,
+    366,
+    367,
+    368,
+    369,
+    370,
+    371,
+    372,
+    373,
+    374,
+    375,
+    376,
+    377,
+    378,
+    379,
+    380,
+    381,
+    382,
+    383,
+    384,
+    385,
+    386,
+    387,
+    388,
+    389,
+    390,
+    391,
+    392,
+    393,
+    394,
+    395,
+    396,
+    397,
+    398,
+    399,
+    400,
+    401,
+    402
+  ],
+  "cases": [
+    {
+      "kind": "retrieval_quality",
+      "query": "什么是boot manager？",
+      "must_include": "boot manager",
+      "retrieval_must_hit": [
+        "boot manager"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "boot manager"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "ISO 14229-1—2013中boot manager的定义是什么？",
+      "must_include": "boot manager",
+      "retrieval_must_hit": [
+        "boot manager"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "boot manager"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "什么是boot memory partition？",
+      "must_include": "boot memory partition",
+      "retrieval_must_hit": [
+        "boot memory partition"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "boot memory partition"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "ISO 14229-1—2013中boot memory partition的定义是什么？",
+      "must_include": "boot memory partition",
+      "retrieval_must_hit": [
+        "boot memory partition"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "boot memory partition"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "什么是boot software？",
+      "must_include": "boot software",
+      "retrieval_must_hit": [
+        "boot software"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "boot software"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "ISO 14229-1—2013中boot software的定义是什么？",
+      "must_include": "boot software",
+      "retrieval_must_hit": [
+        "boot software"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "boot software"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "什么是client？",
+      "must_include": "client",
+      "retrieval_must_hit": [
+        "client"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "client"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "ISO 14229-1—2013中client的定义是什么？",
+      "must_include": "client",
+      "retrieval_must_hit": [
+        "client"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "client"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "什么是diagnostic data？",
+      "must_include": "diagnostic data",
+      "retrieval_must_hit": [
+        "diagnostic data"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "diagnostic data"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "ISO 14229-1—2013中diagnostic data的定义是什么？",
+      "must_include": "diagnostic data",
+      "retrieval_must_hit": [
+        "diagnostic data"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "diagnostic data"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "什么是diagnostic routine？",
+      "must_include": "diagnostic routine",
+      "retrieval_must_hit": [
+        "diagnostic routine"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "diagnostic routine"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "ISO 14229-1—2013中diagnostic routine的定义是什么？",
+      "must_include": "diagnostic routine",
+      "retrieval_must_hit": [
+        "diagnostic routine"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "diagnostic routine"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "什么是diagnostic service？",
+      "must_include": "diagnostic service",
+      "retrieval_must_hit": [
+        "diagnostic service"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "diagnostic service"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "ISO 14229-1—2013中diagnostic service的定义是什么？",
+      "must_include": "diagnostic service",
+      "retrieval_must_hit": [
+        "diagnostic service"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "diagnostic service"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "什么是diagnostic session？",
+      "must_include": "diagnostic session",
+      "retrieval_must_hit": [
+        "diagnostic session"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "diagnostic session"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "ISO 14229-1—2013中diagnostic session的定义是什么？",
+      "must_include": "diagnostic session",
+      "retrieval_must_hit": [
+        "diagnostic session"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "diagnostic session"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "什么是diagnostic trouble code？",
+      "must_include": "diagnostic trouble code",
+      "retrieval_must_hit": [
+        "diagnostic trouble code"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "diagnostic trouble code"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "ISO 14229-1—2013中diagnostic trouble code的定义是什么？",
+      "must_include": "diagnostic trouble code",
+      "retrieval_must_hit": [
+        "diagnostic trouble code"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "diagnostic trouble code"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "什么是functional unit？",
+      "must_include": "functional unit",
+      "retrieval_must_hit": [
+        "functional unit"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "functional unit"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "ISO 14229-1—2013中functional unit的定义是什么？",
+      "must_include": "functional unit",
+      "retrieval_must_hit": [
+        "functional unit"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "functional unit"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "什么是integer type？",
+      "must_include": "integer type",
+      "retrieval_must_hit": [
+        "integer type"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "integer type"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "ISO 14229-1—2013中integer type的定义是什么？",
+      "must_include": "integer type",
+      "retrieval_must_hit": [
+        "integer type"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "integer type"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "什么是local client？",
+      "must_include": "local client",
+      "retrieval_must_hit": [
+        "local client"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "local client"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "ISO 14229-1—2013中local client的定义是什么？",
+      "must_include": "local client",
+      "retrieval_must_hit": [
+        "local client"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "local client"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "什么是local server？",
+      "must_include": "local server",
+      "retrieval_must_hit": [
+        "local server"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "local server"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "ISO 14229-1—2013中local server的定义是什么？",
+      "must_include": "local server",
+      "retrieval_must_hit": [
+        "local server"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "local server"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "什么是record？",
+      "must_include": "record",
+      "retrieval_must_hit": [
+        "record"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "record"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "ISO 14229-1—2013中record的定义是什么？",
+      "must_include": "record",
+      "retrieval_must_hit": [
+        "record"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "record"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "什么是remote server？",
+      "must_include": "remote server",
+      "retrieval_must_hit": [
+        "remote server"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "remote server"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "ISO 14229-1—2013中remote server的定义是什么？",
+      "must_include": "remote server",
+      "retrieval_must_hit": [
+        "remote server"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "remote server"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "什么是reprogramming software？",
+      "must_include": "reprogramming software",
+      "retrieval_must_hit": [
+        "reprogramming software"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "reprogramming software"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "ISO 14229-1—2013中reprogramming software的定义是什么？",
+      "must_include": "reprogramming software",
+      "retrieval_must_hit": [
+        "reprogramming software"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "reprogramming software"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "什么是Service？",
+      "must_include": "Service",
+      "retrieval_must_hit": [
+        "Service"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "Service"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "ISO 14229-1—2013中Service的定义是什么？",
+      "must_include": "Service",
+      "retrieval_must_hit": [
+        "Service"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "Service"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "什么是Software？",
+      "must_include": "Software",
+      "retrieval_must_hit": [
+        "Software"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "Software"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "ISO 14229-1—2013中Software的定义是什么？",
+      "must_include": "Software",
+      "retrieval_must_hit": [
+        "Software"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "expected_sections": [
+        "Software"
+      ],
+      "difficulty": "medium",
+      "query_type": "definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "retrieval_quality",
+      "query": "boot manager和boot memory partition有什么区别？",
+      "must_include": "boot manager",
+      "retrieval_must_hit": [
+        "boot manager",
+        "boot memory partition"
+      ],
+      "assert_mode": "rich_answer",
+      "source": "local_rq",
+      "difficulty": "hard",
+      "query_type": "comparison",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "evidence",
+      "query": "ISO 14229-1—2013：# Road vehicles — Unified diagnostic servi",
+      "must_include": "# Road vehicles — Unified diagnostic servi",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 9,
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "evidence",
+      "query": "ISO 14229-1—2013：connected to a serial data link embedded i",
+      "must_include": "connected to a serial data link embedded i",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 9,
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "evidence",
+      "query": "ISO 14229-1—2013：It specifies generic services, which allow",
+      "must_include": "It specifies generic services, which allow",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 9,
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "evidence",
+      "query": "ISO 14229-1—2013：This part of ISO 14229 does not apply to n",
+      "must_include": "This part of ISO 14229 does not apply to n",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 9,
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "evidence",
+      "query": "ISO 14229-1—2013：However, this part of ISO 14229 does not r",
+      "must_include": "However, this part of ISO 14229 does not r",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 9,
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "evidence",
+      "query": "ISO 14229-1—2013：This part of ISO 14229 does not specify an",
+      "must_include": "This part of ISO 14229 does not specify an",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 9,
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "evidence",
+      "query": "ISO 14229-1—2013：#### 3.1.3 ## boot software software which",
+      "must_include": "#### 3.1.3 ## boot software software which",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 10,
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "evidence",
+      "query": "ISO 14229-1—2013：NOTE 2 See also 3.1.1 and 3.1.17.",
+      "must_include": "NOTE 2 See also 3.1.1 and 3.1.17.",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 10,
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "evidence",
+      "query": "ISO 14229-1—2013：#### 3.1.4 ## client function that is part",
+      "must_include": "#### 3.1.4 ## client function that is part",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 10,
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "evidence",
+      "query": "ISO 14229-1—2013：#### 3.1.5 ## diagnostic data data that is",
+      "must_include": "#### 3.1.5 ## diagnostic data data that is",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 10,
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "evidence",
+      "query": "ISO 14229-1—2013：NOTE 2 Examples of diagnostic data are veh",
+      "must_include": "NOTE 2 Examples of diagnostic data are veh",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 10,
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "evidence",
+      "query": "ISO 14229-1—2013：Three types of values are defined for diag",
+      "must_include": "Three types of values are defined for diag",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 10,
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "evidence",
+      "query": "ISO 14229-1—2013：#### 3.1.9 ## diagnostic trouble code DTC",
+      "must_include": "#### 3.1.9 ## diagnostic trouble code DTC",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 11,
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "evidence",
+      "query": "ISO 14229-1—2013：#### 3.1.11 ## functional unit set of func",
+      "must_include": "#### 3.1.11 ## functional unit set of func",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 11,
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "evidence",
+      "query": "ISO 14229-1—2013：#### 3.1.13 ## local client client that is",
+      "must_include": "#### 3.1.13 ## local client client that is",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 11,
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "evidence",
+      "query": "ISO 14229-1—2013：the appropriate monitors for each DTC have",
+      "must_include": "the appropriate monitors for each DTC have",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 11,
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "definition",
+      "query": "在ISO 14229-1—2013中，什么是boot manager？",
+      "must_include": "boot manager",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "expected_evidence_shape": "term_definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "definition_detail",
+      "query": "在ISO 14229-1—2013中，boot manager 的定义是什么？",
+      "must_include": "part of the boot software that executes im",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "expected_evidence_shape": "term_definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "definition",
+      "query": "在ISO 14229-1—2013中，什么是boot memory partition？",
+      "must_include": "boot memory partition",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "expected_evidence_shape": "term_definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "definition_detail",
+      "query": "在ISO 14229-1—2013中，boot memory partition 的定义是什么？",
+      "must_include": "area of the server memory in which the boo",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "expected_evidence_shape": "term_definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "definition",
+      "query": "在ISO 14229-1—2013中，什么是boot software？",
+      "must_include": "boot software",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "expected_evidence_shape": "term_definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "definition_detail",
+      "query": "在ISO 14229-1—2013中，boot software 的定义是什么？",
+      "must_include": "software which is executed in a special pa",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "expected_evidence_shape": "term_definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "definition",
+      "query": "在ISO 14229-1—2013中，什么是client？",
+      "must_include": "client",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "expected_evidence_shape": "term_definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "definition_detail",
+      "query": "在ISO 14229-1—2013中，client 的定义是什么？",
+      "must_include": "function that is part of the tester and th",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "expected_evidence_shape": "term_definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "definition",
+      "query": "在ISO 14229-1—2013中，什么是diagnostic data？",
+      "must_include": "diagnostic data",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "expected_evidence_shape": "term_definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "definition_detail",
+      "query": "在ISO 14229-1—2013中，diagnostic data 的定义是什么？",
+      "must_include": "data that is located in the memory of an e",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "expected_evidence_shape": "term_definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "definition",
+      "query": "在ISO 14229-1—2013中，什么是diagnostic routine？",
+      "must_include": "diagnostic routine",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "expected_evidence_shape": "term_definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "definition_detail",
+      "query": "在ISO 14229-1—2013中，diagnostic routine 的定义是什么？",
+      "must_include": "routine that is embedded in an electronic",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "expected_evidence_shape": "term_definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "definition",
+      "query": "在ISO 14229-1—2013中，什么是diagnostic service？",
+      "must_include": "diagnostic service",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "expected_evidence_shape": "term_definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "definition_detail",
+      "query": "在ISO 14229-1—2013中，diagnostic service 的定义是什么？",
+      "must_include": "information exchange initiated by a client",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "expected_evidence_shape": "term_definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "definition",
+      "query": "在ISO 14229-1—2013中，什么是diagnostic session？",
+      "must_include": "diagnostic session",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "expected_evidence_shape": "term_definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "definition_detail",
+      "query": "在ISO 14229-1—2013中，diagnostic session 的定义是什么？",
+      "must_include": "state within the server in which a specifi",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "expected_evidence_shape": "term_definition",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "standard",
+      "query": "ISO 14229-1—2013 的标准号和实施日期是什么？",
+      "must_include": "ISO 14229-1—2013",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "expected_evidence_shape": "standard_metadata",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "standard",
+      "query": "ISO 14229-1—2013 对应的标准编号是什么？",
+      "must_include": "ISO 14229-1—2013",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "expected_evidence_shape": "standard_metadata",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "standard",
+      "query": "ISO 14229-1—2013 的现行标准号是什么？",
+      "must_include": "ISO 14229-1—2013",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "expected_evidence_shape": "standard_metadata",
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "section",
+      "query": "在ISO 14229-1—2013中，是否包含“7.1 General definition”这一章节？",
+      "must_include": "7.1 General definition",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 23,
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "section",
+      "query": "在ISO 14229-1—2013中，是否包含“9.2.2.1 Request message definition”这一章节？",
+      "must_include": "9.2.2.1 Request message definition",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 47,
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "section",
+      "query": "在ISO 14229-1—2013中，是否包含“9.9.3.2 Positive response message data-parameter definition”这一章节？",
+      "must_include": "9.9.3.2 Positive response message data-parameter definition",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 81,
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "section",
+      "query": "在ISO 14229-1—2013中，是否包含“9.9.4 Supported negative response codes (NRC_)”这一章节？",
+      "must_include": "9.9.4 Supported negative response codes (NRC_)",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 81,
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "section",
+      "query": "在ISO 14229-1—2013中，是否包含“Example #14 assumptions”这一章节？",
+      "must_include": "Example #14 assumptions",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "page_no": 244,
+      "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "title",
+      "query": "ISO 14229-1—2013 这份文档的标题是什么？",
+      "must_include": "Road vehicles — Unified diagnostic services (UDS) —",
+      "source": "local",
+      "assert_mode": "context_contains",
+      "expected_evidence_shape": "standard_metadata",
+      "target_doc_id": "DOC-000014"
+    }
+  ]
+}

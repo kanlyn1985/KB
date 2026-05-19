@@ -1,0 +1,16 @@
+{
+  "doc_id": "DOC-000009",
+  "source": "coverage_u3_not_tested",
+  "candidate_count": 0,
+  "source_gap_count": 0,
+  "skipped_candidate_count": 0,
+  "excluded_candidate_count": 0,
+  "draft_case_count": 0,
+  "validated": true,
+  "coverage_candidates_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\coverage_reports\\DOC-000009.test_gap_candidates.json",
+  "coverage_candidates_report_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\coverage_reports\\DOC-000009.test_gap_candidates.md",
+  "cases": [],
+  "validation_mode": "trace",
+  "passed_count": 0,
+  "failed_count": 0
+}

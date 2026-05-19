@@ -1,0 +1,642 @@
+{
+  "doc_id": "DOC-000015",
+  "draft_case_count": 12,
+  "status_counts": {
+    "promotable": 6,
+    "reject": 6
+  },
+  "flag_counts": {
+    "overlong_semantic_key": 6,
+    "validation_failed": 6,
+    "weak_anchor": 1
+  },
+  "source_draft_path": "E:\\AI_Project\\opencode_workspace\\KB1\\tests\\generated\\DOC-000015.coverage_test_drafts.json",
+  "cases": [
+    {
+      "name": "coverage_definition_doc_000015_definition_25_ead7093805ec",
+      "status": "draft",
+      "unit_id": "DOC-000015:definition:25:EAD7093805EC",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 25,
+      "semantic_key": "vehicle connector",
+      "query": "什么是vehicle connector？",
+      "must_include": [
+        "vehicle connector"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "**electric vehicle connector** part of a vehicle coupler integral with, or intended to be attached to the cable assembly",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010604"
+        ],
+        "fact_ids": [
+          "FACT-146368"
+        ],
+        "entity_ids": [
+          "ENT-000921"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000921"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是vehicle connector？",
+        "must_include": "vehicle connector",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000015",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 25
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_definition_doc_000015_definition_25_5d5fb4a87209",
+      "status": "draft",
+      "unit_id": "DOC-000015:definition:25:5D5FB4A87209",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 25,
+      "semantic_key": "vehicle inlet",
+      "query": "什么是vehicle inlet？",
+      "must_include": [
+        "vehicle inlet"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "**electric vehicle inlet** part of a vehicle coupler incorporated in, or fixed to, the electric vehicle",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010604"
+        ],
+        "fact_ids": [
+          "FACT-146369"
+        ],
+        "entity_ids": [
+          "ENT-000922"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000922"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是vehicle inlet？",
+        "must_include": "vehicle inlet",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000015",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 25
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000015_requirement_12_23e0d9024e26",
+      "status": "draft",
+      "unit_id": "DOC-000015:requirement:12:23E0D9024E26",
+      "unit_type": "requirement_unit",
+      "importance": "medium",
+      "page_no": 12,
+      "semantic_key": "Automatic reclosing of protective devices ........................................................................ 47 15 Emergency switching or disconnect (optional) .............................................................. 48 16 Marki",
+      "query": "Automatic reclosing of protective devices ........................................................................ 47 15 Emergency switching or disconnect (optional) .............................................................. 48 16 Marki有哪些要求？",
+      "must_include": [
+        "Automatic reclosing of protective devices ........................................................................ 47 15 Emergency switching or disconnect (optional) .............................................................. 48 16 Marki"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "regression",
+      "source_excerpt": "",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010591"
+        ],
+        "fact_ids": [
+          "FACT-146704"
+        ],
+        "entity_ids": [
+          "ENT-000919"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000919"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "Automatic reclosing of protective devices ........................................................................ 47 15 Emergency switching or disconnect (optional) .............................................................. 48 16 Marki有哪些要求？",
+        "must_include": "Automatic reclosing of protective devices ........................................................................ 47 15 Emergency switching or disconnect (optional) .............................................................. 48 16 Marki",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000015",
+        "expected_evidence_shape": "requirement",
+        "page_no": 12
+      },
+      "validation_status": "failed",
+      "readiness_status": "reject",
+      "readiness_score": 0,
+      "quality_flags": [
+        "overlong_semantic_key",
+        "weak_anchor",
+        "validation_failed"
+      ],
+      "readiness_reasons": [
+        "query needs human review before it becomes a stable golden case",
+        "must-hit anchor is too short, too symbolic, or too noisy",
+        "existing validation failed"
+      ]
+    },
+    {
+      "name": "coverage_requirement_doc_000015_requirement_46_d3854ad9b945",
+      "status": "draft",
+      "unit_id": "DOC-000015:requirement:46:D3854AD9B945",
+      "unit_type": "requirement_unit",
+      "importance": "medium",
+      "page_no": 46,
+      "semantic_key": "Switch and switch-disconnector",
+      "query": "Switch and switch-disconnector有哪些要求？",
+      "must_include": [
+        "Switch and switch-disconnector"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "regression",
+      "source_excerpt": "",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010625"
+        ],
+        "fact_ids": [
+          "FACT-146705"
+        ],
+        "entity_ids": [
+          "ENT-000919"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000919"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "Switch and switch-disconnector有哪些要求？",
+        "must_include": "Switch and switch-disconnector",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000015",
+        "expected_evidence_shape": "requirement",
+        "page_no": 46
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000015_requirement_55_e9ea512ef06b",
+      "status": "draft",
+      "unit_id": "DOC-000015:requirement:55:E9EA512EF06B",
+      "unit_type": "requirement_unit",
+      "importance": "medium",
+      "page_no": 55,
+      "semantic_key": "A.2.3 Simplified control pilot circuit",
+      "query": "A.2.3 Simplified control pilot circuit有哪些要求？",
+      "must_include": [
+        "A.2.3 Simplified control pilot circuit"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "regression",
+      "source_excerpt": "",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010634"
+        ],
+        "fact_ids": [
+          "FACT-146404",
+          "FACT-146706"
+        ],
+        "entity_ids": [
+          "ENT-000919"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000919"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "A.2.3 Simplified control pilot circuit有哪些要求？",
+        "must_include": "A.2.3 Simplified control pilot circuit",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000015",
+        "expected_evidence_shape": "requirement",
+        "page_no": 55
+      },
+      "validation_status": "failed",
+      "readiness_status": "reject",
+      "readiness_score": 40,
+      "quality_flags": [
+        "validation_failed"
+      ],
+      "readiness_reasons": [
+        "existing validation failed"
+      ]
+    },
+    {
+      "name": "coverage_requirement_doc_000015_requirement_56_0b2aeb5818b4",
+      "status": "draft",
+      "unit_id": "DOC-000015:requirement:56:0B2AEB5818B4",
+      "unit_type": "requirement_unit",
+      "importance": "medium",
+      "page_no": 56,
+      "semantic_key": "A.2.4 Additional components and high frequency signals",
+      "query": "A.2.4 Additional components and high frequency signals有哪些要求？",
+      "must_include": [
+        "A.2.4 Additional components and high frequency signals"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "regression",
+      "source_excerpt": "",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010634",
+          "EV-010635"
+        ],
+        "fact_ids": [
+          "FACT-146405",
+          "FACT-146707"
+        ],
+        "entity_ids": [
+          "ENT-000919"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000919"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "A.2.4 Additional components and high frequency signals有哪些要求？",
+        "must_include": "A.2.4 Additional components and high frequency signals",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000015",
+        "expected_evidence_shape": "requirement",
+        "page_no": 56
+      },
+      "validation_status": "failed",
+      "readiness_status": "reject",
+      "readiness_score": 15,
+      "quality_flags": [
+        "overlong_semantic_key",
+        "validation_failed"
+      ],
+      "readiness_reasons": [
+        "query needs human review before it becomes a stable golden case",
+        "existing validation failed"
+      ]
+    },
+    {
+      "name": "coverage_requirement_doc_000015_requirement_57_c4504a88e550",
+      "status": "draft",
+      "unit_id": "DOC-000015:requirement:57:C4504A88E550",
+      "unit_type": "requirement_unit",
+      "importance": "medium",
+      "page_no": 57,
+      "semantic_key": "A.3 Requirements for parameters and system behaviour",
+      "query": "A.3 Requirements for parameters and system behaviour有哪些要求？",
+      "must_include": [
+        "A.3 Requirements for parameters and system behaviour"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "regression",
+      "source_excerpt": "",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010635",
+          "EV-010636",
+          "EV-010637"
+        ],
+        "fact_ids": [
+          "FACT-146406",
+          "FACT-146708",
+          "FACT-146709"
+        ],
+        "entity_ids": [
+          "ENT-000919"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000919"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "A.3 Requirements for parameters and system behaviour有哪些要求？",
+        "must_include": "A.3 Requirements for parameters and system behaviour",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000015",
+        "expected_evidence_shape": "requirement",
+        "page_no": 57
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 85,
+      "quality_flags": [
+        "overlong_semantic_key"
+      ],
+      "readiness_reasons": [
+        "query needs human review before it becomes a stable golden case"
+      ]
+    },
+    {
+      "name": "coverage_requirement_doc_000015_requirement_59_ac50176093e0",
+      "status": "draft",
+      "unit_id": "DOC-000015:requirement:59:AC50176093E0",
+      "unit_type": "requirement_unit",
+      "importance": "medium",
+      "page_no": 59,
+      "semantic_key": "tolerance resistors are commonly recommended for this application",
+      "query": "tolerance resistors are commonly recommended for this application有哪些要求？",
+      "must_include": [
+        "tolerance resistors are commonly recommended for this application"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "regression",
+      "source_excerpt": "",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010637",
+          "EV-010638",
+          "EV-010639"
+        ],
+        "fact_ids": [
+          "FACT-146407",
+          "FACT-146710",
+          "FACT-146711"
+        ],
+        "entity_ids": [
+          "ENT-000919"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000919"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "tolerance resistors are commonly recommended for this application有哪些要求？",
+        "must_include": "tolerance resistors are commonly recommended for this application",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000015",
+        "expected_evidence_shape": "requirement",
+        "page_no": 59
+      },
+      "validation_status": "failed",
+      "readiness_status": "reject",
+      "readiness_score": 15,
+      "quality_flags": [
+        "overlong_semantic_key",
+        "validation_failed"
+      ],
+      "readiness_reasons": [
+        "query needs human review before it becomes a stable golden case",
+        "existing validation failed"
+      ]
+    },
+    {
+      "name": "coverage_requirement_doc_000015_requirement_64_b4d4f58736af",
+      "status": "draft",
+      "unit_id": "DOC-000015:requirement:64:B4D4F58736AF",
+      "unit_type": "requirement_unit",
+      "importance": "medium",
+      "page_no": 64,
+      "semantic_key": "Table A.6: Sequence 1.2 Plug-in (w/o S2 or S2 always in close position)",
+      "query": "Table A.6: Sequence 1.2 Plug-in (w/o S2 or S2 always in close position)有哪些要求？",
+      "must_include": [
+        "Table A.6: Sequence 1.2 Plug-in (w/o S2 or S2 always in close position)"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "regression",
+      "source_excerpt": "",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010643"
+        ],
+        "fact_ids": [
+          "FACT-146410",
+          "FACT-146714"
+        ],
+        "entity_ids": [
+          "ENT-000919"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000919"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "Table A.6: Sequence 1.2 Plug-in (w/o S2 or S2 always in close position)有哪些要求？",
+        "must_include": "Table A.6: Sequence 1.2 Plug-in (w/o S2 or S2 always in close position)",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000015",
+        "expected_evidence_shape": "requirement",
+        "page_no": 64
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 85,
+      "quality_flags": [
+        "overlong_semantic_key"
+      ],
+      "readiness_reasons": [
+        "query needs human review before it becomes a stable golden case"
+      ]
+    },
+    {
+      "name": "coverage_requirement_doc_000015_requirement_64_6283c5738869",
+      "status": "draft",
+      "unit_id": "DOC-000015:requirement:64:6283C5738869",
+      "unit_type": "requirement_unit",
+      "importance": "medium",
+      "page_no": 64,
+      "semantic_key": "Table A.6: Sequence 2.1 Unplug at state Bx",
+      "query": "Table A.6: Sequence 2.1 Unplug at state Bx有哪些要求？",
+      "must_include": [
+        "Table A.6: Sequence 2.1 Unplug at state Bx"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "regression",
+      "source_excerpt": "",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010643",
+          "EV-010644"
+        ],
+        "fact_ids": [
+          "FACT-146411",
+          "FACT-146715",
+          "FACT-146716",
+          "FACT-146717"
+        ],
+        "entity_ids": [
+          "ENT-000919"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000919"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "Table A.6: Sequence 2.1 Unplug at state Bx有哪些要求？",
+        "must_include": "Table A.6: Sequence 2.1 Unplug at state Bx",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000015",
+        "expected_evidence_shape": "requirement",
+        "page_no": 64
+      },
+      "validation_status": "failed",
+      "readiness_status": "reject",
+      "readiness_score": 40,
+      "quality_flags": [
+        "validation_failed"
+      ],
+      "readiness_reasons": [
+        "existing validation failed"
+      ]
+    },
+    {
+      "name": "coverage_requirement_doc_000015_requirement_73_cb2024628508",
+      "status": "draft",
+      "unit_id": "DOC-000015:requirement:73:CB2024628508",
+      "unit_type": "requirement_unit",
+      "importance": "medium",
+      "page_no": 73,
+      "semantic_key": "Table A.7 - PWM duty cycle provided by EV supply equipment",
+      "query": "Table A.7 - PWM duty cycle provided by EV supply equipment有哪些要求？",
+      "must_include": [
+        "Table A.7 - PWM duty cycle provided by EV supply equipment"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "regression",
+      "source_excerpt": "",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010652"
+        ],
+        "fact_ids": [
+          "FACT-146412",
+          "FACT-146732"
+        ],
+        "entity_ids": [
+          "ENT-000919"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000919"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "Table A.7 - PWM duty cycle provided by EV supply equipment有哪些要求？",
+        "must_include": "Table A.7 - PWM duty cycle provided by EV supply equipment",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000015",
+        "expected_evidence_shape": "requirement",
+        "page_no": 73
+      },
+      "validation_status": "failed",
+      "readiness_status": "reject",
+      "readiness_score": 15,
+      "quality_flags": [
+        "overlong_semantic_key",
+        "validation_failed"
+      ],
+      "readiness_reasons": [
+        "query needs human review before it becomes a stable golden case",
+        "existing validation failed"
+      ]
+    },
+    {
+      "name": "coverage_requirement_doc_000015_requirement_73_b2ac41092bf1",
+      "status": "draft",
+      "unit_id": "DOC-000015:requirement:73:B2AC41092BF1",
+      "unit_type": "requirement_unit",
+      "importance": "medium",
+      "page_no": 73,
+      "semantic_key": "Table A.8 - Maximum current to be drawn by vehicle",
+      "query": "Table A.8 - Maximum current to be drawn by vehicle有哪些要求？",
+      "must_include": [
+        "Table A.8 - Maximum current to be drawn by vehicle"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "regression",
+      "source_excerpt": "",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010652",
+          "EV-010653"
+        ],
+        "fact_ids": [
+          "FACT-146413",
+          "FACT-146733",
+          "FACT-146734"
+        ],
+        "entity_ids": [
+          "ENT-000919"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000919"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "Table A.8 - Maximum current to be drawn by vehicle有哪些要求？",
+        "must_include": "Table A.8 - Maximum current to be drawn by vehicle",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000015",
+        "expected_evidence_shape": "requirement",
+        "page_no": 73
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    }
+  ]
+}
