@@ -20,6 +20,7 @@ tmp/
 # Runtime logs and local debug artifacts
 api-server*.log
 tmp_dashboard.json
+hs_err_pid*.log
 
 # Generated local reports / deliverables
 output/
@@ -27,3 +28,7 @@ output/
 # Ad-hoc generated eval reports; checked-in golden baselines stay explicit.
 tests/generated/user_query_retrieval_eval_*.json
 tests/generated/user_query_retrieval_eval_*.md
+
+# Ad-hoc analysis dashboards (session artifacts, not project deliverables)
+kb1_pattern_analysis_dashboard.html
+kb1_project_full_review.html
