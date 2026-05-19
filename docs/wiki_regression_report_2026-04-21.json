@@ -1,0 +1,258 @@
+{
+  "case_count": 2,
+  "passed": 2,
+  "failed": 0,
+  "success": true,
+  "results": [
+    {
+      "name": "process_wiki_doc000002",
+      "doc_id": "DOC-000002",
+      "query": "CP时序",
+      "passed": true,
+      "wiki_pages": [
+        {
+          "page_id": "WPROC-DOC-000003-process-doc-000003-a-2-充电控制导引电路",
+          "page_type": "process",
+          "title": "A.2 充电控制导引电路",
+          "slug": "process-doc-000003-a-2-充电控制导引电路",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\processes\\process-doc-000003-a-2-充电控制导引电路.md"
+        },
+        {
+          "page_id": "WPROC-DOC-000003-process-doc-000003-b-2-1-充电控制导引电路",
+          "page_type": "process",
+          "title": "B.2.1 充电控制导引电路",
+          "slug": "process-doc-000003-b-2-1-充电控制导引电路",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\processes\\process-doc-000003-b-2-1-充电控制导引电路.md"
+        },
+        {
+          "page_id": "WPROC-DOC-000003-process-doc-000003-b-3-1-充电控制导引电路",
+          "page_type": "process",
+          "title": "B.3.1 充电控制导引电路",
+          "slug": "process-doc-000003-b-3-1-充电控制导引电路",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\processes\\process-doc-000003-b-3-1-充电控制导引电路.md"
+        },
+        {
+          "page_id": "WPROC-DOC-000003-process-doc-000003-信号-条件-关联对象-车桩未连接-连接确认-版本协商-功能协商-参数配-整权-可选-预约充电-可选-输出回路检测-供电模式-可选-预充及能量传输阶段-注1",
+          "page_type": "process",
+          "title": "信号/条件 关联对象 车桩未连接 连接确认、版本协商、功能协商、参数配 整权(可选) 预约充电(可选) 输出回路检测 供电模式(可选) 预充及能量传输阶段 注1：检测点2电压由制造厂自定义，时序图上拉电压 $ U_{2} $以12 V为例。 注2：时序图中网格填充区域状态由制造厂自定义，网格填充区域粗实线为推荐值。 注 $ ^{3} $：K1、K2内侧电压波形与充电机预充电路方案有关，时序图中预充电路采用二极管方案为例。 图 A.2 正常启动控制时序图 表 A.6 正常启动控制时序表",
+          "slug": "process-doc-000003-信号-条件-关联对象-车桩未连接-连接确认-版本协商-功能协商-参数配-整权-可选-预约充电-可选-输出回路检测-供电模式-可选-预充及能量传输阶段-注1",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\processes\\process-doc-000003-信号-条件-关联对象-车桩未连接-连接确认-版本协商-功能协商-参数配-整权-可选-预约充电-可选-输出回路检测-供电模式-可选-预充及能量传输阶段-注1.md"
+        },
+        {
+          "page_id": "WPROC-DOC-000003-process-doc-000003-表-b-3-附录-a-的充电机兼容旧版本电动汽车的直流充电控制导引电路参数",
+          "page_type": "process",
+          "title": "表 B.3 附录 A 的充电机兼容旧版本电动汽车的直流充电控制导引电路参数",
+          "slug": "process-doc-000003-表-b-3-附录-a-的充电机兼容旧版本电动汽车的直流充电控制导引电路参数",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\processes\\process-doc-000003-表-b-3-附录-a-的充电机兼容旧版本电动汽车的直流充电控制导引电路参数.md"
+        },
+        {
+          "page_id": "WPROC-DOC-000002-process-doc-000002-表-c-3-控制导引电路状态转换表-续",
+          "page_type": "process",
+          "title": "表 C.3 控制导引电路状态转换表 (续)",
+          "slug": "process-doc-000002-表-c-3-控制导引电路状态转换表-续",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\processes\\process-doc-000002-表-c-3-控制导引电路状态转换表-续.md"
+        },
+        {
+          "page_id": "WPROC-DOC-000002-process-doc-000002-附-录-b-规范性-采用-gb-t-20234-3-规定的充电连接装置的直流充电控制导引电路与控制原理",
+          "page_type": "process",
+          "title": "附 录 B\n**（规范性）**\n**采用 GB/T 20234.3 规定的充电连接装置的直流充电控制导引电路与控制原理**",
+          "slug": "process-doc-000002-附-录-b-规范性-采用-gb-t-20234-3-规定的充电连接装置的直流充电控制导引电路与控制原理",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\processes\\process-doc-000002-附-录-b-规范性-采用-gb-t-20234-3-规定的充电连接装置的直流充电控制导引电路与控制原理.md"
+        },
+        {
+          "page_id": "WPAGE-000019",
+          "page_type": "term",
+          "title": "控制导引功能 control pilot function;CP",
+          "slug": "控制导引功能-control-pilot-function-cp",
+          "entity_id": "ENT-000019",
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\terms\\控制导引功能-control-pilot-function-cp.md"
+        },
+        {
+          "page_id": "WPAGE-000018",
+          "page_type": "term",
+          "title": "控制导引电路 control pilot circuit",
+          "slug": "控制导引电路-control-pilot-circuit",
+          "entity_id": "ENT-000018",
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\terms\\控制导引电路-control-pilot-circuit.md"
+        },
+        {
+          "page_id": "WPAR-DOC-000002-parameter-doc-000002-表-a-1-控制导引电路的参数",
+          "page_type": "parameter_group",
+          "title": "**表 A.1 控制导引电路的参数**",
+          "slug": "parameter-doc-000002-表-a-1-控制导引电路的参数",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\parameter_groups\\parameter-doc-000002-表-a-1-控制导引电路的参数.md"
+        },
+        {
+          "page_id": "WPAR-DOC-000002-parameter-doc-000002-表-b-1-直流充电控制导引电路的参数",
+          "page_type": "parameter_group",
+          "title": "**表 B.1 直流充电控制导引电路的参数**",
+          "slug": "parameter-doc-000002-表-b-1-直流充电控制导引电路的参数",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\parameter_groups\\parameter-doc-000002-表-b-1-直流充电控制导引电路的参数.md"
+        },
+        {
+          "page_id": "WPAR-DOC-000002-parameter-doc-000002-表-c-1-直流充电控制导引电路的参数",
+          "page_type": "parameter_group",
+          "title": "表 C.1 直流充电控制导引电路的参数",
+          "slug": "parameter-doc-000002-表-c-1-直流充电控制导引电路的参数",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\parameter_groups\\parameter-doc-000002-表-c-1-直流充电控制导引电路的参数.md"
+        },
+        {
+          "page_id": "WPAR-DOC-000002-parameter-doc-000002-表-c-1-直流充电控制导引电路的参数-续",
+          "page_type": "parameter_group",
+          "title": "**表 C.1 直流充电控制导引电路的参数（续）**",
+          "slug": "parameter-doc-000002-表-c-1-直流充电控制导引电路的参数-续",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\parameter_groups\\parameter-doc-000002-表-c-1-直流充电控制导引电路的参数-续.md"
+        },
+        {
+          "page_id": "WPAR-DOC-000002-parameter-doc-000002-表-g-2-具备充电兼容的电动汽车控制导引电路参数",
+          "page_type": "parameter_group",
+          "title": "表 G.2 具备充电兼容的电动汽车控制导引电路参数",
+          "slug": "parameter-doc-000002-表-g-2-具备充电兼容的电动汽车控制导引电路参数",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\parameter_groups\\parameter-doc-000002-表-g-2-具备充电兼容的电动汽车控制导引电路参数.md"
+        },
+        {
+          "page_id": "WPAR-DOC-000003-parameter-doc-000003-信号-条件-关联对象-车桩未连接-连接确认-版本协商-功能协商-参数配-整权-可选-预约充电-可选-输出回路检测-供电模式-可选-预充及能量传输阶段",
+          "page_type": "parameter_group",
+          "title": "信号/条件 关联对象 车桩未连接 连接确认、版本协商、功能协商、参数配 整权(可选) 预约充电(可选) 输出回路检测 供电模式(可选) 预充及能量传输阶段 注1：检测点2电压由制造厂自定义，时序图上拉电压 $ U_{2} $以12 V为例。 注2：时序图中网格填充区域状态由制造厂自定义，网格填充区域粗实线为推荐值。 注 $ ^{3} $：K1、K2内侧电压波形与充电机预充电路方案有关，时序图中预充电路采用二极管方案为例。 图 A.2 正常启动控制时序图 表 A.6 正常启动控制时序表",
+          "slug": "parameter-doc-000003-信号-条件-关联对象-车桩未连接-连接确认-版本协商-功能协商-参数配-整权-可选-预约充电-可选-输出回路检测-供电模式-可选-预充及能量传输阶段",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\parameter_groups\\parameter-doc-000003-信号-条件-关联对象-车桩未连接-连接确认-版本协商-功能协商-参数配-整权-可选-预约充电-可选-输出回路检测-供电模式-可选-预充及能量传输阶段.md"
+        }
+      ]
+    },
+    {
+      "name": "parameter_wiki_doc000002",
+      "doc_id": "DOC-000002",
+      "query": "CC阻值",
+      "passed": true,
+      "wiki_pages": [
+        {
+          "page_id": "WPAGE-000020",
+          "page_type": "term",
+          "title": "连接确认功能 connection confirm function; CC",
+          "slug": "连接确认功能-connection-confirm-function-cc",
+          "entity_id": "ENT-000020",
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\terms\\连接确认功能-connection-confirm-function-cc.md"
+        },
+        {
+          "page_id": "WPROC-DOC-000002-process-doc-000002-表-a-5-车辆接口连接状态及-rc-的电阻值",
+          "page_type": "process",
+          "title": "表 A.5 车辆接口连接状态及 RC 的电阻值",
+          "slug": "process-doc-000002-表-a-5-车辆接口连接状态及-rc-的电阻值",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\processes\\process-doc-000002-表-a-5-车辆接口连接状态及-rc-的电阻值.md"
+        },
+        {
+          "page_id": "WPAGE-000019",
+          "page_type": "term",
+          "title": "控制导引功能 control pilot function;CP",
+          "slug": "控制导引功能-control-pilot-function-cp",
+          "entity_id": "ENT-000019",
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\terms\\控制导引功能-control-pilot-function-cp.md"
+        },
+        {
+          "page_id": "WPAGE-000018",
+          "page_type": "term",
+          "title": "控制导引电路 control pilot circuit",
+          "slug": "控制导引电路-control-pilot-circuit",
+          "entity_id": "ENT-000018",
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\terms\\控制导引电路-control-pilot-circuit.md"
+        },
+        {
+          "page_id": "WPROC-DOC-000002-process-doc-000002-附-录-b-规范性-采用-gb-t-20234-3-规定的充电连接装置的直流充电控制导引电路与控制原理",
+          "page_type": "process",
+          "title": "附 录 B\n**（规范性）**\n**采用 GB/T 20234.3 规定的充电连接装置的直流充电控制导引电路与控制原理**",
+          "slug": "process-doc-000002-附-录-b-规范性-采用-gb-t-20234-3-规定的充电连接装置的直流充电控制导引电路与控制原理",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\processes\\process-doc-000002-附-录-b-规范性-采用-gb-t-20234-3-规定的充电连接装置的直流充电控制导引电路与控制原理.md"
+        },
+        {
+          "page_id": "WPROC-DOC-000002-process-doc-000002-表-c-3-控制导引电路状态转换表-续",
+          "page_type": "process",
+          "title": "表 C.3 控制导引电路状态转换表 (续)",
+          "slug": "process-doc-000002-表-c-3-控制导引电路状态转换表-续",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\processes\\process-doc-000002-表-c-3-控制导引电路状态转换表-续.md"
+        },
+        {
+          "page_id": "WPAR-DOC-000002-parameter-doc-000002-表-a-1-控制导引电路的参数",
+          "page_type": "parameter_group",
+          "title": "**表 A.1 控制导引电路的参数**",
+          "slug": "parameter-doc-000002-表-a-1-控制导引电路的参数",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\parameter_groups\\parameter-doc-000002-表-a-1-控制导引电路的参数.md"
+        },
+        {
+          "page_id": "WPAR-DOC-000002-parameter-doc-000002-表-b-1-直流充电控制导引电路的参数",
+          "page_type": "parameter_group",
+          "title": "**表 B.1 直流充电控制导引电路的参数**",
+          "slug": "parameter-doc-000002-表-b-1-直流充电控制导引电路的参数",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\parameter_groups\\parameter-doc-000002-表-b-1-直流充电控制导引电路的参数.md"
+        },
+        {
+          "page_id": "WPAR-DOC-000002-parameter-doc-000002-表-c-1-直流充电控制导引电路的参数",
+          "page_type": "parameter_group",
+          "title": "表 C.1 直流充电控制导引电路的参数",
+          "slug": "parameter-doc-000002-表-c-1-直流充电控制导引电路的参数",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\parameter_groups\\parameter-doc-000002-表-c-1-直流充电控制导引电路的参数.md"
+        },
+        {
+          "page_id": "WPAR-DOC-000002-parameter-doc-000002-表-c-1-直流充电控制导引电路的参数-续",
+          "page_type": "parameter_group",
+          "title": "**表 C.1 直流充电控制导引电路的参数（续）**",
+          "slug": "parameter-doc-000002-表-c-1-直流充电控制导引电路的参数-续",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\parameter_groups\\parameter-doc-000002-表-c-1-直流充电控制导引电路的参数-续.md"
+        },
+        {
+          "page_id": "WPAR-DOC-000002-parameter-doc-000002-表-g-2-具备充电兼容的电动汽车控制导引电路参数",
+          "page_type": "parameter_group",
+          "title": "表 G.2 具备充电兼容的电动汽车控制导引电路参数",
+          "slug": "parameter-doc-000002-表-g-2-具备充电兼容的电动汽车控制导引电路参数",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\parameter_groups\\parameter-doc-000002-表-g-2-具备充电兼容的电动汽车控制导引电路参数.md"
+        }
+      ]
+    }
+  ]
+}

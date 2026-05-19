@@ -1,0 +1,319 @@
+{
+  "case_count": 2,
+  "passed": 2,
+  "failed": 0,
+  "success": true,
+  "results": [
+    {
+      "name": "cc_parameter_subgraph",
+      "doc_id": "DOC-000002",
+      "query": "CC阻值",
+      "passed": true,
+      "knowledge_subgraph": {
+        "seed_wiki_page_ids": [
+          "WPAGE-000020",
+          "WPROC-DOC-000002-process-doc-000002-表-a-5-车辆接口连接状态及-rc-的电阻值",
+          "WPAGE-000019",
+          "WPAGE-000018",
+          "WPROC-DOC-000002-process-doc-000002-附-录-b-规范性-采用-gb-t-20234-3-规定的充电连接装置的直流充电控制导引电路与控制原理",
+          "WPROC-DOC-000002-process-doc-000002-表-c-3-控制导引电路状态转换表-续",
+          "WPAR-DOC-000002-parameter-doc-000002-表-a-1-控制导引电路的参数",
+          "WPAR-DOC-000002-parameter-doc-000002-表-b-1-直流充电控制导引电路的参数"
+        ],
+        "seed_entity_ids": [
+          "ENT-000002",
+          "ENT-000018",
+          "ENT-000019",
+          "ENT-000020",
+          "ENT-000065",
+          "ENT-000066",
+          "ENT-000069",
+          "ENT-000072",
+          "ENT-000074",
+          "ENT-000075",
+          "ENT-000076",
+          "ENT-000082"
+        ],
+        "fact_count": 101,
+        "edge_count": 24,
+        "wiki_count": 11
+      },
+      "wiki_pages": [
+        {
+          "page_id": "WPAGE-000020",
+          "page_type": "term",
+          "title": "连接确认功能 connection confirm function; CC",
+          "slug": "连接确认功能-connection-confirm-function-cc",
+          "entity_id": "ENT-000020",
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\terms\\连接确认功能-connection-confirm-function-cc.md",
+          "source_fact_ids_json": "[\"FACT-000099\"]"
+        },
+        {
+          "page_id": "WPROC-DOC-000002-process-doc-000002-表-a-5-车辆接口连接状态及-rc-的电阻值",
+          "page_type": "process",
+          "title": "表 A.5 车辆接口连接状态及 RC 的电阻值",
+          "slug": "process-doc-000002-表-a-5-车辆接口连接状态及-rc-的电阻值",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\processes\\process-doc-000002-表-a-5-车辆接口连接状态及-rc-的电阻值.md",
+          "source_fact_ids_json": "[\"FACT-004787\", \"FACT-004788\", \"FACT-004789\", \"FACT-004790\", \"FACT-004791\", \"FACT-004792\", \"FACT-004793\", \"FACT-004794\", \"FACT-004795\", \"FACT-004796\", \"FACT-004797\", \"FACT-004798\", \"FACT-004799\", \"FACT-004800\", \"FACT-004801\", \"FACT-004802\", \"FACT-004803\", \"FACT-004804\", \"FACT-004805\", \"FACT-004806\", \"FACT-004807\", \"FACT-004808\"]"
+        },
+        {
+          "page_id": "WPAGE-000019",
+          "page_type": "term",
+          "title": "控制导引功能 control pilot function;CP",
+          "slug": "控制导引功能-control-pilot-function-cp",
+          "entity_id": "ENT-000019",
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\terms\\控制导引功能-control-pilot-function-cp.md",
+          "source_fact_ids_json": "[\"FACT-000098\"]"
+        },
+        {
+          "page_id": "WPAGE-000018",
+          "page_type": "term",
+          "title": "控制导引电路 control pilot circuit",
+          "slug": "控制导引电路-control-pilot-circuit",
+          "entity_id": "ENT-000018",
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\terms\\控制导引电路-control-pilot-circuit.md",
+          "source_fact_ids_json": "[\"FACT-000097\"]"
+        },
+        {
+          "page_id": "WPROC-DOC-000002-process-doc-000002-附-录-b-规范性-采用-gb-t-20234-3-规定的充电连接装置的直流充电控制导引电路与控制原理",
+          "page_type": "process",
+          "title": "附 录 B\n**（规范性）**\n**采用 GB/T 20234.3 规定的充电连接装置的直流充电控制导引电路与控制原理**",
+          "slug": "process-doc-000002-附-录-b-规范性-采用-gb-t-20234-3-规定的充电连接装置的直流充电控制导引电路与控制原理",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\processes\\process-doc-000002-附-录-b-规范性-采用-gb-t-20234-3-规定的充电连接装置的直流充电控制导引电路与控制原理.md",
+          "source_fact_ids_json": "[\"FACT-004929\", \"FACT-004930\", \"FACT-004931\", \"FACT-004932\", \"FACT-004933\", \"FACT-004934\", \"FACT-004935\", \"FACT-004936\", \"FACT-004937\", \"FACT-004938\", \"FACT-004939\", \"FACT-004940\", \"FACT-004941\", \"FACT-004942\", \"FACT-004943\", \"FACT-004944\", \"FACT-004945\"]"
+        }
+      ],
+      "graph_edges": [
+        {
+          "edge_id": "EDGE-000001",
+          "src_entity_id": "ENT-000002",
+          "relation": "references_standard",
+          "dst_entity_id": "ENT-000003",
+          "version_scope": "DOC-000002",
+          "confidence": 0.825
+        },
+        {
+          "edge_id": "EDGE-000002",
+          "src_entity_id": "ENT-000002",
+          "relation": "replaces_standard",
+          "dst_entity_id": "ENT-000004",
+          "version_scope": "DOC-000002",
+          "confidence": 0.825
+        },
+        {
+          "edge_id": "EDGE-000003",
+          "src_entity_id": "ENT-000002",
+          "relation": "defines_term",
+          "dst_entity_id": "ENT-000005",
+          "version_scope": "DOC-000002",
+          "confidence": 0.775
+        },
+        {
+          "edge_id": "EDGE-000004",
+          "src_entity_id": "ENT-000002",
+          "relation": "defines_term",
+          "dst_entity_id": "ENT-000006",
+          "version_scope": "DOC-000002",
+          "confidence": 0.775
+        },
+        {
+          "edge_id": "EDGE-000005",
+          "src_entity_id": "ENT-000002",
+          "relation": "defines_term",
+          "dst_entity_id": "ENT-000007",
+          "version_scope": "DOC-000002",
+          "confidence": 0.775
+        },
+        {
+          "edge_id": "EDGE-000006",
+          "src_entity_id": "ENT-000002",
+          "relation": "defines_term",
+          "dst_entity_id": "ENT-000008",
+          "version_scope": "DOC-000002",
+          "confidence": 0.775
+        },
+        {
+          "edge_id": "EDGE-000007",
+          "src_entity_id": "ENT-000002",
+          "relation": "defines_term",
+          "dst_entity_id": "ENT-000009",
+          "version_scope": "DOC-000002",
+          "confidence": 0.775
+        },
+        {
+          "edge_id": "EDGE-000008",
+          "src_entity_id": "ENT-000002",
+          "relation": "defines_term",
+          "dst_entity_id": "ENT-000010",
+          "version_scope": "DOC-000002",
+          "confidence": 0.775
+        }
+      ]
+    },
+    {
+      "name": "cp_timing_subgraph",
+      "doc_id": "DOC-000002",
+      "query": "CP时序",
+      "passed": true,
+      "knowledge_subgraph": {
+        "seed_wiki_page_ids": [
+          "WPROC-DOC-000003-process-doc-000003-a-2-充电控制导引电路",
+          "WPROC-DOC-000003-process-doc-000003-b-2-1-充电控制导引电路",
+          "WPROC-DOC-000003-process-doc-000003-b-3-1-充电控制导引电路",
+          "WPROC-DOC-000003-process-doc-000003-信号-条件-关联对象-车桩未连接-连接确认-版本协商-功能协商-参数配-整权-可选-预约充电-可选-输出回路检测-供电模式-可选-预充及能量传输阶段-注1",
+          "WPROC-DOC-000003-process-doc-000003-表-b-3-附录-a-的充电机兼容旧版本电动汽车的直流充电控制导引电路参数",
+          "WPROC-DOC-000002-process-doc-000002-表-c-3-控制导引电路状态转换表-续",
+          "WPROC-DOC-000002-process-doc-000002-附-录-b-规范性-采用-gb-t-20234-3-规定的充电连接装置的直流充电控制导引电路与控制原理",
+          "WPAGE-000019"
+        ],
+        "seed_entity_ids": [
+          "ENT-000002",
+          "ENT-000018",
+          "ENT-000019",
+          "ENT-000048",
+          "ENT-000065",
+          "ENT-000069",
+          "ENT-000072",
+          "ENT-000074",
+          "ENT-000075",
+          "ENT-000076",
+          "ENT-000082",
+          "ENT-000088",
+          "ENT-000090",
+          "ENT-000091",
+          "ENT-000095",
+          "ENT-000098",
+          "ENT-000099"
+        ],
+        "fact_count": 151,
+        "edge_count": 24,
+        "wiki_count": 15
+      },
+      "wiki_pages": [
+        {
+          "page_id": "WPROC-DOC-000003-process-doc-000003-a-2-充电控制导引电路",
+          "page_type": "process",
+          "title": "A.2 充电控制导引电路",
+          "slug": "process-doc-000003-a-2-充电控制导引电路",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\processes\\process-doc-000003-a-2-充电控制导引电路.md",
+          "source_fact_ids_json": "[\"FACT-005436\", \"FACT-005437\", \"FACT-005438\", \"FACT-005439\", \"FACT-005440\", \"FACT-005441\", \"FACT-005442\", \"FACT-005443\", \"FACT-005444\", \"FACT-005445\", \"FACT-005446\", \"FACT-005460\", \"FACT-005461\", \"FACT-005462\", \"FACT-005463\", \"FACT-005464\", \"FACT-005465\", \"FACT-005466\", \"FACT-005467\", \"FACT-005468\", \"FACT-005469\", \"FACT-005470\", \"FACT-005471\", \"FACT-005472\", \"FACT-005473\"]"
+        },
+        {
+          "page_id": "WPROC-DOC-000003-process-doc-000003-b-2-1-充电控制导引电路",
+          "page_type": "process",
+          "title": "B.2.1 充电控制导引电路",
+          "slug": "process-doc-000003-b-2-1-充电控制导引电路",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\processes\\process-doc-000003-b-2-1-充电控制导引电路.md",
+          "source_fact_ids_json": "[\"FACT-005732\", \"FACT-005733\", \"FACT-005734\", \"FACT-005735\", \"FACT-005736\", \"FACT-005737\", \"FACT-005738\", \"FACT-005739\", \"FACT-005740\", \"FACT-005741\", \"FACT-005742\", \"FACT-005743\", \"FACT-005744\", \"FACT-005745\", \"FACT-005757\", \"FACT-005758\", \"FACT-005759\", \"FACT-005760\", \"FACT-005761\", \"FACT-005762\", \"FACT-005763\", \"FACT-005764\", \"FACT-005765\", \"FACT-005766\", \"FACT-005767\", \"FACT-005768\"]"
+        },
+        {
+          "page_id": "WPROC-DOC-000003-process-doc-000003-b-3-1-充电控制导引电路",
+          "page_type": "process",
+          "title": "B.3.1 充电控制导引电路",
+          "slug": "process-doc-000003-b-3-1-充电控制导引电路",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\processes\\process-doc-000003-b-3-1-充电控制导引电路.md",
+          "source_fact_ids_json": "[\"FACT-005854\", \"FACT-005855\", \"FACT-005856\", \"FACT-005857\", \"FACT-005858\", \"FACT-005859\", \"FACT-005860\", \"FACT-005861\", \"FACT-005862\", \"FACT-005863\", \"FACT-005864\", \"FACT-005865\", \"FACT-005866\", \"FACT-005867\"]"
+        },
+        {
+          "page_id": "WPROC-DOC-000003-process-doc-000003-信号-条件-关联对象-车桩未连接-连接确认-版本协商-功能协商-参数配-整权-可选-预约充电-可选-输出回路检测-供电模式-可选-预充及能量传输阶段-注1",
+          "page_type": "process",
+          "title": "信号/条件 关联对象 车桩未连接 连接确认、版本协商、功能协商、参数配 整权(可选) 预约充电(可选) 输出回路检测 供电模式(可选) 预充及能量传输阶段 注1：检测点2电压由制造厂自定义，时序图上拉电压 $ U_{2} $以12 V为例。 注2：时序图中网格填充区域状态由制造厂自定义，网格填充区域粗实线为推荐值。 注 $ ^{3} $：K1、K2内侧电压波形与充电机预充电路方案有关，时序图中预充电路采用二极管方案为例。 图 A.2 正常启动控制时序图 表 A.6 正常启动控制时序表",
+          "slug": "process-doc-000003-信号-条件-关联对象-车桩未连接-连接确认-版本协商-功能协商-参数配-整权-可选-预约充电-可选-输出回路检测-供电模式-可选-预充及能量传输阶段-注1",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\processes\\process-doc-000003-信号-条件-关联对象-车桩未连接-连接确认-版本协商-功能协商-参数配-整权-可选-预约充电-可选-输出回路检测-供电模式-可选-预充及能量传输阶段-注1.md",
+          "source_fact_ids_json": "[\"FACT-005566\", \"FACT-005567\"]"
+        },
+        {
+          "page_id": "WPROC-DOC-000003-process-doc-000003-表-b-3-附录-a-的充电机兼容旧版本电动汽车的直流充电控制导引电路参数",
+          "page_type": "process",
+          "title": "表 B.3 附录 A 的充电机兼容旧版本电动汽车的直流充电控制导引电路参数",
+          "slug": "process-doc-000003-表-b-3-附录-a-的充电机兼容旧版本电动汽车的直流充电控制导引电路参数",
+          "entity_id": null,
+          "trust_status": "draft",
+          "file_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\wiki\\processes\\process-doc-000003-表-b-3-附录-a-的充电机兼容旧版本电动汽车的直流充电控制导引电路参数.md",
+          "source_fact_ids_json": "[\"FACT-005840\", \"FACT-005841\", \"FACT-005842\", \"FACT-005843\"]"
+        }
+      ],
+      "graph_edges": [
+        {
+          "edge_id": "EDGE-000001",
+          "src_entity_id": "ENT-000002",
+          "relation": "references_standard",
+          "dst_entity_id": "ENT-000003",
+          "version_scope": "DOC-000002",
+          "confidence": 0.825
+        },
+        {
+          "edge_id": "EDGE-000002",
+          "src_entity_id": "ENT-000002",
+          "relation": "replaces_standard",
+          "dst_entity_id": "ENT-000004",
+          "version_scope": "DOC-000002",
+          "confidence": 0.825
+        },
+        {
+          "edge_id": "EDGE-000046",
+          "src_entity_id": "ENT-000048",
+          "relation": "references_standard",
+          "dst_entity_id": "ENT-000049",
+          "version_scope": "DOC-000003",
+          "confidence": 0.825
+        },
+        {
+          "edge_id": "EDGE-000003",
+          "src_entity_id": "ENT-000002",
+          "relation": "defines_term",
+          "dst_entity_id": "ENT-000005",
+          "version_scope": "DOC-000002",
+          "confidence": 0.775
+        },
+        {
+          "edge_id": "EDGE-000004",
+          "src_entity_id": "ENT-000002",
+          "relation": "defines_term",
+          "dst_entity_id": "ENT-000006",
+          "version_scope": "DOC-000002",
+          "confidence": 0.775
+        },
+        {
+          "edge_id": "EDGE-000005",
+          "src_entity_id": "ENT-000002",
+          "relation": "defines_term",
+          "dst_entity_id": "ENT-000007",
+          "version_scope": "DOC-000002",
+          "confidence": 0.775
+        },
+        {
+          "edge_id": "EDGE-000006",
+          "src_entity_id": "ENT-000002",
+          "relation": "defines_term",
+          "dst_entity_id": "ENT-000008",
+          "version_scope": "DOC-000002",
+          "confidence": 0.775
+        },
+        {
+          "edge_id": "EDGE-000007",
+          "src_entity_id": "ENT-000002",
+          "relation": "defines_term",
+          "dst_entity_id": "ENT-000009",
+          "version_scope": "DOC-000002",
+          "confidence": 0.775
+        }
+      ]
+    }
+  ]
+}

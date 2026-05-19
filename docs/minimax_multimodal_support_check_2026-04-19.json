@@ -1,0 +1,18 @@
+{
+  "anthropic_base": "https://api.minimaxi.com/anthropic",
+  "model": "MiniMax-M2.7",
+  "checks": [
+    {
+      "name": "anthropic_text",
+      "status_code": 200,
+      "ok": true,
+      "body_preview": "{\"id\":\"06342b886ccecc448c6b86b11037499d\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"MiniMax-M2.7\",\"content\":[{\"thinking\":\"The user says: \\\"Reply with exactly: ok\\\". So they want a reply that is exactly \\\"ok\\\". There's no policy conflict. So respond with exactly \\\"ok\\\".\",\"signature\":\"b7b19cd050b2b9181c2a5094b73446de02612d49f6d81872b0b30d3a54b948ea\",\"type\":\"thinking\"},{\"text\":\"ok\",\"type\":\"text\"}],\"usage\":{\"input_tokens\":46,\"output_tokens\":39},\"stop_reason\":\"end_turn\",\"base_resp\":{\"status_code\":0"
+    }
+  ],
+  "conclusion": {
+    "anthropic_text_available": true,
+    "anthropic_multimodal_supported_by_current_interface": false,
+    "openai_multimodal_supported_by_current_interface": false,
+    "summary": "根据 MiniMax 官方文档，Anthropic API 兼容接口不支持图像和文档输入；OpenAI API 兼容接口不支持图像输入。当前项目中的 MiniMax 配置仅适用于文本模型调用，不适合直接做 PDF/图片 OCR。"
+  }
+}

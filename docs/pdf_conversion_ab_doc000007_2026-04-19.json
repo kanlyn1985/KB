@@ -1,0 +1,36 @@
+{
+  "document": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\raw\\DOC-000007_QC_T 1036-2016 汽车电源逆变器-免费标准网_www.upbz.net.pdf",
+  "document_size_mb": 0.872,
+  "paddle": {
+    "method": "paddlevl",
+    "engine": "paddlevl",
+    "page_count": 24,
+    "block_count": 24,
+    "page1_anchor_hit_count": 4,
+    "page1_anchor_total": 4,
+    "page1_preview": "# 中华人民共和国汽车行业标准\n\nQC/T 1036—2016\n\n汽车电源逆变器\n\nAutomotive DC—AC power inverter\n\n<div style=\"text-align: center;\"><img src=\"imgs/img_in_image_box_77_1363_278_1489.jpg\" alt=\"Image\" width=\"16%\" /></div>\n\n\n2016-04-05 发布\n\n2016-09-01 实施\n\n中华人民共和国工业和信息化部 发布"
+  },
+  "llm_image": {
+    "method": "llm_image",
+    "status_code": 200,
+    "success": false,
+    "extracted_text_preview": "The user says: \"You are performing OCR. Read this page and return only the visible text in markdown, no commentary.\"\n\nWe have to determine what to do. There's no page content given. There's no attached image or URL. It's a command to \"read this page\". There's no page provided. So we must respond with only visible text in markdown. But we don't have any visible text. Possibly we need to ask for the page content. However the instruction from the user is \"You are performing OCR. Read this page and return only the visible text in markdown, no commentary.\" The assistant should obey. But if there is no page, we can't produce text. We could respond that we need the image. But the instruction says to return only visible text in markdown, no commentary. However the user didn't provide any image. So",
+    "anchor_hit_count": 0,
+    "anchor_total": 4,
+    "notes": "项目配置 LLM 的图像输入链路测试"
+  },
+  "llm_pdf": {
+    "method": "llm_pdf",
+    "status_code": 200,
+    "success": false,
+    "extracted_text_preview": "The user says: \"Read this PDF and return the first page visible text only in markdown, no commentary.\" This is a request that presumably references a PDF that is not given. Possibly they will attach a PDF. The user hasn't attached any PDF. The instruction: \"Read this PDF and return the first page visible text only in markdown, no commentary.\" This is ambiguous. If there's no PDF attached, we cannot read it. According to policy, we must handle the situation: we must ask the user to provide the PDF or the content. The request says \"Read this PDF\". If the PDF is attached, we need to extract text from it. However, the user hasn't provided any PDF in the chat. Possibly they think the PDF is attached or have a link? There's no URL or attachment. So we need to ask for clarification or ask them to",
+    "anchor_hit_count": 0,
+    "anchor_total": 4,
+    "notes": "项目配置 LLM 的 PDF 文档输入链路测试"
+  },
+  "conclusion": {
+    "paddle_available": true,
+    "llm_multimodal_available": false,
+    "summary": "当前项目配置的 LLM 接口未表现出可用的 PDF/图片直读能力；PaddleVL 可以成功完成整份 PDF 解析并正确命中封面关键锚点。"
+  }
+}

@@ -1,0 +1,359 @@
+{
+  "document": "E:\\AI_Project\\opencode_workspace\\KB1\\tmp\\GBT+18487.1-2023.pdf",
+  "document_size_mb": 31.054,
+  "page_count": 157,
+  "sample_size": 10,
+  "sampled_pages": [
+    1,
+    18,
+    36,
+    53,
+    70,
+    88,
+    105,
+    122,
+    140,
+    157
+  ],
+  "paddle_engine": "paddlevl",
+  "paddle_average": {
+    "fidelity_0_5": 2.2,
+    "completeness_0_5": 2.2,
+    "terminology_0_5": 2.9,
+    "structure_0_5": 2.1,
+    "total_0_100": 46.5
+  },
+  "minimax_average": {
+    "fidelity_0_5": 4.6,
+    "completeness_0_5": 4.9,
+    "terminology_0_5": 5.0,
+    "structure_0_5": 4.9,
+    "total_0_100": 96.3
+  },
+  "winner": "minimax_understand_image",
+  "page_results": [
+    {
+      "page_no": 1,
+      "image_path": "E:\\AI_Project\\opencode_workspace\\KB1\\tmp\\ocr_ab_benchmark\\GBT+18487.1-2023_p001.png",
+      "paddle": {
+        "text_preview": "# 中华人民共和国国家标准\n\nGB/T 18487.1—2023\n\n代替 GB/T 18487.1—2015\n\n## 电动汽车传导充电系统 第 1 部分: 通用要求\n\n# Electric vehicle conductive charging system—Part 1: General requirements\n\n2023-09-07 发布\n\n2024-04-01 实施",
+        "char_count": 188,
+        "score": {
+          "fidelity_0_5": 4,
+          "completeness_0_5": 3,
+          "terminology_0_5": 5,
+          "structure_0_5": 3,
+          "total_0_100": 75.0,
+          "issues": [
+            "遗漏了左上角的 ICS 43.040.99 和 CCS T 35 编号",
+            "遗漏了底部的发布机构名称（国家市场监督管理总局、国家标准化管理委员会）及“发布”字样",
+            "将标题中的全角冒号“：”转写为了半角冒号“:”",
+            "将原本分两行显示的中文标题合并到了一行"
+          ]
+        }
+      },
+      "minimax": {
+        "text_preview": "ICS 43.040.99\nCCS T 35\n\nGB\n\n# 中华人民共和国国家标准\n\nGB/T 18487.1—2023\n代替 GB/T 18487.1—2015\n\nSAC\n\n# 电动汽车传导充电系统\n# 第 1 部分：通用要求\n\nElectric vehicle conductive charging system—Part 1: General requirements\n\n2023-09-07 发布\n2024-04-01 实施\n\n国家市场监督管理总局\n国家标准化管理委员会\n发布",
+        "char_count": 243,
+        "score": {
+          "fidelity_0_5": 5,
+          "completeness_0_5": 5,
+          "terminology_0_5": 5,
+          "structure_0_5": 5,
+          "total_0_100": 100.0,
+          "issues": []
+        }
+      }
+    },
+    {
+      "page_no": 18,
+      "image_path": "E:\\AI_Project\\opencode_workspace\\KB1\\tmp\\ocr_ab_benchmark\\GBT+18487.1-2023_p018.png",
+      "paddle": {
+        "text_preview": "#### 3.1.10 \n\n## 直流供电回路 DC power supply circuit\n\n直流供电设备内部对电动汽车进行充电或放电时，电流所流经的电路，以及所有传导连接的车辆插头的电连接部件，以实现直流供电设备与电动汽车之间的能量传输。\n\n### 3.2 电击、保护措施、隔离、开关、接地和连接 electric shock, protective measures, isolation, switching, earthing and bonding\n\n#### 3.2.1 \n\n## 绝缘[性能] insulation\n\n表征一个绝缘体实现其功能的能力的各种性质。\n\n注：有关性质的例子是：电阻、击穿电压。\n\n[来源：GB/T 2900.1—2008，3.3.159]\n\n#### 3.2.2 \n\n## 直接接触 direct contact\n\n人员或动物与带电部分的电接触。\n\n[来源：GB/T 2900.1—2008,3.5.68]\n\n#### 3.2.3 \n\n## 间接接触 indirect contact\n\n人员或动物与在故障状况下带电的外露可导电部分的电接触。\n\n[来源：GB/T 2900.1—2008，3.5.69]\n\n#### 3.2.4 \n\n## 基本绝缘 basic insulation\n\n能够提供基本防护的危险带电部分上的绝缘。\n\n注：本概念不适用于仅用作功能性目的的绝缘。\n\n[来源：GB/T 2900.1—2008，3.5.70]\n\n#### 3.2.5 \n\n## 附加绝缘 supplementary insulation\n\n<div style=\"text-align: center;\"><img src=\"imgs/img_in_image_box_549_1007_590_1048.jpg\" alt=\"Image\" width=\"3%\" /></div>\n\n\n除了基本绝缘外，用于故障防护附加的单独绝缘。\n\n[来源：GB/T 2900.1—2008，3.5.71]\n\n#### 3.2.6 \n\n## 双重绝缘 double insulation\n\n既有基本绝缘又有附加绝缘构成的绝缘。\n\n[来源：GB/T 2900.1—2008，3.5.72]\n\n#### 3.2.7 \n\n## 加强绝缘 reinforced insulation\n\n危险带电部分具有相当于双重绝缘的电击防护等级的绝缘。\n\n注：加强绝缘可以有几个不能像基本绝缘或附加绝缘那样单独测试的绝缘层组成。\n\n[来源：GB/T 2900.1—2008,3.5.73]\n\n#### 3.2.8 \n\n## 非对称(绝缘)故障 asymmetrical (insulation) faults\n\n从不同带电导体到保护接地导体的电阻不同情况下的绝缘故障。",
+        "char_count": 1180,
+        "score": {
+          "fidelity_0_5": 4,
+          "completeness_0_5": 3,
+          "terminology_0_5": 5,
+          "structure_0_5": 3,
+          "total_0_100": 75.0,
+          "issues": []
+        }
+      },
+      "minimax": {
+        "text_preview": "GB/T 18487.1—2023\n\n3.1.10\n直流供电回路 DC power supply circuit\n直流供电设备内部对电动汽车进行充电或放电时，电流所流经的电路，以及所有传导连接的车辆插头的电连接部件，以实现直流供电设备与电动汽车之间的能量传输。\n\n3.2 电击、保护措施、隔离、开关、接地和连接 electric shock, protective measures, isolation, switching, earthing and bonding\n\n3.2.1\n绝缘[性能] insulation\n表征一个绝缘体实现其功能的能力的各种性质。\n注：有关性质的例子是：电阻、击穿电压。\n[来源：GB/T 2900.1—2008, 3.3.159]\n\n3.2.2\n直接接触 direct contact\n人员或动物与带电部分的电接触。\n[来源：GB/T 2900.1—2008, 3.5.68]\n\n3.2.3\n间接接触 indirect contact\n人员或动物与在故障状况下带电的外露可导电部分的电接触。\n[来源：GB/T 2900.1—2008, 3.5.69]\n\n3.2.4\n基本绝缘 basic insulation\n能够提供基本防护的危险带电部分上的绝缘。\n注：本概念不适用于仅用作功能性目的的绝缘。\n[来源：GB/T 2900.1—2008, 3.5.70]\n\n3.2.5\n附加绝缘 supplementary insulation\n除了基本绝缘外，用于故障防护附加的单独绝缘。\n[来源：GB/T 2900.1—2008, 3.5.71]\n\n3.2.6\n双重绝缘 double insulation\n既有基本绝缘又有附加绝缘构成的绝缘。\n[来源：GB/T 2900.1—2008, 3.5.72]\n\n3.2.7\n加强绝缘 reinforced insulation\n危险带电部分具有相当于双重绝缘的电击防护等级的绝缘。\n注：加强绝缘可以有几个不能像基本绝缘或附加绝缘那样单独测试的绝缘层组成。\n[来源：GB/T 2900.1—2008, 3.5.73]\n\n3.2.8\n非对称(绝缘)故障 asymmetrical (insulation) faults\n从不同带电导体到保护接地导体的电阻不同情况下的绝缘故障。\n\n11",
+        "char_count": 975,
+        "score": {
+          "fidelity_0_5": 4,
+          "completeness_0_5": 5,
+          "terminology_0_5": 5,
+          "structure_0_5": 5,
+          "total_0_100": 93.0,
+          "issues": [
+            "在[来源：...]部分，原文在年份后使用的是点号（.），如“2008.3.3.159”，而转写稿统一改为了逗号，如“2008, 3.3.159”。"
+          ]
+        }
+      }
+    },
+    {
+      "page_no": 36,
+      "image_path": "E:\\AI_Project\\opencode_workspace\\KB1\\tmp\\ocr_ab_benchmark\\GBT+18487.1-2023_p036.png",
+      "paddle": {
+        "text_preview": "<div style=\"text-align: center;\">表 2 单一故障条件下接触电压（续）</div>\n\n\n\n<table border=1 style='margin: auto; word-wrap: break-word;'><tr><td style='text-align: center; word-wrap: break-word;'>人体接触区域</td><td style='text-align: center; word-wrap: break-word;'>交流(有效值)</td><td style='text-align: center; word-wrap: break-word;'>直流</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>指尖</td><td style='text-align: center; word-wrap: break-word;'>30 V</td><td style='text-align: center; word-wrap: break-word;'>60 V</td></tr><tr><td colspan=\"3\">注1：这些数值是基于人在站立状态下，从身体接触部位到脚的电流路径。注2：如果在单一故障条件下不能满足这些数值，则需要进行防护性隔离。</td></tr></table>\n\n<table border=1 style='margin: auto; width: max-content;'>\n  <thead><tr><th style='text-align: center;'>接触电压/V</th><th style='text-align: center;'>持续时间/ms</th></tr></thead>\n  <tbody>\n    <tr><td style='text-align: center;'>25</td><td style='text-align: center;'>1250</td></tr>\n    <tr><td style='text-align: center;'>50</td><td style='text-align: center;'>1250</td></tr>\n    <tr><td style='text-align: center;'>75</td><td style='text-align: center;'>1250</td></tr>\n    <tr><td style='text-align: center;'>100</td><td style='text-align: center;'>1250</td></tr>\n    <tr><td style='text-align: center;'>125</td><td style='text-align: center;'>1250</td></tr>\n    <tr><td style='text-align: center;'>150</td><td style='text-align: center;'>1250</td></tr>\n    <tr><td style='text-align: center;'>175</td><td style='text-align: center;'>1250</td></tr>\n    <tr><td style='text-align: center;'>200</td><td style='text-align: center;'>1250</td></tr>\n    <tr><td style='text-align: center;'>225</td><td style='text-align: center;'>1250</td></tr>\n    <tr><td style='text-align: center;'>250</td><td style='text-align: center;'>1250</td></tr>\n    <tr><td style='text-align: center;'>275</td><td style='text-align: center;'>1250</td></tr>\n    <tr><td style='text-align: center;'>300</td><td style='text-align: center;'>1250</td></tr>\n    <tr><td style='text-align: center;'>325</td><td style='text-align: center;'>1250</td></tr>\n    <tr><td style='text-align: center;'>350</td><td style='text-align: center;'>1250</td></tr>\n    <tr><td style='text-align: center;'>375</td><td style='text-align: center;'>1250</td></tr>\n    <tr><td style='text-align: center;'>400</td><td style='text-align: center;'>1250</td></tr>\n    <tr><td style='text-align: center;'>425</td><td style='text-align",
+        "char_count": 5151,
+        "score": {
+          "fidelity_0_5": 2,
+          "completeness_0_5": 4,
+          "terminology_0_5": 5,
+          "structure_0_5": 3,
+          "total_0_100": 67.0,
+          "issues": [
+            "候选文本虚构了一个庞大的数据表格来对应图片中的曲线图，图片中并无这些具体的数值文字。",
+            "漏掉了页眉编号 GB/T 18487.1—2023。",
+            "漏掉了右下角的页码 29。",
+            "漏掉了图表图例‘指尖到脚’。"
+          ]
+        }
+      },
+      "minimax": {
+        "text_preview": "GB/T 18487.1—2023\n\n**表 2 单一故障条件下接触电压（续）**\n\n| 人体接触区域 | 交流（有效值） | 直流 |\n| :--- | :---: | :---: |\n| 指尖 | 30 V | 60 V |\n\n注 1：这些数值是基于人在站立状态下，从身体接触部位到脚的电流路径。\n注 2：如果在单一故障条件下不能满足这些数值，则需要进行防护性隔离。\n\n![接触时间-在单一故障条件下的直流电压图表](image_link)\n持续时间/ms\n100 000\n10 000\n1 000\n100\n10\n10\n100\n1 000\n接触电压/V\n—— 指尖到脚\n\n**图 11 接触时间-在单一故障条件下的直流电压（水湿润，从指尖到脚）**\n\n#### 7.2.5 稳态接触电流的限值保护\n\n提供稳态接触电流限值，将接触电流限制在非危险值下，限值按照 7.1.4。\n限制接触电流的保护性阻抗应符合 IEC 62477-1:2016 中 4.4.5.4 的规定。\n保护阻抗的设计和测试应能承受 IEC 62477-1:2016 中 5.2.3.2 和 5.2.3.4 规定的脉冲电压和暂时过电压测试。\n\n#### 7.3 故障防护\n\n故障防护可防止在基本防护失效期间和之后因触及危险能量而造成人身伤害，应符合 GB/T 17045—2020 中 5.3 的规定。\n在模式 3 和模式 4 下固定安装的供电设备、保护接地导体和保护连接导体应固定连接。\n\n#### 7.4 保护接地导体\n\n对于所有模式，在交流供电网接地端子、直流供电网接地端子和车辆插头的接地端子之间应提供保护接地导体。\n保护接地导体应符合 GB/T 16895.3 的规定。\n对于模式 3 和模式 4 且永久连接供电网的电动汽车供电设备，不应使用开关或类似装置连接保护\n\n29",
+        "char_count": 776,
+        "score": {
+          "fidelity_0_5": 4,
+          "completeness_0_5": 5,
+          "terminology_0_5": 5,
+          "structure_0_5": 5,
+          "total_0_100": 93.0,
+          "issues": [
+            "候选转写中包含了一行描述性文字 '![接触时间-在单一故障条件下的直流电压图表](image_link)'，这属于对图片内容的总结或补充，违反了指令中'不要补充图片里没有的文字'的要求。"
+          ]
+        }
+      }
+    },
+    {
+      "page_no": 53,
+      "image_path": "E:\\AI_Project\\opencode_workspace\\KB1\\tmp\\ocr_ab_benchmark\\GBT+18487.1-2023_p053.png",
+      "paddle": {
+        "text_preview": "<div style=\"text-align: center;\">表 A.1 控制导引电路的参数</div>\n\n\n\n<table border=1 style='margin: auto; word-wrap: break-word;'><tr><td style='text-align: center; word-wrap: break-word;'>对象</td><td style='text-align: center; word-wrap: break-word;'>参数*</td><td style='text-align: center; word-wrap: break-word;'>符号</td><td style='text-align: center; word-wrap: break-word;'>单位</td><td style='text-align: center; word-wrap: break-word;'>标称值</td><td style='text-align: center; word-wrap: break-word;'>最大值</td><td style='text-align: center; word-wrap: break-word;'>最小值</td></tr><tr><td rowspan=\"9\">供电设备</td><td style='text-align: center; word-wrap: break-word;'>输出高电压</td><td style='text-align: center; word-wrap: break-word;'>+Vcc</td><td style='text-align: center; word-wrap: break-word;'>V</td><td style='text-align: center; word-wrap: break-word;'>12.00</td><td style='text-align: center; word-wrap: break-word;'>12.60</td><td style='text-align: center; word-wrap: break-word;'>11.40</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>输出低电压</td><td style='text-align: center; word-wrap: break-word;'>-Vcc</td><td style='text-align: center; word-wrap: break-word;'>V</td><td style='text-align: center; word-wrap: break-word;'>-12.00</td><td style='text-align: center; word-wrap: break-word;'>-11.40</td><td style='text-align: center; word-wrap: break-word;'>-12.60</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>输出频率</td><td style='text-align: center; word-wrap: break-word;'>f</td><td style='text-align: center; word-wrap: break-word;'>Hz</td><td style='text-align: center; word-wrap: break-word;'>1 000.00</td><td style='text-align: center; word-wrap: break-word;'>1 020.00</td><td style='text-align: center; word-wrap: break-word;'>980.00</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>输出占空比公差</td><td style='text-align: center; word-wrap: break-word;'>Dco</td><td style='text-align: center; word-wrap: break-word;'>—</td><td style='text-align: center; word-wrap: break-word;'>—</td><td style='text-align: center; word-wrap: break-word;'>+0.5%</td><td style='text-align: center; word-wrap: break-word;'>-0.5%</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>信号设置时间b,c</td><td style='text-align: center; word-wrap: break-word;'>Ts</td><td style='text-align: center; word-wrap: break-word;'>μs</td><td style='text-align: center; w",
+        "char_count": 6876,
+        "score": {
+          "fidelity_0_5": 4,
+          "completeness_0_5": 4,
+          "terminology_0_5": 4,
+          "structure_0_5": 4,
+          "total_0_100": 80.0,
+          "issues": [
+            "Missing top document header: GB/T 18487.1—2023",
+            "Incorrect transcription of symbol 'Dci' as 'Deci'",
+            "Superscript footnote markers in table cells (e.g., a, b, c, d) are transcribed as normal characters or a '*' symbol",
+            "The table footnotes are merged into a single paragraph, losing the original separate line structure"
+          ]
+        }
+      },
+      "minimax": {
+        "text_preview": "GB/T 18487.1—2023\n\n表 A.1 控制导引电路的参数\n\n| 对象 | 参数ᵃ | 符号 | 单位 | 标称值 | 最大值 | 最小值 |\n| :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n| 供电设备 | 输出高电压 | +Vcc | V | 12.00 | 12.60 | 11.40 |\n| | 输出低电压 | -Vcc | V | -12.00 | -11.40 | -12.60 |\n| | 输出频率 | f | Hz | 1 000.00 | 1 020.00 | 980.00 |\n| | 输出占空比公差 | Dco | — | — | +0.5% | -0.5% |\n| | 信号设置时间ᵇ,ᶜ | Ts | μs | n.a. | 3 | n.a. |\n| | 信号上升时间ᶜ(10%~90%) | Tr | μs | n.a. | 2 | n.a. |\n| | 信号下降时间ᶜ(90%~10%) | Tf | μs | n.a. | 2 | n.a. |\n| | R1 等效电阻ᵈ | R1 | Ω | 1 000 | 1 030 | 970 |\n| | 容抗ᵉ | Cs | pF | — | 1 600 | 300 |\n| 电动汽车 | R2 等效电阻ᵈ | R2 | Ω | 1 300 | 1 339 | 1 261 |\n| | R3 等效电阻ᵈ | R3 | Ω | 2 740 | 2 822 | 2 658 |\n| | 等效二极管压降 (2.75~10 mA, -40 ℃~+85 ℃) | Vd1 | V | 0.70 | 0.85 | 0.55 |\n| | 输入占空比公差 | Dci | — | — | +1.5% | -1.5% |\n| | 容抗ᶠ | Cv | pF | — | 2 400 | — |\n| 电缆 | 容抗ᵍ | Cc | pF | — | 1500 | — |\n\nᵃ 在使用环境条件下和可用寿命内都要达到精度要求。\nᵇ 从开始转变到达稳定值的 95%时所用的时间。\nᶜ 指供电设备信号发生器源端信号的设计要求。车辆接口处检测应满足相关测试标准要求。\nᵈ 等效电阻精度推荐为±3%。\nᵉ 对于模式 3 连接方式 C 和模式 2 电缆，最大等效电容为 Cc+Cs 的总和。\nᶠ 对于模式 3 连接方式 A，最大等效电容为 Cc+Cv 的总和。\nᵍ 针对连接方式 B 的充电电缆。\n\nA.1.2 模式 2\n\n当电动汽车使用模式 2 进行充电时，应使用如图 A.4 所示的控制导引电路进行充电连接装置的连接确认及额定电流参数的判断。\n\n46",
+        "char_count": 1130,
+        "score": {
+          "fidelity_0_5": 5,
+          "completeness_0_5": 5,
+          "terminology_0_5": 5,
+          "structure_0_5": 5,
+          "total_0_100": 100.0,
+          "issues": []
+        }
+      }
+    },
+    {
+      "page_no": 70,
+      "image_path": "E:\\AI_Project\\opencode_workspace\\KB1\\tmp\\ocr_ab_benchmark\\GBT+18487.1-2023_p070.png",
+      "paddle": {
+        "text_preview": "<div style=\"text-align: center;\">表 A.7 交流充电控制时序表（续）</div>\n\n\n\n<table border=1 style='margin: auto; word-wrap: break-word;'><tr><td style='text-align: center; word-wrap: break-word;'>时序</td><td style='text-align: center; word-wrap: break-word;'>时序图例</td><td style='text-align: center; word-wrap: break-word;'>状态</td><td style='text-align: center; word-wrap: break-word;'>条件</td><td style='text-align: center; word-wrap: break-word;'>时间</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>3.1充电设备可以充电(状态2)</td><td style='text-align: center; word-wrap: break-word;'><img src=\"imgs/img_in_image_box_296_287_512_604.jpg\" alt=\"Image\"\" /></td><td style='text-align: center; word-wrap: break-word;'>状态2→状态2&#x27;</td><td style='text-align: center; word-wrap: break-word;'>(5)供电设备可以充电,并通过PWM占空比显示其最大供电电流。电动汽车此时应检测出状态2转变到状态2&#x27;,可以被唤醒。该时序在充电过程的初始阶段出现或充电被中断后重新启动充电过程时出现</td><td style='text-align: center; word-wrap: break-word;'>(T5-T4)无要求</td></tr><tr><td rowspan=\"2\">3.2供电设备可以充电(状态3)</td><td style='text-align: center; word-wrap: break-word;'><img src=\"imgs/img_in_image_box_308_711_516_1042.jpg\" alt=\"Image\"\" /></td><td rowspan=\"2\">状态3→状态3&#x27;</td><td style='text-align: center; word-wrap: break-word;'>(5)供电设备可以充电,并通过PWM占空比显示其最大供电电流。电动汽车此时应检测出状态3转变到状态3&#x27;。该时序在充电过程的初始阶段出现或充电被中断后重新启动充电过程时出现</td><td style='text-align: center; word-wrap: break-word;'>(T5-T4)无要求</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>触发条件:充电准备就绪</td><td style='text-align: center; word-wrap: break-word;'>(6)电动汽车可以充电。(7)供电设备闭合交流供电回路。如果占空比为5%,供电设备在未接收到数字通信的条件下不会闭合交流供电回路</td><td style='text-align: center; word-wrap: break-word;'>(T6-T5)=0s(T7-T6)≤3s</td></tr><tr><td rowspan=\"2\">4电动汽车充电准备就绪</td><td style='text-align: center; word-wrap: break-word;'><img src=\"imgs/img_in_image_box_295_1185_503_1520.jpg\" alt=\"Image\"\" /></td><td style='text-align: center; word-wrap: break-word;'>状态2&#x27;→状态3&#x27;</td><td style='text-align: center; word-wrap: break-word;'>(6)电动汽车充电准备就绪(7)供电设备闭合交流供电回路,除非充电设备在3s内改变至其他充电状态(如状态3)</td><td style='text-align: center; word-wrap: break-word;'>(T7-T6)≤3s</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>触发条件:状态2&#x27;→状态3&#x27;</td><td style='text-align: center; word-wrap: break-word;'>状态3&#x27;</td><td style='text-align: center; word-wrap: break-word;'>如果占空比为5%,供电设备在未接受到数字通信的条件下不会闭合交流供电回路</td><td style='text-align: center; word-wrap: bre",
+        "char_count": 2428,
+        "score": {
+          "fidelity_0_5": 4,
+          "completeness_0_5": 4,
+          "terminology_0_5": 5,
+          "structure_0_5": 4,
+          "total_0_100": 84.0,
+          "issues": [
+            "缺少页眉文字 'GB/T 18487.1—2023'",
+            "时序 3.1 中的图例文字 '触发条件：充电准备就绪' 被遗漏",
+            "时间列中的多个时间范围表达式（如 '(T6-T5)=0s(T7-T6)≤3s'）合并在了一起，缺少空格或换行分隔",
+            "表格结构在处理‘触发条件’时与原图不一致，3.2 和 4 中将其拆分为独立行，而 3.1 中则直接缺失",
+            "缺少页码 '63'"
+          ]
+        }
+      },
+      "minimax": {
+        "text_preview": "GB/T 18487.1—2023\n\n表 A.7 交流充电控制时序表（续）\n\n| 时序 | 时序图例 | 状态 | 条件 | 时间 |\n| :--- | :--- | :--- | :--- | :--- |\n| 3.1<br>充电设备可以充电（状态 2） | ![Diagram 1] 触发条件：充电准备就绪 | 状态 2 → 状态 2' | (5)供电设备可以充电，并通过 PWM 占空比显示其最大供电电流。<br>电动汽车此时应检测出状态 2 转变为状态 2'，可以被唤醒。<br>该时序在充电过程的初始阶段出现或充电被中断后重新启动充电过程时出现 | (T5-T4)<br>无要求 |\n| 3.2<br>供电设备可以充电（状态 3） | ![Diagram 2] 触发条件：充电准备就绪 | 状态 3 → 状态 3' | (5)供电设备可以充电，并通过 PWM 占空比显示其最大供电电流。<br>电动汽车此时应检测出状态 3 转变为状态 3'。<br>该时序在充电过程的初始阶段出现或充电被中断后重新启动充电过程时出现 | (T5-T4)<br>无要求 |\n| | | | (6)电动汽车可以充电。<br>(7)供电设备闭合交流供电回路。如果占空比为 5%，供电设备在未接收到数字通信的条件下不会闭合交流供电回路 | (T6-T5) = 0 s<br>(T7-T6) ≤ 3 s |\n| 4<br>电动汽车充电准备就绪 | ![Diagram 3] 触发条件：状态 2' → 状态 3' | 状态 2' → 状态 3' | (6)电动汽车充电准备就绪<br>(7) 供电设备闭合交流供电回路，除非充电设备在 3 s 内改变至其他充电状态（如状态 3） | (T7-T6) ≤ 3 s |\n| | | 状态 3' | 如果占空比为 5%，供电设备在未接收到数字通信的条件下不会闭合交流供电回路 | |\n\nSAC\n63",
+        "char_count": 811,
+        "score": {
+          "fidelity_0_5": 4,
+          "completeness_0_5": 5,
+          "terminology_0_5": 5,
+          "structure_0_5": 5,
+          "total_0_100": 93.0,
+          "issues": [
+            "在3.1和3.2的‘条件’栏中，图片原文为‘转到’，被转写为了‘转变为’。"
+          ]
+        }
+      }
+    },
+    {
+      "page_no": 88,
+      "image_path": "E:\\AI_Project\\opencode_workspace\\KB1\\tmp\\ocr_ab_benchmark\\GBT+18487.1-2023_p088.png",
+      "paddle": {
+        "text_preview": "进入供电模式，电动汽车断开动力蓄电池连接，并由充电机进行恒压供电。\n\n注：另一种脉冲加热供电模式方案见附录J。\n\nC.4.6.2 供电模式阶段由充电机负责绝缘监测。车辆控制器应断开动力蓄电池与 C5 和 C6 之间的电连接并将动力蓄电池外侧回路电压泄放至 60 V DC 以下，再闭合 C5 和 C6；设备控制器应在确认车辆供电状态就绪后，闭合 C1 和 C2。当车辆控制器确认充电机供电状态就绪且充电机当前最大输出电流值不小于整车当前最大供电电流需求值后，才可导通电动汽车内部高压负载。\n\n注：供电模式阶段电动汽车不接入动力蓄电池，电动汽车内部高压负载可能是阻性或感性负载，充电机输出电压、电流可能存在较大纹波。\n\nC.4.6.3 供电模式阶段，车辆控制器向设备控制器实时发送车辆供电需求参数，当前最大供电电流需求值应包含电动汽车内部高压负载启动电流。\n\nC.4.6.4 设备控制器开始调整输出供电电压，应具备软启动功能 $ 1\\ s\\sim8\\ s $。稳压工作开机启动过程中，输出电压过冲不应大于当前整定值的5%。当充电机从暂停状态恢复供电模式时，应同样满足上述要求。\n\nC.4.5.5 供电模式阶段，在恒压供电模式下，当充电机的输出电流在 5 A 及以下时，可保持输出的持续时间不应低于 10 min。\n\nC.4.6.6 供电模式阶段，在恒压供电模式下，充电机输出电压应满足整车供电电压需求值，输出电流能力不应小于整车当前最大供电电流需求值。\n\nC.4.6.7 供电模式阶段，当充电机当前最大输出电流值小于整车当前最大供电电流需求值时，如电动汽车判断可降功率启动内部高压负载，车辆控制器应调整整车当前最大供电电流需求值低于充电机当前最大输出电流值；如电动汽车判断内部高压负载不能正常工作，车辆控制器可发送供电模式结束报文，退出供电模式阶段；如触发电动汽车内部高压负载欠压保护，车辆控制器可发送车辆中止报文结束充电流程。\n\nC.4.6.8 供电模式阶段，当充电机需要调节输出功率小于整车当前最大供电电流需求时，应先更新当前最大输出电流值，在车辆控制器响应调节负载用电功率并更新整车当前最大供电电流需求值后，进行输出能力调节。功率调节过程中，充电机不宜进行欠压保护，如进行欠压保护，应具有故障自恢复功能。\n\nC.4.6.9 供电模式阶段，车辆控制器需要调节供电需求大于充电机当前最大输出电流值时，应先更新整车当前最大供电电流需求，在设备控制器完成调节并更新当前最大输出电流值前，车辆控制器不应调整实际用电超过充电机当前最大输出电流。\n\nC.4.6.10 供电模式阶段结束后，车辆控制器应关闭内部高压负载并断开 C5 和 C6，设备控制器检测到电流降低至 5 A 及以下后断开 C1 和 C2，然后投入泄放回路，将 C1 和 C2 前端电压降至 60 V DC 以下。\n\nC.4.6.11 供电模式阶段，电动汽车故障停机条件和触发时间由制造商自行定义，具体执行动作应符合 C.4.10 或 C.4.11 的规定。\n\nC.4.6.12 供电模式阶段，充电机故障停机条件包括但不限于：\n\n——供电电压不匹配：车辆需求电压超出充电机输出电压范围，或充电机无法控制输出电压与车辆需求电压之间差值稳定在 $ \\pm5\\% $范围内；\n\n——供电电流异常：整车当前最大供电电流需求值低于充电机最小充电输出电流值；\n\n——车辆逻辑错误：接收到的车辆供电状态由就绪变为未就绪；\n\n——绝缘超限或接地故障。\n\n#### C.4.7 预充电\n\n车辆控制器先闭合 C5 和 C6，使车辆供电回路导通；设备控制器检测到当前车辆供电回路电压正常（确认接触器 C1 和 C2 外端电压：与通信报文电池电压误差范围  $ \\leq \\pm 5\\% $ 且在充电机正常工作电压范围内）后，根据其配置电路并按照 C.7.5 先进行预充电再导通直流供电回路。",
+        "char_count": 1612,
+        "score": {
+          "fidelity_0_5": 4,
+          "completeness_0_5": 4,
+          "terminology_0_5": 5,
+          "structure_0_5": 4,
+          "total_0_100": 84.0,
+          "issues": [
+            "漏掉了页眉 GB/T 18487.1—2023 和页码 81",
+            "将 C.4.6.5 错误转录为 C.4.5.5",
+            "在数字、符号周围添加了图片中不存在的 LaTeX 格式代码（如 $...$）",
+            "在标题 C.4.7 前添加了 Markdown 标记 ####"
+          ]
+        }
+      },
+      "minimax": {
+        "text_preview": "GB/T 18487.1—2023\n\n进入供电模式,电动汽车断开动力蓄电池连接,并由充电机进行恒压供电。\n\n注：另一种脉冲加热供电模式方案见附录 J。\n\n**C.4.6.2** 供电模式阶段由充电机负责绝缘监测。车辆控制器应断开动力蓄电池与 C5 和 C6 之间的电连接并将动力蓄电池外侧回路电压泄放至 60 V DC 以下,再闭合 C5 和 C6;设备控制器应在确认车辆供电状态就绪后,闭合 C1 和 C2。当车辆控制器确认充电机供电状态就绪且充电机当前最大输出电流值不小于整车当前最大供电电流需求值后,才可导通电动汽车内部高压负载。\n\n注：供电模式阶段电动汽车不接入动力蓄电池,电动汽车内部高压负载可能是阻性或感性负载,充电机输出电压、电流可能存在较大纹波。\n\n**C.4.6.3** 供电模式阶段,车辆控制器向设备控制器实时发送车辆供电需求参数,当前最大供电电流需求值应包含电动汽车内部高压负载启动电流。\n\n**C.4.6.4** 设备控制器开始调整输出供电电压,应具备软启动功能(1 s~8 s)。稳压工作开机启动过程中,输出电压过冲不应大于当前整定值的 5%。当充电机从暂停状态恢复供电模式时,应同样满足上述要求。\n\n**C.4.6.5** 供电模式阶段,在恒压供电模式下,当充电机的输出电流在 5 A 及以下时,可保持输出的持续时间不应低于 10 min。\n\n**C.4.6.6** 供电模式阶段,在恒压供电模式下,充电机输出电压应满足整车供电电压需求值,输出电流能力不应小于整车当前最大供电电流需求值。\n\n**C.4.6.7** 供电模式阶段,当充电机当前最大输出电流值小于整车当前最大供电电流需求值时,如电动汽车判断可降功率启动内部高压负载,车辆控制器应调整整车当前最大供电电流需求值低于充电机当前最大输出电流值;如电动汽车判断内部高压负载不能正常工作,车辆控制器可发送供电模式结束报文,退出供电模式阶段;如触发电动汽车内部高压负载欠压保护,车辆控制器可发送车辆中止报文结束充电流程。\n\n**C.4.6.8** 供电模式阶段,当充电机需要调节输出功率小于整车当前最大供电电流需求时,应先更新当前最大输出电流值,在车辆控制器响应调节负载用电功率并更新整车当前最大供电电流需求值后,进行输出能力调节。功率调节过程中,充电机不宜进行欠压保护,如进行欠压保护,应具有故障自恢复功能。\n\n**C.4.6.9** 供电模式阶段,车辆控制器需要调节供电需求大于充电机当前最大输出电流值时,应先更新整车当前最大供电电流需求,在设备控制器完成调节并更新当前最大输出电流值前,车辆控制器不应调整实际用电超过充电机当前最大输出电流。\n\n**C.4.6.10** 供电模式阶段结束后,车辆控制器应关闭内部高压负载并断开 C5 和 C6,设备控制器检测到电流降低至 5 A 及以下后断开 C1 和 C2,然后投入泄放回路,将 C1 和 C2 前端电压降至 60 V DC 以下。\n\n**C.4.6.11** 供电模式阶段,电动汽车故障停机条件和触发时间由制造商自行定义,具体执行动作应符合 C.4.10 或 C.4.11 的规定。\n\n**C.4.6.12** 供电模式阶段,充电机故障停机条件包括但不限于:\n\n——供电电压不匹配:车辆需求电压超出充电机输出电压范围,或充电机无法控制输出电压与车辆需求电压之间差值稳定在±5%范围内;\n\n——供电电流异常:整车当前最大供电电流需求值低于充电机最小充电输出电流值;\n\n——车辆逻辑错误:接收到的车辆供电状态由就绪变为未就绪;\n\n——绝缘超限或接地故障。\n\n**C.4.7 预充电**\n\n车辆控制器先闭合 C5 和 C6,使车辆供电回路导通;设备控制器检测到当前车辆供电回路电压正常(确认接触器 C1 和 C2 外端电压:与通信报文电池电压误差范围≤±5%且在充电机正常工作电压范围内)后,根据其配置电路并按照 C.7.5 先进行预充电再导通直流供电回路。\n\n81",
+        "char_count": 1649,
+        "score": {
+          "fidelity_0_5": 5,
+          "completeness_0_5": 5,
+          "terminology_0_5": 5,
+          "structure_0_5": 5,
+          "total_0_100": 100.0,
+          "issues": [
+            "部分标点符号使用了半角字符（如半角逗号、分号、冒号），而原图为全角字符。",
+            "为各级条目编号额外添加了加粗格式，原图中并非加粗显示。"
+          ]
+        }
+      }
+    },
+    {
+      "page_no": 105,
+      "image_path": "E:\\AI_Project\\opencode_workspace\\KB1\\tmp\\ocr_ab_benchmark\\GBT+18487.1-2023_p105.png",
+      "paddle": {
+        "text_preview": "",
+        "char_count": 0,
+        "score": {
+          "fidelity_0_5": 0,
+          "completeness_0_5": 0,
+          "terminology_0_5": 0,
+          "structure_0_5": 0,
+          "total_0_100": 0.0,
+          "issues": []
+        }
+      },
+      "minimax": {
+        "text_preview": "GB/T 18487.1—2023\n\n![接地故障检测电路示意图](image_link)\n\n标引序号说明：\nDC+ —— 直流供电回路正极；\nDC− —— 直流供电回路负极；\nC1、C2 —— 充电机内部直流供电回路接触器；\n$R_{\\text{IMD+}}$、$R_{\\text{IMD−}}$ —— 充电机内部 IMD 电阻；\n$S_{\\text{IMD+}}$、$S_{\\text{IMD−}}$ —— 充电机内部 IMD 回路开关；\n$R_{\\text{DS+＿EVSE}}$、$R_{\\text{DS−＿EVSE}}$ —— 充电机内部电阻；\n$C_{\\text{Y+＿EVSE}}$、$C_{\\text{Y−＿EVSE}}$ —— 充电机 Y 电容；\n$R_{\\text{cab+}}$、$R_{\\text{cab−}}$ —— 电缆组件内部电阻；\n$C_{\\text{cab+}}$、$C_{\\text{cab−}}$ —— 电缆组件内部电容；\nC5、C6 —— 电动汽车内部车辆断开装置；\n$C_{\\text{Y+＿EV}}$、$C_{\\text{Y−＿EV}}$ —— 电动汽车 Y 电容；\n$R_{\\text{DS+＿EV}}$、$R_{\\text{DS−＿EV}}$ —— 电动汽车内部电阻。\n\n**图 C.6 接地故障检测电路示意图**\n\n除了进行对称接地故障检测期间外，充电机的绝缘监测装置应一直保持在平衡桥模式，即不允许断开任意一侧或同时断开两侧的平衡桥电阻。\n\n能量传输阶段，充电机应至少进行 1 次对称接地故障检测。\n\n当车辆插头与车辆插座完全连接时，电动汽车内部的绝缘监测装置不应干扰充电机接地故障检测电路的工作。\n\n在供电模式（可选功能）、能量传输阶段，当充电机检测到接地故障，应在 10 s 内触发故障停机；在其他阶段（C5 和 C6 未闭合时），当充电机检测到接地故障，应断开 S1 开关，且不允许进入能量传输阶段；\n\n充电机应分别对直流供电回路 DC+ 对 PE、DC− 对 PE 的电压进行实时监测，当检测到该电压超出其可能的电压范围 ± 50 V DC 时，应在 1 s 内触发故障停机。\n\n接地故障检测电路设计应符合表 C.7 的规定。\n\n98",
+        "char_count": 947,
+        "score": {
+          "fidelity_0_5": 4,
+          "completeness_0_5": 4,
+          "terminology_0_5": 5,
+          "structure_0_5": 5,
+          "total_0_100": 87.0,
+          "issues": []
+        }
+      }
+    },
+    {
+      "page_no": 122,
+      "image_path": "E:\\AI_Project\\opencode_workspace\\KB1\\tmp\\ocr_ab_benchmark\\GBT+18487.1-2023_p122.png",
+      "paddle": {
+        "text_preview": "",
+        "char_count": 0,
+        "score": {
+          "fidelity_0_5": 0,
+          "completeness_0_5": 0,
+          "terminology_0_5": 0,
+          "structure_0_5": 0,
+          "total_0_100": 0.0,
+          "issues": []
+        }
+      },
+      "minimax": {
+        "text_preview": "GB/T 18487.1—2023\n\n前车辆控制器可断开开关 S2’。\n\n**E.5.3.7 非正常条件下中止**\n\n在充放电过程中，充放电机或者电动汽车检测到故障时，根据但不限于 C.7.13 给出的故障分类在规定时间内触发故障停机或紧急停机，具体执行动作见 C.4.10 和 C.4.11。\n\n115",
+        "char_count": 152,
+        "score": {
+          "fidelity_0_5": 5,
+          "completeness_0_5": 5,
+          "terminology_0_5": 5,
+          "structure_0_5": 5,
+          "total_0_100": 100.0,
+          "issues": []
+        }
+      }
+    },
+    {
+      "page_no": 140,
+      "image_path": "E:\\AI_Project\\opencode_workspace\\KB1\\tmp\\ocr_ab_benchmark\\GBT+18487.1-2023_p140.png",
+      "paddle": {
+        "text_preview": "",
+        "char_count": 0,
+        "score": {
+          "fidelity_0_5": 0,
+          "completeness_0_5": 0,
+          "terminology_0_5": 0,
+          "structure_0_5": 0,
+          "total_0_100": 0.0,
+          "issues": [
+            "候选文本完全为空，没有任何转写内容。"
+          ]
+        }
+      },
+      "minimax": {
+        "text_preview": "GB/T 18487.1—2023\n\n附录B充电机 | 车辆插头 | GB车辆适配器 | 车辆插座 | 全球通用版本电动汽车\n---|---|---|---|---\nPE | PE | | PE | 车身地\n(U1, 12.0V) | S | Rc', 1.0k Ω | R3', 100kΩ | R4', 2.74kΩ | R4c', 830Ω | R4c, 130Ω | R4, 1.3kΩ | (U2, 12V)\nR1, 1.0kΩ | R2, 1.0 kΩ | R3, 1.0 kΩ | | S2' | 3 2 1 | S2 0 | Rv', 1.59kΩ | Rv, 1.0kΩ\n| CC1 | | CC1 | D1 | | Sv\n检测点1 | | Rc'', 1.5kΩ | | 检测点 2 | | Sv' | Sv\n| CC2 | | CC2 | | 检测点3\n\n**d) 连接至附录 B 充电机**\n\n**图 H.3 全球通用直流充电控制导引充电兼容解决方案（续）**\n\n表 H.1 给出了对应于图 H.1~H.3 的具备充电兼容的电动汽车控制导引电路参数。\n\n**表 H.1 具备充电兼容的电动汽车控制导引电路参数**\n\n| 参数$^a$ | 符号 | 单位 | 标称值 | 最大值 | 最小值 | 电路版本 |\n| :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n| R3'等效电阻 | R3' | $\\Omega$ | 100 000 | 101 000 | 99 000 | 通用 |\n| R4 等效电阻 | R4 | $\\Omega$ | 1 300 | 1 313 | 1 287 | 通用 |\n| R4'等效电阻 | R4' | $\\Omega$ | 2 740 | 2 767 | 2 713 | 通用 |\n| R4c 等效电阻 | R4c | $\\Omega$ | 130 | 131.3 | 128.7 | 见图 H.3 |\n| | | | 200 | 202 | 198 | 见图 H.1 |\n| R4c'等效电阻 | R4c' | $\\Omega$ | 830 | 838.3 | 821.7 | 见图 H.2 和图 H.3 |\n| | | | 1 000 | 1 010 | 990 | 见图 H.1 |\n| Rv'等效电阻 | Rv' | $\\Omega$ | 1 590 | 1 605.9 | 1 574.1 | 见图 H.2 和图 H.3 |\n| 上拉电压$^b$ | U2 | V | 12 | 12.6 | 11.4 | 通用 |\n| S2 开关 | S2 | — | 位置 0 | — | — | 位置 0：初始位置，悬空；<br>位置 1：连接电阻 R4；<br>位置 2：连接电阻 R4c（见图 H.1 和图 H.3）或连接电阻 R4c'（见图 H.2）<br>位置 3：连接电阻 R4c'（见图 H.3） |\n| S2'开关 | S2' | — | 常开 | — | — | 通用 |\n| Sv 开关 | Sv | — | 常开/常闭 | — | — | 通用 |\n| Sv'开关 | Sv' | — | 常开 | — | — | 见图 H.2 和图 H.3 |\n| 等效二极管压降<br>(2.75 mA ~ 10 mA,<br>-40 ℃ ~ +85 ℃) | Vd1 | V | 0.70 | 0.85 | 0.55 | 见图 H.2 和图 H.3 |\n\n$^a$ 在使用环境条件下和可用寿命内都要保持精度范围。电阻精度不大于±1%。  \n$^b$ 车辆厂家可自定义，上拉电压 U2 不大于 28 V。\n\n133",
+        "char_count": 1565,
+        "score": {
+          "fidelity_0_5": 5,
+          "completeness_0_5": 5,
+          "terminology_0_5": 5,
+          "structure_0_5": 4,
+          "total_0_100": 97.0,
+          "issues": [
+            "The circuit diagram labels are transcribed into a table format which does not reflect their actual spatial relationship or electrical connectivity, though the text content is preserved accurately.",
+            "Minor spacing inconsistency in '检测点 2' (with space) versus '检测点1' and '检测点3' (without space) as compared to the image."
+          ]
+        }
+      }
+    },
+    {
+      "page_no": 157,
+      "image_path": "E:\\AI_Project\\opencode_workspace\\KB1\\tmp\\ocr_ab_benchmark\\GBT+18487.1-2023_p157.png",
+      "paddle": {
+        "text_preview": "",
+        "char_count": 0,
+        "score": {
+          "fidelity_0_5": 0,
+          "completeness_0_5": 0,
+          "terminology_0_5": 0,
+          "structure_0_5": 0,
+          "total_0_100": 0.0,
+          "issues": [
+            "候选文本内容为空，未能提取图片中的任何文字。"
+          ]
+        }
+      },
+      "minimax": {
+        "text_preview": "GB/T 18487.1—2023\n\n参 考 文 献\n\n[1] GB/T 2900.1—2008 电工术语 基本术语\n[2] GB/T 2900.71—2008 电工术语 电气装置\n[3] GB/T 2900.102—2020 电工术语 积极辅助生活\n[4] GB/T 7251.7 低压成套开关设备和控制设备 第 7 部分：特定应用的成套设备—如码头、露营地、市集广场、电动车辆充电站\n[5] GB/T 17627 低压电气设备的高电压试验技术 定义、试验和程序要求、试验设备\n[6] GB/T 20234(所有部分) 电动汽车传导充电用连接装置\n[7] GB/T 40425(所有部分) 电动客车顶部接触式充电系统\n[8] IEC 61643-41 Low-voltage surge protective devices—Part 41: Surge protective devices connected to DC low-voltage power systems—Requirements and test methods (under development)\n[9] IEC 61851-1: 2017 Electric vehicle conductive charging system—Part 1: General requirements\n[10] IEC 61851-23 Electric vehicle conductive charging system—Part 23: DC electric vehicle charging station ED2.0. FDIS\n[11] IEC 62196-3: 2014 Plugs, socket-outlets, vehicle connectors and vehicle inlets—Conductive charging of electric vehicles—Part 3: Dimensional compatibility and interchangeability requirements for d.c. and a.c./d.c. pin and contact-tube vehicle couplers\n[12] ISO 17409: 2020 Electrically propelled road vehicles—Connection to an external electric power supply-Safety requirements\n\n____________________________________\n\n150",
+        "char_count": 1129,
+        "score": {
+          "fidelity_0_5": 5,
+          "completeness_0_5": 5,
+          "terminology_0_5": 5,
+          "structure_0_5": 5,
+          "total_0_100": 100.0,
+          "issues": []
+        }
+      }
+    }
+  ],
+  "method_note": "由于该PDF很多页面的内嵌文本层存在乱码，本次不使用文本层做参考答案。评分改为同页图像盲评：同一张页面图分别评估 PaddleVL 输出与 MiniMax understand_image 输出。"
+}
