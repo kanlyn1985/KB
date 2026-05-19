@@ -1,0 +1,44 @@
+doc_type: feature-checklist
+feature: 2026-05-12-residual-state-regression-suite
+status: done
+steps:
+  - id: feature-spec
+    title: 补齐 residual-state-regression-suite 方案和执行清单
+    status: done
+    exit_signal: design 为 approved，checklist 可被实现阶段消费
+  - id: fixture
+    title: 新增 residual state 测试 fixture 和 SQL helper
+    status: done
+    exit_signal: 临时 workspace 可构造 FTS、orphan refs、stale/unknown runs
+  - id: stale-fts
+    title: 覆盖 stale FTS 检测和检索 guard containment
+    status: done
+    exit_signal: stale FTS 被检测，检索刷新后只返回当前 fact
+  - id: orphan-refs
+    title: 覆盖 graph/wiki/coverage orphan refs 诊断
+    status: done
+    exit_signal: workspace doctor 和 hygiene_loop 暴露结构残留风险
+  - id: stale-runs
+    title: 覆盖 stale/unknown runs dry-run 与 execute 边界
+    status: done
+    exit_signal: dry-run 只读，execute 只删目标运行派生物
+  - id: verification
+    title: 运行派生状态治理闭环组合测试并回写清单
+    status: done
+    exit_signal: residual suite、doctor、run governance、dashboard、query repair 测试通过
+checks:
+  - id: stale-fts-contained
+    description: stale FTS 被检测并由 retrieval guard 刷新
+    status: passed
+  - id: orphan-risk-visible
+    description: graph/wiki/coverage orphan refs 被 doctor 与 hygiene_loop 暴露
+    status: passed
+  - id: run-prune-boundary
+    description: stale/unknown runs dry-run 不删除，execute 只删除候选
+    status: passed
+  - id: dashboard-readonly
+    description: hygiene dashboard snapshot 不修改残留数据
+    status: passed
+  - id: no-production-code
+    description: 本 feature 不新增生产逻辑
+    status: passed

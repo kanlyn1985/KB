@@ -1,0 +1,44 @@
+doc_type: feature-checklist
+feature: 2026-05-11-workspace-doctor-cli
+status: done
+steps:
+  - id: feature-spec
+    title: 补齐 workspace doctor CLI 方案和执行清单
+    status: done
+    exit_signal: design 为 approved，checklist 可被实现阶段消费
+  - id: doctor-report
+    title: 实现 doctor report/issue 数据结构和 scope 编排
+    status: done
+    exit_signal: run_workspace_doctor 能返回可 JSON 序列化的报告
+  - id: checks
+    title: 实现 FTS、graph、wiki、coverage、runs 只读检查
+    status: done
+    exit_signal: 各 scope 能生成 issue 和 recommended_actions
+  - id: cli-entry
+    title: 接入 workspace-doctor CLI
+    status: done
+    exit_signal: --scope 与 --json 可解析并输出报告
+  - id: tests
+    title: 补充 doctor 与 CLI parser 测试
+    status: done
+    exit_signal: 新增测试覆盖 FTS、orphan、runs、parser
+  - id: verification
+    title: 运行定向测试并回写清单
+    status: done
+    exit_signal: doctor 相关测试和关键回归通过
+checks:
+  - id: fts-reuses-derived-state
+    description: FTS 检查复用 derived_state registry/check，不复制 freshness 规则
+    status: passed
+  - id: orphan-diagnostics
+    description: graph/wiki/coverage orphan 引用能形成 issue
+    status: passed
+  - id: run-version-diagnostics
+    description: retrieval/eval runs 的旧或未知 code_version 能形成 issue
+    status: passed
+  - id: readonly
+    description: doctor 不刷新、不删除、不修改 schema
+    status: passed
+  - id: cli-usable
+    description: workspace-doctor --scope ... --json 可用
+    status: passed

@@ -1,0 +1,46 @@
+feature: 2026-05-12-golden-generation-v1
+status: done
+steps:
+  - id: step-1
+    title: 建立 GoldenCandidate 名词层和 activation gate 摘要
+    status: done
+    exit_signal: golden_generation 模块能构造候选、分级并输出 readiness summary
+  - id: step-2
+    title: 接入 source_unit 来源
+    status: done
+    exit_signal: 可从 traceable source_units 生成统一候选并保留 corpus_eval 边界
+  - id: step-3
+    title: 接入 eval_failure 来源
+    status: done
+    exit_signal: eval 失败可生成统一 draft candidate 且不从错误召回反推 must_hit
+  - id: step-4
+    title: 增加 CLI dry-run report
+    status: done
+    exit_signal: generate-golden-candidates 命令输出 JSON/Markdown report 且默认不激活
+  - id: step-5
+    title: 接入 API/Workbench review payload
+    status: done
+    exit_signal: Workbench 能展示 origin、tier、blocked reasons 和人工激活建议
+  - id: step-6
+    title: 补齐测试和文档回写
+    status: done
+    exit_signal: 单测覆盖 tier、activation gate、report 汇总和旧接口兼容，docs/dev 与架构需求同步
+checks:
+  - id: check-1
+    description: 生成器不调用 LLM，不让 LLM 生成 expected contract
+    status: passed
+  - id: check-2
+    description: 不从错误召回结果反推 must_hit
+    status: passed
+  - id: check-3
+    description: CLI 默认 dry-run，不自动激活 golden
+    status: passed
+  - id: check-4
+    description: 旧 draft / activate / corpus eval 路径保持兼容
+    status: passed
+  - id: check-5
+    description: generation report 能按 origin、confidence tier 和 blocked reason 汇总
+    status: passed
+  - id: check-6
+    description: 文档同步更新 architecture、requirement、roadmap 和 docs/dev
+    status: passed

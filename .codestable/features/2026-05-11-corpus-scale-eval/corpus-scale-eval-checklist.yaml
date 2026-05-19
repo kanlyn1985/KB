@@ -1,0 +1,40 @@
+doc_type: feature-checklist
+feature: 2026-05-11-corpus-scale-eval
+status: done
+steps:
+  - id: feature-spec
+    title: 补齐规模化验证 feature 方案和执行清单
+    status: done
+    exit_signal: design 为 approved，checklist 可被实现阶段消费
+  - id: case-generator
+    title: 实现 source_units 驱动的 corpus case 生成器
+    status: done
+    exit_signal: definition / parameter / process source unit 可生成带 expected contract 的 case
+  - id: case-runner
+    title: 实现 corpus retrieval eval runner 和报告
+    status: done
+    exit_signal: runner 写入 eval_runs / eval_results 并输出 JSON/Markdown 报告
+  - id: cli-entry
+    title: 接入 CLI 操作入口
+    status: done
+    exit_signal: generate-corpus-eval-cases 和 run-corpus-retrieval-eval 可从 CLI 调用
+  - id: tests
+    title: 补充生成器、runner 和 CLI 测试
+    status: done
+    exit_signal: 新增测试与关键回归测试通过
+checks:
+  - id: generated-contracts
+    description: 自动生成 case 保留 coverage_unit_id、expected_doc_id、expected_query_type、expected_evidence_shape 和 retrieval_must_hit
+    status: passed
+  - id: quality-filters
+    description: 目录、前言、噪声和缺少锚点的 source unit 不生成 case
+    status: passed
+  - id: eval-persistence
+    description: 运行结果写入 eval_runs/eval_results，支持后续 failure analysis
+    status: passed
+  - id: no-result-derived-anchor
+    description: 不从错误召回结果反推 must_hit 或 expected contract
+    status: passed
+  - id: cli-usable
+    description: CLI 能生成并运行小批量 corpus eval
+    status: passed

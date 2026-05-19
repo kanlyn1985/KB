@@ -1,0 +1,47 @@
+doc_type: feature-checklist
+feature: 2026-05-12-full-derived-rebuild-contract
+status: done
+steps:
+  - id: feature-spec
+    title: 补齐 full-derived-rebuild-contract 方案和执行清单
+    status: done
+    exit_signal: design approved，checklist 可被实现阶段消费
+  - id: roadmap-wire
+    title: 在 derived-state-governance roadmap 中登记 full rebuild 子项
+    status: done
+    exit_signal: items.yaml 中 full-derived-rebuild-contract 为 done
+  - id: builder-idempotence
+    title: 修复 graph/wiki 文档级构建器幂等性
+    status: done
+    exit_signal: 重复 build 不保留旧 graph edges 或 stale wiki rows
+  - id: full-mode
+    title: rebuild-derived-state 增加 full mode 和 doc-id 范围
+    status: done
+    exit_signal: full mode 可 dry-run、doc-scoped execute、all execute
+  - id: tests
+    title: 覆盖 full rebuild 契约和默认 reconcile 回归
+    status: done
+    exit_signal: derived_state_rebuild、residual suite、query repair 测试通过
+  - id: acceptance
+    title: 回写架构、需求、指南、roadmap 和验收报告
+    status: done
+    exit_signal: CodeStable 文档与实际能力一致
+checks:
+  - id: graph-builder-idempotent
+    description: graph 文档级 build 不保留旧边
+    status: passed
+  - id: wiki-builder-idempotent
+    description: wiki 文档级 build 不保留 stale rows
+    status: passed
+  - id: full-dry-run-readonly
+    description: full dry-run 不调用构建器、不修改数据
+    status: passed
+  - id: doc-scoped-full
+    description: full mode doc-id 只重建指定文档
+    status: passed
+  - id: all-full-refreshes-fts
+    description: scope all full mode 最终刷新 FTS
+    status: passed
+  - id: default-reconcile-preserved
+    description: 默认 reconcile 行为保持兼容
+    status: passed

@@ -1,0 +1,64 @@
+feature: 2026-05-17-multi-parse-view-foundation
+status: done
+steps:
+  - id: step-1
+    title: 建立 parse view schema 和持久化 helper
+    status: done
+    exit_signal: 临时 workspace 初始化后包含 parse_views/page_parse_selection，helper 可幂等写入候选和选择
+  - id: step-2
+    title: 建立规则评分与选择计算节点
+    status: done
+    exit_signal: 评分函数可比较 native_text/html/ocr_html 候选并输出 selected_reason
+  - id: step-3
+    title: 接入 parse pipeline 的候选登记
+    status: done
+    exit_signal: 主 parser 输出和 PyMuPDF HTML 输出会登记为 parse view，并为每页写入 selection
+  - id: step-4
+    title: 接入 document diagnostics
+    status: done
+    exit_signal: document diagnostics 输出 parse_view summary 且不影响旧字段
+  - id: step-5
+    title: 补齐测试和文档回写
+    status: done
+    exit_signal: schema/helper/pipeline/diagnostics 测试通过，architecture/guide 与 requirement 同步
+  - id: step-6
+    title: 接入 PDF-to-HTML 候选 provider
+    status: done
+    exit_signal: PDF 文档解析时生成 html 候选 view，且只通过 selection 进入最终结果
+  - id: step-7
+    title: 让 selected view 驱动 normalized/pages/blocks
+    status: done
+    exit_signal: 每页最终 normalized block 来自 page_parse_selection 选中的候选 view
+  - id: step-8
+    title: 完成真实文档效果测试
+    status: done
+    exit_signal: DOC-000013 完整 build 后 parse_views、quality、evidence/facts/wiki/coverage 可用
+  - id: step-9
+    title: 接入 Workbench 页面级候选对比
+    status: done
+    exit_signal: /parse-view-detail 和 Parse Views tab 可展示每页候选、评分、选择原因和 fallback chain
+checks:
+  - id: check-1
+    description: 本阶段不接入外部 HTML/OCR provider
+    status: passed
+  - id: check-2
+    description: best view selection 不调用 LLM
+    status: passed
+  - id: check-3
+    description: schema 变更 additive，旧 normalized/pages/blocks 兼容
+    status: passed
+  - id: check-4
+    description: 每页候选和 selected view 可追踪、可解释
+    status: passed
+  - id: check-5
+    description: 文档同步更新 requirement、architecture 和 docs/dev
+    status: passed
+  - id: check-6
+    description: HTML provider 不直接写最终 facts，必须经过 page_parse_selection
+    status: passed
+  - id: check-7
+    description: 重跑 parse 后必须完整刷新 evidence/facts/wiki/graph/coverage，避免旧 page/block 残留
+    status: passed
+  - id: check-8
+    description: Workbench 只读展示 parse view，不重跑 parser 或直接修复数据
+    status: passed

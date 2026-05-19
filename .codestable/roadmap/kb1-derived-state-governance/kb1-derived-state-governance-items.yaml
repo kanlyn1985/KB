@@ -1,0 +1,69 @@
+items:
+  - slug: derived-state-registry
+    description: 建立主数据与派生状态 registry，统一 source/artifact/freshness/check/rebuild 术语。
+    depends_on: []
+    status: done
+    feature: 2026-05-11-derived-state-registry
+    minimal_loop: true
+  - slug: fts-freshness-guard
+    description: 修复共享 connection 检索路径绕过 FTS freshness guard 的根因，关闭 stale facts_fts 召回风险。
+    depends_on:
+      - derived-state-registry
+    status: done
+    feature: 2026-05-11-fts-freshness-guard
+    minimal_loop: true
+  - slug: workspace-doctor-cli
+    description: 提供统一数据残留检查命令，覆盖 FTS、orphan 引用、空 DB 和旧 runs 风险。
+    depends_on:
+      - derived-state-registry
+    status: done
+    feature: 2026-05-11-workspace-doctor-cli
+    minimal_loop: false
+  - slug: rebuild-derived-state-cli
+    description: 提供幂等派生状态重建命令，先覆盖 FTS，再扩展 coverage、wiki 和 graph。
+    depends_on:
+      - fts-freshness-guard
+      - workspace-doctor-cli
+    status: done
+    feature: 2026-05-11-rebuild-derived-state-cli
+    minimal_loop: false
+  - slug: stale-run-governance
+    description: 对 retrieval/eval runs 做 code_version/source version 隔离，并提供显式剪枝策略。
+    depends_on:
+      - derived-state-registry
+    status: done
+    feature: 2026-05-12-stale-run-governance
+    minimal_loop: false
+  - slug: hygiene-dashboard
+    description: 在 Workbench 展示派生状态治理闭环健康度、残留风险和建议动作。
+    depends_on:
+      - workspace-doctor-cli
+      - stale-run-governance
+    status: done
+    feature: 2026-05-12-hygiene-dashboard
+    minimal_loop: false
+  - slug: residual-state-regression-suite
+    description: 增加 stale FTS、orphan graph/wiki、旧 eval run 等残留态测试。
+    depends_on:
+      - fts-freshness-guard
+      - rebuild-derived-state-cli
+      - stale-run-governance
+    status: done
+    feature: 2026-05-12-residual-state-regression-suite
+    minimal_loop: false
+  - slug: structural-derived-rebuild-contract
+    description: 为 graph/wiki/coverage 派生结构补齐 orphan reconcile 重建契约，关闭 doctor 建议动作与 unsupported rebuild 的断裂。
+    depends_on:
+      - workspace-doctor-cli
+      - rebuild-derived-state-cli
+      - residual-state-regression-suite
+    status: done
+    feature: 2026-05-12-structural-derived-rebuild-contract
+    minimal_loop: false
+  - slug: full-derived-rebuild-contract
+    description: 为 graph/wiki/coverage 补齐从主数据重新生成派生结构的 full rebuild 契约，并与 reconcile 模式显式区分。
+    depends_on:
+      - structural-derived-rebuild-contract
+    status: done
+    feature: 2026-05-12-full-derived-rebuild-contract
+    minimal_loop: false

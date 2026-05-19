@@ -1,0 +1,44 @@
+doc_type: feature-checklist
+feature: 2026-05-12-stale-run-governance
+status: done
+steps:
+  - id: feature-spec
+    title: 补齐 stale-run-governance 方案和执行清单
+    status: done
+    exit_signal: design 为 approved，checklist 可被实现阶段消费
+  - id: prune-report
+    title: 实现 run prune report 和候选选择
+    status: done
+    exit_signal: stale/unknown retrieval/eval runs 可形成 dry-run 计划
+  - id: prune-execution
+    title: 实现显式剪枝执行
+    status: done
+    exit_signal: 非 dry-run 删除候选 runs 且 eval_results 跟随删除
+  - id: cli-entry
+    title: 接入 prune-stale-runs CLI 并更新 doctor 建议动作
+    status: done
+    exit_signal: CLI 参数可解析，doctor 推荐公开剪枝命令
+  - id: tests
+    title: 补充 dry-run、删除、suite filter、older filter 测试
+    status: done
+    exit_signal: 关键剪枝边界被测试覆盖
+  - id: verification
+    title: 运行定向测试并回写清单
+    status: done
+    exit_signal: run governance、doctor 和 query repair 回归通过
+checks:
+  - id: dry-run-readonly
+    description: dry-run 只列计划，不删除 runs
+    status: passed
+  - id: prune-stale
+    description: 非 dry-run 删除 stale/unknown runs 和对应 eval_results
+    status: passed
+  - id: keep-current
+    description: current code version runs 始终保留
+    status: passed
+  - id: filters
+    description: suite_id 和 older_than_days 过滤生效
+    status: passed
+  - id: no-unrelated-delete
+    description: 不删除 golden_cases、repair_tasks 或报告文件
+    status: passed

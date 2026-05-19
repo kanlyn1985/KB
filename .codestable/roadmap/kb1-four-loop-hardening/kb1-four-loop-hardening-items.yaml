@@ -1,0 +1,50 @@
+items:
+  - slug: codestable-development-docs
+    description: 补齐 CodeStable 新结构下的需求、架构、规划、issue 和开发者指南。
+    depends_on: []
+    status: done
+    feature: 2026-05-09-codestable-development-docs
+    minimal_loop: true
+  - slug: failure-analysis-workbench
+    description: 在 Workbench 中展示失败问题、期望命中、实际召回、失败类型和建议动作。
+    depends_on:
+      - codestable-development-docs
+    status: done
+    feature: 2026-05-10-failure-analysis-workbench
+    minimal_loop: false
+  - slug: evidence-display-sanitization
+    description: 统一 supporting evidence 展示清洗，避免 HTML 渲染残留进入用户可见输出。
+    depends_on:
+      - codestable-development-docs
+    status: done
+    feature: 2026-05-10-evidence-display-sanitization
+    minimal_loop: false
+  - slug: query-context-clarification-contract
+    description: 定义 query-context 对短缩写歧义问题的输出契约，并与 answer-query 和 UI 对齐。
+    depends_on:
+      - codestable-development-docs
+    status: done
+    feature: 2026-05-10-query-context-clarification-contract
+    minimal_loop: false
+  - slug: golden-case-auto-promotion
+    description: 将真实查询失败、测试失败和修复案例沉淀为 golden case 草稿并支持激活。
+    depends_on:
+      - failure-analysis-workbench
+    status: done
+    feature: 2026-05-10-golden-case-auto-promotion
+    minimal_loop: false
+  - slug: graph-contribution-dashboard
+    description: 在召回闭环中量化 graph 候选是否进入最终 top rerank，避免 graph 看似接入但贡献不可见。
+    depends_on:
+      - failure-analysis-workbench
+    status: done
+    feature: 2026-05-10-graph-contribution-dashboard
+    minimal_loop: false
+  - slug: golden-generation-v1
+    description: 统一 golden 自动生成、置信分级、准入门、报告和审核闭环，避免 corpus eval、coverage promotion、failure draft 分散演进。
+    depends_on:
+      - golden-case-auto-promotion
+      - graph-contribution-dashboard
+    status: done
+    feature: 2026-05-12-golden-generation-v1
+    minimal_loop: false

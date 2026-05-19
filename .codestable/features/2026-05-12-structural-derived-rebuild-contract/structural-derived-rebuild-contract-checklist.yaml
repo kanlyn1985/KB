@@ -1,0 +1,40 @@
+doc_type: feature-checklist
+feature: 2026-05-12-structural-derived-rebuild-contract
+status: done
+steps:
+  - id: feature-spec
+    title: 补齐 structural-derived-rebuild-contract 方案和执行清单
+    status: done
+    exit_signal: design approved，checklist 可被实现阶段消费
+  - id: roadmap-wire
+    title: 在 derived-state-governance roadmap 中登记新子项
+    status: done
+    exit_signal: items.yaml 中 structural-derived-rebuild-contract 为 done
+  - id: rebuild-contract
+    title: 实现 graph/wiki/coverage structural reconcile
+    status: done
+    exit_signal: 三个 scope 不再返回 unsupported，dry-run 和 execute 都有表级 changed_counts
+  - id: tests
+    title: 覆盖 dry-run、execute、scope all 和主数据边界
+    status: done
+    exit_signal: derived_state_rebuild 与 residual regression 测试通过
+  - id: verification
+    title: 运行派生状态治理闭环和查询链路回归
+    status: done
+    exit_signal: 相关 pytest、compileall、diff check 通过
+checks:
+  - id: graph-reconcile
+    description: graph orphan rows 可 dry-run 计划并 execute 清理
+    status: passed
+  - id: wiki-reconcile
+    description: wiki invalid source/entity rows 可 dry-run 计划并 execute 清理
+    status: passed
+  - id: coverage-reconcile
+    description: source unit mapping orphan rows 可 dry-run 计划并 execute 清理
+    status: passed
+  - id: primary-data-preserved
+    description: execute 不删除 facts/evidence/entities/documents/source_units
+    status: passed
+  - id: all-scope-order
+    description: scope all 先结构 reconcile 后 FTS rebuild，最终不留下 unsupported
+    status: passed

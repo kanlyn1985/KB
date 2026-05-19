@@ -1,0 +1,44 @@
+doc_type: feature-checklist
+feature: 2026-05-09-codestable-development-docs
+status: done
+steps:
+  - id: requirements
+    title: 补齐能力愿景层
+    status: done
+    exit_signal: requirements/VISION.md 和四个 current requirement 已创建
+  - id: architecture
+    title: 补齐架构现状层
+    status: done
+    exit_signal: closed-loop、query-chain、development-workflow 架构文档已创建
+  - id: roadmap
+    title: 补齐规划层
+    status: done
+    exit_signal: kb1-four-loop-hardening roadmap 和 items.yaml 已创建
+  - id: feature-record
+    title: 补齐本次 feature 记录
+    status: done
+    exit_signal: design、checklist、acceptance 已创建
+  - id: dev-guide
+    title: 补齐开发者指南
+    status: done
+    exit_signal: docs/dev/kb1-development-guide.md 已创建
+  - id: user-guide
+    title: 补齐用户指南
+    status: done
+    exit_signal: docs/user/kb1-workbench-user-guide.md 已创建
+checks:
+  - id: requirement-index
+    description: VISION.md 能索引当前四个核心能力
+    status: passed
+  - id: roadmap-items
+    description: roadmap items.yaml 能被 YAML 校验工具读取
+    status: passed
+  - id: issue-docs
+    description: 已修问题有 report、analysis、fix-note 三份闭环文档
+    status: passed
+  - id: dev-guide-commands
+    description: 开发指南包含 status、serve-api、query-context、answer-query 和 pytest 命令
+    status: passed
+  - id: user-guide-workbench
+    description: 用户指南包含文档导入、查询调试、歧义澄清、回归状态查看
+    status: passed

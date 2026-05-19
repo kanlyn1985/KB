@@ -1,0 +1,44 @@
+doc_type: feature-checklist
+feature: 2026-05-12-hygiene-dashboard
+status: done
+steps:
+  - id: feature-spec
+    title: 补齐 hygiene-dashboard 方案和执行清单
+    status: done
+    exit_signal: design 为 approved，checklist 可被实现阶段消费
+  - id: api-snapshot
+    title: 增加 hygiene_loop dashboard API 聚合
+    status: done
+    exit_signal: /closed-loop-dashboard 返回复用 doctor 和 dry-run prune 的 hygiene_loop
+  - id: ui-overview
+    title: Workbench Overview 展示派生状态治理闭环摘要
+    status: done
+    exit_signal: Five Loop Dashboard 显示 hygiene 指标和 health box
+  - id: ui-detail-tab
+    title: Workbench 增加 Hygiene 细节页
+    status: done
+    exit_signal: Hygiene tab 展示 issues、derived checks、prune plan、recommended actions
+  - id: tests
+    title: 补充 API 与 UI 资产回归
+    status: done
+    exit_signal: api_server 与 delivery_assets 相关测试覆盖派生状态治理闭环 dashboard
+  - id: verification
+    title: 运行定向测试并回写清单
+    status: done
+    exit_signal: dashboard、doctor、run governance 相关测试通过
+checks:
+  - id: api-exposes-hygiene-loop
+    description: /closed-loop-dashboard 返回 hygiene_loop
+    status: passed
+  - id: reuses-doctor-and-prune
+    description: hygiene_loop 复用 workspace doctor 和 dry-run prune 结果
+    status: passed
+  - id: readonly-dashboard
+    description: dashboard 不执行 rebuild 或 prune execute
+    status: passed
+  - id: ui-exposes-hygiene
+    description: Workbench 暴露 Five Loop Dashboard 与 Hygiene tab
+    status: passed
+  - id: stale-run-risk-visible
+    description: stale/unknown runs 风险和 recommended action 可见
+    status: passed

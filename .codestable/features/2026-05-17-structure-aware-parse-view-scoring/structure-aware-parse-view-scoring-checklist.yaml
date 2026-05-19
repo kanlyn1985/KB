@@ -1,0 +1,36 @@
+feature: 2026-05-17-structure-aware-parse-view-scoring
+status: done
+steps:
+  - id: step-1
+    title: 增加结构质量指标
+    status: done
+    exit_signal: score_parse_view 输出 table、clause、noise、duplicate、continuation 指标
+  - id: step-2
+    title: 更新 selection score 与解释
+    status: done
+    exit_signal: selected_reason 包含 score 和 structure_quality_score
+  - id: step-3
+    title: 增强 Workbench 展示
+    status: done
+    exit_signal: Parse Views 展示结构指标并支持风险页过滤
+  - id: step-4
+    title: 同步文档
+    status: done
+    exit_signal: requirement、feature、dev/user guide 均说明结构评分
+  - id: step-5
+    title: 真实文档验证
+    status: done
+    exit_signal: IEC 61851 至少完成 parse view 生成和验收复核
+checks:
+  - id: check-1
+    description: 不新增外部 OCR/HTML 依赖
+    status: passed
+  - id: check-2
+    description: best view selection 不调用 LLM
+    status: passed
+  - id: check-3
+    description: 指标写入 quality_json，不做破坏性 schema 变更
+    status: passed
+  - id: check-4
+    description: 验证覆盖测试和真实文档
+    status: passed

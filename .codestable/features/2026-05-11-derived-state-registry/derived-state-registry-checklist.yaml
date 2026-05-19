@@ -1,0 +1,40 @@
+doc_type: feature-checklist
+feature: 2026-05-11-derived-state-registry
+status: done
+steps:
+  - id: feature-spec
+    title: 补齐派生状态 registry feature 方案和执行清单
+    status: done
+    exit_signal: design 为 approved，checklist 可被实现阶段消费
+  - id: registry-contracts
+    title: 实现派生状态 registry 数据结构和 FTS specs
+    status: done
+    exit_signal: facts_fts / evidence_fts / wiki_fts 可通过稳定 state_id 查询
+  - id: readonly-checker
+    title: 实现只读派生状态检查编排
+    status: done
+    exit_signal: 检查能报告 missing / stale / fresh，且不写入派生表
+  - id: residual-tests
+    title: 补充残留状态单测
+    status: done
+    exit_signal: stale FTS、missing artifact、fresh FTS 语义被测试覆盖
+  - id: verification
+    title: 运行定向测试并回写清单
+    status: done
+    exit_signal: 新增测试通过，checklist 状态同步
+checks:
+  - id: stable-specs
+    description: registry 暴露 facts_fts、evidence_fts、wiki_fts 三个稳定 spec
+    status: passed
+  - id: missing-artifact
+    description: artifact 表不存在时返回 missing/fail 且不创建表
+    status: passed
+  - id: stale-diff
+    description: 缺少当前 source row 或存在 orphan row 时返回 stale 并给出计数
+    status: passed
+  - id: stale-mtime
+    description: stamp 早于 DB 时返回 stale 原因
+    status: passed
+  - id: no-rebuild-side-effect
+    description: check 阶段不执行 refresh，不修改 schema 或 FTS 内容
+    status: passed

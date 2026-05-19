@@ -1,0 +1,44 @@
+doc_type: feature-checklist
+feature: 2026-05-11-rebuild-derived-state-cli
+status: done
+steps:
+  - id: feature-spec
+    title: 补齐 rebuild-derived-state CLI 方案和执行清单
+    status: done
+    exit_signal: design 为 approved，checklist 可被实现阶段消费
+  - id: command-contract
+    title: 统一 FTS rebuild_command 与 retrieval guard 判断
+    status: done
+    exit_signal: doctor 建议公开命令，retrieval guard 不依赖命令字符串
+  - id: orchestrator
+    title: 实现 rebuild report 和 FTS rebuild 编排
+    status: done
+    exit_signal: dry-run 和实际 FTS rebuild 都返回前后检查摘要
+  - id: cli-entry
+    title: 接入 rebuild-derived-state CLI
+    status: done
+    exit_signal: --scope 与 --dry-run 可解析并输出 JSON
+  - id: tests
+    title: 补充 dry-run、FTS rebuild、unsupported scope 测试
+    status: done
+    exit_signal: 测试覆盖不写 dry-run、实际刷新和非 FTS 不破坏
+  - id: verification
+    title: 运行定向测试并回写清单
+    status: done
+    exit_signal: rebuild / doctor / retrieval guard 测试通过
+checks:
+  - id: dry-run-readonly
+    description: --dry-run 不创建 FTS 表、不写 stamp
+    status: passed
+  - id: fts-rebuild
+    description: --scope fts 能刷新 stale/missing FTS 并产生 after ok
+    status: passed
+  - id: unsupported-safe
+    description: graph/wiki/coverage scope 返回 unsupported 且不删除数据
+    status: passed
+  - id: doctor-action-public
+    description: doctor / DerivedStateSpec 建议公开 rebuild-derived-state 命令
+    status: passed
+  - id: guard-intact
+    description: retrieval guard 仍能自动刷新 stale FTS
+    status: passed

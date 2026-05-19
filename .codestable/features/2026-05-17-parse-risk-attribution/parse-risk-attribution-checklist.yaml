@@ -1,0 +1,29 @@
+feature: 2026-05-17-parse-risk-attribution
+status: done
+steps:
+  - id: step-1
+    title: 实现归因模型
+    status: done
+    exit_signal: parse_quality pages 包含 attribution / recommended_action
+  - id: step-2
+    title: 接入 diagnostics/API/Workbench
+    status: done
+    exit_signal: document-detail 和 Workbench 展示归因摘要
+  - id: step-3
+    title: 同步文档
+    status: done
+    exit_signal: architecture/dev/user/feature 文档说明归因类型
+  - id: step-4
+    title: 测试和 IEC 验证
+    status: done
+    exit_signal: 定向测试通过，DOC-000015 输出 attribution_counts
+checks:
+  - id: check-1
+    description: 归因只读，不修改主数据
+    status: passed
+  - id: check-2
+    description: 归因不调用 LLM
+    status: passed
+  - id: check-3
+    description: 不新增破坏性 schema
+    status: passed

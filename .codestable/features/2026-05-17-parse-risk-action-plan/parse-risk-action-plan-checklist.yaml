@@ -1,0 +1,33 @@
+feature: 2026-05-17-parse-risk-action-plan
+status: completed
+items:
+  - id: action-plan-module
+    status: completed
+    description: Add parse_risk_actions module with dry-run action plan builder.
+  - id: cli-api-entry
+    status: completed
+    description: Add CLI and API entry points.
+  - id: workbench-view
+    status: completed
+    description: Add Workbench button and result rendering.
+  - id: explicit-persistence
+    status: completed
+    description: Add explicit repair_tasks persistence with systemic grouping and metadata doc/page tracking.
+  - id: repair-review
+    status: completed
+    description: Add read-only repair task review with suggested status based on current diagnostics.
+  - id: historical-reports
+    status: completed
+    description: Write timestamped action/review history reports in addition to latest reports.
+  - id: history-dashboard
+    status: completed
+    description: Summarize parse-risk action/review history and expose it in the parse quality dashboard.
+  - id: structural-navigation-attribution
+    status: completed
+    description: Classify contents/list-of-figures pages as structural navigation noise instead of provider/extraction failures.
+  - id: guardrail-tests
+    status: completed
+    description: Verify only test_coverage_gap creates golden candidate requests.
+  - id: docs
+    status: completed
+    description: Update architecture and user/developer docs.

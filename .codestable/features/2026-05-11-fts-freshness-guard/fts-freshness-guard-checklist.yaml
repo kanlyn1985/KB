@@ -1,0 +1,37 @@
+doc_type: feature-checklist
+feature: 2026-05-11-fts-freshness-guard
+status: done
+steps:
+  - id: feature-spec
+    title: 补齐 FTS freshness guard 方案和执行清单
+    status: done
+    exit_signal: design 为 approved，checklist 可被实现阶段消费
+  - id: refresh-node
+    title: 抽出可复用 FTS 刷新节点
+    status: done
+    exit_signal: refresh_fts_index 和 guard 共用同一刷新实现
+  - id: shared-guard
+    title: 让 shared connection 搜索路径执行 freshness guard
+    status: done
+    exit_signal: search_knowledge_base_expanded 传入 connection 时仍会刷新 stale FTS
+  - id: regression-tests
+    title: 补充 stale shared connection 回归测试
+    status: done
+    exit_signal: 测试能复现旧旁路并验证刷新后召回当前 fact
+  - id: verification
+    title: 运行定向测试并回写清单
+    status: done
+    exit_signal: retrieval 和 derived-state 定向测试通过
+checks:
+  - id: shared-connection-refreshes
+    description: shared connection 路径遇到 stale facts_fts 会刷新并召回当前 fact
+    status: passed
+  - id: own-connection-intact
+    description: own connection 搜索路径仍正常
+    status: passed
+  - id: refresh-counts-intact
+    description: refresh_fts_index 返回 evidence/facts/wiki 计数语义不变
+    status: passed
+  - id: no-query-specific-patch
+    description: 未新增 query-specific direct hit 或 answer/rerank 特例
+    status: passed
