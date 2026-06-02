@@ -1,18 +1,38 @@
+"""Fact payload construction and main orchestrator.
+
+Extracted from `facts._impl` to isolate the fact payload construction
+(definition, procedure transition, two-column parameter, table parameter,
+timing, parameter scope, knowledge-unit dispatcher), the evidence-chain
+and metadata-fact persistence, the public `build_facts_for_document`
+orchestrator, and the `FactsBuildResult` value class.
+"""
 from __future__ import annotations
 
 import json
 import re
-import unicodedata
-from html import unescape
-from dataclasses import dataclass
-from datetime import UTC, datetime
+import sqlite3
+from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
-from .config import AppPaths
-from .db import connect
-from .ids import next_prefixed_id
-from .knowledge_units import extract_knowledge_units, save_knowledge_units, save_knowledge_units_jsonl
-
+from ..config import AppPaths
+from ..db import connect
+from ..ids import next_prefixed_id
+from ..knowledge_units import extract_knowledge_units, save_knowledge_units, save_knowledge_units_jsonl
+from ._extract_cover import (
+    _clean_text,
+    _extract_cover_metadata,
+    _extract_doc_metadata,
+    _extract_section_headings,
+    _sanitize_payload,
+    _utc_now,
+)
+from ._extract_terms import (
+    _extract_document_level_concepts,
+    _extract_numeric_term_definitions,
+    _extract_term_definitions,
+)
+from ._extract_process import _extract_type_relations
 
 @dataclass(frozen=True)
 class FactsBuildResult:
@@ -20,739 +40,6 @@ class FactsBuildResult:
     fact_count: int
     fact_types: dict[str, int]
     export_path: Path
-
-
-def _utc_now() -> str:
-    return datetime.now(UTC).isoformat(timespec="seconds")
-
-
-def _clean_text(value: str) -> str:
-    value = unescape(str(value or "")).replace("\xa0", " ")
-    value = _normalize_ocr_text(value)
-    value = re.sub(r"&nbsp;?", " ", value, flags=re.I)
-    value = value.replace("\r\n", "\n").replace("\r", "\n").strip()
-    lines = [line.strip() for line in value.split("\n")]
-    lines = [line for line in lines if line]
-    return "\n".join(lines).strip()
-
-
-def _sanitize_payload(value: object) -> object:
-    if isinstance(value, dict):
-        return {str(key): _sanitize_payload(item) for key, item in value.items()}
-    if isinstance(value, list):
-        return [_sanitize_payload(item) for item in value]
-    if isinstance(value, str):
-        return _clean_text(value)
-    return value
-
-
-def _normalize_ocr_text(value: str) -> str:
-    normalized = (
-        value.replace("犌", "G")
-        .replace("犅", "B")
-        .replace("犜", "T")
-    )
-    normalized = unicodedata.normalize("NFKC", normalized)
-    normalized = (
-        normalized.replace("／", "/")
-        .replace("—", "—")
-        .replace("‐", "-")
-        .replace("‑", "-")
-        .replace("‒", "-")
-        .replace("–", "-")
-        .replace("﹣", "-")
-        .replace("－", "-")
-    )
-    return normalized
-
-
-STANDARD_CODE_PATTERN = re.compile(
-    r"(?:GB/T|GBT|GB|ISO/IEC|ISO|IEC|SAE|QC/T|QC)\s*[A-Z]?\s*[\d.]+(?:[.\-—:]\d+)*",
-    re.I,
-)
-PROCESS_BP_PATTERN = re.compile(
-    r"\b((?:ACQ|SYS|SWE|SUP|MAN|HWE|VAL|REU|PIM|MLE|SPL)\.\d+)\.BP\d+\b",
-    re.I,
-)
-
-
-def _normalize_standard_candidate(match: str) -> str:
-    standard_code = _normalize_ocr_text(match).strip()
-    standard_code = re.sub(r"(?i)^GBT", "GB/T", standard_code)
-    standard_code = re.sub(r"(?i)^GB/T(?=\d)", "GB/T ", standard_code)
-    standard_code = re.sub(r"(?i)^GB(?=\d)", "GB ", standard_code)
-    standard_code = re.sub(r"(?i)^QC/T(?=\d)", "QC/T ", standard_code)
-    standard_code = re.sub(r"(?i)^QC(?=\d)", "QC ", standard_code)
-    standard_code = re.sub(r"\s+", " ", standard_code)
-    prefix_match = re.match(r"(?i)^(GB/T|GB|ISO/IEC|ISO|IEC|SAE|QC/T|QC)\s*(.+)$", standard_code)
-    if not prefix_match:
-        return standard_code
-    prefix = prefix_match.group(1).upper()
-    rest = prefix_match.group(2).strip().replace("—", "-").replace(":", "-")
-    parts = [part for part in re.split(r"-+", rest) if part]
-    if len(parts) >= 2 and re.fullmatch(r"(?:19|20)\d{2}", parts[-1]):
-        return f"{prefix} {'-'.join(parts[:-1])}—{parts[-1]}"
-    return f"{prefix} {rest}".strip()
-
-
-def _is_copyright_or_boilerplate_line(line: str) -> bool:
-    compact = re.sub(r"\s+", " ", _normalize_ocr_text(line)).strip().lower()
-    return bool(
-        compact.startswith("©")
-        or compact.startswith("(c)")
-        or "copyright" in compact
-        or "all rights reserved" in compact
-        or "iso copyright office" in compact
-    )
-
-
-def _is_valid_standard_candidate(candidate: str, source_line: str) -> bool:
-    if not candidate or _is_copyright_or_boilerplate_line(source_line):
-        return False
-    normalized = candidate.upper().replace("—", "-")
-    match = re.match(r"^(GB/T|GB|ISO/IEC|ISO|IEC|SAE|QC/T|QC)\s+(.+)$", normalized)
-    if not match:
-        return False
-    prefix, rest = match.group(1), match.group(2).strip()
-    if prefix in {"ISO", "IEC"} and re.fullmatch(r"(?:19|20)\d{2}", rest):
-        return False
-    return len(re.findall(r"\d", rest)) >= 2
-
-
-def _extract_standard_candidates(text: str, source_filename: str = "") -> list[str]:
-    candidates: list[str] = []
-    seen: set[str] = set()
-    search_texts = [text]
-    if source_filename:
-        search_texts.append(Path(source_filename).stem)
-    for search_text in search_texts:
-        lines = _normalize_ocr_text(search_text).splitlines() or [search_text]
-        for raw_line in lines:
-            line = raw_line.strip()
-            if not line:
-                continue
-            for match in STANDARD_CODE_PATTERN.findall(line):
-                candidate = _normalize_standard_candidate(match)
-                if not _is_valid_standard_candidate(candidate, line):
-                    continue
-                key = candidate.upper()
-                if key in seen:
-                    continue
-                seen.add(key)
-                candidates.append(candidate)
-    return candidates
-
-
-def _choose_primary_standard(candidates: list[str]) -> str | None:
-    if not candidates:
-        return None
-    for candidate in candidates:
-        if re.search(r"[-—]\d{4}$", candidate):
-            return candidate
-    return candidates[0]
-
-
-def _extract_doc_metadata(text: str, source_filename: str = "") -> list[tuple[str, str, dict[str, object]]]:
-    results: list[tuple[str, str, dict[str, object]]] = []
-    text = _normalize_ocr_text(text)
-    lines = [line.strip() for line in text.splitlines() if line.strip()]
-
-    title_found = False
-    for line in lines:
-        if line.startswith("# "):
-            results.append(("document_title", "title", {"value": line[2:].strip()}))
-            title_found = True
-            break
-
-    primary_standard = _choose_primary_standard(_extract_standard_candidates(text, source_filename))
-    if primary_standard:
-        results.append(("document_standard", "standard_code", {"value": primary_standard}))
-
-    if not title_found:
-        for line in lines:
-            compact = re.sub(r"\s+", "", line)
-            if not compact:
-                continue
-            if "国家标准" in compact:
-                continue
-            if re.search(r"^(ICS|CCS|GB/T|GB|ISO|IEC|\d{4}-\d{2}-\d{2})", compact):
-                continue
-            if "发布" in line or "实施" in line:
-                continue
-            if len(compact) < 8:
-                continue
-            if any(token in line for token in ("电动汽车", "charging", "系统", "部分", "逆变器", "电源", "Road vehicles", "Unified diagnostic", "Specification and requirements")):
-                results.append(("document_title", "title", {"value": re.sub(r"\s{2,}", " ", line).strip()}))
-                title_found = True
-                break
-
-    replace_match = re.search(r"代替\s+([A-Z]{1,4}/?[A-Z]*\s*[\d.\-—]+)", text)
-    if replace_match:
-        results.append(("document_versioning", "replaces_standard", {"value": replace_match.group(1).strip()}))
-
-    publish_match = re.search(r"(\d{4}[-—]\d{2}[-—]\d{2})\s*发布", text)
-    if publish_match:
-        results.append(("document_lifecycle", "publication_date", {"value": publish_match.group(1).replace("—", "-")}))
-
-    effective_match = re.search(r"(\d{4}[-—]\d{2}[-—]\d{2})\s*实施", text)
-    if effective_match:
-        results.append(("document_lifecycle", "effective_date", {"value": effective_match.group(1).replace("—", "-")}))
-
-    return results
-
-
-def _extract_cover_metadata(text: str, source_filename: str = "") -> list[tuple[str, str, dict[str, object]]]:
-    results: list[tuple[str, str, dict[str, object]]] = []
-    text = _normalize_ocr_text(text)
-    lines = [line.strip() for line in text.splitlines() if line.strip()]
-    joined = "\n".join(lines)
-
-    primary_standard = _choose_primary_standard(_extract_standard_candidates(joined, source_filename))
-    if primary_standard:
-        results.append(("document_standard", "standard_code", {"value": primary_standard}))
-
-    for line in lines:
-        compact = re.sub(r"\s+", "", line)
-        if len(compact) < 8:
-            continue
-        if compact.startswith(("ICS", "CCS", "GB/T", "GB", "ISO", "IEC")):
-            continue
-        if "国家标准" in compact:
-            continue
-        if "发布" in line or "实施" in line:
-            continue
-        if any(token in line for token in ("电动汽车", "车载充电机", "charger", "charging", "系统", "部分", "逆变器", "电源", "Road vehicles", "Unified diagnostic", "Specification and requirements")):
-            results.append(("document_title", "title", {"value": re.sub(r"\s{2,}", " ", line).strip()}))
-            break
-
-    publish_match = re.search(r"(\d{4}[-—]\d{2}[-—]\d{2})\s*发布", joined)
-    if publish_match:
-        results.append(("document_lifecycle", "publication_date", {"value": publish_match.group(1).replace("—", "-")}))
-
-    effective_match = re.search(r"(\d{4}[-—]\d{2}[-—]\d{2})\s*实施", joined)
-    if effective_match:
-        results.append(("document_lifecycle", "effective_date", {"value": effective_match.group(1).replace("—", "-")}))
-
-    return results
-
-
-def _extract_section_headings(text: str) -> list[tuple[str, str, dict[str, object]]]:
-    results: list[tuple[str, str, dict[str, object]]] = []
-    seen: set[str] = set()
-    for raw_line in text.splitlines():
-        line = raw_line.strip()
-        if not line:
-            continue
-        if line.startswith("#"):
-            level = len(line) - len(line.lstrip("#"))
-            title = line[level:].strip()
-            if title and title not in seen:
-                seen.add(title)
-                results.append(
-                    (
-                        "section_heading",
-                        "has_section",
-                        {"title": title, "heading_level": level},
-                    )
-                )
-            continue
-
-        numbered = re.match(r"^(\d+(?:\.\d+){0,4})\s+(.+)$", line)
-        if numbered:
-            title = numbered.group(2).strip()
-            if title and title not in seen:
-                seen.add(title)
-                results.append(
-                    (
-                        "section_heading",
-                        "has_section",
-                        {"title": title, "section_number": numbered.group(1), "heading_level": 0},
-                    )
-                )
-    return results
-
-
-def _extract_term_definitions(text: str) -> list[tuple[str, str, dict[str, object]]]:
-    results: list[tuple[str, str, dict[str, object]]] = []
-    results.extend(_extract_inline_heading_definitions(text))
-    results.extend(_extract_process_attribute_scope_definitions(text))
-    results.extend(_extract_process_group_definitions(text))
-    looks_like_term_page = (
-        text.count("## ") >= 2 and text.count("#### ") >= 2 and re.search(r"####\s*\d+\.\d+\.\d+", text)
-    )
-    looks_like_numeric_glossary_page = (
-        len(
-            re.findall(
-                r"(?:^|\n)\s*\d+\.\d+\.\d+\s*\n[^\n]{2,80}\n[^\n]{8,}",
-                text,
-            )
-        )
-        >= 2
-    )
-    if (
-        "术语和定义" not in text
-        and "下列术语和定义适用于本文件" not in text
-        and not looks_like_term_page
-        and not looks_like_numeric_glossary_page
-    ):
-        return results
-
-    seen: set[tuple[str, str]] = set()
-    lines = text.splitlines()
-    current_term: str | None = None
-    current_definition_lines: list[str] = []
-
-    def flush_term() -> None:
-        nonlocal current_term, current_definition_lines
-        if not current_term:
-            current_definition_lines = []
-            return
-
-        term = _clean_text(current_term)
-        definition = _clean_text("\n".join(current_definition_lines))
-        if not term or not definition:
-            current_term = None
-            current_definition_lines = []
-            return
-        if len(term) > 80 or len(definition) < 12:
-            current_term = None
-            current_definition_lines = []
-            return
-        if term.lower() in {"前言", "引言", "目 次", "目次"}:
-            current_term = None
-            current_definition_lines = []
-            return
-        if re.match(r"^\d", term):
-            current_term = None
-            current_definition_lines = []
-            return
-        blocked_term_tokens = (
-            "增加了",
-            "更改了",
-            "删除了",
-            "见",
-            "前言",
-            "引言",
-            "目 次",
-            "目次",
-            "范围",
-            "规范性引用文件",
-            "术语和定义",
-        )
-        if any(token in term for token in blocked_term_tokens):
-            current_term = None
-            current_definition_lines = []
-            return
-        if "：" in term or ":" in term:
-            current_term = None
-            current_definition_lines = []
-            return
-        if len(term.splitlines()) > 1:
-            current_term = None
-            current_definition_lines = []
-            return
-        if re.search(r"[，。；]$", term):
-            current_term = None
-            current_definition_lines = []
-            return
-        blocked_definition_tokens = (
-            "增加了",
-            "更改了",
-            "删除了",
-            "见2015年版",
-            "见第",
-            "本文件代替",
-            "下列文件中的内容通过",
-        )
-        if any(token in definition for token in blocked_definition_tokens):
-            current_term = None
-            current_definition_lines = []
-            return
-        if "适用于本文件" in definition and len(definition) < 80:
-            current_term = None
-            current_definition_lines = []
-            return
-        if definition.count("GB/T") >= 4 and "是" not in definition and "指" not in definition:
-            current_term = None
-            current_definition_lines = []
-            return
-        if not _definition_has_publishable_signal(definition):
-            current_term = None
-            current_definition_lines = []
-            return
-        key = (term, definition[:100])
-        if key in seen:
-            current_term = None
-            current_definition_lines = []
-            return
-        seen.add(key)
-        results.append(
-            (
-                "term_definition",
-                "defines_term",
-                {"term": term, "definition": definition},
-            )
-        )
-        current_term = None
-        current_definition_lines = []
-
-    for raw_line in lines:
-        line = raw_line.rstrip()
-        stripped = line.strip()
-        if stripped.startswith("## "):
-            flush_term()
-            current_term = stripped[3:].strip()
-            current_definition_lines = []
-            continue
-
-        if stripped.startswith(("### ", "#### ", "# ")):
-            flush_term()
-            current_term = None
-            current_definition_lines = []
-            continue
-
-        if current_term is not None:
-            current_definition_lines.append(line)
-
-    flush_term()
-    results.extend(_extract_markdown_bilingual_terms(text, seen))
-    results.extend(_extract_numeric_term_definitions(text, seen))
-    return results
-
-
-def _extract_inline_heading_definitions(text: str) -> list[tuple[str, str, dict[str, object]]]:
-    lines = [line.strip() for line in text.splitlines() if line.strip()]
-    if len(lines) < 3:
-        return []
-    if not re.fullmatch(r"\d+(?:\.\d+){1,4}", lines[0]):
-        return []
-
-    term = _clean_definition_term(lines[1])
-    definition = _clean_text("\n".join(lines[2:]))
-    if not _is_publishable_definition_entry(term, definition):
-        return []
-    return [
-        (
-            _definition_fact_type_for_term(term),
-            _definition_predicate_for_term(term),
-            {"term": term, "definition": definition},
-        )
-    ]
-
-
-def _extract_process_attribute_scope_definitions(text: str) -> list[tuple[str, str, dict[str, object]]]:
-    normalized = _clean_text(text)
-    if "过程属性范围" not in normalized:
-        return []
-    results: list[tuple[str, str, dict[str, object]]] = []
-    seen: set[tuple[str, str]] = set()
-    patterns = [
-        re.compile(
-            r"过程属性名称\s*\n+(?P<term>[^\n]{2,80}?过程属性)\s*\n+过程属性范围\s*\n+(?P<definition>(?P=term)是[:：][^\n]+)",
-            re.S,
-        ),
-        re.compile(r"(?P<term>[\u4e00-\u9fffA-Za-z0-9 ._-]{2,80}?过程属性)是[:：](?P<body>[^\n。]+(?:。)?)"),
-    ]
-    for pattern in patterns:
-        for match in pattern.finditer(normalized):
-            term = _clean_definition_term(match.group("term"))
-            definition = _clean_text(match.group("definition") if "definition" in match.groupdict() else f"{term}是：{match.group('body')}")
-            key = (term, definition[:100])
-            if key in seen or not _is_publishable_definition_entry(term, definition):
-                continue
-            seen.add(key)
-            results.append(
-                (
-                    _definition_fact_type_for_term(term),
-                    _definition_predicate_for_term(term),
-                    {"term": term, "definition": definition, "definition_label": "过程属性范围"},
-                )
-            )
-    return results
-
-
-def _extract_process_group_definitions(text: str) -> list[tuple[str, str, dict[str, object]]]:
-    normalized = _clean_text(text)
-    if "过程组" not in normalized:
-        return []
-    results: list[tuple[str, str, dict[str, object]]] = []
-    seen: set[tuple[str, str]] = set()
-    pattern = re.compile(
-        r"(?P<term>[\u4e00-\u9fffA-Za-z ]{2,40}过程组)(?:（(?P<code>[A-Z]{2,5})）|\((?P<code_ascii>[A-Z]{2,5})\))?"
-        r"(?P<definition>(?:包括|由|是|执行)[^。]{8,220}。)",
-        re.S,
-    )
-    for match in pattern.finditer(normalized):
-        term = _clean_definition_term(match.group("term"))
-        code = str(match.group("code") or match.group("code_ascii") or "").strip()
-        definition = _clean_text(f"{term}{f'（{code}）' if code else ''}{match.group('definition')}")
-        key = (term, definition[:100])
-        if key in seen or not _is_publishable_definition_entry(term, definition):
-            continue
-        seen.add(key)
-        results.append(
-            (
-                "concept_definition",
-                "defines_concept",
-                {"term": f"{term}（{code}）" if code else term, "definition": definition, "concept_type": "process_group"},
-            )
-        )
-    return results
-
-
-def _extract_markdown_bilingual_terms(
-    text: str,
-    seen: set[tuple[str, str]],
-) -> list[tuple[str, str, dict[str, object]]]:
-    results: list[tuple[str, str, dict[str, object]]] = []
-    lines = [line.rstrip() for line in text.splitlines()]
-
-    for index, raw_line in enumerate(lines):
-        stripped = raw_line.strip()
-        if not stripped.startswith("## "):
-            continue
-        term_line = stripped[3:].strip()
-        if len(term_line) < 4:
-            continue
-        if not any(token in term_line for token in (":", "；", ";", " to ", "V2")):
-            continue
-
-        definition_lines: list[str] = []
-        cursor = index + 1
-        while cursor < len(lines):
-            candidate = lines[cursor].strip()
-            if not candidate:
-                if definition_lines:
-                    break
-                cursor += 1
-                continue
-            if candidate.startswith("#") and not candidate.startswith(("### ", "#### ")):
-                break
-            if re.match(r"^\d+(?:\.\d+){1,4}\b", candidate):
-                break
-            definition_lines.append(candidate)
-            cursor += 1
-
-        definition = _clean_text("\n".join(definition_lines))
-        term = _clean_text(term_line)
-        if not term or not definition:
-            continue
-        if len(definition) < 12:
-            continue
-        if not _definition_has_publishable_signal(definition):
-            continue
-        key = (term, definition[:100])
-        if key in seen:
-            continue
-        seen.add(key)
-        results.append(
-            (
-                "term_definition",
-                "defines_term",
-                {"term": term, "definition": definition},
-            )
-        )
-
-    return results
-
-
-def _extract_numeric_term_definitions(
-    text: str,
-    seen: set[tuple[str, str]],
-) -> list[tuple[str, str, dict[str, object]]]:
-    results: list[tuple[str, str, dict[str, object]]] = []
-    lines = [line.rstrip() for line in text.splitlines()]
-    index = 0
-
-    while index < len(lines):
-        stripped = lines[index].strip()
-        if not re.match(r"^\d+(?:\.\d+){1,4}$", stripped):
-            index += 1
-            continue
-
-        cursor = index + 1
-        while cursor < len(lines) and not lines[cursor].strip():
-            cursor += 1
-        if cursor >= len(lines):
-            break
-
-        term_line = lines[cursor].strip()
-        if (
-            term_line.startswith("#")
-            or re.match(r"^\d+(?:\.\d+)+", term_line)
-            or len(term_line) > 100
-        ):
-            index = cursor
-            continue
-
-        cursor += 1
-        definition_lines: list[str] = []
-        while cursor < len(lines):
-            candidate = lines[cursor].strip()
-            if not candidate:
-                if definition_lines:
-                    break
-                cursor += 1
-                continue
-            if candidate.startswith("#") or re.match(r"^\d+(?:\.\d+){1,4}\b", candidate):
-                break
-            definition_lines.append(candidate)
-            cursor += 1
-
-        definition = _clean_text("\n".join(definition_lines))
-        term = _clean_text(_strip_bilingual_tail(term_line))
-        if not term or not definition:
-            index = cursor
-            continue
-        if len(term) > 80 or len(definition) < 12:
-            index = cursor
-            continue
-        if not _definition_has_publishable_signal(definition):
-            index = cursor
-            continue
-        key = (term, definition[:100])
-        if key in seen:
-            index = cursor
-            continue
-
-        seen.add(key)
-        results.append(
-            (
-                "term_definition",
-                "defines_term",
-                {"term": term, "definition": definition},
-            )
-        )
-        index = cursor
-
-    return results
-
-
-def _strip_bilingual_tail(value: str) -> str:
-    value = value.strip()
-    if re.search(r"[\u4e00-\u9fff]", value) and re.search(r"[A-Za-z]", value):
-        return re.sub(r"\s{2,}", " ", value)
-    match = re.match(r"^(.*?)(?:\s+[A-Za-z][A-Za-z0-9\-()/ ]+)?$", value.strip())
-    cleaned = match.group(1).strip() if match else value.strip()
-    return re.sub(r"\s{2,}", " ", cleaned)
-
-
-def _extract_abstract_concepts(text: str) -> list[tuple[str, str, dict[str, object]]]:
-    results: list[tuple[str, str, dict[str, object]]] = []
-    normalized = _normalize_ocr_text(text)
-    if "摘要" not in normalized and "Abstract" not in normalized:
-        return results
-
-    concept_patterns = [
-        re.compile(
-            r"(V2G)\s*\((Vehicle-to-Grid)\)\s*技术.*?作为一种(.+?)[。.]",
-            re.S,
-        ),
-        re.compile(
-            r"(Vehicle-to-Grid)\s*\((V2G)\)\s*technology.*?(facilitates.+?\.)",
-            re.S | re.I,
-        ),
-    ]
-
-    for pattern in concept_patterns:
-        match = pattern.search(normalized)
-        if not match:
-            continue
-        if match.group(1) == "V2G":
-            term = "V2G"
-            definition = _clean_text(f"Vehicle-to-Grid (V2G)技术作为一种{match.group(3)}。")
-        else:
-            term = "V2G"
-            definition = _clean_text(match.group(0))
-        results.append(
-            (
-                "concept_definition",
-                "defines_concept",
-                {"term": term, "definition": definition},
-            )
-        )
-        break
-
-    chinese_v2g_match = re.search(
-        r"V2G\s*\((Vehicle-to-Grid)\)\s*技术作为一种创新的能源解决方案，通过实现电动车与电网之间的双向能量交换，(.+?)[。.]",
-        normalized,
-        re.S,
-    )
-    if chinese_v2g_match:
-        definition = _clean_text(
-            "V2G（Vehicle-to-Grid）技术是一种通过实现电动车与电网之间双向能量交换的创新能源解决方案，"
-            + chinese_v2g_match.group(2)
-            + "。"
-        )
-        results.insert(
-            0,
-            (
-                "concept_definition",
-                "defines_concept",
-                {"term": "V2G", "definition": definition},
-            ),
-        )
-
-    abstract_match = re.search(r"(?:摘\s*要|Abstract)\s*(.+)", normalized, re.S | re.I)
-    if abstract_match:
-        abstract_text = _clean_text(abstract_match.group(1))
-        if len(abstract_text) > 80:
-            results.append(
-                (
-                    "document_abstract",
-                    "has_abstract",
-                    {"value": abstract_text[:1200]},
-                )
-            )
-
-    return results
-
-
-def _extract_document_level_concepts(rows: list[object]) -> list[tuple[object, tuple[str, str, dict[str, object]]]]:
-    if not rows:
-        return []
-
-    candidate_rows = [row for row in rows if row["page_no"] <= 2]
-    combined_text = "\n".join(str(row["normalized_text"] or "") for row in candidate_rows)
-    extracted = _extract_abstract_concepts(combined_text)
-    if not extracted:
-        return []
-
-    anchor_row = candidate_rows[0]
-    return [(anchor_row, item) for item in extracted]
-
-
-def _extract_type_relations(text: str) -> list[tuple[str, str, dict[str, object]]]:
-    results: list[tuple[str, str, dict[str, object]]] = []
-    normalized = _normalize_ocr_text(text)
-
-    v2x_match = re.search(
-        r"V2X.+?包括([^。]+)",
-        normalized,
-        re.I | re.S,
-    )
-    if not v2x_match:
-        return results
-
-    raw_items = re.split(r"[、,，；;]", v2x_match.group(1))
-    cleaned_items: list[str] = []
-    for item in raw_items:
-        value = re.sub(r"等.*$", "", item).strip()
-        if value and value not in cleaned_items:
-            cleaned_items.append(value)
-
-    for value in cleaned_items:
-        results.append(
-            (
-                "comparison_relation",
-                "includes_type",
-                {"subject": "V2X", "item": value},
-            )
-        )
-
-    return results
-
-
 def _confidence(base: float, evidence_confidence: float) -> float:
     return round(max(0.1, min(1.0, (base + evidence_confidence) / 2)), 3)
 
@@ -809,6 +96,13 @@ def _knowledge_unit_fact_payloads(
                     }
                 )
         elif unit.type == "table_requirement":
+            # Skip index/catalog tables (e.g. standard number listings)
+            if str(getattr(unit, "scope_type", "") or "") == "index":
+                continue
+            headers = list(getattr(unit, "headers", None) or [])
+            header_blob = " ".join(str(h) for h in headers)
+            if "序号" in header_blob and "标准编号" in header_blob:
+                continue
             title = _unit_canonical_title(unit)
             table_title = _unit_canonical_table_title(unit)
             payloads.append(
@@ -844,6 +138,7 @@ def _knowledge_unit_fact_payloads(
                     "base_confidence": 0.79,
                 }
             )
+            payloads.extend(_procedure_transition_payloads(unit, process_title))
     return payloads
 
 
@@ -971,6 +266,100 @@ def _unit_canonical_table_title(unit) -> str | None:
     return str(value).strip() if value else None
 
 
+def _procedure_transition_payloads(unit, process_title: str) -> list[dict[str, object]]:
+    """Extract transition_facts from procedure content with enumerated steps."""
+    content = str(getattr(unit, "content", "") or "")
+    if not content:
+        return []
+
+    payloads: list[dict[str, object]] = []
+
+    # Path 1: markdown table rows as steps (e.g. | 测试项目 | 性能要求 |)
+    table_rows = _extract_table_step_rows(content)
+    if table_rows:
+        for i, row_text in enumerate(table_rows):
+            if not row_text or len(row_text) < 4:
+                continue
+            payloads.append(
+                {
+                    "fact_type": "transition_fact",
+                    "predicate": "has_transition",
+                    "payload": {
+                        "title": process_title,
+                        "table_title": None,
+                        "section": getattr(unit, "section", None),
+                        "sequence": str(i + 1),
+                        "state": "",
+                        "condition": "",
+                        "action": row_text[:300],
+                        "time_constraint": "",
+                    },
+                    "page_no": unit.page,
+                    "base_confidence": 0.74,
+                }
+            )
+        return payloads
+
+    # Path 2: enumerated step markers: a) b) c), 1. 2. 3., or numbered sub-sections
+    # Also include the unit title as context so steps mentioned in title are captured
+    full_text = str(getattr(unit, "title", "") or "") + "\n" + content
+    step_pattern = re.compile(r"(?:^|\n)\s*(?:([a-z])\s*[).）]|[①-⑳]|(\d+(?:\.\d+)?)\s*[.．)）])\s*", re.I)
+    splits = list(step_pattern.finditer(full_text))
+    if len(splits) < 2:
+        return []
+    for i, match in enumerate(splits):
+        start = match.end()
+        end = splits[i + 1].start() if i + 1 < len(splits) else len(full_text)
+        step_text = full_text[start:end].strip()
+        if not step_text or len(step_text) < 8:
+            continue
+        step_label = match.group(1) or match.group(2) or str(i + 1)
+        payloads.append(
+            {
+                "fact_type": "transition_fact",
+                "predicate": "has_transition",
+                "payload": {
+                    "title": process_title,
+                    "table_title": None,
+                    "section": getattr(unit, "section", None),
+                    "sequence": step_label,
+                    "state": "",
+                    "condition": "",
+                    "action": step_text[:300],
+                    "time_constraint": "",
+                },
+                "page_no": unit.page,
+                "base_confidence": 0.76,
+            }
+        )
+    return payloads
+
+
+def _extract_table_step_rows(content: str) -> list[str]:
+    """Extract step-like rows from markdown tables in procedure content."""
+    rows: list[str] = []
+    lines = content.splitlines()
+    in_table = False
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith("|") and stripped.endswith("|"):
+            if stripped.replace("|", "").replace("-", "").replace(":", "").replace(" ", "") == "":
+                # separator row
+                in_table = True
+                continue
+            if not in_table:
+                in_table = True
+                continue  # skip header row
+            cells = [c.strip() for c in stripped.split("|")[1:-1]]
+            row_text = " / ".join(c for c in cells if c)
+            if row_text and len(row_text) >= 4:
+                rows.append(row_text)
+        else:
+            if in_table:
+                break  # end of table
+    return rows
+
+
 def _process_title_for_procedure_unit(unit) -> str:
     title = _clean_process_payload_title(_unit_canonical_title(unit))
     content = str(getattr(unit, "content", "") or "")
@@ -1028,6 +417,47 @@ def _process_code_from_text(value: str) -> str:
     return match.group(1).upper() if match else ""
 
 
+def _two_column_parameter_payloads(unit, rows: list) -> list[dict[str, object]]:
+    """Extract parameter_value facts from 2-column key-value parameter tables.
+
+    Handles tables like: 输出特性 | 参数  where col-0 is the parameter name
+    and col-1 is the value description.
+    """
+    payloads: list[dict[str, object]] = []
+    for row in rows:
+        if len(row) < 2:
+            continue
+        param_name = str(row[0]).strip()
+        param_value = str(row[1]).strip()
+        if not param_name or not param_value:
+            continue
+        if param_name in {"参数", "输出特性", "项目"}:
+            continue
+        payloads.append(
+            {
+                "fact_type": "parameter_value",
+                "predicate": "has_parameter_value",
+                "payload": {
+                    "table_title": unit.table_title,
+                    "table_no": unit.table_no,
+                    "parameter": param_name,
+                    "value_description": param_value,
+                    **_parameter_scope_fields(
+                        title=unit.title,
+                        table_title=unit.table_title,
+                        object_name=param_name,
+                        parameter=param_name,
+                        symbol="",
+                        state="",
+                    ),
+                },
+                "page_no": unit.page,
+                "base_confidence": 0.74,
+            }
+        )
+    return payloads
+
+
 def _table_parameter_fact_payloads(unit) -> list[dict[str, object]]:
     headers = list(unit.headers or [])
     rows = list(unit.rows or [])
@@ -1036,6 +466,13 @@ def _table_parameter_fact_payloads(unit) -> list[dict[str, object]]:
 
     normalized_headers = [_normalize_header_name(str(header)) for header in headers]
     header_blob = " ".join(normalized_headers)
+
+    # 2-column key-value parameter tables (e.g. "输出特性 | 参数")
+    if len(headers) == 2 and len(rows) >= 2:
+        title_blob = f"{unit.title or ''} {unit.table_title or ''}"
+        if "参数" in header_blob and any(kw in title_blob + header_blob for kw in ("参数", "特性", "规格", "输出", "性能")):
+            return _two_column_parameter_payloads(unit, rows)
+
     if not any(token in header_blob for token in ("参数", "符号", "标称值", "单位", "最大值", "最小值", "电路版本")):
         return []
 
@@ -1287,8 +724,104 @@ def _parameter_scope_fields(
         "scope_confidence": scope_confidence,
         "source_caption": (table_title or title or "").strip(),
     }
+def _ensure_evidence_chains(connection, doc_id: str) -> int:
+    """Ensure every fact has at least one source_unit_fact_map entry. Returns count of fixed facts."""
+    unlinked = connection.execute(
+        """
+        SELECT f.fact_id, f.qualifiers_json
+        FROM facts f
+        LEFT JOIN source_unit_fact_map m ON f.fact_id = m.fact_id
+        WHERE f.source_doc_id = ? AND m.fact_id IS NULL
+        """,
+        (doc_id,),
+    ).fetchall()
+
+    if not unlinked:
+        return 0
+
+    # Pre-load source_units by page_no for this document
+    su_by_page: dict[int, str] = {}
+    default_su: str | None = None
+    for row in connection.execute(
+        "SELECT unit_id, page_no FROM source_units WHERE doc_id = ? AND status != 'rejected' ORDER BY page_no",
+        (doc_id,),
+    ):
+        if default_su is None:
+            default_su = row["unit_id"]
+        if row["page_no"] not in su_by_page:
+            su_by_page[row["page_no"]] = row["unit_id"]
+
+    fixed = 0
+    for row in unlinked:
+        page_no = 0
+        try:
+            q = json.loads(row["qualifiers_json"] or "{}")
+            page_no = int(q.get("page_no", 0))
+        except (json.JSONDecodeError, ValueError, TypeError):
+            # Malformed qualifiers; fall back to the default page_no=0 lookup.
+            pass
+
+        unit_id = su_by_page.get(page_no) or default_su
+        if unit_id:
+            cursor = connection.execute(
+                "INSERT OR IGNORE INTO source_unit_fact_map (doc_id, unit_id, fact_id) VALUES (?, ?, ?)",
+                (doc_id, unit_id, row["fact_id"]),
+            )
+            if cursor.rowcount > 0:
+                fixed += 1
+
+    return fixed
 
 
+def _insert_metadata_facts(connection, doc_id: str, metadata: dict, missing_types: set[str]) -> int:
+    """Insert metadata facts for the specified missing types. Returns count of inserted facts."""
+    now = _utc_now()
+
+    type_map = {
+        "document_title": ("document_title", "title", metadata.get("title", "")),
+        "document_standard": ("document_standard", "standard_code", metadata.get("standard_id", "")),
+        "document_lifecycle": ("document_lifecycle", "publication_date", metadata.get("publication_date", "")),
+        "document_abstract": ("document_abstract", "has_abstract", metadata.get("abstract", "")),
+    }
+
+    inserted = 0
+    for mt in missing_types:
+        if mt not in type_map:
+            continue
+        fact_type, predicate, value = type_map[mt]
+        if not value:
+            continue
+
+        fact_id = next_prefixed_id(connection, "fact", "FACT")
+
+        connection.execute(
+            """INSERT INTO facts
+               (fact_id, source_doc_id, fact_type, predicate, object_value,
+                confidence, fact_status, qualifiers_json, created_at, updated_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            (
+                fact_id, doc_id, fact_type, predicate,
+                json.dumps({"value": value}, ensure_ascii=False),
+                0.85, "active",
+                json.dumps({"page_no": 1, "auto_repaired": True}, ensure_ascii=False),
+                now, now,
+            ),
+        )
+
+        # Create source_unit_fact_map link
+        su = connection.execute(
+            "SELECT unit_id FROM source_units WHERE doc_id = ? AND page_no = 1 AND status != 'rejected' LIMIT 1",
+            (doc_id,),
+        ).fetchone()
+        if su:
+            connection.execute(
+                "INSERT OR IGNORE INTO source_unit_fact_map (doc_id, unit_id, fact_id) VALUES (?, ?, ?)",
+                (doc_id, su["unit_id"], fact_id),
+            )
+
+        inserted += 1
+
+    return inserted
 def build_facts_for_document(workspace_root: Path, doc_id: str) -> FactsBuildResult:
     paths = AppPaths.from_root(workspace_root)
     connection = connect(paths.db_file)
@@ -1312,6 +845,13 @@ def build_facts_for_document(workspace_root: Path, doc_id: str) -> FactsBuildRes
 
         connection.execute(
             "DELETE FROM fact_evidence_map WHERE fact_id IN (SELECT fact_id FROM facts WHERE source_doc_id = ?)",
+            (doc_id,),
+        )
+        # When facts are rebuilt with new IDs, the source_unit_fact_map links
+        # to old fact IDs become stale. Clean them up so that knowledge contracts
+        # don't silently pass on broken traceability chains.
+        connection.execute(
+            "DELETE FROM source_unit_fact_map WHERE doc_id = ?",
             (doc_id,),
         )
         connection.execute("DELETE FROM facts WHERE source_doc_id = ?", (doc_id,))
@@ -1570,6 +1110,9 @@ def build_facts_for_document(workspace_root: Path, doc_id: str) -> FactsBuildRes
             encoding="utf-8",
         )
 
+        # Ensure every fact has a source_unit_fact_map entry
+        _ensure_evidence_chains(connection, doc_id)
+
         connection.commit()
         return FactsBuildResult(
             doc_id=doc_id,
@@ -1579,8 +1122,6 @@ def build_facts_for_document(workspace_root: Path, doc_id: str) -> FactsBuildRes
         )
     finally:
         connection.close()
-
-
 def _nearest_evidence_row(rows: list[object], page_no: int):
     if not rows:
         return None
