@@ -1,0 +1,17 @@
+# Pinned runtime dependencies for reproducible installs.
+# Update by running: pip install --upgrade <pkg> && pip freeze | grep -E "^(httpx|PyMuPDF|anyio|certifi|h11|httpcore|idna|sniffio|exceptiongroup)" >> requirements.txt
+#
+# Lower bounds in pyproject.toml are the contract; the versions here pin the
+# transitive tree we know works in CI as of the last refresh.
+
+# Direct deps (must match pyproject.toml [project.dependencies])
+httpx==0.28.1
+PyMuPDF==1.27.2.3
+
+# Transitive runtime deps
+anyio==4.13.0
+certifi==2023.11.17
+h11==0.16.0
+httpcore==1.0.9
+idna==3.6
+typing_extensions==4.10.0

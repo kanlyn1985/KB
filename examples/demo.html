@@ -712,6 +712,120 @@
       font-size: 0.86rem;
     }
 
+    .answer-rating-section {
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+    }
+
+    .answer-rating {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .rating-label {
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .rating-btn {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 5px 12px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      background: #fff;
+      transition: all 0.15s;
+    }
+
+    .rating-btn:hover {
+      box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.08);
+    }
+
+    .rating-btn.satisfied {
+      color: #1a7f37;
+    }
+
+    .rating-btn.satisfied:hover {
+      border-color: #1a7f37;
+      background: #dafbe1;
+    }
+
+    .rating-btn.unsatisfied {
+      color: #cf222e;
+    }
+
+    .rating-btn.unsatisfied:hover {
+      border-color: #cf222e;
+      background: #ffebe9;
+    }
+
+    .answer-categories {
+      margin-top: 10px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .answer-categories p {
+      font-size: 0.82rem;
+      color: var(--ink);
+      margin: 0;
+    }
+
+    .feedback-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .answer-categories textarea {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 8px;
+      font-size: 0.82rem;
+      resize: vertical;
+      width: 100%;
+      box-sizing: border-box;
+      font-family: inherit;
+    }
+
+    .rating-done {
+      text-align: center;
+      padding: 8px;
+      color: #1a7f37;
+      font-weight: 600;
+    }
+
+    .answer-reflection {
+      margin-top: 12px;
+      border: 1px solid #f0c040;
+      border-radius: 8px;
+      background: #fffbf0;
+      padding: 12px;
+    }
+
+    .answer-reflection h4 {
+      margin: 0 0 8px;
+      font-size: 0.88rem;
+      color: var(--ink);
+    }
+
+    .answer-reflection h5 {
+      margin: 6px 0 4px;
+      font-size: 0.82rem;
+      color: var(--ink);
+    }
+
+    .warn-text {
+      color: #cf222e;
+      font-size: 0.82rem;
+    }
+
     .fact-card {
       border: 1px solid var(--line);
       border-radius: 8px;
@@ -832,7 +946,11 @@
       border: 1px solid var(--line);
       border-radius: 8px;
       background: #fff;
-      overflow: hidden;
+    }
+
+    .right-body details[open] .details-body {
+      overflow: auto;
+      max-height: 35vh;
     }
 
     summary {
@@ -850,6 +968,12 @@
 
     .details-body {
       padding: 12px;
+    }
+
+    .details-body pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
     .footer {
@@ -1023,6 +1147,7 @@
         <button class="tab" data-tab="failures" type="button">Failures</button>
         <button class="tab" data-tab="hygiene" type="button">Hygiene</button>
         <button class="tab" data-tab="query" type="button">Query Lab</button>
+        <button class="tab" data-tab="testRunner" type="button">Test Runner</button>
       </nav>
 
       <section class="main-scroll" id="mainContent"></section>
@@ -1085,6 +1210,11 @@
       parseRiskActions: null,
       parseRiskRepairReview: null,
       parseViewRiskOnly: false,
+      feedbackSubmitted: false,
+      lastReflection: null,
+      testRunnerCases: null,
+      testRunnerResults: {},
+      testRunnerRunning: false,
     };
 
     const $ = (id) => document.getElementById(id);
@@ -1218,6 +1348,64 @@
               <h3>依据事实</h3>
               ${facts.map(renderFactCard).join("")}
             </section>
+          ` : ""}
+          ${renderAnswerRating(answer)}
+        </div>
+      `;
+    }
+
+    function renderAnswerRating(answer) {
+      if (!answer || answer.error || answer.clarification_required) return "";
+      if (state.feedbackSubmitted) {
+        return `
+          <section class="answer-section rating-done">
+            <div class="rating-thanks">感谢反馈！</div>
+            ${state.lastReflection ? renderReflection(state.lastReflection) : ""}
+          </section>
+        `;
+      }
+      return `
+        <section class="answer-section answer-rating-section">
+          <div class="answer-rating">
+            <span class="rating-label">答案评价：</span>
+            <button class="rating-btn satisfied" data-action="rateSatisfied" type="button">👍 满意</button>
+            <button class="rating-btn unsatisfied" data-action="rateUnsatisfied" type="button">👎 不满意</button>
+          </div>
+          <div class="answer-categories" id="answerCategories" style="display:none">
+            <p>请选择问题类型（可多选）：</p>
+            <label class="feedback-checkbox"><input type="checkbox" data-category="incomplete_answer"> 答案不完整</label>
+            <label class="feedback-checkbox"><input type="checkbox" data-category="inaccurate_answer"> 答案不准确</label>
+            <label class="feedback-checkbox"><input type="checkbox" data-category="retrieval_miss"> 检索不到相关信息</label>
+            <label class="feedback-checkbox"><input type="checkbox" data-category="irrelevant_answer"> 答案与问题不相关</label>
+            <label class="feedback-checkbox"><input type="checkbox" data-category="missing_evidence"> 缺少依据事实</label>
+            <label class="feedback-checkbox"><input type="checkbox" data-category="unclear_term"> 术语解释不清</label>
+            <textarea id="feedbackComment" placeholder="补充说明（可选）" rows="2"></textarea>
+            <button class="button primary" data-action="submitFeedback" type="button">提交反馈</button>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderReflection(reflection) {
+      if (!reflection || !reflection.diagnosis || reflection.diagnosis.length === 0) return "";
+      const diagnosis = reflection.diagnosis || [];
+      const actions = reflection.suggested_actions || [];
+      return `
+        <div class="answer-reflection">
+          <h4>🔍 系统反思</h4>
+          <div class="reflection-diagnosis">
+            <h5>问题诊断</h5>
+            <ul class="answer-list">
+              ${diagnosis.map((d) => `<li><strong>${escapeHtml(d.category)}</strong> → ${escapeHtml(d.detail)}</li>`).join("")}
+            </ul>
+          </div>
+          ${actions.length ? `
+            <div class="reflection-actions">
+              <h5>建议修复</h5>
+              <ul class="answer-list">
+                ${actions.map((a) => `<li><strong>${escapeHtml(a.action)}</strong>（${escapeHtml(a.doc_id || "全局")}）${escapeHtml(a.reason)}</li>`).join("")}
+              </ul>
+            </div>
           ` : ""}
         </div>
       `;
@@ -1386,6 +1574,7 @@
         failures: renderFailures,
         hygiene: renderHygiene,
         query: renderQueryLab,
+        testRunner: renderTestRunner,
       }[state.activeTab] || renderOverview;
       container.innerHTML = renderer();
       bindMainActions();
@@ -2840,6 +3029,9 @@
       document.querySelectorAll("[data-action]").forEach((button) => {
         button.addEventListener("click", () => runAction(button.dataset.action));
       });
+      document.querySelectorAll("[data-case-id]").forEach((button) => {
+        button.addEventListener("click", () => runSingleGoldenTest(button.dataset.caseId || ""));
+      });
       document.querySelectorAll("[data-clarification-query]").forEach((button) => {
         button.addEventListener("click", () => {
           const query = button.dataset.clarificationQuery || "";
@@ -2900,6 +3092,26 @@
       const docId = state.selectedDocId;
       if (action === "query") {
         await executeQuery();
+        return;
+      }
+      if (action === "rateSatisfied") {
+        await submitSatisfiedFeedback();
+        return;
+      }
+      if (action === "rateUnsatisfied") {
+        showUnsatisfiedCategories();
+        return;
+      }
+      if (action === "submitFeedback") {
+        await submitUnsatisfiedFeedback();
+        return;
+      }
+      if (action === "loadGoldenCases") {
+        await loadGoldenCases();
+        return;
+      }
+      if (action === "runAllGoldenTests") {
+        await runAllGoldenTests();
         return;
       }
       if (action === "refreshFailures") {
@@ -3205,6 +3417,8 @@
           body: JSON.stringify(requestBody),
         });
         state.lastQuery = payload;
+        state.feedbackSubmitted = false;
+        state.lastReflection = null;
         $("queryDebugPanel").textContent = pretty({
           query_scope: queryScope,
           preferred_doc_id: requestBody.preferred_doc_id || null,
@@ -3237,6 +3451,180 @@
       document.querySelectorAll(".tab").forEach((tab) => {
         tab.classList.toggle("active", tab.dataset.tab === state.activeTab);
       });
+    }
+
+    function renderTestRunner() {
+      const cases = state.testRunnerCases || [];
+      const results = state.testRunnerResults || {};
+      const passedCount = Object.values(results).filter(r => r.passed).length;
+      const failedCount = Object.values(results).filter(r => !r.passed).length;
+      const runCount = Object.keys(results).length;
+      return `
+        <section class="panel">
+          <div class="panel-head">
+            <strong>Golden Test Runner</strong>
+            <div class="tags">
+              ${state.selectedDocId ? `<span class="tag info">${escapeHtml(state.selectedDocId)}</span>` : '<span class="tag warn">选择文档</span>'}
+              ${runCount > 0 ? `<span class="tag ${failedCount > 0 ? 'bad' : 'ok'}">${passedCount}✅ ${failedCount}❌</span>` : ''}
+            </div>
+            <button class="button" data-action="loadGoldenCases" type="button" ${!state.selectedDocId ? 'disabled' : ''}>加载用例</button>
+            <button class="button primary" data-action="runAllGoldenTests" type="button" ${cases.length === 0 ? 'disabled' : ''}>全部执行</button>
+          </div>
+          <div class="panel-body">
+            ${cases.length === 0 ? '<div class="empty">选择文档并点击"加载用例"。</div>' : ''}
+            ${cases.map((c, i) => {
+              const result = results[c.case_id];
+              const statusHtml = result
+                ? (result.passed ? '<span class="tag ok">✅ 通过</span>' : '<span class="tag bad">❌ 失败</span>')
+                : '<span class="tag dark">待执行</span>';
+              const mustHit = Array.isArray(c.must_hit) ? c.must_hit : [];
+              return `
+                <article class="failure-card">
+                  <div class="failure-head">
+                    <strong>#${i + 1}</strong>
+                    ${statusHtml}
+                    <span class="tag info">${escapeHtml(c.assert_mode || "")}</span>
+                  </div>
+                  <div class="failure-body">
+                    <p><strong>Query:</strong> ${escapeHtml(c.query)}</p>
+                    <p class="muted">Must hit: ${mustHit.map(h => escapeHtml(h)).join(", ")}</p>
+                    ${result ? `<p><strong>Answer:</strong> ${escapeHtml((result.answer || "").slice(0, 200))}</p>` : ''}
+                    ${result && !result.passed ? `<p class="warn-text">Missing: ${escapeHtml((result.missing || []).join(", "))}</p>` : ''}
+                  </div>
+                  <div class="failure-foot">
+                    <button class="button small" data-case-id="${escapeHtml(c.case_id)}" type="button">执行</button>
+                  </div>
+                </article>
+              `;
+            }).join("")}
+          </div>
+        </section>
+      `;
+    }
+
+    async function loadGoldenCases() {
+      if (!state.selectedDocId) return;
+      try {
+        setStatus("loading golden cases");
+        const payload = await api("/list-golden-cases", {
+          method: "POST",
+          body: JSON.stringify({ doc_id: state.selectedDocId, status: "active", limit: 200 }),
+        });
+        state.testRunnerCases = payload.cases || [];
+        state.testRunnerResults = {};
+        setStatus(`loaded ${state.testRunnerCases.length} golden cases`);
+      } catch (error) {
+        state.testRunnerCases = [];
+        setStatus(`load golden cases failed: ${error.message}`);
+      }
+      renderMain();
+    }
+
+    async function runSingleGoldenTest(caseId) {
+      const c = (state.testRunnerCases || []).find(x => x.case_id === caseId);
+      if (!c) return;
+      state.testRunnerRunning = true;
+      renderMain();
+      try {
+        setStatus(`running golden test: ${c.query}`);
+        const payload = await api("/answer-query", {
+          method: "POST",
+          body: JSON.stringify({ query: c.query, limit: 8, preferred_doc_id: c.doc_id }),
+        });
+        const answer = payload.direct_answer || "";
+        const mustHit = Array.isArray(c.must_hit) ? c.must_hit : [];
+        const missing = mustHit.filter(h => !answer.includes(h));
+        state.testRunnerResults[caseId] = {
+          passed: missing.length === 0,
+          answer,
+          missing,
+          confidence_score: payload.confidence_score,
+          answer_mode: payload.answer_mode,
+        };
+        setStatus(`golden test ${caseId}: ${missing.length === 0 ? "passed" : "failed"}`);
+      } catch (error) {
+        state.testRunnerResults[caseId] = {
+          passed: false,
+          answer: "",
+          missing: [],
+          error: error.message,
+        };
+        setStatus(`golden test ${caseId} error: ${error.message}`);
+      }
+      state.testRunnerRunning = false;
+      renderMain();
+    }
+
+    async function runAllGoldenTests() {
+      const cases = state.testRunnerCases || [];
+      state.testRunnerResults = {};
+      state.testRunnerRunning = true;
+      renderMain();
+      for (const c of cases) {
+        await runSingleGoldenTest(c.case_id);
+      }
+      state.testRunnerRunning = false;
+      renderMain();
+    }
+
+    async function submitSatisfiedFeedback() {
+      const answer = state.lastQuery || {};
+      try {
+        await api("/submit-answer-feedback", {
+          method: "POST",
+          body: JSON.stringify({
+            query: currentQueryText(),
+            direct_answer: answer.direct_answer || "",
+            answer_mode: answer.answer_mode,
+            preferred_doc_id: answer.preferred_doc_id || state.selectedDocId,
+            confidence_score: answer.confidence_score,
+            satisfaction: "satisfied",
+            categories: [],
+          }),
+        });
+        state.feedbackSubmitted = true;
+        state.lastReflection = null;
+        setStatus("感谢反馈！");
+      } catch (error) {
+        setStatus(`feedback failed: ${error.message}`);
+      }
+      renderMain();
+    }
+
+    function showUnsatisfiedCategories() {
+      const panel = document.getElementById("answerCategories");
+      if (panel) panel.style.display = "block";
+    }
+
+    async function submitUnsatisfiedFeedback() {
+      const checkboxes = document.querySelectorAll("[data-category]:checked");
+      const categories = Array.from(checkboxes).map(cb => cb.dataset.category);
+      const comment = document.getElementById("feedbackComment");
+      const answer = state.lastQuery || {};
+      try {
+        setStatus("submitting feedback");
+        const payload = await api("/submit-answer-feedback", {
+          method: "POST",
+          body: JSON.stringify({
+            query: currentQueryText(),
+            direct_answer: answer.direct_answer || "",
+            answer_mode: answer.answer_mode,
+            preferred_doc_id: answer.preferred_doc_id || state.selectedDocId,
+            confidence_score: answer.confidence_score,
+            satisfaction: "unsatisfied",
+            categories,
+            user_comment: comment ? comment.value : "",
+          }),
+        });
+        state.feedbackSubmitted = true;
+        state.lastReflection = payload.reflection || null;
+        setStatus("感谢反馈！系统已自动分析问题。");
+      } catch (error) {
+        state.feedbackSubmitted = true;
+        state.lastReflection = { diagnosis: [], suggested_actions: [] };
+        setStatus(`feedback submitted (reflection failed: ${error.message})`);
+      }
+renderMain();
     }
 
     function bindChrome() {

@@ -5,12 +5,18 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "enterprise-agent-kb"
 version = "0.1.0"
-description = "Enterprise agent knowledge base compiler and retrieval stack."
+description = "Enterprise knowledge base compilation and retrieval system for automotive standards"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "httpx>=0.27",
     "PyMuPDF>=1.24",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-timeout>=2.3",
 ]
 
 [project.scripts]
@@ -21,3 +27,39 @@ package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-p no:cacheprovider -m 'not integration and not benchmark'"
+norecursedirs = ["_pytest_cache", ".pytest-tmp", "eakb_test_*", "test_runtime_*", "tmp"]
+markers = [
+    "unit: small isolated tests",
+    "smoke: fast end-to-end sanity tests",
+    "integration: uses real local knowledge base assets and can be slower",
+    "benchmark: retrieval and answer quality regression checks",
+    "coverage: generated coverage-promoted tests",
+    "page_coverage: generated page-coverage tests",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["enterprise_agent_kb"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+exclude = ["tests/"]

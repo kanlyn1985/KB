@@ -5,41 +5,28 @@ on:
   pull_request:
 
 jobs:
-  fast-tests:
+  test:
     runs-on: windows-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+      fail-fast: false
+
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
 
-      - name: Install package and test deps
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -e .
-          python -m pip install pytest
+          pip install -e ".[dev]"
 
       - name: Run fast tests
-        run: pytest -q
-
-  benchmark-tests:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install package and test deps
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install -e .
-          python -m pip install pytest
-
-      - name: Run benchmark tests
-        run: pytest -q -m benchmark
+        run: python -m pytest -m "not integration and not benchmark" --tb=short -q
 
   integration-tests:
     runs-on: windows-latest
@@ -50,11 +37,27 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install package and test deps
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -e .
-          python -m pip install pytest
+          pip install -e ".[dev]"
 
       - name: Run integration tests
-        run: pytest -q -m integration
+        run: python -m pytest -m integration --tb=short -q
+
+  benchmark-tests:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Run benchmark tests
+        run: python -m pytest -m benchmark --tb=short -q

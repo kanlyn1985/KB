@@ -1,0 +1,18 @@
+# Pinned development/test dependencies. Install with:
+#   pip install -r requirements.txt -r requirements-dev.txt
+#
+# Lower bounds in pyproject.toml [project.optional-dependencies].dev are the
+# contract; the versions here pin the test runner tree we know works in CI.
+
+# Direct dev deps (must match pyproject.toml [project.optional-dependencies].dev)
+pytest==9.0.3
+pytest-timeout==2.4.0
+pytest-mock>=3.14  # for monkeypatch fixture convenience
+responses>=0.25  # for httpx-style HTTP mocking
+ruff==0.6.9  # for lint + format
+mypy==1.13.0  # for static type checking
+
+# Transitive dev deps
+iniconfig==2.3.0
+packaging==26.2
+pluggy==1.6.0
