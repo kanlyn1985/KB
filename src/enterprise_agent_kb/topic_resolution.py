@@ -44,6 +44,13 @@ def resolve_topic_entities(
     preferred_doc_id: str | None = None,
     limit: int = 8,
 ) -> TopicResolutionResult:
+    """Resolve the rewritten query's topic terms to concrete entities.
+
+    Pulls topic-term candidates from the rewrite result, looks up matching
+    entity rows, and ranks them by confidence and (when available) the
+    preferred document. Returns a ``TopicResolutionResult`` with the
+    target topic string and the ranked entity list.
+    """
     paths = AppPaths.from_root(workspace_root)
     connection = connect(paths.db_file)
     try:

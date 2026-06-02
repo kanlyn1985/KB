@@ -6,11 +6,23 @@ import sqlite3
 from pathlib import Path
 
 from .config import AppPaths
+from .logging_config import get_logger
+
+_logger = get_logger(__name__)
 from .db import connect
 from .parse_views import list_parse_view_pages, summarize_parse_view_selection
 
 
 def build_document_diagnostics(workspace_root: Path, doc_id: str) -> dict[str, object]:
+    """Build a comprehensive diagnostics snapshot for *doc_id*.
+
+    Aggregates parse quality, evidence/fact coverage, and pipeline
+    warnings into a single dict suitable for the API server's
+    ``/document-diagnostics`` endpoint. Sections are individually
+    fail-soft: a missing table or empty result is recorded but does
+    not abort the whole report.
+    """
+    _logger.info("doc_diagnostics:start doc_id=%s", doc_id)
     paths = AppPaths.from_root(workspace_root)
     connection = connect(paths.db_file)
 

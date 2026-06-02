@@ -44,6 +44,13 @@ def _classify_relation(relation: str) -> str:
 
 
 def build_graph_health_report(db_path: str | Path) -> GraphHealthReport:
+    """Build a per-query-type graph health report (edge counts, isolated
+    entities, dangling references) for the workspace DB at *db_path*.
+
+    The report covers all query types the system routes to (definition,
+    parameter, process, comparison, constraint) and is the input to
+    ``format_graph_health_report`` which renders the human-readable form.
+    """
     with connect_context(db_path) as connection:
 
         edge_rows = connection.execute(

@@ -11,6 +11,9 @@ from sqlite3 import Row
 
 from .closed_loop_store import _runtime_code_version, record_eval_run, sync_golden_cases, utc_now
 from .config import AppPaths
+from .logging_config import get_logger
+
+_logger = get_logger(__name__)
 from .db import connect
 from .facts import _definition_has_publishable_signal
 from .query_api import build_query_context
@@ -156,6 +159,16 @@ def run_corpus_retrieval_eval(
     case_types: list[str] | None = None,
     progress: bool = False,
 ) -> CorpusRetrievalEvalResult:
+    """Run the source-unit-driven corpus retrieval evaluation and record an
+    ``eval_run``.
+
+    If *case_file* is provided, cases are loaded from it; otherwise cases
+    are generated from the corpus on-the-fly. Each case is evaluated
+    through the standard retrieval stack and the per-case result is
+    recorded. Returns a ``CorpusRetrievalEvalResult`` summarizing
+    pass/fail counts and the JSON/Markdown report paths.
+    """
+    _logger.info("corpus_retrieval:start suite_id=%s case_file=%s", suite_id, case_file)
     paths = AppPaths.from_root(workspace_root)
     timestamp = utc_now()
     generated = None
@@ -234,6 +247,7 @@ def run_corpus_retrieval_eval(
     }
     json_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
     report_path.write_text(_render_eval_report(payload), encoding="utf-8")
+    _logger.info("corpus_retrieval:done eval_run_id=%s cases=%d", eval_run_id, len(cases))
     return CorpusRetrievalEvalResult(
         eval_run_id=eval_run_id,
         suite_id=suite_id,

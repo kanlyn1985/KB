@@ -9,6 +9,9 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from .config import AppPaths
+from .logging_config import get_logger
+
+_logger = get_logger(__name__)
 from .db import connect
 from .entities import _is_low_quality_process_name
 
@@ -507,6 +510,15 @@ def _delete_stale_doc_wiki_pages(connection, doc_id: str) -> int:
 
 
 def _build_extra_wiki_pages(connection, doc_id: str, paths: AppPaths, now: str) -> list[Path]:
+    """Build wiki pages beyond the per-entity set: process/transition groups
+    and parameter/table-requirement groups.
+
+    Each group is rendered as a markdown file under
+    ``paths.wiki/processes/`` and persisted to the ``wiki_pages`` table
+    with ``page_type`` distinguishing process vs parameter_group. Returns
+    the list of written file paths.
+    """
+    _logger.info("wiki:extra_pages:start doc_id=%s", doc_id)
     export_paths: list[Path] = []
 
     process_rows = connection.execute(
@@ -788,4 +800,5 @@ def _build_extra_wiki_pages(connection, doc_id: str, paths: AppPaths, now: str) 
             ),
         )
 
+    _logger.info("wiki:extra_pages:done doc_id=%s pages=%d", doc_id, len(export_paths))
     return export_paths

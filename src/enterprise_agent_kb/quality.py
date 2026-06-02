@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import sqlite3
 import re
 import unicodedata
 from dataclasses import dataclass
@@ -347,7 +348,8 @@ def read_contract_status(workspace_root: Path, doc_id: str) -> dict[str, object]
     a potentially stale acceptance report file.
 
     Returns {pass_rate: float, failed_count: int, warn_count: int, active_count: int}.
-    Returns defaults if no data is available.
+    Returns defaults if no data is available (no DB file, no contracts,
+    or any other error reading from the DB).
     """
     paths = AppPaths.from_root(workspace_root)
     try:
@@ -358,7 +360,7 @@ def read_contract_status(workspace_root: Path, doc_id: str) -> dict[str, object]
         warn = sum(1 for c in summary.get("contracts", []) if c.get("status") == "warn")
         pass_rate = (1.0 - failed / active) if active > 0 else 0.0
         return {"pass_rate": round(pass_rate, 4), "failed_count": failed, "warn_count": warn, "active_count": active}
-    except (DatabaseError, RepositoryError, TypeError, ValueError, AttributeError):
+    except (DatabaseError, RepositoryError, TypeError, ValueError, AttributeError, sqlite3.OperationalError, FileNotFoundError):
         return {"pass_rate": 0.0, "failed_count": 0, "warn_count": 0, "active_count": 0}
 
 

@@ -6,6 +6,9 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from .config import AppPaths
+from .logging_config import get_logger
+
+_logger = get_logger(__name__)
 from .db import connect
 from .ids import next_prefixed_id
 
@@ -101,6 +104,13 @@ def _ensure_edge(
 
 
 def build_graph_for_document(workspace_root: Path, doc_id: str) -> GraphBuildResult:
+    """Build and persist the fact graph (entity-fact-entity edges) for *doc_id*.
+
+    The graph is materialized as ``graph_edges`` rows in the workspace DB
+    and exported to JSON. Returns a ``GraphBuildResult`` summarizing
+    edge count and per-edge-type breakdown.
+    """
+    _logger.info("build_graph:start doc_id=%s", doc_id)
     paths = AppPaths.from_root(workspace_root)
     connection = connect(paths.db_file)
     now = _utc_now()
@@ -271,6 +281,7 @@ def build_graph_for_document(workspace_root: Path, doc_id: str) -> GraphBuildRes
         )
 
         connection.commit()
+        _logger.info("build_graph:done doc_id=%s edges=%d", doc_id, len(exported))
         return GraphBuildResult(
             doc_id=doc_id,
             edge_count=len(exported),

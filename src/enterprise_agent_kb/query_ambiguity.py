@@ -283,6 +283,14 @@ def build_clarification_context(
     preferred_doc_id: str | None,
     ambiguity: QueryAmbiguity,
 ) -> dict[str, object]:
+    """Build the context payload the answer layer uses when it cannot
+    decide between ambiguous senses of a query term.
+
+    Pulls candidate sense entities for the ambiguous terms (from the
+    workspace's entities + ambiguity_index) and assembles a dict with
+    the candidate labels and a short natural-language question the
+    UI can present to the user.
+    """
     clarification = ambiguity.to_dict()
     rewrite = {
         "original_query": query.strip(),

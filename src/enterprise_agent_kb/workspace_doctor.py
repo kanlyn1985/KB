@@ -432,6 +432,10 @@ def _wiki_issues(connection: Connection) -> list[WorkspaceDoctorIssue]:
 
 
 def _coverage_issues(connection: Connection) -> list[WorkspaceDoctorIssue]:
+    """Detect workspace coverage issues: documents that should have a
+    source-unit matrix but lack one, and any other coverage gaps visible
+    from the DB state.
+    """
     issues: list[WorkspaceDoctorIssue] = []
     missing_source_unit_docs = [
         dict(row)

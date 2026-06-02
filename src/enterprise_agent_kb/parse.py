@@ -23,6 +23,9 @@ from .db import connect
 from .exceptions import DocumentProcessingError, LLMError, NetworkError, TimeoutError
 from .doc_ir import build_doc_ir, save_doc_ir
 from .ids import next_prefixed_id
+from .logging_config import get_logger
+
+_logger = get_logger(__name__)
 from .layout_cleaner import clean_doc_ir, save_cleaned_doc_ir
 from .parse_views import prepare_parse_view_selection, sync_parse_view_candidates, text_readability_metrics
 from .pdf_chunking import (
@@ -537,12 +540,21 @@ def _minimax_ocr_prompt(page_no: int, total_pages: int) -> str:
 
 
 def _parse_pdf_with_minimax_and_paddlevl(source_path: Path) -> tuple[str, list[dict[str, object]]]:
+    """Parse a PDF using the MiniMax VLM as primary, with optional PaddleVL
+    assist for documents with up to 60 pages.
+
+    The PaddleVL pass is dropped silently on transport errors; the MiniMax
+    pass is always attempted. Returns ``(engine, parsed_pages)`` where
+    ``engine`` names the chain that was used.
+    """
     api_host, api_key = _load_minimax_settings()
     page_dimensions = _page_dimensions_from_pdf(source_path)
     page_count_hint = len(page_dimensions)
+    _logger.info("parse:minimax+paddlevl start page_count=%d host=%s", page_count_hint, api_host)
 
     paddle_pages: list[dict[str, object]] = []
     use_paddle_assist = page_count_hint <= 60
+    _logger.debug("parse:paddlevl_assist enabled=%s", use_paddle_assist)
     if use_paddle_assist:
         try:
             _, paddle_pages = _parse_pdf_with_paddlevl(source_path)
@@ -682,6 +694,7 @@ def _parse_pdf_with_minimax_and_paddlevl(source_path: Path) -> tuple[str, list[d
 
 def _parse_pdf_with_pymupdf(source_path: Path) -> tuple[str, list[dict[str, object]]]:
     parsed_pages: list[dict[str, object]] = []
+    _logger.info("parse:pymupdf start path=%s", source_path.name)
     with _open_pdf(source_path) as document:
         for page_index, page in enumerate(document, start=1):
             blocks: list[dict[str, object]] = []
@@ -725,6 +738,7 @@ def _parse_pdf_with_pymupdf(source_path: Path) -> tuple[str, list[dict[str, obje
                 }
             )
 
+    _logger.info("parse:pymupdf done pages=%d", len(parsed_pages))
     return "pymupdf", parsed_pages
 
 
@@ -984,6 +998,7 @@ def parse_document(workspace_root: Path, doc_id: str) -> ParseResult:
     """
     paths = AppPaths.from_root(workspace_root)
     now = _utc_now()
+    _logger.info("parse_document:start doc_id=%s root=%s", doc_id, workspace_root)
     connection = connect(paths.db_file)
 
     try:
@@ -1161,6 +1176,10 @@ def parse_document(workspace_root: Path, doc_id: str) -> ParseResult:
             (len(persisted_pages), "parsed", now, doc_id),
         )
         connection.commit()
+        _logger.info(
+            "parse_document:done doc_id=%s engine=%s pages=%d blocks=%d",
+            doc_id, parser_engine, len(persisted_pages), block_count,
+        )
         return ParseResult(
             doc_id=doc_id,
             page_count=len(persisted_pages),

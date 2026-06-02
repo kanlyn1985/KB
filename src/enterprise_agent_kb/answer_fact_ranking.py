@@ -7,6 +7,9 @@ import re
 from pathlib import Path
 
 from .config import AppPaths
+from .logging_config import get_logger
+
+_logger = get_logger(__name__)
 from .db import connect
 from .evidence_shapes import is_test_method_query, looks_like_test_method_blob
 from .answer_utils import _row_to_fact, _safe_json, _INTENT_FACT_TYPES
@@ -29,354 +32,468 @@ def _augment_facts(
     query: str,
     intent: str,
 ) -> list[dict[str, object]]:
-    from .answer_parameter import _parameter_focus_terms, _is_signal_state_query, _requested_voltage_value
-    from .answer_api import _definition_target_terms
+    """Augment *facts* with intent-specific DB queries and re-rank.
+
+    Dispatches to one of seven intent-specific helpers
+    (``_augment_standard_facts``, ``_augment_definition_facts``, etc.),
+    then deduplicates by ``fact_id`` and re-ranks via ``_rank_facts``.
+
+    See each per-intent helper for SQL details.
+    """
+    _logger.info(
+        "augment_facts:start intent=%s facts=%d docs=%d query=%r",
+        intent, len(facts), len(documents), query[:80],
+    )
     if not documents:
-        return facts
+        return _rank_facts(facts, intent, query=query)
 
     doc_id = documents[0]["doc_id"]
     paths = AppPaths.from_root(workspace_root)
     connection = connect(paths.db_file)
 
     try:
-        extra: list[dict[str, object]] = []
-        if intent == "standard":
-            rows = connection.execute(
-                """
-                SELECT fact_id, fact_type, predicate, object_value, confidence,
-                       source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
-                FROM facts
-                WHERE source_doc_id = ?
-                  AND fact_type IN ('document_standard', 'document_versioning', 'document_lifecycle')
-                ORDER BY fact_id
-                """,
-                (doc_id,),
-            ).fetchall()
-            extra = [_row_to_fact(row) for row in rows]
-        elif intent == "definition":
-            normalized_query = _normalize_query_phrase(query)
-            target_terms = _definition_target_terms(query, rewritten_payload)
-            preferred_doc_ids = [item.get("doc_id") for item in documents if item.get("doc_id")]
-            search_doc_ids = preferred_doc_ids or [doc_id]
-            placeholders = ",".join("?" for _ in search_doc_ids)
-            like_clauses = " OR ".join("object_value LIKE ?" for _ in target_terms[:6])
-            if not like_clauses:
-                like_clauses = "object_value LIKE ?"
-                target_terms = [normalized_query]
-            rows = connection.execute(
-                f"""
-                SELECT fact_id, fact_type, predicate, object_value, confidence,
-                       source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
-                FROM facts
-                WHERE source_doc_id IN ({placeholders})
-                  AND fact_type IN ('term_definition', 'concept_definition', 'document_abstract')
-                  AND ({like_clauses})
-                ORDER BY confidence DESC, fact_id ASC
-                LIMIT 12
-                """,
-                [*search_doc_ids, *[f"%{term}%" for term in target_terms[:6]]],
-            ).fetchall()
-            extra = [_row_to_fact(row) for row in rows]
-        elif intent == "parameter":
-            normalized_query = _normalize_query_phrase(query)
-            focus_terms = _parameter_focus_terms(query, rewritten_payload)
-            relevant_pages = _find_relevant_pages_for_query(
-                connection,
-                doc_id,
-                focus_terms,
-            )
-            rows = connection.execute(
-                """
-                SELECT fact_id, fact_type, predicate, object_value, confidence,
-                       source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
-                FROM facts
-                WHERE source_doc_id = ?
-                  AND fact_type IN ('parameter_value', 'table_requirement', 'threshold', 'requirement')
-                ORDER BY
-                    CASE fact_type
-                        WHEN 'parameter_value' THEN 0
-                        WHEN 'table_requirement' THEN 1
-                        WHEN 'threshold' THEN 2
-                        ELSE 3
-                    END,
-                    confidence DESC,
-                    fact_id ASC
-                LIMIT 240
-                """,
-                (doc_id,),
-            ).fetchall()
-            if _is_signal_state_query(query):
-                requested_voltage = _requested_voltage_value(query)
-                targeted_rows = connection.execute(
-                    """
-                    SELECT fact_id, fact_type, predicate, object_value, confidence,
-                           source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
-                    FROM facts
-                    WHERE source_doc_id = ?
-                      AND fact_type = 'table_requirement'
-                      AND object_value LIKE '%PWM%'
-                      AND object_value LIKE '%状态%'
-                      AND object_value LIKE ?
-                    ORDER BY confidence DESC, fact_id ASC
-                    LIMIT 20
-                    """,
-                    (doc_id, f"%{requested_voltage}%" if requested_voltage else "%"),
-                ).fetchall()
-                rows = [*targeted_rows, *rows]
-            extra = []
-            for row in rows:
-                fact = _row_to_fact(row)
-                qualifiers = fact.get("qualifiers_json")
-                page_no = None
-                if isinstance(qualifiers, dict):
-                    page_no = int(qualifiers.get("page_no") or 0)
-                payload = fact.get("object_value")
-                blob = json.dumps(payload, ensure_ascii=False) if isinstance(payload, (dict, list)) else str(payload or "")
-                focus_bonus = _focus_term_bonus(blob, focus_terms)
-                if focus_bonus:
-                    fact["_focus_term_bonus"] = focus_bonus
-                if page_no and page_no in relevant_pages:
-                    fact["_page_focus_bonus"] = 2.0
-                if any(term and term in blob for term in [normalized_query, *focus_terms]):
-                    extra.append(fact)
-                    continue
-                if page_no and page_no in relevant_pages:
-                    extra.append(fact)
-        elif intent == "process":
-            normalized_query = _normalize_query_phrase(query)
-            test_method_query = is_test_method_query(query)
-            rows = connection.execute(
-                """
-                SELECT fact_id, fact_type, predicate, object_value, confidence,
-                       source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
-                FROM facts
-                WHERE source_doc_id = ?
-                  AND fact_type IN ('process_fact', 'transition_fact', 'table_requirement', 'requirement')
-                ORDER BY
-                    CASE fact_type
-                        WHEN 'transition_fact' THEN 0
-                        WHEN 'process_fact' THEN 1
-                        WHEN 'table_requirement' THEN 2
-                        ELSE 3
-                    END,
-                    confidence DESC,
-                    fact_id ASC
-                LIMIT 160
-                """,
-                (doc_id,),
-            ).fetchall()
-            extra = []
-            focus_terms = [
-                normalized_query,
-                *[str(item) for item in rewritten_payload.get("must_terms", [])],
-                *[str(item) for item in rewritten_payload.get("aliases", [])],
-                *[str(item) for item in rewritten_payload.get("should_terms", [])],
-            ]
-            for row in rows:
-                fact = _row_to_fact(row)
-                payload = fact.get("object_value")
-                blob = json.dumps(payload, ensure_ascii=False) if isinstance(payload, (dict, list)) else str(payload or "")
-                if test_method_query:
-                    if looks_like_test_method_blob(query, blob):
-                        extra.append(fact)
-                    continue
-                if any(term and term in blob for term in focus_terms):
-                    extra.append(fact)
-                    continue
-                if any(token in blob for token in ("时序", "状态", "流程", "握手", "预充", "停机")):
-                    extra.append(fact)
-        elif intent == "comparison":
-            normalized_query = _normalize_query_phrase(query)
-            rows = connection.execute(
-                """
-                SELECT fact_id, fact_type, predicate, object_value, confidence,
-                       source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
-                FROM facts
-                WHERE source_doc_id = ?
-                  AND fact_type IN ('comparison_relation', 'term_definition', 'concept_definition')
-                ORDER BY
-                    CASE fact_type
-                        WHEN 'comparison_relation' THEN 0
-                        ELSE 1
-                    END,
-                    confidence DESC,
-                    fact_id ASC
-                LIMIT 80
-                """,
-                (doc_id,),
-            ).fetchall()
-            extra = []
-            comparison_terms = [
-                normalized_query,
-                *[str(item) for item in rewritten_payload.get("must_terms", [])],
-                *[str(item) for item in rewritten_payload.get("aliases", [])],
-                *[str(item) for item in rewritten_payload.get("should_terms", [])],
-            ]
-            for row in rows:
-                fact = _row_to_fact(row)
-                payload = fact.get("object_value")
-                blob = json.dumps(payload, ensure_ascii=False) if isinstance(payload, (dict, list)) else str(payload or "")
-                if any(term and term in blob for term in comparison_terms):
-                    extra.append(fact)
-                    continue
-                if fact.get("fact_type") == "comparison_relation" and any(token in blob.upper() for token in ("V2X", "V2G", "V2V", "V2B", "V2H")):
-                    extra.append(fact)
-        elif intent == "constraint":
-            normalized_query = _normalize_query_phrase(query)
-            # Extract key constraint terms from the query (strip generic words)
-            constraint_keywords = _extract_constraint_keywords(query)
-            rows = connection.execute(
-                """
-                SELECT fact_id, fact_type, predicate, object_value, confidence,
-                       source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
-                FROM facts
-                WHERE source_doc_id = ?
-                  AND fact_type IN ('threshold', 'requirement', 'table_requirement', 'section_heading')
-                ORDER BY
-                    CASE fact_type
-                        WHEN 'threshold' THEN 0
-                        WHEN 'requirement' THEN 1
-                        ELSE 2
-                    END,
-                    confidence DESC,
-                    fact_id ASC
-                LIMIT 120
-                """,
-                (doc_id,),
-            ).fetchall()
-            # Find page numbers of section headings that match constraint keywords
-            heading_pages: set[int] = set()
-            heading_rows = connection.execute(
-                """
-                SELECT object_value, qualifiers_json FROM facts
-                WHERE source_doc_id = ? AND fact_type = 'section_heading'
-                """,
-                (doc_id,),
-            ).fetchall()
-            for hrow in heading_rows:
-                object_value_str = str(hrow[0] or "")
-                try:
-                    q = json.loads(hrow[1] or "{}")
-                    page_no = int(q.get("page_no") or 0)
-                except (json.JSONDecodeError, ValueError):
-                    continue
-                if page_no and any(kw in object_value_str for kw in constraint_keywords):
-                    heading_pages.add(page_no)
-            extra = []
-            constraint_terms = [
-                normalized_query,
-                *[str(item) for item in rewritten_payload.get("must_terms", [])],
-                *[str(item) for item in rewritten_payload.get("aliases", [])],
-                *[str(item) for item in rewritten_payload.get("should_terms", [])],
-            ]
-            for row in rows:
-                fact = _row_to_fact(row)
-                payload = fact.get("object_value")
-                blob = json.dumps(payload, ensure_ascii=False) if isinstance(payload, (dict, list)) else str(payload or "")
-                if isinstance(payload, dict) and str(payload.get("scope_type") or "") in {"index", "preface"}:
-                    continue
-                if any(token in blob for token in ("前言", "前    言", "目 次", "目次")):
-                    continue
-                # Check if topic/subject/title directly matches constraint keywords
-                topic = str(payload.get("topic") or payload.get("subject") or payload.get("title") or "") if isinstance(payload, dict) else ""
-                topic_match = any(kw in topic for kw in constraint_keywords)
-                # Check if the fact is on a page with a matching section heading
-                qualifiers = fact.get("qualifiers_json")
-                fact_page = 0
-                if isinstance(qualifiers, dict):
-                    fact_page = int(qualifiers.get("page_no") or 0)
-                heading_page_match = fact_page in heading_pages if heading_pages else False
-                # Boost facts with direct topic match
-                if topic_match:
-                    fact["_topic_match_bonus"] = 4.0
-                elif heading_page_match:
-                    fact["_topic_match_bonus"] = 2.0
-                if any(term and term in blob for term in constraint_terms):
-                    extra.append(fact)
-                    continue
-                if topic_match or heading_page_match:
-                    extra.append(fact)
-                    continue
-                if any(token in blob for token in ("要求", "应", "不应", "必须", "切断", "急停", "锁止")):
-                    extra.append(fact)
-        else:
-            normalized_query = _normalize_query_phrase(query)
-            if re.search(r"(CC|阻值|电阻|参数值)", query, re.I):
-                parameter_rows = connection.execute(
-                    """
-                    SELECT fact_id, fact_type, predicate, object_value, confidence,
-                           source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
-                    FROM facts
-                    WHERE source_doc_id = ?
-                      AND fact_type = 'parameter_value'
-                    ORDER BY confidence DESC, fact_id ASC
-                    LIMIT 20
-                    """,
-                    (doc_id,),
-                ).fetchall()
-                supplemental_rows = connection.execute(
-                    """
-                    SELECT fact_id, fact_type, predicate, object_value, confidence,
-                           source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
-                    FROM facts
-                    WHERE source_doc_id = ?
-                      AND fact_type IN ('table_requirement', 'requirement', 'threshold')
-                    ORDER BY confidence DESC, fact_id ASC
-                    LIMIT 30
-                    """,
-                    (doc_id,),
-                ).fetchall()
-                rows = [*parameter_rows, *supplemental_rows]
-            elif re.search(r"表\s*\d+", query):
-                table_rows = connection.execute(
-                    """
-                    SELECT fact_id, fact_type, predicate, object_value, confidence,
-                           source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
-                    FROM facts
-                    WHERE source_doc_id = ?
-                      AND fact_type = 'table_requirement'
-                    ORDER BY confidence DESC, fact_id ASC
-                    LIMIT 8
-                    """,
-                    (doc_id,),
-                ).fetchall()
-                other_rows = connection.execute(
-                    """
-                    SELECT fact_id, fact_type, predicate, object_value, confidence,
-                           source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
-                    FROM facts
-                    WHERE source_doc_id = ?
-                      AND fact_type IN ('requirement', 'threshold', 'parameter_value')
-                    ORDER BY confidence DESC, fact_id ASC
-                    LIMIT 12
-                    """,
-                    (doc_id,),
-                ).fetchall()
-                rows = [*table_rows, *other_rows]
-            else:
-                rows = connection.execute(
-                    """
-                    SELECT fact_id, fact_type, predicate, object_value, confidence,
-                           source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
-                    FROM facts
-                    WHERE source_doc_id = ?
-                      AND fact_type IN ('requirement', 'table_requirement', 'threshold', 'parameter_value')
-                      AND object_value LIKE ?
-                    ORDER BY confidence DESC, fact_id ASC
-                    LIMIT 12
-                    """,
-                    (doc_id, f"%{normalized_query}%"),
-                ).fetchall()
-            extra = [_row_to_fact(row) for row in rows]
-
+        extra = _augment_intent_dispatch(
+            connection=connection,
+            doc_id=doc_id,
+            documents=documents,
+            rewritten_payload=rewritten_payload,
+            query=query,
+            intent=intent,
+        )
         seen = {item["fact_id"] for item in facts}
         for item in extra:
             if item["fact_id"] not in seen:
                 facts.append(item)
                 seen.add(item["fact_id"])
-        return _rank_facts(facts, intent, query=query)
+        ranked = _rank_facts(facts, intent, query=query)
+        _logger.info("augment_facts:done ranked=%d", len(ranked))
+        return ranked
     finally:
         connection.close()
+
+
+def _augment_intent_dispatch(
+    *,
+    connection,
+    doc_id: str,
+    documents: list[dict[str, object]],
+    rewritten_payload: dict[str, object],
+    query: str,
+    intent: str,
+) -> list[dict[str, object]]:
+    """Dispatch augmentation by *intent* to the matching per-intent helper."""
+    if intent == "standard":
+        return _augment_standard_facts(connection, doc_id)
+    if intent == "definition":
+        return _augment_definition_facts(
+            connection, doc_id, documents, query, rewritten_payload,
+        )
+    if intent == "parameter":
+        return _augment_parameter_facts(
+            connection, doc_id, query, rewritten_payload,
+        )
+    if intent == "process":
+        return _augment_process_facts(
+            connection, doc_id, query, rewritten_payload,
+        )
+    if intent == "comparison":
+        return _augment_comparison_facts(
+            connection, doc_id, query, rewritten_payload,
+        )
+    if intent == "constraint":
+        return _augment_constraint_facts(
+            connection, doc_id, query, rewritten_payload,
+        )
+    return _augment_default_facts(
+        connection, doc_id, query, rewritten_payload,
+    )
+
+
+def _augment_standard_facts(connection, doc_id: str) -> list[dict[str, object]]:
+    """For ``intent == "standard"``: pull document/versioning/lifecycle facts."""
+    rows = connection.execute(
+        """
+        SELECT fact_id, fact_type, predicate, object_value, confidence,
+               source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
+        FROM facts
+        WHERE source_doc_id = ?
+          AND fact_type IN ('document_standard', 'document_versioning', 'document_lifecycle')
+        ORDER BY fact_id
+        """,
+        (doc_id,),
+    ).fetchall()
+    return [_row_to_fact(row) for row in rows]
+
+
+def _augment_definition_facts(
+    connection, doc_id: str, documents: list[dict[str, object]],
+    query: str, rewritten_payload: dict[str, object],
+) -> list[dict[str, object]]:
+    """For ``intent == "definition"``: search for term/concept definitions
+    matching the query's target terms across the preferred document(s)."""
+    from .answer_api import _definition_target_terms
+    normalized_query = _normalize_query_phrase(query)
+    target_terms = _definition_target_terms(query, rewritten_payload)
+    preferred_doc_ids = [item.get("doc_id") for item in documents if item.get("doc_id")]
+    search_doc_ids = preferred_doc_ids or [doc_id]
+    placeholders = ",".join("?" for _ in search_doc_ids)
+    like_clauses = " OR ".join("object_value LIKE ?" for _ in target_terms[:6])
+    if not like_clauses:
+        like_clauses = "object_value LIKE ?"
+        target_terms = [normalized_query]
+    rows = connection.execute(
+        f"""
+        SELECT fact_id, fact_type, predicate, object_value, confidence,
+               source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
+        FROM facts
+        WHERE source_doc_id IN ({placeholders})
+          AND fact_type IN ('term_definition', 'concept_definition', 'document_abstract')
+          AND ({like_clauses})
+        ORDER BY confidence DESC, fact_id ASC
+        LIMIT 12
+        """,
+        [*search_doc_ids, *[f"%{term}%" for term in target_terms[:6]]],
+    ).fetchall()
+    return [_row_to_fact(row) for row in rows]
+
+
+def _augment_parameter_facts(
+    connection, doc_id: str, query: str,
+    rewritten_payload: dict[str, object],
+) -> list[dict[str, object]]:
+    """For ``intent == "parameter"``: pull parameter/table/threshold/requirement
+    facts and apply focus-term and page-focus bonuses. Adds PWM/voltage
+    targeted rows for signal-state queries."""
+    from .answer_parameter import _parameter_focus_terms, _is_signal_state_query, _requested_voltage_value
+    normalized_query = _normalize_query_phrase(query)
+    focus_terms = _parameter_focus_terms(query, rewritten_payload)
+    relevant_pages = _find_relevant_pages_for_query(
+        connection,
+        doc_id,
+        focus_terms,
+    )
+    rows = connection.execute(
+        """
+        SELECT fact_id, fact_type, predicate, object_value, confidence,
+               source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
+        FROM facts
+        WHERE source_doc_id = ?
+          AND fact_type IN ('parameter_value', 'table_requirement', 'threshold', 'requirement')
+        ORDER BY
+            CASE fact_type
+                WHEN 'parameter_value' THEN 0
+                WHEN 'table_requirement' THEN 1
+                WHEN 'threshold' THEN 2
+                ELSE 3
+            END,
+            confidence DESC,
+            fact_id ASC
+        LIMIT 240
+        """,
+        (doc_id,),
+    ).fetchall()
+    if _is_signal_state_query(query):
+        requested_voltage = _requested_voltage_value(query)
+        targeted_rows = connection.execute(
+            """
+            SELECT fact_id, fact_type, predicate, object_value, confidence,
+                   source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
+            FROM facts
+            WHERE source_doc_id = ?
+              AND fact_type = 'table_requirement'
+              AND object_value LIKE '%PWM%'
+              AND object_value LIKE '%状态%'
+              AND object_value LIKE ?
+            ORDER BY confidence DESC, fact_id ASC
+            LIMIT 20
+            """,
+            (doc_id, f"%{requested_voltage}%" if requested_voltage else "%"),
+        ).fetchall()
+        rows = [*targeted_rows, *rows]
+    extra: list[dict[str, object]] = []
+    for row in rows:
+        fact = _row_to_fact(row)
+        qualifiers = fact.get("qualifiers_json")
+        page_no = None
+        if isinstance(qualifiers, dict):
+            page_no = int(qualifiers.get("page_no") or 0)
+        payload = fact.get("object_value")
+        blob = json.dumps(payload, ensure_ascii=False) if isinstance(payload, (dict, list)) else str(payload or "")
+        focus_bonus = _focus_term_bonus(blob, focus_terms)
+        if focus_bonus:
+            fact["_focus_term_bonus"] = focus_bonus
+        if page_no and page_no in relevant_pages:
+            fact["_page_focus_bonus"] = 2.0
+        if any(term and term in blob for term in [normalized_query, *focus_terms]):
+            extra.append(fact)
+            continue
+        if page_no and page_no in relevant_pages:
+            extra.append(fact)
+    return extra
+
+
+def _augment_process_facts(
+    connection, doc_id: str, query: str,
+    rewritten_payload: dict[str, object],
+) -> list[dict[str, object]]:
+    """For ``intent == "process"``: pull process/transition/table/requirement
+    facts, with focus-term and timing-token filtering. Test-method queries
+    use a stricter ``looks_like_test_method_blob`` filter."""
+    normalized_query = _normalize_query_phrase(query)
+    test_method_query = is_test_method_query(query)
+    rows = connection.execute(
+        """
+        SELECT fact_id, fact_type, predicate, object_value, confidence,
+               source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
+        FROM facts
+        WHERE source_doc_id = ?
+          AND fact_type IN ('process_fact', 'transition_fact', 'table_requirement', 'requirement')
+        ORDER BY
+            CASE fact_type
+                WHEN 'transition_fact' THEN 0
+                WHEN 'process_fact' THEN 1
+                WHEN 'table_requirement' THEN 2
+                ELSE 3
+            END,
+            confidence DESC,
+            fact_id ASC
+        LIMIT 160
+        """,
+        (doc_id,),
+    ).fetchall()
+    extra: list[dict[str, object]] = []
+    focus_terms = [
+        normalized_query,
+        *[str(item) for item in rewritten_payload.get("must_terms", [])],
+        *[str(item) for item in rewritten_payload.get("aliases", [])],
+        *[str(item) for item in rewritten_payload.get("should_terms", [])],
+    ]
+    for row in rows:
+        fact = _row_to_fact(row)
+        payload = fact.get("object_value")
+        blob = json.dumps(payload, ensure_ascii=False) if isinstance(payload, (dict, list)) else str(payload or "")
+        if test_method_query:
+            if looks_like_test_method_blob(query, blob):
+                extra.append(fact)
+            continue
+        if any(term and term in blob for term in focus_terms):
+            extra.append(fact)
+            continue
+        if any(token in blob for token in ("时序", "状态", "流程", "握手", "预充", "停机")):
+            extra.append(fact)
+    return extra
+
+
+def _augment_comparison_facts(
+    connection, doc_id: str, query: str,
+    rewritten_payload: dict[str, object],
+) -> list[dict[str, object]]:
+    """For ``intent == "comparison"``: pull comparison/term/concept facts
+    and apply focus-term and V2X-family-token filtering."""
+    normalized_query = _normalize_query_phrase(query)
+    rows = connection.execute(
+        """
+        SELECT fact_id, fact_type, predicate, object_value, confidence,
+               source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
+        FROM facts
+        WHERE source_doc_id = ?
+          AND fact_type IN ('comparison_relation', 'term_definition', 'concept_definition')
+        ORDER BY
+            CASE fact_type
+                WHEN 'comparison_relation' THEN 0
+                ELSE 1
+            END,
+            confidence DESC,
+            fact_id ASC
+        LIMIT 80
+        """,
+        (doc_id,),
+    ).fetchall()
+    extra: list[dict[str, object]] = []
+    comparison_terms = [
+        normalized_query,
+        *[str(item) for item in rewritten_payload.get("must_terms", [])],
+        *[str(item) for item in rewritten_payload.get("aliases", [])],
+        *[str(item) for item in rewritten_payload.get("should_terms", [])],
+    ]
+    for row in rows:
+        fact = _row_to_fact(row)
+        payload = fact.get("object_value")
+        blob = json.dumps(payload, ensure_ascii=False) if isinstance(payload, (dict, list)) else str(payload or "")
+        if any(term and term in blob for term in comparison_terms):
+            extra.append(fact)
+            continue
+        if fact.get("fact_type") == "comparison_relation" and any(token in blob.upper() for token in ("V2X", "V2G", "V2V", "V2B", "V2H")):
+            extra.append(fact)
+    return extra
+
+
+def _augment_constraint_facts(
+    connection, doc_id: str, query: str,
+    rewritten_payload: dict[str, object],
+) -> list[dict[str, object]]:
+    """For ``intent == "constraint"``: pull threshold/requirement/table facts
+    and apply topic-match / heading-page bonuses. Excludes preface and index
+    sections."""
+    normalized_query = _normalize_query_phrase(query)
+    constraint_keywords = _extract_constraint_keywords(query)
+    rows = connection.execute(
+        """
+        SELECT fact_id, fact_type, predicate, object_value, confidence,
+               source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
+        FROM facts
+        WHERE source_doc_id = ?
+          AND fact_type IN ('threshold', 'requirement', 'table_requirement', 'section_heading')
+        ORDER BY
+            CASE fact_type
+                WHEN 'threshold' THEN 0
+                WHEN 'requirement' THEN 1
+                ELSE 2
+            END,
+            confidence DESC,
+            fact_id ASC
+        LIMIT 120
+        """,
+        (doc_id,),
+    ).fetchall()
+    heading_pages = _constraint_heading_pages(connection, doc_id, constraint_keywords)
+    extra: list[dict[str, object]] = []
+    constraint_terms = [
+        normalized_query,
+        *[str(item) for item in rewritten_payload.get("must_terms", [])],
+        *[str(item) for item in rewritten_payload.get("aliases", [])],
+        *[str(item) for item in rewritten_payload.get("should_terms", [])],
+    ]
+    for row in rows:
+        fact = _row_to_fact(row)
+        payload = fact.get("object_value")
+        blob = json.dumps(payload, ensure_ascii=False) if isinstance(payload, (dict, list)) else str(payload or "")
+        if isinstance(payload, dict) and str(payload.get("scope_type") or "") in {"index", "preface"}:
+            continue
+        if any(token in blob for token in ("前言", "前    言", "目 次", "目次")):
+            continue
+        topic = str(payload.get("topic") or payload.get("subject") or payload.get("title") or "") if isinstance(payload, dict) else ""
+        topic_match = any(kw in topic for kw in constraint_keywords)
+        qualifiers = fact.get("qualifiers_json")
+        fact_page = 0
+        if isinstance(qualifiers, dict):
+            fact_page = int(qualifiers.get("page_no") or 0)
+        heading_page_match = fact_page in heading_pages if heading_pages else False
+        if topic_match:
+            fact["_topic_match_bonus"] = 4.0
+        elif heading_page_match:
+            fact["_topic_match_bonus"] = 2.0
+        if any(term and term in blob for term in constraint_terms):
+            extra.append(fact)
+            continue
+        if topic_match or heading_page_match:
+            extra.append(fact)
+            continue
+        if any(token in blob for token in ("要求", "应", "不应", "必须", "切断", "急停", "锁止")):
+            extra.append(fact)
+    return extra
+
+
+def _constraint_heading_pages(
+    connection, doc_id: str, constraint_keywords: list[str],
+) -> set[int]:
+    """Return the set of page numbers whose section heading matches any of
+    *constraint_keywords* (used to boost facts on those pages)."""
+    heading_pages: set[int] = set()
+    heading_rows = connection.execute(
+        """
+        SELECT object_value, qualifiers_json FROM facts
+        WHERE source_doc_id = ? AND fact_type = 'section_heading'
+        """,
+        (doc_id,),
+    ).fetchall()
+    for hrow in heading_rows:
+        object_value_str = str(hrow[0] or "")
+        try:
+            q = json.loads(hrow[1] or "{}")
+            page_no = int(q.get("page_no") or 0)
+        except (json.JSONDecodeError, ValueError):
+            continue
+        if page_no and any(kw in object_value_str for kw in constraint_keywords):
+            heading_pages.add(page_no)
+    return heading_pages
+
+
+def _augment_default_facts(
+    connection, doc_id: str, query: str,
+    rewritten_payload: dict[str, object],
+) -> list[dict[str, object]]:
+    """For unrecognised intents: pull requirement/table/threshold/parameter
+    facts, with three sub-paths based on regex matches (CC/resistor,
+    ``表\\d+`` reference, or plain keyword)."""
+    normalized_query = _normalize_query_phrase(query)
+    if re.search(r"(CC|阻值|电阻|参数值)", query, re.I):
+        parameter_rows = connection.execute(
+            """
+            SELECT fact_id, fact_type, predicate, object_value, confidence,
+                   source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
+            FROM facts
+            WHERE source_doc_id = ?
+              AND fact_type = 'parameter_value'
+            ORDER BY confidence DESC, fact_id ASC
+            LIMIT 20
+            """,
+            (doc_id,),
+        ).fetchall()
+        supplemental_rows = connection.execute(
+            """
+            SELECT fact_id, fact_type, predicate, object_value, confidence,
+                   source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
+            FROM facts
+            WHERE source_doc_id = ?
+              AND fact_type IN ('table_requirement', 'requirement', 'threshold')
+            ORDER BY confidence DESC, fact_id ASC
+            LIMIT 30
+            """,
+            (doc_id,),
+        ).fetchall()
+        rows = [*parameter_rows, *supplemental_rows]
+    elif re.search(r"表\s*\d+", query):
+        table_rows = connection.execute(
+            """
+            SELECT fact_id, fact_type, predicate, object_value, confidence,
+                   source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
+            FROM facts
+            WHERE source_doc_id = ?
+              AND fact_type = 'table_requirement'
+            ORDER BY confidence DESC, fact_id ASC
+            LIMIT 8
+            """,
+            (doc_id,),
+        ).fetchall()
+        other_rows = connection.execute(
+            """
+            SELECT fact_id, fact_type, predicate, object_value, confidence,
+                   source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
+            FROM facts
+            WHERE source_doc_id = ?
+              AND fact_type IN ('requirement', 'threshold', 'parameter_value')
+            ORDER BY confidence DESC, fact_id ASC
+            LIMIT 12
+            """,
+            (doc_id,),
+        ).fetchall()
+        rows = [*table_rows, *other_rows]
+    else:
+        rows = connection.execute(
+            """
+            SELECT fact_id, fact_type, predicate, object_value, confidence,
+                   source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
+            FROM facts
+            WHERE source_doc_id = ?
+              AND fact_type IN ('requirement', 'table_requirement', 'threshold', 'parameter_value')
+              AND object_value LIKE ?
+            ORDER BY confidence DESC, fact_id ASC
+            LIMIT 12
+            """,
+            (doc_id, f"%{normalized_query}%"),
+        ).fetchall()
+    return [_row_to_fact(row) for row in rows]
 
 
 

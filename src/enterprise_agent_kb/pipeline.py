@@ -9,6 +9,10 @@ from pathlib import Path
 from typing import Any
 
 from .config import AppPaths
+from .logging_config import get_logger
+
+_logger = get_logger(__name__)
+
 from .coverage import build_coverage_for_document
 from .entities import build_entities_for_document
 from .evidence import build_evidence_for_document
@@ -136,6 +140,14 @@ def _run_document_pipeline_unprotected(
     *,
     progress_callback: PipelineProgressCallback | None,
 ) -> PipelineResult:
+    """Run the full document-build pipeline (parse → quality → evidence →
+    facts → entities → wiki → graph → coverage → acceptance) without
+    database backup/restore. The caller is responsible for crash safety.
+
+    Each stage runs in sequence; if any stage raises, the function
+    propagates immediately (no automatic rollback).
+    """
+    _logger.info("pipeline:start doc_id=%s root=%s", doc_id, workspace_root)
     parse_result = _run_pipeline_stage(
         doc_id,
         "parse",
@@ -231,6 +243,7 @@ def _run_document_pipeline_unprotected(
         },
     )
 
+    _logger.info("pipeline:done doc_id=%s", doc_id)
     return PipelineResult(
         doc_id=doc_id,
         registered=False,
