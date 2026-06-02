@@ -507,3 +507,45 @@ def test_doc_000014_golden_77() -> None:
 def test_doc_000014_golden_78() -> None:
     case = '{"kind": "title", "query": "ISO 14229-1—2013 这份文档的标题是什么？", "must_include": "Road vehicles — Unified diagnostic services (UDS) —", "source": "local", "assert_mode": "context_contains", "expected_evidence_shape": "standard_metadata", "target_doc_id": "DOC-000014"}'
     _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000014_golden_79() -> None:
+    case = '{"kind": "coverage_requirement", "query": "UDS on FlexRay services overview有哪些要求？", "must_include": "UDS on FlexRay services overview", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000014", "expected_evidence_shape": "requirement", "page_no": 10, "coverage_unit_id": "DOC-000014_requirement_10_8", "coverage_semantic_key": "UDS on FlexRay services overview"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000014_golden_80() -> None:
+    case = '{"kind": "coverage_requirement", "query": "ResponseOnEvent (0x86) service有哪些要求？", "must_include": "ResponseOnEvent (0x86) service", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000014", "expected_evidence_shape": "requirement", "page_no": 11, "coverage_unit_id": "DOC-000014_requirement_11_34", "coverage_semantic_key": "ResponseOnEvent (0x86) service"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000014_golden_81() -> None:
+    case = '{"kind": "coverage_requirement", "query": "LinkControl (0x87) service有哪些要求？", "must_include": "LinkControl (0x87) service", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000014", "expected_evidence_shape": "requirement", "page_no": 13, "coverage_unit_id": "DOC-000014:requirement:13:199B824753CA", "coverage_semantic_key": "LinkControl (0x87) service"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000014_golden_82() -> None:
+    case = '{"kind": "coverage_requirement", "query": "Application layer timing有哪些要求？", "must_include": "Application layer timing", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000014", "expected_evidence_shape": "requirement", "page_no": 20, "coverage_unit_id": "DOC-000014_requirement_20_8", "coverage_semantic_key": "Application layer timing"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000014_golden_83() -> None:
+    case = '{"kind": "coverage_requirement", "query": "Data Link layer diagnostic implementation requirements有哪些要求？", "must_include": "Data Link layer diagnostic implementation requirements", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000014", "expected_evidence_shape": "requirement", "page_no": 21, "coverage_unit_id": "DOC-000014_requirement_21_28", "coverage_semantic_key": "Data Link layer diagnostic implementation requirements"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000014_golden_84() -> None:
+    case = '{"kind": "coverage_requirement", "query": "Mapping of T_PDU onto C_PDU for message transmission有哪些要求？", "must_include": "Mapping of T_PDU onto C_PDU for message transmission", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000014", "expected_evidence_shape": "requirement", "page_no": 21, "coverage_unit_id": "DOC-000014_requirement_21_25", "coverage_semantic_key": "Mapping of T_PDU onto C_PDU for message transmission"}'
+    _assert_case(json.loads(case))

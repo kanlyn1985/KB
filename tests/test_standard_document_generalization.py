@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from enterprise_agent_kb import answer_api
-from enterprise_agent_kb.answer_api import _select_definition_answer_facts
+from enterprise_agent_kb.answer_definition import _select_definition_answer_facts, _definition_answer_needs_section_fallback
 from enterprise_agent_kb.facts import _extract_cover_metadata, _extract_doc_metadata
 from enterprise_agent_kb.generated_tests import (
     _case,
@@ -108,10 +108,13 @@ def test_golden_generation_rejects_standard_boilerplate() -> None:
     assert not _is_usable_golden_anchor("International Standards are drafted in accordance with ISO rules")
 
 
-def test_answer_query_downgrades_standard_answer_when_evidence_is_insufficient(
+def test_answer_query_keeps_standard_answer_when_document_standard_fact_present(
     tmp_path: Path,
     monkeypatch,
 ) -> None:
+    """When a document_standard fact exists, the system should still answer
+    with the standard code even if evidence_judgement says insufficient,
+    because the standard code itself is the core answer for a standard_lookup query."""
     def fake_context(*args, **kwargs):
         return {
             "query": "ISO 14229-1是什么标准",
@@ -163,9 +166,60 @@ def test_answer_query_downgrades_standard_answer_when_evidence_is_insufficient(
 
     answer = answer_api.answer_query(tmp_path, "ISO 14229-1是什么标准", limit=4)
 
+    # With document_standard fact present, the system keeps the answer
+    assert answer["fallback_reason"] != "insufficient_evidence"
+    assert "ISO 14229-1" in answer["direct_answer"]
+
+
+def test_answer_query_downgrades_standard_answer_when_no_document_standard_fact(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    """When no document_standard fact exists and evidence_judgement says
+    insufficient, the system should downgrade to insufficient_evidence."""
+    def fake_context(*args, **kwargs):
+        return {
+            "query": "ISO 14229-1是什么标准",
+            "rewrite": {
+                "original_query": "ISO 14229-1是什么标准",
+                "normalized_query": "ISO14229—1",
+                "query_type": "standard_lookup",
+                "target_topic": "ISO14229—1",
+                "aliases": ["ISO 14229-1"],
+                "must_terms": ["ISO14229—1", "ISO", "ISO 14229-1"],
+                "should_terms": [],
+                "negative_terms": [],
+                "protected_anchor_terms": [],
+                "rewrite_override_applied": False,
+                "semantic_quality_flags": [],
+            },
+            "hit_count": 0,
+            "documents": [],
+            "hits": [],
+            "evidence": [],
+            "facts": [],
+            "entities": [],
+            "graph_edges": [],
+            "wiki_pages": [],
+            "knowledge_subgraph": {},
+            "evidence_judgement": {
+                "sufficient": False,
+                "rejected_reasons": ["缺少标准用途、适用范围和完整标题证据。"],
+                "shape_diagnostics": {
+                    "shape_contract": {
+                        "allowed_shapes": ["term_definition"],
+                    }
+                },
+            },
+        }
+
+    monkeypatch.setattr(answer_api, "build_query_context", fake_context)
+    monkeypatch.setattr(answer_api, "_select_supporting_evidence", lambda *args, **kwargs: [])
+
+    answer = answer_api.answer_query(tmp_path, "ISO 14229-1是什么标准", limit=4)
+
     assert answer["fallback_reason"] == "insufficient_evidence"
     assert "当前候选证据不足以给出确定性答案" in answer["direct_answer"]
-    assert "标准号是 ISO 14229-1" not in answer["direct_answer"]
     assert answer["supporting_facts"] == []
 
 
@@ -189,7 +243,7 @@ def test_definition_selection_matches_english_term_case_insensitively() -> None:
         },
     ]
 
-    selected = answer_api._select_definition_answer_facts(
+    selected = _select_definition_answer_facts(
         facts,
         {},
         "client是什么",
@@ -222,7 +276,7 @@ def test_definition_selection_ignores_markdown_wrapping_on_terms() -> None:
         },
     ]
 
-    selected = answer_api._select_definition_answer_facts(
+    selected = _select_definition_answer_facts(
         facts,
         {},
         "什么是vehicle connector？",
@@ -230,7 +284,7 @@ def test_definition_selection_ignores_markdown_wrapping_on_terms() -> None:
     )
 
     assert selected[0]["fact_id"] == "F-TERM"
-    assert not answer_api._definition_answer_needs_section_fallback(
+    assert not _definition_answer_needs_section_fallback(
         selected,
         {"target_topic": "vehicle connector"},
     )

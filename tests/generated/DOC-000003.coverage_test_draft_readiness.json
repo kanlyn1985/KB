@@ -1,8 +1,5516 @@
 {
   "doc_id": "DOC-000003",
-  "draft_case_count": 0,
-  "status_counts": {},
-  "flag_counts": {},
+  "draft_case_count": 90,
+  "status_counts": {
+    "promotable": 81,
+    "reject": 9
+  },
+  "flag_counts": {
+    "overlong_semantic_key": 7,
+    "table_syntax_noise": 2,
+    "weak_anchor": 8
+  },
   "source_draft_path": "E:\\AI_Project\\opencode_workspace\\KB1\\tests\\generated\\DOC-000003.coverage_test_drafts.json",
-  "cases": []
+  "cases": [
+    {
+      "name": "coverage_parameter_row_doc_000003_table_101_2_row_10",
+      "status": "draft",
+      "unit_id": "DOC-000003_table_101_2:row:10",
+      "unit_type": "parameter_row_unit",
+      "importance": "high",
+      "page_no": 101,
+      "semantic_key": "开关 2",
+      "query": "开关 2是多少？",
+      "must_include": [
+        "开关 2"
+      ],
+      "assert_mode": "parameter_value",
+      "recommended_suite": "golden",
+      "source_excerpt": "开关 2 | 开关 2",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028946",
+          "EV-028947",
+          "EV-028948"
+        ],
+        "fact_ids": [
+          "FACT-011560",
+          "FACT-011561",
+          "FACT-011562",
+          "FACT-011563",
+          "FACT-011564",
+          "FACT-011565",
+          "FACT-011566",
+          "FACT-011567",
+          "FACT-011568",
+          "FACT-011569",
+          "FACT-011570",
+          "FACT-011571",
+          "FACT-011572",
+          "FACT-011573",
+          "FACT-011574",
+          "FACT-011575",
+          "FACT-011576",
+          "FACT-011577",
+          "FACT-011578",
+          "FACT-011579",
+          "FACT-011580",
+          "FACT-011581",
+          "FACT-011582",
+          "FACT-011583",
+          "FACT-011584",
+          "FACT-011585",
+          "FACT-011586",
+          "FACT-011587",
+          "FACT-011588",
+          "FACT-011589",
+          "FACT-011590",
+          "FACT-011591",
+          "FACT-011592",
+          "FACT-011593",
+          "FACT-011594",
+          "FACT-011595",
+          "FACT-011596",
+          "FACT-011597",
+          "FACT-011598",
+          "FACT-011599",
+          "FACT-011600",
+          "FACT-011601",
+          "FACT-011602",
+          "FACT-011603",
+          "FACT-011604"
+        ],
+        "entity_ids": [
+          "ENT-000007",
+          "ENT-000178",
+          "ENT-000326",
+          "ENT-000328",
+          "ENT-000341",
+          "ENT-000342"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-b-4-7-非正常条件下充电结束停机-ab39d765",
+          "WPAGE-000178",
+          "WPAGE-000326",
+          "WPAGE-000328",
+          "WPAGE-000341",
+          "WPAGE-000342",
+          "WPROC-DOC-000003-process-doc-000003-b-4-7-非正常条件下充电结束停机",
+          "WPROC-DOC-000003-process-doc-000003-表-c-4-直流充电控制时序表-正常结束停机-续",
+          "WPROC-DOC-000003-process-doc-000003-表-c-5-直流充电控制时序表-故障停机"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_parameter_value",
+        "query": "开关 2是多少？",
+        "must_include": "开关 2",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "parameter_definition",
+        "page_no": 101
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_parameter_row_doc_000003_table_101_2_row_11",
+      "status": "draft",
+      "unit_id": "DOC-000003_table_101_2:row:11",
+      "unit_type": "parameter_row_unit",
+      "importance": "high",
+      "page_no": 101,
+      "semantic_key": "开关 Sv",
+      "query": "开关 Sv是多少？",
+      "must_include": [
+        "开关 Sv"
+      ],
+      "assert_mode": "parameter_value",
+      "recommended_suite": "golden",
+      "source_excerpt": "开关 Sv | 开关 Sv",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028946",
+          "EV-028947",
+          "EV-028948"
+        ],
+        "fact_ids": [
+          "FACT-011560",
+          "FACT-011561",
+          "FACT-011562",
+          "FACT-011563",
+          "FACT-011564",
+          "FACT-011565",
+          "FACT-011566",
+          "FACT-011567",
+          "FACT-011568",
+          "FACT-011569",
+          "FACT-011570",
+          "FACT-011571",
+          "FACT-011572",
+          "FACT-011573",
+          "FACT-011574",
+          "FACT-011575",
+          "FACT-011576",
+          "FACT-011577",
+          "FACT-011578",
+          "FACT-011579",
+          "FACT-011580",
+          "FACT-011581",
+          "FACT-011582",
+          "FACT-011583",
+          "FACT-011584",
+          "FACT-011585",
+          "FACT-011586",
+          "FACT-011587",
+          "FACT-011588",
+          "FACT-011589",
+          "FACT-011590",
+          "FACT-011591",
+          "FACT-011592",
+          "FACT-011593",
+          "FACT-011594",
+          "FACT-011595",
+          "FACT-011596",
+          "FACT-011597",
+          "FACT-011598",
+          "FACT-011599",
+          "FACT-011600",
+          "FACT-011601",
+          "FACT-011602",
+          "FACT-011603",
+          "FACT-011604"
+        ],
+        "entity_ids": [
+          "ENT-000007",
+          "ENT-000178",
+          "ENT-000326",
+          "ENT-000328",
+          "ENT-000341",
+          "ENT-000342"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-b-4-7-非正常条件下充电结束停机-ab39d765",
+          "WPAGE-000178",
+          "WPAGE-000326",
+          "WPAGE-000328",
+          "WPAGE-000341",
+          "WPAGE-000342",
+          "WPROC-DOC-000003-process-doc-000003-b-4-7-非正常条件下充电结束停机",
+          "WPROC-DOC-000003-process-doc-000003-表-c-4-直流充电控制时序表-正常结束停机-续",
+          "WPROC-DOC-000003-process-doc-000003-表-c-5-直流充电控制时序表-故障停机"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_parameter_value",
+        "query": "开关 Sv是多少？",
+        "must_include": "开关 Sv",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "parameter_definition",
+        "page_no": 101
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_parameter_row_doc_000003_table_101_2_row_13",
+      "status": "draft",
+      "unit_id": "DOC-000003_table_101_2:row:13",
+      "unit_type": "parameter_row_unit",
+      "importance": "high",
+      "page_no": 101,
+      "semantic_key": "数字通信",
+      "query": "数字通信是多少？",
+      "must_include": [
+        "数字通信"
+      ],
+      "assert_mode": "parameter_value",
+      "recommended_suite": "golden",
+      "source_excerpt": "数字通信 | 数字通信",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028946",
+          "EV-028947",
+          "EV-028948"
+        ],
+        "fact_ids": [
+          "FACT-011560",
+          "FACT-011561",
+          "FACT-011562",
+          "FACT-011563",
+          "FACT-011564",
+          "FACT-011565",
+          "FACT-011566",
+          "FACT-011567",
+          "FACT-011568",
+          "FACT-011569",
+          "FACT-011570",
+          "FACT-011571",
+          "FACT-011572",
+          "FACT-011573",
+          "FACT-011574",
+          "FACT-011575",
+          "FACT-011576",
+          "FACT-011577",
+          "FACT-011578",
+          "FACT-011579",
+          "FACT-011580",
+          "FACT-011581",
+          "FACT-011582",
+          "FACT-011583",
+          "FACT-011584",
+          "FACT-011585",
+          "FACT-011586",
+          "FACT-011587",
+          "FACT-011588",
+          "FACT-011589",
+          "FACT-011590",
+          "FACT-011591",
+          "FACT-011592",
+          "FACT-011593",
+          "FACT-011594",
+          "FACT-011595",
+          "FACT-011596",
+          "FACT-011597",
+          "FACT-011598",
+          "FACT-011599",
+          "FACT-011600",
+          "FACT-011601",
+          "FACT-011602",
+          "FACT-011603",
+          "FACT-011604"
+        ],
+        "entity_ids": [
+          "ENT-000007",
+          "ENT-000178",
+          "ENT-000326",
+          "ENT-000328",
+          "ENT-000341",
+          "ENT-000342"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-通信-bfc81960",
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-b-4-7-非正常条件下充电结束停机-ab39d765",
+          "WPAGE-000178",
+          "WPAGE-000326",
+          "WPAGE-000328",
+          "WPAGE-000341",
+          "WPAGE-000342",
+          "WPROC-DOC-000003-process-doc-000003-b-4-7-非正常条件下充电结束停机",
+          "WPROC-DOC-000003-process-doc-000003-表-c-4-直流充电控制时序表-正常结束停机-续",
+          "WPROC-DOC-000003-process-doc-000003-表-c-5-直流充电控制时序表-故障停机"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_parameter_value",
+        "query": "数字通信是多少？",
+        "must_include": "数字通信",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "parameter_definition",
+        "page_no": 101
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_parameter_row_doc_000003_parameter_row_101_dd7e4eaa1b28",
+      "status": "draft",
+      "unit_id": "DOC-000003:parameter-row:101:DD7E4EAA1B28",
+      "unit_type": "parameter_row_unit",
+      "importance": "high",
+      "page_no": 101,
+      "semantic_key": "检测点1/检测点2 U_{dp1}=U_{dp2}+0.7\\text{V} 有二极管",
+      "query": "检测点1/检测点2 U_{dp1}=U_{dp2}+0.7\\text{V} 有二极管是多少？",
+      "must_include": [
+        "检测点1/检测点2 U_{dp1}=U_{dp2}+0.7\\text{V} 有二极管"
+      ],
+      "assert_mode": "parameter_value",
+      "recommended_suite": "golden",
+      "source_excerpt": "检测点1/检测点2 U_{dp1}=U_{dp2}+0",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028946",
+          "EV-028947",
+          "EV-028948"
+        ],
+        "fact_ids": [
+          "FACT-011560",
+          "FACT-011561",
+          "FACT-011562",
+          "FACT-011563",
+          "FACT-011564",
+          "FACT-011565",
+          "FACT-011566",
+          "FACT-011567",
+          "FACT-011568",
+          "FACT-011569",
+          "FACT-011570",
+          "FACT-011571",
+          "FACT-011572",
+          "FACT-011573",
+          "FACT-011574",
+          "FACT-011575",
+          "FACT-011576",
+          "FACT-011577",
+          "FACT-011578",
+          "FACT-011579",
+          "FACT-011580",
+          "FACT-011581",
+          "FACT-011582",
+          "FACT-011583",
+          "FACT-011584",
+          "FACT-011585",
+          "FACT-011586",
+          "FACT-011587",
+          "FACT-011588",
+          "FACT-011589",
+          "FACT-011590",
+          "FACT-011591",
+          "FACT-011592",
+          "FACT-011593",
+          "FACT-011594",
+          "FACT-011595",
+          "FACT-011596",
+          "FACT-011597",
+          "FACT-011598",
+          "FACT-011599",
+          "FACT-011600",
+          "FACT-011601",
+          "FACT-011602",
+          "FACT-011603",
+          "FACT-011604"
+        ],
+        "entity_ids": [
+          "ENT-000007",
+          "ENT-000178",
+          "ENT-000326",
+          "ENT-000328",
+          "ENT-000341",
+          "ENT-000342"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-b-4-7-非正常条件下充电结束停机-ab39d765",
+          "WPAGE-000178",
+          "WPAGE-000326",
+          "WPAGE-000328",
+          "WPAGE-000341",
+          "WPAGE-000342",
+          "WPROC-DOC-000003-process-doc-000003-b-4-7-非正常条件下充电结束停机",
+          "WPROC-DOC-000003-process-doc-000003-表-c-4-直流充电控制时序表-正常结束停机-续",
+          "WPROC-DOC-000003-process-doc-000003-表-c-5-直流充电控制时序表-故障停机"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_parameter_value",
+        "query": "检测点1/检测点2 U_{dp1}=U_{dp2}+0.7\\text{V} 有二极管是多少？",
+        "must_include": "检测点1/检测点2 U_{dp1}=U_{dp2}+0.7\\text{V} 有二极管",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "parameter_definition",
+        "page_no": 101
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_parameter_row_doc_000003_parameter_row_101_d47a0dce1e65",
+      "status": "draft",
+      "unit_id": "DOC-000003:parameter-row:101:D47A0DCE1E65",
+      "unit_type": "parameter_row_unit",
+      "importance": "high",
+      "page_no": 101,
+      "semantic_key": "绝缘监测",
+      "query": "绝缘监测是多少？",
+      "must_include": [
+        "绝缘监测"
+      ],
+      "assert_mode": "parameter_value",
+      "recommended_suite": "golden",
+      "source_excerpt": "绝缘监测",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028946",
+          "EV-028947",
+          "EV-028948"
+        ],
+        "fact_ids": [
+          "FACT-011560",
+          "FACT-011561",
+          "FACT-011562",
+          "FACT-011563",
+          "FACT-011564",
+          "FACT-011565",
+          "FACT-011566",
+          "FACT-011567",
+          "FACT-011568",
+          "FACT-011569",
+          "FACT-011570",
+          "FACT-011571",
+          "FACT-011572",
+          "FACT-011573",
+          "FACT-011574",
+          "FACT-011575",
+          "FACT-011576",
+          "FACT-011577",
+          "FACT-011578",
+          "FACT-011579",
+          "FACT-011580",
+          "FACT-011581",
+          "FACT-011582",
+          "FACT-011583",
+          "FACT-011584",
+          "FACT-011585",
+          "FACT-011586",
+          "FACT-011587",
+          "FACT-011588",
+          "FACT-011589",
+          "FACT-011590",
+          "FACT-011591",
+          "FACT-011592",
+          "FACT-011593",
+          "FACT-011594",
+          "FACT-011595",
+          "FACT-011596",
+          "FACT-011597",
+          "FACT-011598",
+          "FACT-011599",
+          "FACT-011600",
+          "FACT-011601",
+          "FACT-011602",
+          "FACT-011603",
+          "FACT-011604"
+        ],
+        "entity_ids": [
+          "ENT-000007",
+          "ENT-000178",
+          "ENT-000326",
+          "ENT-000328",
+          "ENT-000341",
+          "ENT-000342"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-b-4-7-非正常条件下充电结束停机-ab39d765",
+          "WPAGE-000178",
+          "WPAGE-000326",
+          "WPAGE-000328",
+          "WPAGE-000341",
+          "WPAGE-000342",
+          "WPROC-DOC-000003-process-doc-000003-b-4-7-非正常条件下充电结束停机",
+          "WPROC-DOC-000003-process-doc-000003-表-c-4-直流充电控制时序表-正常结束停机-续",
+          "WPROC-DOC-000003-process-doc-000003-表-c-5-直流充电控制时序表-故障停机"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_parameter_value",
+        "query": "绝缘监测是多少？",
+        "must_include": "绝缘监测",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "parameter_definition",
+        "page_no": 101
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_parameter_row_doc_000003_parameter_row_140_380cd1f0221f",
+      "status": "draft",
+      "unit_id": "DOC-000003:parameter-row:140:380CD1F0221F",
+      "unit_type": "parameter_row_unit",
+      "importance": "high",
+      "page_no": 140,
+      "semantic_key": "等效二极管压降 (2.75 mA~10 mA, -40 °C~+85 °C)",
+      "query": "等效二极管压降 (2.75 mA~10 mA, -40 °C~+85 °C)是多少？",
+      "must_include": [
+        "等效二极管压降 (2.75 mA~10 mA, -40 °C~+85 °C)",
+        "V"
+      ],
+      "assert_mode": "parameter_value",
+      "recommended_suite": "golden",
+      "source_excerpt": "等效二极管压降 (2",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028986"
+        ],
+        "fact_ids": [
+          "FACT-010900",
+          "FACT-011821",
+          "FACT-011822",
+          "FACT-011823",
+          "FACT-011824",
+          "FACT-011825",
+          "FACT-011826",
+          "FACT-011827",
+          "FACT-011828",
+          "FACT-011829",
+          "FACT-011830",
+          "FACT-011831",
+          "FACT-011832",
+          "FACT-011833"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000363",
+          "ENT-000364",
+          "ENT-000365",
+          "ENT-000366"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000363",
+          "WPAGE-000364",
+          "WPAGE-000365",
+          "WPAGE-000366",
+          "WPAR-DOC-000003-parameter-doc-000003-表-h-1-具备充电兼容的电动汽车控制导引电路参数"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_parameter_value",
+        "query": "等效二极管压降 (2.75 mA~10 mA, -40 °C~+85 °C)是多少？",
+        "must_include": "等效二极管压降 (2.75 mA~10 mA, -40 °C~+85 °C)",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "parameter_definition",
+        "page_no": 140
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_parameter_row_doc_000003_parameter_row_148_b6f4381acf96",
+      "status": "draft",
+      "unit_id": "DOC-000003:parameter-row:148:B6F4381ACF96",
+      "unit_type": "parameter_row_unit",
+      "importance": "high",
+      "page_no": 148,
+      "semantic_key": "检测点1/检测点2 Udp1=Udp2 无二极管",
+      "query": "检测点1/检测点2 Udp1=Udp2 无二极管是多少？",
+      "must_include": [
+        "检测点1/检测点2 Udp1=Udp2 无二极管"
+      ],
+      "assert_mode": "parameter_value",
+      "recommended_suite": "golden",
+      "source_excerpt": "检测点1/检测点2 Udp1=Udp2 无二极管",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028994",
+          "EV-028995"
+        ],
+        "fact_ids": [
+          "FACT-011840",
+          "FACT-011841",
+          "FACT-011842",
+          "FACT-011843",
+          "FACT-011844",
+          "FACT-011845",
+          "FACT-011846",
+          "FACT-011847",
+          "FACT-011848",
+          "FACT-011849",
+          "FACT-011850",
+          "FACT-011851",
+          "FACT-011852",
+          "FACT-011853",
+          "FACT-011854",
+          "FACT-011855",
+          "FACT-011856",
+          "FACT-011857",
+          "FACT-011858",
+          "FACT-011859",
+          "FACT-011860",
+          "FACT-011861",
+          "FACT-011862",
+          "FACT-011863",
+          "FACT-011864",
+          "FACT-011865",
+          "FACT-011866",
+          "FACT-011867",
+          "FACT-011868",
+          "FACT-011869",
+          "FACT-011870",
+          "FACT-011871",
+          "FACT-011872",
+          "FACT-011873",
+          "FACT-011874",
+          "FACT-011875",
+          "FACT-011876",
+          "FACT-011877",
+          "FACT-011878",
+          "FACT-011879",
+          "FACT-011880",
+          "FACT-011881",
+          "FACT-011882",
+          "FACT-011883",
+          "FACT-011884"
+        ],
+        "entity_ids": [
+          "ENT-000007",
+          "ENT-000178",
+          "ENT-000356",
+          "ENT-000370",
+          "ENT-000371"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-sac-17-标识和说明-d8930784",
+          "WPAGE-000178",
+          "WPAGE-000312",
+          "WPAGE-000356",
+          "WPAGE-000370",
+          "WPAGE-000371",
+          "WPROC-DOC-000003-process-doc-000003-140-sac",
+          "WPROC-DOC-000003-process-doc-000003-表-j-1-脉冲加热控制时序表-正常停机"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_parameter_value",
+        "query": "检测点1/检测点2 Udp1=Udp2 无二极管是多少？",
+        "must_include": "检测点1/检测点2 Udp1=Udp2 无二极管",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "parameter_definition",
+        "page_no": 148
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_parameter_row_doc_000003_parameter_row_148_561bebf830d0",
+      "status": "draft",
+      "unit_id": "DOC-000003:parameter-row:148:561BEBF830D0",
+      "unit_type": "parameter_row_unit",
+      "importance": "high",
+      "page_no": 148,
+      "semantic_key": "检测点1/检测点2 Udp1=Udp2+ 0.7V 有二极管",
+      "query": "检测点1/检测点2 Udp1=Udp2+ 0.7V 有二极管是多少？",
+      "must_include": [
+        "检测点1/检测点2 Udp1=Udp2+ 0.7V 有二极管"
+      ],
+      "assert_mode": "parameter_value",
+      "recommended_suite": "golden",
+      "source_excerpt": "检测点1/检测点2 Udp1=Udp2+ 0",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028994",
+          "EV-028995"
+        ],
+        "fact_ids": [
+          "FACT-011840",
+          "FACT-011841",
+          "FACT-011842",
+          "FACT-011843",
+          "FACT-011844",
+          "FACT-011845",
+          "FACT-011846",
+          "FACT-011847",
+          "FACT-011848",
+          "FACT-011849",
+          "FACT-011850",
+          "FACT-011851",
+          "FACT-011852",
+          "FACT-011853",
+          "FACT-011854",
+          "FACT-011855",
+          "FACT-011856",
+          "FACT-011857",
+          "FACT-011858",
+          "FACT-011859",
+          "FACT-011860",
+          "FACT-011861",
+          "FACT-011862",
+          "FACT-011863",
+          "FACT-011864",
+          "FACT-011865",
+          "FACT-011866",
+          "FACT-011867",
+          "FACT-011868",
+          "FACT-011869",
+          "FACT-011870",
+          "FACT-011871",
+          "FACT-011872",
+          "FACT-011873",
+          "FACT-011874",
+          "FACT-011875",
+          "FACT-011876",
+          "FACT-011877",
+          "FACT-011878",
+          "FACT-011879",
+          "FACT-011880",
+          "FACT-011881",
+          "FACT-011882",
+          "FACT-011883",
+          "FACT-011884"
+        ],
+        "entity_ids": [
+          "ENT-000007",
+          "ENT-000178",
+          "ENT-000356",
+          "ENT-000370",
+          "ENT-000371"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-sac-17-标识和说明-d8930784",
+          "WPAGE-000178",
+          "WPAGE-000312",
+          "WPAGE-000356",
+          "WPAGE-000370",
+          "WPAGE-000371",
+          "WPROC-DOC-000003-process-doc-000003-140-sac",
+          "WPROC-DOC-000003-process-doc-000003-表-j-1-脉冲加热控制时序表-正常停机"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_parameter_value",
+        "query": "检测点1/检测点2 Udp1=Udp2+ 0.7V 有二极管是多少？",
+        "must_include": "检测点1/检测点2 Udp1=Udp2+ 0.7V 有二极管",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "parameter_definition",
+        "page_no": 148
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_parameter_row_doc_000003_parameter_row_150_1ad7642912bc",
+      "status": "draft",
+      "unit_id": "DOC-000003:parameter-row:150:1AD7642912BC",
+      "unit_type": "parameter_row_unit",
+      "importance": "high",
+      "page_no": 150,
+      "semantic_key": "控制引导",
+      "query": "控制引导是多少？",
+      "must_include": [
+        "控制引导"
+      ],
+      "assert_mode": "parameter_value",
+      "recommended_suite": "golden",
+      "source_excerpt": "控制引导 | 检测点1/检测点2 Udp1=Udp2 无二极管",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028995",
+          "EV-028996",
+          "EV-028997"
+        ],
+        "fact_ids": [
+          "FACT-011872",
+          "FACT-011873",
+          "FACT-011874",
+          "FACT-011875",
+          "FACT-011876",
+          "FACT-011877",
+          "FACT-011878",
+          "FACT-011879",
+          "FACT-011880",
+          "FACT-011881",
+          "FACT-011882",
+          "FACT-011883",
+          "FACT-011884",
+          "FACT-011885",
+          "FACT-011886",
+          "FACT-011887",
+          "FACT-011888",
+          "FACT-011889",
+          "FACT-011890",
+          "FACT-011891",
+          "FACT-011892",
+          "FACT-011893",
+          "FACT-011894",
+          "FACT-011895",
+          "FACT-011896",
+          "FACT-011897",
+          "FACT-011898",
+          "FACT-011899",
+          "FACT-011900",
+          "FACT-011901",
+          "FACT-011902",
+          "FACT-011903",
+          "FACT-011904",
+          "FACT-011905",
+          "FACT-011906",
+          "FACT-011907",
+          "FACT-011908",
+          "FACT-011909",
+          "FACT-011910",
+          "FACT-011911",
+          "FACT-011912"
+        ],
+        "entity_ids": [
+          "ENT-000007",
+          "ENT-000178",
+          "ENT-000356",
+          "ENT-000371",
+          "ENT-000372"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-sac-17-标识和说明-d8930784",
+          "WPAGE-000178",
+          "WPAGE-000312",
+          "WPAGE-000356",
+          "WPAGE-000370",
+          "WPAGE-000371",
+          "WPAGE-000372",
+          "WPROC-DOC-000003-process-doc-000003-140-sac",
+          "WPROC-DOC-000003-process-doc-000003-表-j-1-脉冲加热控制时序表-正常停机",
+          "WPROC-DOC-000003-process-doc-000003-表-j-2-脉冲加热控制时序表-故障停机"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_parameter_value",
+        "query": "控制引导是多少？",
+        "must_include": "控制引导",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "parameter_definition",
+        "page_no": 150
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_parameter_row_doc_000003_parameter_row_152_14bde89a8329",
+      "status": "draft",
+      "unit_id": "DOC-000003:parameter-row:152:14BDE89A8329",
+      "unit_type": "parameter_row_unit",
+      "importance": "high",
+      "page_no": 152,
+      "semantic_key": "检测点1/检测点2 U_{dp1}=U_{d}/d_{p2} 无二极管",
+      "query": "检测点1/检测点2 U_{dp1}=U_{d}/d_{p2} 无二极管是多少？",
+      "must_include": [
+        "检测点1/检测点2 U_{dp1}=U_{d}/d_{p2} 无二极管"
+      ],
+      "assert_mode": "parameter_value",
+      "recommended_suite": "golden",
+      "source_excerpt": "检测点1/检测点2 U_{dp1}=U_{d}/d_{p2} 无二极管",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028997",
+          "EV-028998",
+          "EV-028999"
+        ],
+        "fact_ids": [
+          "FACT-011904",
+          "FACT-011905",
+          "FACT-011906",
+          "FACT-011907",
+          "FACT-011908",
+          "FACT-011909",
+          "FACT-011910",
+          "FACT-011911",
+          "FACT-011912",
+          "FACT-011913",
+          "FACT-011914",
+          "FACT-011915",
+          "FACT-011916",
+          "FACT-011917",
+          "FACT-011918",
+          "FACT-011919",
+          "FACT-011920",
+          "FACT-011921",
+          "FACT-011922",
+          "FACT-011923",
+          "FACT-011924",
+          "FACT-011925",
+          "FACT-011926",
+          "FACT-011927",
+          "FACT-011928",
+          "FACT-011929",
+          "FACT-011930",
+          "FACT-011931",
+          "FACT-011932",
+          "FACT-011933",
+          "FACT-011934",
+          "FACT-011935",
+          "FACT-011936"
+        ],
+        "entity_ids": [
+          "ENT-000007",
+          "ENT-000178",
+          "ENT-000356",
+          "ENT-000370",
+          "ENT-000372",
+          "ENT-000373"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-sac-17-标识和说明-d8930784",
+          "WPAGE-000178",
+          "WPAGE-000312",
+          "WPAGE-000356",
+          "WPAGE-000370",
+          "WPAGE-000372",
+          "WPAGE-000373",
+          "WPROC-DOC-000003-process-doc-000003-140-sac",
+          "WPROC-DOC-000003-process-doc-000003-表-j-2-脉冲加热控制时序表-故障停机",
+          "WPROC-DOC-000003-process-doc-000003-表-j-3-脉冲加热控制时序表-紧急停机"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_parameter_value",
+        "query": "检测点1/检测点2 U_{dp1}=U_{d}/d_{p2} 无二极管是多少？",
+        "must_include": "检测点1/检测点2 U_{dp1}=U_{d}/d_{p2} 无二极管",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "parameter_definition",
+        "page_no": 152
+      },
+      "validation_status": "passed",
+      "readiness_status": "reject",
+      "readiness_score": 80,
+      "quality_flags": [
+        "weak_anchor"
+      ],
+      "readiness_reasons": [
+        "must-hit anchor is too short, too symbolic, or too noisy"
+      ]
+    },
+    {
+      "name": "coverage_parameter_row_doc_000003_parameter_row_152_9e82ede156e2",
+      "status": "draft",
+      "unit_id": "DOC-000003:parameter-row:152:9E82EDE156E2",
+      "unit_type": "parameter_row_unit",
+      "importance": "high",
+      "page_no": 152,
+      "semantic_key": "检测点1/检测点2 U_{dp1}=U_{d}/d_{p2}+0.7\\text{V} 有二极管",
+      "query": "检测点1/检测点2 U_{dp1}=U_{d}/d_{p2}+0.7\\text{V} 有二极管是多少？",
+      "must_include": [
+        "检测点1/检测点2 U_{dp1}=U_{d}/d_{p2}+0.7\\text{V} 有二极管"
+      ],
+      "assert_mode": "parameter_value",
+      "recommended_suite": "golden",
+      "source_excerpt": "检测点1/检测点2 U_{dp1}=U_{d}/d_{p2}+0",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028997",
+          "EV-028998",
+          "EV-028999"
+        ],
+        "fact_ids": [
+          "FACT-011904",
+          "FACT-011905",
+          "FACT-011906",
+          "FACT-011907",
+          "FACT-011908",
+          "FACT-011909",
+          "FACT-011910",
+          "FACT-011911",
+          "FACT-011912",
+          "FACT-011913",
+          "FACT-011914",
+          "FACT-011915",
+          "FACT-011916",
+          "FACT-011917",
+          "FACT-011918",
+          "FACT-011919",
+          "FACT-011920",
+          "FACT-011921",
+          "FACT-011922",
+          "FACT-011923",
+          "FACT-011924",
+          "FACT-011925",
+          "FACT-011926",
+          "FACT-011927",
+          "FACT-011928",
+          "FACT-011929",
+          "FACT-011930",
+          "FACT-011931",
+          "FACT-011932",
+          "FACT-011933",
+          "FACT-011934",
+          "FACT-011935",
+          "FACT-011936"
+        ],
+        "entity_ids": [
+          "ENT-000007",
+          "ENT-000178",
+          "ENT-000356",
+          "ENT-000370",
+          "ENT-000372",
+          "ENT-000373"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-sac-17-标识和说明-d8930784",
+          "WPAGE-000178",
+          "WPAGE-000312",
+          "WPAGE-000356",
+          "WPAGE-000370",
+          "WPAGE-000372",
+          "WPAGE-000373",
+          "WPROC-DOC-000003-process-doc-000003-140-sac",
+          "WPROC-DOC-000003-process-doc-000003-表-j-2-脉冲加热控制时序表-故障停机",
+          "WPROC-DOC-000003-process-doc-000003-表-j-3-脉冲加热控制时序表-紧急停机"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_parameter_value",
+        "query": "检测点1/检测点2 U_{dp1}=U_{d}/d_{p2}+0.7\\text{V} 有二极管是多少？",
+        "must_include": "检测点1/检测点2 U_{dp1}=U_{d}/d_{p2}+0.7\\text{V} 有二极管",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "parameter_definition",
+        "page_no": 152
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 85,
+      "quality_flags": [
+        "overlong_semantic_key"
+      ],
+      "readiness_reasons": [
+        "query needs human review before it becomes a stable golden case"
+      ]
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_8_7",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_8_7",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 8,
+      "semantic_key": "规范性引用文件",
+      "query": "规范性引用文件有哪些要求？",
+      "must_include": [
+        "规范性引用文件"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "下列文件中的内容通过文中的规范性引用而构成本文件必不可少的条款",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028854",
+          "EV-028855"
+        ],
+        "fact_ids": [
+          "FACT-010678",
+          "FACT-010921",
+          "FACT-010922"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000247"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-规范性引用文件-8a976f19",
+          "WPAGE-000178",
+          "WPAGE-000247"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "规范性引用文件有哪些要求？",
+        "must_include": "规范性引用文件",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 8
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_16_3",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_16_3",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 16,
+      "semantic_key": "电动汽车交流充电系统 AC electric vehicle charging system 为电动汽车车载充电机提供交流电源的充电系统",
+      "query": "电动汽车交流充电系统 AC electric vehicle charging system 为电动汽车车载充电机提供交流电源的充电系统有哪些要求？",
+      "must_include": [
+        "电动汽车交流充电系统 AC electric vehicle charging system 为电动汽车车载充电机提供交流电源的充电系统"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "标引序号说明： L1、(L2、L3) ——交流电源相线",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028862"
+        ],
+        "fact_ids": [
+          "FACT-010924"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000248"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-电动汽车交流充电系统-ac-electric-vehicle-charging-system-为电动汽车车载充电机提供交流电-98a92f46",
+          "WCON-DOC-000003-constraint-doc-000003-范围-57597f1a",
+          "WPAGE-000178",
+          "WPAGE-000248"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "电动汽车交流充电系统 AC electric vehicle charging system 为电动汽车车载充电机提供交流电源的充电系统有哪些要求？",
+        "must_include": "电动汽车交流充电系统 AC electric vehicle charging system 为电动汽车车载充电机提供交流电源的充电系统",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 16
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 85,
+      "quality_flags": [
+        "overlong_semantic_key"
+      ],
+      "readiness_reasons": [
+        "query needs human review before it becomes a stable golden case"
+      ]
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_22_10",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_22_10",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 22,
+      "semantic_key": "测试负载 test load 特定测试条件下模拟电动汽车动力蓄电池的装置",
+      "query": "测试负载 test load 特定测试条件下模拟电动汽车动力蓄电池的装置有哪些要求？",
+      "must_include": [
+        "测试负载 test load 特定测试条件下模拟电动汽车动力蓄电池的装置"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "**3",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028867",
+          "EV-028868"
+        ],
+        "fact_ids": [
+          "FACT-010709",
+          "FACT-010940",
+          "FACT-010941"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000207",
+          "ENT-000249"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-测试负载-test-load-特定测试条件下模拟电动汽车动力蓄电池的装置-a01f2f17",
+          "WPAGE-000178",
+          "WPAGE-000207",
+          "WPAGE-000249"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "测试负载 test load 特定测试条件下模拟电动汽车动力蓄电池的装置有哪些要求？",
+        "must_include": "测试负载 test load 特定测试条件下模拟电动汽车动力蓄电池的装置",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 22
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_31_12",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_31_12",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 31,
+      "semantic_key": "保护接地导体连续性的持续监测",
+      "query": "保护接地导体连续性的持续监测有哪些要求？",
+      "must_include": [
+        "保护接地导体连续性的持续监测"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "在模式 2、3 和 4 下充电时，保护接地导体的电气连续性应由供电设备持续监测",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028876",
+          "EV-028877",
+          "EV-028878"
+        ],
+        "fact_ids": [
+          "FACT-010774",
+          "FACT-010780",
+          "FACT-010943",
+          "FACT-010944",
+          "FACT-010947",
+          "FACT-010948",
+          "FACT-010949",
+          "FACT-010950",
+          "FACT-010951",
+          "FACT-010952",
+          "FACT-010953",
+          "FACT-010954",
+          "FACT-010955",
+          "FACT-010956"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000251",
+          "ENT-000254",
+          "ENT-000255",
+          "ENT-000256"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-保护接地导体-6f4d759e",
+          "WCON-DOC-000003-constraint-doc-000003-保护接地导体连续性的持续监测-359b81b0",
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-保护接地导体-b55f56c2",
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-保护接地导体连续性的持续监测-995fb151",
+          "WPAGE-000178",
+          "WPAGE-000251",
+          "WPAGE-000254",
+          "WPAGE-000255",
+          "WPAGE-000256",
+          "WPAGE-000269",
+          "WPROC-DOC-000003-process-doc-000003-5-1-2-模式-2",
+          "WPROC-DOC-000003-process-doc-000003-5-2-1-1-通则",
+          "WPROC-DOC-000003-process-doc-000003-5-2-1-2-保护接地导体连续性的持续监测"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "保护接地导体连续性的持续监测有哪些要求？",
+        "must_include": "保护接地导体连续性的持续监测",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 31
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_33_0b036d651cee",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:33:0B036D651CEE",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 33,
+      "semantic_key": "电动汽车供电设备可用负载电流实时调节",
+      "query": "电动汽车供电设备可用负载电流实时调节有哪些要求？",
+      "must_include": [
+        "电动汽车供电设备可用负载电流实时调节"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "不超过供电设备及交流或直流供电网实时可用负载电流",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028879"
+        ],
+        "fact_ids": [
+          "FACT-010782",
+          "FACT-010957",
+          "FACT-010958"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000257"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-电动汽车供电设备可用负载电流实时调节-ec64332f",
+          "WPAGE-000178",
+          "WPAGE-000257"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "电动汽车供电设备可用负载电流实时调节有哪些要求？",
+        "must_include": "电动汽车供电设备可用负载电流实时调节",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 33
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_33_8",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_33_8",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 33,
+      "semantic_key": "车辆供电回路电压适应性切换功能",
+      "query": "车辆供电回路电压适应性切换功能有哪些要求？",
+      "must_include": [
+        "车辆供电回路电压适应性切换功能"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "电动汽车可具备车辆供电回路电压适应性切换功能,以实现不同电压等级的电动汽车与充电设备之间的充电兼容",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028879"
+        ],
+        "fact_ids": [
+          "FACT-010784",
+          "FACT-010960"
+        ],
+        "entity_ids": [
+          "ENT-000178"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-车辆供电回路电压适应性切换功能-53af666c",
+          "WPAGE-000178"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "车辆供电回路电压适应性切换功能有哪些要求？",
+        "must_include": "车辆供电回路电压适应性切换功能",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 33
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_33_42334a8f3e8a",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:33:42334A8F3E8A",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 33,
+      "semantic_key": "通信",
+      "query": "通信有哪些要求？",
+      "must_include": [
+        "通信"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合 GB/T 27930—2023 的规定",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028878",
+          "EV-028879"
+        ],
+        "fact_ids": [
+          "FACT-010786",
+          "FACT-010955",
+          "FACT-010956",
+          "FACT-010961",
+          "FACT-010962"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000256"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-通信-bfc81960",
+          "WPAGE-000178",
+          "WPAGE-000256",
+          "WPAGE-000362",
+          "WPAR-DOC-000003-parameter-doc-000003-表-g-3-通信扩展电路设计参数",
+          "WPROC-DOC-000003-process-doc-000003-5-2-1-2-保护接地导体连续性的持续监测"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "通信有哪些要求？",
+        "must_include": "通信",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 33
+      },
+      "validation_status": "passed",
+      "readiness_status": "reject",
+      "readiness_score": 80,
+      "quality_flags": [
+        "weak_anchor"
+      ],
+      "readiness_reasons": [
+        "must-hit anchor is too short, too symbolic, or too noisy"
+      ]
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_33_16",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_33_16",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 33,
+      "semantic_key": "通则",
+      "query": "通则有哪些要求？",
+      "must_include": [
+        "通则"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "电击定义为电流流经人或家畜时产生的生理效应",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028879",
+          "EV-028880"
+        ],
+        "fact_ids": [
+          "FACT-010787",
+          "FACT-010789",
+          "FACT-010790",
+          "FACT-010793",
+          "FACT-010794",
+          "FACT-010963",
+          "FACT-010964",
+          "FACT-010965",
+          "FACT-010966",
+          "FACT-010970"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000259"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-通则-f5b11fb9",
+          "WCON-DOC-000003-constraint-doc-000003-预期使用和合理可预见的误用-76ea4df0",
+          "WPAGE-000178",
+          "WPAGE-000254",
+          "WPAGE-000259",
+          "WPROC-DOC-000003-process-doc-000003-5-2-1-1-通则"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "通则有哪些要求？",
+        "must_include": "通则",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 33
+      },
+      "validation_status": "passed",
+      "readiness_status": "reject",
+      "readiness_score": 80,
+      "quality_flags": [
+        "weak_anchor"
+      ],
+      "readiness_reasons": [
+        "must-hit anchor is too short, too symbolic, or too noisy"
+      ]
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_33_b01a796f9e73",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:33:B01A796F9E73",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 33,
+      "semantic_key": "预期使用和合理可预见的误用",
+      "query": "预期使用和合理可预见的误用有哪些要求？",
+      "must_include": [
+        "预期使用和合理可预见的误用"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应满足:",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028879",
+          "EV-028880"
+        ],
+        "fact_ids": [
+          "FACT-010790",
+          "FACT-010963",
+          "FACT-010964",
+          "FACT-010965",
+          "FACT-010966"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000259"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-通则-f5b11fb9",
+          "WCON-DOC-000003-constraint-doc-000003-预期使用和合理可预见的误用-76ea4df0",
+          "WPAGE-000178",
+          "WPAGE-000259"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "预期使用和合理可预见的误用有哪些要求？",
+        "must_include": "预期使用和合理可预见的误用",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 33
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_34_435bfdb10b4f",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:34:435BFDB10B4F",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 34,
+      "semantic_key": "感知阈和惊跳反应",
+      "query": "感知阈和惊跳反应有哪些要求？",
+      "must_include": [
+        "感知阈和惊跳反应"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合 12",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028880"
+        ],
+        "fact_ids": [
+          "FACT-010792",
+          "FACT-010968",
+          "FACT-010969"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000261"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-感知阈和惊跳反应-c79484de",
+          "WPAGE-000178",
+          "WPAGE-000261"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "感知阈和惊跳反应有哪些要求？",
+        "must_include": "感知阈和惊跳反应",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 34
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_34_4",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_34_4",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 34,
+      "semantic_key": "接触电流或接触电压的限值",
+      "query": "接触电流或接触电压的限值有哪些要求？",
+      "must_include": [
+        "接触电流或接触电压的限值"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "在正常运行条件和单一故障条件下，应通过以下措施之一避免对一般人员造成危险电击： ——限制接触电流和接触能量",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028880"
+        ],
+        "fact_ids": [
+          "FACT-010791",
+          "FACT-010967"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000260"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-接触电流或接触电压的限值-b323373f",
+          "WPAGE-000178",
+          "WPAGE-000260"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "接触电流或接触电压的限值有哪些要求？",
+        "must_include": "接触电流或接触电压的限值",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 34
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_35_0ebfa2c3e43f",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:35:0EBFA2C3E43F",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 35,
+      "semantic_key": "带电部分基本绝缘进行防护",
+      "query": "带电部分基本绝缘进行防护有哪些要求？",
+      "must_include": [
+        "带电部分基本绝缘进行防护"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合 IEC 62477-1:2016 中 4",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028881"
+        ],
+        "fact_ids": [
+          "FACT-010795",
+          "FACT-010971",
+          "FACT-010972"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000262"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-带电部分基本绝缘进行防护-f4300fc5",
+          "WPAGE-000178",
+          "WPAGE-000262"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "带电部分基本绝缘进行防护有哪些要求？",
+        "must_include": "带电部分基本绝缘进行防护",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 35
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_35_5c778101335c",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:35:5C778101335C",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 35,
+      "semantic_key": "用外壳或屏障进行防护",
+      "query": "用外壳或屏障进行防护有哪些要求？",
+      "must_include": [
+        "用外壳或屏障进行防护"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合 IEC 62477-1:2016 中 4",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028881"
+        ],
+        "fact_ids": [
+          "FACT-010796",
+          "FACT-010973",
+          "FACT-010974"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000263"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-用外壳或屏障进行防护-5a5d3e58",
+          "WPAGE-000178",
+          "WPAGE-000263"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "用外壳或屏障进行防护有哪些要求？",
+        "must_include": "用外壳或屏障进行防护",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 35
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_35_7",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_35_7",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 35,
+      "semantic_key": "限制电压防护",
+      "query": "限制电压防护有哪些要求？",
+      "must_include": [
+        "限制电压防护"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "采用限制电压进行基本防护满足以下条件",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028880",
+          "EV-028881",
+          "EV-028882"
+        ],
+        "fact_ids": [
+          "FACT-010793",
+          "FACT-010797",
+          "FACT-010975",
+          "FACT-010976",
+          "FACT-010977",
+          "FACT-010978",
+          "FACT-010979",
+          "FACT-010980",
+          "FACT-010981"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000264",
+          "ENT-000265",
+          "ENT-000266"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-限制电压防护-8b00f1f8",
+          "WPAGE-000178",
+          "WPAGE-000264",
+          "WPAGE-000265",
+          "WPAGE-000266",
+          "WPROC-DOC-000003-process-doc-000003-表-2-单一故障条件下接触电压",
+          "WPROC-DOC-000003-process-doc-000003-表-2-单一故障条件下接触电压-续"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "限制电压防护有哪些要求？",
+        "must_include": "限制电压防护",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 35
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_36_d7ac1cb142fc",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:36:D7AC1CB142FC",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 36,
+      "semantic_key": "保护接地导体",
+      "query": "保护接地导体有哪些要求？",
+      "must_include": [
+        "保护接地导体"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合 GB/T 16895",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028882",
+          "EV-028883"
+        ],
+        "fact_ids": [
+          "FACT-010802",
+          "FACT-010984",
+          "FACT-010986",
+          "FACT-010987",
+          "FACT-010988"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000268",
+          "ENT-000269"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-保护接地导体-6f4d759e",
+          "WCON-DOC-000003-constraint-doc-000003-保护接地导体连续性的持续监测-359b81b0",
+          "WCON-DOC-000003-constraint-doc-000003-故障防护-dadbb7b7",
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-保护接地导体-b55f56c2",
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-保护接地导体连续性的持续监测-995fb151",
+          "WPAGE-000178",
+          "WPAGE-000255",
+          "WPAGE-000256",
+          "WPAGE-000268",
+          "WPAGE-000269",
+          "WPROC-DOC-000003-process-doc-000003-5-2-1-2-保护接地导体连续性的持续监测"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "保护接地导体有哪些要求？",
+        "must_include": "保护接地导体",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 36
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_36_ae26dcb7e879",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:36:AE26DCB7E879",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 36,
+      "semantic_key": "故障防护",
+      "query": "故障防护有哪些要求？",
+      "must_include": [
+        "故障防护"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合 GB/T 17045—2020 中 5",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028881",
+          "EV-028882"
+        ],
+        "fact_ids": [
+          "FACT-010801",
+          "FACT-010977",
+          "FACT-010984",
+          "FACT-010985"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000268"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-故障防护-dadbb7b7",
+          "WPAGE-000178",
+          "WPAGE-000268"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "故障防护有哪些要求？",
+        "must_include": "故障防护",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 36
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_36_ad8777bce685",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:36:AD8777BCE685",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 36,
+      "semantic_key": "稳态接触电流的限值保护",
+      "query": "稳态接触电流的限值保护有哪些要求？",
+      "must_include": [
+        "稳态接触电流的限值保护"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合 IEC 62477-1:2016 中 4",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028882"
+        ],
+        "fact_ids": [
+          "FACT-010800",
+          "FACT-010982",
+          "FACT-010983"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000267"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-稳态接触电流的限值保护-102f0dd4",
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-稳态接触电流的限值保护-d3478d17",
+          "WPAGE-000178",
+          "WPAGE-000267"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "稳态接触电流的限值保护有哪些要求？",
+        "must_include": "稳态接触电流的限值保护",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 36
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_38_15",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_38_15",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 38,
+      "semantic_key": "中性线",
+      "query": "中性线有哪些要求？",
+      "must_include": [
+        "中性线"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "对电动汽车交流充电系统中，交流供电网应具有中性线且连接方式 A 应连接至标准插座",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028884"
+        ],
+        "fact_ids": [
+          "FACT-010814",
+          "FACT-010997"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000274"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-中性线-515dae09",
+          "WPAGE-000178",
+          "WPAGE-000274"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "中性线有哪些要求？",
+        "must_include": "中性线",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 38
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_38_64b15fa769d9",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:38:64B15FA769D9",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 38,
+      "semantic_key": "供电网断电",
+      "query": "供电网断电有哪些要求？",
+      "must_include": [
+        "供电网断电"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "小于或等于 60 V DC",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028884"
+        ],
+        "fact_ids": [
+          "FACT-010809",
+          "FACT-010989",
+          "FACT-010990"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000270"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-供电网断电-aa5b50bd",
+          "WPAGE-000178",
+          "WPAGE-000270"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "供电网断电有哪些要求？",
+        "must_include": "供电网断电",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 38
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_38_8",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_38_8",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 38,
+      "semantic_key": "接触器粘连",
+      "query": "接触器粘连有哪些要求？",
+      "must_include": [
+        "接触器粘连"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "模式 4 下，电动汽车应具备充电回路车辆断开装置(C5 和 C6)粘连监测和告警功能",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028884"
+        ],
+        "fact_ids": [
+          "FACT-010811",
+          "FACT-010992",
+          "FACT-010993"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000272"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-接触器粘连-fbb6cae0",
+          "WPAGE-000178",
+          "WPAGE-000272",
+          "WPAGE-000289"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "接触器粘连有哪些要求？",
+        "must_include": "接触器粘连",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 38
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_38_622cc1362c2d",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:38:622CC1362C2D",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 38,
+      "semantic_key": "接触顺序",
+      "query": "接触顺序有哪些要求？",
+      "must_include": [
+        "接触顺序"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合 GB/T 20234",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028884"
+        ],
+        "fact_ids": [
+          "FACT-010815",
+          "FACT-010998",
+          "FACT-010999"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000275"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000275"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "接触顺序有哪些要求？",
+        "must_include": "接触顺序",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 38
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_38_f55f658732fa",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:38:F55F658732FA",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 38,
+      "semantic_key": "模式 1 和模式 2 供电接口和车辆接口功能性说明",
+      "query": "模式 1 和模式 2 供电接口和车辆接口功能性说明有哪些要求？",
+      "must_include": [
+        "模式 1 和模式 2 供电接口和车辆接口功能性说明"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合 GB/T 1002 或 GB/T 1003 和 GB/T 2099",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028884"
+        ],
+        "fact_ids": [
+          "FACT-010816",
+          "FACT-011000",
+          "FACT-011001"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000276"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000276"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "模式 1 和模式 2 供电接口和车辆接口功能性说明有哪些要求？",
+        "must_include": "模式 1 和模式 2 供电接口和车辆接口功能性说明",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 38
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_38_67ca1fd62e13",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:38:67CA1FD62E13",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 38,
+      "semantic_key": "模式 3 供电接口和车辆接口的功能性说明",
+      "query": "模式 3 供电接口和车辆接口的功能性说明有哪些要求？",
+      "must_include": [
+        "模式 3 供电接口和车辆接口的功能性说明"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合 GB/T 20234",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028884"
+        ],
+        "fact_ids": [
+          "FACT-010817",
+          "FACT-011000",
+          "FACT-011002",
+          "FACT-011003"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000276",
+          "ENT-000277"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-模式-3-供电接口和车辆接口的功能性说明-3f3394b2",
+          "WPAGE-000178",
+          "WPAGE-000276",
+          "WPAGE-000277"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "模式 3 供电接口和车辆接口的功能性说明有哪些要求？",
+        "must_include": "模式 3 供电接口和车辆接口的功能性说明",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 38
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_38_6",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_38_6",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 38,
+      "semantic_key": "电动汽车供电设备和电动汽车之间信号电路的安全要求",
+      "query": "电动汽车供电设备和电动汽车之间信号电路的安全要求有哪些要求？",
+      "must_include": [
+        "电动汽车供电设备和电动汽车之间信号电路的安全要求"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "供电设备和电动汽车之间的任意信号电路应根据 7",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028884"
+        ],
+        "fact_ids": [
+          "FACT-010810",
+          "FACT-010991"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000271"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-电动汽车供电设备和电动汽车之间信号电路的安全要求-89472ed2",
+          "WPAGE-000178",
+          "WPAGE-000271"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "电动汽车供电设备和电动汽车之间信号电路的安全要求有哪些要求？",
+        "must_include": "电动汽车供电设备和电动汽车之间信号电路的安全要求",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 38
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_39_6624ffcbcc76",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:39:6624FFCBCC76",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 39,
+      "semantic_key": "IP 防护等级",
+      "query": "IP 防护等级有哪些要求？",
+      "must_include": [
+        "IP 防护等级"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合 GB/T 20234",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028885"
+        ],
+        "fact_ids": [
+          "FACT-010824",
+          "FACT-011013",
+          "FACT-011014"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000282"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000282"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "IP 防护等级有哪些要求？",
+        "must_include": "IP 防护等级",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 39
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_39_e1988c513990",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:39:E1988C513990",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 39,
+      "semantic_key": "分断能力",
+      "query": "分断能力有哪些要求？",
+      "must_include": [
+        "分断能力"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合 GB/T 20234",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028885"
+        ],
+        "fact_ids": [
+          "FACT-010823",
+          "FACT-011011",
+          "FACT-011012"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000281"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000281"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "分断能力有哪些要求？",
+        "must_include": "分断能力",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 39
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_39_9ee1863fd08a",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:39:9EE1863FD08A",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 39,
+      "semantic_key": "插拔力",
+      "query": "插拔力有哪些要求？",
+      "must_include": [
+        "插拔力"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合 GB/T 20234",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028885"
+        ],
+        "fact_ids": [
+          "FACT-010825",
+          "FACT-011015",
+          "FACT-011016"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000283"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000283"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "插拔力有哪些要求？",
+        "must_include": "插拔力",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 39
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_39_e795a192730f",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:39:E795A192730F",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 39,
+      "semantic_key": "模式 4 车辆接口的功能性说明",
+      "query": "模式 4 车辆接口的功能性说明有哪些要求？",
+      "must_include": [
+        "模式 4 车辆接口的功能性说明"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合 GB/T 20234",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028885"
+        ],
+        "fact_ids": [
+          "FACT-010818",
+          "FACT-011004",
+          "FACT-011005"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000278"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-模式-4-车辆接口的功能性说明-84a3f460",
+          "WPAGE-000178",
+          "WPAGE-000278"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "模式 4 车辆接口的功能性说明有哪些要求？",
+        "must_include": "模式 4 车辆接口的功能性说明",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 39
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_39_11",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_39_11",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 39,
+      "semantic_key": "电缆加长组件",
+      "query": "电缆加长组件有哪些要求？",
+      "must_include": [
+        "电缆加长组件"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "除了电缆组件,不应使用电缆加长组件连接电动汽车和供电设备",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028885"
+        ],
+        "fact_ids": [
+          "FACT-010822",
+          "FACT-011010"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000280"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000280"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "电缆加长组件有哪些要求？",
+        "must_include": "电缆加长组件",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 39
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_40_2b1e187ffa38",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:40:2B1E187FFA38",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 40,
+      "semantic_key": "模式 2 和模式 3 充电接口的锁止装置",
+      "query": "模式 2 和模式 3 充电接口的锁止装置有哪些要求？",
+      "must_include": [
+        "模式 2 和模式 3 充电接口的锁止装置"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合附录 I 中 I",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028886"
+        ],
+        "fact_ids": [
+          "FACT-010826",
+          "FACT-010827",
+          "FACT-011017",
+          "FACT-011018"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000284"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-模式-2-和模式-3-充电接口的锁止装置-f0f5954e",
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-锁止装置-8bb4e46d",
+          "WPAGE-000178",
+          "WPAGE-000284"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "模式 2 和模式 3 充电接口的锁止装置有哪些要求？",
+        "must_include": "模式 2 和模式 3 充电接口的锁止装置",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 40
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_40_46f7bd6341f8",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:40:46F7BD6341F8",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 40,
+      "semantic_key": "模式 4 充电接口的锁止装置",
+      "query": "模式 4 充电接口的锁止装置有哪些要求？",
+      "must_include": [
+        "模式 4 充电接口的锁止装置"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合 I",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028886"
+        ],
+        "fact_ids": [
+          "FACT-010826",
+          "FACT-010828",
+          "FACT-011019",
+          "FACT-011020"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000285"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-模式-4-充电接口的锁止装置-af38f9e5",
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-锁止装置-8bb4e46d",
+          "WPAGE-000178",
+          "WPAGE-000285"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "模式 4 充电接口的锁止装置有哪些要求？",
+        "must_include": "模式 4 充电接口的锁止装置",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 40
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_40_11",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_40_11",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 40,
+      "semantic_key": "模式 4 的冲击电流",
+      "query": "模式 4 的冲击电流有哪些要求？",
+      "must_include": [
+        "模式 4 的冲击电流"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "在模式 4 下,直流接触器接通时发生的电动汽车到直流供电设备、或者直流供电设备到电动汽车的冲击电流(峰值)应控制在 20 A DC 以下",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028886",
+          "EV-028887"
+        ],
+        "fact_ids": [
+          "FACT-010829",
+          "FACT-010831",
+          "FACT-010836",
+          "FACT-011023",
+          "FACT-011028",
+          "FACT-011029"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000287",
+          "ENT-000289"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000287",
+          "WPAGE-000289"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "模式 4 的冲击电流有哪些要求？",
+        "must_include": "模式 4 的冲击电流",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 40
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_41_224c370a116c",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:41:224C370A116C",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 41,
+      "semantic_key": "交流供电设备的剩余电流保护器",
+      "query": "交流供电设备的剩余电流保护器有哪些要求？",
+      "must_include": [
+        "交流供电设备的剩余电流保护器"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合 GB/T 40820—2021",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028887",
+          "EV-028888"
+        ],
+        "fact_ids": [
+          "FACT-010839",
+          "FACT-010840",
+          "FACT-011034",
+          "FACT-011035",
+          "FACT-011036",
+          "FACT-011037"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000292"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-交流供电设备的剩余电流保护器-417a93e8",
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-剩余电流保护器-b512ebd2",
+          "WPAGE-000178",
+          "WPAGE-000292"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "交流供电设备的剩余电流保护器有哪些要求？",
+        "must_include": "交流供电设备的剩余电流保护器",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 41
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_41_aa1e4f3ec8bb",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:41:AA1E4F3EC8BB",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 41,
+      "semantic_key": "开关和隔离开关",
+      "query": "开关和隔离开关有哪些要求？",
+      "must_include": [
+        "开关和隔离开关"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合 GB/T 14048",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028887"
+        ],
+        "fact_ids": [
+          "FACT-010835",
+          "FACT-011026",
+          "FACT-011027"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000288"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000288"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "开关和隔离开关有哪些要求？",
+        "must_include": "开关和隔离开关",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 41
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_41_2b046242dcb3",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:41:2B046242DCB3",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 41,
+      "semantic_key": "断路器",
+      "query": "断路器有哪些要求？",
+      "must_include": [
+        "断路器"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合 GB/T 10963",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028887"
+        ],
+        "fact_ids": [
+          "FACT-010837",
+          "FACT-011030",
+          "FACT-011031"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000290"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000290"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "断路器有哪些要求？",
+        "must_include": "断路器",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 41
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_41_6fdb21a93aef",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:41:6FDB21A93AEF",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 41,
+      "semantic_key": "继电器",
+      "query": "继电器有哪些要求？",
+      "must_include": [
+        "继电器"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合 GB/T 21711",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028887"
+        ],
+        "fact_ids": [
+          "FACT-010838",
+          "FACT-011032",
+          "FACT-011033"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000291"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000291"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "继电器有哪些要求？",
+        "must_include": "继电器",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 41
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_42_19545b9dc5f8",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:42:19545B9DC5F8",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 42,
+      "semantic_key": "模式 2 的防护等级",
+      "query": "模式 2 的防护等级有哪些要求？",
+      "must_include": [
+        "模式 2 的防护等级"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合 GB/T 41589 的规定",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028888"
+        ],
+        "fact_ids": [
+          "FACT-010844",
+          "FACT-011041",
+          "FACT-011042"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000295"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000295"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "模式 2 的防护等级有哪些要求？",
+        "must_include": "模式 2 的防护等级",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 42
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_42_11",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_42_11",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 42,
+      "semantic_key": "模式 3 和模式 4 的防护等级",
+      "query": "模式 3 和模式 4 的防护等级有哪些要求？",
+      "must_include": [
+        "模式 3 和模式 4 的防护等级"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "在模式 3 和模式 4 下，供电设备的防护等级不应低于 IP32（室内）或 IP54（室外）",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028888"
+        ],
+        "fact_ids": [
+          "FACT-010845",
+          "FACT-011043"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000296"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000296"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "模式 3 和模式 4 的防护等级有哪些要求？",
+        "must_include": "模式 3 和模式 4 的防护等级",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 42
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_42_6",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_42_6",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 42,
+      "semantic_key": "电气间隙和爬电距离",
+      "query": "电气间隙和爬电距离有哪些要求？",
+      "must_include": [
+        "电气间隙和爬电距离"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "当供电设备由制造商安装时，其电气间隙和爬电距离应至少满足 GB/T 16935",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028888"
+        ],
+        "fact_ids": [
+          "FACT-010842",
+          "FACT-011040"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000294"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000294"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "电气间隙和爬电距离有哪些要求？",
+        "must_include": "电气间隙和爬电距离",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 42
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_42_22f9523ea058",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:42:22F9523EA058",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 42,
+      "semantic_key": "电缆管理及贮存方式",
+      "query": "电缆管理及贮存方式有哪些要求？",
+      "must_include": [
+        "电缆管理及贮存方式"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "不超过 7",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028888"
+        ],
+        "fact_ids": [
+          "FACT-010846",
+          "FACT-011044",
+          "FACT-011045"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000297"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000297"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "电缆管理及贮存方式有哪些要求？",
+        "must_include": "电缆管理及贮存方式",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 42
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_44_9",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_44_9",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 44,
+      "semantic_key": "接触电流限值",
+      "query": "接触电流限值有哪些要求？",
+      "must_include": [
+        "接触电流限值"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "交流(有效值)和直流接触电流不应超出表 3 规定的值",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028890",
+          "EV-028891"
+        ],
+        "fact_ids": [
+          "FACT-010852",
+          "FACT-010853",
+          "FACT-011050",
+          "FACT-011051",
+          "FACT-011052",
+          "FACT-011053",
+          "FACT-011054",
+          "FACT-011055",
+          "FACT-011056",
+          "FACT-011057",
+          "FACT-011058",
+          "FACT-011059",
+          "FACT-011060"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000299",
+          "ENT-000300"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000299",
+          "WPAGE-000300",
+          "WPROC-DOC-000003-process-doc-000003-表-3-接触电流限值"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "接触电流限值有哪些要求？",
+        "must_include": "接触电流限值",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 44
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_44_e3eaee4b257b",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:44:E3EAEE4B257B",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 44,
+      "semantic_key": "输入端瞬态过压",
+      "query": "输入端瞬态过压有哪些要求？",
+      "must_include": [
+        "输入端瞬态过压"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "不超过: ——DC+与 PE 之间的电压:2 500 V; ——DC-与 PE 之间的",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028890"
+        ],
+        "fact_ids": [
+          "FACT-010849",
+          "FACT-011046",
+          "FACT-011047"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000298"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000298"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "输入端瞬态过压有哪些要求？",
+        "must_include": "输入端瞬态过压",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 44
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_44_f013d5f5d8f3",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:44:F013D5F5D8F3",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 44,
+      "semantic_key": "防止大气源或开关引起的瞬态过压",
+      "query": "防止大气源或开关引起的瞬态过压有哪些要求？",
+      "must_include": [
+        "防止大气源或开关引起的瞬态过压"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合: ——GB/T 18802",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028890"
+        ],
+        "fact_ids": [
+          "FACT-010850",
+          "FACT-011048",
+          "FACT-011049"
+        ],
+        "entity_ids": [
+          "ENT-000178"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "防止大气源或开关引起的瞬态过压有哪些要求？",
+        "must_include": "防止大气源或开关引起的瞬态过压",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 44
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_46_6",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_46_6",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 46,
+      "semantic_key": "介电强度",
+      "query": "介电强度有哪些要求？",
+      "must_include": [
+        "介电强度"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "在供电设备非电气连接的各带电回路之间、各独立带电回路与地(金属外壳)之间按表 4 规定施加 1 min 工频交流电压(也可采用直流电压)",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028892",
+          "EV-028893"
+        ],
+        "fact_ids": [
+          "FACT-010855",
+          "FACT-011064",
+          "FACT-011065",
+          "FACT-011066",
+          "FACT-011067",
+          "FACT-011068"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000301"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000301"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "介电强度有哪些要求？",
+        "must_include": "介电强度",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 46
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_46_6281da972117",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:46:6281DA972117",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 46,
+      "semantic_key": "绝缘电阻",
+      "query": "绝缘电阻有哪些要求？",
+      "must_include": [
+        "绝缘电阻"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应满足以下要求: —— I 类设备:$R > 1\\ \\text{M}\\Omega$",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028892"
+        ],
+        "fact_ids": [
+          "FACT-010854",
+          "FACT-011062",
+          "FACT-011063"
+        ],
+        "entity_ids": [
+          "ENT-000021",
+          "ENT-000178"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "绝缘电阻有哪些要求？",
+        "must_include": "绝缘电阻",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 46
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_47_14f21de2dfde",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:47:14F21DE2DFDE",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 47,
+      "semantic_key": "冲击耐压",
+      "query": "冲击耐压有哪些要求？",
+      "must_include": [
+        "冲击耐压"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "不小于 5 s",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028893",
+          "EV-028894"
+        ],
+        "fact_ids": [
+          "FACT-010856",
+          "FACT-011069",
+          "FACT-011070",
+          "FACT-011071",
+          "FACT-011072",
+          "FACT-011084"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000302",
+          "ENT-000307"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-充电电缆的短路保护-f506b649",
+          "WPAGE-000178",
+          "WPAGE-000302",
+          "WPAGE-000307"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "冲击耐压有哪些要求？",
+        "must_include": "冲击耐压",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 47
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_47_12",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_47_12",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 47,
+      "semantic_key": "极限温升",
+      "query": "极限温升有哪些要求？",
+      "must_include": [
+        "极限温升"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "电动汽车供电设备在额定负载下长期连续运行，内部各发热元器件及各部位的温升不应超过 NB/T 33001—2018、NB/T 33002—2018 等相关设备标准的规定",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028893"
+        ],
+        "fact_ids": [
+          "FACT-010859",
+          "FACT-011075"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000303"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000303"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "极限温升有哪些要求？",
+        "must_include": "极限温升",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 47
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_48_fca23c3f429a",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:48:FCA23C3F429A",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 48,
+      "semantic_key": "允许表面温度",
+      "query": "允许表面温度有哪些要求？",
+      "must_include": [
+        "允许表面温度"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "不超过特定温度",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028893",
+          "EV-028894"
+        ],
+        "fact_ids": [
+          "FACT-010860",
+          "FACT-011076",
+          "FACT-011077"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000304"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000304"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "允许表面温度有哪些要求？",
+        "must_include": "允许表面温度",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 48
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_48_9",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_48_9",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 48,
+      "semantic_key": "充电电缆的过载保护",
+      "query": "充电电缆的过载保护有哪些要求？",
+      "must_include": [
+        "充电电缆的过载保护"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "电动汽车供电设备应为连接方式 C 下各种尺寸的电缆提供过载保护，除非其输入侧已提供相应的保护",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028894"
+        ],
+        "fact_ids": [
+          "FACT-010864",
+          "FACT-011082"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000306"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-充电电缆的过载保护-3662fb17",
+          "WPAGE-000178",
+          "WPAGE-000306"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "充电电缆的过载保护有哪些要求？",
+        "must_include": "充电电缆的过载保护",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 48
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_48_13",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_48_13",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 48,
+      "semantic_key": "急停",
+      "query": "急停有哪些要求？",
+      "must_include": [
+        "急停"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "供电设备宜安装急停装置",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028894",
+          "EV-028895"
+        ],
+        "fact_ids": [
+          "FACT-010866",
+          "FACT-011085",
+          "FACT-011086"
+        ],
+        "entity_ids": [
+          "ENT-000178"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-急停-75a521e7",
+          "WPAGE-000178",
+          "WPAGE-000343",
+          "WPAGE-000348",
+          "WPAGE-000354",
+          "WPAGE-000355",
+          "WPAGE-000373",
+          "WPAGE-000376",
+          "WPAGE-000377",
+          "WPROC-DOC-000003-process-doc-000003-表-c-10-过压保护阈值-紧急停机",
+          "WPROC-DOC-000003-process-doc-000003-表-c-15-充电机紧急停机要求",
+          "WPROC-DOC-000003-process-doc-000003-表-c-16-电动汽车紧急停机要求",
+          "WPROC-DOC-000003-process-doc-000003-表-c-6-直流充电控制时序表-紧急停机",
+          "WPROC-DOC-000003-process-doc-000003-表-j-3-脉冲加热控制时序表-紧急停机",
+          "WPROC-DOC-000003-process-doc-000003-表-j-5-充电机紧急停机",
+          "WPROC-DOC-000003-process-doc-000003-表-j-6-电动汽车紧急停机"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "急停有哪些要求？",
+        "must_include": "急停",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 48
+      },
+      "validation_status": "passed",
+      "readiness_status": "reject",
+      "readiness_score": 80,
+      "quality_flags": [
+        "weak_anchor"
+      ],
+      "readiness_reasons": [
+        "must-hit anchor is too short, too symbolic, or too noisy"
+      ]
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_48_ed4363708503",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:48:ED4363708503",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 48,
+      "semantic_key": "雷电防护",
+      "query": "雷电防护有哪些要求？",
+      "must_include": [
+        "雷电防护"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应满足 GB 50057—2010 中 6",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028894"
+        ],
+        "fact_ids": [
+          "FACT-010861",
+          "FACT-011078",
+          "FACT-011079"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000305"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000305"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "雷电防护有哪些要求？",
+        "must_include": "雷电防护",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 48
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_49_95939beee4be",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:49:95939BEEE4BE",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 49,
+      "semantic_key": "周围空气温度",
+      "query": "周围空气温度有哪些要求？",
+      "must_include": [
+        "周围空气温度"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "供电设备应至少满足以下正常工作温度范围: ——室外使用:$-25 °C \\sim +40 °C$; ——室内使用:$-5 °C \\sim +40 °C$",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028894",
+          "EV-028895"
+        ],
+        "fact_ids": [
+          "FACT-010867",
+          "FACT-010869",
+          "FACT-011084",
+          "FACT-011087"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000307",
+          "ENT-000308"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-使用条件-b0d3ee69",
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-充电电缆的短路保护-f506b649",
+          "WPAGE-000178",
+          "WPAGE-000307",
+          "WPAGE-000308"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "周围空气温度有哪些要求？",
+        "must_include": "周围空气温度",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 49
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_49_8561f8e9aa8e",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:49:8561F8E9AA8E",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 49,
+      "semantic_key": "室内设备的湿度条件",
+      "query": "室内设备的湿度条件有哪些要求？",
+      "must_include": [
+        "室内设备的湿度条件"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "在最高温度为 $+40 °C$ 时,其相对湿度不超过 $50\\%$",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028895"
+        ],
+        "fact_ids": [
+          "FACT-010870",
+          "FACT-010871",
+          "FACT-011088",
+          "FACT-011089"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000309"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000309"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "室内设备的湿度条件有哪些要求？",
+        "must_include": "室内设备的湿度条件",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 49
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_49_a8dc26cf2baa",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:49:A8DC26CF2BAA",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 49,
+      "semantic_key": "海拔",
+      "query": "海拔有哪些要求？",
+      "must_include": [
+        "海拔"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合 GB/T 16935",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028895",
+          "EV-028896"
+        ],
+        "fact_ids": [
+          "FACT-010874",
+          "FACT-011090",
+          "FACT-011091",
+          "FACT-011093"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000310"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-使用条件-b0d3ee69",
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-特殊使用条件-49191430",
+          "WPAGE-000178",
+          "WPAGE-000310"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "海拔有哪些要求？",
+        "must_include": "海拔",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 49
+      },
+      "validation_status": "passed",
+      "readiness_status": "reject",
+      "readiness_score": 80,
+      "quality_flags": [
+        "weak_anchor"
+      ],
+      "readiness_reasons": [
+        "must-hit anchor is too short, too symbolic, or too noisy"
+      ]
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_49_17",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_49_17",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 49,
+      "semantic_key": "特殊使用条件",
+      "query": "特殊使用条件有哪些要求？",
+      "must_include": [
+        "特殊使用条件"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "若存在客户规定的特殊使用条件,关于测试的特别协议应在供电设备制造商和客户间达成",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028895",
+          "EV-028896"
+        ],
+        "fact_ids": [
+          "FACT-010867",
+          "FACT-010875",
+          "FACT-011092",
+          "FACT-011093"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000310"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-使用条件-b0d3ee69",
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-特殊使用条件-49191430",
+          "WPAGE-000178",
+          "WPAGE-000310"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "特殊使用条件有哪些要求？",
+        "must_include": "特殊使用条件",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 49
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_50_6",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_50_6",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 50,
+      "semantic_key": "维修",
+      "query": "维修有哪些要求？",
+      "must_include": [
+        "维修"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "供电设备的设计应便于对设备进行维护和检修",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028896"
+        ],
+        "fact_ids": [
+          "FACT-010877",
+          "FACT-011095"
+        ],
+        "entity_ids": [
+          "ENT-000178"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-维修-f6dcb175",
+          "WPAGE-000178"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "维修有哪些要求？",
+        "must_include": "维修",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 50
+      },
+      "validation_status": "passed",
+      "readiness_status": "reject",
+      "readiness_score": 80,
+      "quality_flags": [
+        "weak_anchor"
+      ],
+      "readiness_reasons": [
+        "must-hit anchor is too short, too symbolic, or too noisy"
+      ]
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_50_4",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_50_4",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 50,
+      "semantic_key": "运输和存储中的特殊条件",
+      "query": "运输和存储中的特殊条件有哪些要求？",
+      "must_include": [
+        "运输和存储中的特殊条件"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "在运输和存储过程中如有不同或附加的条件，制造商应说明",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028896"
+        ],
+        "fact_ids": [
+          "FACT-010876",
+          "FACT-011094"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000311"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000311"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "运输和存储中的特殊条件有哪些要求？",
+        "must_include": "运输和存储中的特殊条件",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 50
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_51_dd13a175e1a6",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:51:DD13A175E1A6",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 51,
+      "semantic_key": "A.1.1 模式 3",
+      "query": "A.1.1 模式 3有哪些要求？",
+      "must_include": [
+        "A.1.1 模式 3"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "不超过 8 A",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028897"
+        ],
+        "fact_ids": [
+          "FACT-010881",
+          "FACT-011097",
+          "FACT-011098"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000313"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000313",
+          "WPAGE-000319",
+          "WPROC-DOC-000003-process-doc-000003-a-1-1-模式-3"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "A.1.1 模式 3有哪些要求？",
+        "must_include": "A.1.1 模式 3",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 51
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_75_3d314e282b12",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:75:3D314E282B12",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 75,
+      "semantic_key": "附 录 B 采用 GB/T 20234.3 规定的充电连接装置的直流充电控制导引电路与控制原理",
+      "query": "附 录 B 采用 GB/T 20234.3 规定的充电连接装置的直流充电控制导引电路与控制原理有哪些要求？",
+      "must_include": [
+        "附 录 B 采用 GB/T 20234.3 规定的充电连接装置的直流充电控制导引电路与控制原理"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合 GB/T 27930—2023 中 A 类系统的规定",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028921",
+          "EV-028922"
+        ],
+        "fact_ids": [
+          "FACT-010882",
+          "FACT-011315",
+          "FACT-011316",
+          "FACT-011317",
+          "FACT-011318",
+          "FACT-011319",
+          "FACT-011332"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000323",
+          "ENT-000324"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000323",
+          "WPAGE-000324"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "附 录 B 采用 GB/T 20234.3 规定的充电连接装置的直流充电控制导引电路与控制原理有哪些要求？",
+        "must_include": "附 录 B 采用 GB/T 20234.3 规定的充电连接装置的直流充电控制导引电路与控制原理",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 75
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_78_14",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_78_14",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 78,
+      "semantic_key": "B.4.7 非正常条件下充电结束停机",
+      "query": "B.4.7 非正常条件下充电结束停机有哪些要求？",
+      "must_include": [
+        "B.4.7 非正常条件下充电结束停机"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "**B",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028923",
+          "EV-028924",
+          "EV-028925"
+        ],
+        "fact_ids": [
+          "FACT-010884",
+          "FACT-011336",
+          "FACT-011343",
+          "FACT-011344",
+          "FACT-011345",
+          "FACT-011346",
+          "FACT-011347",
+          "FACT-011348",
+          "FACT-011349",
+          "FACT-011350",
+          "FACT-011351",
+          "FACT-011352"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000323",
+          "ENT-000326"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-b-4-7-非正常条件下充电结束停机-ab39d765",
+          "WPAGE-000178",
+          "WPAGE-000323",
+          "WPAGE-000326",
+          "WPAGE-000328",
+          "WPROC-DOC-000003-process-doc-000003-b-4-7-非正常条件下充电结束停机"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "B.4.7 非正常条件下充电结束停机有哪些要求？",
+        "must_include": "B.4.7 非正常条件下充电结束停机",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 78
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_109_904bf06eea1f",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:109:904BF06EEA1F",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 109,
+      "semantic_key": "C.7.6.4 输出过流保护",
+      "query": "C.7.6.4 输出过流保护有哪些要求？",
+      "must_include": [
+        "C.7.6.4 输出过流保护"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "%",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028955"
+        ],
+        "fact_ids": [
+          "FACT-010885",
+          "FACT-011683",
+          "FACT-011684"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000349"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-c-7-6-4-输出过流保护-eea3bd85",
+          "WPAGE-000178",
+          "WPAGE-000349"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "C.7.6.4 输出过流保护有哪些要求？",
+        "must_include": "C.7.6.4 输出过流保护",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 109
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_109_6",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_109_6",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 109,
+      "semantic_key": "C.7.7 电气隔离",
+      "query": "C.7.7 电气隔离有哪些要求？",
+      "must_include": [
+        "C.7.7 电气隔离"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "充电机 A 侧与 B 侧采用电气隔离,提供非直接接地电源给电动汽车供电",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028955"
+        ],
+        "fact_ids": [
+          "FACT-010886",
+          "FACT-011685"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000350"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000350"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "C.7.7 电气隔离有哪些要求？",
+        "must_include": "C.7.7 电气隔离",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 109
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_109_d40471b4251d",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:109:D40471B4251D",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 109,
+      "semantic_key": "C.7.8.1 对充电机的要求",
+      "query": "C.7.8.1 对充电机的要求有哪些要求？",
+      "must_include": [
+        "C.7.8.1 对充电机的要求"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "大于或等于 1 A 之前,充电机直流供电回路中从防反二极管到车辆插头处 DC+ 与 DC-",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028955"
+        ],
+        "fact_ids": [
+          "FACT-010888",
+          "FACT-011686",
+          "FACT-011687",
+          "FACT-011688"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000351"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000351"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "C.7.8.1 对充电机的要求有哪些要求？",
+        "must_include": "C.7.8.1 对充电机的要求",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 109
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_109_fd0922205945",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:109:FD0922205945",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 109,
+      "semantic_key": "C.7.8.2 对车辆的要求",
+      "query": "C.7.8.2 对车辆的要求有哪些要求？",
+      "must_include": [
+        "C.7.8.2 对车辆的要求"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应满足 GB 18384—2020 中 5",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028955",
+          "EV-028956"
+        ],
+        "fact_ids": [
+          "FACT-010889",
+          "FACT-011689",
+          "FACT-011690",
+          "FACT-011691",
+          "FACT-011692",
+          "FACT-011693",
+          "FACT-011694",
+          "FACT-011695"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000352"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000352"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "C.7.8.2 对车辆的要求有哪些要求？",
+        "must_include": "C.7.8.2 对车辆的要求",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 109
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_123_e190a372e4d4",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:123:E190A372E4D4",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 123,
+      "semantic_key": "E.5.1 充/放电切换原则",
+      "query": "E.5.1 充/放电切换原则有哪些要求？",
+      "must_include": [
+        "E.5.1 充/放电切换原则"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合双接口的设计原则和安全要求",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028969"
+        ],
+        "fact_ids": [
+          "FACT-011752",
+          "FACT-011753"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000357"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000357"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "E.5.1 充/放电切换原则有哪些要求？",
+        "must_include": "E.5.1 充/放电切换原则",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 123
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_131_e75e2a5ca5e2",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:131:E75E2A5CA5E2",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 131,
+      "semantic_key": "附录B 充电机 电动汽车",
+      "query": "附录B 充电机 电动汽车有哪些要求？",
+      "must_include": [
+        "附录B 充电机 电动汽车"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "检测点1为 4V",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028977",
+          "EV-028978"
+        ],
+        "fact_ids": [
+          "FACT-011798",
+          "FACT-011799",
+          "FACT-011800"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000360",
+          "ENT-000361"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000360",
+          "WPAGE-000361"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "附录B 充电机 电动汽车有哪些要求？",
+        "must_include": "附录B 充电机 电动汽车",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 131
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_140_5",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_140_5",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 140,
+      "semantic_key": "附录B充电机 | 车辆插头 | GB 车辆适配器 | 车辆插座 | 中欧美电动汽车 --- | --- | --- | --- | --- PE | PE | | PE | 车身地 U1, 12.0V | S | Rc', 1.0k Ω",
+      "query": "附录B充电机 | 车辆插头 | GB 车辆适配器 | 车辆插座 | 中欧美电动汽车 --- | --- | --- | --- | --- PE | PE | | PE | 车身地 U1, 12.0V | S | Rc', 1.0k Ω有哪些要求？",
+      "must_include": [
+        "附录B充电机 | 车辆插头 | GB 车辆适配器 | 车辆插座 | 中欧美电动汽车 --- | --- | --- | --- | --- PE | PE | | PE | 车身地 U1, 12.0V | S | Rc', 1.0k Ω"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "表 H",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028986",
+          "EV-028987"
+        ],
+        "fact_ids": [
+          "FACT-010900",
+          "FACT-011820",
+          "FACT-011821",
+          "FACT-011834"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000363"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000279",
+          "WPAGE-000363",
+          "WPAR-DOC-000003-parameter-doc-000003-表-h-1-具备充电兼容的电动汽车控制导引电路参数"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "附录B充电机 | 车辆插头 | GB 车辆适配器 | 车辆插座 | 中欧美电动汽车 --- | --- | --- | --- | --- PE | PE | | PE | 车身地 U1, 12.0V | S | Rc', 1.0k Ω有哪些要求？",
+        "must_include": "附录B充电机 | 车辆插头 | GB 车辆适配器 | 车辆插座 | 中欧美电动汽车 --- | --- | --- | --- | --- PE | PE | | PE | 车身地 U1, 12.0V | S | Rc', 1.0k Ω",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 140
+      },
+      "validation_status": "passed",
+      "readiness_status": "reject",
+      "readiness_score": 0,
+      "quality_flags": [
+        "table_syntax_noise",
+        "overlong_semantic_key",
+        "weak_anchor"
+      ],
+      "readiness_reasons": [
+        "query or anchor looks like document noise rather than user intent",
+        "query needs human review before it becomes a stable golden case",
+        "must-hit anchor is too short, too symbolic, or too noisy"
+      ]
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_142_4",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_142_4",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 142,
+      "semantic_key": "I.1 交流充电接口锁止装置",
+      "query": "I.1 交流充电接口锁止装置有哪些要求？",
+      "must_include": [
+        "I.1 交流充电接口锁止装置"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "当交流供电设备和车载充电机的最大充电电流大于 16 A 时，供电接口和车辆接口应具有锁止装置",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028988"
+        ],
+        "fact_ids": [
+          "FACT-010902",
+          "FACT-011835"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000367"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-i-1-交流充电接口锁止装置-5adc5fcd",
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-锁止装置-8bb4e46d",
+          "WPAGE-000178",
+          "WPAGE-000367"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "I.1 交流充电接口锁止装置有哪些要求？",
+        "must_include": "I.1 交流充电接口锁止装置",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 142
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_142_11",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_142_11",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 142,
+      "semantic_key": "I.2.1 结构",
+      "query": "I.2.1 结构有哪些要求？",
+      "must_include": [
+        "I.2.1 结构"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "直流充电时，车辆接口应具有锁止装置",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028988"
+        ],
+        "fact_ids": [
+          "FACT-010904",
+          "FACT-011836"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000368"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000368"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "I.2.1 结构有哪些要求？",
+        "must_include": "I.2.1 结构",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 142
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_146_2ddf9264232f",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:146:2DDF9264232F",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 146,
+      "semantic_key": "J.2.4 脉冲加热实施",
+      "query": "J.2.4 脉冲加热实施有哪些要求？",
+      "must_include": [
+        "J.2.4 脉冲加热实施"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "不超过 10 s",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028991",
+          "EV-028992",
+          "EV-028993"
+        ],
+        "fact_ids": [
+          "FACT-010911",
+          "FACT-011837",
+          "FACT-011838",
+          "FACT-011839"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000369"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000369"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "J.2.4 脉冲加热实施有哪些要求？",
+        "must_include": "J.2.4 脉冲加热实施",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 146
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_153_9",
+      "status": "draft",
+      "unit_id": "DOC-000003_requirement_153_9",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 153,
+      "semantic_key": "J.4.2 故障停机",
+      "query": "J.4.2 故障停机有哪些要求？",
+      "must_include": [
+        "J.4.2 故障停机"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "充电机故障停机见表 J",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028999",
+          "EV-029000"
+        ],
+        "fact_ids": [
+          "FACT-010914",
+          "FACT-011937",
+          "FACT-011938",
+          "FACT-011939",
+          "FACT-011940"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000374",
+          "ENT-000375"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-j-4-2-故障停机-d9724ad1",
+          "WPAGE-000178",
+          "WPAGE-000374",
+          "WPAGE-000375",
+          "WPROC-DOC-000003-process-doc-000003-表-j-4-充电机故障停机"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "J.4.2 故障停机有哪些要求？",
+        "must_include": "J.4.2 故障停机",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 153
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_14_bf0863eb3c6c",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:14:BF0863EB3C6C",
+      "unit_type": "requirement_unit",
+      "importance": "medium",
+      "page_no": 14,
+      "semantic_key": "电动汽车电能传输设备 EV energy transfer equipment 连接于电动汽车与供电网(电源)之间,可实现能量流动的设备。 注 1:电动汽车电能传输设备的分类参见图 6。 注 2:对于连接方式 A(模式 1 或模式 3)和连接方式 E(模式 3 和模式 4),电缆组件是电动汽车的一部分。 注 3:对于模式 2 和模式 3(连接方式 B),可拆卸电缆组件不是电动汽车或者供电设备的一部分。 注 4:对于连接方式 C(模式 3 或模式 4),电缆组件是供电设备的一部",
+      "query": "电动汽车电能传输设备 EV energy transfer equipment 连接于电动汽车与供电网(电源)之间,可实现能量流动的设备。 注 1:电动汽车电能传输设备的分类参见图 6。 注 2:对于连接方式 A(模式 1 或模式 3)和连接方式 E(模式 3 和模式 4),电缆组件是电动汽车的一部分。 注 3:对于模式 2 和模式 3(连接方式 B),可拆卸电缆组件不是电动汽车或者供电设备的一部分。 注 4:对于连接方式 C(模式 3 或模式 4),电缆组件是供电设备的一部有哪些要求？",
+      "must_include": [
+        "电动汽车电能传输设备 EV energy transfer equipment 连接于电动汽车与供电网(电源)之间,可实现能量流动的设备。 注 1:电动汽车电能传输设备的分类参见图 6。 注 2:对于连接方式 A(模式 1 或模式 3)和连接方式 E(模式 3 和模式 4),电缆组件是电动汽车的一部分。 注 3:对于模式 2 和模式 3(连接方式 B),可拆卸电缆组件不是电动汽车或者供电设备的一部分。 注 4:对于连接方式 C(模式 3 或模式 4),电缆组件是供电设备的一部"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "regression",
+      "source_excerpt": "",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028860"
+        ],
+        "fact_ids": [
+          "FACT-010686",
+          "FACT-010923"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000186"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000186"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "电动汽车电能传输设备 EV energy transfer equipment 连接于电动汽车与供电网(电源)之间,可实现能量流动的设备。 注 1:电动汽车电能传输设备的分类参见图 6。 注 2:对于连接方式 A(模式 1 或模式 3)和连接方式 E(模式 3 和模式 4),电缆组件是电动汽车的一部分。 注 3:对于模式 2 和模式 3(连接方式 B),可拆卸电缆组件不是电动汽车或者供电设备的一部分。 注 4:对于连接方式 C(模式 3 或模式 4),电缆组件是供电设备的一部有哪些要求？",
+        "must_include": "电动汽车电能传输设备 EV energy transfer equipment 连接于电动汽车与供电网(电源)之间,可实现能量流动的设备。 注 1:电动汽车电能传输设备的分类参见图 6。 注 2:对于连接方式 A(模式 1 或模式 3)和连接方式 E(模式 3 和模式 4),电缆组件是电动汽车的一部分。 注 3:对于模式 2 和模式 3(连接方式 B),可拆卸电缆组件不是电动汽车或者供电设备的一部分。 注 4:对于连接方式 C(模式 3 或模式 4),电缆组件是供电设备的一部",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 14
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 85,
+      "quality_flags": [
+        "overlong_semantic_key"
+      ],
+      "readiness_reasons": [
+        "query needs human review before it becomes a stable golden case"
+      ]
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_76_807ab5f188af",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:76:807AB5F188AF",
+      "unit_type": "requirement_unit",
+      "importance": "medium",
+      "page_no": 76,
+      "semantic_key": "附 录 B (规范性) 采用 GB/T 20234.3 规定的充电连接装置的直流充电控制导引电路与控制原理",
+      "query": "附 录 B (规范性) 采用 GB/T 20234.3 规定的充电连接装置的直流充电控制导引电路与控制原理有哪些要求？",
+      "must_include": [
+        "附 录 B (规范性) 采用 GB/T 20234.3 规定的充电连接装置的直流充电控制导引电路与控制原理"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "regression",
+      "source_excerpt": "",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028921",
+          "EV-028922",
+          "EV-028923"
+        ],
+        "fact_ids": [
+          "FACT-010882",
+          "FACT-011315",
+          "FACT-011316",
+          "FACT-011317",
+          "FACT-011318",
+          "FACT-011319",
+          "FACT-011332",
+          "FACT-011333",
+          "FACT-011334",
+          "FACT-011335",
+          "FACT-011336"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000323",
+          "ENT-000324"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000323",
+          "WPAGE-000324"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "附 录 B (规范性) 采用 GB/T 20234.3 规定的充电连接装置的直流充电控制导引电路与控制原理有哪些要求？",
+        "must_include": "附 录 B (规范性) 采用 GB/T 20234.3 规定的充电连接装置的直流充电控制导引电路与控制原理",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 76
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 85,
+      "quality_flags": [
+        "overlong_semantic_key"
+      ],
+      "readiness_reasons": [
+        "query needs human review before it becomes a stable golden case"
+      ]
+    },
+    {
+      "name": "coverage_requirement_doc_000003_requirement_140_230c1cfc7980",
+      "status": "draft",
+      "unit_id": "DOC-000003:requirement:140:230C1CFC7980",
+      "unit_type": "requirement_unit",
+      "importance": "medium",
+      "page_no": 140,
+      "semantic_key": "附录B充电机 | 车辆插头 | GB 车辆适配器 | 车辆插座 | 中欧美电动汽车 --- | --- | --- | --- | --- PE | PE | | PE | 车身地 U1, 12.0V | S | Rc', 1.0k Ω | R3', 100kΩ | R4', 2.74kΩ | R4c', 830Ω | R4, 1.3kΩ | U2, 12V R1, 1.0kΩ | R2, 1.0 kΩ | R3, 1.0 kΩ | | | S2' | S2 | 2 1 0",
+      "query": "附录B充电机 | 车辆插头 | GB 车辆适配器 | 车辆插座 | 中欧美电动汽车 --- | --- | --- | --- | --- PE | PE | | PE | 车身地 U1, 12.0V | S | Rc', 1.0k Ω | R3', 100kΩ | R4', 2.74kΩ | R4c', 830Ω | R4, 1.3kΩ | U2, 12V R1, 1.0kΩ | R2, 1.0 kΩ | R3, 1.0 kΩ | | | S2' | S2 | 2 1 0有哪些要求？",
+      "must_include": [
+        "附录B充电机 | 车辆插头 | GB 车辆适配器 | 车辆插座 | 中欧美电动汽车 --- | --- | --- | --- | --- PE | PE | | PE | 车身地 U1, 12.0V | S | Rc', 1.0k Ω | R3', 100kΩ | R4', 2.74kΩ | R4c', 830Ω | R4, 1.3kΩ | U2, 12V R1, 1.0kΩ | R2, 1.0 kΩ | R3, 1.0 kΩ | | | S2' | S2 | 2 1 0"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "regression",
+      "source_excerpt": "",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028986",
+          "EV-028987"
+        ],
+        "fact_ids": [
+          "FACT-010900",
+          "FACT-011820",
+          "FACT-011821",
+          "FACT-011834"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000363"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178",
+          "WPAGE-000279",
+          "WPAGE-000363",
+          "WPAR-DOC-000003-parameter-doc-000003-表-h-1-具备充电兼容的电动汽车控制导引电路参数"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "附录B充电机 | 车辆插头 | GB 车辆适配器 | 车辆插座 | 中欧美电动汽车 --- | --- | --- | --- | --- PE | PE | | PE | 车身地 U1, 12.0V | S | Rc', 1.0k Ω | R3', 100kΩ | R4', 2.74kΩ | R4c', 830Ω | R4, 1.3kΩ | U2, 12V R1, 1.0kΩ | R2, 1.0 kΩ | R3, 1.0 kΩ | | | S2' | S2 | 2 1 0有哪些要求？",
+        "must_include": "附录B充电机 | 车辆插头 | GB 车辆适配器 | 车辆插座 | 中欧美电动汽车 --- | --- | --- | --- | --- PE | PE | | PE | 车身地 U1, 12.0V | S | Rc', 1.0k Ω | R3', 100kΩ | R4', 2.74kΩ | R4c', 830Ω | R4, 1.3kΩ | U2, 12V R1, 1.0kΩ | R2, 1.0 kΩ | R3, 1.0 kΩ | | | S2' | S2 | 2 1 0",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "requirement",
+        "page_no": 140
+      },
+      "validation_status": "passed",
+      "readiness_status": "reject",
+      "readiness_score": 30,
+      "quality_flags": [
+        "table_syntax_noise",
+        "overlong_semantic_key"
+      ],
+      "readiness_reasons": [
+        "query or anchor looks like document noise rather than user intent",
+        "query needs human review before it becomes a stable golden case"
+      ]
+    },
+    {
+      "name": "coverage_process_doc_000003_procedure_18_10",
+      "status": "draft",
+      "unit_id": "DOC-000003_procedure_18_10",
+      "unit_type": "process_unit",
+      "importance": "medium",
+      "page_no": 18,
+      "semantic_key": "初始化(阶段) initialization (stage) 对电动汽车、供电设备以及触发条件进行设置、检查和确认参数和工作条件的时间段，为能量传输做准备。 触发可由用户操作启动，休眠或断电的电动汽车或供电设备即被唤醒或重新初始化。 注：包括信号连接确认、唤醒、准备就绪、充电预约、充电系统自检、预充电等。 3.1.9.2 能量传输(阶段) energy transfer(stage) 在完成初始化(阶段)后，为电动汽车可充电储能系统提供电能或将电动汽车可充电储能系统的电能输出",
+      "query": "初始化(阶段) initialization (stage) 对电动汽车、供电设备以及触发条件进行设置、检查和确认参数和工作条件的时间段，为能量传输做准备。 触发可由用户操作启动，休眠或断电的电动汽车或供电设备即被唤醒或重新初始化。 注：包括信号连接确认、唤醒、准备就绪、充电预约、充电系统自检、预充电等。 3.1.9.2 能量传输(阶段) energy transfer(stage) 在完成初始化(阶段)后，为电动汽车可充电储能系统提供电能或将电动汽车可充电储能系统的电能输出有哪些活动？",
+      "must_include": [
+        "初始化(阶段) initialization (stage) 对电动汽车、供电设备以及触发条件进行设置、检查和确认参数和工作条件的时间段，为能量传输做准备。 触发可由用户操作启动，休眠或断电的电动汽车或供电设备即被唤醒或重新初始化。 注：包括信号连接确认、唤醒、准备就绪、充电预约、充电系统自检、预充电等。 3.1.9.2 能量传输(阶段) energy transfer(stage) 在完成初始化(阶段)后，为电动汽车可充电储能系统提供电能或将电动汽车可充电储能系统的电能输出"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "regression",
+      "source_excerpt": "**3",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028864",
+          "EV-028865"
+        ],
+        "fact_ids": [
+          "FACT-010925",
+          "FACT-010926",
+          "FACT-010927",
+          "FACT-010928",
+          "FACT-010929",
+          "FACT-010930",
+          "FACT-010931",
+          "FACT-010932",
+          "FACT-010933",
+          "FACT-010934",
+          "FACT-010935",
+          "FACT-010936",
+          "FACT-010937",
+          "FACT-010938",
+          "FACT-010939"
+        ],
+        "entity_ids": [
+          "ENT-000178"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000178"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_gap",
+        "query": "初始化(阶段) initialization (stage) 对电动汽车、供电设备以及触发条件进行设置、检查和确认参数和工作条件的时间段，为能量传输做准备。 触发可由用户操作启动，休眠或断电的电动汽车或供电设备即被唤醒或重新初始化。 注：包括信号连接确认、唤醒、准备就绪、充电预约、充电系统自检、预充电等。 3.1.9.2 能量传输(阶段) energy transfer(stage) 在完成初始化(阶段)后，为电动汽车可充电储能系统提供电能或将电动汽车可充电储能系统的电能输出有哪些活动？",
+        "must_include": "初始化(阶段) initialization (stage) 对电动汽车、供电设备以及触发条件进行设置、检查和确认参数和工作条件的时间段，为能量传输做准备。 触发可由用户操作启动，休眠或断电的电动汽车或供电设备即被唤醒或重新初始化。 注：包括信号连接确认、唤醒、准备就绪、充电预约、充电系统自检、预充电等。 3.1.9.2 能量传输(阶段) energy transfer(stage) 在完成初始化(阶段)后，为电动汽车可充电储能系统提供电能或将电动汽车可充电储能系统的电能输出",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "process_activity",
+        "page_no": 18
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 85,
+      "quality_flags": [
+        "overlong_semantic_key"
+      ],
+      "readiness_reasons": [
+        "query needs human review before it becomes a stable golden case"
+      ]
+    },
+    {
+      "name": "coverage_process_doc_000003_procedure_31_6",
+      "status": "draft",
+      "unit_id": "DOC-000003_procedure_31_6",
+      "unit_type": "process_unit",
+      "importance": "medium",
+      "page_no": 31,
+      "semantic_key": "模式 4",
+      "query": "模式 4有哪些活动？",
+      "must_include": [
+        "模式 4"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "regression",
+      "source_excerpt": "模式 4 用于电动汽车连接到直流供电设备的情况，应用于永久连接在供电网的设备或通过标准插头电缆组件或通过交流车辆插座与供电网连接的设备",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028877",
+          "EV-028878"
+        ],
+        "fact_ids": [
+          "FACT-010776",
+          "FACT-010777",
+          "FACT-010778",
+          "FACT-010946",
+          "FACT-010955",
+          "FACT-010956"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000253",
+          "ENT-000256"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-模式-4-充电接口的锁止装置-af38f9e5",
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-模式-4-车辆接口的功能性说明-84a3f460",
+          "WPAGE-000178",
+          "WPAGE-000253",
+          "WPAGE-000256",
+          "WPAGE-000278",
+          "WPAGE-000285",
+          "WPAGE-000287",
+          "WPAGE-000296",
+          "WPROC-DOC-000003-process-doc-000003-5-1-4-模式-4",
+          "WPROC-DOC-000003-process-doc-000003-5-2-1-2-保护接地导体连续性的持续监测"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_gap",
+        "query": "模式 4有哪些活动？",
+        "must_include": "模式 4",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "process_activity",
+        "page_no": 31
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_process_doc_000003_procedure_31_10",
+      "status": "draft",
+      "unit_id": "DOC-000003_procedure_31_10",
+      "unit_type": "process_unit",
+      "importance": "medium",
+      "page_no": 31,
+      "semantic_key": "通则",
+      "query": "通则有哪些活动？",
+      "must_include": [
+        "通则"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "regression",
+      "source_excerpt": "供电设备至少应提供以下控制导引功能： ——保护接地导体连续性的持续监测",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028877",
+          "EV-028878"
+        ],
+        "fact_ids": [
+          "FACT-010779",
+          "FACT-010780",
+          "FACT-010947",
+          "FACT-010948",
+          "FACT-010949",
+          "FACT-010950",
+          "FACT-010951",
+          "FACT-010952",
+          "FACT-010953",
+          "FACT-010954",
+          "FACT-010955",
+          "FACT-010956"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000254",
+          "ENT-000255",
+          "ENT-000256"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-保护接地导体连续性的持续监测-359b81b0",
+          "WCON-DOC-000003-constraint-doc-000003-通则-f5b11fb9",
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-保护接地导体连续性的持续监测-995fb151",
+          "WPAGE-000178",
+          "WPAGE-000254",
+          "WPAGE-000255",
+          "WPAGE-000256",
+          "WPROC-DOC-000003-process-doc-000003-5-2-1-1-通则",
+          "WPROC-DOC-000003-process-doc-000003-5-2-1-2-保护接地导体连续性的持续监测"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_gap",
+        "query": "通则有哪些活动？",
+        "must_include": "通则",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "process_activity",
+        "page_no": 31
+      },
+      "validation_status": "passed",
+      "readiness_status": "reject",
+      "readiness_score": 80,
+      "quality_flags": [
+        "weak_anchor"
+      ],
+      "readiness_reasons": [
+        "must-hit anchor is too short, too symbolic, or too noisy"
+      ]
+    },
+    {
+      "name": "coverage_process_doc_000003_procedure_32_10",
+      "status": "draft",
+      "unit_id": "DOC-000003_procedure_32_10",
+      "unit_type": "process_unit",
+      "importance": "medium",
+      "page_no": 32,
+      "semantic_key": "保护接地导体连续性的持续监测",
+      "query": "保护接地导体连续性的持续监测有哪些活动？",
+      "must_include": [
+        "保护接地导体连续性的持续监测"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "regression",
+      "source_excerpt": "供电设备应通过 PWM(模式 2 和模式 3)或数字通信(模式 4)告知电动汽车允许可用最大电流值",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028877",
+          "EV-028878",
+          "EV-028879"
+        ],
+        "fact_ids": [
+          "FACT-010775",
+          "FACT-010776",
+          "FACT-010780",
+          "FACT-010786",
+          "FACT-010944",
+          "FACT-010945",
+          "FACT-010946",
+          "FACT-010947",
+          "FACT-010948",
+          "FACT-010949",
+          "FACT-010950",
+          "FACT-010951",
+          "FACT-010952",
+          "FACT-010953",
+          "FACT-010954",
+          "FACT-010955",
+          "FACT-010956",
+          "FACT-010961",
+          "FACT-010962"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000251",
+          "ENT-000252",
+          "ENT-000253",
+          "ENT-000254",
+          "ENT-000255",
+          "ENT-000256"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000003-constraint-doc-000003-保护接地导体-6f4d759e",
+          "WCON-DOC-000003-constraint-doc-000003-保护接地导体连续性的持续监测-359b81b0",
+          "WCON-DOC-000003-constraint-doc-000003-通信-bfc81960",
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-保护接地导体-b55f56c2",
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-保护接地导体连续性的持续监测-995fb151",
+          "WPAGE-000178",
+          "WPAGE-000251",
+          "WPAGE-000252",
+          "WPAGE-000253",
+          "WPAGE-000254",
+          "WPAGE-000255",
+          "WPAGE-000256",
+          "WPAGE-000269",
+          "WPROC-DOC-000003-process-doc-000003-5-1-2-模式-2",
+          "WPROC-DOC-000003-process-doc-000003-5-1-3-模式-3",
+          "WPROC-DOC-000003-process-doc-000003-5-1-4-模式-4",
+          "WPROC-DOC-000003-process-doc-000003-5-2-1-1-通则",
+          "WPROC-DOC-000003-process-doc-000003-5-2-1-2-保护接地导体连续性的持续监测"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_gap",
+        "query": "保护接地导体连续性的持续监测有哪些活动？",
+        "must_include": "保护接地导体连续性的持续监测",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "process_activity",
+        "page_no": 32
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    },
+    {
+      "name": "coverage_process_doc_000003_procedure_33_6",
+      "status": "draft",
+      "unit_id": "DOC-000003_procedure_33_6",
+      "unit_type": "process_unit",
+      "importance": "medium",
+      "page_no": 33,
+      "semantic_key": "模式 2 和模式 3 充电接口的锁止功能",
+      "query": "模式 2 和模式 3 充电接口的锁止功能有哪些活动？",
+      "must_include": [
+        "模式 2 和模式 3 充电接口的锁止功能"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "regression",
+      "source_excerpt": "采用锁止装置来保证车辆插头和/或供电插头的可靠连接,避免供电设备与电动汽车之间的意外带电断开",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-028879"
+        ],
+        "fact_ids": [
+          "FACT-010783",
+          "FACT-010959"
+        ],
+        "entity_ids": [
+          "ENT-000178",
+          "ENT-000258"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000003-constraint-topic-doc-000003-模式-2-和模式-3-充电接口的锁止功能-e081740b",
+          "WPAGE-000178",
+          "WPAGE-000258",
+          "WPROC-DOC-000003-process-doc-000003-5-2-2-2-模式-2-和模式-3-充电接口的锁止功能"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_gap",
+        "query": "模式 2 和模式 3 充电接口的锁止功能有哪些活动？",
+        "must_include": "模式 2 和模式 3 充电接口的锁止功能",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000003",
+        "expected_evidence_shape": "process_activity",
+        "page_no": 33
+      },
+      "validation_status": "passed",
+      "readiness_status": "promotable",
+      "readiness_score": 100,
+      "quality_flags": [],
+      "readiness_reasons": []
+    }
+  ]
 }

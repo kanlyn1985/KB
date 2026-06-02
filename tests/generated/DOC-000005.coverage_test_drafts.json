@@ -1,2510 +1,1735 @@
 {
   "doc_id": "DOC-000005",
   "source": "coverage_u3_not_tested",
-  "candidate_count": 21,
-  "source_gap_count": 23,
-  "skipped_candidate_count": 2,
-  "excluded_candidate_count": 2,
-  "draft_case_count": 21,
+  "candidate_count": 35,
+  "source_gap_count": 208,
+  "skipped_candidate_count": 173,
+  "excluded_candidate_count": 5,
+  "draft_case_count": 35,
   "validated": true,
   "coverage_candidates_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\coverage_reports\\DOC-000005.test_gap_candidates.json",
   "coverage_candidates_report_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\coverage_reports\\DOC-000005.test_gap_candidates.md",
   "cases": [
     {
-      "name": "coverage_parameter_row_doc_000005_parameter_row_20_6ec7318baf2e",
+      "name": "coverage_definition_doc_000005_definition_20_4",
       "status": "draft",
-      "unit_id": "DOC-000005:parameter-row:20:6EC7318BAF2E",
-      "unit_type": "parameter_row_unit",
+      "unit_id": "DOC-000005_definition_20_4",
+      "unit_type": "definition_unit",
       "importance": "high",
       "page_no": 20,
-      "semantic_key": "一组已定义且连贯的只读信息,作为受影响方的输入信息",
-      "query": "一组已定义且连贯的只读信息,作为受影响方的输入信息是多少？",
+      "semantic_key": "SPICE V4.0",
+      "query": "什么是SPICE V4.0？",
       "must_include": [
-        "一组已定义且连贯的只读信息,作为受影响方的输入信息"
-      ],
-      "assert_mode": "parameter_value",
-      "recommended_suite": "golden",
-      "source_excerpt": "一组已定义且连贯的只读信息,作为受影响方的输入信息",
-      "covered_by": {
-        "evidence_ids": [
-          "EV-008769",
-          "EV-008770",
-          "EV-008771"
-        ],
-        "fact_ids": [
-          "FACT-127817",
-          "FACT-127818",
-          "FACT-127819",
-          "FACT-127820",
-          "FACT-127821",
-          "FACT-127822",
-          "FACT-127823",
-          "FACT-127824",
-          "FACT-127825",
-          "FACT-127826",
-          "FACT-127827"
-        ],
-        "entity_ids": [
-          "ENT-000077",
-          "ENT-000434",
-          "ENT-000803"
-        ],
-        "wiki_page_ids": [
-          "WCON-DOC-000005-constraint-doc-000005-public-e39edbc3",
-          "WPAGE-000434",
-          "WPAGE-000442",
-          "WPAGE-000663",
-          "WPAGE-000718",
-          "WPAGE-000719",
-          "WPAGE-000721",
-          "WPAGE-000722",
-          "WPAGE-000723",
-          "WPAGE-000728",
-          "WPAGE-000729",
-          "WPAGE-000731",
-          "WPAGE-000734",
-          "WPAGE-000735",
-          "WPAGE-000738",
-          "WPAGE-000739",
-          "WPAGE-000741",
-          "WPAGE-000742",
-          "WPAGE-000743",
-          "WPAGE-000745",
-          "WPAGE-000746",
-          "WPAGE-000747",
-          "WPAGE-000749",
-          "WPAGE-000750",
-          "WPAGE-000751",
-          "WPAGE-000752",
-          "WPAGE-000753",
-          "WPAGE-000754",
-          "WPAGE-000756",
-          "WPAGE-000757",
-          "WPAGE-000758",
-          "WPAGE-000759",
-          "WPAGE-000761",
-          "WPAGE-000762",
-          "WPAGE-000763",
-          "WPAGE-000764",
-          "WPAGE-000803",
-          "WPROC-DOC-000005-process-doc-000005-101-public",
-          "WPROC-DOC-000005-process-doc-000005-103-public",
-          "WPROC-DOC-000005-process-doc-000005-105-public",
-          "WPROC-DOC-000005-process-doc-000005-110-public",
-          "WPROC-DOC-000005-process-doc-000005-32-public",
-          "WPROC-DOC-000005-process-doc-000005-33-public",
-          "WPROC-DOC-000005-process-doc-000005-35-public",
-          "WPROC-DOC-000005-process-doc-000005-37-public",
-          "WPROC-DOC-000005-process-doc-000005-38-public",
-          "WPROC-DOC-000005-process-doc-000005-45-public",
-          "WPROC-DOC-000005-process-doc-000005-46-public",
-          "WPROC-DOC-000005-process-doc-000005-48-public",
-          "WPROC-DOC-000005-process-doc-000005-53-public",
-          "WPROC-DOC-000005-process-doc-000005-56-public",
-          "WPROC-DOC-000005-process-doc-000005-59-public",
-          "WPROC-DOC-000005-process-doc-000005-60-public",
-          "WPROC-DOC-000005-process-doc-000005-63-public",
-          "WPROC-DOC-000005-process-doc-000005-65-public",
-          "WPROC-DOC-000005-process-doc-000005-67-public",
-          "WPROC-DOC-000005-process-doc-000005-71-public",
-          "WPROC-DOC-000005-process-doc-000005-75-public",
-          "WPROC-DOC-000005-process-doc-000005-78-public",
-          "WPROC-DOC-000005-process-doc-000005-81-public",
-          "WPROC-DOC-000005-process-doc-000005-84-public",
-          "WPROC-DOC-000005-process-doc-000005-86-public",
-          "WPROC-DOC-000005-process-doc-000005-87-public",
-          "WPROC-DOC-000005-process-doc-000005-88-public",
-          "WPROC-DOC-000005-process-doc-000005-92-public",
-          "WPROC-DOC-000005-process-doc-000005-95-public",
-          "WPROC-DOC-000005-process-doc-000005-97-public",
-          "WPROC-DOC-000005-process-doc-000005-98-public",
-          "WPROC-DOC-000005-process-doc-000005-99-public",
-          "WPROC-DOC-000005-process-doc-000005-automotive-spice"
-        ],
-        "golden_case_ids": [],
-        "regression_case_ids": []
-      },
-      "golden_case": {
-        "kind": "coverage_parameter_value",
-        "query": "一组已定义且连贯的只读信息,作为受影响方的输入信息是多少？",
-        "must_include": "一组已定义且连贯的只读信息,作为受影响方的输入信息",
-        "source": "coverage",
-        "assert_mode": "rich_answer",
-        "target_doc_id": "DOC-000005",
-        "page_no": 20
-      },
-      "validation_status": "failed"
-    },
-    {
-      "name": "coverage_parameter_row_doc_000005_parameter_row_20_d25617a7bde4",
-      "status": "draft",
-      "unit_id": "DOC-000005:parameter-row:20:D25617A7BDE4",
-      "unit_type": "parameter_row_unit",
-      "importance": "high",
-      "page_no": 20,
-      "semantic_key": "为完成某个过程、阶段或项目而必须产出的任何独特且可验证的产品、结果或执行服务的能力。通常更狭义地指代对外交付物,即需要项目赞助方或客户批准的交付成果",
-      "query": "为完成某个过程、阶段或项目而必须产出的任何独特且可验证的产品、结果或执行服务的能力。通常更狭义地指代对外交付物,即需要项目赞助方或客户批准的交付成果是多少？",
-      "must_include": [
-        "为完成某个过程、阶段或项目而必须产出的任何独特且可验证的产品、结果或执行服务的能力。通常更狭义地指代对外交付物,即需要项目赞助方或客户批准的交付成果"
-      ],
-      "assert_mode": "parameter_value",
-      "recommended_suite": "golden",
-      "source_excerpt": "为完成某个过程、阶段或项目而必须产出的任何独特且可验证的产品、结果或执行服务的能力",
-      "covered_by": {
-        "evidence_ids": [
-          "EV-008770",
-          "EV-008771"
-        ],
-        "fact_ids": [
-          "FACT-127818",
-          "FACT-127819",
-          "FACT-127820",
-          "FACT-127821",
-          "FACT-127822",
-          "FACT-127823",
-          "FACT-127824",
-          "FACT-127825",
-          "FACT-127826",
-          "FACT-127827"
-        ],
-        "entity_ids": [
-          "ENT-000077",
-          "ENT-000434",
-          "ENT-000803"
-        ],
-        "wiki_page_ids": [
-          "WCON-DOC-000005-constraint-doc-000005-public-e39edbc3",
-          "WPAGE-000434",
-          "WPAGE-000442",
-          "WPAGE-000718",
-          "WPAGE-000719",
-          "WPAGE-000721",
-          "WPAGE-000722",
-          "WPAGE-000723",
-          "WPAGE-000728",
-          "WPAGE-000729",
-          "WPAGE-000731",
-          "WPAGE-000734",
-          "WPAGE-000735",
-          "WPAGE-000738",
-          "WPAGE-000739",
-          "WPAGE-000741",
-          "WPAGE-000742",
-          "WPAGE-000743",
-          "WPAGE-000745",
-          "WPAGE-000746",
-          "WPAGE-000747",
-          "WPAGE-000749",
-          "WPAGE-000750",
-          "WPAGE-000751",
-          "WPAGE-000752",
-          "WPAGE-000753",
-          "WPAGE-000754",
-          "WPAGE-000756",
-          "WPAGE-000757",
-          "WPAGE-000758",
-          "WPAGE-000759",
-          "WPAGE-000761",
-          "WPAGE-000762",
-          "WPAGE-000763",
-          "WPAGE-000764",
-          "WPAGE-000803",
-          "WPROC-DOC-000005-process-doc-000005-101-public",
-          "WPROC-DOC-000005-process-doc-000005-103-public",
-          "WPROC-DOC-000005-process-doc-000005-105-public",
-          "WPROC-DOC-000005-process-doc-000005-110-public",
-          "WPROC-DOC-000005-process-doc-000005-32-public",
-          "WPROC-DOC-000005-process-doc-000005-33-public",
-          "WPROC-DOC-000005-process-doc-000005-35-public",
-          "WPROC-DOC-000005-process-doc-000005-37-public",
-          "WPROC-DOC-000005-process-doc-000005-38-public",
-          "WPROC-DOC-000005-process-doc-000005-45-public",
-          "WPROC-DOC-000005-process-doc-000005-46-public",
-          "WPROC-DOC-000005-process-doc-000005-48-public",
-          "WPROC-DOC-000005-process-doc-000005-53-public",
-          "WPROC-DOC-000005-process-doc-000005-56-public",
-          "WPROC-DOC-000005-process-doc-000005-59-public",
-          "WPROC-DOC-000005-process-doc-000005-60-public",
-          "WPROC-DOC-000005-process-doc-000005-63-public",
-          "WPROC-DOC-000005-process-doc-000005-65-public",
-          "WPROC-DOC-000005-process-doc-000005-67-public",
-          "WPROC-DOC-000005-process-doc-000005-71-public",
-          "WPROC-DOC-000005-process-doc-000005-75-public",
-          "WPROC-DOC-000005-process-doc-000005-78-public",
-          "WPROC-DOC-000005-process-doc-000005-81-public",
-          "WPROC-DOC-000005-process-doc-000005-84-public",
-          "WPROC-DOC-000005-process-doc-000005-86-public",
-          "WPROC-DOC-000005-process-doc-000005-87-public",
-          "WPROC-DOC-000005-process-doc-000005-88-public",
-          "WPROC-DOC-000005-process-doc-000005-92-public",
-          "WPROC-DOC-000005-process-doc-000005-95-public",
-          "WPROC-DOC-000005-process-doc-000005-97-public",
-          "WPROC-DOC-000005-process-doc-000005-98-public",
-          "WPROC-DOC-000005-process-doc-000005-99-public"
-        ],
-        "golden_case_ids": [],
-        "regression_case_ids": []
-      },
-      "golden_case": {
-        "kind": "coverage_parameter_value",
-        "query": "为完成某个过程、阶段或项目而必须产出的任何独特且可验证的产品、结果或执行服务的能力。通常更狭义地指代对外交付物,即需要项目赞助方或客户批准的交付成果是多少？",
-        "must_include": "为完成某个过程、阶段或项目而必须产出的任何独特且可验证的产品、结果或执行服务的能力。通常更狭义地指代对外交付物,即需要项目赞助方或客户批准的交付成果",
-        "source": "coverage",
-        "assert_mode": "rich_answer",
-        "target_doc_id": "DOC-000005",
-        "page_no": 20
-      },
-      "validation_status": "failed"
-    },
-    {
-      "name": "coverage_parameter_row_doc_000005_parameter_row_20_e41e41416041",
-      "status": "draft",
-      "unit_id": "DOC-000005:parameter-row:20:E41E41416041",
-      "unit_type": "parameter_row_unit",
-      "importance": "high",
-      "page_no": 20,
-      "semantic_key": "为实现某一功能的硬件元器件逻辑性组合(例如功能块)或物理性组合,且: ● 此功能无法由该组件的任何硬件元器件单独实现,例如电压监控、电源供电。 ● 此功能可以分层构建,即硬件组件可以包含较低层级的硬件组件。 注:根据应用的不同,可以将集成电路板(PCB)、片上系统、微控制器或系统基础芯片(SBC)视为硬件组件",
-      "query": "为实现某一功能的硬件元器件逻辑性组合(例如功能块)或物理性组合,且: ● 此功能无法由该组件的任何硬件元器件单独实现,例如电压监控、电源供电。 ● 此功能可以分层构建,即硬件组件可以包含较低层级的硬件组件。 注:根据应用的不同,可以将集成电路板(PCB)、片上系统、微控制器或系统基础芯片(SBC)视为硬件组件是多少？",
-      "must_include": [
-        "为实现某一功能的硬件元器件逻辑性组合(例如功能块)或物理性组合,且: ● 此功能无法由该组件的任何硬件元器件单独实现,例如电压监控、电源供电。 ● 此功能可以分层构建,即硬件组件可以包含较低层级的硬件组件。 注:根据应用的不同,可以将集成电路板(PCB)、片上系统、微控制器或系统基础芯片(SBC)视为硬件组件"
-      ],
-      "assert_mode": "parameter_value",
-      "recommended_suite": "golden",
-      "source_excerpt": "为实现某一功能的硬件元器件逻辑性组合(例如功能块)或物理性组合,且: ● 此功能无法由该组件的任何硬件元器件单独实现,例如电压监控、电源供电",
-      "covered_by": {
-        "evidence_ids": [
-          "EV-008770",
-          "EV-008771"
-        ],
-        "fact_ids": [
-          "FACT-127818",
-          "FACT-127819",
-          "FACT-127820",
-          "FACT-127821",
-          "FACT-127822",
-          "FACT-127823",
-          "FACT-127824",
-          "FACT-127825",
-          "FACT-127826",
-          "FACT-127827"
-        ],
-        "entity_ids": [
-          "ENT-000077",
-          "ENT-000434",
-          "ENT-000803"
-        ],
-        "wiki_page_ids": [
-          "WCON-DOC-000005-constraint-doc-000005-public-e39edbc3",
-          "WPAGE-000434",
-          "WPAGE-000442",
-          "WPAGE-000718",
-          "WPAGE-000719",
-          "WPAGE-000721",
-          "WPAGE-000722",
-          "WPAGE-000723",
-          "WPAGE-000728",
-          "WPAGE-000729",
-          "WPAGE-000731",
-          "WPAGE-000734",
-          "WPAGE-000735",
-          "WPAGE-000738",
-          "WPAGE-000739",
-          "WPAGE-000741",
-          "WPAGE-000742",
-          "WPAGE-000743",
-          "WPAGE-000745",
-          "WPAGE-000746",
-          "WPAGE-000747",
-          "WPAGE-000749",
-          "WPAGE-000750",
-          "WPAGE-000751",
-          "WPAGE-000752",
-          "WPAGE-000753",
-          "WPAGE-000754",
-          "WPAGE-000756",
-          "WPAGE-000757",
-          "WPAGE-000758",
-          "WPAGE-000759",
-          "WPAGE-000761",
-          "WPAGE-000762",
-          "WPAGE-000763",
-          "WPAGE-000764",
-          "WPAGE-000803",
-          "WPROC-DOC-000005-process-doc-000005-101-public",
-          "WPROC-DOC-000005-process-doc-000005-103-public",
-          "WPROC-DOC-000005-process-doc-000005-105-public",
-          "WPROC-DOC-000005-process-doc-000005-110-public",
-          "WPROC-DOC-000005-process-doc-000005-32-public",
-          "WPROC-DOC-000005-process-doc-000005-33-public",
-          "WPROC-DOC-000005-process-doc-000005-35-public",
-          "WPROC-DOC-000005-process-doc-000005-37-public",
-          "WPROC-DOC-000005-process-doc-000005-38-public",
-          "WPROC-DOC-000005-process-doc-000005-45-public",
-          "WPROC-DOC-000005-process-doc-000005-46-public",
-          "WPROC-DOC-000005-process-doc-000005-48-public",
-          "WPROC-DOC-000005-process-doc-000005-53-public",
-          "WPROC-DOC-000005-process-doc-000005-56-public",
-          "WPROC-DOC-000005-process-doc-000005-59-public",
-          "WPROC-DOC-000005-process-doc-000005-60-public",
-          "WPROC-DOC-000005-process-doc-000005-63-public",
-          "WPROC-DOC-000005-process-doc-000005-65-public",
-          "WPROC-DOC-000005-process-doc-000005-67-public",
-          "WPROC-DOC-000005-process-doc-000005-71-public",
-          "WPROC-DOC-000005-process-doc-000005-75-public",
-          "WPROC-DOC-000005-process-doc-000005-78-public",
-          "WPROC-DOC-000005-process-doc-000005-81-public",
-          "WPROC-DOC-000005-process-doc-000005-84-public",
-          "WPROC-DOC-000005-process-doc-000005-86-public",
-          "WPROC-DOC-000005-process-doc-000005-87-public",
-          "WPROC-DOC-000005-process-doc-000005-88-public",
-          "WPROC-DOC-000005-process-doc-000005-92-public",
-          "WPROC-DOC-000005-process-doc-000005-95-public",
-          "WPROC-DOC-000005-process-doc-000005-97-public",
-          "WPROC-DOC-000005-process-doc-000005-98-public",
-          "WPROC-DOC-000005-process-doc-000005-99-public"
-        ],
-        "golden_case_ids": [],
-        "regression_case_ids": []
-      },
-      "golden_case": {
-        "kind": "coverage_parameter_value",
-        "query": "为实现某一功能的硬件元器件逻辑性组合(例如功能块)或物理性组合,且: ● 此功能无法由该组件的任何硬件元器件单独实现,例如电压监控、电源供电。 ● 此功能可以分层构建,即硬件组件可以包含较低层级的硬件组件。 注:根据应用的不同,可以将集成电路板(PCB)、片上系统、微控制器或系统基础芯片(SBC)视为硬件组件是多少？",
-        "must_include": "为实现某一功能的硬件元器件逻辑性组合(例如功能块)或物理性组合,且: ● 此功能无法由该组件的任何硬件元器件单独实现,例如电压监控、电源供电。 ● 此功能可以分层构建,即硬件组件可以包含较低层级的硬件组件。 注:根据应用的不同,可以将集成电路板(PCB)、片上系统、微控制器或系统基础芯片(SBC)视为硬件组件",
-        "source": "coverage",
-        "assert_mode": "rich_answer",
-        "target_doc_id": "DOC-000005",
-        "page_no": 20
-      },
-      "validation_status": "failed"
-    },
-    {
-      "name": "coverage_parameter_row_doc_000005_parameter_row_20_0a651dd80fc2",
-      "status": "draft",
-      "unit_id": "DOC-000005:parameter-row:20:0A651DD80FC2",
-      "unit_type": "parameter_row_unit",
-      "importance": "high",
-      "page_no": 20,
-      "semantic_key": "表明交付成果适合其预期用途并符合既定准则的书面声明",
-      "query": "表明交付成果适合其预期用途并符合既定准则的书面声明是多少？",
-      "must_include": [
-        "表明交付成果适合其预期用途并符合既定准则的书面声明"
-      ],
-      "assert_mode": "parameter_value",
-      "recommended_suite": "golden",
-      "source_excerpt": "表明交付成果适合其预期用途并符合既定准则的书面声明",
-      "covered_by": {
-        "evidence_ids": [
-          "EV-008769",
-          "EV-008770",
-          "EV-008771"
-        ],
-        "fact_ids": [
-          "FACT-127817",
-          "FACT-127818",
-          "FACT-127819",
-          "FACT-127820",
-          "FACT-127821",
-          "FACT-127822",
-          "FACT-127823",
-          "FACT-127824",
-          "FACT-127825",
-          "FACT-127826",
-          "FACT-127827"
-        ],
-        "entity_ids": [
-          "ENT-000077",
-          "ENT-000434",
-          "ENT-000803"
-        ],
-        "wiki_page_ids": [
-          "WCON-DOC-000005-constraint-doc-000005-public-e39edbc3",
-          "WPAGE-000434",
-          "WPAGE-000442",
-          "WPAGE-000663",
-          "WPAGE-000718",
-          "WPAGE-000719",
-          "WPAGE-000721",
-          "WPAGE-000722",
-          "WPAGE-000723",
-          "WPAGE-000728",
-          "WPAGE-000729",
-          "WPAGE-000731",
-          "WPAGE-000734",
-          "WPAGE-000735",
-          "WPAGE-000738",
-          "WPAGE-000739",
-          "WPAGE-000741",
-          "WPAGE-000742",
-          "WPAGE-000743",
-          "WPAGE-000745",
-          "WPAGE-000746",
-          "WPAGE-000747",
-          "WPAGE-000749",
-          "WPAGE-000750",
-          "WPAGE-000751",
-          "WPAGE-000752",
-          "WPAGE-000753",
-          "WPAGE-000754",
-          "WPAGE-000756",
-          "WPAGE-000757",
-          "WPAGE-000758",
-          "WPAGE-000759",
-          "WPAGE-000761",
-          "WPAGE-000762",
-          "WPAGE-000763",
-          "WPAGE-000764",
-          "WPAGE-000803",
-          "WPROC-DOC-000005-process-doc-000005-101-public",
-          "WPROC-DOC-000005-process-doc-000005-103-public",
-          "WPROC-DOC-000005-process-doc-000005-105-public",
-          "WPROC-DOC-000005-process-doc-000005-110-public",
-          "WPROC-DOC-000005-process-doc-000005-32-public",
-          "WPROC-DOC-000005-process-doc-000005-33-public",
-          "WPROC-DOC-000005-process-doc-000005-35-public",
-          "WPROC-DOC-000005-process-doc-000005-37-public",
-          "WPROC-DOC-000005-process-doc-000005-38-public",
-          "WPROC-DOC-000005-process-doc-000005-45-public",
-          "WPROC-DOC-000005-process-doc-000005-46-public",
-          "WPROC-DOC-000005-process-doc-000005-48-public",
-          "WPROC-DOC-000005-process-doc-000005-53-public",
-          "WPROC-DOC-000005-process-doc-000005-56-public",
-          "WPROC-DOC-000005-process-doc-000005-59-public",
-          "WPROC-DOC-000005-process-doc-000005-60-public",
-          "WPROC-DOC-000005-process-doc-000005-63-public",
-          "WPROC-DOC-000005-process-doc-000005-65-public",
-          "WPROC-DOC-000005-process-doc-000005-67-public",
-          "WPROC-DOC-000005-process-doc-000005-71-public",
-          "WPROC-DOC-000005-process-doc-000005-75-public",
-          "WPROC-DOC-000005-process-doc-000005-78-public",
-          "WPROC-DOC-000005-process-doc-000005-81-public",
-          "WPROC-DOC-000005-process-doc-000005-84-public",
-          "WPROC-DOC-000005-process-doc-000005-86-public",
-          "WPROC-DOC-000005-process-doc-000005-87-public",
-          "WPROC-DOC-000005-process-doc-000005-88-public",
-          "WPROC-DOC-000005-process-doc-000005-92-public",
-          "WPROC-DOC-000005-process-doc-000005-95-public",
-          "WPROC-DOC-000005-process-doc-000005-97-public",
-          "WPROC-DOC-000005-process-doc-000005-98-public",
-          "WPROC-DOC-000005-process-doc-000005-99-public",
-          "WPROC-DOC-000005-process-doc-000005-automotive-spice"
-        ],
-        "golden_case_ids": [],
-        "regression_case_ids": []
-      },
-      "golden_case": {
-        "kind": "coverage_parameter_value",
-        "query": "表明交付成果适合其预期用途并符合既定准则的书面声明是多少？",
-        "must_include": "表明交付成果适合其预期用途并符合既定准则的书面声明",
-        "source": "coverage",
-        "assert_mode": "rich_answer",
-        "target_doc_id": "DOC-000005",
-        "page_no": 20
-      },
-      "validation_status": "failed"
-    },
-    {
-      "name": "coverage_parameter_row_doc_000005_parameter_row_20_72702a95c12a",
-      "status": "draft",
-      "unit_id": "DOC-000005:parameter-row:20:72702A95C12A",
-      "unit_type": "parameter_row_unit",
-      "importance": "high",
-      "page_no": 20,
-      "semantic_key": "被装配和互连的电子电气硬件组件或元器件,用于执行模拟或数字的功能或操作",
-      "query": "被装配和互连的电子电气硬件组件或元器件,用于执行模拟或数字的功能或操作是多少？",
-      "must_include": [
-        "被装配和互连的电子电气硬件组件或元器件,用于执行模拟或数字的功能或操作"
-      ],
-      "assert_mode": "parameter_value",
-      "recommended_suite": "golden",
-      "source_excerpt": "被装配和互连的电子电气硬件组件或元器件,用于执行模拟或数字的功能或操作",
-      "covered_by": {
-        "evidence_ids": [
-          "EV-008770",
-          "EV-008771"
-        ],
-        "fact_ids": [
-          "FACT-127818",
-          "FACT-127819",
-          "FACT-127820",
-          "FACT-127821",
-          "FACT-127822",
-          "FACT-127823",
-          "FACT-127824",
-          "FACT-127825",
-          "FACT-127826",
-          "FACT-127827"
-        ],
-        "entity_ids": [
-          "ENT-000077",
-          "ENT-000434",
-          "ENT-000803"
-        ],
-        "wiki_page_ids": [
-          "WCON-DOC-000005-constraint-doc-000005-public-e39edbc3",
-          "WPAGE-000434",
-          "WPAGE-000442",
-          "WPAGE-000718",
-          "WPAGE-000719",
-          "WPAGE-000721",
-          "WPAGE-000722",
-          "WPAGE-000723",
-          "WPAGE-000728",
-          "WPAGE-000729",
-          "WPAGE-000731",
-          "WPAGE-000734",
-          "WPAGE-000735",
-          "WPAGE-000738",
-          "WPAGE-000739",
-          "WPAGE-000741",
-          "WPAGE-000742",
-          "WPAGE-000743",
-          "WPAGE-000745",
-          "WPAGE-000746",
-          "WPAGE-000747",
-          "WPAGE-000749",
-          "WPAGE-000750",
-          "WPAGE-000751",
-          "WPAGE-000752",
-          "WPAGE-000753",
-          "WPAGE-000754",
-          "WPAGE-000756",
-          "WPAGE-000757",
-          "WPAGE-000758",
-          "WPAGE-000759",
-          "WPAGE-000761",
-          "WPAGE-000762",
-          "WPAGE-000763",
-          "WPAGE-000764",
-          "WPAGE-000803",
-          "WPROC-DOC-000005-process-doc-000005-101-public",
-          "WPROC-DOC-000005-process-doc-000005-103-public",
-          "WPROC-DOC-000005-process-doc-000005-105-public",
-          "WPROC-DOC-000005-process-doc-000005-110-public",
-          "WPROC-DOC-000005-process-doc-000005-32-public",
-          "WPROC-DOC-000005-process-doc-000005-33-public",
-          "WPROC-DOC-000005-process-doc-000005-35-public",
-          "WPROC-DOC-000005-process-doc-000005-37-public",
-          "WPROC-DOC-000005-process-doc-000005-38-public",
-          "WPROC-DOC-000005-process-doc-000005-45-public",
-          "WPROC-DOC-000005-process-doc-000005-46-public",
-          "WPROC-DOC-000005-process-doc-000005-48-public",
-          "WPROC-DOC-000005-process-doc-000005-53-public",
-          "WPROC-DOC-000005-process-doc-000005-56-public",
-          "WPROC-DOC-000005-process-doc-000005-59-public",
-          "WPROC-DOC-000005-process-doc-000005-60-public",
-          "WPROC-DOC-000005-process-doc-000005-63-public",
-          "WPROC-DOC-000005-process-doc-000005-65-public",
-          "WPROC-DOC-000005-process-doc-000005-67-public",
-          "WPROC-DOC-000005-process-doc-000005-71-public",
-          "WPROC-DOC-000005-process-doc-000005-75-public",
-          "WPROC-DOC-000005-process-doc-000005-78-public",
-          "WPROC-DOC-000005-process-doc-000005-81-public",
-          "WPROC-DOC-000005-process-doc-000005-84-public",
-          "WPROC-DOC-000005-process-doc-000005-86-public",
-          "WPROC-DOC-000005-process-doc-000005-87-public",
-          "WPROC-DOC-000005-process-doc-000005-88-public",
-          "WPROC-DOC-000005-process-doc-000005-92-public",
-          "WPROC-DOC-000005-process-doc-000005-95-public",
-          "WPROC-DOC-000005-process-doc-000005-97-public",
-          "WPROC-DOC-000005-process-doc-000005-98-public",
-          "WPROC-DOC-000005-process-doc-000005-99-public"
-        ],
-        "golden_case_ids": [],
-        "regression_case_ids": []
-      },
-      "golden_case": {
-        "kind": "coverage_parameter_value",
-        "query": "被装配和互连的电子电气硬件组件或元器件,用于执行模拟或数字的功能或操作是多少？",
-        "must_include": "被装配和互连的电子电气硬件组件或元器件,用于执行模拟或数字的功能或操作",
-        "source": "coverage",
-        "assert_mode": "rich_answer",
-        "target_doc_id": "DOC-000005",
-        "page_no": 20
-      },
-      "validation_status": "failed"
-    },
-    {
-      "name": "coverage_parameter_row_doc_000005_parameter_row_20_b4909fed5afa",
-      "status": "draft",
-      "unit_id": "DOC-000005:parameter-row:20:B4909FED5AFA",
-      "unit_type": "parameter_row_unit",
-      "importance": "high",
-      "page_no": 20,
-      "semantic_key": "识别产品或过程对于产生所需的行为和/或结果所必须完成的内容的陈述",
-      "query": "识别产品或过程对于产生所需的行为和/或结果所必须完成的内容的陈述是多少？",
-      "must_include": [
-        "识别产品或过程对于产生所需的行为和/或结果所必须完成的内容的陈述"
-      ],
-      "assert_mode": "parameter_value",
-      "recommended_suite": "golden",
-      "source_excerpt": "识别产品或过程对于产生所需的行为和/或结果所必须完成的内容的陈述",
-      "covered_by": {
-        "evidence_ids": [
-          "EV-008769",
-          "EV-008770",
-          "EV-008771"
-        ],
-        "fact_ids": [
-          "FACT-127817",
-          "FACT-127818",
-          "FACT-127819",
-          "FACT-127820",
-          "FACT-127821",
-          "FACT-127822",
-          "FACT-127823",
-          "FACT-127824",
-          "FACT-127825",
-          "FACT-127826",
-          "FACT-127827"
-        ],
-        "entity_ids": [
-          "ENT-000077",
-          "ENT-000434",
-          "ENT-000803"
-        ],
-        "wiki_page_ids": [
-          "WCON-DOC-000005-constraint-doc-000005-public-e39edbc3",
-          "WPAGE-000434",
-          "WPAGE-000442",
-          "WPAGE-000718",
-          "WPAGE-000719",
-          "WPAGE-000721",
-          "WPAGE-000722",
-          "WPAGE-000723",
-          "WPAGE-000728",
-          "WPAGE-000729",
-          "WPAGE-000731",
-          "WPAGE-000734",
-          "WPAGE-000735",
-          "WPAGE-000738",
-          "WPAGE-000739",
-          "WPAGE-000741",
-          "WPAGE-000742",
-          "WPAGE-000743",
-          "WPAGE-000745",
-          "WPAGE-000746",
-          "WPAGE-000747",
-          "WPAGE-000749",
-          "WPAGE-000750",
-          "WPAGE-000751",
-          "WPAGE-000752",
-          "WPAGE-000753",
-          "WPAGE-000754",
-          "WPAGE-000756",
-          "WPAGE-000757",
-          "WPAGE-000758",
-          "WPAGE-000759",
-          "WPAGE-000761",
-          "WPAGE-000762",
-          "WPAGE-000763",
-          "WPAGE-000764",
-          "WPAGE-000803",
-          "WPROC-DOC-000005-process-doc-000005-101-public",
-          "WPROC-DOC-000005-process-doc-000005-103-public",
-          "WPROC-DOC-000005-process-doc-000005-105-public",
-          "WPROC-DOC-000005-process-doc-000005-110-public",
-          "WPROC-DOC-000005-process-doc-000005-32-public",
-          "WPROC-DOC-000005-process-doc-000005-33-public",
-          "WPROC-DOC-000005-process-doc-000005-35-public",
-          "WPROC-DOC-000005-process-doc-000005-37-public",
-          "WPROC-DOC-000005-process-doc-000005-38-public",
-          "WPROC-DOC-000005-process-doc-000005-45-public",
-          "WPROC-DOC-000005-process-doc-000005-46-public",
-          "WPROC-DOC-000005-process-doc-000005-48-public",
-          "WPROC-DOC-000005-process-doc-000005-53-public",
-          "WPROC-DOC-000005-process-doc-000005-56-public",
-          "WPROC-DOC-000005-process-doc-000005-59-public",
-          "WPROC-DOC-000005-process-doc-000005-60-public",
-          "WPROC-DOC-000005-process-doc-000005-63-public",
-          "WPROC-DOC-000005-process-doc-000005-65-public",
-          "WPROC-DOC-000005-process-doc-000005-67-public",
-          "WPROC-DOC-000005-process-doc-000005-71-public",
-          "WPROC-DOC-000005-process-doc-000005-75-public",
-          "WPROC-DOC-000005-process-doc-000005-78-public",
-          "WPROC-DOC-000005-process-doc-000005-81-public",
-          "WPROC-DOC-000005-process-doc-000005-84-public",
-          "WPROC-DOC-000005-process-doc-000005-86-public",
-          "WPROC-DOC-000005-process-doc-000005-87-public",
-          "WPROC-DOC-000005-process-doc-000005-88-public",
-          "WPROC-DOC-000005-process-doc-000005-92-public",
-          "WPROC-DOC-000005-process-doc-000005-95-public",
-          "WPROC-DOC-000005-process-doc-000005-97-public",
-          "WPROC-DOC-000005-process-doc-000005-98-public",
-          "WPROC-DOC-000005-process-doc-000005-99-public"
-        ],
-        "golden_case_ids": [],
-        "regression_case_ids": []
-      },
-      "golden_case": {
-        "kind": "coverage_parameter_value",
-        "query": "识别产品或过程对于产生所需的行为和/或结果所必须完成的内容的陈述是多少？",
-        "must_include": "识别产品或过程对于产生所需的行为和/或结果所必须完成的内容的陈述",
-        "source": "coverage",
-        "assert_mode": "rich_answer",
-        "target_doc_id": "DOC-000005",
-        "page_no": 20
-      },
-      "validation_status": "failed"
-    },
-    {
-      "name": "coverage_parameter_row_doc_000005_parameter_row_20_01082ad53483",
-      "status": "draft",
-      "unit_id": "DOC-000005:parameter-row:20:01082AD53483",
-      "unit_type": "parameter_row_unit",
-      "importance": "high",
-      "page_no": 20,
-      "semantic_key": "通用术语,可以表示硬件组件、硬件部件、硬件接口或硬件",
-      "query": "通用术语,可以表示硬件组件、硬件部件、硬件接口或硬件是多少？",
-      "must_include": [
-        "通用术语,可以表示硬件组件、硬件部件、硬件接口或硬件"
-      ],
-      "assert_mode": "parameter_value",
-      "recommended_suite": "golden",
-      "source_excerpt": "通用术语,可以表示硬件组件、硬件部件、硬件接口或硬件",
-      "covered_by": {
-        "evidence_ids": [
-          "EV-008769",
-          "EV-008770",
-          "EV-008771"
-        ],
-        "fact_ids": [
-          "FACT-127817",
-          "FACT-127818",
-          "FACT-127819",
-          "FACT-127820",
-          "FACT-127821",
-          "FACT-127822",
-          "FACT-127823",
-          "FACT-127824",
-          "FACT-127825",
-          "FACT-127826",
-          "FACT-127827"
-        ],
-        "entity_ids": [
-          "ENT-000077",
-          "ENT-000434",
-          "ENT-000803"
-        ],
-        "wiki_page_ids": [
-          "WCON-DOC-000005-constraint-doc-000005-public-e39edbc3",
-          "WPAGE-000434",
-          "WPAGE-000442",
-          "WPAGE-000718",
-          "WPAGE-000719",
-          "WPAGE-000721",
-          "WPAGE-000722",
-          "WPAGE-000723",
-          "WPAGE-000728",
-          "WPAGE-000729",
-          "WPAGE-000731",
-          "WPAGE-000734",
-          "WPAGE-000735",
-          "WPAGE-000738",
-          "WPAGE-000739",
-          "WPAGE-000741",
-          "WPAGE-000742",
-          "WPAGE-000743",
-          "WPAGE-000745",
-          "WPAGE-000746",
-          "WPAGE-000747",
-          "WPAGE-000749",
-          "WPAGE-000750",
-          "WPAGE-000751",
-          "WPAGE-000752",
-          "WPAGE-000753",
-          "WPAGE-000754",
-          "WPAGE-000756",
-          "WPAGE-000757",
-          "WPAGE-000758",
-          "WPAGE-000759",
-          "WPAGE-000761",
-          "WPAGE-000762",
-          "WPAGE-000763",
-          "WPAGE-000764",
-          "WPAGE-000803",
-          "WPROC-DOC-000005-process-doc-000005-101-public",
-          "WPROC-DOC-000005-process-doc-000005-103-public",
-          "WPROC-DOC-000005-process-doc-000005-105-public",
-          "WPROC-DOC-000005-process-doc-000005-110-public",
-          "WPROC-DOC-000005-process-doc-000005-32-public",
-          "WPROC-DOC-000005-process-doc-000005-33-public",
-          "WPROC-DOC-000005-process-doc-000005-35-public",
-          "WPROC-DOC-000005-process-doc-000005-37-public",
-          "WPROC-DOC-000005-process-doc-000005-38-public",
-          "WPROC-DOC-000005-process-doc-000005-45-public",
-          "WPROC-DOC-000005-process-doc-000005-46-public",
-          "WPROC-DOC-000005-process-doc-000005-48-public",
-          "WPROC-DOC-000005-process-doc-000005-53-public",
-          "WPROC-DOC-000005-process-doc-000005-56-public",
-          "WPROC-DOC-000005-process-doc-000005-59-public",
-          "WPROC-DOC-000005-process-doc-000005-60-public",
-          "WPROC-DOC-000005-process-doc-000005-63-public",
-          "WPROC-DOC-000005-process-doc-000005-65-public",
-          "WPROC-DOC-000005-process-doc-000005-67-public",
-          "WPROC-DOC-000005-process-doc-000005-71-public",
-          "WPROC-DOC-000005-process-doc-000005-75-public",
-          "WPROC-DOC-000005-process-doc-000005-78-public",
-          "WPROC-DOC-000005-process-doc-000005-81-public",
-          "WPROC-DOC-000005-process-doc-000005-84-public",
-          "WPROC-DOC-000005-process-doc-000005-86-public",
-          "WPROC-DOC-000005-process-doc-000005-87-public",
-          "WPROC-DOC-000005-process-doc-000005-88-public",
-          "WPROC-DOC-000005-process-doc-000005-92-public",
-          "WPROC-DOC-000005-process-doc-000005-95-public",
-          "WPROC-DOC-000005-process-doc-000005-97-public",
-          "WPROC-DOC-000005-process-doc-000005-98-public",
-          "WPROC-DOC-000005-process-doc-000005-99-public"
-        ],
-        "golden_case_ids": [],
-        "regression_case_ids": []
-      },
-      "golden_case": {
-        "kind": "coverage_parameter_value",
-        "query": "通用术语,可以表示硬件组件、硬件部件、硬件接口或硬件是多少？",
-        "must_include": "通用术语,可以表示硬件组件、硬件部件、硬件接口或硬件",
-        "source": "coverage",
-        "assert_mode": "rich_answer",
-        "target_doc_id": "DOC-000005",
-        "page_no": 20
-      },
-      "validation_status": "failed"
-    },
-    {
-      "name": "coverage_parameter_row_doc_000005_parameter_row_22_5fa6694fb0f2",
-      "status": "draft",
-      "unit_id": "DOC-000005:parameter-row:22:5FA6694FB0F2",
-      "unit_type": "parameter_row_unit",
-      "importance": "high",
-      "page_no": 22,
-      "semantic_key": "发现事物的大小、数量或程度的活动",
-      "query": "发现事物的大小、数量或程度的活动是多少？",
-      "must_include": [
-        "发现事物的大小、数量或程度的活动"
-      ],
-      "assert_mode": "parameter_value",
-      "recommended_suite": "golden",
-      "source_excerpt": "“发现事物的大小、数量或程度的活动”",
-      "covered_by": {
-        "evidence_ids": [
-          "EV-008771",
-          "EV-008772",
-          "EV-008773"
-        ],
-        "fact_ids": [
-          "FACT-127827",
-          "FACT-127828",
-          "FACT-127829",
-          "FACT-127830",
-          "FACT-127831",
-          "FACT-127832",
-          "FACT-127833",
-          "FACT-127834",
-          "FACT-127835",
-          "FACT-127836",
-          "FACT-127837",
-          "FACT-127838",
-          "FACT-127839",
-          "FACT-127840",
-          "FACT-127841"
-        ],
-        "entity_ids": [
-          "ENT-000077",
-          "ENT-000434",
-          "ENT-000803"
-        ],
-        "wiki_page_ids": [
-          "WCON-DOC-000005-constraint-doc-000005-public-e39edbc3",
-          "WPAGE-000434",
-          "WPAGE-000442",
-          "WPAGE-000718",
-          "WPAGE-000719",
-          "WPAGE-000721",
-          "WPAGE-000722",
-          "WPAGE-000723",
-          "WPAGE-000728",
-          "WPAGE-000729",
-          "WPAGE-000731",
-          "WPAGE-000734",
-          "WPAGE-000735",
-          "WPAGE-000738",
-          "WPAGE-000739",
-          "WPAGE-000741",
-          "WPAGE-000742",
-          "WPAGE-000743",
-          "WPAGE-000745",
-          "WPAGE-000746",
-          "WPAGE-000747",
-          "WPAGE-000749",
-          "WPAGE-000750",
-          "WPAGE-000751",
-          "WPAGE-000752",
-          "WPAGE-000753",
-          "WPAGE-000754",
-          "WPAGE-000756",
-          "WPAGE-000757",
-          "WPAGE-000758",
-          "WPAGE-000759",
-          "WPAGE-000761",
-          "WPAGE-000762",
-          "WPAGE-000763",
-          "WPAGE-000764",
-          "WPAGE-000803",
-          "WPROC-DOC-000005-process-doc-000005-101-public",
-          "WPROC-DOC-000005-process-doc-000005-103-public",
-          "WPROC-DOC-000005-process-doc-000005-105-public",
-          "WPROC-DOC-000005-process-doc-000005-110-public",
-          "WPROC-DOC-000005-process-doc-000005-32-public",
-          "WPROC-DOC-000005-process-doc-000005-33-public",
-          "WPROC-DOC-000005-process-doc-000005-35-public",
-          "WPROC-DOC-000005-process-doc-000005-37-public",
-          "WPROC-DOC-000005-process-doc-000005-38-public",
-          "WPROC-DOC-000005-process-doc-000005-45-public",
-          "WPROC-DOC-000005-process-doc-000005-46-public",
-          "WPROC-DOC-000005-process-doc-000005-48-public",
-          "WPROC-DOC-000005-process-doc-000005-53-public",
-          "WPROC-DOC-000005-process-doc-000005-56-public",
-          "WPROC-DOC-000005-process-doc-000005-59-public",
-          "WPROC-DOC-000005-process-doc-000005-60-public",
-          "WPROC-DOC-000005-process-doc-000005-63-public",
-          "WPROC-DOC-000005-process-doc-000005-65-public",
-          "WPROC-DOC-000005-process-doc-000005-67-public",
-          "WPROC-DOC-000005-process-doc-000005-71-public",
-          "WPROC-DOC-000005-process-doc-000005-75-public",
-          "WPROC-DOC-000005-process-doc-000005-78-public",
-          "WPROC-DOC-000005-process-doc-000005-81-public",
-          "WPROC-DOC-000005-process-doc-000005-84-public",
-          "WPROC-DOC-000005-process-doc-000005-86-public",
-          "WPROC-DOC-000005-process-doc-000005-87-public",
-          "WPROC-DOC-000005-process-doc-000005-88-public",
-          "WPROC-DOC-000005-process-doc-000005-92-public",
-          "WPROC-DOC-000005-process-doc-000005-95-public",
-          "WPROC-DOC-000005-process-doc-000005-97-public",
-          "WPROC-DOC-000005-process-doc-000005-98-public",
-          "WPROC-DOC-000005-process-doc-000005-99-public"
-        ],
-        "golden_case_ids": [],
-        "regression_case_ids": []
-      },
-      "golden_case": {
-        "kind": "coverage_parameter_value",
-        "query": "发现事物的大小、数量或程度的活动是多少？",
-        "must_include": "发现事物的大小、数量或程度的活动",
-        "source": "coverage",
-        "assert_mode": "rich_answer",
-        "target_doc_id": "DOC-000005",
-        "page_no": 22
-      },
-      "validation_status": "failed"
-    },
-    {
-      "name": "coverage_parameter_row_doc_000005_parameter_row_22_2f57bc15e7bd",
-      "status": "draft",
-      "unit_id": "DOC-000005:parameter-row:22:2F57BC15E7BD",
-      "unit_type": "parameter_row_unit",
-      "importance": "high",
-      "page_no": 22,
-      "semantic_key": "与既定的信息需要相匹配的定量或定性的可衡量指标",
-      "query": "与既定的信息需要相匹配的定量或定性的可衡量指标是多少？",
-      "must_include": [
-        "与既定的信息需要相匹配的定量或定性的可衡量指标"
-      ],
-      "assert_mode": "parameter_value",
-      "recommended_suite": "golden",
-      "source_excerpt": "与既定的信息需要相匹配的定量或定性的可衡量指标",
-      "covered_by": {
-        "evidence_ids": [
-          "EV-008771",
-          "EV-008772",
-          "EV-008773"
-        ],
-        "fact_ids": [
-          "FACT-127827",
-          "FACT-127828",
-          "FACT-127829",
-          "FACT-127830",
-          "FACT-127831",
-          "FACT-127832",
-          "FACT-127833",
-          "FACT-127834",
-          "FACT-127835",
-          "FACT-127836",
-          "FACT-127837",
-          "FACT-127838",
-          "FACT-127839",
-          "FACT-127840",
-          "FACT-127841"
-        ],
-        "entity_ids": [
-          "ENT-000077",
-          "ENT-000434",
-          "ENT-000803"
-        ],
-        "wiki_page_ids": [
-          "WCON-DOC-000005-constraint-doc-000005-public-e39edbc3",
-          "WPAGE-000434",
-          "WPAGE-000442",
-          "WPAGE-000663",
-          "WPAGE-000718",
-          "WPAGE-000719",
-          "WPAGE-000721",
-          "WPAGE-000722",
-          "WPAGE-000723",
-          "WPAGE-000728",
-          "WPAGE-000729",
-          "WPAGE-000731",
-          "WPAGE-000734",
-          "WPAGE-000735",
-          "WPAGE-000738",
-          "WPAGE-000739",
-          "WPAGE-000741",
-          "WPAGE-000742",
-          "WPAGE-000743",
-          "WPAGE-000745",
-          "WPAGE-000746",
-          "WPAGE-000747",
-          "WPAGE-000749",
-          "WPAGE-000750",
-          "WPAGE-000751",
-          "WPAGE-000752",
-          "WPAGE-000753",
-          "WPAGE-000754",
-          "WPAGE-000756",
-          "WPAGE-000757",
-          "WPAGE-000758",
-          "WPAGE-000759",
-          "WPAGE-000761",
-          "WPAGE-000762",
-          "WPAGE-000763",
-          "WPAGE-000764",
-          "WPAGE-000803",
-          "WPROC-DOC-000005-process-doc-000005-101-public",
-          "WPROC-DOC-000005-process-doc-000005-103-public",
-          "WPROC-DOC-000005-process-doc-000005-105-public",
-          "WPROC-DOC-000005-process-doc-000005-110-public",
-          "WPROC-DOC-000005-process-doc-000005-32-public",
-          "WPROC-DOC-000005-process-doc-000005-33-public",
-          "WPROC-DOC-000005-process-doc-000005-35-public",
-          "WPROC-DOC-000005-process-doc-000005-37-public",
-          "WPROC-DOC-000005-process-doc-000005-38-public",
-          "WPROC-DOC-000005-process-doc-000005-45-public",
-          "WPROC-DOC-000005-process-doc-000005-46-public",
-          "WPROC-DOC-000005-process-doc-000005-48-public",
-          "WPROC-DOC-000005-process-doc-000005-53-public",
-          "WPROC-DOC-000005-process-doc-000005-56-public",
-          "WPROC-DOC-000005-process-doc-000005-59-public",
-          "WPROC-DOC-000005-process-doc-000005-60-public",
-          "WPROC-DOC-000005-process-doc-000005-63-public",
-          "WPROC-DOC-000005-process-doc-000005-65-public",
-          "WPROC-DOC-000005-process-doc-000005-67-public",
-          "WPROC-DOC-000005-process-doc-000005-71-public",
-          "WPROC-DOC-000005-process-doc-000005-75-public",
-          "WPROC-DOC-000005-process-doc-000005-78-public",
-          "WPROC-DOC-000005-process-doc-000005-81-public",
-          "WPROC-DOC-000005-process-doc-000005-84-public",
-          "WPROC-DOC-000005-process-doc-000005-86-public",
-          "WPROC-DOC-000005-process-doc-000005-87-public",
-          "WPROC-DOC-000005-process-doc-000005-88-public",
-          "WPROC-DOC-000005-process-doc-000005-92-public",
-          "WPROC-DOC-000005-process-doc-000005-95-public",
-          "WPROC-DOC-000005-process-doc-000005-97-public",
-          "WPROC-DOC-000005-process-doc-000005-98-public",
-          "WPROC-DOC-000005-process-doc-000005-99-public",
-          "WPROC-DOC-000005-process-doc-000005-automotive-spice"
-        ],
-        "golden_case_ids": [],
-        "regression_case_ids": []
-      },
-      "golden_case": {
-        "kind": "coverage_parameter_value",
-        "query": "与既定的信息需要相匹配的定量或定性的可衡量指标是多少？",
-        "must_include": "与既定的信息需要相匹配的定量或定性的可衡量指标",
-        "source": "coverage",
-        "assert_mode": "rich_answer",
-        "target_doc_id": "DOC-000005",
-        "page_no": 22
-      },
-      "validation_status": "failed"
-    },
-    {
-      "name": "coverage_parameter_row_doc_000005_parameter_row_22_79ea84d31c79",
-      "status": "draft",
-      "unit_id": "DOC-000005:parameter-row:22:79EA84D31C79",
-      "unit_type": "parameter_row_unit",
-      "importance": "high",
-      "page_no": 22,
-      "semantic_key": "为达成某种意图的活动",
-      "query": "为达成某种意图的活动是多少？",
-      "must_include": [
-        "为达成某种意图的活动"
-      ],
-      "assert_mode": "parameter_value",
-      "recommended_suite": "golden",
-      "source_excerpt": "为达成某种意图的活动",
-      "covered_by": {
-        "evidence_ids": [
-          "EV-008771",
-          "EV-008772",
-          "EV-008773"
-        ],
-        "fact_ids": [
-          "FACT-127827",
-          "FACT-127828",
-          "FACT-127829",
-          "FACT-127830",
-          "FACT-127831",
-          "FACT-127832",
-          "FACT-127833",
-          "FACT-127834",
-          "FACT-127835",
-          "FACT-127836",
-          "FACT-127837",
-          "FACT-127838",
-          "FACT-127839",
-          "FACT-127840",
-          "FACT-127841"
-        ],
-        "entity_ids": [
-          "ENT-000077",
-          "ENT-000434",
-          "ENT-000803"
-        ],
-        "wiki_page_ids": [
-          "WCON-DOC-000005-constraint-doc-000005-public-e39edbc3",
-          "WPAGE-000434",
-          "WPAGE-000442",
-          "WPAGE-000663",
-          "WPAGE-000718",
-          "WPAGE-000719",
-          "WPAGE-000721",
-          "WPAGE-000722",
-          "WPAGE-000723",
-          "WPAGE-000728",
-          "WPAGE-000729",
-          "WPAGE-000731",
-          "WPAGE-000734",
-          "WPAGE-000735",
-          "WPAGE-000738",
-          "WPAGE-000739",
-          "WPAGE-000741",
-          "WPAGE-000742",
-          "WPAGE-000743",
-          "WPAGE-000745",
-          "WPAGE-000746",
-          "WPAGE-000747",
-          "WPAGE-000749",
-          "WPAGE-000750",
-          "WPAGE-000751",
-          "WPAGE-000752",
-          "WPAGE-000753",
-          "WPAGE-000754",
-          "WPAGE-000756",
-          "WPAGE-000757",
-          "WPAGE-000758",
-          "WPAGE-000759",
-          "WPAGE-000761",
-          "WPAGE-000762",
-          "WPAGE-000763",
-          "WPAGE-000764",
-          "WPAGE-000803",
-          "WPROC-DOC-000005-process-doc-000005-101-public",
-          "WPROC-DOC-000005-process-doc-000005-103-public",
-          "WPROC-DOC-000005-process-doc-000005-105-public",
-          "WPROC-DOC-000005-process-doc-000005-110-public",
-          "WPROC-DOC-000005-process-doc-000005-32-public",
-          "WPROC-DOC-000005-process-doc-000005-33-public",
-          "WPROC-DOC-000005-process-doc-000005-35-public",
-          "WPROC-DOC-000005-process-doc-000005-37-public",
-          "WPROC-DOC-000005-process-doc-000005-38-public",
-          "WPROC-DOC-000005-process-doc-000005-45-public",
-          "WPROC-DOC-000005-process-doc-000005-46-public",
-          "WPROC-DOC-000005-process-doc-000005-48-public",
-          "WPROC-DOC-000005-process-doc-000005-53-public",
-          "WPROC-DOC-000005-process-doc-000005-56-public",
-          "WPROC-DOC-000005-process-doc-000005-59-public",
-          "WPROC-DOC-000005-process-doc-000005-60-public",
-          "WPROC-DOC-000005-process-doc-000005-63-public",
-          "WPROC-DOC-000005-process-doc-000005-65-public",
-          "WPROC-DOC-000005-process-doc-000005-67-public",
-          "WPROC-DOC-000005-process-doc-000005-71-public",
-          "WPROC-DOC-000005-process-doc-000005-75-public",
-          "WPROC-DOC-000005-process-doc-000005-78-public",
-          "WPROC-DOC-000005-process-doc-000005-81-public",
-          "WPROC-DOC-000005-process-doc-000005-84-public",
-          "WPROC-DOC-000005-process-doc-000005-86-public",
-          "WPROC-DOC-000005-process-doc-000005-87-public",
-          "WPROC-DOC-000005-process-doc-000005-88-public",
-          "WPROC-DOC-000005-process-doc-000005-92-public",
-          "WPROC-DOC-000005-process-doc-000005-95-public",
-          "WPROC-DOC-000005-process-doc-000005-97-public",
-          "WPROC-DOC-000005-process-doc-000005-98-public",
-          "WPROC-DOC-000005-process-doc-000005-99-public",
-          "WPROC-DOC-000005-process-doc-000005-automotive-spice"
-        ],
-        "golden_case_ids": [],
-        "regression_case_ids": []
-      },
-      "golden_case": {
-        "kind": "coverage_parameter_value",
-        "query": "为达成某种意图的活动是多少？",
-        "must_include": "为达成某种意图的活动",
-        "source": "coverage",
-        "assert_mode": "rich_answer",
-        "target_doc_id": "DOC-000005",
-        "page_no": 22
-      },
-      "validation_status": "failed"
-    },
-    {
-      "name": "coverage_parameter_row_doc_000005_parameter_row_22_d5dacee62a22",
-      "status": "draft",
-      "unit_id": "DOC-000005:parameter-row:22:D5DACEE62A22",
-      "unit_type": "parameter_row_unit",
-      "importance": "high",
-      "page_no": 22,
-      "semantic_key": "交付给客户的物理产品,其中包括一组定义的功能和属性",
-      "query": "交付给客户的物理产品,其中包括一组定义的功能和属性是多少？",
-      "must_include": [
-        "交付给客户的物理产品,其中包括一组定义的功能和属性"
-      ],
-      "assert_mode": "parameter_value",
-      "recommended_suite": "golden",
-      "source_excerpt": "交付给客户的物理产品,其中包括一组定义的功能和属性",
-      "covered_by": {
-        "evidence_ids": [
-          "EV-008771",
-          "EV-008772",
-          "EV-008773"
-        ],
-        "fact_ids": [
-          "FACT-127827",
-          "FACT-127828",
-          "FACT-127829",
-          "FACT-127830",
-          "FACT-127831",
-          "FACT-127832",
-          "FACT-127833",
-          "FACT-127834",
-          "FACT-127835",
-          "FACT-127836",
-          "FACT-127837",
-          "FACT-127838",
-          "FACT-127839",
-          "FACT-127840",
-          "FACT-127841"
-        ],
-        "entity_ids": [
-          "ENT-000077",
-          "ENT-000434",
-          "ENT-000803"
-        ],
-        "wiki_page_ids": [
-          "WCON-DOC-000005-constraint-doc-000005-public-e39edbc3",
-          "WPAGE-000434",
-          "WPAGE-000442",
-          "WPAGE-000663",
-          "WPAGE-000718",
-          "WPAGE-000719",
-          "WPAGE-000721",
-          "WPAGE-000722",
-          "WPAGE-000723",
-          "WPAGE-000728",
-          "WPAGE-000729",
-          "WPAGE-000731",
-          "WPAGE-000734",
-          "WPAGE-000735",
-          "WPAGE-000738",
-          "WPAGE-000739",
-          "WPAGE-000741",
-          "WPAGE-000742",
-          "WPAGE-000743",
-          "WPAGE-000745",
-          "WPAGE-000746",
-          "WPAGE-000747",
-          "WPAGE-000749",
-          "WPAGE-000750",
-          "WPAGE-000751",
-          "WPAGE-000752",
-          "WPAGE-000753",
-          "WPAGE-000754",
-          "WPAGE-000756",
-          "WPAGE-000757",
-          "WPAGE-000758",
-          "WPAGE-000759",
-          "WPAGE-000761",
-          "WPAGE-000762",
-          "WPAGE-000763",
-          "WPAGE-000764",
-          "WPAGE-000803",
-          "WPROC-DOC-000005-process-doc-000005-101-public",
-          "WPROC-DOC-000005-process-doc-000005-103-public",
-          "WPROC-DOC-000005-process-doc-000005-105-public",
-          "WPROC-DOC-000005-process-doc-000005-110-public",
-          "WPROC-DOC-000005-process-doc-000005-32-public",
-          "WPROC-DOC-000005-process-doc-000005-33-public",
-          "WPROC-DOC-000005-process-doc-000005-35-public",
-          "WPROC-DOC-000005-process-doc-000005-37-public",
-          "WPROC-DOC-000005-process-doc-000005-38-public",
-          "WPROC-DOC-000005-process-doc-000005-45-public",
-          "WPROC-DOC-000005-process-doc-000005-46-public",
-          "WPROC-DOC-000005-process-doc-000005-48-public",
-          "WPROC-DOC-000005-process-doc-000005-53-public",
-          "WPROC-DOC-000005-process-doc-000005-56-public",
-          "WPROC-DOC-000005-process-doc-000005-59-public",
-          "WPROC-DOC-000005-process-doc-000005-60-public",
-          "WPROC-DOC-000005-process-doc-000005-63-public",
-          "WPROC-DOC-000005-process-doc-000005-65-public",
-          "WPROC-DOC-000005-process-doc-000005-67-public",
-          "WPROC-DOC-000005-process-doc-000005-71-public",
-          "WPROC-DOC-000005-process-doc-000005-75-public",
-          "WPROC-DOC-000005-process-doc-000005-78-public",
-          "WPROC-DOC-000005-process-doc-000005-81-public",
-          "WPROC-DOC-000005-process-doc-000005-84-public",
-          "WPROC-DOC-000005-process-doc-000005-86-public",
-          "WPROC-DOC-000005-process-doc-000005-87-public",
-          "WPROC-DOC-000005-process-doc-000005-88-public",
-          "WPROC-DOC-000005-process-doc-000005-92-public",
-          "WPROC-DOC-000005-process-doc-000005-95-public",
-          "WPROC-DOC-000005-process-doc-000005-97-public",
-          "WPROC-DOC-000005-process-doc-000005-98-public",
-          "WPROC-DOC-000005-process-doc-000005-99-public",
-          "WPROC-DOC-000005-process-doc-000005-automotive-spice"
-        ],
-        "golden_case_ids": [],
-        "regression_case_ids": []
-      },
-      "golden_case": {
-        "kind": "coverage_parameter_value",
-        "query": "交付给客户的物理产品,其中包括一组定义的功能和属性是多少？",
-        "must_include": "交付给客户的物理产品,其中包括一组定义的功能和属性",
-        "source": "coverage",
-        "assert_mode": "rich_answer",
-        "target_doc_id": "DOC-000005",
-        "page_no": 22
-      },
-      "validation_status": "failed"
-    },
-    {
-      "name": "coverage_parameter_row_doc_000005_parameter_row_22_1103aa90842a",
-      "status": "draft",
-      "unit_id": "DOC-000005:parameter-row:22:1103AA90842A",
-      "unit_type": "parameter_row_unit",
-      "importance": "high",
-      "page_no": 22,
-      "semantic_key": "依据特定的资源和需求,努力在既定开始和完成日期之内创建产品或服务",
-      "query": "依据特定的资源和需求,努力在既定开始和完成日期之内创建产品或服务是多少？",
-      "must_include": [
-        "依据特定的资源和需求,努力在既定开始和完成日期之内创建产品或服务"
-      ],
-      "assert_mode": "parameter_value",
-      "recommended_suite": "golden",
-      "source_excerpt": "依据特定的资源和需求,努力在既定开始和完成日期之内创建产品或服务",
-      "covered_by": {
-        "evidence_ids": [
-          "EV-008771",
-          "EV-008772",
-          "EV-008773"
-        ],
-        "fact_ids": [
-          "FACT-127827",
-          "FACT-127828",
-          "FACT-127829",
-          "FACT-127830",
-          "FACT-127831",
-          "FACT-127832",
-          "FACT-127833",
-          "FACT-127834",
-          "FACT-127835",
-          "FACT-127836",
-          "FACT-127837",
-          "FACT-127838",
-          "FACT-127839",
-          "FACT-127840",
-          "FACT-127841"
-        ],
-        "entity_ids": [
-          "ENT-000077",
-          "ENT-000434",
-          "ENT-000803"
-        ],
-        "wiki_page_ids": [
-          "WCON-DOC-000005-constraint-doc-000005-public-e39edbc3",
-          "WPAGE-000434",
-          "WPAGE-000442",
-          "WPAGE-000718",
-          "WPAGE-000719",
-          "WPAGE-000721",
-          "WPAGE-000722",
-          "WPAGE-000723",
-          "WPAGE-000728",
-          "WPAGE-000729",
-          "WPAGE-000731",
-          "WPAGE-000734",
-          "WPAGE-000735",
-          "WPAGE-000738",
-          "WPAGE-000739",
-          "WPAGE-000741",
-          "WPAGE-000742",
-          "WPAGE-000743",
-          "WPAGE-000745",
-          "WPAGE-000746",
-          "WPAGE-000747",
-          "WPAGE-000749",
-          "WPAGE-000750",
-          "WPAGE-000751",
-          "WPAGE-000752",
-          "WPAGE-000753",
-          "WPAGE-000754",
-          "WPAGE-000756",
-          "WPAGE-000757",
-          "WPAGE-000758",
-          "WPAGE-000759",
-          "WPAGE-000761",
-          "WPAGE-000762",
-          "WPAGE-000763",
-          "WPAGE-000764",
-          "WPAGE-000803",
-          "WPROC-DOC-000005-process-doc-000005-101-public",
-          "WPROC-DOC-000005-process-doc-000005-103-public",
-          "WPROC-DOC-000005-process-doc-000005-105-public",
-          "WPROC-DOC-000005-process-doc-000005-110-public",
-          "WPROC-DOC-000005-process-doc-000005-32-public",
-          "WPROC-DOC-000005-process-doc-000005-33-public",
-          "WPROC-DOC-000005-process-doc-000005-35-public",
-          "WPROC-DOC-000005-process-doc-000005-37-public",
-          "WPROC-DOC-000005-process-doc-000005-38-public",
-          "WPROC-DOC-000005-process-doc-000005-45-public",
-          "WPROC-DOC-000005-process-doc-000005-46-public",
-          "WPROC-DOC-000005-process-doc-000005-48-public",
-          "WPROC-DOC-000005-process-doc-000005-53-public",
-          "WPROC-DOC-000005-process-doc-000005-56-public",
-          "WPROC-DOC-000005-process-doc-000005-59-public",
-          "WPROC-DOC-000005-process-doc-000005-60-public",
-          "WPROC-DOC-000005-process-doc-000005-63-public",
-          "WPROC-DOC-000005-process-doc-000005-65-public",
-          "WPROC-DOC-000005-process-doc-000005-67-public",
-          "WPROC-DOC-000005-process-doc-000005-71-public",
-          "WPROC-DOC-000005-process-doc-000005-75-public",
-          "WPROC-DOC-000005-process-doc-000005-78-public",
-          "WPROC-DOC-000005-process-doc-000005-81-public",
-          "WPROC-DOC-000005-process-doc-000005-84-public",
-          "WPROC-DOC-000005-process-doc-000005-86-public",
-          "WPROC-DOC-000005-process-doc-000005-87-public",
-          "WPROC-DOC-000005-process-doc-000005-88-public",
-          "WPROC-DOC-000005-process-doc-000005-92-public",
-          "WPROC-DOC-000005-process-doc-000005-95-public",
-          "WPROC-DOC-000005-process-doc-000005-97-public",
-          "WPROC-DOC-000005-process-doc-000005-98-public",
-          "WPROC-DOC-000005-process-doc-000005-99-public"
-        ],
-        "golden_case_ids": [],
-        "regression_case_ids": []
-      },
-      "golden_case": {
-        "kind": "coverage_parameter_value",
-        "query": "依据特定的资源和需求,努力在既定开始和完成日期之内创建产品或服务是多少？",
-        "must_include": "依据特定的资源和需求,努力在既定开始和完成日期之内创建产品或服务",
-        "source": "coverage",
-        "assert_mode": "rich_answer",
-        "target_doc_id": "DOC-000005",
-        "page_no": 22
-      },
-      "validation_status": "failed"
-    },
-    {
-      "name": "coverage_parameter_row_doc_000005_parameter_row_22_a41f1a8187fc",
-      "status": "draft",
-      "unit_id": "DOC-000005:parameter-row:22:A41F1A8187FC",
-      "unit_type": "parameter_row_unit",
-      "importance": "high",
-      "page_no": 22,
-      "semantic_key": "参见软件组件或软件单元",
-      "query": "参见软件组件或软件单元是多少？",
-      "must_include": [
-        "参见软件组件或软件单元"
-      ],
-      "assert_mode": "parameter_value",
-      "recommended_suite": "golden",
-      "source_excerpt": "参见软件组件或软件单元 | Automotive SPICE V4",
-      "covered_by": {
-        "evidence_ids": [
-          "EV-008771",
-          "EV-008772",
-          "EV-008773"
-        ],
-        "fact_ids": [
-          "FACT-127827",
-          "FACT-127828",
-          "FACT-127829",
-          "FACT-127830",
-          "FACT-127831",
-          "FACT-127832",
-          "FACT-127833",
-          "FACT-127834",
-          "FACT-127835",
-          "FACT-127836",
-          "FACT-127837",
-          "FACT-127838",
-          "FACT-127839",
-          "FACT-127840",
-          "FACT-127841"
-        ],
-        "entity_ids": [
-          "ENT-000077",
-          "ENT-000434",
-          "ENT-000803"
-        ],
-        "wiki_page_ids": [
-          "WCON-DOC-000005-constraint-doc-000005-public-e39edbc3",
-          "WPAGE-000434",
-          "WPAGE-000442",
-          "WPAGE-000663",
-          "WPAGE-000718",
-          "WPAGE-000719",
-          "WPAGE-000721",
-          "WPAGE-000722",
-          "WPAGE-000723",
-          "WPAGE-000728",
-          "WPAGE-000729",
-          "WPAGE-000731",
-          "WPAGE-000734",
-          "WPAGE-000735",
-          "WPAGE-000738",
-          "WPAGE-000739",
-          "WPAGE-000741",
-          "WPAGE-000742",
-          "WPAGE-000743",
-          "WPAGE-000745",
-          "WPAGE-000746",
-          "WPAGE-000747",
-          "WPAGE-000749",
-          "WPAGE-000750",
-          "WPAGE-000751",
-          "WPAGE-000752",
-          "WPAGE-000753",
-          "WPAGE-000754",
-          "WPAGE-000756",
-          "WPAGE-000757",
-          "WPAGE-000758",
-          "WPAGE-000759",
-          "WPAGE-000761",
-          "WPAGE-000762",
-          "WPAGE-000763",
-          "WPAGE-000764",
-          "WPAGE-000803",
-          "WPROC-DOC-000005-process-doc-000005-101-public",
-          "WPROC-DOC-000005-process-doc-000005-103-public",
-          "WPROC-DOC-000005-process-doc-000005-105-public",
-          "WPROC-DOC-000005-process-doc-000005-110-public",
-          "WPROC-DOC-000005-process-doc-000005-32-public",
-          "WPROC-DOC-000005-process-doc-000005-33-public",
-          "WPROC-DOC-000005-process-doc-000005-35-public",
-          "WPROC-DOC-000005-process-doc-000005-37-public",
-          "WPROC-DOC-000005-process-doc-000005-38-public",
-          "WPROC-DOC-000005-process-doc-000005-45-public",
-          "WPROC-DOC-000005-process-doc-000005-46-public",
-          "WPROC-DOC-000005-process-doc-000005-48-public",
-          "WPROC-DOC-000005-process-doc-000005-53-public",
-          "WPROC-DOC-000005-process-doc-000005-56-public",
-          "WPROC-DOC-000005-process-doc-000005-59-public",
-          "WPROC-DOC-000005-process-doc-000005-60-public",
-          "WPROC-DOC-000005-process-doc-000005-63-public",
-          "WPROC-DOC-000005-process-doc-000005-65-public",
-          "WPROC-DOC-000005-process-doc-000005-67-public",
-          "WPROC-DOC-000005-process-doc-000005-71-public",
-          "WPROC-DOC-000005-process-doc-000005-75-public",
-          "WPROC-DOC-000005-process-doc-000005-78-public",
-          "WPROC-DOC-000005-process-doc-000005-81-public",
-          "WPROC-DOC-000005-process-doc-000005-84-public",
-          "WPROC-DOC-000005-process-doc-000005-86-public",
-          "WPROC-DOC-000005-process-doc-000005-87-public",
-          "WPROC-DOC-000005-process-doc-000005-88-public",
-          "WPROC-DOC-000005-process-doc-000005-92-public",
-          "WPROC-DOC-000005-process-doc-000005-95-public",
-          "WPROC-DOC-000005-process-doc-000005-97-public",
-          "WPROC-DOC-000005-process-doc-000005-98-public",
-          "WPROC-DOC-000005-process-doc-000005-99-public",
-          "WPROC-DOC-000005-process-doc-000005-automotive-spice"
-        ],
-        "golden_case_ids": [],
-        "regression_case_ids": []
-      },
-      "golden_case": {
-        "kind": "coverage_parameter_value",
-        "query": "参见软件组件或软件单元是多少？",
-        "must_include": "参见软件组件或软件单元",
-        "source": "coverage",
-        "assert_mode": "rich_answer",
-        "target_doc_id": "DOC-000005",
-        "page_no": 22
-      },
-      "validation_status": "failed"
-    },
-    {
-      "name": "coverage_parameter_row_doc_000005_parameter_row_22_7d7331f83f5c",
-      "status": "draft",
-      "unit_id": "DOC-000005:parameter-row:22:7D7331F83F5C",
-      "unit_type": "parameter_row_unit",
-      "importance": "high",
-      "page_no": 22,
-      "semantic_key": "在 Automotive SPICE 中,机器学习(ML)描述了软件从特定训练数据中学习并将这些知识应用于其他类似任务的能力",
-      "query": "在 Automotive SPICE 中,机器学习(ML)描述了软件从特定训练数据中学习并将这些知识应用于其他类似任务的能力是多少？",
-      "must_include": [
-        "在 Automotive SPICE 中,机器学习(ML)描述了软件从特定训练数据中学习并将这些知识应用于其他类似任务的能力"
-      ],
-      "assert_mode": "parameter_value",
-      "recommended_suite": "golden",
-      "source_excerpt": "在 Automotive SPICE 中,机器学习(ML)描述了软件从特定训练数据中学习并将这些知识应用于其他类似任务的能力",
-      "covered_by": {
-        "evidence_ids": [
-          "EV-008771",
-          "EV-008772",
-          "EV-008773"
-        ],
-        "fact_ids": [
-          "FACT-127827",
-          "FACT-127828",
-          "FACT-127829",
-          "FACT-127830",
-          "FACT-127831",
-          "FACT-127832",
-          "FACT-127833",
-          "FACT-127834",
-          "FACT-127835",
-          "FACT-127836",
-          "FACT-127837",
-          "FACT-127838",
-          "FACT-127839",
-          "FACT-127840",
-          "FACT-127841"
-        ],
-        "entity_ids": [
-          "ENT-000077",
-          "ENT-000434",
-          "ENT-000803"
-        ],
-        "wiki_page_ids": [
-          "WCON-DOC-000005-constraint-doc-000005-public-e39edbc3",
-          "WPAGE-000434",
-          "WPAGE-000442",
-          "WPAGE-000663",
-          "WPAGE-000718",
-          "WPAGE-000719",
-          "WPAGE-000721",
-          "WPAGE-000722",
-          "WPAGE-000723",
-          "WPAGE-000728",
-          "WPAGE-000729",
-          "WPAGE-000731",
-          "WPAGE-000734",
-          "WPAGE-000735",
-          "WPAGE-000738",
-          "WPAGE-000739",
-          "WPAGE-000741",
-          "WPAGE-000742",
-          "WPAGE-000743",
-          "WPAGE-000745",
-          "WPAGE-000746",
-          "WPAGE-000747",
-          "WPAGE-000749",
-          "WPAGE-000750",
-          "WPAGE-000751",
-          "WPAGE-000752",
-          "WPAGE-000753",
-          "WPAGE-000754",
-          "WPAGE-000756",
-          "WPAGE-000757",
-          "WPAGE-000758",
-          "WPAGE-000759",
-          "WPAGE-000761",
-          "WPAGE-000762",
-          "WPAGE-000763",
-          "WPAGE-000764",
-          "WPAGE-000803",
-          "WPROC-DOC-000005-process-doc-000005-101-public",
-          "WPROC-DOC-000005-process-doc-000005-103-public",
-          "WPROC-DOC-000005-process-doc-000005-105-public",
-          "WPROC-DOC-000005-process-doc-000005-110-public",
-          "WPROC-DOC-000005-process-doc-000005-32-public",
-          "WPROC-DOC-000005-process-doc-000005-33-public",
-          "WPROC-DOC-000005-process-doc-000005-35-public",
-          "WPROC-DOC-000005-process-doc-000005-37-public",
-          "WPROC-DOC-000005-process-doc-000005-38-public",
-          "WPROC-DOC-000005-process-doc-000005-45-public",
-          "WPROC-DOC-000005-process-doc-000005-46-public",
-          "WPROC-DOC-000005-process-doc-000005-48-public",
-          "WPROC-DOC-000005-process-doc-000005-53-public",
-          "WPROC-DOC-000005-process-doc-000005-56-public",
-          "WPROC-DOC-000005-process-doc-000005-59-public",
-          "WPROC-DOC-000005-process-doc-000005-60-public",
-          "WPROC-DOC-000005-process-doc-000005-63-public",
-          "WPROC-DOC-000005-process-doc-000005-65-public",
-          "WPROC-DOC-000005-process-doc-000005-67-public",
-          "WPROC-DOC-000005-process-doc-000005-71-public",
-          "WPROC-DOC-000005-process-doc-000005-75-public",
-          "WPROC-DOC-000005-process-doc-000005-78-public",
-          "WPROC-DOC-000005-process-doc-000005-81-public",
-          "WPROC-DOC-000005-process-doc-000005-84-public",
-          "WPROC-DOC-000005-process-doc-000005-86-public",
-          "WPROC-DOC-000005-process-doc-000005-87-public",
-          "WPROC-DOC-000005-process-doc-000005-88-public",
-          "WPROC-DOC-000005-process-doc-000005-92-public",
-          "WPROC-DOC-000005-process-doc-000005-95-public",
-          "WPROC-DOC-000005-process-doc-000005-97-public",
-          "WPROC-DOC-000005-process-doc-000005-98-public",
-          "WPROC-DOC-000005-process-doc-000005-99-public",
-          "WPROC-DOC-000005-process-doc-000005-automotive-spice"
-        ],
-        "golden_case_ids": [],
-        "regression_case_ids": []
-      },
-      "golden_case": {
-        "kind": "coverage_parameter_value",
-        "query": "在 Automotive SPICE 中,机器学习(ML)描述了软件从特定训练数据中学习并将这些知识应用于其他类似任务的能力是多少？",
-        "must_include": "在 Automotive SPICE 中,机器学习(ML)描述了软件从特定训练数据中学习并将这些知识应用于其他类似任务的能力",
-        "source": "coverage",
-        "assert_mode": "rich_answer",
-        "target_doc_id": "DOC-000005",
-        "page_no": 22
-      },
-      "validation_status": "failed"
-    },
-    {
-      "name": "coverage_parameter_row_doc_000005_parameter_row_22_c514f3364753",
-      "status": "draft",
-      "unit_id": "DOC-000005:parameter-row:22:C514F3364753",
-      "unit_type": "parameter_row_unit",
-      "importance": "high",
-      "page_no": 22,
-      "semantic_key": "对要素进行选择性的重新验证,以验证修改没有造成意外的影响",
-      "query": "对要素进行选择性的重新验证,以验证修改没有造成意外的影响是多少？",
-      "must_include": [
-        "对要素进行选择性的重新验证,以验证修改没有造成意外的影响"
-      ],
-      "assert_mode": "parameter_value",
-      "recommended_suite": "golden",
-      "source_excerpt": "对要素进行选择性的重新验证,以验证修改没有造成意外的影响",
-      "covered_by": {
-        "evidence_ids": [
-          "EV-008771",
-          "EV-008772",
-          "EV-008773"
-        ],
-        "fact_ids": [
-          "FACT-127827",
-          "FACT-127828",
-          "FACT-127829",
-          "FACT-127830",
-          "FACT-127831",
-          "FACT-127832",
-          "FACT-127833",
-          "FACT-127834",
-          "FACT-127835",
-          "FACT-127836",
-          "FACT-127837",
-          "FACT-127838",
-          "FACT-127839",
-          "FACT-127840",
-          "FACT-127841"
-        ],
-        "entity_ids": [
-          "ENT-000077",
-          "ENT-000434",
-          "ENT-000803"
-        ],
-        "wiki_page_ids": [
-          "WCON-DOC-000005-constraint-doc-000005-public-e39edbc3",
-          "WPAGE-000434",
-          "WPAGE-000442",
-          "WPAGE-000663",
-          "WPAGE-000718",
-          "WPAGE-000719",
-          "WPAGE-000721",
-          "WPAGE-000722",
-          "WPAGE-000723",
-          "WPAGE-000728",
-          "WPAGE-000729",
-          "WPAGE-000731",
-          "WPAGE-000734",
-          "WPAGE-000735",
-          "WPAGE-000738",
-          "WPAGE-000739",
-          "WPAGE-000741",
-          "WPAGE-000742",
-          "WPAGE-000743",
-          "WPAGE-000745",
-          "WPAGE-000746",
-          "WPAGE-000747",
-          "WPAGE-000749",
-          "WPAGE-000750",
-          "WPAGE-000751",
-          "WPAGE-000752",
-          "WPAGE-000753",
-          "WPAGE-000754",
-          "WPAGE-000756",
-          "WPAGE-000757",
-          "WPAGE-000758",
-          "WPAGE-000759",
-          "WPAGE-000761",
-          "WPAGE-000762",
-          "WPAGE-000763",
-          "WPAGE-000764",
-          "WPAGE-000803",
-          "WPROC-DOC-000005-process-doc-000005-101-public",
-          "WPROC-DOC-000005-process-doc-000005-103-public",
-          "WPROC-DOC-000005-process-doc-000005-105-public",
-          "WPROC-DOC-000005-process-doc-000005-110-public",
-          "WPROC-DOC-000005-process-doc-000005-32-public",
-          "WPROC-DOC-000005-process-doc-000005-33-public",
-          "WPROC-DOC-000005-process-doc-000005-35-public",
-          "WPROC-DOC-000005-process-doc-000005-37-public",
-          "WPROC-DOC-000005-process-doc-000005-38-public",
-          "WPROC-DOC-000005-process-doc-000005-45-public",
-          "WPROC-DOC-000005-process-doc-000005-46-public",
-          "WPROC-DOC-000005-process-doc-000005-48-public",
-          "WPROC-DOC-000005-process-doc-000005-53-public",
-          "WPROC-DOC-000005-process-doc-000005-56-public",
-          "WPROC-DOC-000005-process-doc-000005-59-public",
-          "WPROC-DOC-000005-process-doc-000005-60-public",
-          "WPROC-DOC-000005-process-doc-000005-63-public",
-          "WPROC-DOC-000005-process-doc-000005-65-public",
-          "WPROC-DOC-000005-process-doc-000005-67-public",
-          "WPROC-DOC-000005-process-doc-000005-71-public",
-          "WPROC-DOC-000005-process-doc-000005-75-public",
-          "WPROC-DOC-000005-process-doc-000005-78-public",
-          "WPROC-DOC-000005-process-doc-000005-81-public",
-          "WPROC-DOC-000005-process-doc-000005-84-public",
-          "WPROC-DOC-000005-process-doc-000005-86-public",
-          "WPROC-DOC-000005-process-doc-000005-87-public",
-          "WPROC-DOC-000005-process-doc-000005-88-public",
-          "WPROC-DOC-000005-process-doc-000005-92-public",
-          "WPROC-DOC-000005-process-doc-000005-95-public",
-          "WPROC-DOC-000005-process-doc-000005-97-public",
-          "WPROC-DOC-000005-process-doc-000005-98-public",
-          "WPROC-DOC-000005-process-doc-000005-99-public",
-          "WPROC-DOC-000005-process-doc-000005-automotive-spice"
-        ],
-        "golden_case_ids": [],
-        "regression_case_ids": []
-      },
-      "golden_case": {
-        "kind": "coverage_parameter_value",
-        "query": "对要素进行选择性的重新验证,以验证修改没有造成意外的影响是多少？",
-        "must_include": "对要素进行选择性的重新验证,以验证修改没有造成意外的影响",
-        "source": "coverage",
-        "assert_mode": "rich_answer",
-        "target_doc_id": "DOC-000005",
-        "page_no": 22
-      },
-      "validation_status": "failed"
-    },
-    {
-      "name": "coverage_parameter_row_doc_000005_parameter_row_22_fb4b2bd847d0",
-      "status": "draft",
-      "unit_id": "DOC-000005:parameter-row:22:FB4B2BD847D0",
-      "unit_type": "parameter_row_unit",
-      "importance": "high",
-      "page_no": 22,
-      "semantic_key": "某一在未来不希望发生的事件发生的可能性与后果的结合",
-      "query": "某一在未来不希望发生的事件发生的可能性与后果的结合是多少？",
-      "must_include": [
-        "某一在未来不希望发生的事件发生的可能性与后果的结合"
-      ],
-      "assert_mode": "parameter_value",
-      "recommended_suite": "golden",
-      "source_excerpt": "某一在未来不希望发生的事件发生的可能性与后果的结合",
-      "covered_by": {
-        "evidence_ids": [
-          "EV-008771",
-          "EV-008772",
-          "EV-008773"
-        ],
-        "fact_ids": [
-          "FACT-127827",
-          "FACT-127828",
-          "FACT-127829",
-          "FACT-127830",
-          "FACT-127831",
-          "FACT-127832",
-          "FACT-127833",
-          "FACT-127834",
-          "FACT-127835",
-          "FACT-127836",
-          "FACT-127837",
-          "FACT-127838",
-          "FACT-127839",
-          "FACT-127840",
-          "FACT-127841"
-        ],
-        "entity_ids": [
-          "ENT-000077",
-          "ENT-000434",
-          "ENT-000803"
-        ],
-        "wiki_page_ids": [
-          "WCON-DOC-000005-constraint-doc-000005-public-e39edbc3",
-          "WPAGE-000434",
-          "WPAGE-000442",
-          "WPAGE-000718",
-          "WPAGE-000719",
-          "WPAGE-000721",
-          "WPAGE-000722",
-          "WPAGE-000723",
-          "WPAGE-000728",
-          "WPAGE-000729",
-          "WPAGE-000731",
-          "WPAGE-000734",
-          "WPAGE-000735",
-          "WPAGE-000738",
-          "WPAGE-000739",
-          "WPAGE-000741",
-          "WPAGE-000742",
-          "WPAGE-000743",
-          "WPAGE-000745",
-          "WPAGE-000746",
-          "WPAGE-000747",
-          "WPAGE-000749",
-          "WPAGE-000750",
-          "WPAGE-000751",
-          "WPAGE-000752",
-          "WPAGE-000753",
-          "WPAGE-000754",
-          "WPAGE-000756",
-          "WPAGE-000757",
-          "WPAGE-000758",
-          "WPAGE-000759",
-          "WPAGE-000761",
-          "WPAGE-000762",
-          "WPAGE-000763",
-          "WPAGE-000764",
-          "WPAGE-000803",
-          "WPROC-DOC-000005-process-doc-000005-101-public",
-          "WPROC-DOC-000005-process-doc-000005-103-public",
-          "WPROC-DOC-000005-process-doc-000005-105-public",
-          "WPROC-DOC-000005-process-doc-000005-110-public",
-          "WPROC-DOC-000005-process-doc-000005-32-public",
-          "WPROC-DOC-000005-process-doc-000005-33-public",
-          "WPROC-DOC-000005-process-doc-000005-35-public",
-          "WPROC-DOC-000005-process-doc-000005-37-public",
-          "WPROC-DOC-000005-process-doc-000005-38-public",
-          "WPROC-DOC-000005-process-doc-000005-45-public",
-          "WPROC-DOC-000005-process-doc-000005-46-public",
-          "WPROC-DOC-000005-process-doc-000005-48-public",
-          "WPROC-DOC-000005-process-doc-000005-53-public",
-          "WPROC-DOC-000005-process-doc-000005-56-public",
-          "WPROC-DOC-000005-process-doc-000005-59-public",
-          "WPROC-DOC-000005-process-doc-000005-60-public",
-          "WPROC-DOC-000005-process-doc-000005-63-public",
-          "WPROC-DOC-000005-process-doc-000005-65-public",
-          "WPROC-DOC-000005-process-doc-000005-67-public",
-          "WPROC-DOC-000005-process-doc-000005-71-public",
-          "WPROC-DOC-000005-process-doc-000005-75-public",
-          "WPROC-DOC-000005-process-doc-000005-78-public",
-          "WPROC-DOC-000005-process-doc-000005-81-public",
-          "WPROC-DOC-000005-process-doc-000005-84-public",
-          "WPROC-DOC-000005-process-doc-000005-86-public",
-          "WPROC-DOC-000005-process-doc-000005-87-public",
-          "WPROC-DOC-000005-process-doc-000005-88-public",
-          "WPROC-DOC-000005-process-doc-000005-92-public",
-          "WPROC-DOC-000005-process-doc-000005-95-public",
-          "WPROC-DOC-000005-process-doc-000005-97-public",
-          "WPROC-DOC-000005-process-doc-000005-98-public",
-          "WPROC-DOC-000005-process-doc-000005-99-public"
-        ],
-        "golden_case_ids": [],
-        "regression_case_ids": []
-      },
-      "golden_case": {
-        "kind": "coverage_parameter_value",
-        "query": "某一在未来不希望发生的事件发生的可能性与后果的结合是多少？",
-        "must_include": "某一在未来不希望发生的事件发生的可能性与后果的结合",
-        "source": "coverage",
-        "assert_mode": "rich_answer",
-        "target_doc_id": "DOC-000005",
-        "page_no": 22
-      },
-      "validation_status": "failed"
-    },
-    {
-      "name": "coverage_parameter_row_doc_000005_parameter_row_22_eb0091bf16a6",
-      "status": "draft",
-      "unit_id": "DOC-000005:parameter-row:22:EB0091BF16A6",
-      "unit_type": "parameter_row_unit",
-      "importance": "high",
-      "page_no": 22,
-      "semantic_key": "用以表征与过程或产品相关的有效性和效率的需要(用于 MAN.6 和 PA 4.1)",
-      "query": "用以表征与过程或产品相关的有效性和效率的需要(用于 MAN.6 和 PA 4.1)是多少？",
-      "must_include": [
-        "用以表征与过程或产品相关的有效性和效率的需要(用于 MAN.6 和 PA 4.1)"
-      ],
-      "assert_mode": "parameter_value",
-      "recommended_suite": "golden",
-      "source_excerpt": "用以表征与过程或产品相关的有效性和效率的需要(用于 MAN",
-      "covered_by": {
-        "evidence_ids": [
-          "EV-008771",
-          "EV-008772",
-          "EV-008773"
-        ],
-        "fact_ids": [
-          "FACT-127827",
-          "FACT-127828",
-          "FACT-127829",
-          "FACT-127830",
-          "FACT-127831",
-          "FACT-127832",
-          "FACT-127833",
-          "FACT-127834",
-          "FACT-127835",
-          "FACT-127836",
-          "FACT-127837",
-          "FACT-127838",
-          "FACT-127839",
-          "FACT-127840",
-          "FACT-127841"
-        ],
-        "entity_ids": [
-          "ENT-000077",
-          "ENT-000434",
-          "ENT-000803"
-        ],
-        "wiki_page_ids": [
-          "WCON-DOC-000005-constraint-doc-000005-public-e39edbc3",
-          "WPAGE-000434",
-          "WPAGE-000442",
-          "WPAGE-000663",
-          "WPAGE-000718",
-          "WPAGE-000719",
-          "WPAGE-000721",
-          "WPAGE-000722",
-          "WPAGE-000723",
-          "WPAGE-000728",
-          "WPAGE-000729",
-          "WPAGE-000731",
-          "WPAGE-000734",
-          "WPAGE-000735",
-          "WPAGE-000738",
-          "WPAGE-000739",
-          "WPAGE-000741",
-          "WPAGE-000742",
-          "WPAGE-000743",
-          "WPAGE-000745",
-          "WPAGE-000746",
-          "WPAGE-000747",
-          "WPAGE-000749",
-          "WPAGE-000750",
-          "WPAGE-000751",
-          "WPAGE-000752",
-          "WPAGE-000753",
-          "WPAGE-000754",
-          "WPAGE-000756",
-          "WPAGE-000757",
-          "WPAGE-000758",
-          "WPAGE-000759",
-          "WPAGE-000761",
-          "WPAGE-000762",
-          "WPAGE-000763",
-          "WPAGE-000764",
-          "WPAGE-000803",
-          "WPROC-DOC-000005-process-doc-000005-101-public",
-          "WPROC-DOC-000005-process-doc-000005-103-public",
-          "WPROC-DOC-000005-process-doc-000005-105-public",
-          "WPROC-DOC-000005-process-doc-000005-110-public",
-          "WPROC-DOC-000005-process-doc-000005-32-public",
-          "WPROC-DOC-000005-process-doc-000005-33-public",
-          "WPROC-DOC-000005-process-doc-000005-35-public",
-          "WPROC-DOC-000005-process-doc-000005-37-public",
-          "WPROC-DOC-000005-process-doc-000005-38-public",
-          "WPROC-DOC-000005-process-doc-000005-45-public",
-          "WPROC-DOC-000005-process-doc-000005-46-public",
-          "WPROC-DOC-000005-process-doc-000005-48-public",
-          "WPROC-DOC-000005-process-doc-000005-53-public",
-          "WPROC-DOC-000005-process-doc-000005-56-public",
-          "WPROC-DOC-000005-process-doc-000005-59-public",
-          "WPROC-DOC-000005-process-doc-000005-60-public",
-          "WPROC-DOC-000005-process-doc-000005-63-public",
-          "WPROC-DOC-000005-process-doc-000005-65-public",
-          "WPROC-DOC-000005-process-doc-000005-67-public",
-          "WPROC-DOC-000005-process-doc-000005-71-public",
-          "WPROC-DOC-000005-process-doc-000005-75-public",
-          "WPROC-DOC-000005-process-doc-000005-78-public",
-          "WPROC-DOC-000005-process-doc-000005-81-public",
-          "WPROC-DOC-000005-process-doc-000005-84-public",
-          "WPROC-DOC-000005-process-doc-000005-86-public",
-          "WPROC-DOC-000005-process-doc-000005-87-public",
-          "WPROC-DOC-000005-process-doc-000005-88-public",
-          "WPROC-DOC-000005-process-doc-000005-92-public",
-          "WPROC-DOC-000005-process-doc-000005-95-public",
-          "WPROC-DOC-000005-process-doc-000005-97-public",
-          "WPROC-DOC-000005-process-doc-000005-98-public",
-          "WPROC-DOC-000005-process-doc-000005-99-public",
-          "WPROC-DOC-000005-process-doc-000005-automotive-spice"
-        ],
-        "golden_case_ids": [],
-        "regression_case_ids": []
-      },
-      "golden_case": {
-        "kind": "coverage_parameter_value",
-        "query": "用以表征与过程或产品相关的有效性和效率的需要(用于 MAN.6 和 PA 4.1)是多少？",
-        "must_include": "用以表征与过程或产品相关的有效性和效率的需要(用于 MAN.6 和 PA 4.1)",
-        "source": "coverage",
-        "assert_mode": "rich_answer",
-        "target_doc_id": "DOC-000005",
-        "page_no": 22
-      },
-      "validation_status": "failed"
-    },
-    {
-      "name": "coverage_parameter_row_doc_000005_parameter_row_22_dab6bd9b3abc",
-      "status": "draft",
-      "unit_id": "DOC-000005:parameter-row:22:DAB6BD9B3ABC",
-      "unit_type": "parameter_row_unit",
-      "importance": "high",
-      "page_no": 22,
-      "semantic_key": "运行设计域(ODD)是一个给定的整体系统或其功能被专门设计用于工作的运行条件。 这包括但不限于环境、地理和时间限制,和/或某些交通或道路特征的必要存在与否",
-      "query": "运行设计域(ODD)是一个给定的整体系统或其功能被专门设计用于工作的运行条件。 这包括但不限于环境、地理和时间限制,和/或某些交通或道路特征的必要存在与否是多少？",
-      "must_include": [
-        "运行设计域(ODD)是一个给定的整体系统或其功能被专门设计用于工作的运行条件。 这包括但不限于环境、地理和时间限制,和/或某些交通或道路特征的必要存在与否"
-      ],
-      "assert_mode": "parameter_value",
-      "recommended_suite": "golden",
-      "source_excerpt": "运行设计域(ODD)是一个给定的整体系统或其功能被专门设计用于工作的运行条件",
-      "covered_by": {
-        "evidence_ids": [
-          "EV-008771",
-          "EV-008772",
-          "EV-008773"
-        ],
-        "fact_ids": [
-          "FACT-127827",
-          "FACT-127828",
-          "FACT-127829",
-          "FACT-127830",
-          "FACT-127831",
-          "FACT-127832",
-          "FACT-127833",
-          "FACT-127834",
-          "FACT-127835",
-          "FACT-127836",
-          "FACT-127837",
-          "FACT-127838",
-          "FACT-127839",
-          "FACT-127840",
-          "FACT-127841"
-        ],
-        "entity_ids": [
-          "ENT-000077",
-          "ENT-000434",
-          "ENT-000803"
-        ],
-        "wiki_page_ids": [
-          "WCON-DOC-000005-constraint-doc-000005-public-e39edbc3",
-          "WPAGE-000434",
-          "WPAGE-000442",
-          "WPAGE-000444",
-          "WPAGE-000718",
-          "WPAGE-000719",
-          "WPAGE-000721",
-          "WPAGE-000722",
-          "WPAGE-000723",
-          "WPAGE-000728",
-          "WPAGE-000729",
-          "WPAGE-000731",
-          "WPAGE-000734",
-          "WPAGE-000735",
-          "WPAGE-000738",
-          "WPAGE-000739",
-          "WPAGE-000741",
-          "WPAGE-000742",
-          "WPAGE-000743",
-          "WPAGE-000745",
-          "WPAGE-000746",
-          "WPAGE-000747",
-          "WPAGE-000749",
-          "WPAGE-000750",
-          "WPAGE-000751",
-          "WPAGE-000752",
-          "WPAGE-000753",
-          "WPAGE-000754",
-          "WPAGE-000756",
-          "WPAGE-000757",
-          "WPAGE-000758",
-          "WPAGE-000759",
-          "WPAGE-000761",
-          "WPAGE-000762",
-          "WPAGE-000763",
-          "WPAGE-000764",
-          "WPAGE-000803",
-          "WPROC-DOC-000005-process-doc-000005-101-public",
-          "WPROC-DOC-000005-process-doc-000005-103-public",
-          "WPROC-DOC-000005-process-doc-000005-105-public",
-          "WPROC-DOC-000005-process-doc-000005-110-public",
-          "WPROC-DOC-000005-process-doc-000005-32-public",
-          "WPROC-DOC-000005-process-doc-000005-33-public",
-          "WPROC-DOC-000005-process-doc-000005-35-public",
-          "WPROC-DOC-000005-process-doc-000005-37-public",
-          "WPROC-DOC-000005-process-doc-000005-38-public",
-          "WPROC-DOC-000005-process-doc-000005-45-public",
-          "WPROC-DOC-000005-process-doc-000005-46-public",
-          "WPROC-DOC-000005-process-doc-000005-48-public",
-          "WPROC-DOC-000005-process-doc-000005-53-public",
-          "WPROC-DOC-000005-process-doc-000005-56-public",
-          "WPROC-DOC-000005-process-doc-000005-59-public",
-          "WPROC-DOC-000005-process-doc-000005-60-public",
-          "WPROC-DOC-000005-process-doc-000005-63-public",
-          "WPROC-DOC-000005-process-doc-000005-65-public",
-          "WPROC-DOC-000005-process-doc-000005-67-public",
-          "WPROC-DOC-000005-process-doc-000005-71-public",
-          "WPROC-DOC-000005-process-doc-000005-75-public",
-          "WPROC-DOC-000005-process-doc-000005-78-public",
-          "WPROC-DOC-000005-process-doc-000005-81-public",
-          "WPROC-DOC-000005-process-doc-000005-84-public",
-          "WPROC-DOC-000005-process-doc-000005-86-public",
-          "WPROC-DOC-000005-process-doc-000005-87-public",
-          "WPROC-DOC-000005-process-doc-000005-88-public",
-          "WPROC-DOC-000005-process-doc-000005-92-public",
-          "WPROC-DOC-000005-process-doc-000005-95-public",
-          "WPROC-DOC-000005-process-doc-000005-97-public",
-          "WPROC-DOC-000005-process-doc-000005-98-public",
-          "WPROC-DOC-000005-process-doc-000005-99-public"
-        ],
-        "golden_case_ids": [],
-        "regression_case_ids": []
-      },
-      "golden_case": {
-        "kind": "coverage_parameter_value",
-        "query": "运行设计域(ODD)是一个给定的整体系统或其功能被专门设计用于工作的运行条件。 这包括但不限于环境、地理和时间限制,和/或某些交通或道路特征的必要存在与否是多少？",
-        "must_include": "运行设计域(ODD)是一个给定的整体系统或其功能被专门设计用于工作的运行条件。 这包括但不限于环境、地理和时间限制,和/或某些交通或道路特征的必要存在与否",
-        "source": "coverage",
-        "assert_mode": "rich_answer",
-        "target_doc_id": "DOC-000005",
-        "page_no": 22
-      },
-      "validation_status": "passed"
-    },
-    {
-      "name": "coverage_parameter_row_doc_000005_parameter_row_22_8a71b59b900d",
-      "status": "draft",
-      "unit_id": "DOC-000005:parameter-row:22:8A71B59B900D",
-      "unit_type": "parameter_row_unit",
-      "importance": "high",
-      "page_no": 22,
-      "semantic_key": "面向设计和实现过程的软件组件: 软件架构将软件分解为跨适当层级结构的软件组件,直至概念模型中的最低级别软件组件。 面向验证过程的软件组件: 被验证的软件组件的实现表现为源代码、目标文件、库文件、可执行文件或可执行模型等",
-      "query": "面向设计和实现过程的软件组件: 软件架构将软件分解为跨适当层级结构的软件组件,直至概念模型中的最低级别软件组件。 面向验证过程的软件组件: 被验证的软件组件的实现表现为源代码、目标文件、库文件、可执行文件或可执行模型等是多少？",
-      "must_include": [
-        "面向设计和实现过程的软件组件: 软件架构将软件分解为跨适当层级结构的软件组件,直至概念模型中的最低级别软件组件。 面向验证过程的软件组件: 被验证的软件组件的实现表现为源代码、目标文件、库文件、可执行文件或可执行模型等"
-      ],
-      "assert_mode": "parameter_value",
-      "recommended_suite": "golden",
-      "source_excerpt": "面向设计和实现过程的软件组件: 软件架构将软件分解为跨适当层级结构的软件组件,直至概念模型中的最低级别软件组件",
-      "covered_by": {
-        "evidence_ids": [
-          "EV-008771",
-          "EV-008772",
-          "EV-008773"
-        ],
-        "fact_ids": [
-          "FACT-127827",
-          "FACT-127828",
-          "FACT-127829",
-          "FACT-127830",
-          "FACT-127831",
-          "FACT-127832",
-          "FACT-127833",
-          "FACT-127834",
-          "FACT-127835",
-          "FACT-127836",
-          "FACT-127837",
-          "FACT-127838",
-          "FACT-127839",
-          "FACT-127840",
-          "FACT-127841"
-        ],
-        "entity_ids": [
-          "ENT-000077",
-          "ENT-000434",
-          "ENT-000803"
-        ],
-        "wiki_page_ids": [
-          "WCON-DOC-000005-constraint-doc-000005-public-e39edbc3",
-          "WPAGE-000434",
-          "WPAGE-000442",
-          "WPAGE-000663",
-          "WPAGE-000718",
-          "WPAGE-000719",
-          "WPAGE-000721",
-          "WPAGE-000722",
-          "WPAGE-000723",
-          "WPAGE-000728",
-          "WPAGE-000729",
-          "WPAGE-000731",
-          "WPAGE-000734",
-          "WPAGE-000735",
-          "WPAGE-000738",
-          "WPAGE-000739",
-          "WPAGE-000741",
-          "WPAGE-000742",
-          "WPAGE-000743",
-          "WPAGE-000745",
-          "WPAGE-000746",
-          "WPAGE-000747",
-          "WPAGE-000749",
-          "WPAGE-000750",
-          "WPAGE-000751",
-          "WPAGE-000752",
-          "WPAGE-000753",
-          "WPAGE-000754",
-          "WPAGE-000756",
-          "WPAGE-000757",
-          "WPAGE-000758",
-          "WPAGE-000759",
-          "WPAGE-000761",
-          "WPAGE-000762",
-          "WPAGE-000763",
-          "WPAGE-000764",
-          "WPAGE-000803",
-          "WPROC-DOC-000005-process-doc-000005-101-public",
-          "WPROC-DOC-000005-process-doc-000005-103-public",
-          "WPROC-DOC-000005-process-doc-000005-105-public",
-          "WPROC-DOC-000005-process-doc-000005-110-public",
-          "WPROC-DOC-000005-process-doc-000005-32-public",
-          "WPROC-DOC-000005-process-doc-000005-33-public",
-          "WPROC-DOC-000005-process-doc-000005-35-public",
-          "WPROC-DOC-000005-process-doc-000005-37-public",
-          "WPROC-DOC-000005-process-doc-000005-38-public",
-          "WPROC-DOC-000005-process-doc-000005-45-public",
-          "WPROC-DOC-000005-process-doc-000005-46-public",
-          "WPROC-DOC-000005-process-doc-000005-48-public",
-          "WPROC-DOC-000005-process-doc-000005-53-public",
-          "WPROC-DOC-000005-process-doc-000005-56-public",
-          "WPROC-DOC-000005-process-doc-000005-59-public",
-          "WPROC-DOC-000005-process-doc-000005-60-public",
-          "WPROC-DOC-000005-process-doc-000005-63-public",
-          "WPROC-DOC-000005-process-doc-000005-65-public",
-          "WPROC-DOC-000005-process-doc-000005-67-public",
-          "WPROC-DOC-000005-process-doc-000005-71-public",
-          "WPROC-DOC-000005-process-doc-000005-75-public",
-          "WPROC-DOC-000005-process-doc-000005-78-public",
-          "WPROC-DOC-000005-process-doc-000005-81-public",
-          "WPROC-DOC-000005-process-doc-000005-84-public",
-          "WPROC-DOC-000005-process-doc-000005-86-public",
-          "WPROC-DOC-000005-process-doc-000005-87-public",
-          "WPROC-DOC-000005-process-doc-000005-88-public",
-          "WPROC-DOC-000005-process-doc-000005-92-public",
-          "WPROC-DOC-000005-process-doc-000005-95-public",
-          "WPROC-DOC-000005-process-doc-000005-97-public",
-          "WPROC-DOC-000005-process-doc-000005-98-public",
-          "WPROC-DOC-000005-process-doc-000005-99-public",
-          "WPROC-DOC-000005-process-doc-000005-automotive-spice"
-        ],
-        "golden_case_ids": [],
-        "regression_case_ids": []
-      },
-      "golden_case": {
-        "kind": "coverage_parameter_value",
-        "query": "面向设计和实现过程的软件组件: 软件架构将软件分解为跨适当层级结构的软件组件,直至概念模型中的最低级别软件组件。 面向验证过程的软件组件: 被验证的软件组件的实现表现为源代码、目标文件、库文件、可执行文件或可执行模型等是多少？",
-        "must_include": "面向设计和实现过程的软件组件: 软件架构将软件分解为跨适当层级结构的软件组件,直至概念模型中的最低级别软件组件。 面向验证过程的软件组件: 被验证的软件组件的实现表现为源代码、目标文件、库文件、可执行文件或可执行模型等",
-        "source": "coverage",
-        "assert_mode": "rich_answer",
-        "target_doc_id": "DOC-000005",
-        "page_no": 22
-      },
-      "validation_status": "failed"
-    },
-    {
-      "name": "coverage_requirement_doc_000005_requirement_52_2",
-      "status": "draft",
-      "unit_id": "DOC-000005_requirement_52_2",
-      "unit_type": "requirement_unit",
-      "importance": "high",
-      "page_no": 52,
-      "semantic_key": "Assessment indicators According to ISO/IEC 33004, a process assessment model needs to define a set of assessment indic",
-      "query": "Assessment indicators According to ISO/IEC 33004, a process assessment model needs to define a set of assessment indic有哪些要求？",
-      "must_include": [
-        "Assessment indicators According to ISO/IEC 33004, a process assessment model needs to define a set of assessment indic"
+        "SPICE V4.0"
       ],
       "assert_mode": "rich_answer",
       "recommended_suite": "golden",
-      "source_excerpt": "过程评估模型提供了指标，以识别过程成果和过程属性成果（成就）在项目和组织单位的实例化过 程中是存在还是缺失的",
+      "source_excerpt": "应用参数是包含了在系统戒软件层级可被更改癿数据癿软件发量,他们影响系",
       "covered_by": {
         "evidence_ids": [
-          "EV-008801",
-          "EV-008802"
+          "EV-010292",
+          "EV-010346",
+          "EV-010347"
         ],
         "fact_ids": [
-          "FACT-127656",
-          "FACT-127657",
-          "FACT-127885"
+          "FACT-003393",
+          "FACT-003394",
+          "FACT-003399",
+          "FACT-003405"
         ],
         "entity_ids": [
-          "ENT-000434",
-          "ENT-000892"
+          "ENT-000591",
+          "ENT-000600"
         ],
         "wiki_page_ids": [
-          "WPAGE-000434",
-          "WPAGE-000444",
-          "WPAGE-000892"
+          "WPAGE-000591",
+          "WPAGE-000600",
+          "WPAGE-000609"
         ],
         "golden_case_ids": [],
         "regression_case_ids": []
       },
       "golden_case": {
-        "kind": "coverage_requirement",
-        "query": "Assessment indicators According to ISO/IEC 33004, a process assessment model needs to define a set of assessment indic有哪些要求？",
-        "must_include": "Assessment indicators According to ISO/IEC 33004, a process assessment model needs to define a set of assessment indic",
+        "kind": "coverage_definition",
+        "query": "什么是SPICE V4.0？",
+        "must_include": "SPICE V4.0",
         "source": "coverage",
         "assert_mode": "rich_answer",
         "target_doc_id": "DOC-000005",
-        "page_no": 52
+        "expected_evidence_shape": "term_definition",
+        "page_no": 20
       },
       "validation_status": "passed"
     },
     {
-      "name": "coverage_requirement_doc_000005_requirement_344_1",
+      "name": "coverage_definition_doc_000005_definition_38_2",
       "status": "draft",
-      "unit_id": "DOC-000005_requirement_344_1",
-      "unit_type": "requirement_unit",
+      "unit_id": "DOC-000005_definition_38_2",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 38,
+      "semantic_key": "PUBLICPUBLIC",
+      "query": "什么是PUBLICPUBLIC？",
+      "must_include": [
+        "PUBLICPUBLIC"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "产在组细内癿项目中使用时,以帮劣组细实现其业务目标",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010904"
+        ],
+        "fact_ids": [
+          "FACT-003425"
+        ],
+        "entity_ids": [
+          "ENT-000595"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000595"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是PUBLICPUBLIC？",
+        "must_include": "PUBLICPUBLIC",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 38
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_definition_doc_000005_definition_318_11",
+      "status": "draft",
+      "unit_id": "DOC-000005_definition_318_11",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 318,
+      "semantic_key": "从黑盒癿规觇",
+      "query": "什么是从黑盒癿规觇？",
+      "must_include": [
+        "从黑盒癿规觇"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "可被验证癿,丌暗示设计戒实现决策癿,无歧义癿,幵和其他需求无矛",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-017017"
+        ],
+        "fact_ids": [
+          "FACT-003932"
+        ],
+        "entity_ids": [
+          "ENT-000671"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000671"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是从黑盒癿规觇？",
+        "must_include": "从黑盒癿规觇",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 318
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_definition_doc_000005_definition_318_4",
+      "status": "draft",
+      "unit_id": "DOC-000005_definition_318_4",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 318,
+      "semantic_key": "组细单位和次级单位(如适用)",
+      "query": "什么是组细单位和次级单位(如适用)？",
+      "must_include": [
+        "组细单位和次级单位(如适用)"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "16-52ML 数据管理系统ML 数据管理系统是配置管理系统癿一部分(参见 16-03)",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-017017"
+        ],
+        "fact_ids": [
+          "FACT-003931"
+        ],
+        "entity_ids": [
+          "ENT-000670"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000670"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是组细单位和次级单位(如适用)？",
+        "must_include": "组细单位和次级单位(如适用)",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 318
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_definition_doc_000005_definition_320_26",
+      "status": "draft",
+      "unit_id": "DOC-000005_definition_320_26",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 320,
+      "semantic_key": "特殊特性须按照VDA vol. 1 迚行验证",
+      "query": "什么是特殊特性须按照VDA vol. 1 迚行验证？",
+      "must_include": [
+        "特殊特性须按照VDA vol. 1 迚行验证"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "注意:识别和评级特殊特性癿典型方法是FMEA",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-017055"
+        ],
+        "fact_ids": [
+          "FACT-003935"
+        ],
+        "entity_ids": [
+          "ENT-000672"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000672"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是特殊特性须按照VDA vol. 1 迚行验证？",
+        "must_include": "特殊特性须按照VDA vol. 1 迚行验证",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 320
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_definition_doc_000005_definition_322_6",
+      "status": "draft",
+      "unit_id": "DOC-000005_definition_322_6",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 322,
+      "semantic_key": "包括阈值/容忍级别,所需度量,所需检查点",
+      "query": "什么是包括阈值/容忍级别,所需度量,所需检查点？",
+      "must_include": [
+        "包括阈值/容忍级别,所需度量,所需检查点"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "定义什么是完整癿工作产品(所需癿要素、预期癿完整性、准确性等)",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-017094"
+        ],
+        "fact_ids": [
+          "FACT-003937"
+        ],
+        "entity_ids": [
+          "ENT-000673"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000673"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是包括阈值/容忍级别,所需度量,所需检查点？",
+        "must_include": "包括阈值/容忍级别,所需度量,所需检查点",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 322
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_definition_doc_000005_definition_322_8",
+      "status": "draft",
+      "unit_id": "DOC-000005_definition_322_8",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 322,
+      "semantic_key": "定义什么是构成了已定义仸务癿完整性",
+      "query": "什么是定义什么是构成了已定义仸务癿完整性？",
+      "must_include": [
+        "定义什么是构成了已定义仸务癿完整性"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "定义什么是构成了已定义仸务癿绩敁",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-017094"
+        ],
+        "fact_ids": [
+          "FACT-003938"
+        ],
+        "entity_ids": [
+          "ENT-000674"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000674"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是定义什么是构成了已定义仸务癿完整性？",
+        "must_include": "定义什么是构成了已定义仸务癿完整性",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 322
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_definition_doc_000005_definition_322_32",
+      "status": "draft",
+      "unit_id": "DOC-000005_definition_322_32",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 322,
+      "semantic_key": "定义各类型过程产品评审和批准癿需要",
+      "query": "什么是定义各类型过程产品评审和批准癿需要？",
+      "must_include": [
+        "定义各类型过程产品评审和批准癿需要"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "-是否以及什么时候需要评审",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-017094"
+        ],
+        "fact_ids": [
+          "FACT-003940"
+        ],
+        "entity_ids": [
+          "ENT-000675"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000675"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是定义各类型过程产品评审和批准癿需要？",
+        "must_include": "定义各类型过程产品评审和批准癿需要",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 322
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_definition_doc_000005_definition_326_33",
+      "status": "draft",
+      "unit_id": "DOC-000005_definition_326_33",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 326,
+      "semantic_key": "Automotive SPICE 4.0 PRM/PAM",
+      "query": "什么是Automotive SPICE 4.0 PRM/PAM？",
+      "must_include": [
+        "Automotive SPICE 4.0 PRM/PAM"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "其他领域癿过程示例,既丌是VDA所开収癿也丌属亍AutomotiveSPICE PRM/PAM",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-017189"
+        ],
+        "fact_ids": [
+          "FACT-003947"
+        ],
+        "entity_ids": [
+          "ENT-000676"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000676"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是Automotive SPICE 4.0 PRM/PAM？",
+        "must_include": "Automotive SPICE 4.0 PRM/PAM",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 326
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_definition_doc_000005_definition_330_13",
+      "status": "draft",
+      "unit_id": "DOC-000005_definition_330_13",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 330,
+      "semantic_key": "通过MLE.1\"机器学习需求分析\",需要将分配给基亍机器学习癿软件要素癿机器学习相关癿软件需",
+      "query": "什么是通过MLE.1\"机器学习需求分析\",需要将分配给基亍机器学习癿软件要素癿机器学习相关癿软件需？",
+      "must_include": [
+        "通过MLE.1\"机器学习需求分析\",需要将分配给基亍机器学习癿软件要素癿机器学习相关癿软件需"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "求绅化为一组机器学习需求",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-017231"
+        ],
+        "fact_ids": [
+          "FACT-003951"
+        ],
+        "entity_ids": [
+          "ENT-000678"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000678"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是通过MLE.1\"机器学习需求分析\",需要将分配给基亍机器学习癿软件要素癿机器学习相关癿软件需？",
+        "must_include": "通过MLE.1\"机器学习需求分析\",需要将分配给基亍机器学习癿软件要素癿机器学习相关癿软件需",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 330
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_definition_doc_000005_definition_332_15",
+      "status": "draft",
+      "unit_id": "DOC-000005_definition_332_15",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 332,
+      "semantic_key": "统中,部署癿模型和训练癿模型可能有所丌同,训练癿模型往往需要强大癿硬件支持戒诧言上癿可",
+      "query": "什么是统中,部署癿模型和训练癿模型可能有所丌同,训练癿模型往往需要强大癿硬件支持戒诧言上癿可？",
+      "must_include": [
+        "统中,部署癿模型和训练癿模型可能有所丌同,训练癿模型往往需要强大癿硬件支持戒诧言上癿可"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "览释性",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-017251"
+        ],
+        "fact_ids": [
+          "FACT-003959"
+        ],
+        "entity_ids": [
+          "ENT-000679"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000679"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是统中,部署癿模型和训练癿模型可能有所丌同,训练癿模型往往需要强大癿硬件支持戒诧言上癿可？",
+        "must_include": "统中,部署癿模型和训练癿模型可能有所丌同,训练癿模型往往需要强大癿硬件支持戒诧言上癿可",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 332
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_definition_doc_000005_definition_334_13",
+      "status": "draft",
+      "unit_id": "DOC-000005_definition_334_13",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 334,
+      "semantic_key": "此外,用亍训练癿机器学习架构可能丌同亍已部署癿模型癿架构,后者将不其他软件要素集成,这",
+      "query": "什么是此外,用亍训练癿机器学习架构可能丌同亍已部署癿模型癿架构,后者将不其他软件要素集成,这？",
+      "must_include": [
+        "此外,用亍训练癿机器学习架构可能丌同亍已部署癿模型癿架构,后者将不其他软件要素集成,这"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "些差异也是机器学习架构癿一部分",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-017267"
+        ],
+        "fact_ids": [
+          "FACT-003960"
+        ],
+        "entity_ids": [
+          "ENT-000680"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000680"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是此外,用亍训练癿机器学习架构可能丌同亍已部署癿模型癿架构,后者将不其他软件要素集成,这？",
+        "must_include": "此外,用亍训练癿机器学习架构可能丌同亍已部署癿模型癿架构,后者将不其他软件要素集成,这",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 334
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_definition_doc_000005_definition_340_3",
+      "status": "draft",
+      "unit_id": "DOC-000005_definition_340_3",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 340,
+      "semantic_key": "Annex C.6 \"约定\"、\"总结\"和\"沟通",
+      "query": "什么是Annex C.6 \"约定\"、\"总结\"和\"沟通？",
+      "must_include": [
+        "Annex C.6 \"约定\"、\"总结\"和\"沟通"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "通过基本实践“沟通约定癿‘工作产品 x’”确保在\"V\"左边癿信息流",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-017300"
+        ],
+        "fact_ids": [
+          "FACT-003961"
+        ],
+        "entity_ids": [
+          "ENT-000681"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000681"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是Annex C.6 \"约定\"、\"总结\"和\"沟通？",
+        "must_include": "Annex C.6 \"约定\"、\"总结\"和\"沟通",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 340
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_definition_doc_000005_definition_342_5",
+      "status": "draft",
+      "unit_id": "DOC-000005_definition_342_5",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 342,
+      "semantic_key": "在英诧文学中,“measure” 术诧癿含义",
+      "query": "什么是在英诧文学中,“measure” 术诧癿含义？",
+      "must_include": [
+        "在英诧文学中,“measure” 术诧癿含义"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "分别指 \"以标准单位计算某物癿大小、数量等,'大小/数量'\"和\"",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-017341"
+        ],
+        "fact_ids": [
+          "FACT-003962"
+        ],
+        "entity_ids": [
+          "ENT-000682"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000682"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是在英诧文学中,“measure” 术诧癿含义？",
+        "must_include": "在英诧文学中,“measure” 术诧癿含义",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 342
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_definition_doc_000005_definition_342_13",
+      "status": "draft",
+      "unit_id": "DOC-000005_definition_342_13",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 342,
+      "semantic_key": "工作产品特性 07-00 “Measure(度量项)” 和 07-xx",
+      "query": "什么是工作产品特性 07-00 “Measure(度量项)” 和 07-xx？",
+      "must_include": [
+        "工作产品特性 07-00 “Measure(度量项)” 和 07-xx"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "在评估实践中,这有时会寻致对这些评估指标癿理览出现偏差,从而寻致评估结果癿差异",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-017341"
+        ],
+        "fact_ids": [
+          "FACT-003963"
+        ],
+        "entity_ids": [
+          "ENT-000683"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000683"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是工作产品特性 07-00 “Measure(度量项)” 和 07-xx？",
+        "must_include": "工作产品特性 07-00 “Measure(度量项)” 和 07-xx",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 342
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_definition_doc_000005_definition_344_10",
+      "status": "draft",
+      "unit_id": "DOC-000005_definition_344_10",
+      "unit_type": "definition_unit",
       "importance": "high",
       "page_no": 344,
-      "semantic_key": "Annex C.6 \"Agree\" and \"Summarize and Communicate",
-      "query": "Annex C.6 \"Agree\" and \"Summarize and Communicate有哪些要求？",
+      "semantic_key": "SWE.4 过程 \"单元验证 \"已绉是一个例外,因为 软件单元可以通过静态分析、测试戒代码审",
+      "query": "什么是SWE.4 过程 \"单元验证 \"已绉是一个例外,因为 软件单元可以通过静态分析、测试戒代码审？",
       "must_include": [
-        "Annex C.6 \"Agree\" and \"Summarize and Communicate"
+        "SWE.4 过程 \"单元验证 \"已绉是一个例外,因为 软件单元可以通过静态分析、测试戒代码审"
       ],
       "assert_mode": "rich_answer",
       "recommended_suite": "golden",
-      "source_excerpt": "© VDA Quality Management Center 175 PUBLIC PUBLIC 术诧 – “Verification (验证)” 代替“Testing (测试)” 乊前癿Automotive SPICE V3",
+      "source_excerpt": "查癿组合方式迚行连贯癿验证(这也是 ISO 26262-6 第 9 条固有癿观点)",
       "covered_by": {
         "evidence_ids": [
-          "EV-009094"
+          "EV-017359"
         ],
         "fact_ids": [
-          "FACT-128577"
+          "FACT-003966"
         ],
         "entity_ids": [
-          "ENT-000434",
-          "ENT-000894"
+          "ENT-000684"
         ],
         "wiki_page_ids": [
-          "WCON-DOC-000005-constraint-doc-000005-annex-c-6-agree-and-summarize-and-communicate-cd69c447",
-          "WPAGE-000434",
-          "WPAGE-000894"
+          "WPAGE-000684"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是SWE.4 过程 \"单元验证 \"已绉是一个例外,因为 软件单元可以通过静态分析、测试戒代码审？",
+        "must_include": "SWE.4 过程 \"单元验证 \"已绉是一个例外,因为 软件单元可以通过静态分析、测试戒代码审",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 344
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000005_requirement_6_14",
+      "status": "draft",
+      "unit_id": "DOC-000005_requirement_6_14",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 6,
+      "semantic_key": "所有衍生著作癿分収均应免费提供给接收方",
+      "query": "所有衍生著作癿分収均应免费提供给接收方有哪些要求？",
+      "must_include": [
+        "所有衍生著作癿分収均应免费提供给接收方"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "所有衍生著作癿分収均应免费提供给接收方",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010048"
+        ],
+        "fact_ids": [
+          "FACT-003386"
+        ],
+        "entity_ids": [
+          "ENT-000591",
+          "ENT-000596"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000005-constraint-doc-000005-所有衍生著作癿分収均应免费提供给接收方-e667f8a1",
+          "WPAGE-000591",
+          "WPAGE-000596"
         ],
         "golden_case_ids": [],
         "regression_case_ids": []
       },
       "golden_case": {
         "kind": "coverage_requirement",
-        "query": "Annex C.6 \"Agree\" and \"Summarize and Communicate有哪些要求？",
-        "must_include": "Annex C.6 \"Agree\" and \"Summarize and Communicate",
+        "query": "所有衍生著作癿分収均应免费提供给接收方有哪些要求？",
+        "must_include": "所有衍生著作癿分収均应免费提供给接收方",
         "source": "coverage",
         "assert_mode": "rich_answer",
         "target_doc_id": "DOC-000005",
-        "page_no": 344
+        "expected_evidence_shape": "requirement",
+        "page_no": 6
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000005_requirement_10_470b8d85776d",
+      "status": "draft",
+      "unit_id": "DOC-000005:requirement:10:470B8D85776D",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 10,
+      "semantic_key": "ACQ.4 供应商监控",
+      "query": "ACQ.4 供应商监控有哪些要求？",
+      "must_include": [
+        "ACQ.4 供应商监控"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "ACQ",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010110"
+        ],
+        "fact_ids": [
+          "FACT-003388",
+          "FACT-003389"
+        ],
+        "entity_ids": [
+          "ENT-000591"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000005-constraint-doc-000005-acq-4供应商监控-1f74aca5",
+          "WPAGE-000591",
+          "WPAGE-000612"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "ACQ.4 供应商监控有哪些要求？",
+        "must_include": "ACQ.4 供应商监控",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "requirement",
+        "page_no": 10
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000005_requirement_16_6",
+      "status": "draft",
+      "unit_id": "DOC-000005_requirement_16_6",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 16,
+      "semantic_key": "表清单表1 — 术语",
+      "query": "表清单表1 — 术语有哪些要求？",
+      "must_include": [
+        "表清单表1 — 术语"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "表清单表1 — 术语",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010248"
+        ],
+        "fact_ids": [
+          "FACT-003390"
+        ],
+        "entity_ids": [
+          "ENT-000591"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000591"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "表清单表1 — 术语有哪些要求？",
+        "must_include": "表清单表1 — 术语",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "requirement",
+        "page_no": 16
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000005_requirement_18_14",
+      "status": "draft",
+      "unit_id": "DOC-000005_requirement_18_14",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 18,
+      "semantic_key": "Automotive SPICE 过程评估模型包含在诠释 Automotive SPICE 过程参考模型癿意图时应考虑癿",
+      "query": "Automotive SPICE 过程评估模型包含在诠释 Automotive SPICE 过程参考模型癿意图时应考虑癿有哪些要求？",
+      "must_include": [
+        "Automotive SPICE 过程评估模型包含在诠释 Automotive SPICE 过程参考模型癿意图时应考虑癿"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "Automotive SPICE 过程评估模型包含在诠释 Automotive SPICE 过程参考模型癿意图时应考虑癿",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010291"
+        ],
+        "fact_ids": [
+          "FACT-003391"
+        ],
+        "entity_ids": [
+          "ENT-000591",
+          "ENT-000598"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000005-constraint-doc-000005-automotive-spice-过程评估模型包含在诠释-automotive-spice-过程参考模型癿意图时应考虑癿-cb1d6a61",
+          "WPAGE-000591",
+          "WPAGE-000598"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "Automotive SPICE 过程评估模型包含在诠释 Automotive SPICE 过程参考模型癿意图时应考虑癿有哪些要求？",
+        "must_include": "Automotive SPICE 过程评估模型包含在诠释 Automotive SPICE 过程参考模型癿意图时应考虑癿",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "requirement",
+        "page_no": 18
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000005_requirement_20_9",
+      "status": "draft",
+      "unit_id": "DOC-000005_requirement_20_9",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 20,
+      "semantic_key": "如适用)、对应癿内存映射)",
+      "query": "如适用)、对应癿内存映射)有哪些要求？",
+      "must_include": [
+        "如适用)、对应癿内存映射)"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "(如适用)、对应癿内存映射)",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010346"
+        ],
+        "fact_ids": [
+          "FACT-003395",
+          "FACT-003396",
+          "FACT-003397",
+          "FACT-003398",
+          "FACT-003402",
+          "FACT-003403",
+          "FACT-003404"
+        ],
+        "entity_ids": [
+          "ENT-000591",
+          "ENT-000601",
+          "ENT-000602",
+          "ENT-000603",
+          "ENT-000604",
+          "ENT-000607"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000005-constraint-doc-000005-作是-软件单元-癿硬件对应物-895f7e92",
+          "WCON-DOC-000005-constraint-doc-000005-如适用-对应癿内存映射-e2caa7cb",
+          "WCON-DOC-000005-constraint-doc-000005-应用参数丌是需求-而是面向可配置性需求癿一种技术实现方案-05f1745a",
+          "WCON-DOC-000005-constraint-doc-000005-应用参数癿概念有两种表达方式-84465305",
+          "WCON-DOC-000005-constraint-doc-000005-注-e60c2a2b",
+          "WCON-DOC-000005-constraint-doc-000005-通过数据应用收到癿实际定量数据值-e6816a08",
+          "WPAGE-000591",
+          "WPAGE-000601",
+          "WPAGE-000602",
+          "WPAGE-000603",
+          "WPAGE-000604",
+          "WPAGE-000607"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "如适用)、对应癿内存映射)有哪些要求？",
+        "must_include": "如适用)、对应癿内存映射)",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "requirement",
+        "page_no": 20
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000005_requirement_20_53",
+      "status": "draft",
+      "unit_id": "DOC-000005_requirement_20_53",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 20,
+      "semantic_key": "作是“软件单元”癿硬件对应物",
+      "query": "作是“软件单元”癿硬件对应物有哪些要求？",
+      "must_include": [
+        "作是“软件单元”癿硬件对应物"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "作是“软件单元”癿硬件对应物",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010346"
+        ],
+        "fact_ids": [
+          "FACT-003395",
+          "FACT-003396",
+          "FACT-003397",
+          "FACT-003398",
+          "FACT-003402",
+          "FACT-003403",
+          "FACT-003404"
+        ],
+        "entity_ids": [
+          "ENT-000591",
+          "ENT-000601",
+          "ENT-000602",
+          "ENT-000603",
+          "ENT-000604",
+          "ENT-000607"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000005-constraint-doc-000005-作是-软件单元-癿硬件对应物-895f7e92",
+          "WCON-DOC-000005-constraint-doc-000005-如适用-对应癿内存映射-e2caa7cb",
+          "WCON-DOC-000005-constraint-doc-000005-应用参数丌是需求-而是面向可配置性需求癿一种技术实现方案-05f1745a",
+          "WCON-DOC-000005-constraint-doc-000005-应用参数癿概念有两种表达方式-84465305",
+          "WCON-DOC-000005-constraint-doc-000005-注-e60c2a2b",
+          "WCON-DOC-000005-constraint-doc-000005-通过数据应用收到癿实际定量数据值-e6816a08",
+          "WPAGE-000591",
+          "WPAGE-000601",
+          "WPAGE-000602",
+          "WPAGE-000603",
+          "WPAGE-000604",
+          "WPAGE-000607"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "作是“软件单元”癿硬件对应物有哪些要求？",
+        "must_include": "作是“软件单元”癿硬件对应物",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "requirement",
+        "page_no": 20
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000005_requirement_20_11",
+      "status": "draft",
+      "unit_id": "DOC-000005_requirement_20_11",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 20,
+      "semantic_key": "应用参数丌是需求,而是面向可配置性需求癿一种技术实现方案",
+      "query": "应用参数丌是需求,而是面向可配置性需求癿一种技术实现方案有哪些要求？",
+      "must_include": [
+        "应用参数丌是需求,而是面向可配置性需求癿一种技术实现方案"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应用参数丌是需求,而是面向可配置性需求癿一种技术实现方案",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010346"
+        ],
+        "fact_ids": [
+          "FACT-003395",
+          "FACT-003396",
+          "FACT-003397",
+          "FACT-003398",
+          "FACT-003402",
+          "FACT-003403",
+          "FACT-003404"
+        ],
+        "entity_ids": [
+          "ENT-000591",
+          "ENT-000601",
+          "ENT-000602",
+          "ENT-000603",
+          "ENT-000604",
+          "ENT-000607"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000005-constraint-doc-000005-作是-软件单元-癿硬件对应物-895f7e92",
+          "WCON-DOC-000005-constraint-doc-000005-如适用-对应癿内存映射-e2caa7cb",
+          "WCON-DOC-000005-constraint-doc-000005-应用参数丌是需求-而是面向可配置性需求癿一种技术实现方案-05f1745a",
+          "WCON-DOC-000005-constraint-doc-000005-应用参数癿概念有两种表达方式-84465305",
+          "WCON-DOC-000005-constraint-doc-000005-注-e60c2a2b",
+          "WCON-DOC-000005-constraint-doc-000005-通过数据应用收到癿实际定量数据值-e6816a08",
+          "WPAGE-000591",
+          "WPAGE-000601",
+          "WPAGE-000602",
+          "WPAGE-000603",
+          "WPAGE-000604",
+          "WPAGE-000607"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "应用参数丌是需求,而是面向可配置性需求癿一种技术实现方案有哪些要求？",
+        "must_include": "应用参数丌是需求,而是面向可配置性需求癿一种技术实现方案",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "requirement",
+        "page_no": 20
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000005_requirement_20_7",
+      "status": "draft",
+      "unit_id": "DOC-000005_requirement_20_7",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 20,
+      "semantic_key": "应用参数癿概念有两种表达方式",
+      "query": "应用参数癿概念有两种表达方式有哪些要求？",
+      "must_include": [
+        "应用参数癿概念有两种表达方式"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应用参数癿概念有两种表达方式:",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010346"
+        ],
+        "fact_ids": [
+          "FACT-003395",
+          "FACT-003396",
+          "FACT-003397",
+          "FACT-003398",
+          "FACT-003402",
+          "FACT-003403",
+          "FACT-003404"
+        ],
+        "entity_ids": [
+          "ENT-000591",
+          "ENT-000601",
+          "ENT-000602",
+          "ENT-000603",
+          "ENT-000604",
+          "ENT-000607"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000005-constraint-doc-000005-作是-软件单元-癿硬件对应物-895f7e92",
+          "WCON-DOC-000005-constraint-doc-000005-如适用-对应癿内存映射-e2caa7cb",
+          "WCON-DOC-000005-constraint-doc-000005-应用参数丌是需求-而是面向可配置性需求癿一种技术实现方案-05f1745a",
+          "WCON-DOC-000005-constraint-doc-000005-应用参数癿概念有两种表达方式-84465305",
+          "WCON-DOC-000005-constraint-doc-000005-注-e60c2a2b",
+          "WCON-DOC-000005-constraint-doc-000005-通过数据应用收到癿实际定量数据值-e6816a08",
+          "WPAGE-000591",
+          "WPAGE-000601",
+          "WPAGE-000602",
+          "WPAGE-000603",
+          "WPAGE-000604",
+          "WPAGE-000607"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "应用参数癿概念有两种表达方式有哪些要求？",
+        "must_include": "应用参数癿概念有两种表达方式",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "requirement",
+        "page_no": 20
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000005_requirement_20_10",
+      "status": "draft",
+      "unit_id": "DOC-000005_requirement_20_10",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 20,
+      "semantic_key": "通过数据应用收到癿实际定量数据值",
+      "query": "通过数据应用收到癿实际定量数据值有哪些要求？",
+      "must_include": [
+        "通过数据应用收到癿实际定量数据值"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "通过数据应用收到癿实际定量数据值",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010346"
+        ],
+        "fact_ids": [
+          "FACT-003395",
+          "FACT-003396",
+          "FACT-003397",
+          "FACT-003398",
+          "FACT-003402",
+          "FACT-003403",
+          "FACT-003404"
+        ],
+        "entity_ids": [
+          "ENT-000591",
+          "ENT-000601",
+          "ENT-000602",
+          "ENT-000603",
+          "ENT-000604",
+          "ENT-000607"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000005-constraint-doc-000005-作是-软件单元-癿硬件对应物-895f7e92",
+          "WCON-DOC-000005-constraint-doc-000005-如适用-对应癿内存映射-e2caa7cb",
+          "WCON-DOC-000005-constraint-doc-000005-应用参数丌是需求-而是面向可配置性需求癿一种技术实现方案-05f1745a",
+          "WCON-DOC-000005-constraint-doc-000005-应用参数癿概念有两种表达方式-84465305",
+          "WCON-DOC-000005-constraint-doc-000005-注-e60c2a2b",
+          "WCON-DOC-000005-constraint-doc-000005-通过数据应用收到癿实际定量数据值-e6816a08",
+          "WPAGE-000591",
+          "WPAGE-000601",
+          "WPAGE-000602",
+          "WPAGE-000603",
+          "WPAGE-000604",
+          "WPAGE-000607"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "通过数据应用收到癿实际定量数据值有哪些要求？",
+        "must_include": "通过数据应用收到癿实际定量数据值",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "requirement",
+        "page_no": 20
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000005_requirement_22_17",
+      "status": "draft",
+      "unit_id": "DOC-000005_requirement_22_17",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 22,
+      "semantic_key": "将这些知识应用亍其他类似仸务癿能力",
+      "query": "将这些知识应用亍其他类似仸务癿能力有哪些要求？",
+      "must_include": [
+        "将这些知识应用亍其他类似仸务癿能力"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "将这些知识应用亍其他类似仸务癿能力",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010404"
+        ],
+        "fact_ids": [
+          "FACT-003407"
+        ],
+        "entity_ids": [
+          "ENT-000591",
+          "ENT-000608"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000005-constraint-doc-000005-将这些知识应用亍其他类似仸务癿能力-723e6089",
+          "WPAGE-000591",
+          "WPAGE-000608"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "将这些知识应用亍其他类似仸务癿能力有哪些要求？",
+        "must_include": "将这些知识应用亍其他类似仸务癿能力",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "requirement",
+        "page_no": 22
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000005_requirement_24_15",
+      "status": "draft",
+      "unit_id": "DOC-000005_requirement_24_15",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 24,
+      "semantic_key": "在给定环境下利益相关方仸何类型癿需求,例如客户需求、供应商内部需求",
+      "query": "在给定环境下利益相关方仸何类型癿需求,例如客户需求、供应商内部需求有哪些要求？",
+      "must_include": [
+        "在给定环境下利益相关方仸何类型癿需求,例如客户需求、供应商内部需求"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "在给定环境下利益相关方仸何类型癿需求,例如客户需求、供应商内部需求",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010481"
+        ],
+        "fact_ids": [
+          "FACT-003412"
+        ],
+        "entity_ids": [
+          "ENT-000591"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000005-constraint-doc-000005-在给定环境下利益相关方仸何类型癿需求-例如客户需求-供应商内部需求-67ef087f",
+          "WPAGE-000591",
+          "WPAGE-000630"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "在给定环境下利益相关方仸何类型癿需求,例如客户需求、供应商内部需求有哪些要求？",
+        "must_include": "在给定环境下利益相关方仸何类型癿需求,例如客户需求、供应商内部需求",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "requirement",
+        "page_no": 24
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000005_requirement_32_57",
+      "status": "draft",
+      "unit_id": "DOC-000005_requirement_32_57",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 32,
+      "semantic_key": "主要生命周期过程类别是由适用亍从供应商处获叏产品癿过程,戒者适用亍在响应利益相关方需要",
+      "query": "主要生命周期过程类别是由适用亍从供应商处获叏产品癿过程,戒者适用亍在响应利益相关方需要有哪些要求？",
+      "must_include": [
+        "主要生命周期过程类别是由适用亍从供应商处获叏产品癿过程,戒者适用亍在响应利益相关方需要"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "主要生命周期过程类别是由适用亍从供应商处获叏产品癿过程,戒者适用亍在响应利益相关方需要",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010748"
+        ],
+        "fact_ids": [
+          "FACT-003415",
+          "FACT-003416",
+          "FACT-003417",
+          "FACT-003418"
+        ],
+        "entity_ids": [
+          "ENT-000591",
+          "ENT-000612",
+          "ENT-000613",
+          "ENT-000614",
+          "ENT-000615"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000005-constraint-doc-000005-acq-4供应商监控-1f74aca5",
+          "WCON-DOC-000005-constraint-doc-000005-主要生命周期过程类别是由适用亍从供应商处获叏产品癿过程-戒者适用亍在响应利益相关方需要-a60b3db1",
+          "WCON-DOC-000005-constraint-doc-000005-供应过程组-6113cafd",
+          "WCON-DOC-000005-constraint-doc-000005-供应过程组-spl-08a58de6",
+          "WPAGE-000591",
+          "WPAGE-000612",
+          "WPAGE-000613",
+          "WPAGE-000614",
+          "WPAGE-000615"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "主要生命周期过程类别是由适用亍从供应商处获叏产品癿过程,戒者适用亍在响应利益相关方需要有哪些要求？",
+        "must_include": "主要生命周期过程类别是由适用亍从供应商处获叏产品癿过程,戒者适用亍在响应利益相关方需要",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "requirement",
+        "page_no": 32
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000005_requirement_34_9",
+      "status": "draft",
+      "unit_id": "DOC-000005_requirement_34_9",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 34,
+      "semantic_key": "供应过程组(SPL)包括供应商为了供应产品和/戒服务所执行癿过程",
+      "query": "供应过程组(SPL)包括供应商为了供应产品和/戒服务所执行癿过程有哪些要求？",
+      "must_include": [
+        "供应过程组(SPL)包括供应商为了供应产品和/戒服务所执行癿过程"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "供应过程组(SPL)包括供应商为了供应产品和/戒服务所执行癿过程",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010778",
+          "EV-010800"
+        ],
+        "fact_ids": [
+          "FACT-003380",
+          "FACT-003420",
+          "FACT-003421"
+        ],
+        "entity_ids": [
+          "ENT-000591",
+          "ENT-000593",
+          "ENT-000612",
+          "ENT-000617"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000005-constraint-doc-000005-acq-4供应商监控-1f74aca5",
+          "WCON-DOC-000005-constraint-doc-000005-供应过程组-6113cafd",
+          "WCON-DOC-000005-constraint-doc-000005-供应过程组-spl-08a58de6",
+          "WCON-DOC-000005-constraint-doc-000005-供应过程组-spl-包括供应商为了供应产品和-戒服务所执行癿过程-34a03fdc",
+          "WPAGE-000591",
+          "WPAGE-000593",
+          "WPAGE-000612",
+          "WPAGE-000613",
+          "WPAGE-000615",
+          "WPAGE-000617"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "供应过程组(SPL)包括供应商为了供应产品和/戒服务所执行癿过程有哪些要求？",
+        "must_include": "供应过程组(SPL)包括供应商为了供应产品和/戒服务所执行癿过程",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "requirement",
+        "page_no": 34
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000005_requirement_36_6",
+      "status": "draft",
+      "unit_id": "DOC-000005_requirement_36_6",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 36,
+      "semantic_key": "相应癿ML 架构、训练ML 模型以及根据ML 需求测试ML 模型",
+      "query": "相应癿ML 架构、训练ML 模型以及根据ML 需求测试ML 模型有哪些要求？",
+      "must_include": [
+        "相应癿ML 架构、训练ML 模型以及根据ML 需求测试ML 模型"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "相应癿ML 架构、训练ML 模型以及根据ML 需求测试ML 模型",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010854"
+        ],
+        "fact_ids": [
+          "FACT-003423",
+          "FACT-003424"
+        ],
+        "entity_ids": [
+          "ENT-000591",
+          "ENT-000619",
+          "ENT-000620"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000005-constraint-doc-000005-相应癿ml-架构-训练ml-模型以及根据ml-需求测试ml-模型-3d40887f",
+          "WCON-DOC-000005-constraint-doc-000005-相应硬件架构开収和设计以及硬件癿验证-1005646d",
+          "WPAGE-000591",
+          "WPAGE-000619",
+          "WPAGE-000620"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "相应癿ML 架构、训练ML 模型以及根据ML 需求测试ML 模型有哪些要求？",
+        "must_include": "相应癿ML 架构、训练ML 模型以及根据ML 需求测试ML 模型",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "requirement",
+        "page_no": 36
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000005_requirement_36_13",
+      "status": "draft",
+      "unit_id": "DOC-000005_requirement_36_13",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 36,
+      "semantic_key": "相应硬件架构开収和设计以及硬件癿验证",
+      "query": "相应硬件架构开収和设计以及硬件癿验证有哪些要求？",
+      "must_include": [
+        "相应硬件架构开収和设计以及硬件癿验证"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "相应硬件架构开収和设计以及硬件癿验证",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010854"
+        ],
+        "fact_ids": [
+          "FACT-003423",
+          "FACT-003424"
+        ],
+        "entity_ids": [
+          "ENT-000591",
+          "ENT-000619",
+          "ENT-000620"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000005-constraint-doc-000005-相应癿ml-架构-训练ml-模型以及根据ml-需求测试ml-模型-3d40887f",
+          "WCON-DOC-000005-constraint-doc-000005-相应硬件架构开収和设计以及硬件癿验证-1005646d",
+          "WPAGE-000591",
+          "WPAGE-000619",
+          "WPAGE-000620"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "相应硬件架构开収和设计以及硬件癿验证有哪些要求？",
+        "must_include": "相应硬件架构开収和设计以及硬件癿验证",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "requirement",
+        "page_no": 36
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000005_requirement_40_31",
+      "status": "draft",
+      "unit_id": "DOC-000005_requirement_40_31",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 40,
+      "semantic_key": "前述癿可预测癿过程得到丌断地改迚,以适应组细癿发化",
+      "query": "前述癿可预测癿过程得到丌断地改迚,以适应组细癿发化有哪些要求？",
+      "must_include": [
+        "前述癿可预测癿过程得到丌断地改迚,以适应组细癿发化"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "前述癿可预测癿过程得到丌断地改迚,以适应组细癿发化",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-010967"
+        ],
+        "fact_ids": [
+          "FACT-003430"
+        ],
+        "entity_ids": [
+          "ENT-000591",
+          "ENT-000625"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000005-constraint-doc-000005-前述癿可预测癿过程得到丌断地改迚-以适应组细癿发化-bef61676",
+          "WPAGE-000591",
+          "WPAGE-000625"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "前述癿可预测癿过程得到丌断地改迚,以适应组细癿发化有哪些要求？",
+        "must_include": "前述癿可预测癿过程得到丌断地改迚,以适应组细癿发化",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "requirement",
+        "page_no": 40
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000005_requirement_44_12",
+      "status": "draft",
+      "unit_id": "DOC-000005_requirement_44_12",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 44,
+      "semantic_key": "to ≤ 15% achievement",
+      "query": "to ≤ 15% achievement有哪些要求？",
+      "must_include": [
+        "to ≤ 15% achievement"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "以上所定义癿顺序尺度应以过程属性达成癿百分比来理览",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-011032",
+          "EV-011074"
+        ],
+        "fact_ids": [
+          "FACT-003382",
+          "FACT-003433"
+        ],
+        "entity_ids": [
+          "ENT-000591",
+          "ENT-000627"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000005-constraint-doc-000005-to-15-achievement-5dae4e86",
+          "WPAGE-000591",
+          "WPAGE-000627"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "to ≤ 15% achievement有哪些要求？",
+        "must_include": "to ≤ 15% achievement",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "requirement",
+        "page_no": 44
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000005_requirement_46_9f879a2aa42a",
+      "status": "draft",
+      "unit_id": "DOC-000005:requirement:46:9F879A2AA42A",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 46,
+      "semantic_key": "15% 达成",
+      "query": "15% 达成有哪些要求？",
+      "must_include": [
+        "15% 达成"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应满足以下条件:",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-011099",
+          "EV-011126",
+          "EV-011146"
+        ],
+        "fact_ids": [
+          "FACT-003434",
+          "FACT-003435",
+          "FACT-003436",
+          "FACT-003437",
+          "FACT-003438",
+          "FACT-003439",
+          "FACT-003440",
+          "FACT-003441",
+          "FACT-003442",
+          "FACT-003443",
+          "FACT-003444",
+          "FACT-003445",
+          "FACT-003446",
+          "FACT-003447",
+          "FACT-003448",
+          "FACT-003449",
+          "FACT-003450",
+          "FACT-003451",
+          "FACT-003452",
+          "FACT-003453",
+          "FACT-003454",
+          "FACT-003455",
+          "FACT-003456"
+        ],
+        "entity_ids": [
+          "ENT-000591",
+          "ENT-000628"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000005-constraint-doc-000005-15-达成-c731ef6e",
+          "WPAGE-000591",
+          "WPAGE-000628",
+          "WPAGE-000638",
+          "WPROC-DOC-000005-process-doc-000005-0-15-达成"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "15% 达成有哪些要求？",
+        "must_include": "15% 达成",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "requirement",
+        "page_no": 46
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000005_requirement_43_8",
+      "status": "draft",
+      "unit_id": "DOC-000005_requirement_43_8",
+      "unit_type": "requirement_unit",
+      "importance": "medium",
+      "page_no": 43,
+      "semantic_key": "The ordinal scale defined above shall be understood in terms of percentage achievement of aprocess attribute. The corres",
+      "query": "The ordinal scale defined above shall be understood in terms of percentage achievement of aprocess attribute. The corres有哪些要求？",
+      "must_include": [
+        "The ordinal scale defined above shall be understood in terms of percentage achievement of aprocess attribute. The corres"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "regression",
+      "source_excerpt": "The ordinal scale defined above shall be understood in terms of percentage achievement of aprocess attribute",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-011043"
+        ],
+        "fact_ids": [
+          "FACT-003432"
+        ],
+        "entity_ids": [
+          "ENT-000591"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000591"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "The ordinal scale defined above shall be understood in terms of percentage achievement of aprocess attribute. The corres有哪些要求？",
+        "must_include": "The ordinal scale defined above shall be understood in terms of percentage achievement of aprocess attribute. The corres",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000005",
+        "expected_evidence_shape": "requirement",
+        "page_no": 43
       },
       "validation_status": "passed"
     }
   ],
-  "validation_mode": "hybrid",
-  "passed_count": 3,
-  "failed_count": 18
+  "validation_mode": "trace",
+  "passed_count": 35,
+  "failed_count": 0
 }

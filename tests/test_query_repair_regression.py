@@ -19,9 +19,18 @@ from enterprise_agent_kb.query_api import build_query_context
 from enterprise_agent_kb.query_api import _merge_injected_hits
 from enterprise_agent_kb.query_api import _rewrite_with_expansion
 from enterprise_agent_kb.query_rewrite import rewrite_query
+from test_helpers import resolve_doc_id_by_filename
 
 
 WORKSPACE = Path("knowledge_base")
+
+
+def _has_doc(filename_stem: str) -> bool:
+    """Check whether a document with the given filename stem exists in the KB."""
+    try:
+        return bool(resolve_doc_id_by_filename(filename_stem, ".pdf"))
+    except Exception:
+        return False
 
 
 class _FakeLLMResponse:
@@ -117,17 +126,19 @@ def test_text_llm_uses_minimax_before_astron(monkeypatch: pytest.MonkeyPatch) ->
     monkeypatch.setenv("ANTHROPIC_MODEL", "astron-code-latest")
     calls: list[dict[str, object]] = []
 
-    def fake_post(url: str, **kwargs: object) -> _FakeLLMResponse:
-        calls.append({"url": url, "json": kwargs.get("json")})
-        return _FakeLLMResponse(_text_llm_payload('{"ok": true}'))
+    original_call = query_semantic_parser._call_llm_message
 
-    monkeypatch.setattr(query_semantic_parser.httpx, "post", fake_post)
+    def fake_call(*, api_base: str, auth_token: str, model: str, prompt: str, system_prompt: str, provider_name: str) -> str:
+        calls.append({"api_base": api_base, "model": model})
+        return '{"ok": true}'
+
+    monkeypatch.setattr(query_semantic_parser, "_call_llm_message", fake_call)
     result = query_semantic_parser._call_astron_text("ping")
 
     assert result == '{"ok": true}'
     assert len(calls) == 1
-    assert str(calls[0]["url"]).startswith("https://minimax.example/anthropic")
-    assert dict(calls[0]["json"] or {})["model"] == "MiniMax-M2.7"
+    assert str(calls[0]["api_base"]).startswith("https://minimax.example/anthropic")
+    assert calls[0]["model"] == "MiniMax-M2.7"
 
 
 def test_injected_hit_merge_preserves_graph_provenance_on_replacement() -> None:
@@ -174,13 +185,13 @@ def test_text_llm_falls_back_to_astron_after_minimax_failure(monkeypatch: pytest
     monkeypatch.setenv("ANTHROPIC_MODEL", "astron-code-latest")
     calls: list[str] = []
 
-    def fake_post(url: str, **kwargs: object) -> _FakeLLMResponse:
-        calls.append(url)
-        if "minimax.example" in url:
+    def fake_call(*, api_base: str, auth_token: str, model: str, prompt: str, system_prompt: str, provider_name: str) -> str:
+        calls.append(api_base)
+        if "minimax.example" in api_base:
             raise TimeoutError("primary timeout")
-        return _FakeLLMResponse(_text_llm_payload('{"fallback": true}'))
+        return '{"fallback": true}'
 
-    monkeypatch.setattr(query_semantic_parser.httpx, "post", fake_post)
+    monkeypatch.setattr(query_semantic_parser, "_call_llm_message", fake_call)
     result = query_semantic_parser._call_astron_text("ping")
 
     assert result == '{"fallback": true}'
@@ -398,6 +409,10 @@ def test_answer_query_asks_for_clarification_on_ambiguous_cp() -> None:
     assert any("控制导引电路" in label for label in labels)
 
 
+@pytest.mark.skipif(
+    not _has_doc("18487.1"),
+    reason="18487.1.pdf not in current knowledge_base",
+)
 def test_answer_query_defines_contextual_cp_acronym(monkeypatch: pytest.MonkeyPatch) -> None:
     _disable_query_llms(monkeypatch)
     answer = answer_query(WORKSPACE, "CP控制导引是什么意思", limit=6)

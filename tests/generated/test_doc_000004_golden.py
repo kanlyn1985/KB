@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 import pytest
 
 from enterprise_agent_kb.answer_api import answer_query
 from enterprise_agent_kb.query_api import build_query_context
+
+os.environ.setdefault("EAKB_ENABLE_LLM_EVIDENCE_JUDGE", "0")
 
 WORKSPACE = Path("knowledge_base")
 
@@ -245,495 +248,355 @@ def test_doc_000004_golden_34() -> None:
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_35() -> None:
-    case = '{"kind": "coverage_parameter_value", "query": "修正正弦波是多少？", "must_include": "修正正弦波", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 10, "coverage_unit_id": "DOC-000004_table_10_3:row:2", "coverage_semantic_key": "修正正弦波"}'
+    case = '{"kind": "coverage_definition", "query": "什么是case A？", "must_include": "case A", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "term_definition", "page_no": 20, "coverage_unit_id": "DOC-000004:definition:20:59235381B3B5", "coverage_semantic_key": "case A"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_36() -> None:
-    case = '{"kind": "coverage_parameter_value", "query": "单相 220 V是多少？", "must_include": "单相 220 V", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 10, "coverage_unit_id": "DOC-000004_table_10_17:row:2", "coverage_semantic_key": "单相 220 V"}'
+    case = '{"kind": "coverage_definition", "query": "什么是case B？", "must_include": "case B", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "term_definition", "page_no": 20, "coverage_unit_id": "DOC-000004:definition:20:A11ACB65DE94", "coverage_semantic_key": "case B"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_37() -> None:
-    case = '{"kind": "coverage_parameter_value", "query": "正弦波是多少？", "must_include": "正弦波", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 10, "coverage_unit_id": "DOC-000004_table_10_3:row:1", "coverage_semantic_key": "正弦波"}'
+    case = '{"kind": "coverage_definition", "query": "什么是exposed？", "must_include": "exposed", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "term_definition", "page_no": 21, "coverage_unit_id": "DOC-000004:definition:21:FE1783700830", "coverage_semantic_key": "exposed"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_38() -> None:
-    case = '{"kind": "coverage_parameter_value", "query": "正弦波修正正弦波是多少？", "must_include": "正弦波修正正弦波", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 10, "coverage_unit_id": "DOC-000004_table_10_17:row:1", "coverage_semantic_key": "正弦波修正正弦波"}'
+    case = '{"kind": "coverage_definition", "query": "什么是insulation？", "must_include": "insulation", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "term_definition", "page_no": 22, "coverage_unit_id": "DOC-000004:definition:22:E7028970AAD6", "coverage_semantic_key": "insulation"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_39() -> None:
-    case = '{"kind": "coverage_requirement", "query": "防止触及危险的带电零部件的防护有哪些要求？", "must_include": "防止触及危险的带电零部件的防护", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 11, "coverage_unit_id": "DOC-000004_requirement_11_35", "coverage_semantic_key": "防止触及危险的带电零部件的防护"}'
+    case = '{"kind": "coverage_definition", "query": "什么是plug？", "must_include": "plug", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "term_definition", "page_no": 23, "coverage_unit_id": "DOC-000004:definition:23:2705389A1DD2", "coverage_semantic_key": "plug"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_40() -> None:
-    case = '{"kind": "coverage_requirement", "query": "输入反接保护有哪些要求？", "must_include": "输入反接保护", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 12, "coverage_unit_id": "DOC-000004_requirement_12_19", "coverage_semantic_key": "输入反接保护"}'
+    case = '{"kind": "coverage_definition", "query": "什么是rechargeable？", "must_include": "rechargeable", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "term_definition", "page_no": 23, "coverage_unit_id": "DOC-000004:definition:23:0DE464474F41", "coverage_semantic_key": "rechargeable"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_41() -> None:
-    case = '{"kind": "coverage_requirement", "query": "接线端受力抗拉特性有哪些要求？", "must_include": "接线端受力抗拉特性", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 13, "coverage_unit_id": "DOC-000004_requirement_13_15", "coverage_semantic_key": "接线端受力抗拉特性"}'
+    case = '{"kind": "coverage_definition", "query": "什么是cable？", "must_include": "cable", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "term_definition", "page_no": 24, "coverage_unit_id": "DOC-000004:definition:24:2C273FBC80BB", "coverage_semantic_key": "cable"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_42() -> None:
-    case = '{"kind": "coverage_requirement", "query": "耐辅助起动特性有哪些要求？", "must_include": "耐辅助起动特性", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 13, "coverage_unit_id": "DOC-000004_requirement_13_11", "coverage_semantic_key": "耐辅助起动特性"}'
+    case = '{"kind": "coverage_definition", "query": "什么是vehicle？", "must_include": "vehicle", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "term_definition", "page_no": 25, "coverage_unit_id": "DOC-000004:definition:25:822259A7E6C9", "coverage_semantic_key": "vehicle"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_43() -> None:
-    case = '{"kind": "coverage_requirement", "query": "燃烧特性有哪些要求？", "must_include": "燃烧特性", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 14, "coverage_unit_id": "DOC-000004_requirement_14_23", "coverage_semantic_key": "燃烧特性"}'
+    case = '{"kind": "coverage_definition", "query": "什么是latching？", "must_include": "latching", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "term_definition", "page_no": 26, "coverage_unit_id": "DOC-000004:definition:26:EBD01B835D2F", "coverage_semantic_key": "latching"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_44() -> None:
-    case = '{"kind": "coverage_requirement", "query": "判定原则有哪些要求？", "must_include": "判定原则", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 21, "coverage_unit_id": "DOC-000004_requirement_21_33", "coverage_semantic_key": "判定原则"}'
+    case = '{"kind": "coverage_definition", "query": "什么是switching？", "must_include": "switching", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "term_definition", "page_no": 28, "coverage_unit_id": "DOC-000004:definition:28:4981D8836E74", "coverage_semantic_key": "switching"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_45() -> None:
-    case = '{"kind": "coverage_requirement", "query": "耐久性试验有哪些要求？", "must_include": "耐久性试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 21, "coverage_unit_id": "DOC-000004_requirement_21_19", "coverage_semantic_key": "耐久性试验"}'
+    case = '{"kind": "coverage_definition", "query": "什么是Characteristics？", "must_include": "Characteristics", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "term_definition", "page_no": 29, "coverage_unit_id": "DOC-000004:definition:29:A167B478009C", "coverage_semantic_key": "Characteristics"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_46() -> None:
-    case = '{"kind": "coverage_requirement", "query": "型式检验条件有哪些要求？", "must_include": "型式检验条件", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 22, "coverage_unit_id": "DOC-000004_requirement_22_2", "coverage_semantic_key": "型式检验条件"}'
+    case = '{"kind": "coverage_definition", "query": "什么是touch？", "must_include": "touch", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "term_definition", "page_no": 29, "coverage_unit_id": "DOC-000004:definition:29:0F5B4D41F070", "coverage_semantic_key": "touch"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_47() -> None:
-    case = '{"kind": "coverage_gap", "query": "b）抗扰试验应符合表4的规定有哪些活动？", "must_include": "b）抗扰试验应符合表4的规定", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 14, "coverage_unit_id": "DOC-000004_procedure_14_31", "coverage_semantic_key": "b）抗扰试验应符合表4的规定"}'
+    case = '{"kind": "coverage_definition", "query": "什么是Mode 3？", "must_include": "Mode 3", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "term_definition", "page_no": 32, "coverage_unit_id": "DOC-000004:definition:32:F8AEBC2A863C", "coverage_semantic_key": "Mode 3"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_48() -> None:
-    case = '{"kind": "coverage_gap", "query": "外观与尺寸检查有哪些活动？", "must_include": "外观与尺寸检查", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 15, "coverage_unit_id": "DOC-000004_procedure_15_27", "coverage_semantic_key": "外观与尺寸检查"}'
+    case = '{"kind": "coverage_definition", "query": "什么是Mode 4？", "must_include": "Mode 4", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "term_definition", "page_no": 32, "coverage_unit_id": "DOC-000004:definition:32:ED5E2F2A0F9B", "coverage_semantic_key": "Mode 4"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_49() -> None:
-    case = '{"kind": "coverage_gap", "query": "密封性试验有哪些活动？", "must_include": "密封性试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 15, "coverage_unit_id": "DOC-000004_procedure_15_29", "coverage_semantic_key": "密封性试验"}'
+    case = '{"kind": "coverage_definition", "query": "什么是Fault？", "must_include": "Fault", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "term_definition", "page_no": 37, "coverage_unit_id": "DOC-000004:definition:37:EB1AB5F9B3B5", "coverage_semantic_key": "Fault"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_50() -> None:
-    case = '{"kind": "coverage_gap", "query": "测量设备与试验用电源有哪些活动？", "must_include": "测量设备与试验用电源", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 15, "coverage_unit_id": "DOC-000004_procedure_15_21", "coverage_semantic_key": "测量设备与试验用电源"}'
+    case = '{"kind": "coverage_requirement", "query": "V/400 V is 4 kV rated impulse voltage withstand that implies at least 3 mm有哪些要求？", "must_include": "V/400 V is 4 kV rated impulse voltage withstand that implies at least 3 mm", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 38, "coverage_unit_id": "DOC-000004:requirement:38:53F041856E1D", "coverage_semantic_key": "V/400 V is 4 kV rated impulse voltage withstand that implies at least 3 mm"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_51() -> None:
-    case = '{"kind": "coverage_gap", "query": "输出基本特性有哪些活动？", "must_include": "输出基本特性", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 15, "coverage_unit_id": "DOC-000004_procedure_15_35", "coverage_semantic_key": "输出基本特性"}'
+    case = '{"kind": "coverage_requirement", "query": "Under preparation有哪些要求？", "must_include": "Under preparation", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 39, "coverage_unit_id": "DOC-000004:requirement:39:D3EC6FE49ABF", "coverage_semantic_key": "Under preparation"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_52() -> None:
-    case = '{"kind": "coverage_gap", "query": "乘员电击保护试验有哪些活动？", "must_include": "乘员电击保护试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 16, "coverage_unit_id": "DOC-000004_procedure_16_42", "coverage_semantic_key": "乘员电击保护试验"}'
+    case = '{"kind": "coverage_requirement", "query": "Touch current有哪些要求？", "must_include": "Touch current", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 46, "coverage_unit_id": "DOC-000004:requirement:46:4B5548F774AC", "coverage_semantic_key": "Touch current"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_53() -> None:
-    case = '{"kind": "coverage_gap", "query": "持续输出能力试验有哪些活动？", "must_include": "持续输出能力试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 16, "coverage_unit_id": "DOC-000004_procedure_16_32", "coverage_semantic_key": "持续输出能力试验"}'
+    case = '{"kind": "coverage_requirement", "query": "Din ≤ 7有哪些要求？", "must_include": "Din ≤ 7", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 73, "coverage_unit_id": "DOC-000004:requirement:73:10C34B6726E6", "coverage_semantic_key": "Din ≤ 7"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_54() -> None:
-    case = '{"kind": "coverage_gap", "query": "无功电流试验有哪些活动？", "must_include": "无功电流试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 16, "coverage_unit_id": "DOC-000004_procedure_16_34", "coverage_semantic_key": "无功电流试验"}'
+    case = '{"kind": "coverage_requirement", "query": "MHz to 30 MHz with a logarithmic step width of 4 % and a holding time of 0,5 s有哪些要求？", "must_include": "MHz to 30 MHz with a logarithmic step width of 4 % and a holding time of 0,5 s", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 75, "coverage_unit_id": "DOC-000004:requirement:75:F60406F89C10", "coverage_semantic_key": "MHz to 30 MHz with a logarithmic step width of 4 % and a holding time of 0,5 s"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_55() -> None:
-    case = '{"kind": "coverage_gap", "query": "标识检查有哪些活动？", "must_include": "标识检查", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 16, "coverage_unit_id": "DOC-000004_procedure_16_37", "coverage_semantic_key": "标识检查"}'
+    case = '{"kind": "coverage_requirement", "query": "To be published有哪些要求？", "must_include": "To be published", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 102, "coverage_unit_id": "DOC-000004:requirement:102:C59DEB4D4109", "coverage_semantic_key": "To be published"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_56() -> None:
-    case = '{"kind": "coverage_gap", "query": "爬电距离、电气间隙和穿通绝缘距离试验有哪些活动？", "must_include": "爬电距离、电气间隙和穿通绝缘距离试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 16, "coverage_unit_id": "DOC-000004_procedure_16_39", "coverage_semantic_key": "爬电距离、电气间隙和穿通绝缘距离试验"}'
+    case = '{"kind": "coverage_requirement", "query": "No liability shall attach to IEC or its directors, employees, servants or agents including individual experts and有哪些要求？", "must_include": "No liability shall attach to IEC or its directors, employees, servants or agents including individual experts and", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 11, "coverage_unit_id": "DOC-000004:requirement:11:1291D180CBFE", "coverage_semantic_key": "No liability shall attach to IEC or its directors, employees, servants or agents including individual experts and"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_57() -> None:
-    case = '{"kind": "coverage_gap", "query": "输出效率试验有哪些活动？", "must_include": "输出效率试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 16, "coverage_unit_id": "DOC-000004_procedure_16_23", "coverage_semantic_key": "输出效率试验"}'
+    case = '{"kind": "coverage_requirement", "query": "Electrical rating有哪些要求？", "must_include": "Electrical rating", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 41, "coverage_unit_id": "DOC-000004_requirement_41_22", "coverage_semantic_key": "Electrical rating"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_58() -> None:
-    case = '{"kind": "coverage_gap", "query": "过载输出能力试验有哪些活动？", "must_include": "过载输出能力试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 16, "coverage_unit_id": "DOC-000004_procedure_16_30", "coverage_semantic_key": "过载输出能力试验"}'
+    case = '{"kind": "coverage_requirement", "query": "Requirements for adaptors有哪些要求？", "must_include": "Requirements for adaptors", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 41, "coverage_unit_id": "DOC-000004_requirement_41_10", "coverage_semantic_key": "Requirements for adaptors"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_59() -> None:
-    case = '{"kind": "coverage_gap", "query": "危险性放电防护试验有哪些活动？", "must_include": "危险性放电防护试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 17, "coverage_unit_id": "DOC-000004_procedure_17_25", "coverage_semantic_key": "危险性放电防护试验"}'
+    case = '{"kind": "coverage_requirement", "query": "Cable dimensions有哪些要求？", "must_include": "Cable dimensions", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 42, "coverage_unit_id": "DOC-000004_requirement_42_18", "coverage_semantic_key": "Cable dimensions"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_60() -> None:
-    case = '{"kind": "coverage_gap", "query": "短路保护试验有哪些活动？", "must_include": "短路保护试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 17, "coverage_unit_id": "DOC-000004_procedure_17_14", "coverage_semantic_key": "短路保护试验"}'
+    case = '{"kind": "coverage_requirement", "query": "Cable management and storage means for cables assemblies有哪些要求？", "must_include": "Cable management and storage means for cables assemblies", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 42, "coverage_unit_id": "DOC-000004_requirement_42_26", "coverage_semantic_key": "Cable management and storage means for cables assemblies"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_61() -> None:
-    case = '{"kind": "coverage_gap", "query": "绝缘电阻和绝缘强度试验有哪些活动？", "must_include": "绝缘电阻和绝缘强度试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 17, "coverage_unit_id": "DOC-000004_procedure_17_27", "coverage_semantic_key": "绝缘电阻和绝缘强度试验"}'
+    case = '{"kind": "coverage_requirement", "query": "Construction requirements有哪些要求？", "must_include": "Construction requirements", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 42, "coverage_unit_id": "DOC-000004_requirement_42_11", "coverage_semantic_key": "Construction requirements"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_62() -> None:
-    case = '{"kind": "coverage_gap", "query": "输入欠压保护试验有哪些活动？", "must_include": "输入欠压保护试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 17, "coverage_unit_id": "DOC-000004_procedure_17_16", "coverage_semantic_key": "输入欠压保护试验"}'
+    case = '{"kind": "coverage_requirement", "query": "Dielectric withstand characteristics有哪些要求？", "must_include": "Dielectric withstand characteristics", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 42, "coverage_unit_id": "DOC-000004_requirement_42_7", "coverage_semantic_key": "Dielectric withstand characteristics"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_63() -> None:
-    case = '{"kind": "coverage_gap", "query": "过流保护试验有哪些活动？", "must_include": "过流保护试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 17, "coverage_unit_id": "DOC-000004_procedure_17_12", "coverage_semantic_key": "过流保护试验"}'
+    case = '{"kind": "coverage_requirement", "query": "Strain relief有哪些要求？", "must_include": "Strain relief", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 42, "coverage_unit_id": "DOC-000004_requirement_42_23", "coverage_semantic_key": "Strain relief"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_64() -> None:
-    case = '{"kind": "coverage_gap", "query": "保护重启时间试验有哪些活动？", "must_include": "保护重启时间试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 18, "coverage_unit_id": "DOC-000004_procedure_18_21", "coverage_semantic_key": "保护重启时间试验"}'
+    case = '{"kind": "coverage_requirement", "query": "IP degrees有哪些要求？", "must_include": "IP degrees", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 45, "coverage_unit_id": "DOC-000004_requirement_45_12", "coverage_semantic_key": "IP degrees"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_65() -> None:
-    case = '{"kind": "coverage_gap", "query": "保护门试验有哪些活动？", "must_include": "保护门试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 18, "coverage_unit_id": "DOC-000004_procedure_18_32", "coverage_semantic_key": "保护门试验"}'
+    case = '{"kind": "coverage_requirement", "query": "Insulation resistance有哪些要求？", "must_include": "Insulation resistance", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 46, "coverage_unit_id": "DOC-000004_requirement_46_3", "coverage_semantic_key": "Insulation resistance"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_66() -> None:
-    case = '{"kind": "coverage_gap", "query": "抗辅助起动试验有哪些活动？", "must_include": "抗辅助起动试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 18, "coverage_unit_id": "DOC-000004_procedure_18_40", "coverage_semantic_key": "抗辅助起动试验"}'
+    case = '{"kind": "coverage_requirement", "query": "Mechanical strength有哪些要求？", "must_include": "Mechanical strength", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 48, "coverage_unit_id": "DOC-000004_requirement_48_11", "coverage_semantic_key": "Mechanical strength"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_67() -> None:
-    case = '{"kind": "coverage_gap", "query": "拔出插销所需力试验有哪些活动？", "must_include": "拔出插销所需力试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 18, "coverage_unit_id": "DOC-000004_procedure_18_34", "coverage_semantic_key": "拔出插销所需力试验"}'
+    case = '{"kind": "coverage_requirement", "query": "Minimum temperature functional test有哪些要求？", "must_include": "Minimum temperature functional test", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 48, "coverage_unit_id": "DOC-000004_requirement_48_8", "coverage_semantic_key": "Minimum temperature functional test"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_68() -> None:
-    case = '{"kind": "coverage_gap", "query": "插座尺寸检查有哪些活动？", "must_include": "插座尺寸检查", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 18, "coverage_unit_id": "DOC-000004_procedure_18_30", "coverage_semantic_key": "插座尺寸检查"}'
+    case = '{"kind": "coverage_requirement", "query": "Emergency switching or disconnect (optional)有哪些要求？", "must_include": "Emergency switching or disconnect (optional)", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 50, "coverage_unit_id": "DOC-000004_requirement_50_8", "coverage_semantic_key": "Emergency switching or disconnect (optional)"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_69() -> None:
-    case = '{"kind": "coverage_gap", "query": "插拔耐久试验有哪些活动？", "must_include": "插拔耐久试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 18, "coverage_unit_id": "DOC-000004_procedure_18_36", "coverage_semantic_key": "插拔耐久试验"}'
+    case = '{"kind": "coverage_requirement", "query": "Installation manual of EV charging stations有哪些要求？", "must_include": "Installation manual of EV charging stations", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 50, "coverage_unit_id": "DOC-000004_requirement_50_14", "coverage_semantic_key": "Installation manual of EV charging stations"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_70() -> None:
-    case = '{"kind": "coverage_gap", "query": "温升试验有哪些活动？", "must_include": "温升试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 18, "coverage_unit_id": "DOC-000004_procedure_18_23", "coverage_semantic_key": "温升试验"}'
+    case = '{"kind": "coverage_requirement", "query": "Marking of EV supply equipment有哪些要求？", "must_include": "Marking of EV supply equipment", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 51, "coverage_unit_id": "DOC-000004_requirement_51_13", "coverage_semantic_key": "Marking of EV supply equipment"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_71() -> None:
-    case = '{"kind": "coverage_gap", "query": "输入反接保护试验有哪些活动？", "must_include": "输入反接保护试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 18, "coverage_unit_id": "DOC-000004_procedure_18_19", "coverage_semantic_key": "输入反接保护试验"}'
+    case = '{"kind": "coverage_requirement", "query": "Marking of charging cable assemblies case B有哪些要求？", "must_include": "Marking of charging cable assemblies case B", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 51, "coverage_unit_id": "DOC-000004_requirement_51_30", "coverage_semantic_key": "Marking of charging cable assemblies case B"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_72() -> None:
-    case = '{"kind": "coverage_gap", "query": "输入过压保护试验有哪些活动？", "must_include": "输入过压保护试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 18, "coverage_unit_id": "DOC-000004_procedure_18_17", "coverage_semantic_key": "输入过压保护试验"}'
+    case = '{"kind": "coverage_requirement", "query": "User manual for EV supply equipment有哪些要求？", "must_include": "User manual for EV supply equipment", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 51, "coverage_unit_id": "DOC-000004_requirement_51_11", "coverage_semantic_key": "User manual for EV supply equipment"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_73() -> None:
-    case = '{"kind": "coverage_gap", "query": "输出线缆试验有哪些活动？", "must_include": "输出线缆试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 18, "coverage_unit_id": "DOC-000004_procedure_18_38", "coverage_semantic_key": "输出线缆试验"}'
+    case = '{"kind": "coverage_requirement", "query": "Durability test for marking有哪些要求？", "must_include": "Durability test for marking", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 52, "coverage_unit_id": "DOC-000004_requirement_52_10", "coverage_semantic_key": "Durability test for marking"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_74() -> None:
-    case = '{"kind": "coverage_gap", "query": "低温试验有哪些活动？", "must_include": "低温试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 19, "coverage_unit_id": "DOC-000004_procedure_19_36", "coverage_semantic_key": "低温试验"}'
+    case = '{"kind": "coverage_requirement", "query": "kHz有哪些要求？", "must_include": "kHz", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 55, "coverage_unit_id": "DOC-000004_requirement_55_13", "coverage_semantic_key": "kHz"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_75() -> None:
-    case = '{"kind": "coverage_gap", "query": "抗叠加交流电压试验有哪些活动？", "must_include": "抗叠加交流电压试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 19, "coverage_unit_id": "DOC-000004_procedure_19_11", "coverage_semantic_key": "抗叠加交流电压试验"}'
+    case = '{"kind": "coverage_requirement", "query": "equivalent resistors有哪些要求？", "must_include": "equivalent resistors", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 58, "coverage_unit_id": "DOC-000004_requirement_58_39", "coverage_semantic_key": "equivalent resistors"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_76() -> None:
-    case = '{"kind": "coverage_gap", "query": "抗跌落性试验有哪些活动？", "must_include": "抗跌落性试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 19, "coverage_unit_id": "DOC-000004_procedure_19_34", "coverage_semantic_key": "抗跌落性试验"}'
+    case = '{"kind": "coverage_requirement", "query": "s, if any有哪些要求？", "must_include": "s, if any", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 61, "coverage_unit_id": "DOC-000004_requirement_61_22", "coverage_semantic_key": "s, if any"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_77() -> None:
-    case = '{"kind": "coverage_gap", "query": "接线端受力抗拉试验有哪些活动？", "must_include": "接线端受力抗拉试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 19, "coverage_unit_id": "DOC-000004_procedure_19_32", "coverage_semantic_key": "接线端受力抗拉试验"}'
+    case = '{"kind": "coverage_requirement", "query": "cable assembly) in state B at the beginning of each sequence有哪些要求？", "must_include": "cable assembly) in state B at the beginning of each sequence", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 75, "coverage_unit_id": "DOC-000004_requirement_75_4", "coverage_semantic_key": "cable assembly) in state B at the beginning of each sequence"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_78() -> None:
-    case = '{"kind": "coverage_gap", "query": "湿热循环试验有哪些活动？", "must_include": "湿热循环试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 19, "coverage_unit_id": "DOC-000004_procedure_19_42", "coverage_semantic_key": "湿热循环试验"}'
+    case = '{"kind": "coverage_requirement", "query": "aThe power dissipation of the resistor caused by the detection circuit shall not exceed the value given above有哪些要求？", "must_include": "aThe power dissipation of the resistor caused by the detection circuit shall not exceed the value given above", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 87, "coverage_unit_id": "DOC-000004_requirement_87_25", "coverage_semantic_key": "aThe power dissipation of the resistor caused by the detection circuit shall not exceed the value given above"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_79() -> None:
-    case = '{"kind": "coverage_gap", "query": "燃烧试验有哪些活动？", "must_include": "燃烧试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 19, "coverage_unit_id": "DOC-000004_procedure_19_48", "coverage_semantic_key": "燃烧试验"}'
+    case = '{"kind": "coverage_requirement", "query": "bResistors used should preferably fail open circuit failure mode有哪些要求？", "must_include": "bResistors used should preferably fail open circuit failure mode", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 87, "coverage_unit_id": "DOC-000004_requirement_87_26", "coverage_semantic_key": "bResistors used should preferably fail open circuit failure mode"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_80() -> None:
-    case = '{"kind": "coverage_gap", "query": "耐化学试剂试验有哪些活动？", "must_include": "耐化学试剂试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 19, "coverage_unit_id": "DOC-000004_procedure_19_46", "coverage_semantic_key": "耐化学试剂试验"}'
+    case = '{"kind": "coverage_requirement", "query": "dEV supply equipment shall not provide power有哪些要求？", "must_include": "dEV supply equipment shall not provide power", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 87, "coverage_unit_id": "DOC-000004_requirement_87_28", "coverage_semantic_key": "dEV supply equipment shall not provide power"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_81() -> None:
-    case = '{"kind": "coverage_gap", "query": "耐稳态湿热试验有哪些活动？", "must_include": "耐稳态湿热试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 19, "coverage_unit_id": "DOC-000004_procedure_19_44", "coverage_semantic_key": "耐稳态湿热试验"}'
+    case = '{"kind": "coverage_requirement", "query": "eThe minimum and maximum values of each range shall be tested有哪些要求？", "must_include": "eThe minimum and maximum values of each range shall be tested", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 87, "coverage_unit_id": "DOC-000004_requirement_87_29", "coverage_semantic_key": "eThe minimum and maximum values of each range shall be tested"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_82() -> None:
-    case = '{"kind": "coverage_gap", "query": "辐射骚扰试验有哪些活动？", "must_include": "辐射骚扰试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 19, "coverage_unit_id": "DOC-000004_procedure_19_56", "coverage_semantic_key": "辐射骚扰试验"}'
+    case = '{"kind": "coverage_requirement", "query": "seconds (see Table D.7 line 3)有哪些要求？", "must_include": "seconds (see Table D.7 line 3)", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 119, "coverage_unit_id": "DOC-000004_requirement_119_19", "coverage_semantic_key": "seconds (see Table D.7 line 3)"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_83() -> None:
-    case = '{"kind": "coverage_gap", "query": "高低温贮存试验有哪些活动？", "must_include": "高低温贮存试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 19, "coverage_unit_id": "DOC-000004_procedure_19_40", "coverage_semantic_key": "高低温贮存试验"}'
+    case = '{"kind": "coverage_requirement", "query": "The EV simulator is used with setting according to Test 3 in Table D有哪些要求？", "must_include": "The EV simulator is used with setting according to Test 3 in Table D", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 133, "coverage_unit_id": "DOC-000004_requirement_133_33", "coverage_semantic_key": "The EV simulator is used with setting according to Test 3 in Table D"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_84() -> None:
-    case = '{"kind": "coverage_gap", "query": "高温试验有哪些活动？", "must_include": "高温试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 19, "coverage_unit_id": "DOC-000004_procedure_19_38", "coverage_semantic_key": "高温试验"}'
+    case = '{"kind": "coverage_requirement", "query": "the charging station shall shut off power有哪些要求？", "must_include": "the charging station shall shut off power", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 134, "coverage_unit_id": "DOC-000004_requirement_134_11", "coverage_semantic_key": "the charging station shall shut off power"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000004_golden_85() -> None:
-    case = '{"kind": "coverage_gap", "query": "耐振动试验有哪些活动？", "must_include": "耐振动试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 21, "coverage_unit_id": "DOC-000004_procedure_21_8", "coverage_semantic_key": "耐振动试验"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000004_golden_86() -> None:
-    case = '{"kind": "coverage_requirement", "query": "基本要求有哪些要求？", "must_include": "基本要求", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 9, "coverage_unit_id": "DOC-000004:requirement:9:E236E89A1B47", "coverage_semantic_key": "基本要求"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000004_golden_87() -> None:
-    case = '{"kind": "coverage_requirement", "query": "静态电流有哪些要求？", "must_include": "静态电流", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 11, "coverage_unit_id": "DOC-000004:requirement:11:193E87DDBEF6", "coverage_semantic_key": "静态电流"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000004_golden_88() -> None:
-    case = '{"kind": "coverage_requirement", "query": "插销拔出力有哪些要求？", "must_include": "插销拔出力", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 12, "coverage_unit_id": "DOC-000004:requirement:12:09AE3204904A", "coverage_semantic_key": "插销拔出力"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000004_golden_89() -> None:
-    case = '{"kind": "coverage_requirement", "query": "输出短路保护有哪些要求？", "must_include": "输出短路保护", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 12, "coverage_unit_id": "DOC-000004:requirement:12:CEF098497AE1", "coverage_semantic_key": "输出短路保护"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000004_golden_90() -> None:
-    case = '{"kind": "coverage_requirement", "query": "插座插拔耐久有哪些要求？", "must_include": "插座插拔耐久", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 13, "coverage_unit_id": "DOC-000004:requirement:13:8964CB67F00F", "coverage_semantic_key": "插座插拔耐久"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000004_golden_91() -> None:
-    case = '{"kind": "coverage_requirement", "query": "耐低温特性有哪些要求？", "must_include": "耐低温特性", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 13, "coverage_unit_id": "DOC-000004:requirement:13:2ACD9F989B26", "coverage_semantic_key": "耐低温特性"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000004_golden_92() -> None:
-    case = '{"kind": "coverage_requirement", "query": "耐叠加交流电压特性有哪些要求？", "must_include": "耐叠加交流电压特性", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 13, "coverage_unit_id": "DOC-000004:requirement:13:6336C8808584", "coverage_semantic_key": "耐叠加交流电压特性"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000004_golden_93() -> None:
-    case = '{"kind": "coverage_requirement", "query": "耐跌落特性有哪些要求？", "must_include": "耐跌落特性", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 13, "coverage_unit_id": "DOC-000004:requirement:13:3AFA4FD39627", "coverage_semantic_key": "耐跌落特性"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000004_golden_94() -> None:
-    case = '{"kind": "coverage_requirement", "query": "耐高温特性有哪些要求？", "must_include": "耐高温特性", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 13, "coverage_unit_id": "DOC-000004:requirement:13:AEAF83A63A00", "coverage_semantic_key": "耐高温特性"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000004_golden_95() -> None:
-    case = '{"kind": "coverage_requirement", "query": "输出导线有哪些要求？", "must_include": "输出导线", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 13, "coverage_unit_id": "DOC-000004:requirement:13:E197BD12492A", "coverage_semantic_key": "输出导线"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000004_golden_96() -> None:
-    case = '{"kind": "coverage_requirement", "query": "电磁兼容性有哪些要求？", "must_include": "电磁兼容性", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 14, "coverage_unit_id": "DOC-000004:requirement:14:0D3CAC8BF513", "coverage_semantic_key": "电磁兼容性"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000004_golden_97() -> None:
-    case = '{"kind": "coverage_requirement", "query": "耐化学试剂特性有哪些要求？", "must_include": "耐化学试剂特性", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 14, "coverage_unit_id": "DOC-000004:requirement:14:69F3AC5D02BB", "coverage_semantic_key": "耐化学试剂特性"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000004_golden_98() -> None:
-    case = '{"kind": "coverage_requirement", "query": "耐湿热循环特性有哪些要求？", "must_include": "耐湿热循环特性", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 14, "coverage_unit_id": "DOC-000004:requirement:14:BDDC9AC8B358", "coverage_semantic_key": "耐湿热循环特性"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000004_golden_99() -> None:
-    case = '{"kind": "coverage_requirement", "query": "耐稳态湿热特性有哪些要求？", "must_include": "耐稳态湿热特性", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 14, "coverage_unit_id": "DOC-000004:requirement:14:9CB6770228DC", "coverage_semantic_key": "耐稳态湿热特性"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000004_golden_100() -> None:
-    case = '{"kind": "coverage_requirement", "query": "高低温贮存特性有哪些要求？", "must_include": "高低温贮存特性", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 14, "coverage_unit_id": "DOC-000004:requirement:14:452DDC59FE14", "coverage_semantic_key": "高低温贮存特性"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000004_golden_101() -> None:
-    case = '{"kind": "coverage_requirement", "query": "耐振动特性有哪些要求？", "must_include": "耐振动特性", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 15, "coverage_unit_id": "DOC-000004:requirement:15:F8EE29E9F573", "coverage_semantic_key": "耐振动特性"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000004_golden_102() -> None:
-    case = '{"kind": "coverage_requirement", "query": "瞬态抗扰性试验有哪些要求？", "must_include": "瞬态抗扰性试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 20, "coverage_unit_id": "DOC-000004:requirement:20:F99BF5C99567", "coverage_semantic_key": "瞬态抗扰性试验"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000004_golden_103() -> None:
-    case = '{"kind": "coverage_requirement", "query": "标志、包装、运输和贮存有哪些要求？", "must_include": "标志、包装、运输和贮存", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 23, "coverage_unit_id": "DOC-000004:requirement:23:7D5704094A97", "coverage_semantic_key": "标志、包装、运输和贮存"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000004_golden_104() -> None:
-    case = '{"kind": "coverage_requirement", "query": "型式检验抽样方法 从出厂检验合格的同一批产品中随机抽取样品,按表8进行试验。产品的型式检验必须全部符合规定要求,如有个别项目不合格,应重新加倍抽取,就不合格项目进行复查。如仍有不合格项目时,则认为该次型式检验不合格。耐久性项目不合格,则认为该次型式检验不合格,不得加倍抽取有哪些要求？", "must_include": "型式检验抽样方法 从出厂检验合格的同一批产品中随机抽取样品,按表8进行试验。产品的型式检验必须全部符合规定要求,如有个别项目不合格,应重新加倍抽取,就不合格项目进行复查。如仍有不合格项目时,则认为该次型式检验不合格。耐久性项目不合格,则认为该次型式检验不合格,不得加倍抽取", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 22, "coverage_unit_id": "DOC-000004:requirement:22:4BCD1C6B9C5E", "coverage_semantic_key": "型式检验抽样方法 从出厂检验合格的同一批产品中随机抽取样品,按表8进行试验。产品的型式检验必须全部符合规定要求,如有个别项目不合格,应重新加倍抽取,就不合格项目进行复查。如仍有不合格项目时,则认为该次型式检验不合格。耐久性项目不合格,则认为该次型式检验不合格,不得加倍抽取"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000004_golden_105() -> None:
-    case = '{"kind": "coverage_gap", "query": "瞬态抗扰性试验有哪些活动？", "must_include": "瞬态抗扰性试验", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "page_no": 20, "coverage_unit_id": "DOC-000004_procedure_20_12", "coverage_semantic_key": "瞬态抗扰性试验"}'
+    case = '{"kind": "coverage_requirement", "query": "charging station shall not shut off power有哪些要求？", "must_include": "charging station shall not shut off power", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000004", "expected_evidence_shape": "requirement", "page_no": 134, "coverage_unit_id": "DOC-000004_requirement_134_7", "coverage_semantic_key": "charging station shall not shut off power"}'
     _assert_case(json.loads(case))

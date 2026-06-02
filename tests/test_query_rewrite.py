@@ -1,6 +1,12 @@
 from __future__ import annotations
 
-from enterprise_agent_kb.query_rewrite import rewrite_query
+import pytest
+
+from enterprise_agent_kb.query_rewrite import (
+    _has_explicit_constraint_intent,
+    _strip_constraint_intent_suffix,
+    rewrite_query,
+)
 
 
 def test_rewrite_definition_query() -> None:
@@ -46,3 +52,66 @@ def test_rewrite_parameter_query() -> None:
     rewritten = rewrite_query("CC阻值有哪些")
     assert rewritten.query_type == "parameter_lookup"
     assert "CC" in rewritten.must_terms
+
+
+# ── Unit tests for _has_explicit_constraint_intent ─────────────────────────
+
+
+@pytest.mark.unit
+class TestHasExplicitConstraintIntent:
+    def test_protection_restart(self) -> None:
+        assert _has_explicit_constraint_intent("逆变器保护重启时间") is True
+
+    def test_protection_function(self) -> None:
+        assert _has_explicit_constraint_intent("逆变器有哪些保护功能") is True
+
+    def test_overvoltage_requirement(self) -> None:
+        assert _has_explicit_constraint_intent("输入过压保护要求有哪些") is True
+
+    def test_plain_parameter_no_match(self) -> None:
+        assert _has_explicit_constraint_intent("逆变器额定输出电压") is False
+
+    def test_definition_no_match(self) -> None:
+        assert _has_explicit_constraint_intent("什么是保护门") is False
+
+
+# ── Unit tests for _strip_constraint_intent_suffix ─────────────────────────
+
+
+@pytest.mark.unit
+class TestStripConstraintIntentSuffix:
+    def test_function_with_requirement_suffix(self) -> None:
+        assert _strip_constraint_intent_suffix("逆变器保护功能有哪些要求") == "逆变器保护"
+
+    def test_function_with_you_na_xie(self) -> None:
+        assert _strip_constraint_intent_suffix("逆变器保护功能有哪些") == "逆变器保护"
+
+    def test_you_na_xie_y_pattern(self) -> None:
+        assert _strip_constraint_intent_suffix("逆变器有哪些保护功能") == "保护功能"
+
+    def test_simple_requirement_suffix(self) -> None:
+        assert _strip_constraint_intent_suffix("输入过压保护要求") == "输入过压保护"
+
+    def test_efficiency_requirement(self) -> None:
+        assert _strip_constraint_intent_suffix("逆变器效率要求") == "逆变器效率"
+
+    def test_no_intent_suffix(self) -> None:
+        assert _strip_constraint_intent_suffix("QC/T 1036 标准号") == "QC/T 1036 标准号"
+
+    def test_only_intent_markers(self) -> None:
+        assert _strip_constraint_intent_suffix("有哪些要求") == ""
+
+    def test_single_intent_marker(self) -> None:
+        assert _strip_constraint_intent_suffix("要求") == ""
+
+    def test_intent_word_as_object_part_falls_through(self) -> None:
+        # "要求" as object_part is an intent word, so falls through to iterative strip
+        assert _strip_constraint_intent_suffix("逆变器有哪些要求") == "逆变器"
+
+    def test_protection_restart_strips_time_suffix(self) -> None:
+        # "时间" is stripped as an intent suffix for constraint queries
+        assert _strip_constraint_intent_suffix("逆变器保护重启时间") == "逆变器保护重启"
+
+    def test_protection_restart_strips_duration_suffix(self) -> None:
+        # "时长" is also stripped as an intent suffix
+        assert _strip_constraint_intent_suffix("逆变器保护重启时长") == "逆变器保护重启"

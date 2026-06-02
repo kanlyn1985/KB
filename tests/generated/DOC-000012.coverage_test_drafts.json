@@ -1,16 +1,3922 @@
 {
   "doc_id": "DOC-000012",
   "source": "coverage_u3_not_tested",
-  "candidate_count": 0,
-  "source_gap_count": 0,
-  "skipped_candidate_count": 0,
-  "excluded_candidate_count": 0,
-  "draft_case_count": 0,
+  "candidate_count": 77,
+  "source_gap_count": 178,
+  "skipped_candidate_count": 101,
+  "excluded_candidate_count": 6,
+  "draft_case_count": 77,
   "validated": true,
   "coverage_candidates_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\coverage_reports\\DOC-000012.test_gap_candidates.json",
   "coverage_candidates_report_path": "E:\\AI_Project\\opencode_workspace\\KB1\\knowledge_base\\coverage_reports\\DOC-000012.test_gap_candidates.md",
-  "cases": [],
+  "cases": [
+    {
+      "name": "coverage_definition_doc_000012_definition_15_18",
+      "status": "draft",
+      "unit_id": "DOC-000012_definition_15_18",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 15,
+      "semantic_key": "A.3.4",
+      "query": "什么是A.3.4？",
+      "must_include": [
+        "A.3.4"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "### 3 鉴权通过后,充电机宜控制车辆插头电子锁止装置(可简称“电子锁”)闭锁",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001324",
+          "EV-001366"
+        ],
+        "fact_ids": [
+          "FACT-002255",
+          "FACT-002564"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000448"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000448"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是A.3.4？",
+        "must_include": "A.3.4",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 15
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_definition_doc_000012_definition_15_36",
+      "status": "draft",
+      "unit_id": "DOC-000012_definition_15_36",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 15,
+      "semantic_key": "A.3.5",
+      "query": "什么是A.3.5？",
+      "must_include": [
+        "A.3.5"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "### 4 充电机唤醒车辆时,应通过闭合辅源接触器K3、K4,并发送充电机唤醒报文来唤醒车辆,未接",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001342",
+          "EV-001366"
+        ],
+        "fact_ids": [
+          "FACT-002261",
+          "FACT-002567",
+          "FACT-002570"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000451"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000451"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是A.3.5？",
+        "must_include": "A.3.5",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 15
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_definition_doc_000012_definition_15_58",
+      "status": "draft",
+      "unit_id": "DOC-000012_definition_15_58",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 15,
+      "semantic_key": "A.3.6",
+      "query": "什么是A.3.6？",
+      "must_include": [
+        "A.3.6"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "### 1 车桩确认进入输出回路检测阶段后,电动汽车应控制断开开关S3,电动汽车应通过检测点3",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001305",
+          "EV-001362",
+          "EV-001364",
+          "EV-001366",
+          "EV-001423"
+        ],
+        "fact_ids": [
+          "FACT-002267",
+          "FACT-002268",
+          "FACT-002552",
+          "FACT-002558",
+          "FACT-002569",
+          "FACT-002572",
+          "FACT-002581"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000443",
+          "ENT-000450",
+          "ENT-000452",
+          "ENT-000458"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000012-constraint-doc-000012-通信-de2d4db3",
+          "WPAGE-000414",
+          "WPAGE-000443",
+          "WPAGE-000450",
+          "WPAGE-000452",
+          "WPAGE-000458"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是A.3.6？",
+        "must_include": "A.3.6",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 15
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_definition_doc_000012_definition_30_24",
+      "status": "draft",
+      "unit_id": "DOC-000012_definition_30_24",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 30,
+      "semantic_key": "T22",
+      "query": "什么是T22？",
+      "must_include": [
+        "T22"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "仅当车辆与充电机结束充电后进入重新启动时,车辆接口保持连接状态,充电机应通过闭合接触器",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002062"
+        ],
+        "fact_ids": [
+          "FACT-002668"
+        ],
+        "entity_ids": [
+          "ENT-000489"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000489"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是T22？",
+        "must_include": "T22",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 30
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_definition_doc_000012_definition_38_47",
+      "status": "draft",
+      "unit_id": "DOC-000012_definition_38_47",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 38,
+      "semantic_key": "A.5.12",
+      "query": "什么是A.5.12？",
+      "must_include": [
+        "A.5.12"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "### 1 车辆可采用供电回路电压切换的方式用于匹配最大输出电压较低的非车载充电机,车辆的",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002335",
+          "EV-002343"
+        ],
+        "fact_ids": [
+          "FACT-002396",
+          "FACT-002707"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000507"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000507"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是A.5.12？",
+        "must_include": "A.5.12",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 38
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_definition_doc_000012_definition_45_44",
+      "status": "draft",
+      "unit_id": "DOC-000012_definition_45_44",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 45,
+      "semantic_key": "B.2.2.6",
+      "query": "什么是B.2.2.6？",
+      "must_include": [
+        "B.2.2.6"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "### 2 当操作人员实施了停止充电指令,或充电机达到操作人员设定的充电结束条件,或充电机收",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002596",
+          "EV-002606"
+        ],
+        "fact_ids": [
+          "FACT-002442",
+          "FACT-002747"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000524"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000524"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是B.2.2.6？",
+        "must_include": "B.2.2.6",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 45
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_definition_doc_000012_definition_51_37",
+      "status": "draft",
+      "unit_id": "DOC-000012_definition_51_37",
+      "unit_type": "definition_unit",
+      "importance": "high",
+      "page_no": 51,
+      "semantic_key": "B.3.2.6",
+      "query": "什么是B.3.2.6？",
+      "must_include": [
+        "B.3.2.6"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "### 2 当操作人员实施了停止充电指令,或充电机达到操作人员设定的充电结束条件,或充电机收",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002868"
+        ],
+        "fact_ids": [
+          "FACT-002784"
+        ],
+        "entity_ids": [
+          "ENT-000534"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000534"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_definition",
+        "query": "什么是B.3.2.6？",
+        "must_include": "B.3.2.6",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "term_definition",
+        "page_no": 51
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_9_abc62d2c6a9d",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:9:ABC62D2C6A9D",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 9,
+      "semantic_key": "除10",
+      "query": "除10有哪些要求？",
+      "must_include": [
+        "除10"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合GB/T18487",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001109",
+          "EV-001112"
+        ],
+        "fact_ids": [
+          "FACT-002222",
+          "FACT-002520",
+          "FACT-002521"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000432"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000012-constraint-doc-000012-除10-29647730",
+          "WPAGE-000414",
+          "WPAGE-000432"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "除10有哪些要求？",
+        "must_include": "除10",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 9
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_9_fc476ef314d4",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:9:FC476EF314D4",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 9,
+      "semantic_key": "除9",
+      "query": "除9有哪些要求？",
+      "must_include": [
+        "除9"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合GB/T18487",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001097",
+          "EV-001112"
+        ],
+        "fact_ids": [
+          "FACT-002218",
+          "FACT-002517",
+          "FACT-002518"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000430"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000012-constraint-doc-000012-除9-64a38fd7",
+          "WPAGE-000414",
+          "WPAGE-000430"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "除9有哪些要求？",
+        "must_include": "除9",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 9
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_18_17",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_18_17",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 18,
+      "semantic_key": "非车载充电机控制器应根据车辆充电需求参数实时调整充电电压和充电电流,车辆控制器和",
+      "query": "非车载充电机控制器应根据车辆充电需求参数实时调整充电电压和充电电流,车辆控制器和有哪些要求？",
+      "must_include": [
+        "非车载充电机控制器应根据车辆充电需求参数实时调整充电电压和充电电流,车辆控制器和"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "非车载充电机控制器应相互发送各自的状态信息",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001491",
+          "EV-001527"
+        ],
+        "fact_ids": [
+          "FACT-002294",
+          "FACT-002602"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000464"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000464"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "非车载充电机控制器应根据车辆充电需求参数实时调整充电电压和充电电流,车辆控制器和有哪些要求？",
+        "must_include": "非车载充电机控制器应根据车辆充电需求参数实时调整充电电压和充电电流,车辆控制器和",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 18
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_19_16",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_19_16",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 19,
+      "semantic_key": "车桩功能协商确认均支持充放电模式功能,且本次充电启动充放电模式,则车桩在能量传输",
+      "query": "车桩功能协商确认均支持充放电模式功能,且本次充电启动充放电模式,则车桩在能量传输有哪些要求？",
+      "must_include": [
+        "车桩功能协商确认均支持充放电模式功能,且本次充电启动充放电模式,则车桩在能量传输"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应通过自动重连或重新启动实现能量传输方向切换;空闲阶段车辆可进入休眠状态,且车辆接收到辅源",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001540",
+          "EV-001581"
+        ],
+        "fact_ids": [
+          "FACT-002301",
+          "FACT-002613",
+          "FACT-002614"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000470"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000470"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "车桩功能协商确认均支持充放电模式功能,且本次充电启动充放电模式,则车桩在能量传输有哪些要求？",
+        "must_include": "车桩功能协商确认均支持充放电模式功能,且本次充电启动充放电模式,则车桩在能量传输",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 19
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_19_41",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_19_41",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 19,
+      "semantic_key": "车辆在供电模式和预充及能量传输阶段进入正常结束状态时,当车辆判断充电机接触器",
+      "query": "车辆在供电模式和预充及能量传输阶段进入正常结束状态时,当车辆判断充电机接触器有哪些要求？",
+      "must_include": [
+        "车辆在供电模式和预充及能量传输阶段进入正常结束状态时,当车辆判断充电机接触器"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "K1、K2为断开状态、电子锁为闭锁状态且允许进行粘连检测时,车辆应控制接触器K5、K6进行粘连检",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001477",
+          "EV-001560",
+          "EV-001567",
+          "EV-001581"
+        ],
+        "fact_ids": [
+          "FACT-002291",
+          "FACT-002305",
+          "FACT-002308",
+          "FACT-002619"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000471"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000471"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "车辆在供电模式和预充及能量传输阶段进入正常结束状态时,当车辆判断充电机接触器有哪些要求？",
+        "must_include": "车辆在供电模式和预充及能量传输阶段进入正常结束状态时,当车辆判断充电机接触器",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 19
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_19_47",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_19_47",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 19,
+      "semantic_key": "车辆接触器K5、K6完成粘连检测,粘连检测中如未完成同时断开接触器K5、K6,粘连检",
+      "query": "车辆接触器K5、K6完成粘连检测,粘连检测中如未完成同时断开接触器K5、K6,粘连检有哪些要求？",
+      "must_include": [
+        "车辆接触器K5、K6完成粘连检测,粘连检测中如未完成同时断开接触器K5、K6,粘连检"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "测后应确认接触器K5、K6已全部断开;车辆接触器K5、K6进行粘连检测时,如车辆接触器未粘连,则",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001573",
+          "EV-001581"
+        ],
+        "fact_ids": [
+          "FACT-002309",
+          "FACT-002620",
+          "FACT-002621",
+          "FACT-002622"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000472"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000472"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "车辆接触器K5、K6完成粘连检测,粘连检测中如未完成同时断开接触器K5、K6,粘连检有哪些要求？",
+        "must_include": "车辆接触器K5、K6完成粘连检测,粘连检测中如未完成同时断开接触器K5、K6,粘连检",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 19
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_20_dd4b7e1f34c1",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:20:DD4B7E1F34C1",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 20,
+      "semantic_key": "充电机正常结束时,应停止输出并断开接触器K1、K2,各阶段触发充电机进入正常结束",
+      "query": "充电机正常结束时,应停止输出并断开接触器K1、K2,各阶段触发充电机进入正常结束有哪些要求？",
+      "must_include": [
+        "充电机正常结束时,应停止输出并断开接触器K1、K2,各阶段触发充电机进入正常结束"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合图A",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001560",
+          "EV-001594",
+          "EV-001599",
+          "EV-001642"
+        ],
+        "fact_ids": [
+          "FACT-002305",
+          "FACT-002314",
+          "FACT-002316",
+          "FACT-002626",
+          "FACT-002627",
+          "FACT-002628",
+          "FACT-002629",
+          "FACT-002630"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000474"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000474"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "充电机正常结束时,应停止输出并断开接触器K1、K2,各阶段触发充电机进入正常结束有哪些要求？",
+        "must_include": "充电机正常结束时,应停止输出并断开接触器K1、K2,各阶段触发充电机进入正常结束",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 20
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_20_096b4dcd3836",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:20:096B4DCD3836",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 20,
+      "semantic_key": "在正常结束阶段,当充电机判断需要进入故障停机时,充电机电流下降速率及接触器",
+      "query": "在正常结束阶段,当充电机判断需要进入故障停机时,充电机电流下降速率及接触器有哪些要求？",
+      "must_include": [
+        "在正常结束阶段,当充电机判断需要进入故障停机时,充电机电流下降速率及接触器"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合表A",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001560",
+          "EV-001608",
+          "EV-001642",
+          "EV-001644"
+        ],
+        "fact_ids": [
+          "FACT-002305",
+          "FACT-002318",
+          "FACT-002321",
+          "FACT-002631",
+          "FACT-002632",
+          "FACT-002633",
+          "FACT-002634"
+        ],
+        "entity_ids": [
+          "ENT-000414"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000012-constraint-topic-doc-000012-故障停机-a4000b51",
+          "WPAGE-000414"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "在正常结束阶段,当充电机判断需要进入故障停机时,充电机电流下降速率及接触器有哪些要求？",
+        "must_include": "在正常结束阶段,当充电机判断需要进入故障停机时,充电机电流下降速率及接触器",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 20
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_20_6",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_20_6",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 20,
+      "semantic_key": "在正常结束阶段,当车辆判断需要进入故障停机时,车辆接触器K5、K6动作时间应符合",
+      "query": "在正常结束阶段,当车辆判断需要进入故障停机时,车辆接触器K5、K6动作时间应符合有哪些要求？",
+      "must_include": [
+        "在正常结束阶段,当车辆判断需要进入故障停机时,车辆接触器K5、K6动作时间应符合"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "表A",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001560",
+          "EV-001586",
+          "EV-001642",
+          "EV-001644"
+        ],
+        "fact_ids": [
+          "FACT-002305",
+          "FACT-002312",
+          "FACT-002321",
+          "FACT-002624",
+          "FACT-002625"
+        ],
+        "entity_ids": [
+          "ENT-000414"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000012-constraint-topic-doc-000012-故障停机-a4000b51",
+          "WPAGE-000414"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "在正常结束阶段,当车辆判断需要进入故障停机时,车辆接触器K5、K6动作时间应符合有哪些要求？",
+        "must_include": "在正常结束阶段,当车辆判断需要进入故障停机时,车辆接触器K5、K6动作时间应符合",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 20
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_20_3",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_20_3",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 20,
+      "semantic_key": "当断开车辆接触器K5、K6或车辆接触器K5、K6外侧电压绝对值小于DC60V 时,车辆",
+      "query": "当断开车辆接触器K5、K6或车辆接触器K5、K6外侧电压绝对值小于DC60V 时,车辆有哪些要求？",
+      "must_include": [
+        "当断开车辆接触器K5、K6或车辆接触器K5、K6外侧电压绝对值小于DC60V 时,车辆"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应闭合开关S3,检测点2电压变为U2/2",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001581",
+          "EV-001583",
+          "EV-001642"
+        ],
+        "fact_ids": [
+          "FACT-002311",
+          "FACT-002616",
+          "FACT-002618",
+          "FACT-002623"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000473"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000473"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "当断开车辆接触器K5、K6或车辆接触器K5、K6外侧电压绝对值小于DC60V 时,车辆有哪些要求？",
+        "must_include": "当断开车辆接触器K5、K6或车辆接触器K5、K6外侧电压绝对值小于DC60V 时,车辆",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 20
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_20_32",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_20_32",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 20,
+      "semantic_key": "正常结束阶段后,若车辆接口保持连接状态,且充电机需要重新唤醒车辆建立通信时,充",
+      "query": "正常结束阶段后,若车辆接口保持连接状态,且充电机需要重新唤醒车辆建立通信时,充有哪些要求？",
+      "must_include": [
+        "正常结束阶段后,若车辆接口保持连接状态,且充电机需要重新唤醒车辆建立通信时,充"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "电机应通过闭合接触器K3、K4和发送充电机唤醒报文来唤醒车辆",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001560",
+          "EV-001612",
+          "EV-001642"
+        ],
+        "fact_ids": [
+          "FACT-002305",
+          "FACT-002319",
+          "FACT-002635"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000475"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000012-constraint-doc-000012-通信-de2d4db3",
+          "WPAGE-000414",
+          "WPAGE-000475"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "正常结束阶段后,若车辆接口保持连接状态,且充电机需要重新唤醒车辆建立通信时,充有哪些要求？",
+        "must_include": "正常结束阶段后,若车辆接口保持连接状态,且充电机需要重新唤醒车辆建立通信时,充",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 20
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_21_05fd039c7d8b",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:21:05FD039C7D8B",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 21,
+      "semantic_key": "当车辆判断需要进入故障停机状态时,应发送对应中止原因的中止报文",
+      "query": "当车辆判断需要进入故障停机状态时,应发送对应中止原因的中止报文有哪些要求？",
+      "must_include": [
+        "当车辆判断需要进入故障停机状态时,应发送对应中止原因的中止报文"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "不超过40 °C时车",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001644",
+          "EV-001648",
+          "EV-001689"
+        ],
+        "fact_ids": [
+          "FACT-002321",
+          "FACT-002323",
+          "FACT-002636",
+          "FACT-002637",
+          "FACT-002638",
+          "FACT-002639"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000476"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000012-constraint-topic-doc-000012-故障停机-a4000b51",
+          "WPAGE-000414",
+          "WPAGE-000476"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "当车辆判断需要进入故障停机状态时,应发送对应中止原因的中止报文有哪些要求？",
+        "must_include": "当车辆判断需要进入故障停机状态时,应发送对应中止原因的中止报文",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 21
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_22_6885eea391d7",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:22:6885EEA391D7",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 22,
+      "semantic_key": "当充电机判断需要进入故障停机状态时,应发送对应中止原因的中止报文",
+      "query": "当充电机判断需要进入故障停机状态时,应发送对应中止原因的中止报文有哪些要求？",
+      "must_include": [
+        "当充电机判断需要进入故障停机状态时,应发送对应中止原因的中止报文"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": ") 必要可选项功能模块协商不成功:可选项功能模块中,充电机应执行的功能模块协商",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001644",
+          "EV-001712",
+          "EV-001740",
+          "EV-001788"
+        ],
+        "fact_ids": [
+          "FACT-002321",
+          "FACT-002329",
+          "FACT-002640",
+          "FACT-002641",
+          "FACT-002642",
+          "FACT-002643",
+          "FACT-002644"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000477"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000012-constraint-topic-doc-000012-故障停机-a4000b51",
+          "WPAGE-000414",
+          "WPAGE-000477"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "当充电机判断需要进入故障停机状态时,应发送对应中止原因的中止报文有哪些要求？",
+        "must_include": "当充电机判断需要进入故障停机状态时,应发送对应中止原因的中止报文",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 22
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_23_39",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_23_39",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 23,
+      "semantic_key": "各阶段触发充电机进入故障停机状态时,充电机电流下降速率及接触器K1、K2的故障",
+      "query": "各阶段触发充电机进入故障停机状态时,充电机电流下降速率及接触器K1、K2的故障有哪些要求？",
+      "must_include": [
+        "各阶段触发充电机进入故障停机状态时,充电机电流下降速率及接触器K1、K2的故障"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "响应时间要求按表A",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001778",
+          "EV-001788"
+        ],
+        "fact_ids": [
+          "FACT-002330",
+          "FACT-002645"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000478"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000012-constraint-topic-doc-000012-故障停机-a4000b51",
+          "WPAGE-000414",
+          "WPAGE-000478"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "各阶段触发充电机进入故障停机状态时,充电机电流下降速率及接触器K1、K2的故障有哪些要求？",
+        "must_include": "各阶段触发充电机进入故障停机状态时,充电机电流下降速率及接触器K1、K2的故障",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 23
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_23_f3150784752b",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:23:F3150784752B",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 23,
+      "semantic_key": "在故障停机阶段,当充电机判断需要进入紧急停机时,充电机电流下降速率及接触器",
+      "query": "在故障停机阶段,当充电机判断需要进入紧急停机时,充电机电流下降速率及接触器有哪些要求？",
+      "must_include": [
+        "在故障停机阶段,当充电机判断需要进入紧急停机时,充电机电流下降速率及接触器"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合表A",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001785",
+          "EV-001788",
+          "EV-001814"
+        ],
+        "fact_ids": [
+          "FACT-002332",
+          "FACT-002334",
+          "FACT-002646",
+          "FACT-002647"
+        ],
+        "entity_ids": [
+          "ENT-000414"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000012-constraint-topic-doc-000012-故障停机-a4000b51",
+          "WCONTOP-DOC-000012-constraint-topic-doc-000012-紧急停机-23ed18ba",
+          "WPAGE-000414"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "在故障停机阶段,当充电机判断需要进入紧急停机时,充电机电流下降速率及接触器有哪些要求？",
+        "must_include": "在故障停机阶段,当充电机判断需要进入紧急停机时,充电机电流下降速率及接触器",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 23
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_24_51",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_24_51",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 24,
+      "semantic_key": "在紧急停机阶段,车辆不应进行接触器K5、K6的粘连检测,接触器K5、K6断开后,车辆",
+      "query": "在紧急停机阶段,车辆不应进行接触器K5、K6的粘连检测,接触器K5、K6断开后,车辆有哪些要求？",
+      "must_include": [
+        "在紧急停机阶段,车辆不应进行接触器K5、K6的粘连检测,接触器K5、K6断开后,车辆"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应控制闭合开关S3",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001814",
+          "EV-001838",
+          "EV-001845"
+        ],
+        "fact_ids": [
+          "FACT-002334",
+          "FACT-002339",
+          "FACT-002649"
+        ],
+        "entity_ids": [
+          "ENT-000414"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000012-constraint-topic-doc-000012-紧急停机-23ed18ba",
+          "WPAGE-000414"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "在紧急停机阶段,车辆不应进行接触器K5、K6的粘连检测,接触器K5、K6断开后,车辆有哪些要求？",
+        "must_include": "在紧急停机阶段,车辆不应进行接触器K5、K6的粘连检测,接触器K5、K6断开后,车辆",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 24
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_24_54",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_24_54",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 24,
+      "semantic_key": "开关S2断开后,车辆接口处于连接状态时,车辆可在进入休眠后闭合开关S2",
+      "query": "开关S2断开后,车辆接口处于连接状态时,车辆可在进入休眠后闭合开关S2有哪些要求？",
+      "must_include": [
+        "开关S2断开后,车辆接口处于连接状态时,车辆可在进入休眠后闭合开关S2"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "结束(车辆断开接触器K5、K6和双方停止通信)且检测点3电压变为0V 后,车辆应闭合开关S2",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001841",
+          "EV-001845"
+        ],
+        "fact_ids": [
+          "FACT-002340",
+          "FACT-002650"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000480"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000480"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "开关S2断开后,车辆接口处于连接状态时,车辆可在进入休眠后闭合开关S2有哪些要求？",
+        "must_include": "开关S2断开后,车辆接口处于连接状态时,车辆可在进入休眠后闭合开关S2",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 24
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_24_31",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_24_31",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 24,
+      "semantic_key": "当车辆判断需要进入紧急停机状态时,应发送对应中止原因的中止报文",
+      "query": "当车辆判断需要进入紧急停机状态时,应发送对应中止原因的中止报文有哪些要求？",
+      "must_include": [
+        "当车辆判断需要进入紧急停机状态时,应发送对应中止原因的中止报文"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "紧急停机状态的原因应包含:",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001814",
+          "EV-001818",
+          "EV-001845",
+          "EV-001891"
+        ],
+        "fact_ids": [
+          "FACT-002334",
+          "FACT-002336",
+          "FACT-002648",
+          "FACT-002651"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000479",
+          "ENT-000481"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000012-constraint-topic-doc-000012-紧急停机-23ed18ba",
+          "WPAGE-000414",
+          "WPAGE-000479",
+          "WPAGE-000481"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "当车辆判断需要进入紧急停机状态时,应发送对应中止原因的中止报文有哪些要求？",
+        "must_include": "当车辆判断需要进入紧急停机状态时,应发送对应中止原因的中止报文",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 24
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_25_42",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_25_42",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 25,
+      "semantic_key": "充电交互结束(充电机断开接触器K1、K2和辅源接触器K3、K4、双方停止通信、接触器",
+      "query": "充电交互结束(充电机断开接触器K1、K2和辅源接触器K3、K4、双方停止通信、接触器有哪些要求？",
+      "must_include": [
+        "充电交互结束(充电机断开接触器K1、K2和辅源接触器K3、K4、双方停止通信、接触器"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "K1、K2外侧电压绝对值小于DC60V 和电子锁解锁)且检测点1电压变为12V 后充电机应闭合开",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001886",
+          "EV-001891"
+        ],
+        "fact_ids": [
+          "FACT-002347",
+          "FACT-002653"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000482"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000012-constraint-doc-000012-通信-de2d4db3",
+          "WPAGE-000414",
+          "WPAGE-000482"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "充电交互结束(充电机断开接触器K1、K2和辅源接触器K3、K4、双方停止通信、接触器有哪些要求？",
+        "must_include": "充电交互结束(充电机断开接触器K1、K2和辅源接触器K3、K4、双方停止通信、接触器",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 25
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_25_14",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_25_14",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 25,
+      "semantic_key": "当充电机判断需要进入紧急停机状态时,应发送对应中止原因的中止报文",
+      "query": "当充电机判断需要进入紧急停机状态时,应发送对应中止原因的中止报文有哪些要求？",
+      "must_include": [
+        "当充电机判断需要进入紧急停机状态时,应发送对应中止原因的中止报文"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "f) 电压过高:在供电模式、预充电或能量传输阶段,充电机输出电压高于表A",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001814",
+          "EV-001849",
+          "EV-001891"
+        ],
+        "fact_ids": [
+          "FACT-002334",
+          "FACT-002342",
+          "FACT-002651",
+          "FACT-002652"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000481"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000012-constraint-topic-doc-000012-紧急停机-23ed18ba",
+          "WPAGE-000414",
+          "WPAGE-000481"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "当充电机判断需要进入紧急停机状态时,应发送对应中止原因的中止报文有哪些要求？",
+        "must_include": "当充电机判断需要进入紧急停机状态时,应发送对应中止原因的中止报文",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 25
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_26_31",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_26_31",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 26,
+      "semantic_key": "充电机或车辆停机时,若中止原因为允许重连(按GB/T27930",
+      "query": "充电机或车辆停机时,若中止原因为允许重连(按GB/T27930有哪些要求？",
+      "must_include": [
+        "充电机或车辆停机时,若中止原因为允许重连(按GB/T27930"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "重连需求,应在发出中止报文的1min内,由重连请求发起方(即中止发起方)确认充电交互结束(充电",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001920",
+          "EV-001951"
+        ],
+        "fact_ids": [
+          "FACT-002351",
+          "FACT-002654",
+          "FACT-002655"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000483"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000483"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "充电机或车辆停机时,若中止原因为允许重连(按GB/T27930有哪些要求？",
+        "must_include": "充电机或车辆停机时,若中止原因为允许重连(按GB/T27930",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 26
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_26_36",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_26_36",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 26,
+      "semantic_key": "在等待重连过程中充电机不应解锁电子锁,双方均不应进入休眠",
+      "query": "在等待重连过程中充电机不应解锁电子锁,双方均不应进入休眠有哪些要求？",
+      "must_include": [
+        "在等待重连过程中充电机不应解锁电子锁,双方均不应进入休眠"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "阶段不应选择二次鉴权",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001926",
+          "EV-001946",
+          "EV-001951"
+        ],
+        "fact_ids": [
+          "FACT-002352",
+          "FACT-002358",
+          "FACT-002656"
+        ],
+        "entity_ids": [
+          "ENT-000414"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "在等待重连过程中充电机不应解锁电子锁,双方均不应进入休眠有哪些要求？",
+        "must_include": "在等待重连过程中充电机不应解锁电子锁,双方均不应进入休眠",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 26
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_26_49",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_26_49",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 26,
+      "semantic_key": "支持重新启动功能的充电机应不休眠或可被唤醒报文唤醒",
+      "query": "支持重新启动功能的充电机应不休眠或可被唤醒报文唤醒有哪些要求？",
+      "must_include": [
+        "支持重新启动功能的充电机应不休眠或可被唤醒报文唤醒"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "败,在充电接口连接断开前,充电机不应再次进行重新启动",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001932",
+          "EV-001939",
+          "EV-001951"
+        ],
+        "fact_ids": [
+          "FACT-002354",
+          "FACT-002356",
+          "FACT-002657"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000484"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000484"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "支持重新启动功能的充电机应不休眠或可被唤醒报文唤醒有哪些要求？",
+        "must_include": "支持重新启动功能的充电机应不休眠或可被唤醒报文唤醒",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 26
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_26_52",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_26_52",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 26,
+      "semantic_key": "重新启动时,若车辆发起重新启动,应发送唤醒报文唤醒充电机;若充电机发起重新启",
+      "query": "重新启动时,若车辆发起重新启动,应发送唤醒报文唤醒充电机;若充电机发起重新启有哪些要求？",
+      "must_include": [
+        "重新启动时,若车辆发起重新启动,应发送唤醒报文唤醒充电机;若充电机发起重新启"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "动,则应闭合接触器K3、K4并发送唤醒报文唤醒车辆",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001932",
+          "EV-001942",
+          "EV-001951"
+        ],
+        "fact_ids": [
+          "FACT-002354",
+          "FACT-002357",
+          "FACT-002658",
+          "FACT-002659"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000485"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000485"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "重新启动时,若车辆发起重新启动,应发送唤醒报文唤醒充电机;若充电机发起重新启有哪些要求？",
+        "must_include": "重新启动时,若车辆发起重新启动,应发送唤醒报文唤醒充电机;若充电机发起重新启",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 26
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_27_259acc68af9e",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:27:259ACC68AF9E",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 27,
+      "semantic_key": "正常启动",
+      "query": "正常启动有哪些要求？",
+      "must_include": [
+        "正常启动"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合图A",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001955",
+          "EV-001961",
+          "EV-001963",
+          "EV-001970",
+          "EV-001972",
+          "EV-002015"
+        ],
+        "fact_ids": [
+          "FACT-002360",
+          "FACT-002361",
+          "FACT-002362",
+          "FACT-002363",
+          "FACT-002660",
+          "FACT-002661",
+          "FACT-002662",
+          "FACT-002663",
+          "FACT-002664",
+          "FACT-002665"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000486",
+          "ENT-000487"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000437",
+          "WPAGE-000486",
+          "WPAGE-000487"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "正常启动有哪些要求？",
+        "must_include": "正常启动",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 27
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_28_13",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_28_13",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 28,
+      "semantic_key": "正常启动控制时序表(续)",
+      "query": "正常启动控制时序表(续)有哪些要求？",
+      "must_include": [
+        "正常启动控制时序表(续)"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "T5充电机应在此刻闭合电子锁,车桩开始进入预约充电阶段(可选)",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-001955",
+          "EV-001963",
+          "EV-001970",
+          "EV-001972",
+          "EV-002015"
+        ],
+        "fact_ids": [
+          "FACT-002360",
+          "FACT-002362",
+          "FACT-002363",
+          "FACT-002660",
+          "FACT-002661",
+          "FACT-002662",
+          "FACT-002663",
+          "FACT-002664",
+          "FACT-002665"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000486",
+          "ENT-000487"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000486",
+          "WPAGE-000487"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "正常启动控制时序表(续)有哪些要求？",
+        "must_include": "正常启动控制时序表(续)",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 28
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_30_19",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_30_19",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 30,
+      "semantic_key": "正常结束或故障停机控制时序表",
+      "query": "正常结束或故障停机控制时序表有哪些要求？",
+      "must_include": [
+        "正常结束或故障停机控制时序表"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "若充电机发送的允许粘连检测报文中允许进行粘连检测,车辆应进行接触器K5、K6粘连检测,检测",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002029",
+          "EV-002062"
+        ],
+        "fact_ids": [
+          "FACT-002367",
+          "FACT-002666",
+          "FACT-002667"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000488"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000012-constraint-topic-doc-000012-故障停机-a4000b51",
+          "WCONTOP-DOC-000012-constraint-topic-doc-000012-正常结束或故障停机控制时序表-bc214c57",
+          "WPAGE-000414",
+          "WPAGE-000488"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "正常结束或故障停机控制时序表有哪些要求？",
+        "must_include": "正常结束或故障停机控制时序表",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 30
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_32_13",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_32_13",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 32,
+      "semantic_key": "车辆触发的紧急停机控制时序表",
+      "query": "车辆触发的紧急停机控制时序表有哪些要求？",
+      "must_include": [
+        "车辆触发的紧急停机控制时序表"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "预充及能量传输阶段触发紧急停机,车辆应关闭绝缘监测功能",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002070",
+          "EV-002097"
+        ],
+        "fact_ids": [
+          "FACT-002370",
+          "FACT-002669",
+          "FACT-002670",
+          "FACT-002671"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000490"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000012-constraint-topic-doc-000012-紧急停机-23ed18ba",
+          "WCONTOP-DOC-000012-constraint-topic-doc-000012-车辆触发的紧急停机控制时序表-bba23e17",
+          "WPAGE-000414",
+          "WPAGE-000490"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "车辆触发的紧急停机控制时序表有哪些要求？",
+        "must_include": "车辆触发的紧急停机控制时序表",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 32
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_34_13",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_34_13",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 34,
+      "semantic_key": "充电机触发的紧急停机控制时序表",
+      "query": "充电机触发的紧急停机控制时序表有哪些要求？",
+      "must_include": [
+        "充电机触发的紧急停机控制时序表"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "预充及能量传输阶段触发紧急停机,车辆应关闭绝缘监测功能",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002105",
+          "EV-002149"
+        ],
+        "fact_ids": [
+          "FACT-002373",
+          "FACT-002672",
+          "FACT-002673",
+          "FACT-002674"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000491"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000012-constraint-topic-doc-000012-充电机触发的紧急停机控制时序表-62f2523a",
+          "WCONTOP-DOC-000012-constraint-topic-doc-000012-紧急停机-23ed18ba",
+          "WPAGE-000414",
+          "WPAGE-000491"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "充电机触发的紧急停机控制时序表有哪些要求？",
+        "must_include": "充电机触发的紧急停机控制时序表",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 34
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_34_42",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_34_42",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 34,
+      "semantic_key": "手动应急解锁装置",
+      "query": "手动应急解锁装置有哪些要求？",
+      "must_include": [
+        "手动应急解锁装置"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "若车辆插头配备手动应急解锁装置,则可通过应急解锁装置手动解锁电子锁",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002144",
+          "EV-002149",
+          "EV-002190"
+        ],
+        "fact_ids": [
+          "FACT-002376",
+          "FACT-002680",
+          "FACT-002681",
+          "FACT-002682",
+          "FACT-002683",
+          "FACT-002684"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000493",
+          "ENT-000494"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000012-constraint-topic-doc-000012-锁止装置-5a51e8ba",
+          "WPAGE-000414",
+          "WPAGE-000493",
+          "WPAGE-000494"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "手动应急解锁装置有哪些要求？",
+        "must_include": "手动应急解锁装置",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 34
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_34_91cf63482650",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:34:91CF63482650",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 34,
+      "semantic_key": "车桩数据交互",
+      "query": "车桩数据交互有哪些要求？",
+      "must_include": [
+        "车桩数据交互"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合GB/T27930",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002134",
+          "EV-002149"
+        ],
+        "fact_ids": [
+          "FACT-002374",
+          "FACT-002677",
+          "FACT-002678"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000492"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000492"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "车桩数据交互有哪些要求？",
+        "must_include": "车桩数据交互",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 34
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_34_7a6e3b67c0fa",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:34:7A6E3B67C0FA",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 34,
+      "semantic_key": "通则",
+      "query": "通则有哪些要求？",
+      "must_include": [
+        "通则"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合第4章~第12章规定",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002149"
+        ],
+        "fact_ids": [
+          "FACT-002675",
+          "FACT-002676"
+        ],
+        "entity_ids": [
+          "ENT-000414"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "通则有哪些要求？",
+        "must_include": "通则",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 34
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_35_a21b3c396710",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:35:A21B3C396710",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 35,
+      "semantic_key": "供电模式阶段由充电机实施直流供电回路绝缘监测,应满足A",
+      "query": "供电模式阶段由充电机实施直流供电回路绝缘监测,应满足A有哪些要求？",
+      "must_include": [
+        "供电模式阶段由充电机实施直流供电回路绝缘监测,应满足A"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应满足A",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002156",
+          "EV-002190"
+        ],
+        "fact_ids": [
+          "FACT-002378",
+          "FACT-002685",
+          "FACT-002686"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000495"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000463",
+          "WPAGE-000495"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "供电模式阶段由充电机实施直流供电回路绝缘监测,应满足A有哪些要求？",
+        "must_include": "供电模式阶段由充电机实施直流供电回路绝缘监测,应满足A",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 35
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_36_8",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_36_8",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 36,
+      "semantic_key": "充电机Y电容",
+      "query": "充电机Y电容有哪些要求？",
+      "must_include": [
+        "充电机Y电容"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "每个车辆插头的直流供电回路DC+与PE之间、DC-与PE之间的总电容均不应大于0",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002197",
+          "EV-002225"
+        ],
+        "fact_ids": [
+          "FACT-002383",
+          "FACT-002689"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000497"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000497"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "充电机Y电容有哪些要求？",
+        "must_include": "充电机Y电容",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 36
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_38_42",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_38_42",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 38,
+      "semantic_key": "停电保护",
+      "query": "停电保护有哪些要求？",
+      "must_include": [
+        "停电保护"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "因停电等原因,直流供电回路或控制电路失去电力时,充电机应提供停电保护功能",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002328",
+          "EV-002343"
+        ],
+        "fact_ids": [
+          "FACT-002394",
+          "FACT-002704",
+          "FACT-002705",
+          "FACT-002706"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000506"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000012-constraint-topic-doc-000012-停电保护-fac90854",
+          "WPAGE-000414",
+          "WPAGE-000506"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "停电保护有哪些要求？",
+        "must_include": "停电保护",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 38
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_38_21",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_38_21",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 38,
+      "semantic_key": "充电机应具备保护自身和车辆的措施,并防止交流供电回路发生短路等故障",
+      "query": "充电机应具备保护自身和车辆的措施,并防止交流供电回路发生短路等故障有哪些要求？",
+      "must_include": [
+        "充电机应具备保护自身和车辆的措施,并防止交流供电回路发生短路等故障"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "输出回路和外露带电部分的设计应能防止因漏水和异物进入而造成短路",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002307",
+          "EV-002343"
+        ],
+        "fact_ids": [
+          "FACT-002391",
+          "FACT-002701"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000503"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000503"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "充电机应具备保护自身和车辆的措施,并防止交流供电回路发生短路等故障有哪些要求？",
+        "must_include": "充电机应具备保护自身和车辆的措施,并防止交流供电回路发生短路等故障",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 38
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_38_25",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_38_25",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 38,
+      "semantic_key": "充电机直流供电回路DC+与DC-之间发生短路时,充电机应立即使用过流保护装置(如限",
+      "query": "充电机直流供电回路DC+与DC-之间发生短路时,充电机应立即使用过流保护装置(如限有哪些要求？",
+      "must_include": [
+        "充电机直流供电回路DC+与DC-之间发生短路时,充电机应立即使用过流保护装置(如限"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "机应将最大峰值电流限制在10kA 及以下",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002310",
+          "EV-002343"
+        ],
+        "fact_ids": [
+          "FACT-002392",
+          "FACT-002702"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000504"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000504"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "充电机直流供电回路DC+与DC-之间发生短路时,充电机应立即使用过流保护装置(如限有哪些要求？",
+        "must_include": "充电机直流供电回路DC+与DC-之间发生短路时,充电机应立即使用过流保护装置(如限",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 38
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_38_21f4f183293f",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:38:21F4F183293F",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 38,
+      "semantic_key": "充电机直流输出回路中从短路保护装置至车辆插头之间的线路短路耐受额定值(I",
+      "query": "充电机直流输出回路中从短路保护装置至车辆插头之间的线路短路耐受额定值(I有哪些要求？",
+      "must_include": [
+        "充电机直流输出回路中从短路保护装置至车辆插头之间的线路短路耐受额定值(I"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "t)应不小",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002316",
+          "EV-002343"
+        ],
+        "fact_ids": [
+          "FACT-002393",
+          "FACT-002703"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000505"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000505"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "充电机直流输出回路中从短路保护装置至车辆插头之间的线路短路耐受额定值(I有哪些要求？",
+        "must_include": "充电机直流输出回路中从短路保护装置至车辆插头之间的线路短路耐受额定值(I",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 38
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_38_88b575d230fd",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:38:88B575D230FD",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 38,
+      "semantic_key": "负载突降",
+      "query": "负载突降有哪些要求？",
+      "must_include": [
+        "负载突降"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "不超过10ms的瞬态电压通常不产生危险情况",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002296",
+          "EV-002343"
+        ],
+        "fact_ids": [
+          "FACT-002388",
+          "FACT-002698",
+          "FACT-002699",
+          "FACT-002700",
+          "FACT-002706"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000502",
+          "ENT-000506"
+        ],
+        "wiki_page_ids": [
+          "WCONTOP-DOC-000012-constraint-topic-doc-000012-停电保护-fac90854",
+          "WPAGE-000414",
+          "WPAGE-000502",
+          "WPAGE-000506"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "负载突降有哪些要求？",
+        "must_include": "负载突降",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 38
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_38_9f19d6662d75",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:38:9F19D6662D75",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 38,
+      "semantic_key": "车辆供电回路电压切换",
+      "query": "车辆供电回路电压切换有哪些要求？",
+      "must_include": [
+        "车辆供电回路电压切换"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合相应控制导引和通信协议的要求",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002333",
+          "EV-002343"
+        ],
+        "fact_ids": [
+          "FACT-002395",
+          "FACT-002708",
+          "FACT-002709"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000508"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000012-constraint-doc-000012-通信-de2d4db3",
+          "WPAGE-000414",
+          "WPAGE-000508"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "车辆供电回路电压切换有哪些要求？",
+        "must_include": "车辆供电回路电压切换",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 38
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_39_71a43c17a236",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:39:71A43C17A236",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 39,
+      "semantic_key": "具备双直流车辆插座且可同时充电的电动汽车基本方案示意图见图A",
+      "query": "具备双直流车辆插座且可同时充电的电动汽车基本方案示意图见图A有哪些要求？",
+      "must_include": [
+        "具备双直流车辆插座且可同时充电的电动汽车基本方案示意图见图A"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合本附录的要求",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002364",
+          "EV-002371"
+        ],
+        "fact_ids": [
+          "FACT-002403",
+          "FACT-002710",
+          "FACT-002711",
+          "FACT-002712",
+          "FACT-002713"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000509"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000509"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "具备双直流车辆插座且可同时充电的电动汽车基本方案示意图见图A有哪些要求？",
+        "must_include": "具备双直流车辆插座且可同时充电的电动汽车基本方案示意图见图A",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 39
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_40_37",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_40_37",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 40,
+      "semantic_key": "任意一个车辆插座的车辆供电回路接触器出现粘连故障,若不能确保车辆插座的B级电压",
+      "query": "任意一个车辆插座的车辆供电回路接触器出现粘连故障,若不能确保车辆插座的B级电压有哪些要求？",
+      "must_include": [
+        "任意一个车辆插座的车辆供电回路接触器出现粘连故障,若不能确保车辆插座的B级电压"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "时,该车辆插座不应充电",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002406",
+          "EV-002410"
+        ],
+        "fact_ids": [
+          "FACT-002411",
+          "FACT-002716"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000512"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000512"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "任意一个车辆插座的车辆供电回路接触器出现粘连故障,若不能确保车辆插座的B级电压有哪些要求？",
+        "must_include": "任意一个车辆插座的车辆供电回路接触器出现粘连故障,若不能确保车辆插座的B级电压",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 40
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_40_18",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_40_18",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 40,
+      "semantic_key": "若仅使用一个车辆插座进行充电,另一个车辆插座的B 级电压触头之间以及B 级电压触头",
+      "query": "若仅使用一个车辆插座进行充电,另一个车辆插座的B 级电压触头之间以及B 级电压触头有哪些要求？",
+      "must_include": [
+        "若仅使用一个车辆插座进行充电,另一个车辆插座的B 级电压触头之间以及B 级电压触头"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "与PE触头之间的电压应保持在DC60V 以下或存储的总能量小于0",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002388",
+          "EV-002410"
+        ],
+        "fact_ids": [
+          "FACT-002406",
+          "FACT-002714"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000510"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000510"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "若仅使用一个车辆插座进行充电,另一个车辆插座的B 级电压触头之间以及B 级电压触头有哪些要求？",
+        "must_include": "若仅使用一个车辆插座进行充电,另一个车辆插座的B 级电压触头之间以及B 级电压触头",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 40
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_40_21",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_40_21",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 40,
+      "semantic_key": "车辆插座的实际电流方向应与充放电工作模式保持一致,且每个车辆供电回路应具有独立",
+      "query": "车辆插座的实际电流方向应与充放电工作模式保持一致,且每个车辆供电回路应具有独立有哪些要求？",
+      "must_include": [
+        "车辆插座的实际电流方向应与充放电工作模式保持一致,且每个车辆供电回路应具有独立"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "的过流保护功能",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002391",
+          "EV-002410"
+        ],
+        "fact_ids": [
+          "FACT-002407",
+          "FACT-002715"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000511"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000511"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "车辆插座的实际电流方向应与充放电工作模式保持一致,且每个车辆供电回路应具有独立有哪些要求？",
+        "must_include": "车辆插座的实际电流方向应与充放电工作模式保持一致,且每个车辆供电回路应具有独立",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 40
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_41_254001784fd1",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:41:254001784FD1",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 41,
+      "semantic_key": "可双车辆插座充电的车辆,其车载可充电储能系统在车辆插座处产生的总短路能量(I",
+      "query": "可双车辆插座充电的车辆,其车载可充电储能系统在车辆插座处产生的总短路能量(I有哪些要求？",
+      "must_include": [
+        "可双车辆插座充电的车辆,其车载可充电储能系统在车辆插座处产生的总短路能量(I"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "不超过500000A",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002422",
+          "EV-002430"
+        ],
+        "fact_ids": [
+          "FACT-002414",
+          "FACT-002720",
+          "FACT-002721",
+          "FACT-002722"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000514"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000514"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "可双车辆插座充电的车辆,其车载可充电储能系统在车辆插座处产生的总短路能量(I有哪些要求？",
+        "must_include": "可双车辆插座充电的车辆,其车载可充电储能系统在车辆插座处产生的总短路能量(I",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 41
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_41_4",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_41_4",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 41,
+      "semantic_key": "可双车辆插座充电的车辆,每个车辆插座绝缘监测应符合A",
+      "query": "可双车辆插座充电的车辆,每个车辆插座绝缘监测应符合A有哪些要求？",
+      "must_include": [
+        "可双车辆插座充电的车辆,每个车辆插座绝缘监测应符合A"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "处于能量传输阶段,车辆应能同时检测两个直流供电回路的绝缘电阻状态",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002412",
+          "EV-002430"
+        ],
+        "fact_ids": [
+          "FACT-002412",
+          "FACT-002717",
+          "FACT-002718",
+          "FACT-002719"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000513"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000513"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "可双车辆插座充电的车辆,每个车辆插座绝缘监测应符合A有哪些要求？",
+        "must_include": "可双车辆插座充电的车辆,每个车辆插座绝缘监测应符合A",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 41
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_42_b125a8bca856",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:42:B125A8BCA856",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 42,
+      "semantic_key": "中向下兼容的通信协议流程",
+      "query": "中向下兼容的通信协议流程有哪些要求？",
+      "must_include": [
+        "中向下兼容的通信协议流程"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合B",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002442",
+          "EV-002458"
+        ],
+        "fact_ids": [
+          "FACT-002417",
+          "FACT-002725",
+          "FACT-002726"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000516"
+        ],
+        "wiki_page_ids": [
+          "WCON-DOC-000012-constraint-doc-000012-通信-de2d4db3",
+          "WPAGE-000414",
+          "WPAGE-000516"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "中向下兼容的通信协议流程有哪些要求？",
+        "must_include": "中向下兼容的通信协议流程",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 42
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_42_a01a7603b0e3",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:42:A01A7603B0E3",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 42,
+      "semantic_key": "符合附录A 的电动汽车,经过版本协商阶段后按GB/T27930",
+      "query": "符合附录A 的电动汽车,经过版本协商阶段后按GB/T27930有哪些要求？",
+      "must_include": [
+        "符合附录A 的电动汽车,经过版本协商阶段后按GB/T27930"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "应符合B",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002437",
+          "EV-002458"
+        ],
+        "fact_ids": [
+          "FACT-002415",
+          "FACT-002723",
+          "FACT-002724"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000515"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000515"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "符合附录A 的电动汽车,经过版本协商阶段后按GB/T27930有哪些要求？",
+        "must_include": "符合附录A 的电动汽车,经过版本协商阶段后按GB/T27930",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 42
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_42_23",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_42_23",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 42,
+      "semantic_key": "符合附录A 的电动汽车与旧版本充电机充电的直流充电控制导引电路基本方案应符合图B",
+      "query": "符合附录A 的电动汽车与旧版本充电机充电的直流充电控制导引电路基本方案应符合图B有哪些要求？",
+      "must_include": [
+        "符合附录A 的电动汽车与旧版本充电机充电的直流充电控制导引电路基本方案应符合图B"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "车载充电机的泄放电路中应具备投切功能,绝缘检测电路应具备投切功能",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002447",
+          "EV-002449",
+          "EV-002458",
+          "EV-002495"
+        ],
+        "fact_ids": [
+          "FACT-002419",
+          "FACT-002420",
+          "FACT-002727",
+          "FACT-002728",
+          "FACT-002729"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000517"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000517"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "符合附录A 的电动汽车与旧版本充电机充电的直流充电控制导引电路基本方案应符合图B有哪些要求？",
+        "must_include": "符合附录A 的电动汽车与旧版本充电机充电的直流充电控制导引电路基本方案应符合图B",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 42
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_43_16",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_43_16",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 43,
+      "semantic_key": "附录A的电动汽车兼容旧版本充电机的直流充电控制导引电路参数",
+      "query": "附录A的电动汽车兼容旧版本充电机的直流充电控制导引电路参数有哪些要求？",
+      "must_include": [
+        "附录A的电动汽车兼容旧版本充电机的直流充电控制导引电路参数"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "对象参数a符号单位标称值最大值b最小值b对应状态d",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002447",
+          "EV-002470",
+          "EV-002473",
+          "EV-002495",
+          "EV-002497",
+          "EV-002551"
+        ],
+        "fact_ids": [
+          "FACT-002419",
+          "FACT-002422",
+          "FACT-002423",
+          "FACT-002424",
+          "FACT-002730",
+          "FACT-002731",
+          "FACT-002732",
+          "FACT-002733",
+          "FACT-002734",
+          "FACT-002735",
+          "FACT-002736"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000518",
+          "ENT-000519"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000518",
+          "WPAGE-000519"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "附录A的电动汽车兼容旧版本充电机的直流充电控制导引电路参数有哪些要求？",
+        "must_include": "附录A的电动汽车兼容旧版本充电机的直流充电控制导引电路参数",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 43
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_44_59ecbee954b4",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:44:59ECBEE954B4",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 44,
+      "semantic_key": "附录A的电动汽车兼容旧版本充电机的直流充电控制导引电路参数(续)",
+      "query": "附录A的电动汽车兼容旧版本充电机的直流充电控制导引电路参数(续)有哪些要求？",
+      "must_include": [
+        "附录A的电动汽车兼容旧版本充电机的直流充电控制导引电路参数(续)"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "不超过28V",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002473",
+          "EV-002495",
+          "EV-002497",
+          "EV-002551"
+        ],
+        "fact_ids": [
+          "FACT-002423",
+          "FACT-002424",
+          "FACT-002730",
+          "FACT-002731",
+          "FACT-002732",
+          "FACT-002733",
+          "FACT-002734",
+          "FACT-002735",
+          "FACT-002736"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000518",
+          "ENT-000519"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000518",
+          "WPAGE-000519"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "附录A的电动汽车兼容旧版本充电机的直流充电控制导引电路参数(续)有哪些要求？",
+        "must_include": "附录A的电动汽车兼容旧版本充电机的直流充电控制导引电路参数(续)",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 44
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_45_69a2228c03ef",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:45:69A2228C03EF",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 45,
+      "semantic_key": "在充电阶段,车辆控制器向非车载充电机控制器实时发送充电接口充电需求参数,非车载充",
+      "query": "在充电阶段,车辆控制器向非车载充电机控制器实时发送充电接口充电需求参数,非车载充有哪些要求？",
+      "must_include": [
+        "在充电阶段,车辆控制器向非车载充电机控制器实时发送充电接口充电需求参数,非车载充"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "A,应在ΔI/dImins(dImin为最小充电速率,20A/s)内将充电电流调整到与命令值相一致",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002580",
+          "EV-002582",
+          "EV-002606",
+          "EV-002665"
+        ],
+        "fact_ids": [
+          "FACT-002437",
+          "FACT-002438",
+          "FACT-002742",
+          "FACT-002743",
+          "FACT-002744",
+          "FACT-002745",
+          "FACT-002746",
+          "FACT-002753",
+          "FACT-002756",
+          "FACT-002758"
+        ],
+        "entity_ids": [
+          "ENT-000414"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000533"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "在充电阶段,车辆控制器向非车载充电机控制器实时发送充电接口充电需求参数,非车载充有哪些要求？",
+        "must_include": "在充电阶段,车辆控制器向非车载充电机控制器实时发送充电接口充电需求参数,非车载充",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 45
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_45_21",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_45_21",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 45,
+      "semantic_key": "当车辆收到充电机最大输出能力参数后,车辆判断允许充电时,车辆控制器断开开关S3并",
+      "query": "当车辆收到充电机最大输出能力参数后,车辆判断允许充电时,车辆控制器断开开关S3并有哪些要求？",
+      "must_include": [
+        "当车辆收到充电机最大输出能力参数后,车辆判断允许充电时,车辆控制器断开开关S3并"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "闭合K5、K6,使车辆供电回路导通,车辆应通过检测点3电压判断车辆接口连接状态",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002571",
+          "EV-002606",
+          "EV-002665"
+        ],
+        "fact_ids": [
+          "FACT-002435",
+          "FACT-002741",
+          "FACT-002743",
+          "FACT-002753",
+          "FACT-002756",
+          "FACT-002758"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000523"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000523"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "当车辆收到充电机最大输出能力参数后,车辆判断允许充电时,车辆控制器断开开关S3并有哪些要求？",
+        "must_include": "当车辆收到充电机最大输出能力参数后,车辆判断允许充电时,车辆控制器断开开关S3并",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 45
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_45_330712b6513f",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:45:330712B6513F",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 45,
+      "semantic_key": "当达到整车充电结束条件或收到充电机中止充电报文后,车辆控制器开始周期发送车辆中",
+      "query": "当达到整车充电结束条件或收到充电机中止充电报文后,车辆控制器开始周期发送车辆中有哪些要求？",
+      "must_include": [
+        "当达到整车充电结束条件或收到充电机中止充电报文后,车辆控制器开始周期发送车辆中"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "不小于100A/s的速率减小充电电流(对于输出电流≥100 A 时)或在1s内(对于输",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002593",
+          "EV-002606",
+          "EV-002665"
+        ],
+        "fact_ids": [
+          "FACT-002441",
+          "FACT-002743",
+          "FACT-002748",
+          "FACT-002749",
+          "FACT-002750",
+          "FACT-002753",
+          "FACT-002756",
+          "FACT-002758"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000525"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000525"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "当达到整车充电结束条件或收到充电机中止充电报文后,车辆控制器开始周期发送车辆中有哪些要求？",
+        "must_include": "当达到整车充电结束条件或收到充电机中止充电报文后,车辆控制器开始周期发送车辆中",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 45
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_45_6",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_45_6",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 45,
+      "semantic_key": "绝缘检测时充电机应闭合K1、K2且输出绝缘监测电压应为车辆握手报文内的车辆端绝缘",
+      "query": "绝缘检测时充电机应闭合K1、K2且输出绝缘监测电压应为车辆握手报文内的车辆端绝缘有哪些要求？",
+      "must_include": [
+        "绝缘检测时充电机应闭合K1、K2且输出绝缘监测电压应为车辆握手报文内的车辆端绝缘"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "后,泄放电路应从直流供电回路中分离,当直流供电回路DC+与DC-之间电压降到DC60V 以下时",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002554",
+          "EV-002606"
+        ],
+        "fact_ids": [
+          "FACT-002431",
+          "FACT-002738"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000521"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000521"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "绝缘检测时充电机应闭合K1、K2且输出绝缘监测电压应为车辆握手报文内的车辆端绝缘有哪些要求？",
+        "must_include": "绝缘检测时充电机应闭合K1、K2且输出绝缘监测电压应为车辆握手报文内的车辆端绝缘",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 45
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_45_12",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_45_12",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 45,
+      "semantic_key": "车辆控制器与非车载充电机控制器在配置阶段时,车辆控制器应能将车辆接口处的充电参",
+      "query": "车辆控制器与非车载充电机控制器在配置阶段时,车辆控制器应能将车辆接口处的充电参有哪些要求？",
+      "must_include": [
+        "车辆控制器与非车载充电机控制器在配置阶段时,车辆控制器应能将车辆接口处的充电参"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "数,包括最高允许充电电流、最高允许充电总电压、整车充电系统当前电压等信息告知充电机",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002562",
+          "EV-002606"
+        ],
+        "fact_ids": [
+          "FACT-002433",
+          "FACT-002739",
+          "FACT-002740"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000522"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000522"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "车辆控制器与非车载充电机控制器在配置阶段时,车辆控制器应能将车辆接口处的充电参有哪些要求？",
+        "must_include": "车辆控制器与非车载充电机控制器在配置阶段时,车辆控制器应能将车辆接口处的充电参",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 45
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_46_52",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_46_52",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 46,
+      "semantic_key": "充电机进行绝缘检测后,应及时对电压进行泄放,1s内将车辆接口电压降到DC60V 以",
+      "query": "充电机进行绝缘检测后,应及时对电压进行泄放,1s内将车辆接口电压降到DC60V 以有哪些要求？",
+      "must_include": [
+        "充电机进行绝缘检测后,应及时对电压进行泄放,1s内将车辆接口电压降到DC60V 以"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "下,避免在充电阶段对电池负载产生电压冲击",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002580",
+          "EV-002606",
+          "EV-002657",
+          "EV-002665"
+        ],
+        "fact_ids": [
+          "FACT-002437",
+          "FACT-002456",
+          "FACT-002743",
+          "FACT-002753",
+          "FACT-002756",
+          "FACT-002758",
+          "FACT-002762",
+          "FACT-002763"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000526"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000526"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "充电机进行绝缘检测后,应及时对电压进行泄放,1s内将车辆接口电压降到DC60V 以有哪些要求？",
+        "must_include": "充电机进行绝缘检测后,应及时对电压进行泄放,1s内将车辆接口电压降到DC60V 以",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 46
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_46_90bed323c8d7",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:46:90BED323C8D7",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 46,
+      "semantic_key": "在充电机侧和车辆侧均设置绝缘监测电路",
+      "query": "在充电机侧和车辆侧均设置绝缘监测电路有哪些要求？",
+      "must_include": [
+        "在充电机侧和车辆侧均设置绝缘监测电路"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "Ω/V 时,宜进行绝缘异常报警,但可正常充电;R≤100Ω/V 视为绝缘故障,应停止充电",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002651",
+          "EV-002665"
+        ],
+        "fact_ids": [
+          "FACT-002455",
+          "FACT-002759",
+          "FACT-002760",
+          "FACT-002761"
+        ],
+        "entity_ids": [
+          "ENT-000414"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "在充电机侧和车辆侧均设置绝缘监测电路有哪些要求？",
+        "must_include": "在充电机侧和车辆侧均设置绝缘监测电路",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 46
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_46_2",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_46_2",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 46,
+      "semantic_key": "在充电过程中,非车载充电机控制器应对检测点1的电压进行检测,若车辆接口由完全连接",
+      "query": "在充电过程中,非车载充电机控制器应对检测点1的电压进行检测,若车辆接口由完全连接有哪些要求？",
+      "must_include": [
+        "在充电过程中,非车载充电机控制器应对检测点1的电压进行检测,若车辆接口由完全连接"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "报文,并控制充电机停止充电,应在50 ms内将输出电流降至5A 及以下且100 ms内断开K1、K2、",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002604",
+          "EV-002606",
+          "EV-002665"
+        ],
+        "fact_ids": [
+          "FACT-002444",
+          "FACT-002743",
+          "FACT-002751",
+          "FACT-002753",
+          "FACT-002756",
+          "FACT-002758"
+        ],
+        "entity_ids": [
+          "ENT-000414"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "在充电过程中,非车载充电机控制器应对检测点1的电压进行检测,若车辆接口由完全连接有哪些要求？",
+        "must_include": "在充电过程中,非车载充电机控制器应对检测点1的电压进行检测,若车辆接口由完全连接",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 46
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_46_24",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_46_24",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 46,
+      "semantic_key": "在充电阶段,若充电机出现不能继续充电的故障,则向车辆周期发送充电机中止充电报",
+      "query": "在充电阶段,若充电机出现不能继续充电的故障,则向车辆周期发送充电机中止充电报有哪些要求？",
+      "must_include": [
+        "在充电阶段,若充电机出现不能继续充电的故障,则向车辆周期发送充电机中止充电报"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "文,并控制充电机停止充电,应在100ms内断开K1、K2,K3、K4应在充电机发送统计报文和收到车辆",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002580",
+          "EV-002606",
+          "EV-002629",
+          "EV-002665"
+        ],
+        "fact_ids": [
+          "FACT-002437",
+          "FACT-002449",
+          "FACT-002743",
+          "FACT-002753",
+          "FACT-002754",
+          "FACT-002756",
+          "FACT-002758"
+        ],
+        "entity_ids": [
+          "ENT-000414"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000533"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "在充电阶段,若充电机出现不能继续充电的故障,则向车辆周期发送充电机中止充电报有哪些要求？",
+        "must_include": "在充电阶段,若充电机出现不能继续充电的故障,则向车辆周期发送充电机中止充电报",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 46
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_48_10",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_48_10",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 48,
+      "semantic_key": "附录A的电动汽车兼容旧版本充电机的直流充电连接控制时序表",
+      "query": "附录A的电动汽车兼容旧版本充电机的直流充电连接控制时序表有哪些要求？",
+      "must_include": [
+        "附录A的电动汽车兼容旧版本充电机的直流充电连接控制时序表"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "点3电压变为4V,车辆应被唤醒,并进入版本协商阶段",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002675",
+          "EV-002677",
+          "EV-002725"
+        ],
+        "fact_ids": [
+          "FACT-002460",
+          "FACT-002764",
+          "FACT-002765",
+          "FACT-002766",
+          "FACT-002767",
+          "FACT-002768",
+          "FACT-002769",
+          "FACT-002770",
+          "FACT-002771",
+          "FACT-002772"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000527",
+          "ENT-000528"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000527",
+          "WPAGE-000528"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "附录A的电动汽车兼容旧版本充电机的直流充电连接控制时序表有哪些要求？",
+        "must_include": "附录A的电动汽车兼容旧版本充电机的直流充电连接控制时序表",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 48
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_49_10",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_49_10",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 49,
+      "semantic_key": "符合附录A 的充电机与旧版本电动汽车充电的直流充电控制导引电路基本方案应符合图B",
+      "query": "符合附录A 的充电机与旧版本电动汽车充电的直流充电控制导引电路基本方案应符合图B有哪些要求？",
+      "must_include": [
+        "符合附录A 的充电机与旧版本电动汽车充电的直流充电控制导引电路基本方案应符合图B"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "器可集成在电池管理系统中",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002731",
+          "EV-002757"
+        ],
+        "fact_ids": [
+          "FACT-002462",
+          "FACT-002773",
+          "FACT-002774"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000529"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000529"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "符合附录A 的充电机与旧版本电动汽车充电的直流充电控制导引电路基本方案应符合图B有哪些要求？",
+        "must_include": "符合附录A 的充电机与旧版本电动汽车充电的直流充电控制导引电路基本方案应符合图B",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 49
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_49_26",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_49_26",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 49,
+      "semantic_key": "附录A的充电机兼容旧版本电动汽车的直流充电控制导引电路参数",
+      "query": "附录A的充电机兼容旧版本电动汽车的直流充电控制导引电路参数有哪些要求？",
+      "must_include": [
+        "附录A的充电机兼容旧版本电动汽车的直流充电控制导引电路参数"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "对象参数a符号单位标称值最大值b最小值b对应状态d",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002747",
+          "EV-002750",
+          "EV-002757",
+          "EV-002759",
+          "EV-002814"
+        ],
+        "fact_ids": [
+          "FACT-002464",
+          "FACT-002465",
+          "FACT-002466",
+          "FACT-002775",
+          "FACT-002776",
+          "FACT-002777",
+          "FACT-002778",
+          "FACT-002779"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000530",
+          "ENT-000531"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000530",
+          "WPAGE-000531"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "附录A的充电机兼容旧版本电动汽车的直流充电控制导引电路参数有哪些要求？",
+        "must_include": "附录A的充电机兼容旧版本电动汽车的直流充电控制导引电路参数",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 49
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_50_23",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_50_23",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 50,
+      "semantic_key": "附录A的充电机兼容旧版本电动汽车的直流充电控制导引电路参数(续)",
+      "query": "附录A的充电机兼容旧版本电动汽车的直流充电控制导引电路参数(续)有哪些要求？",
+      "must_include": [
+        "附录A的充电机兼容旧版本电动汽车的直流充电控制导引电路参数(续)"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "a 上拉电压及电阻在使用环境条件下和可用寿命内应保持精度范围",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002750",
+          "EV-002757",
+          "EV-002759",
+          "EV-002814"
+        ],
+        "fact_ids": [
+          "FACT-002465",
+          "FACT-002466",
+          "FACT-002775",
+          "FACT-002776",
+          "FACT-002777",
+          "FACT-002778",
+          "FACT-002779"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000530",
+          "ENT-000531"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000530",
+          "WPAGE-000531"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "附录A的充电机兼容旧版本电动汽车的直流充电控制导引电路参数(续)有哪些要求？",
+        "must_include": "附录A的充电机兼容旧版本电动汽车的直流充电控制导引电路参数(续)",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 50
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_51_31",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_51_31",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 51,
+      "semantic_key": "充电阶段",
+      "query": "充电阶段有哪些要求？",
+      "must_include": [
+        "充电阶段"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "载充电机控制器应相互发送各自的状态信息",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002808",
+          "EV-002868",
+          "EV-002886",
+          "EV-002890",
+          "EV-002894",
+          "EV-002917",
+          "EV-002926"
+        ],
+        "fact_ids": [
+          "FACT-002469",
+          "FACT-002475",
+          "FACT-002476",
+          "FACT-002477",
+          "FACT-002479",
+          "FACT-002783",
+          "FACT-002792",
+          "FACT-002793",
+          "FACT-002794",
+          "FACT-002795",
+          "FACT-002796",
+          "FACT-002798",
+          "FACT-002801",
+          "FACT-002802"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000533",
+          "ENT-000535"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000533",
+          "WPAGE-000535"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "充电阶段有哪些要求？",
+        "must_include": "充电阶段",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 51
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_51_15",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_51_15",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 51,
+      "semantic_key": "非车载充电机控制器应能根据收到的车辆充电参数,配置充电能力并将其车辆接口处的最",
+      "query": "非车载充电机控制器应能根据收到的车辆充电参数,配置充电能力并将其车辆接口处的最有哪些要求？",
+      "must_include": [
+        "非车载充电机控制器应能根据收到的车辆充电参数,配置充电能力并将其车辆接口处的最"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "汽车,充电机不应因车辆最高允许充电总电压大于充电机最高输出充电电压而停止充电",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002868"
+        ],
+        "fact_ids": [
+          "FACT-002782"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000532"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000532"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "非车载充电机控制器应能根据收到的车辆充电参数,配置充电能力并将其车辆接口处的最有哪些要求？",
+        "must_include": "非车载充电机控制器应能根据收到的车辆充电参数,配置充电能力并将其车辆接口处的最",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 51
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_52_19",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_52_19",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 52,
+      "semantic_key": "充电阶段,若充电机出现不能继续充电的故障,则向车辆周期发送充电机中止充电报文,并",
+      "query": "充电阶段,若充电机出现不能继续充电的故障,则向车辆周期发送充电机中止充电报文,并有哪些要求？",
+      "must_include": [
+        "充电阶段,若充电机出现不能继续充电的故障,则向车辆周期发送充电机中止充电报文,并"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "控制充电机停止充电,应在100ms内断开K1、K2,K3和K4应在充电机发完统计报文和收到车辆统计",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002868",
+          "EV-002886",
+          "EV-002926"
+        ],
+        "fact_ids": [
+          "FACT-002475",
+          "FACT-002783",
+          "FACT-002790",
+          "FACT-002792",
+          "FACT-002794",
+          "FACT-002796"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000533",
+          "ENT-000535"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000533",
+          "WPAGE-000535"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "充电阶段,若充电机出现不能继续充电的故障,则向车辆周期发送充电机中止充电报文,并有哪些要求？",
+        "must_include": "充电阶段,若充电机出现不能继续充电的故障,则向车辆周期发送充电机中止充电报文,并",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 52
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_52_35",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_52_35",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 52,
+      "semantic_key": "在充电机侧和车辆侧均设置绝缘监测电路,具备直流供电回路DC+与PE 之间、DC-与PE",
+      "query": "在充电机侧和车辆侧均设置绝缘监测电路,具备直流供电回路DC+与PE 之间、DC-与PE有哪些要求？",
+      "must_include": [
+        "在充电机侧和车辆侧均设置绝缘监测电路,具备直流供电回路DC+与PE 之间、DC-与PE"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "之间的对称绝缘故障和非对称绝缘故障的检测",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002902",
+          "EV-002926"
+        ],
+        "fact_ids": [
+          "FACT-002478",
+          "FACT-002797",
+          "FACT-002798",
+          "FACT-002799",
+          "FACT-002800"
+        ],
+        "entity_ids": [
+          "ENT-000414"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "在充电机侧和车辆侧均设置绝缘监测电路,具备直流供电回路DC+与PE 之间、DC-与PE有哪些要求？",
+        "must_include": "在充电机侧和车辆侧均设置绝缘监测电路,具备直流供电回路DC+与PE 之间、DC-与PE",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 52
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_52_be14e035fbb2",
+      "status": "draft",
+      "unit_id": "DOC-000012:requirement:52:BE14E035FBB2",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 52,
+      "semantic_key": "在充电阶段由于故障出现负载突降(如抛负载)的情况时,瞬时输出电压值不应超过车辆最高",
+      "query": "在充电阶段由于故障出现负载突降(如抛负载)的情况时,瞬时输出电压值不应超过车辆最高有哪些要求？",
+      "must_include": [
+        "在充电阶段由于故障出现负载突降(如抛负载)的情况时,瞬时输出电压值不应超过车辆最高"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "%",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002868",
+          "EV-002917",
+          "EV-002926"
+        ],
+        "fact_ids": [
+          "FACT-002479",
+          "FACT-002783",
+          "FACT-002801",
+          "FACT-002802"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000533"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000502",
+          "WPAGE-000533"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "在充电阶段由于故障出现负载突降(如抛负载)的情况时,瞬时输出电压值不应超过车辆最高有哪些要求？",
+        "must_include": "在充电阶段由于故障出现负载突降(如抛负载)的情况时,瞬时输出电压值不应超过车辆最高",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 52
+      },
+      "validation_status": "passed"
+    },
+    {
+      "name": "coverage_requirement_doc_000012_requirement_54_23",
+      "status": "draft",
+      "unit_id": "DOC-000012_requirement_54_23",
+      "unit_type": "requirement_unit",
+      "importance": "high",
+      "page_no": 54,
+      "semantic_key": "附录A的充电机兼容旧版本电动汽车的直流充电连接控制时序表(续)",
+      "query": "附录A的充电机兼容旧版本电动汽车的直流充电连接控制时序表(续)有哪些要求？",
+      "must_include": [
+        "附录A的充电机兼容旧版本电动汽车的直流充电连接控制时序表(续)"
+      ],
+      "assert_mode": "rich_answer",
+      "recommended_suite": "golden",
+      "source_excerpt": "设备控制器检测到车辆接口当前电压正常,充电机应将前端输出电压调整到车辆接口当前电压减去",
+      "covered_by": {
+        "evidence_ids": [
+          "EV-002931",
+          "EV-002941",
+          "EV-002943",
+          "EV-002982"
+        ],
+        "fact_ids": [
+          "FACT-002482",
+          "FACT-002483",
+          "FACT-002805",
+          "FACT-002806",
+          "FACT-002807",
+          "FACT-002808"
+        ],
+        "entity_ids": [
+          "ENT-000414",
+          "ENT-000527",
+          "ENT-000536"
+        ],
+        "wiki_page_ids": [
+          "WPAGE-000414",
+          "WPAGE-000527",
+          "WPAGE-000536"
+        ],
+        "golden_case_ids": [],
+        "regression_case_ids": []
+      },
+      "golden_case": {
+        "kind": "coverage_requirement",
+        "query": "附录A的充电机兼容旧版本电动汽车的直流充电连接控制时序表(续)有哪些要求？",
+        "must_include": "附录A的充电机兼容旧版本电动汽车的直流充电连接控制时序表(续)",
+        "source": "coverage",
+        "assert_mode": "rich_answer",
+        "target_doc_id": "DOC-000012",
+        "expected_evidence_shape": "requirement",
+        "page_no": 54
+      },
+      "validation_status": "passed"
+    }
+  ],
   "validation_mode": "trace",
-  "passed_count": 0,
+  "passed_count": 77,
   "failed_count": 0
 }

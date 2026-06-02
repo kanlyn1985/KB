@@ -1374,6 +1374,79 @@
       "assert_mode": "context_contains",
       "expected_evidence_shape": "standard_metadata",
       "target_doc_id": "DOC-000014"
+    },
+    {
+      "kind": "coverage_requirement",
+      "query": "UDS on FlexRay services overview有哪些要求？",
+      "must_include": "UDS on FlexRay services overview",
+      "source": "coverage",
+      "assert_mode": "rich_answer",
+      "target_doc_id": "DOC-000014",
+      "expected_evidence_shape": "requirement",
+      "page_no": 10,
+      "coverage_unit_id": "DOC-000014_requirement_10_8",
+      "coverage_semantic_key": "UDS on FlexRay services overview"
+    },
+    {
+      "kind": "coverage_requirement",
+      "query": "ResponseOnEvent (0x86) service有哪些要求？",
+      "must_include": "ResponseOnEvent (0x86) service",
+      "source": "coverage",
+      "assert_mode": "rich_answer",
+      "target_doc_id": "DOC-000014",
+      "expected_evidence_shape": "requirement",
+      "page_no": 11,
+      "coverage_unit_id": "DOC-000014_requirement_11_34",
+      "coverage_semantic_key": "ResponseOnEvent (0x86) service"
+    },
+    {
+      "kind": "coverage_requirement",
+      "query": "LinkControl (0x87) service有哪些要求？",
+      "must_include": "LinkControl (0x87) service",
+      "source": "coverage",
+      "assert_mode": "rich_answer",
+      "target_doc_id": "DOC-000014",
+      "expected_evidence_shape": "requirement",
+      "page_no": 13,
+      "coverage_unit_id": "DOC-000014:requirement:13:199B824753CA",
+      "coverage_semantic_key": "LinkControl (0x87) service"
+    },
+    {
+      "kind": "coverage_requirement",
+      "query": "Application layer timing有哪些要求？",
+      "must_include": "Application layer timing",
+      "source": "coverage",
+      "assert_mode": "rich_answer",
+      "target_doc_id": "DOC-000014",
+      "expected_evidence_shape": "requirement",
+      "page_no": 20,
+      "coverage_unit_id": "DOC-000014_requirement_20_8",
+      "coverage_semantic_key": "Application layer timing"
+    },
+    {
+      "kind": "coverage_requirement",
+      "query": "Data Link layer diagnostic implementation requirements有哪些要求？",
+      "must_include": "Data Link layer diagnostic implementation requirements",
+      "source": "coverage",
+      "assert_mode": "rich_answer",
+      "target_doc_id": "DOC-000014",
+      "expected_evidence_shape": "requirement",
+      "page_no": 21,
+      "coverage_unit_id": "DOC-000014_requirement_21_28",
+      "coverage_semantic_key": "Data Link layer diagnostic implementation requirements"
+    },
+    {
+      "kind": "coverage_requirement",
+      "query": "Mapping of T_PDU onto C_PDU for message transmission有哪些要求？",
+      "must_include": "Mapping of T_PDU onto C_PDU for message transmission",
+      "source": "coverage",
+      "assert_mode": "rich_answer",
+      "target_doc_id": "DOC-000014",
+      "expected_evidence_shape": "requirement",
+      "page_no": 21,
+      "coverage_unit_id": "DOC-000014_requirement_21_25",
+      "coverage_semantic_key": "Mapping of T_PDU onto C_PDU for message transmission"
     }
-  ]
+  ],
+  "coverage_promoted_case_count": 6
 }

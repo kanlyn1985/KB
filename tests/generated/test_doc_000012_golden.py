@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 import pytest
 
 from enterprise_agent_kb.answer_api import answer_query
 from enterprise_agent_kb.query_api import build_query_context
+
+os.environ.setdefault("EAKB_ENABLE_LLM_EVIDENCE_JUDGE", "0")
 
 WORKSPACE = Path("knowledge_base")
 
@@ -385,250 +388,803 @@ def test_doc_000012_golden_57() -> None:
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000012_golden_58() -> None:
-    case = '{"kind": "coverage_requirement", "query": "A.3.3 参数配置阶段有哪些要求？", "must_include": "A.3.3 参数配置阶段", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 14, "coverage_unit_id": "DOC-000012_requirement_14_21", "coverage_semantic_key": "A.3.3 参数配置阶段"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000012_golden_59() -> None:
-    case = '{"kind": "coverage_requirement", "query": "A.3.4 鉴权阶段有哪些要求？", "must_include": "A.3.4 鉴权阶段", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 15, "coverage_unit_id": "DOC-000012_requirement_15_10", "coverage_semantic_key": "A.3.4 鉴权阶段"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000012_golden_60() -> None:
-    case = '{"kind": "coverage_requirement", "query": "A.3.5 预约充电有哪些要求？", "must_include": "A.3.5 预约充电", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 15, "coverage_unit_id": "DOC-000012_requirement_15_16", "coverage_semantic_key": "A.3.5 预约充电"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000012_golden_61() -> None:
-    case = '{"kind": "coverage_requirement", "query": "A.3.6 输出回路检测阶段有哪些要求？", "must_include": "A.3.6 输出回路检测阶段", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 15, "coverage_unit_id": "DOC-000012_requirement_15_25", "coverage_semantic_key": "A.3.6 输出回路检测阶段"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000012_golden_62() -> None:
-    case = '{"kind": "coverage_requirement", "query": "A.3.8 预充电有哪些要求？", "must_include": "A.3.8 预充电", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 17, "coverage_unit_id": "DOC-000012_requirement_17_14", "coverage_semantic_key": "A.3.8 预充电"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000012_golden_63() -> None:
-    case = '{"kind": "coverage_requirement", "query": "A.3.10.3.2 充电机紧急停机有哪些要求？", "must_include": "A.3.10.3.2 充电机紧急停机", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 25, "coverage_unit_id": "DOC-000012_requirement_25_2", "coverage_semantic_key": "A.3.10.3.2 充电机紧急停机"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000012_golden_64() -> None:
-    case = '{"kind": "coverage_requirement", "query": "A.5.6 充电机 Y 电容有哪些要求？", "must_include": "A.5.6 充电机 Y 电容", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 36, "coverage_unit_id": "DOC-000012_requirement_36_6", "coverage_semantic_key": "A.5.6 充电机 Y 电容"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000012_golden_65() -> None:
-    case = '{"kind": "coverage_requirement", "query": "B.2.2.4 充电准备就绪有哪些要求？", "must_include": "B.2.2.4 充电准备就绪", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 45, "coverage_unit_id": "DOC-000012_requirement_45_4", "coverage_semantic_key": "B.2.2.4 充电准备就绪"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000012_golden_66() -> None:
-    case = '{"kind": "coverage_requirement", "query": "B.2.2.5 充电阶段有哪些要求？", "must_include": "B.2.2.5 充电阶段", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 45, "coverage_unit_id": "DOC-000012_requirement_45_11", "coverage_semantic_key": "B.2.2.5 充电阶段"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000012_golden_67() -> None:
-    case = '{"kind": "coverage_requirement", "query": "B.2.2.7 非正常条件下充电中止有哪些要求？", "must_include": "B.2.2.7 非正常条件下充电中止", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 45, "coverage_unit_id": "DOC-000012_requirement_45_17", "coverage_semantic_key": "B.2.2.7 非正常条件下充电中止"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000012_golden_68() -> None:
-    case = '{"kind": "coverage_requirement", "query": "B.2.3 充电电路原理有哪些要求？", "must_include": "B.2.3 充电电路原理", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 46, "coverage_unit_id": "DOC-000012_requirement_46_14", "coverage_semantic_key": "B.2.3 充电电路原理"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000012_golden_69() -> None:
-    case = '{"kind": "coverage_requirement", "query": "B.3.2.4 充电准备就绪有哪些要求？", "must_include": "B.3.2.4 充电准备就绪", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 51, "coverage_unit_id": "DOC-000012_requirement_51_3", "coverage_semantic_key": "B.3.2.4 充电准备就绪"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000012_golden_70() -> None:
-    case = '{"kind": "coverage_requirement", "query": "B.3.2.7 非正常条件下充电中止有哪些要求？", "must_include": "B.3.2.7 非正常条件下充电中止", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 51, "coverage_unit_id": "DOC-000012_requirement_51_14", "coverage_semantic_key": "B.3.2.7 非正常条件下充电中止"}'
-    _assert_case(json.loads(case))
-
-@pytest.mark.integration
-@pytest.mark.benchmark
-@pytest.mark.coverage
-def test_doc_000012_golden_71() -> None:
     case = '{"kind": "coverage_requirement", "query": "接触顺序有哪些要求？", "must_include": "接触顺序", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 9, "coverage_unit_id": "DOC-000012:requirement:9:5EC0DB18C963", "coverage_semantic_key": "接触顺序"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
-def test_doc_000012_golden_72() -> None:
+def test_doc_000012_golden_59() -> None:
     case = '{"kind": "coverage_requirement", "query": "车辆接口功能性说明有哪些要求？", "must_include": "车辆接口功能性说明", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 9, "coverage_unit_id": "DOC-000012:requirement:9:8CB180ED9DF0", "coverage_semantic_key": "车辆接口功能性说明"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
-def test_doc_000012_golden_73() -> None:
+def test_doc_000012_golden_60() -> None:
     case = '{"kind": "coverage_requirement", "query": "使用条件、维修、标识和说明有哪些要求？", "must_include": "使用条件、维修、标识和说明", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 10, "coverage_unit_id": "DOC-000012:requirement:10:5B035001E0D4", "coverage_semantic_key": "使用条件、维修、标识和说明"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
-def test_doc_000012_golden_74() -> None:
+def test_doc_000012_golden_61() -> None:
     case = '{"kind": "coverage_requirement", "query": "过载保护、短路保护和急停有哪些要求？", "must_include": "过载保护、短路保护和急停", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 10, "coverage_unit_id": "DOC-000012:requirement:10:EC48275BE4A7", "coverage_semantic_key": "过载保护、短路保护和急停"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
+def test_doc_000012_golden_62() -> None:
+    case = '{"kind": "coverage_definition", "query": "什么是接口的直流充电系统通用要求,具体给出了直流充电控制导引电路与控制原理,以及实现向下兼容的直？", "must_include": "接口的直流充电系统通用要求,具体给出了直流充电控制导引电路与控制原理,以及实现向下兼容的直", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "term_definition", "page_no": 6, "coverage_unit_id": "DOC-000012_definition_6_4", "coverage_semantic_key": "接口的直流充电系统通用要求,具体给出了直流充电控制导引电路与控制原理,以及实现向下兼容的直"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_63() -> None:
+    case = '{"kind": "coverage_definition", "query": "什么是随着电动汽车相关产业与消费市场规模的快速扩大,行业迫切需求大功率充电、即插即充、预约充？", "must_include": "随着电动汽车相关产业与消费市场规模的快速扩大,行业迫切需求大功率充电、即插即充、预约充", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "term_definition", "page_no": 6, "coverage_unit_id": "DOC-000012_definition_6_2", "coverage_semantic_key": "随着电动汽车相关产业与消费市场规模的快速扩大,行业迫切需求大功率充电、即插即充、预约充"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_64() -> None:
+    case = '{"kind": "coverage_definition", "query": "什么是次,暂停的总时间不大于35min(充电机发起的暂停总时间不大于5min,车辆发起的暂停总？", "must_include": "次,暂停的总时间不大于35min(充电机发起的暂停总时间不大于5min,车辆发起的暂停总", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "term_definition", "page_no": 19, "coverage_unit_id": "DOC-000012_definition_19_5", "coverage_semantic_key": "次,暂停的总时间不大于35min(充电机发起的暂停总时间不大于5min,车辆发起的暂停总"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_65() -> None:
+    case = '{"kind": "coverage_definition", "query": "什么是池基本信息报文、车辆充放电基本信息报文、车辆充放电电池基本信息报文的内容,且以上报？", "must_include": "池基本信息报文、车辆充放电基本信息报文、车辆充放电电池基本信息报文的内容,且以上报", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "term_definition", "page_no": 19, "coverage_unit_id": "DOC-000012_definition_19_2", "coverage_semantic_key": "池基本信息报文、车辆充放电基本信息报文、车辆充放电电池基本信息报文的内容,且以上报"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_66() -> None:
+    case = '{"kind": "coverage_definition", "query": "什么是I脉冲I脉冲=I脉冲峰值/6457mA？", "must_include": "I脉冲I脉冲=I脉冲峰值/6457mA", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "term_definition", "page_no": 37, "coverage_unit_id": "DOC-000012_definition_37_35", "coverage_semantic_key": "I脉冲I脉冲=I脉冲峰值/6457mA"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_67() -> None:
+    case = '{"kind": "coverage_requirement", "query": "符合附录A 的充电机兼容旧版本电动汽车有哪些要求？", "must_include": "符合附录A 的充电机兼容旧版本电动汽车", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 6, "coverage_unit_id": "DOC-000012_requirement_6_16", "coverage_semantic_key": "符合附录A 的充电机兼容旧版本电动汽车"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_68() -> None:
+    case = '{"kind": "coverage_requirement", "query": "供电设备因供电能力限制可调整其当前的可用最大电流值有哪些要求？", "must_include": "供电设备因供电能力限制可调整其当前的可用最大电流值", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 8, "coverage_unit_id": "DOC-000012:requirement:8:85C557613C9A", "coverage_semantic_key": "供电设备因供电能力限制可调整其当前的可用最大电流值"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_69() -> None:
+    case = '{"kind": "coverage_requirement", "query": "条件时,跳转进入向下兼容的充电系有哪些要求？", "must_include": "条件时,跳转进入向下兼容的充电系", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 8, "coverage_unit_id": "DOC-000012:requirement:8:0594E4004CE0", "coverage_semantic_key": "条件时,跳转进入向下兼容的充电系"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_70() -> None:
+    case = '{"kind": "coverage_requirement", "query": "直流供电设备应在电动汽车和直流供电设备之间进行保护接地导体连续性监测有哪些要求？", "must_include": "直流供电设备应在电动汽车和直流供电设备之间进行保护接地导体连续性监测", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 8, "coverage_unit_id": "DOC-000012:requirement:8:200A5857FE7C", "coverage_semantic_key": "直流供电设备应在电动汽车和直流供电设备之间进行保护接地导体连续性监测"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_71() -> None:
+    case = '{"kind": "coverage_requirement", "query": "车辆可具备车辆供电回路电压适应性切换功能有哪些要求？", "must_include": "车辆可具备车辆供电回路电压适应性切换功能", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 8, "coverage_unit_id": "DOC-000012:requirement:8:C44F8BBD3C07", "coverage_semantic_key": "车辆可具备车辆供电回路电压适应性切换功能"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_72() -> None:
+    case = '{"kind": "coverage_requirement", "query": "使用两个直流车辆插头对一辆电动汽车进行充电时,电动汽车应符合A有哪些要求？", "must_include": "使用两个直流车辆插头对一辆电动汽车进行充电时,电动汽车应符合A", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 9, "coverage_unit_id": "DOC-000012_requirement_9_29", "coverage_semantic_key": "使用两个直流车辆插头对一辆电动汽车进行充电时,电动汽车应符合A"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_73() -> None:
+    case = '{"kind": "coverage_requirement", "query": "当一台供电设备可同时连接两辆及以上电动汽车时,应有设计机制保证在任一时刻每辆电动汽有哪些要求？", "must_include": "当一台供电设备可同时连接两辆及以上电动汽车时,应有设计机制保证在任一时刻每辆电动汽", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 9, "coverage_unit_id": "DOC-000012_requirement_9_32", "coverage_semantic_key": "当一台供电设备可同时连接两辆及以上电动汽车时,应有设计机制保证在任一时刻每辆电动汽"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_74() -> None:
+    case = '{"kind": "coverage_requirement", "query": "模式4下,电动汽车应具备直流供电回路断开装置(接触器K5和K6)的粘连监测和告警功能,当有哪些要求？", "must_include": "模式4下,电动汽车应具备直流供电回路断开装置(接触器K5和K6)的粘连监测和告警功能,当", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 9, "coverage_unit_id": "DOC-000012_requirement_9_20", "coverage_semantic_key": "模式4下,电动汽车应具备直流供电回路断开装置(接触器K5和K6)的粘连监测和告警功能,当"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
 def test_doc_000012_golden_75() -> None:
-    case = '{"kind": "coverage_requirement", "query": "A.1 通则有哪些要求？", "must_include": "A.1 通则", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 11, "coverage_unit_id": "DOC-000012:requirement:11:12BA0127C9AD", "coverage_semantic_key": "A.1 通则"}'
+    case = '{"kind": "coverage_requirement", "query": "采用连接方式C的车辆插头和车辆插座在非耦合时,车辆插座应符合GB/T43332中未连接外部有哪些要求？", "must_include": "采用连接方式C的车辆插头和车辆插座在非耦合时,车辆插座应符合GB/T43332中未连接外部", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 9, "coverage_unit_id": "DOC-000012_requirement_9_16", "coverage_semantic_key": "采用连接方式C的车辆插头和车辆插座在非耦合时,车辆插座应符合GB/T43332中未连接外部"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000012_golden_76() -> None:
-    case = '{"kind": "coverage_requirement", "query": "A.3.7 供电模式有哪些要求？", "must_include": "A.3.7 供电模式", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 16, "coverage_unit_id": "DOC-000012:requirement:16:398D03A819F9", "coverage_semantic_key": "A.3.7 供电模式"}'
+    case = '{"kind": "coverage_requirement", "query": "在整个充电过程中,非车载充电机控制器应能监测接触器K1、K2、K3和K4的状态并控制其断有哪些要求？", "must_include": "在整个充电过程中,非车载充电机控制器应能监测接触器K1、K2、K3和K4的状态并控制其断", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 11, "coverage_unit_id": "DOC-000012_requirement_11_26", "coverage_semantic_key": "在整个充电过程中,非车载充电机控制器应能监测接触器K1、K2、K3和K4的状态并控制其断"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000012_golden_77() -> None:
-    case = '{"kind": "coverage_requirement", "query": "A.3.10.2.1 车辆故障停机有哪些要求？", "must_include": "A.3.10.2.1 车辆故障停机", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 21, "coverage_unit_id": "DOC-000012:requirement:21:A4CE093A6824", "coverage_semantic_key": "A.3.10.2.1 车辆故障停机"}'
+    case = '{"kind": "coverage_requirement", "query": "非车载充电机的辅源应具备过电压、过电流、短路保护等功能有哪些要求？", "must_include": "非车载充电机的辅源应具备过电压、过电流、短路保护等功能", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 11, "coverage_unit_id": "DOC-000012_requirement_11_38", "coverage_semantic_key": "非车载充电机的辅源应具备过电压、过电流、短路保护等功能"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000012_golden_78() -> None:
-    case = '{"kind": "coverage_requirement", "query": "i) 预充及能量传输失败有哪些要求？", "must_include": "i) 预充及能量传输失败", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 21, "coverage_unit_id": "DOC-000012:requirement:21:1F1BD8188FEB", "coverage_semantic_key": "i) 预充及能量传输失败"}'
+    case = '{"kind": "coverage_requirement", "query": "非车载充电机的输入回路、输出回路以及低压控制(辅助)供电回路三者之间应具备电气隔有哪些要求？", "must_include": "非车载充电机的输入回路、输出回路以及低压控制(辅助)供电回路三者之间应具备电气隔", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 11, "coverage_unit_id": "DOC-000012_requirement_11_29", "coverage_semantic_key": "非车载充电机的输入回路、输出回路以及低压控制(辅助)供电回路三者之间应具备电气隔"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000012_golden_79() -> None:
-    case = '{"kind": "coverage_requirement", "query": "A.3.10.2.2 充电机故障停机有哪些要求？", "must_include": "A.3.10.2.2 充电机故障停机", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 22, "coverage_unit_id": "DOC-000012:requirement:22:D23236A25DC8", "coverage_semantic_key": "A.3.10.2.2 充电机故障停机"}'
+    case = '{"kind": "coverage_requirement", "query": "直流充电控制导引电路的参数有哪些要求？", "must_include": "直流充电控制导引电路的参数", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 12, "coverage_unit_id": "DOC-000012_requirement_12_20", "coverage_semantic_key": "直流充电控制导引电路的参数"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000012_golden_80() -> None:
-    case = '{"kind": "coverage_requirement", "query": "A.4.1 正常启动有哪些要求？", "must_include": "A.4.1 正常启动", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 27, "coverage_unit_id": "DOC-000012:requirement:27:986738871BC1", "coverage_semantic_key": "A.4.1 正常启动"}'
+    case = '{"kind": "coverage_requirement", "query": "将车辆插头插入车辆插座,检测点1电压值为4V 时,非车载充电机控制器判断车辆接口完有哪些要求？", "must_include": "将车辆插头插入车辆插座,检测点1电压值为4V 时,非车载充电机控制器判断车辆接口完", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 13, "coverage_unit_id": "DOC-000012_requirement_13_42", "coverage_semantic_key": "将车辆插头插入车辆插座,检测点1电压值为4V 时,非车载充电机控制器判断车辆接口完"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000012_golden_81() -> None:
-    case = '{"kind": "coverage_requirement", "query": "A.4.2 正常结束、故障停机和紧急停机有哪些要求？", "must_include": "A.4.2 正常结束、故障停机和紧急停机", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 29, "coverage_unit_id": "DOC-000012:requirement:29:0A4E387D2CDB", "coverage_semantic_key": "A.4.2 正常结束、故障停机和紧急停机"}'
+    case = '{"kind": "coverage_requirement", "query": "将车辆插头插入车辆插座,检测点3电压值为4V 时,车辆控制器判断车辆接口完全连接,车有哪些要求？", "must_include": "将车辆插头插入车辆插座,检测点3电压值为4V 时,车辆控制器判断车辆接口完全连接,车", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 13, "coverage_unit_id": "DOC-000012_requirement_13_47", "coverage_semantic_key": "将车辆插头插入车辆插座,检测点3电压值为4V 时,车辆控制器判断车辆接口完全连接,车"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000012_golden_82() -> None:
-    case = '{"kind": "coverage_requirement", "query": "A.5.5 绝缘监测装置有哪些要求？", "must_include": "A.5.5 绝缘监测装置", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 35, "coverage_unit_id": "DOC-000012:requirement:35:864FC4A8A9B4", "coverage_semantic_key": "A.5.5 绝缘监测装置"}'
+    case = '{"kind": "coverage_requirement", "query": "直流充电控制导引电路的参数(续)有哪些要求？", "must_include": "直流充电控制导引电路的参数(续)", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 13, "coverage_unit_id": "DOC-000012:requirement:13:0148B1BBBC3D", "coverage_semantic_key": "直流充电控制导引电路的参数(续)"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000012_golden_83() -> None:
-    case = '{"kind": "coverage_requirement", "query": "A.5.10 过载及短路保护有哪些要求？", "must_include": "A.5.10 过载及短路保护", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 38, "coverage_unit_id": "DOC-000012:requirement:38:6201F4344A6C", "coverage_semantic_key": "A.5.10 过载及短路保护"}'
+    case = '{"kind": "coverage_requirement", "query": "车辆插头与车辆插座插合有哪些要求？", "must_include": "车辆插头与车辆插座插合", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 13, "coverage_unit_id": "DOC-000012_requirement_13_35", "coverage_semantic_key": "车辆插头与车辆插座插合"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000012_golden_84() -> None:
-    case = '{"kind": "coverage_requirement", "query": "A.5.12 车辆供电回路电压切换有哪些要求？", "must_include": "A.5.12 车辆供电回路电压切换", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 38, "coverage_unit_id": "DOC-000012:requirement:38:689A5B7DC408", "coverage_semantic_key": "A.5.12 车辆供电回路电压切换"}'
+    case = '{"kind": "coverage_requirement", "query": "从车辆接口未连接到检测点1电压值变为4V 之前,非车载充电机控制器应保持开关S1为有哪些要求？", "must_include": "从车辆接口未连接到检测点1电压值变为4V 之前,非车载充电机控制器应保持开关S1为", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 14, "coverage_unit_id": "DOC-000012_requirement_14_8", "coverage_semantic_key": "从车辆接口未连接到检测点1电压值变为4V 之前,非车载充电机控制器应保持开关S1为"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000012_golden_85() -> None:
-    case = '{"kind": "coverage_requirement", "query": "A.5.9 负载突降有哪些要求？", "must_include": "A.5.9 负载突降", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 38, "coverage_unit_id": "DOC-000012:requirement:38:221276937A5B", "coverage_semantic_key": "A.5.9 负载突降"}'
+    case = '{"kind": "coverage_requirement", "query": "在整个充电过程中,若车辆接口处于完全连接状态,车辆应支持辅源唤醒或充电机唤醒报文有哪些要求？", "must_include": "在整个充电过程中,若车辆接口处于完全连接状态,车辆应支持辅源唤醒或充电机唤醒报文", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 14, "coverage_unit_id": "DOC-000012:requirement:14:C8FD7D589686", "coverage_semantic_key": "在整个充电过程中,若车辆接口处于完全连接状态,车辆应支持辅源唤醒或充电机唤醒报文"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000012_golden_86() -> None:
-    case = '{"kind": "coverage_requirement", "query": "A.5.13 充放电模式有哪些要求？", "must_include": "A.5.13 充放电模式", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 39, "coverage_unit_id": "DOC-000012:requirement:39:11AF2B767B8E", "coverage_semantic_key": "A.5.13 充放电模式"}'
+    case = '{"kind": "coverage_requirement", "query": "版本协商过程中,如充电机发生故障(不包含检测点1电压异常),可断开开关S1,双方停止数有哪些要求？", "must_include": "版本协商过程中,如充电机发生故障(不包含检测点1电压异常),可断开开关S1,双方停止数", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 14, "coverage_unit_id": "DOC-000012_requirement_14_17", "coverage_semantic_key": "版本协商过程中,如充电机发生故障(不包含检测点1电压异常),可断开开关S1,双方停止数"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000012_golden_87() -> None:
-    case = '{"kind": "coverage_requirement", "query": "A.5.14 具备双车辆插座的车辆有哪些要求？", "must_include": "A.5.14 具备双车辆插座的车辆", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 39, "coverage_unit_id": "DOC-000012:requirement:39:A3D5161B36C9", "coverage_semantic_key": "A.5.14 具备双车辆插座的车辆"}'
+    case = '{"kind": "coverage_requirement", "query": "电动汽车与充电机的数据交互进入GB/T27930有哪些要求？", "must_include": "电动汽车与充电机的数据交互进入GB/T27930", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 14, "coverage_unit_id": "DOC-000012:requirement:14:1C538B2037DB", "coverage_semantic_key": "电动汽车与充电机的数据交互进入GB/T27930"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000012_golden_88() -> None:
-    case = '{"kind": "coverage_requirement", "query": "B.1 总体要求有哪些要求？", "must_include": "B.1 总体要求", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 42, "coverage_unit_id": "DOC-000012:requirement:42:29C1AE08269D", "coverage_semantic_key": "B.1 总体要求"}'
+    case = '{"kind": "coverage_requirement", "query": "车桩均可发起预约充电,预约等待期间双方停止发送通信报文,车辆可进入休眠状态有哪些要求？", "must_include": "车桩均可发起预约充电,预约等待期间双方停止发送通信报文,车辆可进入休眠状态", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 15, "coverage_unit_id": "DOC-000012_requirement_15_35", "coverage_semantic_key": "车桩均可发起预约充电,预约等待期间双方停止发送通信报文,车辆可进入休眠状态"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000012_golden_89() -> None:
-    case = '{"kind": "coverage_requirement", "query": "B.2.2.6 正常条件下充电结束有哪些要求？", "must_include": "B.2.2.6 正常条件下充电结束", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 45, "coverage_unit_id": "DOC-000012:requirement:45:AC66682DDFF3", "coverage_semantic_key": "B.2.2.6 正常条件下充电结束"}'
+    case = '{"kind": "coverage_requirement", "query": "车桩成功鉴权后,若车桩检测车辆接口未发生断开,车桩进入自动重连和重新启动时,后续充有哪些要求？", "must_include": "车桩成功鉴权后,若车桩检测车辆接口未发生断开,车桩进入自动重连和重新启动时,后续充", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 15, "coverage_unit_id": "DOC-000012_requirement_15_22", "coverage_semantic_key": "车桩成功鉴权后,若车桩检测车辆接口未发生断开,车桩进入自动重连和重新启动时,后续充"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000012_golden_90() -> None:
-    case = '{"kind": "coverage_requirement", "query": "B.3.1 充电控制导引电路有哪些要求？", "must_include": "B.3.1 充电控制导引电路", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 49, "coverage_unit_id": "DOC-000012:requirement:49:4AECC84B80BD", "coverage_semantic_key": "B.3.1 充电控制导引电路"}'
+    case = '{"kind": "coverage_requirement", "query": "供电模式阶段,车辆应确认已断开动力蓄电池与接触器K5、K6的电连接,并将动力蓄电池外有哪些要求？", "must_include": "供电模式阶段,车辆应确认已断开动力蓄电池与接触器K5、K6的电连接,并将动力蓄电池外", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 16, "coverage_unit_id": "DOC-000012:requirement:16:DE67E1BA0D06", "coverage_semantic_key": "供电模式阶段,车辆应确认已断开动力蓄电池与接触器K5、K6的电连接,并将动力蓄电池外"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000012_golden_91() -> None:
-    case = '{"kind": "coverage_requirement", "query": "B.3.2.6 正常条件下充电结束有哪些要求？", "must_include": "B.3.2.6 正常条件下充电结束", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 51, "coverage_unit_id": "DOC-000012:requirement:51:C90D372D3BB3", "coverage_semantic_key": "B.3.2.6 正常条件下充电结束"}'
+    case = '{"kind": "coverage_requirement", "query": "供电模式阶段由充电机实施绝缘监测,绝缘检测时的输出电压为整车供电电压需求值,绝缘有哪些要求？", "must_include": "供电模式阶段由充电机实施绝缘监测,绝缘检测时的输出电压为整车供电电压需求值,绝缘", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 16, "coverage_unit_id": "DOC-000012_requirement_16_45", "coverage_semantic_key": "供电模式阶段由充电机实施绝缘监测,绝缘检测时的输出电压为整车供电电压需求值,绝缘"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000012_golden_92() -> None:
-    case = '{"kind": "coverage_requirement", "query": "B.3.3 充电电路原理有哪些要求？", "must_include": "B.3.3 充电电路原理", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 52, "coverage_unit_id": "DOC-000012:requirement:52:BE1205987932", "coverage_semantic_key": "B.3.3 充电电路原理"}'
+    case = '{"kind": "coverage_requirement", "query": "充电机应具备供电模式功能有哪些要求？", "must_include": "充电机应具备供电模式功能", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 16, "coverage_unit_id": "DOC-000012_requirement_16_30", "coverage_semantic_key": "充电机应具备供电模式功能"}'
     _assert_case(json.loads(case))
 
 @pytest.mark.integration
 @pytest.mark.benchmark
 @pytest.mark.coverage
 def test_doc_000012_golden_93() -> None:
-    case = '{"kind": "coverage_requirement", "query": "B.3.4 充电连接控制时序有哪些要求？", "must_include": "B.3.4 充电连接控制时序", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "page_no": 52, "coverage_unit_id": "DOC-000012:requirement:52:A7862323392E", "coverage_semantic_key": "B.3.4 充电连接控制时序"}'
+    case = '{"kind": "coverage_requirement", "query": "充电机应检测直流充电回路DC+与PE 之间、DC-与PE 之间的绝缘电阻(取两者最小值为有哪些要求？", "must_include": "充电机应检测直流充电回路DC+与PE 之间、DC-与PE 之间的绝缘电阻(取两者最小值为", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 16, "coverage_unit_id": "DOC-000012_requirement_16_18", "coverage_semantic_key": "充电机应检测直流充电回路DC+与PE 之间、DC-与PE 之间的绝缘电阻(取两者最小值为"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_94() -> None:
+    case = '{"kind": "coverage_requirement", "query": "充电机最迟应在确认进入输出回路检测阶段后控制电子锁闭锁有哪些要求？", "must_include": "充电机最迟应在确认进入输出回路检测阶段后控制电子锁闭锁", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 16, "coverage_unit_id": "DOC-000012_requirement_16_5", "coverage_semantic_key": "充电机最迟应在确认进入输出回路检测阶段后控制电子锁闭锁"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_95() -> None:
+    case = '{"kind": "coverage_requirement", "query": "当充电机接触器K1、K2任意一个或同时粘连时,充电机应触发故障停机,并在故障恢复前不有哪些要求？", "must_include": "当充电机接触器K1、K2任意一个或同时粘连时,充电机应触发故障停机,并在故障恢复前不", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 16, "coverage_unit_id": "DOC-000012_requirement_16_10", "coverage_semantic_key": "当充电机接触器K1、K2任意一个或同时粘连时,充电机应触发故障停机,并在故障恢复前不"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_96() -> None:
+    case = '{"kind": "coverage_requirement", "query": "当整车供电电压需求值高于充电机最高充电输出电压值或低于充电机最低充电输出电压值有哪些要求？", "must_include": "当整车供电电压需求值高于充电机最高充电输出电压值或低于充电机最低充电输出电压值", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 16, "coverage_unit_id": "DOC-000012_requirement_16_53", "coverage_semantic_key": "当整车供电电压需求值高于充电机最高充电输出电压值或低于充电机最低充电输出电压值"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_97() -> None:
+    case = '{"kind": "coverage_requirement", "query": "供电模式中,充电机当前最大输出电流能力值小于整车当前最大供电电流需求值时,若车辆有哪些要求？", "must_include": "供电模式中,充电机当前最大输出电流能力值小于整车当前最大供电电流需求值时,若车辆", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 17, "coverage_unit_id": "DOC-000012_requirement_17_1", "coverage_semantic_key": "供电模式中,充电机当前最大输出电流能力值小于整车当前最大供电电流需求值时,若车辆"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_98() -> None:
+    case = '{"kind": "coverage_requirement", "query": "供电模式中,当充电机需要降低输出功率,应先更新充电机当前最大输出电流能力,当车辆判有哪些要求？", "must_include": "供电模式中,当充电机需要降低输出功率,应先更新充电机当前最大输出电流能力,当车辆判", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 17, "coverage_unit_id": "DOC-000012_requirement_17_6", "coverage_semantic_key": "供电模式中,当充电机需要降低输出功率,应先更新充电机当前最大输出电流能力,当车辆判"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_99() -> None:
+    case = '{"kind": "coverage_requirement", "query": "在进入能量传输阶段前,车辆控制器控制闭合接触器K5、K6后,车辆准备就绪状态参数值为有哪些要求？", "must_include": "在进入能量传输阶段前,车辆控制器控制闭合接触器K5、K6后,车辆准备就绪状态参数值为", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 17, "coverage_unit_id": "DOC-000012_requirement_17_28", "coverage_semantic_key": "在进入能量传输阶段前,车辆控制器控制闭合接触器K5、K6后,车辆准备就绪状态参数值为"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_100() -> None:
+    case = '{"kind": "coverage_requirement", "query": "在恒压充电模式下,充电机的输出电压应满足车辆电压需求值,输出电流应不超过整车充电有哪些要求？", "must_include": "在恒压充电模式下,充电机的输出电压应满足车辆电压需求值,输出电流应不超过整车充电", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 18, "coverage_unit_id": "DOC-000012:requirement:18:E9FDDA498EFE", "coverage_semantic_key": "在恒压充电模式下,充电机的输出电压应满足车辆电压需求值,输出电流应不超过整车充电"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_101() -> None:
+    case = '{"kind": "coverage_requirement", "query": "在能量传输阶段由车辆实施绝缘监测,应能监测DC+与PE、DC-与PE 之间的对称和不对有哪些要求？", "must_include": "在能量传输阶段由车辆实施绝缘监测,应能监测DC+与PE、DC-与PE 之间的对称和不对", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 18, "coverage_unit_id": "DOC-000012_requirement_18_34", "coverage_semantic_key": "在能量传输阶段由车辆实施绝缘监测,应能监测DC+与PE、DC-与PE 之间的对称和不对"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_102() -> None:
+    case = '{"kind": "coverage_requirement", "query": "当整车充电电流需求参数小于充电机最小输出电流时(包括整车充电电流需求参数为有哪些要求？", "must_include": "当整车充电电流需求参数小于充电机最小输出电流时(包括整车充电电流需求参数为", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 18, "coverage_unit_id": "DOC-000012:requirement:18:B4EA2505C8D2", "coverage_semantic_key": "当整车充电电流需求参数小于充电机最小输出电流时(包括整车充电电流需求参数为"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_103() -> None:
+    case = '{"kind": "coverage_requirement", "query": "能量传输阶段包含以下工作模式有哪些要求？", "must_include": "能量传输阶段包含以下工作模式", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 18, "coverage_unit_id": "DOC-000012:requirement:18:0E1C01A5F03F", "coverage_semantic_key": "能量传输阶段包含以下工作模式"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_104() -> None:
+    case = '{"kind": "coverage_requirement", "query": "车桩应具备暂停功能有哪些要求？", "must_include": "车桩应具备暂停功能", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 18, "coverage_unit_id": "DOC-000012_requirement_18_42", "coverage_semantic_key": "车桩应具备暂停功能"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_105() -> None:
+    case = '{"kind": "coverage_requirement", "query": "车辆期待的充电模式为恒流模式时,若接触器K1、K2外侧电压小于充电机最高输出电压有哪些要求？", "must_include": "车辆期待的充电模式为恒流模式时,若接触器K1、K2外侧电压小于充电机最高输出电压", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 18, "coverage_unit_id": "DOC-000012_requirement_18_25", "coverage_semantic_key": "车辆期待的充电模式为恒流模式时,若接触器K1、K2外侧电压小于充电机最高输出电压"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_106() -> None:
+    case = '{"kind": "coverage_requirement", "query": "非车载充电机控制器应根据车辆充电需求参数实时调整充电电压和充电电流,车辆控制器和有哪些要求？", "must_include": "非车载充电机控制器应根据车辆充电需求参数实时调整充电电压和充电电流,车辆控制器和", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 18, "coverage_unit_id": "DOC-000012_requirement_18_17", "coverage_semantic_key": "非车载充电机控制器应根据车辆充电需求参数实时调整充电电压和充电电流,车辆控制器和"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_107() -> None:
+    case = '{"kind": "coverage_requirement", "query": "车桩功能协商确认均支持充放电模式功能,且本次充电启动充放电模式,则车桩在能量传输有哪些要求？", "must_include": "车桩功能协商确认均支持充放电模式功能,且本次充电启动充放电模式,则车桩在能量传输", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 19, "coverage_unit_id": "DOC-000012_requirement_19_16", "coverage_semantic_key": "车桩功能协商确认均支持充放电模式功能,且本次充电启动充放电模式,则车桩在能量传输"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_108() -> None:
+    case = '{"kind": "coverage_requirement", "query": "车辆在供电模式和预充及能量传输阶段进入正常结束状态时,当车辆判断充电机接触器有哪些要求？", "must_include": "车辆在供电模式和预充及能量传输阶段进入正常结束状态时,当车辆判断充电机接触器", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 19, "coverage_unit_id": "DOC-000012_requirement_19_41", "coverage_semantic_key": "车辆在供电模式和预充及能量传输阶段进入正常结束状态时,当车辆判断充电机接触器"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_109() -> None:
+    case = '{"kind": "coverage_requirement", "query": "车辆接触器K5、K6完成粘连检测,粘连检测中如未完成同时断开接触器K5、K6,粘连检有哪些要求？", "must_include": "车辆接触器K5、K6完成粘连检测,粘连检测中如未完成同时断开接触器K5、K6,粘连检", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 19, "coverage_unit_id": "DOC-000012_requirement_19_47", "coverage_semantic_key": "车辆接触器K5、K6完成粘连检测,粘连检测中如未完成同时断开接触器K5、K6,粘连检"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_110() -> None:
+    case = '{"kind": "coverage_requirement", "query": "充电机正常结束时,应停止输出并断开接触器K1、K2,各阶段触发充电机进入正常结束有哪些要求？", "must_include": "充电机正常结束时,应停止输出并断开接触器K1、K2,各阶段触发充电机进入正常结束", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 20, "coverage_unit_id": "DOC-000012:requirement:20:DD4B7E1F34C1", "coverage_semantic_key": "充电机正常结束时,应停止输出并断开接触器K1、K2,各阶段触发充电机进入正常结束"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_111() -> None:
+    case = '{"kind": "coverage_requirement", "query": "在正常结束阶段,当充电机判断需要进入故障停机时,充电机电流下降速率及接触器有哪些要求？", "must_include": "在正常结束阶段,当充电机判断需要进入故障停机时,充电机电流下降速率及接触器", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 20, "coverage_unit_id": "DOC-000012:requirement:20:096B4DCD3836", "coverage_semantic_key": "在正常结束阶段,当充电机判断需要进入故障停机时,充电机电流下降速率及接触器"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_112() -> None:
+    case = '{"kind": "coverage_requirement", "query": "在正常结束阶段,当车辆判断需要进入故障停机时,车辆接触器K5、K6动作时间应符合有哪些要求？", "must_include": "在正常结束阶段,当车辆判断需要进入故障停机时,车辆接触器K5、K6动作时间应符合", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 20, "coverage_unit_id": "DOC-000012_requirement_20_6", "coverage_semantic_key": "在正常结束阶段,当车辆判断需要进入故障停机时,车辆接触器K5、K6动作时间应符合"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_113() -> None:
+    case = '{"kind": "coverage_requirement", "query": "当断开车辆接触器K5、K6或车辆接触器K5、K6外侧电压绝对值小于DC60V 时,车辆有哪些要求？", "must_include": "当断开车辆接触器K5、K6或车辆接触器K5、K6外侧电压绝对值小于DC60V 时,车辆", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 20, "coverage_unit_id": "DOC-000012_requirement_20_3", "coverage_semantic_key": "当断开车辆接触器K5、K6或车辆接触器K5、K6外侧电压绝对值小于DC60V 时,车辆"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_114() -> None:
+    case = '{"kind": "coverage_requirement", "query": "正常结束阶段后,若车辆接口保持连接状态,且充电机需要重新唤醒车辆建立通信时,充有哪些要求？", "must_include": "正常结束阶段后,若车辆接口保持连接状态,且充电机需要重新唤醒车辆建立通信时,充", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 20, "coverage_unit_id": "DOC-000012_requirement_20_32", "coverage_semantic_key": "正常结束阶段后,若车辆接口保持连接状态,且充电机需要重新唤醒车辆建立通信时,充"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_115() -> None:
+    case = '{"kind": "coverage_requirement", "query": "当车辆判断需要进入故障停机状态时,应发送对应中止原因的中止报文有哪些要求？", "must_include": "当车辆判断需要进入故障停机状态时,应发送对应中止原因的中止报文", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 21, "coverage_unit_id": "DOC-000012:requirement:21:05FD039C7D8B", "coverage_semantic_key": "当车辆判断需要进入故障停机状态时,应发送对应中止原因的中止报文"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_116() -> None:
+    case = '{"kind": "coverage_requirement", "query": "当充电机判断需要进入故障停机状态时,应发送对应中止原因的中止报文有哪些要求？", "must_include": "当充电机判断需要进入故障停机状态时,应发送对应中止原因的中止报文", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 22, "coverage_unit_id": "DOC-000012:requirement:22:6885EEA391D7", "coverage_semantic_key": "当充电机判断需要进入故障停机状态时,应发送对应中止原因的中止报文"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_117() -> None:
+    case = '{"kind": "coverage_requirement", "query": "各阶段触发充电机进入故障停机状态时,充电机电流下降速率及接触器K1、K2的故障有哪些要求？", "must_include": "各阶段触发充电机进入故障停机状态时,充电机电流下降速率及接触器K1、K2的故障", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 23, "coverage_unit_id": "DOC-000012_requirement_23_39", "coverage_semantic_key": "各阶段触发充电机进入故障停机状态时,充电机电流下降速率及接触器K1、K2的故障"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_118() -> None:
+    case = '{"kind": "coverage_requirement", "query": "在故障停机阶段,当充电机判断需要进入紧急停机时,充电机电流下降速率及接触器有哪些要求？", "must_include": "在故障停机阶段,当充电机判断需要进入紧急停机时,充电机电流下降速率及接触器", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 23, "coverage_unit_id": "DOC-000012:requirement:23:F3150784752B", "coverage_semantic_key": "在故障停机阶段,当充电机判断需要进入紧急停机时,充电机电流下降速率及接触器"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_119() -> None:
+    case = '{"kind": "coverage_requirement", "query": "在紧急停机阶段,车辆不应进行接触器K5、K6的粘连检测,接触器K5、K6断开后,车辆有哪些要求？", "must_include": "在紧急停机阶段,车辆不应进行接触器K5、K6的粘连检测,接触器K5、K6断开后,车辆", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 24, "coverage_unit_id": "DOC-000012_requirement_24_51", "coverage_semantic_key": "在紧急停机阶段,车辆不应进行接触器K5、K6的粘连检测,接触器K5、K6断开后,车辆"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_120() -> None:
+    case = '{"kind": "coverage_requirement", "query": "开关S2断开后,车辆接口处于连接状态时,车辆可在进入休眠后闭合开关S2有哪些要求？", "must_include": "开关S2断开后,车辆接口处于连接状态时,车辆可在进入休眠后闭合开关S2", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 24, "coverage_unit_id": "DOC-000012_requirement_24_54", "coverage_semantic_key": "开关S2断开后,车辆接口处于连接状态时,车辆可在进入休眠后闭合开关S2"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_121() -> None:
+    case = '{"kind": "coverage_requirement", "query": "当车辆判断需要进入紧急停机状态时,应发送对应中止原因的中止报文有哪些要求？", "must_include": "当车辆判断需要进入紧急停机状态时,应发送对应中止原因的中止报文", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 24, "coverage_unit_id": "DOC-000012_requirement_24_31", "coverage_semantic_key": "当车辆判断需要进入紧急停机状态时,应发送对应中止原因的中止报文"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_122() -> None:
+    case = '{"kind": "coverage_requirement", "query": "充电交互结束(充电机断开接触器K1、K2和辅源接触器K3、K4、双方停止通信、接触器有哪些要求？", "must_include": "充电交互结束(充电机断开接触器K1、K2和辅源接触器K3、K4、双方停止通信、接触器", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 25, "coverage_unit_id": "DOC-000012_requirement_25_42", "coverage_semantic_key": "充电交互结束(充电机断开接触器K1、K2和辅源接触器K3、K4、双方停止通信、接触器"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_123() -> None:
+    case = '{"kind": "coverage_requirement", "query": "当充电机判断需要进入紧急停机状态时,应发送对应中止原因的中止报文有哪些要求？", "must_include": "当充电机判断需要进入紧急停机状态时,应发送对应中止原因的中止报文", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 25, "coverage_unit_id": "DOC-000012_requirement_25_14", "coverage_semantic_key": "当充电机判断需要进入紧急停机状态时,应发送对应中止原因的中止报文"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_124() -> None:
+    case = '{"kind": "coverage_requirement", "query": "充电机或车辆停机时,若中止原因为允许重连(按GB/T27930有哪些要求？", "must_include": "充电机或车辆停机时,若中止原因为允许重连(按GB/T27930", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 26, "coverage_unit_id": "DOC-000012_requirement_26_31", "coverage_semantic_key": "充电机或车辆停机时,若中止原因为允许重连(按GB/T27930"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_125() -> None:
+    case = '{"kind": "coverage_requirement", "query": "在等待重连过程中充电机不应解锁电子锁,双方均不应进入休眠有哪些要求？", "must_include": "在等待重连过程中充电机不应解锁电子锁,双方均不应进入休眠", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 26, "coverage_unit_id": "DOC-000012_requirement_26_36", "coverage_semantic_key": "在等待重连过程中充电机不应解锁电子锁,双方均不应进入休眠"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_126() -> None:
+    case = '{"kind": "coverage_requirement", "query": "支持重新启动功能的充电机应不休眠或可被唤醒报文唤醒有哪些要求？", "must_include": "支持重新启动功能的充电机应不休眠或可被唤醒报文唤醒", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 26, "coverage_unit_id": "DOC-000012_requirement_26_49", "coverage_semantic_key": "支持重新启动功能的充电机应不休眠或可被唤醒报文唤醒"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_127() -> None:
+    case = '{"kind": "coverage_requirement", "query": "重新启动时,若车辆发起重新启动,应发送唤醒报文唤醒充电机;若充电机发起重新启有哪些要求？", "must_include": "重新启动时,若车辆发起重新启动,应发送唤醒报文唤醒充电机;若充电机发起重新启", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 26, "coverage_unit_id": "DOC-000012_requirement_26_52", "coverage_semantic_key": "重新启动时,若车辆发起重新启动,应发送唤醒报文唤醒充电机;若充电机发起重新启"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_128() -> None:
+    case = '{"kind": "coverage_requirement", "query": "正常启动有哪些要求？", "must_include": "正常启动", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 27, "coverage_unit_id": "DOC-000012:requirement:27:259ACC68AF9E", "coverage_semantic_key": "正常启动"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_129() -> None:
+    case = '{"kind": "coverage_requirement", "query": "正常启动控制时序表(续)有哪些要求？", "must_include": "正常启动控制时序表(续)", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 28, "coverage_unit_id": "DOC-000012_requirement_28_13", "coverage_semantic_key": "正常启动控制时序表(续)"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_130() -> None:
+    case = '{"kind": "coverage_requirement", "query": "正常结束或故障停机控制时序表有哪些要求？", "must_include": "正常结束或故障停机控制时序表", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 30, "coverage_unit_id": "DOC-000012_requirement_30_19", "coverage_semantic_key": "正常结束或故障停机控制时序表"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_131() -> None:
+    case = '{"kind": "coverage_requirement", "query": "车辆触发的紧急停机控制时序表有哪些要求？", "must_include": "车辆触发的紧急停机控制时序表", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 32, "coverage_unit_id": "DOC-000012_requirement_32_13", "coverage_semantic_key": "车辆触发的紧急停机控制时序表"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_132() -> None:
+    case = '{"kind": "coverage_requirement", "query": "充电机触发的紧急停机控制时序表有哪些要求？", "must_include": "充电机触发的紧急停机控制时序表", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 34, "coverage_unit_id": "DOC-000012_requirement_34_13", "coverage_semantic_key": "充电机触发的紧急停机控制时序表"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_133() -> None:
+    case = '{"kind": "coverage_requirement", "query": "手动应急解锁装置有哪些要求？", "must_include": "手动应急解锁装置", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 34, "coverage_unit_id": "DOC-000012_requirement_34_42", "coverage_semantic_key": "手动应急解锁装置"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_134() -> None:
+    case = '{"kind": "coverage_requirement", "query": "车桩数据交互有哪些要求？", "must_include": "车桩数据交互", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 34, "coverage_unit_id": "DOC-000012:requirement:34:91CF63482650", "coverage_semantic_key": "车桩数据交互"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_135() -> None:
+    case = '{"kind": "coverage_requirement", "query": "供电模式阶段由充电机实施直流供电回路绝缘监测,应满足A有哪些要求？", "must_include": "供电模式阶段由充电机实施直流供电回路绝缘监测,应满足A", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 35, "coverage_unit_id": "DOC-000012:requirement:35:A21B3C396710", "coverage_semantic_key": "供电模式阶段由充电机实施直流供电回路绝缘监测,应满足A"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_136() -> None:
+    case = '{"kind": "coverage_requirement", "query": "充电机Y电容有哪些要求？", "must_include": "充电机Y电容", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 36, "coverage_unit_id": "DOC-000012_requirement_36_8", "coverage_semantic_key": "充电机Y电容"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_137() -> None:
+    case = '{"kind": "coverage_requirement", "query": "停电保护有哪些要求？", "must_include": "停电保护", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 38, "coverage_unit_id": "DOC-000012_requirement_38_42", "coverage_semantic_key": "停电保护"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_138() -> None:
+    case = '{"kind": "coverage_requirement", "query": "充电机应具备保护自身和车辆的措施,并防止交流供电回路发生短路等故障有哪些要求？", "must_include": "充电机应具备保护自身和车辆的措施,并防止交流供电回路发生短路等故障", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 38, "coverage_unit_id": "DOC-000012_requirement_38_21", "coverage_semantic_key": "充电机应具备保护自身和车辆的措施,并防止交流供电回路发生短路等故障"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_139() -> None:
+    case = '{"kind": "coverage_requirement", "query": "充电机直流供电回路DC+与DC-之间发生短路时,充电机应立即使用过流保护装置(如限有哪些要求？", "must_include": "充电机直流供电回路DC+与DC-之间发生短路时,充电机应立即使用过流保护装置(如限", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 38, "coverage_unit_id": "DOC-000012_requirement_38_25", "coverage_semantic_key": "充电机直流供电回路DC+与DC-之间发生短路时,充电机应立即使用过流保护装置(如限"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_140() -> None:
+    case = '{"kind": "coverage_requirement", "query": "充电机直流输出回路中从短路保护装置至车辆插头之间的线路短路耐受额定值(I有哪些要求？", "must_include": "充电机直流输出回路中从短路保护装置至车辆插头之间的线路短路耐受额定值(I", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 38, "coverage_unit_id": "DOC-000012:requirement:38:21F4F183293F", "coverage_semantic_key": "充电机直流输出回路中从短路保护装置至车辆插头之间的线路短路耐受额定值(I"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_141() -> None:
+    case = '{"kind": "coverage_requirement", "query": "负载突降有哪些要求？", "must_include": "负载突降", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 38, "coverage_unit_id": "DOC-000012:requirement:38:88B575D230FD", "coverage_semantic_key": "负载突降"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_142() -> None:
+    case = '{"kind": "coverage_requirement", "query": "车辆供电回路电压切换有哪些要求？", "must_include": "车辆供电回路电压切换", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 38, "coverage_unit_id": "DOC-000012:requirement:38:9F19D6662D75", "coverage_semantic_key": "车辆供电回路电压切换"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_143() -> None:
+    case = '{"kind": "coverage_requirement", "query": "具备双直流车辆插座且可同时充电的电动汽车基本方案示意图见图A有哪些要求？", "must_include": "具备双直流车辆插座且可同时充电的电动汽车基本方案示意图见图A", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 39, "coverage_unit_id": "DOC-000012:requirement:39:71A43C17A236", "coverage_semantic_key": "具备双直流车辆插座且可同时充电的电动汽车基本方案示意图见图A"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_144() -> None:
+    case = '{"kind": "coverage_requirement", "query": "任意一个车辆插座的车辆供电回路接触器出现粘连故障,若不能确保车辆插座的B级电压有哪些要求？", "must_include": "任意一个车辆插座的车辆供电回路接触器出现粘连故障,若不能确保车辆插座的B级电压", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 40, "coverage_unit_id": "DOC-000012_requirement_40_37", "coverage_semantic_key": "任意一个车辆插座的车辆供电回路接触器出现粘连故障,若不能确保车辆插座的B级电压"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_145() -> None:
+    case = '{"kind": "coverage_requirement", "query": "若仅使用一个车辆插座进行充电,另一个车辆插座的B 级电压触头之间以及B 级电压触头有哪些要求？", "must_include": "若仅使用一个车辆插座进行充电,另一个车辆插座的B 级电压触头之间以及B 级电压触头", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 40, "coverage_unit_id": "DOC-000012_requirement_40_18", "coverage_semantic_key": "若仅使用一个车辆插座进行充电,另一个车辆插座的B 级电压触头之间以及B 级电压触头"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_146() -> None:
+    case = '{"kind": "coverage_requirement", "query": "车辆插座的实际电流方向应与充放电工作模式保持一致,且每个车辆供电回路应具有独立有哪些要求？", "must_include": "车辆插座的实际电流方向应与充放电工作模式保持一致,且每个车辆供电回路应具有独立", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 40, "coverage_unit_id": "DOC-000012_requirement_40_21", "coverage_semantic_key": "车辆插座的实际电流方向应与充放电工作模式保持一致,且每个车辆供电回路应具有独立"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_147() -> None:
+    case = '{"kind": "coverage_requirement", "query": "可双车辆插座充电的车辆,其车载可充电储能系统在车辆插座处产生的总短路能量(I有哪些要求？", "must_include": "可双车辆插座充电的车辆,其车载可充电储能系统在车辆插座处产生的总短路能量(I", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 41, "coverage_unit_id": "DOC-000012:requirement:41:254001784FD1", "coverage_semantic_key": "可双车辆插座充电的车辆,其车载可充电储能系统在车辆插座处产生的总短路能量(I"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_148() -> None:
+    case = '{"kind": "coverage_requirement", "query": "可双车辆插座充电的车辆,每个车辆插座绝缘监测应符合A有哪些要求？", "must_include": "可双车辆插座充电的车辆,每个车辆插座绝缘监测应符合A", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 41, "coverage_unit_id": "DOC-000012_requirement_41_4", "coverage_semantic_key": "可双车辆插座充电的车辆,每个车辆插座绝缘监测应符合A"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_149() -> None:
+    case = '{"kind": "coverage_requirement", "query": "中向下兼容的通信协议流程有哪些要求？", "must_include": "中向下兼容的通信协议流程", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 42, "coverage_unit_id": "DOC-000012:requirement:42:B125A8BCA856", "coverage_semantic_key": "中向下兼容的通信协议流程"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_150() -> None:
+    case = '{"kind": "coverage_requirement", "query": "符合附录A 的电动汽车,经过版本协商阶段后按GB/T27930有哪些要求？", "must_include": "符合附录A 的电动汽车,经过版本协商阶段后按GB/T27930", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 42, "coverage_unit_id": "DOC-000012:requirement:42:A01A7603B0E3", "coverage_semantic_key": "符合附录A 的电动汽车,经过版本协商阶段后按GB/T27930"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_151() -> None:
+    case = '{"kind": "coverage_requirement", "query": "符合附录A 的电动汽车与旧版本充电机充电的直流充电控制导引电路基本方案应符合图B有哪些要求？", "must_include": "符合附录A 的电动汽车与旧版本充电机充电的直流充电控制导引电路基本方案应符合图B", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 42, "coverage_unit_id": "DOC-000012_requirement_42_23", "coverage_semantic_key": "符合附录A 的电动汽车与旧版本充电机充电的直流充电控制导引电路基本方案应符合图B"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_152() -> None:
+    case = '{"kind": "coverage_requirement", "query": "附录A的电动汽车兼容旧版本充电机的直流充电控制导引电路参数有哪些要求？", "must_include": "附录A的电动汽车兼容旧版本充电机的直流充电控制导引电路参数", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 43, "coverage_unit_id": "DOC-000012_requirement_43_16", "coverage_semantic_key": "附录A的电动汽车兼容旧版本充电机的直流充电控制导引电路参数"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_153() -> None:
+    case = '{"kind": "coverage_requirement", "query": "附录A的电动汽车兼容旧版本充电机的直流充电控制导引电路参数(续)有哪些要求？", "must_include": "附录A的电动汽车兼容旧版本充电机的直流充电控制导引电路参数(续)", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 44, "coverage_unit_id": "DOC-000012:requirement:44:59ECBEE954B4", "coverage_semantic_key": "附录A的电动汽车兼容旧版本充电机的直流充电控制导引电路参数(续)"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_154() -> None:
+    case = '{"kind": "coverage_requirement", "query": "在充电阶段,车辆控制器向非车载充电机控制器实时发送充电接口充电需求参数,非车载充有哪些要求？", "must_include": "在充电阶段,车辆控制器向非车载充电机控制器实时发送充电接口充电需求参数,非车载充", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 45, "coverage_unit_id": "DOC-000012:requirement:45:69A2228C03EF", "coverage_semantic_key": "在充电阶段,车辆控制器向非车载充电机控制器实时发送充电接口充电需求参数,非车载充"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_155() -> None:
+    case = '{"kind": "coverage_requirement", "query": "当车辆收到充电机最大输出能力参数后,车辆判断允许充电时,车辆控制器断开开关S3并有哪些要求？", "must_include": "当车辆收到充电机最大输出能力参数后,车辆判断允许充电时,车辆控制器断开开关S3并", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 45, "coverage_unit_id": "DOC-000012_requirement_45_21", "coverage_semantic_key": "当车辆收到充电机最大输出能力参数后,车辆判断允许充电时,车辆控制器断开开关S3并"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_156() -> None:
+    case = '{"kind": "coverage_requirement", "query": "当达到整车充电结束条件或收到充电机中止充电报文后,车辆控制器开始周期发送车辆中有哪些要求？", "must_include": "当达到整车充电结束条件或收到充电机中止充电报文后,车辆控制器开始周期发送车辆中", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 45, "coverage_unit_id": "DOC-000012:requirement:45:330712B6513F", "coverage_semantic_key": "当达到整车充电结束条件或收到充电机中止充电报文后,车辆控制器开始周期发送车辆中"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_157() -> None:
+    case = '{"kind": "coverage_requirement", "query": "绝缘检测时充电机应闭合K1、K2且输出绝缘监测电压应为车辆握手报文内的车辆端绝缘有哪些要求？", "must_include": "绝缘检测时充电机应闭合K1、K2且输出绝缘监测电压应为车辆握手报文内的车辆端绝缘", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 45, "coverage_unit_id": "DOC-000012_requirement_45_6", "coverage_semantic_key": "绝缘检测时充电机应闭合K1、K2且输出绝缘监测电压应为车辆握手报文内的车辆端绝缘"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_158() -> None:
+    case = '{"kind": "coverage_requirement", "query": "车辆控制器与非车载充电机控制器在配置阶段时,车辆控制器应能将车辆接口处的充电参有哪些要求？", "must_include": "车辆控制器与非车载充电机控制器在配置阶段时,车辆控制器应能将车辆接口处的充电参", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 45, "coverage_unit_id": "DOC-000012_requirement_45_12", "coverage_semantic_key": "车辆控制器与非车载充电机控制器在配置阶段时,车辆控制器应能将车辆接口处的充电参"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_159() -> None:
+    case = '{"kind": "coverage_requirement", "query": "充电机进行绝缘检测后,应及时对电压进行泄放,1s内将车辆接口电压降到DC60V 以有哪些要求？", "must_include": "充电机进行绝缘检测后,应及时对电压进行泄放,1s内将车辆接口电压降到DC60V 以", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 46, "coverage_unit_id": "DOC-000012_requirement_46_52", "coverage_semantic_key": "充电机进行绝缘检测后,应及时对电压进行泄放,1s内将车辆接口电压降到DC60V 以"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_160() -> None:
+    case = '{"kind": "coverage_requirement", "query": "在充电机侧和车辆侧均设置绝缘监测电路有哪些要求？", "must_include": "在充电机侧和车辆侧均设置绝缘监测电路", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 46, "coverage_unit_id": "DOC-000012:requirement:46:90BED323C8D7", "coverage_semantic_key": "在充电机侧和车辆侧均设置绝缘监测电路"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_161() -> None:
+    case = '{"kind": "coverage_requirement", "query": "在充电过程中,非车载充电机控制器应对检测点1的电压进行检测,若车辆接口由完全连接有哪些要求？", "must_include": "在充电过程中,非车载充电机控制器应对检测点1的电压进行检测,若车辆接口由完全连接", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 46, "coverage_unit_id": "DOC-000012_requirement_46_2", "coverage_semantic_key": "在充电过程中,非车载充电机控制器应对检测点1的电压进行检测,若车辆接口由完全连接"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_162() -> None:
+    case = '{"kind": "coverage_requirement", "query": "在充电阶段,若充电机出现不能继续充电的故障,则向车辆周期发送充电机中止充电报有哪些要求？", "must_include": "在充电阶段,若充电机出现不能继续充电的故障,则向车辆周期发送充电机中止充电报", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 46, "coverage_unit_id": "DOC-000012_requirement_46_24", "coverage_semantic_key": "在充电阶段,若充电机出现不能继续充电的故障,则向车辆周期发送充电机中止充电报"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_163() -> None:
+    case = '{"kind": "coverage_requirement", "query": "附录A的电动汽车兼容旧版本充电机的直流充电连接控制时序表有哪些要求？", "must_include": "附录A的电动汽车兼容旧版本充电机的直流充电连接控制时序表", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 48, "coverage_unit_id": "DOC-000012_requirement_48_10", "coverage_semantic_key": "附录A的电动汽车兼容旧版本充电机的直流充电连接控制时序表"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_164() -> None:
+    case = '{"kind": "coverage_requirement", "query": "符合附录A 的充电机与旧版本电动汽车充电的直流充电控制导引电路基本方案应符合图B有哪些要求？", "must_include": "符合附录A 的充电机与旧版本电动汽车充电的直流充电控制导引电路基本方案应符合图B", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 49, "coverage_unit_id": "DOC-000012_requirement_49_10", "coverage_semantic_key": "符合附录A 的充电机与旧版本电动汽车充电的直流充电控制导引电路基本方案应符合图B"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_165() -> None:
+    case = '{"kind": "coverage_requirement", "query": "附录A的充电机兼容旧版本电动汽车的直流充电控制导引电路参数有哪些要求？", "must_include": "附录A的充电机兼容旧版本电动汽车的直流充电控制导引电路参数", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 49, "coverage_unit_id": "DOC-000012_requirement_49_26", "coverage_semantic_key": "附录A的充电机兼容旧版本电动汽车的直流充电控制导引电路参数"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_166() -> None:
+    case = '{"kind": "coverage_requirement", "query": "附录A的充电机兼容旧版本电动汽车的直流充电控制导引电路参数(续)有哪些要求？", "must_include": "附录A的充电机兼容旧版本电动汽车的直流充电控制导引电路参数(续)", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 50, "coverage_unit_id": "DOC-000012_requirement_50_23", "coverage_semantic_key": "附录A的充电机兼容旧版本电动汽车的直流充电控制导引电路参数(续)"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_167() -> None:
+    case = '{"kind": "coverage_requirement", "query": "充电阶段有哪些要求？", "must_include": "充电阶段", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 51, "coverage_unit_id": "DOC-000012_requirement_51_31", "coverage_semantic_key": "充电阶段"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_168() -> None:
+    case = '{"kind": "coverage_requirement", "query": "非车载充电机控制器应能根据收到的车辆充电参数,配置充电能力并将其车辆接口处的最有哪些要求？", "must_include": "非车载充电机控制器应能根据收到的车辆充电参数,配置充电能力并将其车辆接口处的最", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 51, "coverage_unit_id": "DOC-000012_requirement_51_15", "coverage_semantic_key": "非车载充电机控制器应能根据收到的车辆充电参数,配置充电能力并将其车辆接口处的最"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_169() -> None:
+    case = '{"kind": "coverage_requirement", "query": "充电阶段,若充电机出现不能继续充电的故障,则向车辆周期发送充电机中止充电报文,并有哪些要求？", "must_include": "充电阶段,若充电机出现不能继续充电的故障,则向车辆周期发送充电机中止充电报文,并", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 52, "coverage_unit_id": "DOC-000012_requirement_52_19", "coverage_semantic_key": "充电阶段,若充电机出现不能继续充电的故障,则向车辆周期发送充电机中止充电报文,并"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_170() -> None:
+    case = '{"kind": "coverage_requirement", "query": "在充电机侧和车辆侧均设置绝缘监测电路,具备直流供电回路DC+与PE 之间、DC-与PE有哪些要求？", "must_include": "在充电机侧和车辆侧均设置绝缘监测电路,具备直流供电回路DC+与PE 之间、DC-与PE", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 52, "coverage_unit_id": "DOC-000012_requirement_52_35", "coverage_semantic_key": "在充电机侧和车辆侧均设置绝缘监测电路,具备直流供电回路DC+与PE 之间、DC-与PE"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_171() -> None:
+    case = '{"kind": "coverage_requirement", "query": "在充电阶段由于故障出现负载突降(如抛负载)的情况时,瞬时输出电压值不应超过车辆最高有哪些要求？", "must_include": "在充电阶段由于故障出现负载突降(如抛负载)的情况时,瞬时输出电压值不应超过车辆最高", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 52, "coverage_unit_id": "DOC-000012:requirement:52:BE14E035FBB2", "coverage_semantic_key": "在充电阶段由于故障出现负载突降(如抛负载)的情况时,瞬时输出电压值不应超过车辆最高"}'
+    _assert_case(json.loads(case))
+
+@pytest.mark.integration
+@pytest.mark.benchmark
+@pytest.mark.coverage
+def test_doc_000012_golden_172() -> None:
+    case = '{"kind": "coverage_requirement", "query": "附录A的充电机兼容旧版本电动汽车的直流充电连接控制时序表(续)有哪些要求？", "must_include": "附录A的充电机兼容旧版本电动汽车的直流充电连接控制时序表(续)", "source": "coverage", "assert_mode": "rich_answer", "target_doc_id": "DOC-000012", "expected_evidence_shape": "requirement", "page_no": 54, "coverage_unit_id": "DOC-000012_requirement_54_23", "coverage_semantic_key": "附录A的充电机兼容旧版本电动汽车的直流充电连接控制时序表(续)"}'
     _assert_case(json.loads(case))
