@@ -40,6 +40,21 @@ SCHEMA_VERSION = 1  # bump to force re-apply on schema changes
 
 # Heading pattern: lines starting with # (1-4 #) followed by section number
 HEADING_PATTERN = re.compile(r"^\s*(#{1,4})\s+(\d[\d\.]*)\s+(.+?)(?:\n|$)", re.MULTILINE)
+# Generic intros / table-of-contents lines that show up repeatedly and
+# aren't useful as expected_points.  Filtered at decompose time.
+NOISE_PREFIXES = (
+    "下列", "本标准", "本规范", "本部分", "本文件",
+    "本标准规定了", "本标准适用于",
+    "下列文件", "下列术语",
+    "见 ", "参见 ", "详见 ",
+    "GB ", "GB/T", "GB 1", "QC/T ", "ISO ", "IEC ", "JT/T ",
+    "前    言", "前 言", "前  言",
+    "目 次", "目次",
+    "ICS ", "ICS",
+    "T 36", "T 35",
+)
+
+
 
 # MiniMax-M2 (Anthropic-compatible) is configured via env
 import os  # noqa: E402
@@ -58,24 +73,26 @@ def _now() -> str:
 def _split_sections(doc_ir: dict) -> list[dict]:
     """Split a doc_ir into sections by Markdown heading.
 
+    Sections are de-duplicated: if the same section_id appears in multiple
+    blocks (e.g. OCR put the heading on a different page than the content,
+    or the same chapter is repeated because of PDF structure), the
+    texts are concatenated and the lowest page_no is kept.
+
     Returns a list of {section: "3.5", title: "电压滞回功能",
                        page: 9, text: "..."} dicts.
     """
-    sections: list[dict] = []
+    raw: list[dict] = []
     current: dict | None = None
     for page in doc_ir.get("pages", []):
         page_no = page.get("page_no", 0)
-        # Each page is a list of blocks; concatenate text
         page_text = "\n".join(
             str(b.get("text", "")) for b in page.get("blocks", [])
         )
-        # Walk line by line to find headings
         for line in page_text.split("\n"):
             m = HEADING_PATTERN.match(line.strip())
             if m:
-                # New heading found: close current, start new
                 if current is not None:
-                    sections.append(current)
+                    raw.append(current)
                 current = {
                     "section": m.group(2).strip(),
                     "title": m.group(3).strip(),
@@ -85,8 +102,26 @@ def _split_sections(doc_ir: dict) -> list[dict]:
             elif current is not None:
                 current["text"] += line + "\n"
     if current is not None:
-        sections.append(current)
-    return sections
+        raw.append(current)
+
+    # Deduplicate by section id: concatenate text, keep lowest page_no.
+    by_sec: dict[str, dict] = {}
+    for sec in raw:
+        key = sec["section"]
+        if key in by_sec:
+            by_sec[key]["text"] += "\n" + sec["text"]
+            by_sec[key]["page"] = min(by_sec[key]["page"], sec["page"])
+        else:
+            by_sec[key] = sec
+    # Preserve original order (first-seen)
+    seen: set[str] = set()
+    deduped: list[dict] = []
+    for sec in raw:
+        if sec["section"] in seen:
+            continue
+        seen.add(sec["section"])
+        deduped.append(by_sec[sec["section"]])
+    return deduped
 
 
 def _llm_decompose_points(section: dict) -> list[dict]:
@@ -94,23 +129,32 @@ def _llm_decompose_points(section: dict) -> list[dict]:
     import httpx
 
     if not ANTHROPIC_BASE_URL or not ANTHROPIC_AUTH_TOKEN:
-        # Fall back to naive sentence split if LLM not configured
         return _naive_decompose(section)
 
-    prompt = f"""将以下文档章节拆解为 2-5 个独立论点。每个论点必须:
-1. 是该章节确实陈述的事实 (不要外推)
-2. 用一个完整句子表达
-3. 不与该章节其他论点重复
+    # Truncate to ~1200 chars on a sentence boundary.  MiniMax-M2 sometimes
+    # silently filters longer Chinese policy/standards content (returning
+    # only a "thinking" block with no "text").  Keep the prompt body
+    # short to avoid this.
+    body = section["text"][:1200]
+    if len(section["text"]) > 1200:
+        last_period = max(body.rfind("。"), body.rfind("."), body.rfind("!"), body.rfind("?"))
+        if last_period > 600:
+            body = body[:last_period + 1]
 
-章节标题: {section['section']} {section['title']}
-章节正文:
-{section['text'][:2000]}
+    prompt = f"""Decompose the following document section into 2-5 independent claims. Each claim must:
+1. Be a fact actually stated in the section (no extrapolation)
+2. Be a complete sentence
+3. Not duplicate other claims in the same section
+4. NOT be a generic intro like "the following..." or "this standard..."
 
-输出 JSON 格式:
-{{"points": ["论点 1...", "论点 2..."]}}
+Section title: {section['section']} {section['title']}
+Section body:
+{body}
+
+Output STRICTLY in this JSON format (no extra text, comments, or Markdown code blocks):
+{{"points": ["claim 1", "claim 2", "claim 3"]}}
 """
     try:
-        # trust_env=False bypasses the SOCKS proxy set in env
         with httpx.Client(timeout=60.0, trust_env=False) as client:
             resp = client.post(
                 f"{ANTHROPIC_BASE_URL.rstrip('/')}/v1/messages",
@@ -122,19 +166,86 @@ def _llm_decompose_points(section: dict) -> list[dict]:
                 json={
                     "model": LLM_MODEL,
                     "max_tokens": 1024,
+                    "temperature": 0,
                     "messages": [{"role": "user", "content": prompt}],
                 },
             )
         data = resp.json()
-        text = data["content"][0]["text"]
-        m = re.search(r"\{.*\}", text, re.DOTALL)
+        # Robust text extraction. MiniMax-M2 returns a list of blocks:
+        #   [{"type": "thinking", "thinking": "..."},
+        #    {"type": "text", "text": "..."}]
+        # Older APIs may return a single string.  We concatenate all
+        # "text" blocks (skip "thinking" reasoning).
+        text = ""
+        if "content" in data and data["content"]:
+            text_parts = []
+            for block in data["content"]:
+                if isinstance(block, dict) and block.get("type") == "text" and "text" in block:
+                    text_parts.append(block["text"])
+                elif isinstance(block, dict) and "text" in block and "thinking" not in block:
+                    text_parts.append(block["text"])
+                elif isinstance(block, str):
+                    text_parts.append(block)
+            text = "\n".join(text_parts)
+        if not text:
+            raise ValueError("no text in LLM response")
+        # Strip Markdown code fences
+        text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text.strip())
+        # Find first balanced { ... } block (handles nested quotes/braces)
+        m = None
+        start = text.find("{")
+        while start != -1:
+            depth = 0
+            for i in range(start, len(text)):
+                ch = text[i]
+                if ch == "{":
+                    depth += 1
+                elif ch == "}":
+                    depth -= 1
+                    if depth == 0:
+                        cand = text[start:i+1]
+                        if '"points"' in cand:
+                            m = type("M", (), {"group": lambda s, _=0: cand})()
+                            class _M:
+                                def __init__(s, g): s.g = g
+                                def group(s, *a): return s.g
+                            m = _M(cand)
+                        break
+            if m:
+                break
+            start = text.find("{", start + 1)
         if m:
             parsed = json.loads(m.group(0))
-            return [{"section": section["section"], "page": section["page"],
-                     "point": p, "source": "llm"} for p in parsed.get("points", [])]
+            points = parsed.get("points", [])
+            if isinstance(points, list) and points:
+                return [{"section": section["section"], "page": section["page"],
+                         "point": p, "source": "llm"} for p in points
+                        if isinstance(p, str) and not _is_noise(p)]
     except Exception as e:
-        print(f"  LLM decompose failed for {section['section']}: {e}")
+        print(f"  LLM decompose failed for {section['section']}: {type(e).__name__}: {str(e)[:100]}")
     return _naive_decompose(section)
+def _is_noise(point: str) -> bool:
+    """Detect intros / TOCs / reference lists that aren't useful as expected_points.
+
+    A point is noise if it:
+    - is empty
+    - starts with a generic intro prefix ("下列", "本标准", ...)
+    - is a pure table row (3+ | separators)
+    - is a pure reference list (3+ standard codes)
+    """
+    p = point.strip()
+    if not p:
+        return True
+    for prefix in NOISE_PREFIXES:
+        if p.startswith(prefix):
+            return True
+    # Pure tables (heavy on | and digits but no Chinese sentence)
+    if p.count("|") >= 3 and len(p) < 150:
+        return True
+    # Pure reference lists: many standard codes without a complete sentence
+    if (p.count("GB") + p.count("QC/T") + p.count("ISO") + p.count("IEC")) >= 3:
+        return True
+    return False
 
 
 def _naive_decompose(section: dict) -> list[dict]:
@@ -142,10 +253,14 @@ def _naive_decompose(section: dict) -> list[dict]:
     text = section["text"].strip()
     if not text:
         return []
-    # Split on Chinese + English sentence boundaries
     sentences = re.split(r"(?<=[。!?])\s+|(?<=[.!?])\s+", text)
-    sentences = [s.strip() for s in sentences if len(s.strip()) > 10]
+    sentences = [s.strip() for s in sentences if len(s.strip()) > 30]
+    # Filter noise
+    sentences = [s for s in sentences if not _is_noise(s)]
     points = sentences[:3] if sentences else [text[:200]]
+    points = [p for p in points if not _is_noise(p)]
+    if not points and text:
+        points = [text[:200]]
     return [{"section": section["section"], "page": section["page"],
              "point": p, "source": "naive"} for p in points]
 
@@ -159,7 +274,9 @@ def _embedding_decompose_points(section: dict) -> list[dict]:
     if not text:
         return []
     sentences = re.split(r"(?<=[。!?])\s+|(?<=[.!?])\s+", text)
-    sentences = [s.strip() for s in sentences if len(s.strip()) > 10]
+    sentences = [s.strip() for s in sentences if len(s.strip()) > 30]
+    # Filter noise (intros / TOCs) BEFORE clustering
+    sentences = [s for s in sentences if not _is_noise(s)]
     if len(sentences) <= 1:
         return [{"section": section["section"], "page": section["page"],
                  "point": sentences[0] if sentences else text[:200],
@@ -186,8 +303,16 @@ def _embedding_decompose_points(section: dict) -> list[dict]:
                 anchors.append(emb)
         # Cap at 3 points for short sections
         groups = groups[:3]
+        # Filter noise again at the group level
+        points = []
+        for g in groups:
+            joined = " ".join(g)
+            if not _is_noise(joined):
+                points.append(joined)
+        if not points and groups:
+            points = [" ".join(groups[0])]
         return [{"section": section["section"], "page": section["page"],
-                 "point": " ".join(g), "source": "embedding"} for g in groups]
+                 "point": p, "source": "embedding"} for p in points]
     except ImportError:
         return _naive_decompose(section)
     except Exception as e:
