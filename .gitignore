@@ -67,3 +67,6 @@ tests/generated/
 
 # Scratch / temp output files from ad-hoc sessions
 /_*.txt
+
+# Runtime output of scripts/run_constraint_regression.py
+docs/constraint_regression_report_DOC-000001.json
