@@ -30,6 +30,7 @@ from .evidence_shapes import (
 )
 from .query_semantic_parser import _call_astron_text, _extract_json_block
 from .graph_retrieval import STRONG_RELATIONS_BY_QUERY_TYPE
+from .exceptions import LLMError, NetworkError, TimeoutError
 
 
 EVIDENCE_JUDGE_PROMPT_VERSION = "v0.1.0"
@@ -85,7 +86,38 @@ def judge_evidence(
     use_llm: bool = True,
     force_llm: bool = False,
 ) -> EvidenceJudgement:
+    """Decide whether the candidate facts+evidence are sufficient for *query*.
+
+    Always computes a rule-based judgement (the cheap path); only delegates to
+    the LLM judge when the rule-based pass is uncertain or `force_llm=True`.
+    """
+    rule_judgement = _rule_judge_evidence(query, context, expansion or {})
+    if not _should_use_llm_judge(rule_judgement, use_llm=use_llm, force_llm=force_llm):
+        return rule_judgement
     anchors = _anchors(query, expansion or {})
+    return _judge_with_llm(
+        query=query,
+        context=context,
+        expansion=expansion or {},
+        anchors=anchors,
+        rule_judgement=rule_judgement,
+        force_llm=force_llm,
+    )
+
+
+def _rule_judge_evidence(
+    query: str,
+    context: dict[str, object],
+    expansion: dict[str, object],
+) -> EvidenceJudgement:
+    """Cheap, deterministic evidence judgement — no LLM calls.
+
+    Stages: (1) collect candidates, (2) score each candidate against the
+    query anchors and active evidence shapes, (3) decide sufficiency using
+    top score + missing-anchor count + shape contract, (4) build a
+    human-readable reason.
+    """
+    anchors = _anchors(query, expansion)
     query_type = _query_type_from_context(context)
     strong_relations = _strong_relations_for(query_type)
     facts = list(context.get("facts") or [])
@@ -95,40 +127,8 @@ def judge_evidence(
         *_candidate_items("evidence", evidence),
     ]
     active_shape_items = active_shapes(query, query_type)
-    scored: list[SCORED_ROW] = []
-    for kind, item in candidates:
-        blob = _blob(item)
-        if _is_preface_or_index_blob(blob):
-            continue
-        matched = [anchor for anchor in anchors if _contains(blob, anchor)]
-        score = len(matched) * 0.22
-        shape_hits: list[str] = []
-        for shape in active_shape_items:
-            contribution = shape.score_candidate(query, kind, item, blob)
-            if contribution > 0:
-                score += contribution
-                shape_hits.append(shape.name)
-        if kind == "fact" and _has_strong_graph_support(item, query, strong_relations):
-            score += 1.05
-        if kind == "fact" and str(item.get("fact_type") or "") == "table_requirement":
-            score += 0.18
-        scored.append((score, kind, item, matched, shape_hits))
-    scored.sort(key=lambda row: row[0], reverse=True)
-
-    matched_anchors: list[str] = []
-    best_fact_ids: list[str] = []
-    best_evidence_ids: list[str] = []
-    for score, kind, item, matched, _shape_hits in scored[:5]:
-        if score <= 0:
-            continue
-        for anchor in matched:
-            if anchor not in matched_anchors:
-                matched_anchors.append(anchor)
-        if kind == "fact" and item.get("fact_id"):
-            best_fact_ids.append(str(item["fact_id"]))
-        if kind == "evidence" and item.get("evidence_id"):
-            best_evidence_ids.append(str(item["evidence_id"]))
-
+    scored: list[SCORED_ROW] = _score_candidates(query, candidates, anchors, active_shape_items, strong_relations)
+    matched_anchors, best_fact_ids, best_evidence_ids = _collect_top_hits(scored[:5])
     missing = [anchor for anchor in anchors if anchor not in matched_anchors]
     top_score = scored[0][0] if scored else 0.0
     allowed_shapes = allowed_evidence_shapes_for_query(query, query_type)
@@ -137,7 +137,7 @@ def judge_evidence(
     sufficient = top_score >= 1.1 and len(missing) <= max(0, len(anchors) // 3) and shape_sufficiency["sufficient"]
 
     rejected = _rejection_notes(query, scored)
-    followups = [] if sufficient else _followup_queries(query, missing, expansion or {})
+    followups = [] if sufficient else _followup_queries(query, missing, expansion)
     confidence = min(0.95, max(0.0, top_score / 1.8))
     diagnostics = shape_diagnostics(query, active_shape_items, scored)
     diagnostics["shape_sufficiency"] = shape_sufficiency
@@ -159,15 +159,8 @@ def judge_evidence(
         rejected.append(
             f"evidence shape contract mismatch: query_type={query_type}, expected={','.join(allowed_shapes) or '-'}, actual={selected_shape or '-'}"
         )
-    if sufficient and selected_shape:
-        reason = next((shape.reason for shape in active_shape_items if shape.name == selected_shape), "top evidence covers expected evidence shape")
-    elif sufficient and any(_has_strong_graph_support(row[2], query, strong_relations) for row in scored[:5]):
-        reason = "top fact is connected to the query anchor through a trusted graph relation and supporting evidence"
-    elif sufficient:
-        reason = "top evidence covers required anchors and expected signal-state table"
-    else:
-        reason = "top evidence does not cover enough required anchors or expected evidence shape"
-    rule_judgement = EvidenceJudgement(
+    reason = _select_reason(query, query_type, scored, sufficient, selected_shape, active_shape_items, strong_relations)
+    return EvidenceJudgement(
         sufficient=sufficient,
         confidence=round(confidence, 3),
         matched_anchors=matched_anchors[:12],
@@ -180,16 +173,76 @@ def judge_evidence(
         evidence_shape=selected_shape,
         shape_diagnostics=diagnostics,
     )
-    if not _should_use_llm_judge(rule_judgement, use_llm=use_llm, force_llm=force_llm):
-        return rule_judgement
-    return _judge_with_llm(
-        query=query,
-        context=context,
-        expansion=expansion or {},
-        anchors=anchors,
-        rule_judgement=rule_judgement,
-        force_llm=force_llm,
-    )
+
+
+def _score_candidates(
+    query: str,
+    candidates: list[tuple[str, dict[str, object]]],
+    anchors: list[str],
+    active_shape_items: list[object],
+    strong_relations: object,
+) -> list[SCORED_ROW]:
+    """Score each candidate against anchors and active shapes; sort by score desc."""
+    scored: list[SCORED_ROW] = []
+    for kind, item in candidates:
+        blob = _blob(item)
+        if _is_preface_or_index_blob(blob):
+            continue
+        matched = [anchor for anchor in anchors if _contains(blob, anchor)]
+        score = len(matched) * 0.22
+        shape_hits: list[str] = []
+        for shape in active_shape_items:
+            contribution = shape.score_candidate(query, kind, item, blob)
+            if contribution > 0:
+                score += contribution
+                shape_hits.append(shape.name)
+        if kind == "fact" and _has_strong_graph_support(item, query, strong_relations):
+            score += 1.05
+        if kind == "fact" and str(item.get("fact_type") or "") == "table_requirement":
+            score += 0.18
+        scored.append((score, kind, item, matched, shape_hits))
+    scored.sort(key=lambda row: row[0], reverse=True)
+    return scored
+
+
+def _collect_top_hits(scored: list[SCORED_ROW]) -> tuple[list[str], list[str], list[str]]:
+    """Aggregate matched anchors and best fact/evidence ids from the top-K rows."""
+    matched_anchors: list[str] = []
+    best_fact_ids: list[str] = []
+    best_evidence_ids: list[str] = []
+    for _score, kind, item, matched, _shape_hits in scored:
+        if _score <= 0:
+            continue
+        for anchor in matched:
+            if anchor not in matched_anchors:
+                matched_anchors.append(anchor)
+        if kind == "fact" and item.get("fact_id"):
+            best_fact_ids.append(str(item["fact_id"]))
+        if kind == "evidence" and item.get("evidence_id"):
+            best_evidence_ids.append(str(item["evidence_id"]))
+    return matched_anchors, best_fact_ids, best_evidence_ids
+
+
+def _select_reason(
+    query: str,
+    query_type: str,
+    scored: list[SCORED_ROW],
+    sufficient: bool,
+    selected_shape: str,
+    active_shape_items: list[object],
+    strong_relations: object,
+) -> str:
+    """Pick a human-readable explanation that justifies the sufficiency decision."""
+    if sufficient and selected_shape:
+        return next(
+            (shape.reason for shape in active_shape_items if shape.name == selected_shape),
+            "top evidence covers expected evidence shape",
+        )
+    if sufficient and any(_has_strong_graph_support(row[2], query, strong_relations) for row in scored[:5]):
+        return "top fact is connected to the query anchor through a trusted graph relation and supporting evidence"
+    if sufficient:
+        return "top evidence covers required anchors and expected signal-state table"
+    return "top evidence does not cover enough required anchors or expected evidence shape"
 
 
 def _query_type_from_context(context: dict[str, object]) -> str:
@@ -326,7 +379,7 @@ def _judge_with_llm(
             judge_source="llm",
             used_llm=True,
         )
-    except Exception:
+    except (LLMError, NetworkError, TimeoutError, RuntimeError, ValueError, json.JSONDecodeError):
         return EvidenceJudgement(
             **{
                 **rule_judgement.to_dict(),

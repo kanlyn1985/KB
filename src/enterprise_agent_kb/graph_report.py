@@ -3,6 +3,7 @@ from __future__ import annotations
 import sqlite3
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
+from .db import connect_context
 
 from .graph_retrieval import STRONG_RELATIONS_BY_QUERY_TYPE, RELATION_SCORE
 
@@ -43,121 +44,118 @@ def _classify_relation(relation: str) -> str:
 
 
 def build_graph_health_report(db_path: str | Path) -> GraphHealthReport:
-    connection = sqlite3.connect(str(db_path))
-    connection.row_factory = sqlite3.Row
+    with connect_context(db_path) as connection:
 
-    edge_rows = connection.execute(
-        "SELECT edge_id, src_entity_id, relation, dst_entity_id, confidence FROM graph_edges"
-    ).fetchall()
+        edge_rows = connection.execute(
+            "SELECT edge_id, src_entity_id, relation, dst_entity_id, confidence FROM graph_edges"
+        ).fetchall()
 
-    total_edges = len(edge_rows)
-    strong_total = 0
-    weak_total = 0
-    unclassified_total = 0
-
-    for er in edge_rows:
-        cls = _classify_relation(er["relation"])
-        if cls == "strong":
-            strong_total += 1
-        elif cls == "weak":
-            weak_total += 1
-        else:
-            unclassified_total += 1
-
-    fact_rows = connection.execute(
-        "SELECT fact_id, subject_entity_id, object_entity_id FROM facts"
-    ).fetchall()
-
-    # Build entity -> edge mapping
-    entity_edges: dict[str, set[str]] = {}
-    for er in edge_rows:
-        entity_edges.setdefault(er["src_entity_id"], set()).add(er["edge_id"])
-        entity_edges.setdefault(er["dst_entity_id"], set()).add(er["edge_id"])
-
-    linked_facts = 0
-    unlinked_facts = 0
-    for fr in fact_rows:
-        sid = fr["subject_entity_id"]
-        oid = fr["object_entity_id"]
-        if (sid and sid in entity_edges) or (oid and oid in entity_edges):
-            linked_facts += 1
-        else:
-            unlinked_facts += 1
-
-    qtype_reports: list[GraphQueryTypeReport] = []
-    issues: list[str] = []
-
-    for qtype, required in STRONG_RELATIONS_BY_QUERY_TYPE.items():
-        rel_set = set(required)
-        q_strong = 0
-        q_weak = 0
-        q_confidences: list[float] = []
+        total_edges = len(edge_rows)
+        strong_total = 0
+        weak_total = 0
+        unclassified_total = 0
 
         for er in edge_rows:
-            if er["relation"] in rel_set:
-                cls = _classify_relation(er["relation"])
-                if cls == "strong":
-                    q_strong += 1
-                elif cls == "weak":
-                    q_weak += 1
-                conf = er["confidence"]
-                if conf is not None:
-                    q_confidences.append(float(conf))
-
-        existing_rels = {er["relation"] for er in edge_rows}
-        missing = [r for r in required if r not in existing_rels]
-        avg_conf = sum(q_confidences) / len(q_confidences) if q_confidences else 0.0
-
-        # Count linked/unlinked facts for this query type via entity relation filter
-        q_linked = 0
-        q_unlinked = 0
-        relevant_entity_ids: set[str] = set()
-        for er in edge_rows:
-            if er["relation"] in rel_set:
-                relevant_entity_ids.add(er["src_entity_id"])
-                relevant_entity_ids.add(er["dst_entity_id"])
-        for fr in fact_rows:
-            if fr["subject_entity_id"] in relevant_entity_ids or fr["object_entity_id"] in relevant_entity_ids:
-                q_linked += 1
+            cls = _classify_relation(er["relation"])
+            if cls == "strong":
+                strong_total += 1
+            elif cls == "weak":
+                weak_total += 1
             else:
-                q_unlinked += 1
+                unclassified_total += 1
 
-        if missing:
-            status = "degraded"
-            issues.append(f"query_type={qtype}: missing strong relations {missing}")
-        elif q_strong == 0:
-            status = "empty"
-            issues.append(f"query_type={qtype}: no strong edges for required relations")
-        else:
-            status = "healthy"
+        fact_rows = connection.execute(
+            "SELECT fact_id, subject_entity_id, object_entity_id FROM facts"
+        ).fetchall()
 
-        qtype_reports.append(
-            GraphQueryTypeReport(
-                query_type=qtype,
-                required_relations=list(required),
-                strong_edges=q_strong,
-                weak_edges=q_weak,
-                missing_relation=missing,
-                linked_facts=q_linked,
-                unlinked_facts=q_unlinked,
-                avg_confidence=round(avg_conf, 3),
-                status=status,
+        # Build entity -> edge mapping
+        entity_edges: dict[str, set[str]] = {}
+        for er in edge_rows:
+            entity_edges.setdefault(er["src_entity_id"], set()).add(er["edge_id"])
+            entity_edges.setdefault(er["dst_entity_id"], set()).add(er["edge_id"])
+
+        linked_facts = 0
+        unlinked_facts = 0
+        for fr in fact_rows:
+            sid = fr["subject_entity_id"]
+            oid = fr["object_entity_id"]
+            if (sid and sid in entity_edges) or (oid and oid in entity_edges):
+                linked_facts += 1
+            else:
+                unlinked_facts += 1
+
+        qtype_reports: list[GraphQueryTypeReport] = []
+        issues: list[str] = []
+
+        for qtype, required in STRONG_RELATIONS_BY_QUERY_TYPE.items():
+            rel_set = set(required)
+            q_strong = 0
+            q_weak = 0
+            q_confidences: list[float] = []
+
+            for er in edge_rows:
+                if er["relation"] in rel_set:
+                    cls = _classify_relation(er["relation"])
+                    if cls == "strong":
+                        q_strong += 1
+                    elif cls == "weak":
+                        q_weak += 1
+                    conf = er["confidence"]
+                    if conf is not None:
+                        q_confidences.append(float(conf))
+
+            existing_rels = {er["relation"] for er in edge_rows}
+            missing = [r for r in required if r not in existing_rels]
+            avg_conf = sum(q_confidences) / len(q_confidences) if q_confidences else 0.0
+
+            # Count linked/unlinked facts for this query type via entity relation filter
+            q_linked = 0
+            q_unlinked = 0
+            relevant_entity_ids: set[str] = set()
+            for er in edge_rows:
+                if er["relation"] in rel_set:
+                    relevant_entity_ids.add(er["src_entity_id"])
+                    relevant_entity_ids.add(er["dst_entity_id"])
+            for fr in fact_rows:
+                if fr["subject_entity_id"] in relevant_entity_ids or fr["object_entity_id"] in relevant_entity_ids:
+                    q_linked += 1
+                else:
+                    q_unlinked += 1
+
+            if missing:
+                status = "degraded"
+                issues.append(f"query_type={qtype}: missing strong relations {missing}")
+            elif q_strong == 0:
+                status = "empty"
+                issues.append(f"query_type={qtype}: no strong edges for required relations")
+            else:
+                status = "healthy"
+
+            qtype_reports.append(
+                GraphQueryTypeReport(
+                    query_type=qtype,
+                    required_relations=list(required),
+                    strong_edges=q_strong,
+                    weak_edges=q_weak,
+                    missing_relation=missing,
+                    linked_facts=q_linked,
+                    unlinked_facts=q_unlinked,
+                    avg_confidence=round(avg_conf, 3),
+                    status=status,
+                )
             )
+
+        return GraphHealthReport(
+            total_edges=total_edges,
+            strong_edges=strong_total,
+            weak_edges=weak_total,
+            edges_no_classification=unclassified_total,
+            linked_facts=linked_facts,
+            unlinked_facts=unlinked_facts,
+            total_facts=len(fact_rows),
+            query_type_reports=qtype_reports,
+            issues=issues,
         )
-
-    connection.close()
-
-    return GraphHealthReport(
-        total_edges=total_edges,
-        strong_edges=strong_total,
-        weak_edges=weak_total,
-        edges_no_classification=unclassified_total,
-        linked_facts=linked_facts,
-        unlinked_facts=unlinked_facts,
-        total_facts=len(fact_rows),
-        query_type_reports=qtype_reports,
-        issues=issues,
-    )
 
 
 def format_graph_health_report(report: GraphHealthReport) -> str:

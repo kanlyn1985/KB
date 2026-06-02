@@ -30,9 +30,10 @@ def preprocess_cache_dir(root_dir: Path, source_path: Path) -> Path:
 
 def split_pdf_into_chunks(source_path: Path, output_dir: Path, *, chunk_size: int = 25) -> list[PdfChunk]:
     output_dir.mkdir(parents=True, exist_ok=True)
-    source = fitz.open(source_path)
+    from .parse import _open_pdf
+
     chunks: list[PdfChunk] = []
-    try:
+    with _open_pdf(source_path) as source:
         total_pages = len(source)
         if total_pages == 0:
             return []
@@ -40,16 +41,11 @@ def split_pdf_into_chunks(source_path: Path, output_dir: Path, *, chunk_size: in
             end_page = min(start_page + chunk_size - 1, total_pages)
             chunk_name = f"{source_path.stem}_p{start_page:03d}-{end_page:03d}.pdf"
             chunk_path = output_dir / chunk_name
-            chunk_doc = fitz.open()
-            try:
+            with _open_pdf() as chunk_doc:
                 chunk_doc.insert_pdf(source, from_page=start_page - 1, to_page=end_page - 1)
                 chunk_doc.save(chunk_path)
-            finally:
-                chunk_doc.close()
             chunks.append(PdfChunk(start_page=start_page, end_page=end_page, pdf_path=chunk_path))
         return chunks
-    finally:
-        source.close()
 
 
 def render_chunk_to_images(
@@ -59,8 +55,9 @@ def render_chunk_to_images(
     scale: float = 1.8,
 ) -> list[PageImage]:
     output_dir.mkdir(parents=True, exist_ok=True)
-    chunk_doc = fitz.open(chunk.pdf_path)
-    try:
+    from .parse import _open_pdf
+
+    with _open_pdf(chunk.pdf_path) as chunk_doc:
         images: list[PageImage] = []
         for index, page in enumerate(chunk_doc):
             page_no = chunk.start_page + index
@@ -76,8 +73,6 @@ def render_chunk_to_images(
                 )
             )
         return images
-    finally:
-        chunk_doc.close()
 
 
 def load_manifest(manifest_path: Path) -> dict[str, object]:

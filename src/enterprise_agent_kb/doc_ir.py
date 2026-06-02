@@ -143,6 +143,6 @@ def _float_bbox(value) -> list[float] | None:
     if isinstance(value, list):
         try:
             return [float(item) for item in value]
-        except Exception:
+        except (TypeError, ValueError):
             return None
     return None

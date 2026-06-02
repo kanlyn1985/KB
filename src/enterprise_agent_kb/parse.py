@@ -9,15 +9,18 @@ import unicodedata
 import uuid
 from dataclasses import dataclass
 from datetime import UTC, datetime
+from contextlib import contextmanager
 from html.parser import HTMLParser
 from pathlib import Path
+from typing import Any, Callable, Iterator
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import fitz
-import httpx
 
-from .config import AppPaths
+from .config import AppEndpoints, AppPaths
+from .infrastructure.llm_client import LLMClient, Message, Provider
 from .db import connect
+from .exceptions import DocumentProcessingError, LLMError, NetworkError, TimeoutError
 from .doc_ir import build_doc_ir, save_doc_ir
 from .ids import next_prefixed_id
 from .layout_cleaner import clean_doc_ir, save_cleaned_doc_ir
@@ -62,6 +65,22 @@ def _utc_now() -> str:
     return datetime.now(UTC).isoformat(timespec="seconds")
 
 
+@contextmanager
+def _open_pdf(path: str | Path | None = None) -> Iterator[fitz.Document]:
+    """Context manager that opens a fitz.Document and guarantees .close().
+
+    PyMuPDF Document objects are not GC-deterministic; without an explicit
+    close the underlying file handle can stay open across iterations. Use
+    this helper instead of bare `fitz.open(...)` so the close is guaranteed
+    even when the caller raises.
+    """
+    document = fitz.open(path) if path is not None else fitz.open()
+    try:
+        yield document
+    finally:
+        document.close()
+
+
 def _shared_workspace_root() -> Path:
     return Path(__file__).resolve().parents[3]
 
@@ -71,19 +90,15 @@ def _project_root() -> Path:
 
 
 def _page_dimensions_from_pdf(source_path: Path) -> dict[int, tuple[float, float]]:
-    document = fitz.open(source_path)
-    try:
+    with _open_pdf(source_path) as document:
         return {
             page_index: (float(page.rect.width), float(page.rect.height))
             for page_index, page in enumerate(document, start=1)
         }
-    finally:
-        document.close()
 
 
 def _profile_pdf_text_layer(source_path: Path) -> PdfTextProfile:
-    document = fitz.open(source_path)
-    try:
+    with _open_pdf(source_path) as document:
         page_count = len(document)
         char_counts: list[int] = []
         readability_scores: list[float] = []
@@ -97,8 +112,6 @@ def _profile_pdf_text_layer(source_path: Path) -> PdfTextProfile:
             readability_scores.append(float(readability["readability_score"]))
             symbol_ratios.append(float(readability["symbol_ratio"]))
             unreadable_ratios.append(float(readability["unreadable_ratio"]))
-    finally:
-        document.close()
     readable_page_count = sum(
         1
         for count, readability_score, symbol_ratio, unreadable_ratio in zip(
@@ -140,6 +153,10 @@ def _profile_pdf_text_layer(source_path: Path) -> PdfTextProfile:
 
 
 def _normalize_pdf_text_fallback(text: str) -> str:
+    # Strip BOM and zero-width characters
+    text = text.replace("﻿", "").replace("​", "").replace("‌", "").replace("‍", "")
+    # Strip C0 control chars (keep \n \t) and C1 control chars
+    text = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f]", "", text)
     lines: list[str] = []
     previous_blank = False
     for raw_line in text.replace("\r\n", "\n").replace("\r", "\n").split("\n"):
@@ -190,8 +207,7 @@ def _backfill_empty_pdf_pages_from_text(
     if not parsed_pages:
         return parsed_pages, stats
 
-    document = fitz.open(source_path)
-    try:
+    with _open_pdf(source_path) as document:
         for page_payload in parsed_pages:
             if _page_has_text_blocks(page_payload):
                 continue
@@ -219,8 +235,6 @@ def _backfill_empty_pdf_pages_from_text(
                 page_payload["page_status"] = "blank"
                 page_payload["parser_confidence"] = max(float(page_payload.get("parser_confidence") or 0.0), 0.99)
                 stats["blank_pages"] += 1
-    finally:
-        document.close()
 
     return parsed_pages, stats
 
@@ -251,7 +265,7 @@ def _load_paddlevl_settings() -> tuple[str, str]:
 
 def _load_minimax_settings() -> tuple[str, str]:
     _load_env_file(_project_root() / ".env")
-    api_host = os.environ.get("MINIMAX_API_HOST", "https://api.minimaxi.com")
+    api_host = os.environ.get("MINIMAX_API_HOST") or AppEndpoints.from_env().minimax_api_host
     api_key = os.environ.get("MINIMAX_API_KEY") or os.environ.get("OPENAI_API_KEY")
     if not api_key:
         raise RuntimeError("MiniMax configuration unavailable")
@@ -262,7 +276,7 @@ def _load_astron_settings() -> tuple[str, str]:
     """加载 astron-code-latest 模型配置"""
     _load_env_file(_project_root() / ".env")
     auth_token = os.environ.get("ANTHROPIC_AUTH_TOKEN")
-    api_base = os.environ.get("ANTHROPIC_BASE_URL", "https://maas-coding-api.cn-huabei-1.xf-yun.com/anthropic")
+    api_base = os.environ.get("ANTHROPIC_BASE_URL") or AppEndpoints.from_env().anthropic_base_url
     if not auth_token:
         raise RuntimeError("astron-code-latest configuration unavailable (ANTHROPIC_AUTH_TOKEN)")
     return api_base.rstrip("/"), auth_token
@@ -351,15 +365,15 @@ def _parse_pdf_subset_with_paddlevl(
     temp_root.mkdir(parents=True, exist_ok=True)
     ordered_pages = sorted(set(page_numbers))
     subset_pdf = temp_root / f"{source_path.stem}_subset_{uuid.uuid4().hex}.pdf"
-    source_doc = fitz.open(source_path)
-    subset_doc = fitz.open()
-    try:
-        for page_no in ordered_pages:
-            subset_doc.insert_pdf(source_doc, from_page=page_no - 1, to_page=page_no - 1)
-        subset_doc.save(subset_pdf)
-    finally:
-        subset_doc.close()
-        source_doc.close()
+    with _open_pdf(source_path) as source_doc, _open_pdf() as subset_doc:
+        try:
+            for page_no in ordered_pages:
+                subset_doc.insert_pdf(source_doc, from_page=page_no - 1, to_page=page_no - 1)
+            subset_doc.save(subset_pdf)
+        except Exception:
+            if subset_pdf.exists():
+                subset_pdf.unlink()
+            raise
 
     try:
         _, subset_pages = _parse_pdf_with_paddlevl(subset_pdf)
@@ -390,16 +404,13 @@ def _page_image_batches(source_path: Path) -> tuple[Path, list[list[tuple[int, s
         return cache_dir, batches
 
     if total_pages <= 40:
-        document = fitz.open(source_path)
-        try:
+        with _open_pdf(source_path) as document:
             batch: list[tuple[int, str]] = []
             for page_index, page in enumerate(document, start=1):
                 pix = page.get_pixmap(matrix=fitz.Matrix(1.8, 1.8), alpha=False)
                 encoded = base64.b64encode(pix.tobytes("png")).decode("ascii")
                 batch.append((page_index, f"data:image/png;base64,{encoded}"))
             return cache_dir, [batch]
-        finally:
-            document.close()
 
     batches: list[list[tuple[int, str]]] = []
     chunk_dir = cache_dir / "chunks"
@@ -464,9 +475,11 @@ def _call_minimax_vlm(api_host: str, api_key: str, prompt: str, image_url: str) 
             return content
         except MiniMaxUsageLimitError:
             raise
+        except (httpx.HTTPStatusError, httpx.TimeoutError) as exc:
+            raise NetworkError(f"MiniMax VLM network error: {exc}")
         except Exception as exc:
             last_error = exc
-    raise RuntimeError(f"MiniMax VLM failed after retries: {last_error}")
+    raise DocumentProcessingError(f"MiniMax VLM failed after retries: {last_error}")
 
 
 def _call_astron_vlm(api_base: str, auth_token: str, prompt: str, image_url: str) -> str:
@@ -507,9 +520,11 @@ def _call_astron_vlm(api_base: str, auth_token: str, prompt: str, image_url: str
             if not content:
                 raise RuntimeError("astron VLM returned empty content")
             return str(content).strip()
+        except (httpx.HTTPStatusError, httpx.TimeoutError) as exc:
+            raise NetworkError(f"Astron VLM network error: {exc}")
         except Exception as exc:
             last_error = exc
-    raise RuntimeError(f"astron-code-latest VLM failed after retries: {last_error}")
+    raise DocumentProcessingError(f"Astron VLM failed after retries: {last_error}")
 
 
 def _minimax_ocr_prompt(page_no: int, total_pages: int) -> str:
@@ -531,7 +546,7 @@ def _parse_pdf_with_minimax_and_paddlevl(source_path: Path) -> tuple[str, list[d
     if use_paddle_assist:
         try:
             _, paddle_pages = _parse_pdf_with_paddlevl(source_path)
-        except Exception:
+        except (DocumentProcessingError, NetworkError, TimeoutError):
             paddle_pages = []
 
     cache_dir, page_batches = _page_image_batches(source_path)
@@ -546,6 +561,7 @@ def _parse_pdf_with_minimax_and_paddlevl(source_path: Path) -> tuple[str, list[d
     try:
         astron_api_base, astron_auth_token = _load_astron_settings()
     except RuntimeError:
+        # Astron backup not configured or unreachable; primary MiniMax path remains usable.
         pass
 
     def _run_page(page_no: int, image_url: str) -> tuple[int, str]:
@@ -557,7 +573,7 @@ def _parse_pdf_with_minimax_and_paddlevl(source_path: Path) -> tuple[str, list[d
         # MiniMax is the primary VLM; astron is only used as backup.
         try:
             text = _call_minimax_vlm(api_host, api_key, prompt, image_url)
-        except Exception:
+        except (LLMError, NetworkError, TimeoutError):
             if not astron_api_base or not astron_auth_token:
                 raise
             text = _call_astron_vlm(astron_api_base, astron_auth_token, prompt, image_url)
@@ -573,7 +589,7 @@ def _parse_pdf_with_minimax_and_paddlevl(source_path: Path) -> tuple[str, list[d
             prompt = _minimax_ocr_prompt(first_page_no, page_count_for_prompt)
             try:
                 preflight_text = _call_minimax_vlm(api_host, api_key, prompt, first_image_url)
-            except Exception:
+            except (NetworkError, TimeoutError, DocumentProcessingError):
                 if not astron_api_base or not astron_auth_token:
                     raise
                 preflight_text = _call_astron_vlm(astron_api_base, astron_auth_token, prompt, first_image_url)
@@ -594,7 +610,7 @@ def _parse_pdf_with_minimax_and_paddlevl(source_path: Path) -> tuple[str, list[d
                     minimax_results[page_no] = text
                 except MiniMaxUsageLimitError:
                     break
-                except Exception:
+                except (NetworkError, TimeoutError, DocumentProcessingError):
                     continue
 
     missing_pages = [page_no for page_no in range(1, page_count_for_prompt + 1) if page_no not in minimax_results]
@@ -602,7 +618,7 @@ def _parse_pdf_with_minimax_and_paddlevl(source_path: Path) -> tuple[str, list[d
     if missing_pages:
         try:
             paddle_subset_pages = _parse_pdf_subset_with_paddlevl(source_path, missing_pages)
-        except Exception:
+        except (DocumentProcessingError, NetworkError, TimeoutError):
             paddle_subset_pages = {}
 
     parsed_pages: list[dict[str, object]] = []
@@ -666,8 +682,7 @@ def _parse_pdf_with_minimax_and_paddlevl(source_path: Path) -> tuple[str, list[d
 
 def _parse_pdf_with_pymupdf(source_path: Path) -> tuple[str, list[dict[str, object]]]:
     parsed_pages: list[dict[str, object]] = []
-    document = fitz.open(source_path)
-    try:
+    with _open_pdf(source_path) as document:
         for page_index, page in enumerate(document, start=1):
             blocks: list[dict[str, object]] = []
             reading_order = 1
@@ -709,8 +724,6 @@ def _parse_pdf_with_pymupdf(source_path: Path) -> tuple[str, list[dict[str, obje
                     "blocks": blocks,
                 }
             )
-    finally:
-        document.close()
 
     return "pymupdf", parsed_pages
 
@@ -783,15 +796,46 @@ def _split_plain_pdf_text_block(
     ]
 
 
+_FAKE_BOLD_CJK_MAP = str.maketrans(
+    {
+        '犃': 'A',
+        '犅': 'B',
+        '犆': 'C',
+        '犇': 'D',
+        '犈': 'E',
+        '犌': 'G',
+        '犐': 'I',
+        '犛': 'S',
+        '犝': 'U',
+        '犜': 'T',
+        '犪': 'a',
+        '犫': 'b',
+        '犮': 'c',
+        '犱': 'd',
+        '犲': 'e',
+        '犳': 'f',
+        '犵': 'g',
+        '犺': 'h',
+        '犻': 'i',
+        '犾': 'l',
+        '狀': 'n',
+        '狅': 'o',
+        '狆': 'p',
+        '狉': 'r',
+        '狊': 's',
+        '狋': 't',
+        '狌': 'u',
+        '狏': 'v',
+        '狑': 'w',
+        '狔': 'y',
+    }
+)
+
+
 def _normalize_plain_pdf_text(text: str) -> str:
-    normalized = unicodedata.normalize("NFKC", str(text or ""))
-    normalized = (
-        normalized.replace("犌", "G")
-        .replace("犅", "B")
-        .replace("犜", "T")
-        .replace("／", "/")
-        .replace("\u3000", " ")
-    )
+    normalized = unicodedata.normalize('NFKC', str(text or ''))
+    normalized = normalized.translate(_FAKE_BOLD_CJK_MAP)
+    normalized = normalized.replace('／', '/').replace('　', ' ')
     return _normalize_pdf_text_fallback(normalized)
 
 
@@ -845,8 +889,7 @@ def _strip_html_text(value: str) -> str:
 
 def _parse_pdf_html_view(source_path: Path) -> tuple[str, list[dict[str, object]]]:
     parsed_pages: list[dict[str, object]] = []
-    document = fitz.open(source_path)
-    try:
+    with _open_pdf(source_path) as document:
         for page_index, page in enumerate(document, start=1):
             html_text = page.get_text("html") or ""
             visible_text = _strip_html_text(html_text)
@@ -873,8 +916,6 @@ def _parse_pdf_html_view(source_path: Path) -> tuple[str, list[dict[str, object]
                     "blocks": blocks,
                 }
             )
-    finally:
-        document.close()
     return "pymupdf_html", parsed_pages
 
 
@@ -885,14 +926,15 @@ def _parse_pdf(source_path: Path) -> tuple[str, list[dict[str, object]]]:
             if profile.digital_text_sufficient:
                 engine, pages = _parse_pdf_with_pymupdf(source_path)
                 return f"{engine}_fast_text", pages
-        except Exception:
+        except (DocumentProcessingError, OSError, RuntimeError, ValueError):
+            # Fast-text path unavailable; fall through to VLM/PaddleVL/MuPDF chain.
             pass
     try:
         return _parse_pdf_with_minimax_and_paddlevl(source_path)
-    except Exception:
+    except (DocumentProcessingError, LLMError, NetworkError, TimeoutError, OSError, RuntimeError):
         try:
             return _parse_pdf_with_paddlevl(source_path)
-        except Exception:
+        except (DocumentProcessingError, NetworkError, TimeoutError, OSError, RuntimeError):
             return _parse_pdf_with_pymupdf(source_path)
 
 
@@ -924,7 +966,7 @@ def _parse_text(source_path: Path) -> list[dict[str, object]]:
     ]
 
 
-def _select_parser(source_type: str):
+def _select_parser(source_type: str) -> Callable[[Path], Any]:
     if source_type == "pdf":
         return _parse_pdf
     if source_type in {"markdown", "text", "file"}:
@@ -933,6 +975,13 @@ def _select_parser(source_type: str):
 
 
 def parse_document(workspace_root: Path, doc_id: str) -> ParseResult:
+    """Parse a registered document into structured page blocks.
+
+    Looks up the document by *doc_id* in the workspace DB, dispatches to the
+    appropriate parser (PDF/text/markdown), persists parsed pages, and
+    returns a ParseResult summarizing the outcome. For PDFs the parser chain
+    tries fast text → VLM → PaddleVL → PyMuPDF in order.
+    """
     paths = AppPaths.from_root(workspace_root)
     now = _utc_now()
     connection = connect(paths.db_file)
@@ -961,7 +1010,7 @@ def parse_document(workspace_root: Path, doc_id: str) -> ParseResult:
             try:
                 html_engine, html_pages = _parse_pdf_html_view(source_path)
                 extra_views.append((html_engine, html_pages))
-            except Exception:
+            except (DocumentProcessingError, OSError, RuntimeError):
                 extra_views = []
             parse_view_candidates, parse_view_selections, parsed_pages = prepare_parse_view_selection(
                 doc_id=doc_id,

@@ -308,7 +308,145 @@ def _mark_doc_wiki_pages_stale(connection, doc_id: str, now: str) -> None:
     )
 
 
+def _render_and_persist_entity_page(
+    *,
+    connection: sqlite3.Connection,
+    entity: sqlite3.Row,
+    doc_id: str,
+    paths: AppPaths,
+    now: str,
+) -> list[Path]:
+    """Render markdown for one entity and persist both the file and the row.
+
+    Returns the (single-element) list of file paths written, or an empty list
+    if the entity was filtered out (e.g. an unpublishable term).
+    """
+    if entity["entity_type"] == "term" and not _term_is_publishable(
+        str(entity["canonical_name"]),
+        str(entity["description"] or ""),
+    ):
+        return []
+
+    fact_rows = connection.execute(
+        """
+        SELECT
+            f.fact_id,
+            f.fact_type,
+            f.predicate,
+            f.object_value,
+            f.source_doc_id,
+            s.canonical_name AS subject_name
+        FROM facts f
+        LEFT JOIN entities s ON f.subject_entity_id = s.entity_id
+        WHERE f.source_doc_id = ?
+          AND (f.subject_entity_id = ? OR f.object_entity_id = ?)
+        ORDER BY f.fact_id
+        """,
+        (doc_id, entity["entity_id"], entity["entity_id"]),
+    ).fetchall()
+
+    content, page_type, subdir = _render_entity_content(entity, fact_rows)
+    target_dir = paths.wiki / subdir
+    target_dir.mkdir(parents=True, exist_ok=True)
+    slug = _slugify_with_hash(
+        f"{entity['entity_type']}-{entity['entity_id']}-{entity['canonical_name']}"
+    )
+    file_path = target_dir / f"{slug}.md"
+    file_path.write_text(content, encoding="utf-8")
+
+    _persist_wiki_page_row(
+        connection=connection,
+        entity=entity,
+        doc_id=doc_id,
+        page_type=page_type,
+        slug=slug,
+        file_path=file_path,
+        fact_rows=fact_rows,
+        now=now,
+    )
+    return [file_path]
+
+
+def _render_entity_content(
+    entity: sqlite3.Row,
+    fact_rows: list[sqlite3.Row],
+) -> tuple[str, str, str]:
+    """Pick the right builder for the entity type and return (markdown, page_type, subdir).
+
+    Centralizes the per-type dispatch so the persistence layer doesn't have
+    to know about the type taxonomy.
+    """
+    entity_type = entity["entity_type"]
+    name = str(entity["canonical_name"])
+    if entity_type == "document":
+        return _build_document_page(entity, fact_rows), "document", "documents"
+    if entity_type == "standard":
+        return _build_standard_page(entity, fact_rows), "standard", "standards"
+    if entity_type == "parameter_topic":
+        return _build_parameter_topic_page(entity, fact_rows), "parameter", "parameter_topics"
+    if entity_type == "parameter_group":
+        return _build_parameter_group_wiki_page(name, fact_rows), "parameter_group", "parameter_groups"
+    if entity_type == "process":
+        return _build_process_wiki_page(name, fact_rows), "process", "processes"
+    if entity_type == "constraint_topic":
+        return _build_constraint_wiki_page(name, fact_rows), "constraint", "constraints"
+    if entity_type == "comparison_topic":
+        return _build_comparison_wiki_page(name, fact_rows), "comparison", "comparisons"
+    return _build_term_page(entity, fact_rows), "term", "terms"
+
+
+def _persist_wiki_page_row(
+    *,
+    connection: sqlite3.Connection,
+    entity: sqlite3.Row,
+    doc_id: str,
+    page_type: str,
+    slug: str,
+    file_path: Path,
+    fact_rows: list[sqlite3.Row],
+    now: str,
+) -> None:
+    """Upsert a wiki_pages row for the rendered entity."""
+    wiki_page_id = f"WPAGE-{entity['entity_id'].split('-', 1)[1]}"
+    source_fact_ids = [row["fact_id"] for row in fact_rows]
+    connection.execute(
+        """
+        INSERT INTO wiki_pages (
+            page_id, page_type, title, slug, entity_id, source_fact_ids_json,
+            source_doc_ids_json, trust_status, file_path, updated_at
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(page_id) DO UPDATE SET
+            page_type = excluded.page_type,
+            title = excluded.title,
+            slug = excluded.slug,
+            entity_id = excluded.entity_id,
+            source_fact_ids_json = excluded.source_fact_ids_json,
+            source_doc_ids_json = excluded.source_doc_ids_json,
+            trust_status = excluded.trust_status,
+            file_path = excluded.file_path,
+            updated_at = excluded.updated_at
+        """,
+        (
+            wiki_page_id,
+            page_type,
+            entity["canonical_name"],
+            slug,
+            entity["entity_id"],
+            json.dumps(source_fact_ids, ensure_ascii=False),
+            json.dumps([doc_id], ensure_ascii=False),
+            "reviewed" if entity["entity_type"] != "term" else "draft",
+            str(file_path),
+            now,
+        ),
+    )
+
+
 def build_wiki_for_document(workspace_root: Path, doc_id: str) -> WikiBuildResult:
+    """Compile wiki pages for *doc_id*: render per-entity markdown, persist
+    to disk and the `wiki_pages` table, and delete any stale pages left from
+    a previous build.
+    """
     paths = AppPaths.from_root(workspace_root)
     connection = connect(paths.db_file)
     now = _utc_now()
@@ -332,104 +470,14 @@ def build_wiki_for_document(workspace_root: Path, doc_id: str) -> WikiBuildResul
         export_paths: list[Path] = []
 
         for entity in entity_rows:
-            if entity["entity_type"] == "term" and not _term_is_publishable(
-                str(entity["canonical_name"]),
-                str(entity["description"] or ""),
-            ):
-                continue
-
-            fact_rows = connection.execute(
-                """
-                SELECT
-                    f.fact_id,
-                    f.fact_type,
-                    f.predicate,
-                    f.object_value,
-                    f.source_doc_id,
-                    s.canonical_name AS subject_name
-                FROM facts f
-                LEFT JOIN entities s ON f.subject_entity_id = s.entity_id
-                WHERE f.source_doc_id = ?
-                  AND (f.subject_entity_id = ? OR f.object_entity_id = ?)
-                ORDER BY f.fact_id
-                """,
-                (doc_id, entity["entity_id"], entity["entity_id"]),
-            ).fetchall()
-
-            if entity["entity_type"] == "document":
-                content = _build_document_page(entity, fact_rows)
-                page_type = "document"
-                subdir = "documents"
-            elif entity["entity_type"] == "standard":
-                content = _build_standard_page(entity, fact_rows)
-                page_type = "standard"
-                subdir = "standards"
-            elif entity["entity_type"] == "parameter_topic":
-                content = _build_parameter_topic_page(entity, fact_rows)
-                page_type = "parameter"
-                subdir = "parameter_topics"
-            elif entity["entity_type"] == "parameter_group":
-                content = _build_parameter_group_wiki_page(str(entity["canonical_name"]), fact_rows)
-                page_type = "parameter_group"
-                subdir = "parameter_groups"
-            elif entity["entity_type"] == "process":
-                content = _build_process_wiki_page(str(entity["canonical_name"]), fact_rows)
-                page_type = "process"
-                subdir = "processes"
-            elif entity["entity_type"] == "constraint_topic":
-                content = _build_constraint_wiki_page(str(entity["canonical_name"]), fact_rows)
-                page_type = "constraint"
-                subdir = "constraints"
-            elif entity["entity_type"] == "comparison_topic":
-                content = _build_comparison_wiki_page(str(entity["canonical_name"]), fact_rows)
-                page_type = "comparison"
-                subdir = "comparisons"
-            else:
-                content = _build_term_page(entity, fact_rows)
-                page_type = "term"
-                subdir = "terms"
-
-            target_dir = paths.wiki / subdir
-            target_dir.mkdir(parents=True, exist_ok=True)
-            slug = _slugify_with_hash(
-                f"{entity['entity_type']}-{entity['entity_id']}-{entity['canonical_name']}"
-            )
-            file_path = target_dir / f"{slug}.md"
-            file_path.write_text(content, encoding="utf-8")
-            export_paths.append(file_path)
-
-            wiki_page_id = f"WPAGE-{entity['entity_id'].split('-', 1)[1]}"
-            source_fact_ids = [row["fact_id"] for row in fact_rows]
-            connection.execute(
-                """
-                INSERT INTO wiki_pages (
-                    page_id, page_type, title, slug, entity_id, source_fact_ids_json,
-                    source_doc_ids_json, trust_status, file_path, updated_at
+            export_paths.extend(
+                _render_and_persist_entity_page(
+                    connection=connection,
+                    entity=entity,
+                    doc_id=doc_id,
+                    paths=paths,
+                    now=now,
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ON CONFLICT(page_id) DO UPDATE SET
-                    page_type = excluded.page_type,
-                    title = excluded.title,
-                    slug = excluded.slug,
-                    entity_id = excluded.entity_id,
-                    source_fact_ids_json = excluded.source_fact_ids_json,
-                    source_doc_ids_json = excluded.source_doc_ids_json,
-                    trust_status = excluded.trust_status,
-                    file_path = excluded.file_path,
-                    updated_at = excluded.updated_at
-                """,
-                (
-                    wiki_page_id,
-                    page_type,
-                    entity["canonical_name"],
-                    slug,
-                    entity["entity_id"],
-                    json.dumps(source_fact_ids, ensure_ascii=False),
-                    json.dumps([doc_id], ensure_ascii=False),
-                    "reviewed" if entity["entity_type"] != "term" else "draft",
-                    str(file_path),
-                    now,
-                ),
             )
 
         extra_pages = _build_extra_wiki_pages(connection, doc_id, paths, now)

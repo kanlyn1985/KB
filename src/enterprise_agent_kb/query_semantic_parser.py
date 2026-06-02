@@ -8,7 +8,9 @@ from dataclasses import asdict, dataclass
 from functools import lru_cache
 from pathlib import Path
 
-import httpx
+from .infrastructure.llm_client import LLMClient, Message, Provider
+from .exceptions import LLMError, NetworkError, TimeoutError
+from .config import AppEndpoints
 
 
 ALLOWED_QUERY_TYPES = {
@@ -107,7 +109,7 @@ def _load_minimax_text_settings() -> tuple[str, str, str]:
     api_base = (
         os.environ.get("MINIMAX_ANTHROPIC_BASE_URL")
         or os.environ.get("OPENAI_BASE_URL")
-        or "https://api.minimaxi.com/anthropic"
+        or AppEndpoints.from_env().minimax_anthropic_base
     )
     api_key = os.environ.get("MINIMAX_API_KEY") or os.environ.get("OPENAI_API_KEY")
     model = os.environ.get("MINIMAX_MODEL") or os.environ.get("LLM_MODEL") or "MiniMax-M2.7"
@@ -143,12 +145,13 @@ def _text_llm_timeout_seconds() -> float:
         try:
             return max(1.0, min(float(explicit), 60.0))
         except ValueError:
-            return 8.0
+            return 5.0
+    # Default: use a shorter timeout for semantic parsing to avoid blocking answer queries
     try:
-        timeout_ms = int(os.environ.get("API_TIMEOUT_MS", "8000"))
+        timeout_ms = int(os.environ.get("API_TIMEOUT_MS", "5000"))
     except ValueError:
-        timeout_ms = 8000
-    return max(1.0, min(timeout_ms / 1000.0, 12.0))
+        timeout_ms = 5000
+    return max(1.0, min(timeout_ms / 1000.0, 8.0))
 
 
 def _provider_failure_cooldown_seconds() -> float:
@@ -277,7 +280,7 @@ def _semantic_quality_flags(
     return flags
 
 
-def _post_anthropic_message(
+def _call_llm_message(
     *,
     api_base: str,
     auth_token: str,
@@ -286,51 +289,41 @@ def _post_anthropic_message(
     system_prompt: str,
     provider_name: str,
 ) -> str:
+    """Call LLM using unified client."""
     timeout_sec = _text_llm_timeout_seconds()
-    headers = {
-        "Authorization": f"Bearer {auth_token}",
-        "Content-Type": "application/json",
-        "anthropic-version": "2023-06-01",
-    }
-    payload = {
-        "model": model,
-        "max_tokens": 1000,
-        "temperature": 0,
-        "system": system_prompt,
-        "messages": [
-            {
-                "role": "user",
-                "content": prompt,
-            }
-        ],
-    }
-    response = httpx.post(
-        f"{api_base}/v1/messages",
-        headers=headers,
-        json=payload,
-        timeout=timeout_sec,
-    )
-    response.raise_for_status()
-    data = response.json()
-    content_blocks = data.get("content", [])
-    if isinstance(content_blocks, list):
-        content = "\n".join(
-            str(item.get("text", "")).strip()
-            for item in content_blocks
-            if isinstance(item, dict) and item.get("type") == "text"
-        ).strip()
+
+    # Determine provider type from api_base/model
+    if "minimax" in api_base.lower() or "minimax" in model.lower():
+        provider = Provider.CLAUDE  # MiniMax uses Claude-compatible API
     else:
-        content = ""
-    if not content:
+        provider = Provider.CLAUDE  # Default to Claude (Anthropic-compatible)
+
+    client = LLMClient(
+        provider=provider,
+        api_base=api_base,
+        api_key=auth_token,
+        timeout=timeout_sec,
+        max_retries=1,
+    )
+
+    response = client.chat(
+        messages=[Message(role="user", content=prompt)],
+        model=model,
+        system_prompt=system_prompt,
+        temperature=0.0,
+        max_tokens=1000,
+    )
+
+    if not response.content:
         raise RuntimeError(f"{provider_name} text LLM returned empty content")
-    return str(content).strip()
+    return response.content.strip()
 
 
 def _call_minimax_text(prompt: str, system_prompt: str = SEMANTIC_PARSER_SYSTEM_PROMPT) -> str:
     api_base, api_key, model = _load_minimax_text_settings()
     _ensure_provider_available("minimax", api_base, model)
     try:
-        return _post_anthropic_message(
+        return _call_llm_message(
             api_base=api_base,
             auth_token=api_key,
             model=model,
@@ -338,7 +331,7 @@ def _call_minimax_text(prompt: str, system_prompt: str = SEMANTIC_PARSER_SYSTEM_
             system_prompt=system_prompt,
             provider_name="MiniMax",
         )
-    except Exception:
+    except (LLMError, NetworkError, TimeoutError, RuntimeError, ValueError, json.JSONDecodeError):
         _mark_provider_failure("minimax", api_base, model)
         raise
 
@@ -347,7 +340,7 @@ def _call_astron_backup_text(prompt: str, system_prompt: str = SEMANTIC_PARSER_S
     api_base, auth_token, model = _load_astron_settings()
     _ensure_provider_available("astron", api_base, model)
     try:
-        return _post_anthropic_message(
+        return _call_llm_message(
             api_base=api_base,
             auth_token=auth_token,
             model=model,
@@ -355,7 +348,7 @@ def _call_astron_backup_text(prompt: str, system_prompt: str = SEMANTIC_PARSER_S
             system_prompt=system_prompt,
             provider_name="astron",
         )
-    except Exception:
+    except (LLMError, NetworkError, TimeoutError, RuntimeError, ValueError, json.JSONDecodeError):
         _mark_provider_failure("astron", api_base, model)
         raise
 
@@ -422,5 +415,5 @@ def parse_semantic_query(query: str) -> SemanticQuery:
             quality_flags=quality_flags,
             raw_response=raw,
         )
-    except Exception:
+    except (LLMError, NetworkError, TimeoutError, RuntimeError, ValueError, json.JSONDecodeError):
         return _default_semantic(query)

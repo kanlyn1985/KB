@@ -3,6 +3,8 @@ from __future__ import annotations
 import html
 import json
 import re
+from dataclasses import dataclass
+from typing import Callable
 
 
 POLICY_BY_QUERY_TYPE = {
@@ -59,24 +61,33 @@ def build_summary_lines(
     return lines
 
 
-def build_direct_answer(
-    *,
-    policy: str,
-    query: str,
-    facts: list[dict[str, object]],
-    evidence: list[dict[str, object]],
-    wiki_pages: list[dict[str, object]],
-    standard_normalizer,
-    standard_extractor,
-    truncate_fn,
-) -> str:
-    if policy == "parameter_meaning":
-        parameter_meaning_answer = _build_parameter_meaning_answer(query, facts, evidence, wiki_pages, truncate_fn)
+@dataclass(frozen=True)
+class DirectAnswerContext:
+    """Inputs to build_direct_answer, grouped to keep the call site readable.
+
+    `standard_normalizer` and `standard_extractor` are usually `._normalize_standard_code`
+    and `._extract_standard_from_query`; `truncate_fn` is usually `._truncate`. They are
+    injected as callables so the policy module stays decoupled from the answer API
+    helpers.
+    """
+    policy: str
+    query: str
+    facts: list[dict[str, object]]
+    evidence: list[dict[str, object]]
+    wiki_pages: list[dict[str, object]]
+    standard_normalizer: Callable[[str], str]
+    standard_extractor: Callable[[str], str]
+    truncate_fn: Callable[[str, int], str]
+
+
+def build_direct_answer(ctx: DirectAnswerContext) -> str:
+    if ctx.policy == "parameter_meaning":
+        parameter_meaning_answer = _build_parameter_meaning_answer(ctx.query, ctx.facts, ctx.evidence, ctx.wiki_pages, ctx.truncate_fn)
         if parameter_meaning_answer:
             return parameter_meaning_answer
 
-    if policy == "definition":
-        for item in facts:
+    if ctx.policy == "definition":
+        for item in ctx.facts:
             if item["fact_type"] in {"term_definition", "concept_definition"} and isinstance(item["object"], dict):
                 term = item["object"].get("term", "")
                 definition = item["object"].get("definition", "")
@@ -85,25 +96,25 @@ def build_direct_answer(
             if item["fact_type"] == "document_abstract" and isinstance(item["object"], dict):
                 value = item["object"].get("value", "")
                 if value:
-                    return truncate_fn(str(value), 240)
+                    return ctx.truncate_fn(str(value), 240)
 
-    if policy == "parameter_value":
-        parameter_answer = _build_parameter_answer(query, facts)
+    if ctx.policy == "parameter_value":
+        parameter_answer = _build_parameter_answer(ctx.query, ctx.facts)
         if parameter_answer:
             return parameter_answer
 
-    if policy in {"lifecycle_lookup", "timing_lookup", "test_method_lookup"}:
-        process_answer = _build_process_answer(query, facts)
+    if ctx.policy in {"lifecycle_lookup", "timing_lookup", "test_method_lookup"}:
+        process_answer = _build_process_answer(ctx.query, ctx.facts)
         if process_answer:
             return process_answer
 
-    if policy == "standard_lookup":
-        query_standard = standard_normalizer(standard_extractor(query))
+    if ctx.policy == "standard_lookup":
+        query_standard = ctx.standard_normalizer(ctx.standard_extractor(ctx.query))
         standard = None
         effective = None
         publication = None
         replaced = None
-        for item in facts:
+        for item in ctx.facts:
             if not isinstance(item["object"], dict):
                 continue
             if item["fact_type"] == "document_standard" and standard is None:
@@ -114,10 +125,10 @@ def build_direct_answer(
                 publication = item["object"].get("value")
             elif item["fact_type"] == "document_versioning" and replaced is None:
                 replaced = item["object"].get("value")
-        if not standard or standard_normalizer(str(standard)) != query_standard:
-            for item in wiki_pages:
+        if not standard or ctx.standard_normalizer(str(standard)) != query_standard:
+            for item in ctx.wiki_pages:
                 title = str(item.get("title", ""))
-                if standard_normalizer(title) == query_standard:
+                if ctx.standard_normalizer(title) == query_standard:
                     standard = title
                     break
         parts = []
@@ -132,22 +143,22 @@ def build_direct_answer(
         if parts:
             return "，".join(parts) + "。"
 
-    if any(token in query for token in ("时序", "流程", "阶段", "握手", "预充", "停机", "状态")):
-        process_answer = _build_process_answer(query, facts)
+    if any(token in ctx.query for token in ("时序", "流程", "阶段", "握手", "预充", "停机", "状态")):
+        process_answer = _build_process_answer(ctx.query, ctx.facts)
         if process_answer:
             return process_answer
 
-    if policy == "comparison":
-        comparison_answer = _build_comparison_answer(query, facts, evidence)
+    if ctx.policy == "comparison":
+        comparison_answer = _build_comparison_answer(ctx.query, ctx.facts, ctx.evidence)
         if comparison_answer:
             return comparison_answer
 
-    requirement_answer = _build_requirement_answer(query, facts)
+    requirement_answer = _build_requirement_answer(ctx.query, ctx.facts)
     if requirement_answer:
         return requirement_answer
 
-    if facts:
-        first = facts[0]
+    if ctx.facts:
+        first = ctx.facts[0]
         if isinstance(first.get("object"), dict):
             obj = first["object"]
             if "title" in obj:
@@ -155,8 +166,8 @@ def build_direct_answer(
             if "value" in obj:
                 return f"最相关的结构化结果是 {obj['value']}。"
 
-    if evidence:
-        return evidence[0]["snippet"]
+    if ctx.evidence:
+        return ctx.evidence[0]["snippet"]
 
     return "没有找到足够的结构化结果。"
 
@@ -493,14 +504,20 @@ def _build_requirement_answer(query: str, facts: list[dict[str, object]]) -> str
     return ""
 
 
-def _build_parameter_answer(query: str, facts: list[dict[str, object]]) -> str:
-    focus_pages = _parameter_focus_pages(query, facts)
-    requested_loop = _requested_loop_scope(query)
-    if "参数表" in query or ("表" in query and "参数" in query):
-        table_answer = _build_parameter_table_title_answer(query, facts, focus_pages)
-        if table_answer:
-            return table_answer
-    parameter_rows = []
+def _select_parameter_rows(
+    query: str,
+    facts: list[dict[str, object]],
+    focus_pages: set[int],
+    requested_loop: str,
+) -> list[tuple[float, int, str, str, str, str, str, str, str, str, str]]:
+    """Filter and rank parameter_value facts against the query.
+
+    Returns a list of (focus_score, page_no, object_name, parameter, symbol,
+    nominal, unit, state, source_caption, loop_scope, scope_confidence) tuples
+    in the order they will be rendered. Rows are excluded entirely if they
+    target the wrong loop, wrong detection point, or wrong unit.
+    """
+    rows: list[tuple[float, int, str, str, str, str, str, str, str, str, str]] = []
     for item in facts:
         if item.get("fact_type") != "parameter_value":
             continue
@@ -531,7 +548,7 @@ def _build_parameter_answer(query: str, facts: list[dict[str, object]]) -> str:
         if "阻值" in query or "电阻" in query:
             if unit != "Ω" and not symbol.startswith("R") and "电阻" not in parameter:
                 continue
-        detection_match = __import__("re").search(r"(检测点\s*\d)", query)
+        detection_match = re.search(r"(检测点\s*\d)", query)
         if detection_match:
             requested_point = detection_match.group(1)
             if requested_point not in detection_points and requested_point not in f"{parameter}{state}{object_name}":
@@ -556,7 +573,7 @@ def _build_parameter_answer(query: str, facts: list[dict[str, object]]) -> str:
             focus_score += 2
         if scope_confidence == "row":
             focus_score += 1.5
-        parameter_rows.append(
+        rows.append(
             (
                 focus_score,
                 page_no,
@@ -571,6 +588,17 @@ def _build_parameter_answer(query: str, facts: list[dict[str, object]]) -> str:
                 scope_confidence,
             )
         )
+    return rows
+
+
+def _build_parameter_answer(query: str, facts: list[dict[str, object]]) -> str:
+    focus_pages = _parameter_focus_pages(query, facts)
+    requested_loop = _requested_loop_scope(query)
+    if "参数表" in query or ("表" in query and "参数" in query):
+        table_answer = _build_parameter_table_title_answer(query, facts, focus_pages)
+        if table_answer:
+            return table_answer
+    parameter_rows = _select_parameter_rows(query, facts, focus_pages, requested_loop)
 
     if not parameter_rows:
         table_answer = _build_parameter_table_answer(query, facts, focus_pages)

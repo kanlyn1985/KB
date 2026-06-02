@@ -6,6 +6,10 @@ import sqlite3
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
+from .logging_config import get_logger
+
+_logger = get_logger(__name__)
+
 
 @dataclass
 class Sense:
@@ -44,6 +48,7 @@ def save_ambiguity_index(index: dict[str, list[Sense]], path: str | Path) -> Non
 def load_ambiguity_index(path: str | Path) -> dict[str, list[Sense]]:
     p = Path(path)
     if not p.exists():
+        _logger.warning("ambiguity index file not found at %s; proceeding without disambiguation", p)
         return {}
     data = json.loads(p.read_text(encoding="utf-8"))
     index: dict[str, list[Sense]] = {}

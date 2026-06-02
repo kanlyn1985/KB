@@ -1,7 +1,45 @@
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 from pathlib import Path
+
+
+@dataclass(frozen=True)
+class AppEndpoints:
+    """Centralized default endpoints for external vendor APIs.
+
+    Each field documents the env var that overrides it at runtime; production
+    deployments typically set those env vars directly, so this class is mainly
+    useful for tests and as a single place to read the defaults.
+    """
+    minimax_api_host: str
+    """MiniMax (海螺 AI) OpenAI-compatible endpoint. Env: MINIMAX_API_HOST."""
+    minimax_anthropic_base: str
+    """MiniMax's Anthropic-compatible mirror. Env: MINIMAX_ANTHROPIC_BASE_URL."""
+    anthropic_base_url: str
+    """Anthropic-compatible endpoint (default routes through MaaS coding gateway). Env: ANTHROPIC_BASE_URL."""
+    openai_api_base: str
+    """OpenAI-compatible endpoint. Env: OPENAI_API_BASE."""
+    astron_api_base: str
+    """ASTRON (讯飞 Astron) endpoint on the MaaS coding gateway. Env: ASTRON_API_BASE."""
+
+    @classmethod
+    def from_env(cls) -> "AppEndpoints":
+        return cls(
+            minimax_api_host=os.environ.get("MINIMAX_API_HOST", "https://api.minimaxi.com"),
+            minimax_anthropic_base=os.environ.get(
+                "MINIMAX_ANTHROPIC_BASE_URL", "https://api.minimaxi.com/anthropic"
+            ),
+            anthropic_base_url=os.environ.get(
+                "ANTHROPIC_BASE_URL",
+                "https://maas-coding-api.cn-huabei-1.xf-yun.com/anthropic",
+            ),
+            openai_api_base=os.environ.get("OPENAI_API_BASE", "https://api.openai.com/v1"),
+            astron_api_base=os.environ.get(
+                "ASTRON_API_BASE", "https://maas-coding-api.cn-huabei-1.xf-yun.com"
+            ),
+        )
 
 
 @dataclass(frozen=True)

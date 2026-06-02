@@ -216,6 +216,18 @@ def _direct_fact_hits(connection, rewritten: RewrittenQuery, limit: int) -> list
         rewritten.normalized_query,
         *_process_alias_terms(rewritten),
     ]
+    # Add short keyword fragments from long must_terms for better LIKE matching
+    for term in list(rewritten.must_terms):
+        # Extract overlapping 2-char Chinese fragments for fine-grained LIKE matching
+        chars = re.findall(r"[一-鿿]", term)
+        for i in range(len(chars) - 1):
+            frag = chars[i] + chars[i + 1]
+            if frag not in search_terms:
+                search_terms.append(frag)
+        # Also keep longer 3-4 char fragments
+        for frag in re.findall(r"[一-鿿]{3,4}", term):
+            if frag not in search_terms:
+                search_terms.append(frag)
     search_terms = [term for term in search_terms if term]
     hits: list[dict[str, object]] = []
     seen: set[str] = set()
@@ -372,7 +384,45 @@ def _direct_parameter_fact_hits(connection, rewritten: RewrittenQuery, limit: in
             }
         )
     hits.sort(key=lambda item: float(item.get("score") or 0.0), reverse=True)
-    return hits[: max(limit, 12)]
+    parameter_hits = hits[: max(limit, 12)]
+
+    # Also search requirement/threshold facts for parameter queries that may not
+    # have a direct parameter_value (e.g., "效率要求" is a requirement, not a parameter row)
+    search_frags = list(set(
+        frag
+        for term in rewritten.must_terms
+        for frag in re.findall(r"[一-鿿]{2}", term)
+    ))
+    if search_frags and len(parameter_hits) < 3:
+        seen_ids = {str(h.get("result_id")) for h in parameter_hits}
+        for frag in search_frags[:4]:
+            req_rows = connection.execute(
+                """
+                SELECT fact_id, fact_type, source_doc_id, json_extract(qualifiers_json, '$.page_no') AS page_no,
+                       object_value, confidence
+                FROM facts
+                WHERE fact_type IN ('requirement', 'threshold')
+                  AND object_value LIKE ?
+                ORDER BY confidence DESC, fact_id ASC
+                LIMIT ?
+                """,
+                (f"%{frag}%", limit),
+            ).fetchall()
+            for row in req_rows:
+                if row["fact_id"] in seen_ids:
+                    continue
+                seen_ids.add(row["fact_id"])
+                parameter_hits.append(
+                    {
+                        "result_type": "fact",
+                        "result_id": row["fact_id"],
+                        "doc_id": row["source_doc_id"],
+                        "page_no": row["page_no"],
+                        "score": round(float(row["confidence"] or 0) * 0.8, 6),
+                        "snippet": f"knowledge_unit_fact {row['object_value']}",
+                    }
+                )
+    return parameter_hits
 
 
 def _structured_parameter_score(

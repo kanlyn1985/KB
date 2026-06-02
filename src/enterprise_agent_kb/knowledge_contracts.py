@@ -125,9 +125,14 @@ def _evaluate_contract(connection: Connection, doc_id: str, contract: KnowledgeT
         if status == "passed":
             status = "warn"
     if fact_count and not golden_case_count:
-        issues.append("no_active_golden_case_for_shape")
-        if status == "passed":
-            status = "warn"
+        # Only warn about missing golden cases when there are source units
+        # that should be verified.  Shapes with zero source units (e.g.
+        # standard_metadata which is a document-level check) don't need
+        # golden cases — there is nothing to test.
+        if source_unit_count > 0:
+            issues.append("no_active_golden_case_for_shape")
+            if status == "passed":
+                status = "warn"
 
     return {
         "knowledge_type": contract.knowledge_type,
@@ -256,6 +261,13 @@ def _golden_shapes_for_contract(contract: KnowledgeTypeContract) -> tuple[str, .
         return ("standard_metadata", "term_definition")
     if contract.evidence_shape == "requirement":
         return ("requirement", "parameter_definition", "process_activity")
+    # test_method shapes overlap with process_activity and requirement —
+    # test methods verify requirements and process steps.
+    if contract.evidence_shape == "test_method":
+        return ("process_activity", "requirement", "parameter_definition")
+    # definition includes term_definition and concept_definition golden cases
+    if contract.evidence_shape == "term_definition":
+        return ("term_definition", "concept_definition")
     return (contract.evidence_shape,)
 
 

@@ -89,6 +89,11 @@ def extract_knowledge_units(cleaned_doc_ir_path: Path) -> KnowledgeUnitBundle:
                     headers, rows = _parse_markdown_table(text)
                 else:
                     headers, rows = _parse_html_table(text)
+                # Detect index/catalog tables (e.g. "标准编号、标准名称、实施日期")
+                scope_type = None
+                title_blob = f"{title} {table_title or ''}"
+                if any(token in title_blob for token in ("标准编号", "标准名称", "起始实施日期", "被代替标准编号")):
+                    scope_type = "index"
                 units.append(
                     _knowledge_unit(
                         id=f"{doc_id}_table_{page_no}_{index+1}",
@@ -101,6 +106,7 @@ def extract_knowledge_units(cleaned_doc_ir_path: Path) -> KnowledgeUnitBundle:
                         table_no=table_no,
                         headers=headers,
                         rows=rows,
+                        scope_type=scope_type,
                     )
                 )
                 index += 1

@@ -107,7 +107,7 @@ def _refresh_fts_index(connection, paths: AppPaths) -> dict[str, int]:
         """
     ).fetchall()
     for row in wiki_rows:
-        searchable = _build_searchable_text(f"{row['title']} {row['slug']}")
+        searchable = _build_searchable_text(f"{row['title']}")
         connection.execute(
             """
             INSERT INTO wiki_fts(result_id, doc_id, page_no, searchable_text)
@@ -226,17 +226,25 @@ def _expanded_queries(query: str) -> list[str]:
 
 
 def _fts_match_expr(query: str) -> str:
-    tokens = _tokenize(_normalize_text(query))
-    cjk_terms: list[str] = []
+    normalized = _normalize_text(query)
+    tokens = _tokenize(normalized)
+    # Split tokens on / and - so "qc/t" becomes ["qc", "t"] for FTS matching.
+    # FTS5 unicode61 tokenizer treats / and - as separators, so the indexed
+    # tokens are split, but _tokenize keeps them as one token.
+    split_tokens: list[str] = []
     for token in tokens:
+        parts = re.split(r"[/\-]", token)
+        split_tokens.extend(p for p in parts if p)
+    cjk_terms: list[str] = []
+    for token in split_tokens:
         if re.fullmatch(r"[\u4e00-\u9fff]{2,}", token):
             cjk_terms.extend(_cjk_ngrams(token, n=2))
             if len(token) >= 3:
                 cjk_terms.extend(_cjk_ngrams(token, n=3))
-    tokens = [*tokens, *cjk_terms]
-    if not tokens:
+    all_tokens = [*split_tokens, *cjk_terms]
+    if not all_tokens:
         return f'"{query}"'
-    return " OR ".join(f'"{token}"' for token in tokens[:8])
+    return " OR ".join(f'"{token}"' for token in all_tokens[:10])
 
 
 def _search_fts(
@@ -283,6 +291,11 @@ def _search_fts_table(connection, source: str, expr: str, limit: int, seen: set[
             continue
         seen.add(key)
         score = 1.0 / (1.0 + max(float(row["rank"] or 0), 0.0))
+        # Boost evidence and facts over wiki to avoid wiki dominance
+        if source == "evidence":
+            score *= 1.5
+        elif source == "facts":
+            score *= 1.3
         hits.append(
             {
                 "result_type": _source_result_type(source),

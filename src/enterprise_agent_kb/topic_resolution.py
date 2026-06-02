@@ -253,7 +253,7 @@ def _entity_aliases(item: dict[str, object]) -> list[str]:
         return []
     try:
         loaded = value if isinstance(value, list) else __import__("json").loads(str(value))
-    except Exception:
+    except (TypeError, ValueError):
         return []
     if not isinstance(loaded, list):
         return []

@@ -124,7 +124,11 @@ def _should_skip_semantic_parser(query: str, rule_query_type: str) -> bool:
     if rule_query_type == "constraint" and _has_explicit_constraint_intent(query):
         return True
     if rule_query_type == "parameter_lookup":
-        return bool(re.search(r"(阻值|电阻|电压|电流|频率|检测点|占空比|PWM|[+-]?\d+(?:\.\d+)?\s*(?:V|A|Ω|kΩ|Hz|%))", query, re.I))
+        return True
+    if rule_query_type == "comparison":
+        return True
+    if rule_query_type == "section_lookup":
+        return True
     return False
 
 
@@ -247,6 +251,9 @@ def _rebuild_normalized_query(
             if len(term) <= 16:
                 return term
     if semantic_normalized and not _should_ignore_semantic_anchor(semantic):
+        # Strip "什么是" prefix from semantic_normalized for definition queries
+        if query_type == "definition":
+            semantic_normalized = re.sub(r"^什么是\s*", "", semantic_normalized).strip()
         return semantic_normalized
     return rule_normalized or original_query.strip()
 
@@ -276,6 +283,10 @@ def _rebuild_target_topic(
     if protected_anchor_terms:
         return protected_anchor_terms[0]
     if semantic_target and semantic_target.lower() not in {"undefined", "unknown", "未知主题", "未知实体"}:
+        # For definition queries, strip "什么是" prefix from semantic_target
+        # since the target should be the term itself, not the question.
+        if query_type == "definition":
+            semantic_target = re.sub(r"^什么是\s*", "", semantic_target).strip()
         if query_type == "definition" and re.fullmatch(r"[A-Z][A-Z0-9/-]{1,10}", normalized_query):
             return normalized_query
         if query_type == "definition" and _looks_cleaner_than_semantic(normalized_query, semantic_target):
@@ -431,6 +442,12 @@ def _detect_query_type(original_query: str, normalized_query: str) -> str:
         return "lifecycle_lookup"
     if re.search(r"(时序|流程|阶段|启动|结束|停机|握手|预充|能量传输|状态\s*\d|状态迁移)", original_query):
         return "timing_lookup"
+    # Constraint keywords must be checked BEFORE parameter_lookup to avoid misrouting
+    # e.g. "逆变器保护重启时间" contains parameter-like terms but is a constraint query
+    if any(token in original_query for token in ("过压保护", "欠压保护", "短路保护", "过载保护", "过热保护", "过流保护", "保护功能", "保护重启")):
+        return "constraint"
+    if _has_explicit_constraint_intent(original_query):
+        return "constraint"
     if re.search(r"(有哪些定义|定义有哪些)", original_query) and _has_explicit_parameter_lookup_intent(original_query):
         return "parameter_lookup"
     if _has_explicit_parameter_lookup_intent(original_query):
@@ -467,7 +484,7 @@ def _looks_like_definition_intent(query: str) -> bool:
 def _has_explicit_parameter_lookup_intent(query: str) -> bool:
     return bool(
         re.search(
-            r"(阻值|电阻|参数值|参数有哪些|参数是什么|哪些参数|电压值|电流值|欧姆|Ω|检测点\s*\d|CC1|CC2|占空比|频率|PWM|(?<![A-Za-z0-9])[+-]?\d+(?:\.\d+)?\s*V(?![A-Za-z0-9]))",
+            r"(阻值|电阻|参数值|参数有哪些|参数是什么|哪些参数|电压值|电流值|欧姆|Ω|检测点\s*\d|CC1|CC2|占空比|频率|PWM|效率|输出电压|输入电压|输出频率|绝缘电阻|额定输出|功率因数|(?<![A-Za-z0-9])[+-]?\d+(?:\.\d+)?\s*V(?![A-Za-z0-9]))",
             query,
             re.I,
         )
@@ -477,7 +494,8 @@ def _has_explicit_parameter_lookup_intent(query: str) -> bool:
 def _has_explicit_constraint_intent(query: str) -> bool:
     return bool(
         re.search(
-            r"(有哪些要求|有什么要求|要求有哪些|要求是什么|应满足什么|应符合什么|不应超过什么|不小于什么)",
+            r"(有哪些要求|有什么要求|要求有哪些|要求是什么|应满足什么|应符合什么|不应超过什么|不小于什么"
+            r"|保护功能|保护要求|保护重启|功能要求|有哪些保护|有什么保护|保护有哪些|安全要求|安全功能)",
             query,
         )
     )
@@ -485,12 +503,32 @@ def _has_explicit_constraint_intent(query: str) -> bool:
 
 def _strip_constraint_intent_suffix(query: str) -> str:
     text = str(query or "").strip()
-    text = re.sub(
-        r"(?:有哪些要求|有什么要求|要求有哪些|要求是什么|应满足什么|应符合什么|不应超过什么|不小于什么)[？?。！!]*$",
-        "",
-        text,
-    ).strip()
-    text = re.sub(r"(?:的)?要求$", "", text).strip()
+    # First check "X有哪些Y" pattern on the original text, before any
+    # stripping that might break apart compound nouns like "保护功能".
+    # e.g. "逆变器有哪些保护功能" → object_part="保护功能" (substantive)
+    # e.g. "逆变器有哪些要求" → object_part="要求" (intent word, skip)
+    m = re.match(r"^(.+?)有哪些(.+)$", text)
+    if m:
+        object_part = m.group(2).strip()
+        if object_part and len(object_part) >= 2 and not re.fullmatch(
+            r"(?:的)?(?:要求|规定|功能|是什么|应满足什么|应符合什么)", object_part
+        ):
+            return object_part
+    # Iteratively strip trailing intent markers and "有哪些/有什么" until
+    # no more changes.  This handles patterns like "X功能有哪些要求" where
+    # stripping "要求" exposes "有哪些", and stripping that exposes "功能".
+    for _ in range(3):  # max 3 passes to avoid infinite loops
+        prev = text
+        text = re.sub(r"(?:的)?(?:要求|规定)$", "", text).strip()
+        text = re.sub(r"(?:的)?(?:功能)$", "", text).strip()
+        text = re.sub(r"(?:的)?(?:时间|时长)$", "", text).strip()
+        text = re.sub(r"是什么$", "", text).strip()
+        text = re.sub(r"应满足什么$", "", text).strip()
+        text = re.sub(r"应符合什么$", "", text).strip()
+        text = re.sub(r"有哪些$", "", text).strip()
+        text = re.sub(r"有什么$", "", text).strip()
+        if text == prev:
+            break
     return text
 
 

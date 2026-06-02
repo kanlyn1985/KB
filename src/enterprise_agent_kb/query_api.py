@@ -13,7 +13,7 @@ from .evidence_judge import judge_evidence
 from .graph_retrieval import retrieve_graph_candidates
 from .query_expansion import expand_query, expansion_terms_for_retrieval
 from .query_ambiguity import build_clarification_context, detect_query_ambiguity_with_kb
-from .query_rewrite import rewrite_query
+from .query_rewrite import rewrite_query, RewrittenQuery
 from .reranker import rerank_candidates
 from .retrieval_router import route_retrieval
 from .routing_summary import direct_routing_hits
@@ -29,7 +29,7 @@ def _safe_json(value: str | None) -> object:
         return value
 
 
-def _rewrite_with_expansion(rewritten, expansion_terms: list[str]):
+def _rewrite_with_expansion(rewritten: RewrittenQuery, expansion_terms: list[str]) -> RewrittenQuery:
     if not expansion_terms:
         return rewritten
     must_terms = list(rewritten.must_terms)
@@ -165,6 +165,13 @@ def build_query_context(
     limit: int = 8,
     preferred_doc_id: str | None = None,
 ) -> dict[str, object]:
+    """Build a retrieval-augmented context for *query* against the KB.
+
+    Detects ambiguity, runs FTS5 search, gathers facts/evidence/wiki/graph
+    hits, and returns a flat dict suitable for ranking layers and direct
+    answering. The returned dict is mutable by callers for further filtering
+    (e.g. restricting to a primary document).
+    """
     query = query.strip()
     paths = AppPaths.from_root(workspace_root)
     ambiguity = detect_query_ambiguity_with_kb(query, paths.root / "ambiguity_index.json")
@@ -321,6 +328,7 @@ def build_query_context(
             fact_items.sort(key=lambda item: fact_rank.get(item.get("fact_id"), 9999))
 
         fact_items = _augment_standard_facts(connection, query, fact_items)
+        fact_items = _augment_parameter_facts(connection, rewritten, fact_items)
         for item in fact_items:
             if item.get("subject_entity_id"):
                 entity_ids.add(item["subject_entity_id"])
@@ -591,7 +599,9 @@ def _inject_exact_standard_hits(connection, query: str, hits: list[dict[str, obj
         payload = _safe_json(row["object_value"])
         if isinstance(payload, dict):
             value = str(payload.get("value", ""))
-            if _normalize_standard_code(value) == normalized:
+            normalized_value = _normalize_standard_code(value)
+            # Match by prefix so "QC/T1036" matches "QC/T1036—2016"
+            if normalized_value == normalized or normalized_value.startswith(normalized + "—") or normalized_value.startswith(normalized + "-"):
                 exact_hits.append(
                     {
                         "result_type": "fact",
@@ -616,7 +626,7 @@ def _safe_json(value: str | None) -> object:
 
 
 def _extract_standard_from_query(query: str) -> str | None:
-    match = re.search(r"(?:GB/T|GBT|GB|ISO/IEC|ISO|IEC)\s*[\d.]+(?:[.\-—:]\d+)*", query, re.I)
+    match = re.search(r"(?:GB/T|GBT|GB|ISO/IEC|ISO|IEC|QC/T|QCT|QC)\s*[\d.]+(?:[.\-—:]\d+)*", query, re.I)
     return match.group(0) if match else None
 
 
@@ -654,7 +664,7 @@ def _augment_standard_facts(connection, query: str, fact_items: list[dict[str, o
         if not isinstance(payload, dict):
             continue
         value = _normalize_standard_code(str(payload.get("value", "")))
-        if value == normalized:
+        if value == normalized or value.startswith(normalized + "—") or value.startswith(normalized + "-"):
             matched_doc_ids.add(row["source_doc_id"])
             if row["fact_id"] not in existing_ids:
                 augmented.append(_row_to_fact(row))
@@ -673,6 +683,31 @@ def _augment_standard_facts(connection, query: str, fact_items: list[dict[str, o
         augmented.append(_row_to_fact(row))
         existing_ids.add(row["fact_id"])
 
+    return augmented
+
+
+def _augment_parameter_facts(connection, rewritten, fact_items: list[dict[str, object]]) -> list[dict[str, object]]:
+    """Inject parameter_value facts for parameter_lookup queries."""
+    if getattr(rewritten, "query_type", "") != "parameter_lookup":
+        return fact_items
+    existing_ids = {item["fact_id"] for item in fact_items}
+    # Check if we already have parameter_value facts
+    if any(item.get("fact_type") == "parameter_value" for item in fact_items):
+        return fact_items
+    rows = connection.execute(
+        """
+        SELECT fact_id, fact_type, predicate, object_value, confidence,
+               source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
+        FROM facts
+        WHERE fact_type = 'parameter_value'
+        ORDER BY fact_id
+        """
+    ).fetchall()
+    augmented = list(fact_items)
+    for row in rows:
+        if row["fact_id"] not in existing_ids:
+            augmented.append(_row_to_fact(row))
+            existing_ids.add(row["fact_id"])
     return augmented
 
 
@@ -729,7 +764,7 @@ def _inject_direct_term_definition_hits(connection, rewritten, hits: list[dict[s
 
 
 def _inject_direct_requirement_hits(connection, rewritten, hits: list[dict[str, object]], limit: int) -> list[dict[str, object]]:
-    if rewritten.query_type != "constraint":
+    if rewritten.query_type not in {"constraint", "parameter_lookup"}:
         return hits
     search_terms = [
         str(getattr(rewritten, "target_topic", "") or "").strip(),
@@ -740,7 +775,7 @@ def _inject_direct_requirement_hits(connection, rewritten, hits: list[dict[str, 
     for term in search_terms:
         if not term or term in terms:
             continue
-        if len(term) < 4:
+        if len(term) < 2:
             continue
         if term.casefold() in {"requirement", "requirements", "shall", "要求"}:
             continue
@@ -748,15 +783,25 @@ def _inject_direct_requirement_hits(connection, rewritten, hits: list[dict[str, 
     if not terms:
         return hits
 
+    # Extract 2-char Chinese fragments for fine-grained LIKE matching
+    cjk_frags: list[str] = []
+    for term in terms:
+        chars = re.findall(r"[一-鿿]", term)
+        for i in range(len(chars) - 1):
+            frag = chars[i] + chars[i + 1]
+            if frag not in cjk_frags and frag not in terms:
+                cjk_frags.append(frag)
+
     direct_hits: list[dict[str, object]] = []
     seen: set[str] = set()
+    # Search with full terms first (higher priority)
     for term in terms[:4]:
         rows = connection.execute(
             """
             SELECT fact_id, source_doc_id, json_extract(qualifiers_json, '$.page_no') AS page_no,
                    object_value, confidence
             FROM facts
-            WHERE fact_type IN ('requirement', 'table_requirement')
+            WHERE fact_type IN ('requirement', 'threshold', 'table_requirement')
               AND object_value LIKE ?
             ORDER BY confidence DESC, fact_id ASC
             LIMIT ?
@@ -781,6 +826,67 @@ def _inject_direct_requirement_hits(connection, rewritten, hits: list[dict[str, 
                     "channels": ["direct_requirement"],
                 }
             )
+
+    # Supplement with 2-char CJK fragment matches when full terms miss.
+    # Filter out overly-generic fragments (matching too many rows) to ensure
+    # specific fragments like "保护重启" are not drowned by generic ones like "逆变".
+    # Phase 1: Search with selective (low-frequency) fragments only.
+    # Phase 2: If still insufficient, search with all fragments.
+    MAX_GENERIC_MATCH_COUNT = 20
+    selective_frags = []
+    generic_frags = []
+    for frag in cjk_frags[:6]:
+        frag_count = connection.execute(
+            "SELECT count(*) FROM facts WHERE fact_type IN ('requirement', 'threshold', 'table_requirement') AND object_value LIKE ?",
+            (f"%{frag}%",),
+        ).fetchone()[0]
+        if frag_count <= MAX_GENERIC_MATCH_COUNT:
+            selective_frags.append(frag)
+        else:
+            generic_frags.append(frag)
+
+    for phase_frags in (selective_frags, cjk_frags[:6]):
+        if not phase_frags or len(direct_hits) >= limit:
+            continue
+        like_clauses = " OR ".join(f"object_value LIKE ?" for _ in phase_frags[:6])
+        frag_params = [f"%{frag}%" for frag in phase_frags[:6]]
+        rows = connection.execute(
+            f"""
+            SELECT fact_id, source_doc_id, json_extract(qualifiers_json, '$.page_no') AS page_no,
+                   object_value, confidence
+            FROM facts
+            WHERE fact_type IN ('requirement', 'threshold', 'table_requirement')
+              AND ({like_clauses})
+            ORDER BY confidence DESC, fact_id ASC
+            LIMIT ?
+            """,
+            [*frag_params, min(limit * 3, 30)],
+        ).fetchall()
+        # Score each row by how many fragments it matches
+        frag_scored: list[tuple[float, dict]] = []
+        for row in rows:
+            if row["fact_id"] in seen:
+                continue
+            blob = str(row["object_value"] or "")
+            match_count = sum(1 for frag in cjk_frags[:6] if frag in blob)
+            score = 1.5 + 0.2 * match_count  # more matching frags = higher score
+            payload = _safe_json(row["object_value"])
+            frag_blob = json.dumps(payload, ensure_ascii=False)
+            frag_scored.append((score, {
+                "result_type": "fact",
+                "result_id": row["fact_id"],
+                "doc_id": row["source_doc_id"],
+                "page_no": row["page_no"],
+                "score": score,
+                "snippet": f"direct_requirement_frag {frag_blob[:1200]}",
+                "channel": "direct_requirement",
+                "channels": ["direct_requirement"],
+            }))
+        # Sort by fragment-match score (descending) then take top results
+        frag_scored.sort(key=lambda x: x[0], reverse=True)
+        for _, hit in frag_scored[:limit]:
+            seen.add(hit["result_id"])
+            direct_hits.append(hit)
 
     return _merge_injected_hits(hits, direct_hits, limit, force_injected=True, minimum_limit=limit)
 
@@ -1040,6 +1146,8 @@ def _augment_facts_from_wiki(connection, fact_items: list[dict[str, object]], wi
                 value = str(fact_id).strip()
                 if value and value not in existing_ids and value not in extra_fact_ids:
                     extra_fact_ids.append(value)
+    # Cap augmentation to avoid flooding context with hundreds of facts
+    extra_fact_ids = extra_fact_ids[:40]
     if not extra_fact_ids:
         return fact_items
 

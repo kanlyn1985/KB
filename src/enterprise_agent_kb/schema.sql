@@ -349,3 +349,35 @@ CREATE INDEX IF NOT EXISTS idx_audit_log_event_type ON audit_log(event_type);
 CREATE INDEX IF NOT EXISTS idx_jobs_target ON jobs(target_type, target_id, status);
 CREATE INDEX IF NOT EXISTS idx_dependencies_upstream ON dependencies(upstream_type, upstream_id);
 CREATE INDEX IF NOT EXISTS idx_dependencies_downstream ON dependencies(downstream_type, downstream_id);
+
+CREATE TABLE IF NOT EXISTS answer_feedback (
+    feedback_id TEXT PRIMARY KEY,
+    query TEXT NOT NULL,
+    direct_answer TEXT NOT NULL,
+    answer_mode TEXT,
+    preferred_doc_id TEXT,
+    confidence_score REAL,
+    satisfaction TEXT NOT NULL,
+    categories_json TEXT NOT NULL DEFAULT '[]',
+    user_comment TEXT,
+    reflection_json TEXT,
+    created_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_answer_feedback_satisfaction ON answer_feedback(satisfaction);
+CREATE INDEX IF NOT EXISTS idx_answer_feedback_created_at ON answer_feedback(created_at);
+
+CREATE TABLE IF NOT EXISTS low_confidence_queries (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    query TEXT NOT NULL,
+    doc_id TEXT,
+    confidence REAL NOT NULL,
+    answer_mode TEXT,
+    answer_preview TEXT,
+    created_at TEXT NOT NULL,
+    processed INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE INDEX IF NOT EXISTS idx_low_conf_queries_doc_id ON low_confidence_queries(doc_id);
+CREATE INDEX IF NOT EXISTS idx_low_conf_queries_processed ON low_confidence_queries(processed);
+CREATE INDEX IF NOT EXISTS idx_low_conf_queries_created_at ON low_confidence_queries(created_at);

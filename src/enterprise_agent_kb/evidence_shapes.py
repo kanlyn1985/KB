@@ -654,7 +654,7 @@ def _extract_json_objects(blob: str) -> list[dict[str, object]]:
     for match in re.finditer(r"\{.*?\}", str(blob or "")):
         try:
             value = json.loads(match.group(0))
-        except Exception:
+        except (TypeError, ValueError):
             continue
         if isinstance(value, dict):
             objects.append(value)

@@ -486,6 +486,31 @@ def _activity_phrase_variants(phrase: str) -> list[str]:
     return variants
 
 
+_NOISE_TOPICS = frozenset({
+    "和", "的", "了", "在", "与", "或", "及", "等", "之",
+    "规定", "要求", "条件", "原则", "概述", "范围",
+    "噪声", "尺寸", "材料", "标识", "结构", "温升",
+})
+
+
+def _is_valid_constraint_topic(topic: str) -> bool:
+    """Filter out noisy or overly generic constraint topic names."""
+    if not topic or len(topic) < 3 or len(topic) > 80:
+        return False
+    # Starts with a preposition/conjunction
+    if topic[0] in {"和", "的", "与", "及", "或", "等", "之", "在"}:
+        return False
+    # Exact match against known noise
+    stripped = topic.strip().rstrip("。；；，")
+    if stripped in _NOISE_TOPICS:
+        return False
+    # Contains only a generic noun + 的 pattern (e.g. "和 4.5.2 的规定")
+    import re
+    if re.match(r"^[和与及或]?\s*\d", stripped):
+        return False
+    return True
+
+
 def _find_existing_entity_id(connection, canonical_name: str, entity_type: str) -> str | None:
     row = connection.execute(
         """
@@ -610,6 +635,7 @@ def _merge_aliases(existing_alias_json: str | None, new_aliases: list[str] | Non
             if isinstance(loaded, list):
                 aliases.extend(str(item).strip() for item in loaded if str(item).strip())
         except json.JSONDecodeError:
+            # Corrupt alias column; start from an empty alias list for this entity.
             pass
     for alias in new_aliases or []:
         text = str(alias or "").strip()
@@ -900,7 +926,7 @@ def build_entities_for_document(workspace_root: Path, doc_id: str) -> EntitiesBu
             elif row["fact_type"] in {"requirement", "threshold"}:
                 topic = str(payload.get("topic") or payload.get("subject") or "").strip()
                 scope_type = str(payload.get("scope_type") or "").strip()
-                if topic and scope_type not in {"index", "preface", "overview"}:
+                if topic and scope_type not in {"index", "preface", "overview"} and _is_valid_constraint_topic(topic):
                     entity_id = _ensure_entity(
                         connection,
                         canonical_name=topic,

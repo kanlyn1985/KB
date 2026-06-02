@@ -6,6 +6,7 @@ from dataclasses import asdict, dataclass
 from functools import lru_cache
 
 from .query_semantic_parser import _call_astron_text, _extract_json_block
+from .exceptions import LLMError, NetworkError, TimeoutError
 
 
 QUERY_EXPANSION_PROMPT_VERSION = "v0.1.0"
@@ -157,7 +158,7 @@ def expand_query(query: str) -> QueryExpansion:
         if not _expansion_is_usable(stripped, expansion):
             return _fallback_expansion(stripped, anchors)
         return expansion
-    except Exception:
+    except (LLMError, NetworkError, TimeoutError, RuntimeError, ValueError, json.JSONDecodeError):
         return _fallback_expansion(stripped, anchors)
 
 

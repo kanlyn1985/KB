@@ -44,9 +44,11 @@ def validate_document_ingestion(
     workspace_root: Path,
     doc_id: str,
     *,
-    min_text_coverage: float = 0.5,
-    min_semantic_coverage: float = 0.2,
-    min_answerability: float = 0.2,
+    min_text_coverage: float = 0.9,
+    min_semantic_coverage: float = 0.5,
+    min_answerability: float = 0.5,
+    min_test_coverage: float = 0.5,
+    min_contract_pass_rate: float = 0.5,
     output_dir: Path | None = None,
 ) -> IngestionAcceptanceResult:
     paths = AppPaths.from_root(workspace_root)
@@ -66,7 +68,9 @@ def validate_document_ingestion(
         _check("source_units_present", int(coverage.get("source_unit_count") or 0) > 0, "source_units count > 0", coverage.get("source_unit_count")),
         _threshold_check("text_coverage_rate", coverage.get("text_coverage_rate"), min_text_coverage),
         _threshold_check("semantic_coverage_rate", coverage.get("semantic_coverage_rate"), min_semantic_coverage),
-        _threshold_check("answerability_score", coverage.get("answerability_score"), min_answerability, severity="warn"),
+        _threshold_check("answerability_score", coverage.get("answerability_score"), min_answerability),
+        _threshold_check("test_coverage_rate", coverage.get("test_coverage_rate"), min_test_coverage),
+        _contract_pass_rate_check(knowledge_contracts, min_contract_pass_rate),
         _path_check("coverage_summary_exists", artifacts.get("coverage_summary_path")),
         _path_check("coverage_report_exists", artifacts.get("coverage_report_path")),
         _contract_check(knowledge_contracts),
@@ -101,6 +105,8 @@ def validate_document_ingestion(
             "min_text_coverage": min_text_coverage,
             "min_semantic_coverage": min_semantic_coverage,
             "min_answerability": min_answerability,
+            "min_test_coverage": min_test_coverage,
+            "min_contract_pass_rate": min_contract_pass_rate,
         },
         "checks": checks,
         "diagnostics": diagnostics,
@@ -143,7 +149,7 @@ def _load_db_counts(db_file: Path, doc_id: str) -> dict[str, int]:
         connection.close()
 
 
-def _check(name: str, passed: bool, expectation: str, actual: object = None, *, severity: str = "fail") -> dict[str, object]:
+def _check(name: str, passed: bool, expectation: str, actual: object | None = None, *, severity: str = "fail") -> dict[str, object]:
     if passed:
         status = "passed"
     elif severity == "warn":
@@ -171,6 +177,14 @@ def _path_check(name: str, value: object) -> dict[str, object]:
     return _check(name, path.exists(), "artifact path exists", str(path))
 
 
+def _contract_pass_rate_check(summary: dict[str, object], min_pass_rate: float) -> dict[str, object]:
+    """Check that the contract pass rate meets the minimum threshold."""
+    active = int(summary.get("active_contract_count") or 0)
+    failed = int(summary.get("failed_count") or 0)
+    pass_rate = (1.0 - failed / active) if active > 0 else 0.0
+    return _threshold_check("contract_pass_rate", round(pass_rate, 4), min_pass_rate)
+
+
 def _contract_check(summary: dict[str, object]) -> dict[str, object]:
     status = str(summary.get("status") or "")
     compact = compact_contract_summary(summary)
@@ -194,7 +208,6 @@ def _contract_check(summary: dict[str, object]) -> dict[str, object]:
         status == "passed",
         "active knowledge contracts have traceable source_units/evidence/facts",
         compact,
-        severity="warn",
     )
 
 
