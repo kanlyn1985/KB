@@ -1,0 +1,25 @@
+{
+  "phase": "1",
+  "version": "v1",
+  "suite": "golden",
+  "timestamp": "2026-06-03T16:45:00",
+  "total": 24,
+  "passed": 4,
+  "pass_rate": 0.167,
+  "avg_coverage": 0.167,
+  "multi_prompt_stability": 0.875,
+  "by_doc": {
+    "DOC-000001": {"total": 24, "passed": 4, "pass_rate": 0.167, "avg_coverage": 0.167}
+  },
+  "signoff_criteria": {
+    "expected_points_table": {"required": "10+ docs, 500+ points", "actual": "14 docs, 929 points", "passed": true},
+    "llm_decompose_pct": {"required": ">=10%", "actual": "4.2% (39/929)", "passed": false, "note": "Xunfei LLM API 500"},
+    "noise_rate": {"required": "<5%", "actual": "0.4%", "passed": true},
+    "qa_bank_size": {"required": ">=100 questions", "actual": "555 (30 golden curated to 24)", "passed": true},
+    "spot_check_approved": {"required": "pass", "actual": "passed (6 noise removed)", "passed": true},
+    "evaluator_runs": {"required": "smoke 跑通", "actual": "跑通 in 17m43s", "passed": true},
+    "multi_prompt_stability": {"required": ">0.8", "actual": "0.875", "passed": true},
+    "pass_rate_65_85": {"required": "0.65-0.85", "actual": "0.167", "passed": false, "note": "Fallback questions lack page-matched expected_points; LLM API down"}
+  },
+  "conclusion": "Phase 1 INFRASTRUCTURE-READY, EVAL-BLOCKED. 5/8 criteria met. Remaining 3 failures trace to: (a) Xunfei LLM API returning 500 (infrastructure), (b) fallback-generated questions lack page-bound expected_points (data-quality issue requiring LLM-generated question bank). Re-run when LLM service recovers."
+}
