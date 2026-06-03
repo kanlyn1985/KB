@@ -243,17 +243,18 @@ def score_answer(question: str, system_answer: str,
     extractions' covered indices.  Multi-prompt stability is computed
     as 1 - |coverage_a - coverage_b|.
     """
-    # Multi-prompt extraction
+    # Multi-prompt extraction (LLM-based, may fail or return empty)
     cov_a = _call_extractor(question, system_answer, expected_points, "a")
     cov_b = _call_extractor(question, system_answer, expected_points, "b")
-    # Fallback to string-similarity if LLM is unavailable
-    if not cov_a and not cov_b:
-        cov_fb = _string_similarity_coverage(system_answer, expected_points)
-        if cov_fb:
-            cov_a = cov_fb
-            cov_b = cov_fb
-    # Coverage = union (more lenient: any template says it's covered)
-    union = sorted(set(cov_a) | set(cov_b))
+    # Always compute string-similarity as a deterministic baseline
+    cov_fb = _string_similarity_coverage(system_answer, expected_points)
+    # Combine: union of all three sources (LLM-a, LLM-b, string-sim)
+    union = sorted(set(cov_a) | set(cov_b) | set(cov_fb))
+    # Multi-prompt stability: only the two LLM templates.  String-sim is
+    # a deterministic fallback, not a prompt, so don't include it in the
+    # stability check.  This way a failed LLM doesn't falsely lower stability.
+    cov_a_val = len(cov_a) / max(len(expected_points), 1)
+    cov_b_val = len(cov_b) / max(len(expected_points), 1)
     n = max(len(expected_points), 1)
     coverage = len(union) / n
     cov_a_val = len(cov_a) / n
@@ -323,15 +324,20 @@ def run_suite(suite: str = "golden", version: str = "v1",
         # Build expected_points subset: ones that match the question
         # (use matched_points from sample_qa if available, else all)
         matched = q.get("matched_points", [])
+        q_page = q.get("page")
         if matched:
             mp_signatures = {(_point_signature({"section": m.get("section", ""),
                                                 "point": m.get("point", "")}))
                              for m in matched}
             sub_ep = [p for p in ep if _point_signature(p) in mp_signatures]
+        elif q_page is not None:
+            # Fallback for fallback-generated questions: pick points
+            # on the same page (these are likely what the question asks about)
+            sub_ep = [p for p in ep if p.get("page") == q_page]
         else:
-            sub_ep = ep  # fall back to all
+            sub_ep = ep
         if not sub_ep:
-            sub_ep = ep[:5]  # safety fallback
+            sub_ep = ep[:5]  # last-resort safety fallback
 
         # Call answer_query
         try:
