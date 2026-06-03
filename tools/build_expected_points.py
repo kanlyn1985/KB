@@ -127,7 +127,28 @@ def _split_sections(doc_ir: dict) -> list[dict]:
     if not deduped:
         for page in doc_ir.get("pages", []):
             pn = page.get("page_no", 0)
-            page_text = "\n".join(str(b.get("text", "")) for b in page.get("blocks", []))
+            page_text = "\n".join(str(b.get("text") or "") for b in (page.get("blocks") or []))
+            if page_text.strip():
+                deduped.append({
+                    "section": f"p{pn}",
+                    "title": f"Page {pn}",
+                    "page": pn,
+                    "text": page_text,
+                })
+        return deduped
+    # Chunked fallback: if deduped has only 1-2 sections but the doc has
+    # many pages with text, the heading detection missed most pages.
+    # Synthesize per-page sections for those missed pages.
+    pages_with_text = [
+        p for p in doc_ir.get("pages", [])
+        if any((b.get("text") or "").strip() for b in (p.get("blocks") or []))
+    ]
+    covered_pages = {s["page"] for s in deduped}
+    missed_pages = [p for p in pages_with_text if p.get("page_no") not in covered_pages]
+    if missed_pages and len(deduped) <= 3 and len(pages_with_text) > 10:
+        for p in missed_pages:
+            pn = p.get("page_no", 0)
+            page_text = "\n".join(str(b.get("text", "")) for b in p.get("blocks", []))
             if page_text.strip():
                 deduped.append({
                     "section": f"p{pn}",
@@ -435,7 +456,13 @@ def build_doc_points(doc_id: str, version: str) -> dict:
         if sec_len < 30:
             print(f"    sec {sec['section']} ({sec_len} chars): skipped (too short)")
             continue
-        if sec_len > LONG_SECTION_THRESHOLD:
+        # For very large sections (>10K chars) use embedding only — the
+        # LLM path is too slow and frequently trips the safety filter
+        # on long Chinese policy content.  Embedding still produces
+        # coarse points via sentence clustering.
+        if sec_len > 10000:
+            points = _embedding_decompose_points(sec)
+        elif sec_len > LONG_SECTION_THRESHOLD:
             points = _llm_decompose_points(sec)
         else:
             points = _embedding_decompose_points(sec)
