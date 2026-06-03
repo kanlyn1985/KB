@@ -124,6 +124,39 @@ def _split_sections(doc_ir: dict) -> list[dict]:
     return deduped
 
 
+
+def _refine_llm_section_labels(parent_section: str, section_text: str,
+                                llm_points: list[dict]) -> list[dict]:
+    """Refine the section field of LLM-extracted points.
+
+    LLM returns all points labeled with parent_section.  Scan the original
+    section_text for #### N.M.K markers that match child subsections
+    and re-assign the points by their position in the text.
+    """
+    import re
+    if not llm_points:
+        return llm_points
+    sub_pat = re.compile(r"^#{2,4}\s+(\d+(?:\.\d+)+)\s+", re.MULTILINE)
+    boundaries: list[tuple[int, str]] = []
+    for m in sub_pat.finditer(section_text):
+        sec_id = m.group(1)
+        if sec_id != parent_section and sec_id.startswith(parent_section + "."):
+            boundaries.append((m.start(), sec_id))
+    if not boundaries:
+        return llm_points
+    boundaries.sort()
+    out: list[dict] = []
+    for pt in llm_points:
+        # Naive: use the order of points in the text.  Approximate using
+        # the index in the points list — first point → first boundary, etc.
+        idx = llm_points.index(pt)
+        if idx < len(boundaries):
+            pt["section"] = boundaries[idx][1]
+        out.append(pt)
+    return out
+
+
+
 def _llm_decompose_points(section: dict) -> list[dict]:
     """Ask MiniMax-M2 to decompose a long section into 2-5 coarse points."""
     import httpx
@@ -218,9 +251,11 @@ Output STRICTLY in this JSON format (no extra text, comments, or Markdown code b
             parsed = json.loads(m.group(0))
             points = parsed.get("points", [])
             if isinstance(points, list) and points:
-                return [{"section": section["section"], "page": section["page"],
-                         "point": p, "source": "llm"} for p in points
-                        if isinstance(p, str) and not _is_noise(p)]
+                out_points = [{"section": section["section"], "page": section["page"],
+                               "point": p, "source": "llm"} for p in points
+                              if isinstance(p, str) and not _is_noise(p)]
+                return _refine_llm_section_labels(
+                    section["section"], section["text"], out_points)
     except Exception as e:
         print(f"  LLM decompose failed for {section['section']}: {type(e).__name__}: {str(e)[:100]}")
     return _naive_decompose(section)
@@ -248,76 +283,123 @@ def _is_noise(point: str) -> bool:
     return False
 
 
+
+def _split_by_subsections(parent_section: str, text: str) -> list[tuple[str, str]]:
+    """Split a section's text by embedded #### N.M subsection markers.
+
+    If the section text contains Markdown headings like "#### 4.2" that are
+    children of the parent section (e.g. "4.1"), split the text there and
+    return (subsection_id, sub_text) pairs.  This keeps the subsection
+    label correct instead of attributing child content to the parent.
+
+    Returns [(parent_section, text)] when no sub-headings are found.
+    """
+    import re
+    # Match subsection markers: #### 4.1 / 4.1.1 etc.
+    # Match #### N.M or #### N.M.K (any depth), or just #### N (one level deeper)
+    escaped = re.escape(parent_section)
+    sub_pat = re.compile(
+        r"^#{2,4}\s+(" + escaped + r"(?:\.\d+)*)\s+",
+        re.MULTILINE,
+    )
+    matches = list(sub_pat.finditer(text))
+    if not matches:
+        return [(parent_section, text)]
+    out: list[tuple[str, str]] = []
+    for i, m in enumerate(matches):
+        sec_id = m.group(1)
+        start = m.end()
+        end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
+        out.append((sec_id, text[start:end]))
+    return out
+
+
 def _naive_decompose(section: dict) -> list[dict]:
-    """Fallback: split by sentences, take first 3 as coarse points."""
+    """Fallback: split by sub-section markers then sentences, take first 3."""
     text = section["text"].strip()
     if not text:
         return []
-    sentences = re.split(r"(?<=[。!?])\s+|(?<=[.!?])\s+", text)
-    sentences = [s.strip() for s in sentences if len(s.strip()) > 30]
-    # Filter noise
-    sentences = [s for s in sentences if not _is_noise(s)]
-    points = sentences[:3] if sentences else [text[:200]]
-    points = [p for p in points if not _is_noise(p)]
-    if not points and text:
-        points = [text[:200]]
-    return [{"section": section["section"], "page": section["page"],
-             "point": p, "source": "naive"} for p in points]
+    # First, split by embedded #### N.M subsection markers
+    sub_chunks = _split_by_subsections(section["section"], text)
+    out: list[dict] = []
+    for sub_sec, sub_text in sub_chunks:
+        sub_text = sub_text.strip()
+        if not sub_text:
+            continue
+        sentences = re.split(r"(?<=[。!?])\s+|(?<=[.!?])\s+", sub_text)
+        sentences = [s.strip() for s in sentences if len(s.strip()) > 30]
+        sentences = [s for s in sentences if not _is_noise(s)]
+        # Take first 1-3 sentences from each sub-chunk
+        for sent in sentences[:3]:
+            if not _is_noise(sent):
+                out.append({"section": sub_sec, "page": section["page"],
+                            "point": sent, "source": "naive"})
+    if not out and text:
+        out.append({"section": section["section"], "page": section["page"],
+                    "point": text[:200], "source": "naive"})
+    return out
 
 
 def _embedding_decompose_points(section: dict) -> list[dict]:
     """Cluster sentences of a short section by embedding similarity.
 
     Uses sentence-transformers locally.  Falls back to naive if not installed.
+    First splits by embedded #### N.M subsection markers so each sub-chunk
+    gets its own correct section label.
     """
     text = section["text"].strip()
     if not text:
         return []
-    sentences = re.split(r"(?<=[。!?])\s+|(?<=[.!?])\s+", text)
-    sentences = [s.strip() for s in sentences if len(s.strip()) > 30]
-    # Filter noise (intros / TOCs) BEFORE clustering
-    sentences = [s for s in sentences if not _is_noise(s)]
-    if len(sentences) <= 1:
-        return [{"section": section["section"], "page": section["page"],
-                 "point": sentences[0] if sentences else text[:200],
-                 "source": "embedding"}]
-    if len(sentences) <= 3:
-        return [{"section": section["section"], "page": section["page"],
-                 "point": s, "source": "embedding"} for s in sentences]
-    try:
-        from sentence_transformers import SentenceTransformer
-        import numpy as np
-        model = SentenceTransformer("all-MiniLM-L6-v2")
-        embeddings = model.encode(sentences)
-        # Greedy cluster: start new group when similarity to anchor drops
-        groups: list[list[str]] = [[sentences[0]]]
-        anchors = [embeddings[0]]
-        for sent, emb in zip(sentences[1:], embeddings[1:]):
-            sims = [float(np.dot(emb, a) / (np.linalg.norm(emb) * np.linalg.norm(a)))
-                    for a in anchors]
-            if max(sims) > 0.55:  # similar to some existing group
-                best = sims.index(max(sims))
-                groups[best].append(sent)
-            else:
-                groups.append([sent])
-                anchors.append(emb)
-        # Cap at 3 points for short sections
-        groups = groups[:3]
-        # Filter noise again at the group level
-        points = []
-        for g in groups:
-            joined = " ".join(g)
-            if not _is_noise(joined):
-                points.append(joined)
-        if not points and groups:
-            points = [" ".join(groups[0])]
-        return [{"section": section["section"], "page": section["page"],
-                 "point": p, "source": "embedding"} for p in points]
-    except ImportError:
-        return _naive_decompose(section)
-    except Exception as e:
-        print(f"  Embedding decompose failed for {section['section']}: {e}")
-        return _naive_decompose(section)
+    sub_chunks = _split_by_subsections(section["section"], text)
+    out: list[dict] = []
+    for sub_sec, sub_text in sub_chunks:
+        sub_text = sub_text.strip()
+        if not sub_text:
+            continue
+        sentences = re.split(r"(?<=[。!?])\s+|(?<=[.!?])\s+", sub_text)
+        sentences = [s.strip() for s in sentences if len(s.strip()) > 30]
+        sentences = [s for s in sentences if not _is_noise(s)]
+        if not sentences:
+            continue
+        if len(sentences) <= 3:
+            for sent in sentences:
+                if not _is_noise(sent):
+                    out.append({"section": sub_sec, "page": section["page"],
+                                "point": sent, "source": "embedding"})
+            continue
+        try:
+            from sentence_transformers import SentenceTransformer
+            import numpy as np
+            model = SentenceTransformer("all-MiniLM-L6-v2")
+            embeddings = model.encode(sentences)
+            groups: list[list[str]] = [[sentences[0]]]
+            anchors = [embeddings[0]]
+            for sent, emb in zip(sentences[1:], embeddings[1:]):
+                sims = [float(np.dot(emb, a) / (np.linalg.norm(emb) * np.linalg.norm(a)))
+                        for a in anchors]
+                if max(sims) > 0.55:
+                    best = sims.index(max(sims))
+                    groups[best].append(sent)
+                else:
+                    groups.append([sent])
+                    anchors.append(emb)
+            groups = groups[:3]
+            for g in groups:
+                joined = " ".join(g)
+                if not _is_noise(joined):
+                    out.append({"section": sub_sec, "page": section["page"],
+                                "point": joined, "source": "embedding"})
+        except ImportError:
+            for sent in sentences[:3]:
+                if not _is_noise(sent):
+                    out.append({"section": sub_sec, "page": section["page"],
+                                "point": sent, "source": "embedding"})
+        except Exception as e:
+            print(f"  Embedding decompose failed for {sub_sec}: {e}")
+    if not out and text:
+        out.append({"section": section["section"], "page": section["page"],
+                    "point": text[:200], "source": "embedding"})
+    return out
 
 
 def build_doc_points(doc_id: str, version: str) -> dict:
