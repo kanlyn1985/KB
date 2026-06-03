@@ -189,8 +189,65 @@ def register_subcommand(subparsers) -> None:
 
 
 
+
+    # --- Phase 1 evaluation suite (eval run-now) ---
+    p_eval = subparsers.add_parser(
+        "eval",
+        help="Run the Phase 1 evaluation suite (sample_qa bank).",
+    )
+    eval_subs = p_eval.add_subparsers(dest="eval_command", required=True)
+    rn = eval_subs.add_parser(
+        "run-now",
+        help="Run the golden or full evaluation suite and print pass_rate.",
+    )
+    rn.add_argument("--suite", choices=["golden", "full"], default="golden",
+                    help="golden = 30 questions spot-check set; full = all questions")
+    rn.add_argument("--version", default="v1", help="expected_points version")
+    rn.add_argument("--max-questions", type=int, default=None,
+                    help="Cap number of questions (for quick smoke tests)")
+    rn.add_argument("--root", type=Path, default=Path("knowledge_base"),
+                    help="Workspace root (default: knowledge_base)")
+
+
 def handle_command(args, schema_path) -> bool:
     """Handle the main() branch for this command family."""
+
+    # --- eval run-now ---
+    if getattr(args, "command", None) == "eval" and getattr(args, "eval_command", None) == "run-now":
+        from enterprise_agent_kb.evaluation import run_suite
+        from pathlib import Path
+        try:
+            result = run_suite(
+                suite=args.suite,
+                version=args.version,
+                workspace_root=args.root,
+                max_questions=args.max_questions,
+            )
+        except FileNotFoundError as e:
+            print(f"ERROR: {e}")
+            print("Run python tools/build_expected_points.py and "
+                  "python tools/build_sample_qa.py first.")
+            return True
+        out = {
+            "suite": result.suite,
+            "total": result.total,
+            "passed": result.passed,
+            "pass_rate": result.pass_rate,
+            "avg_coverage": result.avg_coverage,
+            "multi_prompt_stability": result.multi_prompt_stability,
+            "by_doc": result.by_doc,
+        }
+        print(json.dumps(out, ensure_ascii=False, indent=2))
+        if 0.65 <= result.pass_rate <= 0.85 and result.multi_prompt_stability > 0.8:
+            print(f"\nPhase 1 sign-off criteria met: pass_rate={result.pass_rate:.2f} "
+                  f"in [0.65, 0.85], stability={result.multi_prompt_stability:.2f} > 0.8")
+        elif result.pass_rate < 0.65:
+            print(f"\nFAIL: pass_rate={result.pass_rate:.2f} < 0.65")
+        elif result.pass_rate > 0.85:
+            print(f"\nFAIL: pass_rate={result.pass_rate:.2f} > 0.85")
+        return True
+
+    # --- existing eval handlers (graph-report, run-corpus-retrieval-eval, etc.) ---
     if args.command == "graph-report":
         db_path = Path(args.root) / "db" / "knowledge.db"
         report = build_graph_health_report(db_path)
