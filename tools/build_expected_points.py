@@ -121,6 +121,20 @@ def _split_sections(doc_ir: dict) -> list[dict]:
             continue
         seen.add(sec["section"])
         deduped.append(by_sec[sec["section"]])
+    # Fallback: if no headings were found, treat each page as a synthetic
+    # section ("p1", "p2", ...).  This handles docs that were parsed as
+    # flat text without Markdown headings.
+    if not deduped:
+        for page in doc_ir.get("pages", []):
+            pn = page.get("page_no", 0)
+            page_text = "\n".join(str(b.get("text", "")) for b in page.get("blocks", []))
+            if page_text.strip():
+                deduped.append({
+                    "section": f"p{pn}",
+                    "title": f"Page {pn}",
+                    "page": pn,
+                    "text": page_text,
+                })
     return deduped
 
 
