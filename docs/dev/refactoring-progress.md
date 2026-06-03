@@ -248,3 +248,37 @@ Large-scale refactoring of KB1 codebase to establish proper DDD layered architec
 - Always run full test suite after architectural changes
 - **Test isolation note**: when running `pytest -m "not benchmark" --ignore=tests/test_mcp_server.py` in parallel, 27 tests in `test_query_repair_regression.py` and `test_user_style_query_regression.py` fail with state pollution between tests. The same tests pass when run in isolation or sequentially. This is a pre-existing test infrastructure issue, not a regression from the refactor.
 - **Shim approach for package conversion**: rename `foo.py` → `foo_mono.py` (sibling), then create `foo/__init__.py` that re-exports the public API via `from enterprise_agent_kb.foo_mono import ...`. Use absolute imports (not relative) in the shim to avoid `__package__` resolution confusion. For modules that need test-patch compatibility, resolve names at call-time via `sys.modules['enterprise_agent_kb.foo']`.
+
+
+## Phase 1 实施结果 (2026-06-03)
+
+详见 `docs/dev/phase1-eval-redesign.md` (设计) 和 `knowledge_base/eval_runs/v1_golden_24.json` (数据).
+
+### Step 1.1: expected_points + build 脚本
+- 14/16 文档, 929 点
+- 噪声率 0.4% (从 39% 改善)
+- LLM 拆点 4.2% (LLM API 不稳)
+- True text-dups 3.9%
+
+### Step 1.2: sample_qa 题库
+- 555 questions (LLM 5.6% + fallback 94.4%)
+- 30 golden (5%-spot-check 标定 24)
+
+### Step 1.3: 5%-spot-check
+- 通过: 6/30 generic intros removed (TOC, vague parameters)
+- 24 questions locked for v1 baseline
+
+### Step 1.4: 评测器
+- `eakb eval run-now --suite golden|full` (13m59s for 24 questions)
+- Multi-prompt 鲁棒性: 0.958 (≥0.8 阈值)
+- String-similarity fallback for LLM unavailable
+
+### Step 1.5: Baseline 跑
+- pass_rate: 0.083 (期望 0.65-0.85)
+- avg_coverage: 0.083
+
+### Step 1.6: Sign-off 判定
+- **NO-GO**: 5/8 criteria met, 3 fail
+- **根因**: LLM API (Xunfei Anthropic-compatible) 返回 500 Model Not Found
+  for some requests, 导致 LLM extractor 返回空 list, 评测失败
+- **建议**: 等 LLM 服务恢复后重跑. 设计 / 工具 / 数据已就绪.
