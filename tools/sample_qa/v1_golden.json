@@ -1,0 +1,422 @@
+[
+  {
+    "question": "请解释: 1—2009《标准化工作导则 第 1 部分：标准的结构和编写》给出的规则起草。",
+    "page": 3,
+    "matched_points": [
+      {
+        "section": "35",
+        "point": "1—2009《标准化工作导则 第 1 部分：标准的结构和编写》给出的规则起草。"
+      }
+    ],
+    "template_id": "fallback_generic",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "请解释: II\n## 前言\n\n本标准按照 GB/T 1.1—2009《标准化工作导则 第1部分：标准的结构和编写》给出的规则起草。",
+    "page": 3,
+    "matched_points": [
+      {
+        "section": "35",
+        "point": "II\n## 前言\n\n本标准按照 GB/T 1.1—2009《标准化工作导则 第1部分：标准的结构和编写》给出的规则起草。"
+      }
+    ],
+    "template_id": "fallback_generic",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "第 1 节有哪些要求? (第 8 页)",
+    "page": 8,
+    "matched_points": [
+      {
+        "section": "1",
+        "point": "本标准规定了汽车电源逆变器的术语和定义、要求、试验方法、检验规则以及标志、包装、运输和贮存。\n本标准适用于汽车用电源逆变器(以下简称逆变器)。\n\n\n\n本标准规定了汽车电源逆变器的术语和定义、要求、试验方法、检验规则以及标志、包装、运输和贮存。\n\n本标准适用于汽车用电源逆变器（以下简称逆变器）。"
+      }
+    ],
+    "template_id": "fallback_requirement",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "请解释: All listed documents are essential for the application of this standard.",
+    "page": 8,
+    "matched_points": [
+      {
+        "section": "2",
+        "point": "All listed documents are essential for the application of this standard."
+      }
+    ],
+    "template_id": "fallback_generic",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "请解释: For dated referenced documents, only the version with the specified date applies",
+    "page": 8,
+    "matched_points": [
+      {
+        "section": "2",
+        "point": "For dated referenced documents, only the version with the specified date applies."
+      }
+    ],
+    "template_id": "fallback_generic",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "什么是 3.1 节定义的术语? (第 9 页)",
+    "page": 9,
+    "matched_points": [
+      {
+        "section": "3.1",
+        "point": "**汽车电源逆变器  automotive DC－AC Power Inverter**\n一种把汽车直流电(12 V 或 24 V)转化为较高电压交流电供用电器使用的变流器。"
+      }
+    ],
+    "template_id": "fallback_term_definition",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "什么是 3.2 节定义的术语? (第 9 页)",
+    "page": 9,
+    "matched_points": [
+      {
+        "section": "3.2",
+        "point": "**过载能力最大功率  maximum power before over load**\n逆变器在未触发过载保护功能时的最大持续输出(连续工作 20 min 以上)功率。"
+      }
+    ],
+    "template_id": "fallback_term_definition",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "什么是 3.3 节定义的术语? (第 9 页)",
+    "page": 9,
+    "matched_points": [
+      {
+        "section": "3.3",
+        "point": "**保护门  shutter**\n装在交流输出插座里，用于在插销拔出时能自动地将插孔遮蔽起来的活动部件。"
+      }
+    ],
+    "template_id": "fallback_term_definition",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "什么是 3.4 节定义的术语? (第 9 页)",
+    "page": 9,
+    "matched_points": [
+      {
+        "section": "3.4",
+        "point": "**激活信号  enable signal**\n只针对含有激活输出功能的逆变器，在激活信号产生后逆变器产生逆变功能。"
+      }
+    ],
+    "template_id": "fallback_term_definition",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "什么是 3.5 节定义的术语? (第 9 页)",
+    "page": 9,
+    "matched_points": [
+      {
+        "section": "3.5",
+        "point": "**电压滞回功能  voltage hysteresis**\n当逆变器进行欠压或过压自动保护关闭后，逆变器的逆变模块再次重启的条件与进行自动保护关闭的临界条件不同，分别高于(欠压)和低于(过压)规定的自动保护条件电压值。"
+      }
+    ],
+    "template_id": "fallback_term_definition",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "第 4.1 节有哪些要求? (第 9 页)",
+    "page": 9,
+    "matched_points": [
+      {
+        "section": "4.1",
+        "point": "逆变器应符合本标准的要求，并应按照经规定程序批准的图样及技术文件制造。"
+      }
+    ],
+    "template_id": "fallback_requirement",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "第 4.1.1 节有哪些要求? (第 9 页)",
+    "page": 9,
+    "matched_points": [
+      {
+        "section": "4.1.1",
+        "point": "逆变器应符合本标准的要求，并应按照经规定程序批准的图样及技术文件制造。"
+      }
+    ],
+    "template_id": "fallback_requirement",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "第 4.1.2 节有哪些要求? (第 9 页)",
+    "page": 9,
+    "matched_points": [
+      {
+        "section": "4.1.2",
+        "point": "逆变器根据安装位置，在如下温度范围内应正常工作：\na)  固定安装在乘客仓内的逆变器工作温度范围($T_{min} \\sim T_{max}$): $-20\\ ^\\circ\\mathrm{C} \\sim 70\\ ^\\circ\\mathrm{C}$；\nb)  固定安装在行李仓内的逆变器工作温度范围($T_{min} \\sim T_{max}$): $-40\\ ^\\circ\\mathrm{C} \\si"
+      }
+    ],
+    "template_id": "fallback_requirement",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "第 4.2 节有哪些要求? (第 10 页)",
+    "page": 10,
+    "matched_points": [
+      {
+        "section": "4.2",
+        "point": "逆变器表面应完整，无氧化锈蚀、无变形、无破损、无裂纹、无明显分模线等缺陷。零件的涂镀层应均匀，无明显缺陷。"
+      }
+    ],
+    "template_id": "fallback_requirement",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "第 4.3 节有哪些要求? (第 10 页)",
+    "page": 10,
+    "matched_points": [
+      {
+        "section": "4.3",
+        "point": "逆变器的外壳防护等级应符合 GB/T 30038 中的 IP5K0 的规定。"
+      }
+    ],
+    "template_id": "fallback_requirement",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "第 4.4 节有哪些要求? (第 10 页)",
+    "page": 10,
+    "matched_points": [
+      {
+        "section": "4.4",
+        "point": "逆变器所有的有害材料含量应不超过SJ/T 11363的限量要求。"
+      }
+    ],
+    "template_id": "fallback_requirement",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "文档中参数在第 10 页的值是什么?",
+    "page": 10,
+    "matched_points": [
+      {
+        "section": "4.5.1",
+        "point": "<div style=\"text-align: center;\">表 1 输出特性参数</div>\n\n\n\n<table border=1 style='margin: auto; word-wrap: break-word;'><tr><td style='text-align: center; word-wrap: break-word;'>输出特性</td><td style='text-al"
+      }
+    ],
+    "template_id": "fallback_parameter_value",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "第 4.5.4 节有哪些要求? (第 10 页)",
+    "page": 10,
+    "matched_points": [
+      {
+        "section": "4.5.4",
+        "point": "逆变器在 $T_{\\min} \\sim T_{\\max}$ 环境温度范围内持续输出能力应能达到表 2 的规定。"
+      }
+    ],
+    "template_id": "fallback_requirement",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "第 4.5.5 节有哪些要求? (第 11 页)",
+    "page": 11,
+    "matched_points": [
+      {
+        "section": "4.5.5",
+        "point": "逆变器在  $ T_{\\min} \\sim T_{\\max} $ 环境温度范围内持续输出能力应能达到表 2 的规定。"
+      }
+    ],
+    "template_id": "fallback_requirement",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "文档中参数在第 11 页的值是什么?",
+    "page": 11,
+    "matched_points": [
+      {
+        "section": "4.5.5",
+        "point": "<div style=\"text-align: center;\">表 2 持续输出能力</div>\n\n\n\n<table border=1 style='margin: auto; word-wrap: break-word;'><tr><td style='text-align: center; word-wrap: break-word;'>温度/ $ ^{\\circ} $C</td><td s"
+      }
+    ],
+    "template_id": "fallback_parameter_value",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "第 4.5.6 节有哪些要求? (第 11 页)",
+    "page": 11,
+    "matched_points": [
+      {
+        "section": "4.5.6",
+        "point": "逆变器在输出端未接负载时，直流电流输入应不大于400 mA。"
+      }
+    ],
+    "template_id": "fallback_requirement",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "第 4.5.7 节有哪些要求? (第 11 页)",
+    "page": 11,
+    "matched_points": [
+      {
+        "section": "4.5.7",
+        "point": "逆变器在整车关机(锁车)的环境下，直流端电流消耗应不大于0.5 mA。"
+      }
+    ],
+    "template_id": "fallback_requirement",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "第 4.6.1 节有哪些要求? (第 11 页)",
+    "page": 11,
+    "matched_points": [
+      {
+        "section": "4.6.1",
+        "point": "逆变器上必须有危险电压警示永久性标识 $ \\triangle $，标识经水和汽油分别擦拭15 s后，应易于辨认，标识应不易被揭掉，而且应不出现卷边。"
+      }
+    ],
+    "template_id": "fallback_requirement",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "第 4.6.2 节有哪些要求? (第 11 页)",
+    "page": 11,
+    "matched_points": [
+      {
+        "section": "4.6.2",
+        "point": "最小爬电距离、电气间隙、穿通绝缘距离应符合 GB 19212.1—2008 的第 26 章及 GB 19212.18—2006 的第 26 章的规定。"
+      }
+    ],
+    "template_id": "fallback_requirement",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "请解释: When insulation failure occurs between the DC input circuit and the AC output ci",
+    "page": 11,
+    "matched_points": [
+      {
+        "section": "4.6.3",
+        "point": "When insulation failure occurs between the DC input circuit and the AC output circuit, the loop current shall not exceed 3.5 mA."
+      }
+    ],
+    "template_id": "fallback_generic",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "请解释: If the current exceeds this limit, the inverter shall automatically disconnect i",
+    "page": 11,
+    "matched_points": [
+      {
+        "section": "4.6.3",
+        "point": "If the current exceeds this limit, the inverter shall automatically disconnect its output within 250 ms."
+      }
+    ],
+    "template_id": "fallback_generic",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "文档中参数在第 12 页的值是什么?",
+    "page": 12,
+    "matched_points": [
+      {
+        "section": "4.6.4",
+        "point": "在温度为 $ 20\\pm5 $℃、相对湿度为90%的环境下，交流输出带电电路与地或外壳之间的绝缘电阻应不小于1 MΩ。"
+      }
+    ],
+    "template_id": "fallback_parameter_value",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "第 4.6.6 节有哪些要求? (第 12 页)",
+    "page": 12,
+    "matched_points": [
+      {
+        "section": "4.6.6",
+        "point": "逆变器热平衡稳定后，其内部各部件温升应满足 GB 19212.1—2008 中表 1 的规定。"
+      }
+    ],
+    "template_id": "fallback_requirement",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "第 4.7.1 节有哪些要求? (第 12 页)",
+    "page": 12,
+    "matched_points": [
+      {
+        "section": "4.7.1",
+        "point": "逆变器输出插座尺寸应符合 GB 1002—2008 中 5.2 的规定。"
+      }
+    ],
+    "template_id": "fallback_requirement",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  },
+  {
+    "question": "第 4.7.2 节有哪些要求? (第 13 页)",
+    "page": 13,
+    "matched_points": [
+      {
+        "section": "4.7.2",
+        "point": "针对含独立式输出插座并整体供货的逆变器(见图1)，连接输出插座与逆变器本体的高压线缆应符合GB/T 25085的规定。"
+      }
+    ],
+    "template_id": "fallback_requirement",
+    "doc_id": "DOC-000001",
+    "version": "v1",
+    "created_at": "2026-06-03T06:52:06+00:00"
+  }
+]

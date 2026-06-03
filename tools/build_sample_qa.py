@@ -255,6 +255,68 @@ def _build_golden_questions(qa: list[dict]) -> list[dict]:
     return golden[:30]
 
 
+
+# ---- Fallback question templates (no LLM needed) -----------------------
+
+# Templates indexed by point kind.  For each expected point we pick a
+# template based on the section prefix or point content.
+_QUESTION_TEMPLATES = [
+    # Term-definition: standard "什么是 X" question
+    ("term_definition", lambda p: f"什么是 {p.get('section', '')} 节定义的术语? (第 {p.get('page', '?')} 页)"),
+    # Parameter: "X 是多少" question
+    ("parameter_value", lambda p: f"文档中参数在第 {p.get('page', '?')} 页的值是什么?"),
+    # Requirement: "X 的要求是什么"
+    ("requirement", lambda p: f"第 {p.get('section', '')} 节有哪些要求? (第 {p.get('page', '?')} 页)"),
+    # Threshold: "X 阈值/范围"
+    ("threshold", lambda p: f"第 {p.get('section', '')} 节规定的阈值或限值是多少? (第 {p.get('page', '?')} 页)"),
+    # Generic: ask the point text directly
+    ("generic", lambda p: f"请解释: {p.get('point', '')[:80]}"),
+]
+
+
+def _generate_fallback_questions(expected_points: list[dict],
+                                 max_per_section: int = 3) -> list[dict]:
+    """Generate questions from expected_points using templates.
+
+    Returns a list of {question, page, matched_points, template_id}.
+    """
+    out: list[dict] = []
+    section_counts: dict[str, int] = {}
+    for p in expected_points:
+        sec = p.get("section", "")
+        if section_counts.get(sec, 0) >= max_per_section:
+            continue
+        # Pick template by section prefix / first word
+        text = p.get("point", "").strip()
+        if not text:
+            continue
+        template_id, tmpl = _QUESTION_TEMPLATES[4]  # generic
+        if sec.startswith("3.") and len(text) < 200:
+            # Term-definition section
+            template_id, tmpl = _QUESTION_TEMPLATES[0]
+        elif any(kw in text for kw in ["%", "V", "Hz", "VA"]):
+            template_id, tmpl = _QUESTION_TEMPLATES[1]
+        elif any(kw in text for kw in ["应", "必须", "不应", "要求", "不得"]):
+            template_id, tmpl = _QUESTION_TEMPLATES[2]
+        elif any(kw in text for kw in ["不大于", "不小于", "不超过", "不低于", "范围"]):
+            template_id, tmpl = _QUESTION_TEMPLATES[3]
+        question = tmpl(p)
+        # Avoid duplicates within the same section
+        if any(q["question"] == question for q in out):
+            continue
+        section_counts[sec] = section_counts.get(sec, 0) + 1
+        out.append({
+            "question": question,
+            "page": p.get("page"),
+            "matched_points": [{"section": p.get("section"),
+                                 "point": text[:200]}],
+            "template_id": f"fallback_{template_id}",
+        })
+    return out
+
+
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--version", default="v1", help="expected_points version")
@@ -295,6 +357,16 @@ def main() -> int:
                 q["version"] = args.version
                 q["created_at"] = _now()
                 doc_questions.append(q)
+        # Fallback to template-based questions if LLM produced 0
+        if not doc_questions:
+            print(f"    [fallback] LLM unavailable, generating template-based questions")
+            fq = _generate_fallback_questions(ep, max_per_section=2)
+            for q in fq:
+                q["doc_id"] = doc_id
+                q["version"] = args.version
+                q["created_at"] = _now()
+                doc_questions.append(q)
+            print(f"    fallback: {len(fq)} questions")
         all_questions.extend(doc_questions)
         print(f"  -> {len(doc_questions)} questions for {doc_id}\n")
 
