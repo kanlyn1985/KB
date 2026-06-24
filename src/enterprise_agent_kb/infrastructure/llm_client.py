@@ -13,6 +13,7 @@ import httpx
 
 from ..domain.llm import ILLMClient, LLMClientError, LLMResponse, Message, Provider
 from ..config import AppEndpoints
+from ..exceptions import NetworkError as _InfraNetworkError, TimeoutError as _InfraTimeoutError
 
 
 class LLMClient(ILLMClient):
@@ -84,31 +85,43 @@ class LLMClient(ILLMClient):
         """
         model = model or self._default_model
 
-        for attempt in range(self.max_retries + 1):
-            try:
-                if self.provider == Provider.CLAUDE:
-                    return self._claude_chat(
-                        messages, model, system_prompt, temperature, max_tokens, **kwargs
-                    )
-                elif self.provider in {Provider.OPENAI, Provider.ASTRON}:
-                    return self._openai_chat(
-                        messages, model, system_prompt, temperature, max_tokens, **kwargs
-                    )
-                elif self.provider == Provider.MINIMAX:
-                    return self._minimax_vlm(
-                        messages, model, temperature, max_tokens, **kwargs
-                    )
-            except httpx.HTTPStatusError as e:
-                if attempt == self.max_retries:
-                    raise LLMClientError(f"HTTP {e.response.status_code}: {e}")
-            except (httpx.TimeoutException, httpx.NetworkError) as e:
-                if attempt == self.max_retries:
-                    raise LLMClientError(f"Network error: {e}")
-            except Exception as e:
-                if attempt == self.max_retries:
-                    raise LLMClientError(f"LLM error: {e}")
+        # httpx does not support socks proxies (all_proxy=socks://...). The local
+        # LLM gateway is on localhost, so clear socks proxy env for the duration
+        # of the call and restore it afterwards. Done here, centrally, so every
+        # call site is covered without per-site patches.
+        _proxy_keys = ("all_proxy", "ALL_PROXY")
+        _saved_proxy = {k: os.environ.pop(k) for k in _proxy_keys if k in os.environ}
+        try:
+            for attempt in range(self.max_retries + 1):
+                try:
+                    if self.provider == Provider.CLAUDE:
+                        return self._claude_chat(
+                            messages, model, system_prompt, temperature, max_tokens, **kwargs
+                        )
+                    elif self.provider in {Provider.OPENAI, Provider.ASTRON}:
+                        return self._openai_chat(
+                            messages, model, system_prompt, temperature, max_tokens, **kwargs
+                        )
+                    elif self.provider == Provider.MINIMAX:
+                        return self._minimax_vlm(
+                            messages, model, temperature, max_tokens, **kwargs
+                        )
+                except httpx.HTTPStatusError as e:
+                    if attempt == self.max_retries:
+                        raise LLMClientError(f"HTTP {e.response.status_code}: {e}")
+                except httpx.TimeoutException as e:
+                    if attempt == self.max_retries:
+                        raise _InfraTimeoutError(f"Network error: {e}")
+                except httpx.NetworkError as e:
+                    if attempt == self.max_retries:
+                        raise _InfraNetworkError(f"Network error: {e}")
+                except Exception as e:
+                    if attempt == self.max_retries:
+                        raise LLMClientError(f"LLM error: {e}")
 
-        raise LLMClientError("Max retries exceeded")
+            raise LLMClientError("Max retries exceeded")
+        finally:
+            os.environ.update(_saved_proxy)
 
     def _claude_chat(
         self,
@@ -310,4 +323,39 @@ def create_minimax_client(
         api_base=api_host,
         api_key=api_key,
         timeout=timeout,
+    )
+
+
+def get_text_llm_settings() -> tuple[str, str, str]:
+    """Return the unified text-LLM endpoint, key, and model.
+
+    All text LLM call sites (semantic parser, query planner, evidence judge,
+    query expansion) read from here so the whole system uses one provider.
+    The local Anthropic-compatible proxy at ANTHROPIC_BASE_URL is the single
+    working gateway; it recognizes Claude model names (which it routes to GLM)
+    but rejects vendor-specific names like astron-code-latest.
+
+    Returns:
+        (api_base, api_key, model)
+    """
+    api_base = (
+        os.environ.get("ANTHROPIC_BASE_URL")
+        or AppEndpoints.from_env().anthropic_base_url
+    ).rstrip("/")
+    api_key = os.environ.get("ANTHROPIC_AUTH_TOKEN") or os.environ.get("ANTHROPIC_API_KEY", "")
+    model = os.environ.get("TEXT_LLM_MODEL") or os.environ.get("CLAUDE_MODEL", "claude-3-5-sonnet-20241022")
+    if not api_key:
+        raise RuntimeError("text LLM configuration unavailable: set ANTHROPIC_AUTH_TOKEN")
+    return api_base, api_key, model
+
+
+def get_text_llm_client(timeout: float = 60.0, max_retries: int = 1) -> LLMClient:
+    """Create an LLMClient wired to the unified text-LLM endpoint."""
+    api_base, api_key, model = get_text_llm_settings()
+    return LLMClient(
+        provider=Provider.CLAUDE,
+        api_base=api_base,
+        api_key=api_key,
+        timeout=timeout,
+        max_retries=max_retries,
     )

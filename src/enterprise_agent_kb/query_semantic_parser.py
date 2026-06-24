@@ -146,12 +146,13 @@ def _text_llm_timeout_seconds() -> float:
             return max(1.0, min(float(explicit), 60.0))
         except ValueError:
             return 5.0
-    # Default: use a shorter timeout for semantic parsing to avoid blocking answer queries
+    # Default: GLM-backed proxy emits a thinking block before the text answer,
+    # so structured prompts need ~15-25s. Cap at 30s to stay responsive.
     try:
-        timeout_ms = int(os.environ.get("API_TIMEOUT_MS", "5000"))
+        timeout_ms = int(os.environ.get("API_TIMEOUT_MS", "20000"))
     except ValueError:
-        timeout_ms = 5000
-    return max(1.0, min(timeout_ms / 1000.0, 8.0))
+        timeout_ms = 20000
+    return max(1.0, min(timeout_ms / 1000.0, 30.0))
 
 
 def _provider_failure_cooldown_seconds() -> float:
@@ -289,17 +290,10 @@ def _call_llm_message(
     system_prompt: str,
     provider_name: str,
 ) -> str:
-    """Call LLM using unified client."""
+    """Call the unified text LLM endpoint."""
     timeout_sec = _text_llm_timeout_seconds()
-
-    # Determine provider type from api_base/model
-    if "minimax" in api_base.lower() or "minimax" in model.lower():
-        provider = Provider.CLAUDE  # MiniMax uses Claude-compatible API
-    else:
-        provider = Provider.CLAUDE  # Default to Claude (Anthropic-compatible)
-
     client = LLMClient(
-        provider=provider,
+        provider=Provider.CLAUDE,
         api_base=api_base,
         api_key=auth_token,
         timeout=timeout_sec,
@@ -311,7 +305,7 @@ def _call_llm_message(
         model=model,
         system_prompt=system_prompt,
         temperature=0.0,
-        max_tokens=1000,
+        max_tokens=1500,
     )
 
     if not response.content:
@@ -320,8 +314,15 @@ def _call_llm_message(
 
 
 def _call_minimax_text(prompt: str, system_prompt: str = SEMANTIC_PARSER_SYSTEM_PROMPT) -> str:
-    api_base, api_key, model = _load_minimax_text_settings()
-    _ensure_provider_available("minimax", api_base, model)
+    """Call the unified text LLM. Kept for compatibility with existing callers.
+
+    Despite the legacy name, this now routes through the single unified
+    text-LLM endpoint (see get_text_llm_settings).
+    """
+    from .infrastructure.llm_client import get_text_llm_settings
+
+    api_base, api_key, model = get_text_llm_settings()
+    _ensure_provider_available("text_llm", api_base, model)
     try:
         return _call_llm_message(
             api_base=api_base,
@@ -329,45 +330,27 @@ def _call_minimax_text(prompt: str, system_prompt: str = SEMANTIC_PARSER_SYSTEM_
             model=model,
             prompt=prompt,
             system_prompt=system_prompt,
-            provider_name="MiniMax",
+            provider_name="text_llm",
         )
     except (LLMError, NetworkError, TimeoutError, RuntimeError, ValueError, json.JSONDecodeError):
-        _mark_provider_failure("minimax", api_base, model)
+        _mark_provider_failure("text_llm", api_base, model)
         raise
 
 
 def _call_astron_backup_text(prompt: str, system_prompt: str = SEMANTIC_PARSER_SYSTEM_PROMPT) -> str:
-    api_base, auth_token, model = _load_astron_settings()
-    _ensure_provider_available("astron", api_base, model)
-    try:
-        return _call_llm_message(
-            api_base=api_base,
-            auth_token=auth_token,
-            model=model,
-            prompt=prompt,
-            system_prompt=system_prompt,
-            provider_name="astron",
-        )
-    except (LLMError, NetworkError, TimeoutError, RuntimeError, ValueError, json.JSONDecodeError):
-        _mark_provider_failure("astron", api_base, model)
-        raise
+    """Legacy alias — now calls the same unified text LLM as the primary path."""
+    return _call_minimax_text(prompt, system_prompt=system_prompt)
 
 
 def _call_astron_text(prompt: str, system_prompt: str = SEMANTIC_PARSER_SYSTEM_PROMPT) -> str:
-    """Call the configured text LLM, with MiniMax as primary and astron as backup.
+    """Call the unified text LLM.
 
-    The function name is kept for compatibility with existing query modules and tests.
+    The name is kept for compatibility with existing query modules
+    (advanced_query_planner, evidence_judge, query_expansion import this).
+    All text LLM traffic now routes through one endpoint — see
+    get_text_llm_settings.
     """
-    errors: list[str] = []
-    try:
-        return _call_minimax_text(prompt, system_prompt=system_prompt)
-    except Exception as exc:
-        errors.append(f"minimax:{type(exc).__name__}:{exc}")
-    try:
-        return _call_astron_backup_text(prompt, system_prompt=system_prompt)
-    except Exception as exc:
-        errors.append(f"astron:{type(exc).__name__}:{exc}")
-    raise RuntimeError(f"text LLM failed; {'; '.join(errors)}")
+    return _call_minimax_text(prompt, system_prompt=system_prompt)
 
 
 @lru_cache(maxsize=512)
