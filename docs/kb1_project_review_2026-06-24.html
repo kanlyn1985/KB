@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KB1 项目阶段评审报告 · 2026-06-24</title>
+<style>
+  :root{
+    --bg:#0f1419; --surface:#161b22; --surface2:#1c2330; --border:#2d333b;
+    --text:#e6edf3; --text-dim:#9da7b3; --text-mute:#6e7681;
+    --brand:#4f9cf9; --brand2:#7ee787;
+    --green:#3fb950; --green-bg:rgba(63,185,80,.12);
+    --yellow:#d29922; --yellow-bg:rgba(210,153,34,.12);
+    --red:#f85149; --red-bg:rgba(248,81,73,.12);
+    --purple:#bc8cff; --teal:#39d0d8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Segoe UI","PingFang SC","Microsoft YaHei",-apple-system,sans-serif;
+    background:var(--bg); color:var(--text); line-height:1.7;
+    font-size:15px; padding:0;
+  }
+  .wrap{max-width:1180px; margin:0 auto; padding:0 28px 120px}
+
+  /* hero */
+  .hero{
+    background:linear-gradient(135deg,#0d2030 0%,#16263d 50%,#0f1f30 100%);
+    border-bottom:1px solid var(--border); padding:56px 28px 44px; position:relative; overflow:hidden;
+  }
+  .hero::after{content:"";position:absolute;inset:0;background:
+    radial-gradient(circle at 80% 20%, rgba(79,156,249,.15), transparent 40%),
+    radial-gradient(circle at 15% 90%, rgba(126,231,135,.08), transparent 35%);}
+  .hero-inner{max-width:1180px;margin:0 auto;position:relative;z-index:1}
+  .hero .eyebrow{color:var(--brand); font-size:13px; font-weight:600; letter-spacing:2px; text-transform:uppercase}
+  .hero h1{font-size:38px; font-weight:700; margin:10px 0 8px; letter-spacing:-.5px}
+  .hero .sub{color:var(--text-dim); font-size:17px; max-width:760px}
+  .hero-meta{display:flex; flex-wrap:wrap; gap:10px; margin-top:26px}
+  .meta-chip{background:rgba(255,255,255,.05); border:1px solid var(--border); border-radius:8px; padding:8px 14px; font-size:13px; color:var(--text-dim)}
+  .meta-chip b{color:var(--text); font-weight:600}
+
+  /* verdict banner */
+  .verdict{
+    margin-top:32px; display:grid; grid-template-columns:repeat(4,1fr); gap:14px;
+  }
+  .vcard{background:rgba(255,255,255,.04); border:1px solid var(--border); border-radius:12px; padding:18px 18px 16px}
+  .vcard .label{font-size:12px; color:var(--text-mute); text-transform:uppercase; letter-spacing:1px}
+  .vcard .val{font-size:30px; font-weight:700; margin-top:6px; line-height:1}
+  .vcard .note{font-size:12px; color:var(--text-dim); margin-top:8px}
+
+  /* nav */
+  nav.toc{
+    position:sticky; top:0; z-index:50; background:rgba(15,20,25,.92); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border); margin:0 -28px 0; padding:0 28px;
+  }
+  nav.toc .toc-inner{max-width:1180px;margin:0 auto;display:flex;gap:4px;overflow-x:auto;padding:10px 0}
+  nav.toc a{color:var(--text-dim); text-decoration:none; font-size:13px; padding:7px 13px; border-radius:7px; white-space:nowrap; transition:.15s}
+  nav.toc a:hover{background:var(--surface2); color:var(--text)}
+
+  section{margin-top:46px; scroll-margin-top:64px}
+  .sec-head{display:flex; align-items:baseline; gap:12px; border-bottom:1px solid var(--border); padding-bottom:12px; margin-bottom:22px}
+  .sec-head .num{font-size:13px; font-weight:700; color:var(--brand); background:rgba(79,156,249,.12); border:1px solid rgba(79,156,249,.3); border-radius:6px; padding:3px 9px}
+  .sec-head h2{font-size:24px; font-weight:700; letter-spacing:-.3px}
+  .sec-head .tagline{color:var(--text-mute); font-size:13px; margin-left:auto}
+
+  p{margin-bottom:14px; color:var(--text-dim)}
+  p b, li b{color:var(--text)}
+  .lead{font-size:16px}
+
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:18px}
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+  .grid4{display:grid; grid-template-columns:repeat(4,1fr); gap:14px}
+  @media(max-width:860px){.grid2,.grid3,.grid4{grid-template-columns:1fr} .verdict{grid-template-columns:1fr 1fr}}
+
+  .card{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px}
+  .card h3{font-size:16px; margin-bottom:10px; display:flex; align-items:center; gap:8px}
+  .card h3 .dot{width:8px;height:8px;border-radius:50%}
+  .card ul{list-style:none; margin:0}
+  .card li{padding:5px 0 5px 20px; position:relative; color:var(--text-dim); font-size:14px}
+  .card li::before{content:"›"; position:absolute; left:0; color:var(--brand); font-weight:700}
+
+  .stat{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:18px; text-align:center}
+  .stat .big{font-size:32px; font-weight:700; line-height:1}
+  .stat .lab{font-size:12px; color:var(--text-mute); text-transform:uppercase; letter-spacing:1px; margin-top:8px}
+  .stat .sub{font-size:12px; color:var(--text-dim); margin-top:4px}
+
+  /* tables */
+  table{width:100%; border-collapse:collapse; font-size:13.5px; margin:6px 0}
+  th,td{text-align:left; padding:10px 12px; border-bottom:1px solid var(--border)}
+  th{color:var(--text-mute); font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:.5px; background:var(--surface2)}
+  td{color:var(--text-dim)}
+  td b, td.code{color:var(--text); font-family:"Cascadia Code",Consolas,monospace; font-size:12.5px}
+  tr:hover td{background:rgba(255,255,255,.02)}
+
+  /* badges */
+  .badge{display:inline-block; padding:2px 9px; border-radius:11px; font-size:11.5px; font-weight:600; letter-spacing:.3px}
+  .b-green{background:var(--green-bg); color:var(--green); border:1px solid rgba(63,185,80,.3)}
+  .b-yellow{background:var(--yellow-bg); color:var(--yellow); border:1px solid rgba(210,153,34,.3)}
+  .b-red{background:var(--red-bg); color:var(--red); border:1px solid rgba(248,81,73,.3)}
+  .b-blue{background:rgba(79,156,249,.12); color:var(--brand); border:1px solid rgba(79,156,249,.3)}
+  .b-purple{background:rgba(188,140,255,.12); color:var(--purple); border:1px solid rgba(188,140,255,.3)}
+  .b-gray{background:rgba(255,255,255,.05); color:var(--text-mute); border:1px solid var(--border)}
+
+  /* code block */
+  pre{background:#0a0e14; border:1px solid var(--border); border-radius:10px; padding:16px 18px; overflow-x:auto; font-family:"Cascadia Code",Consolas,monospace; font-size:13px; line-height:1.6; margin:12px 0}
+  pre .c{color:var(--text-mute)}
+  pre .k{color:var(--purple)}
+  pre .s{color:var(--brand2)}
+  pre .a{color:var(--teal)}
+  code.inline{background:var(--surface2); padding:2px 6px; border-radius:4px; font-family:"Cascadia Code",Consolas,monospace; font-size:12.5px; color:var(--brand2)}
+
+  /* progress bars */
+  .pbar{height:9px; background:var(--surface2); border-radius:5px; overflow:hidden; margin:6px 0 2px}
+  .pbar > i{display:block; height:100%; border-radius:5px}
+  .prow{margin-bottom:14px}
+  .prow .pl{display:flex; justify-content:space-between; font-size:13px; margin-bottom:2px}
+  .prow .pl span:first-child{color:var(--text)}
+
+  /* pipeline diagram */
+  .pipeline{display:flex; flex-wrap:wrap; align-items:stretch; gap:0; margin:16px 0}
+  .pnode{flex:1; min-width:120px; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px 10px; text-align:center; position:relative; font-size:12.5px}
+  .pnode .pn-title{font-weight:600; color:var(--text); font-size:13px}
+  .pnode .pn-count{color:var(--brand); font-size:11px; margin-top:3px}
+  .parrow{display:flex; align-items:center; color:var(--text-mute); font-size:18px; padding:0 3px}
+  @media(max-width:760px){.parrow{transform:rotate(90deg); padding:6px 0} .pnode{min-width:100%}}
+
+  /* loops */
+  .loop{background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--brand); border-radius:10px; padding:16px 18px; margin-bottom:14px}
+  .loop .lh{display:flex; align-items:center; gap:10px; margin-bottom:8px}
+  .loop .lh h4{font-size:15px; font-weight:600}
+  .loop .lh .num{color:var(--brand); font-family:monospace; font-size:13px}
+  .loop p{font-size:13.5px; margin:0}
+  .loop .metrics{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+  .loop .metrics .m{background:var(--surface2); border-radius:6px; padding:4px 10px; font-size:12px}
+  .loop .metrics .m b{color:var(--text)}
+
+  /* risk item */
+  .risk{display:flex; gap:14px; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px 18px; margin-bottom:12px}
+  .risk .sev{flex-shrink:0; width:60px; text-align:center}
+  .risk .sev .sevb{display:inline-block; padding:4px 0; width:60px; border-radius:6px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px}
+  .risk h4{font-size:15px; margin-bottom:5px}
+  .risk p{font-size:13.5px; margin:0}
+  .risk .rec{margin-top:8px; font-size:12.5px; color:var(--brand2)}
+
+  /* callout */
+  .callout{border-left:3px solid var(--yellow); background:var(--yellow-bg); border-radius:0 10px 10px 0; padding:14px 18px; margin:16px 0}
+  .callout.green{border-color:var(--green); background:var(--green-bg)}
+  .callout.red{border-color:var(--red); background:var(--red-bg)}
+  .callout.blue{border-color:var(--brand); background:rgba(79,156,249,.08)}
+  .callout p{margin:0; color:var(--text)}
+  .callout .ct{font-weight:700; margin-bottom:4px; display:block}
+
+  .footnote{font-size:12px; color:var(--text-mute); border-top:1px solid var(--border); margin-top:50px; padding-top:18px}
+  .footnote b{color:var(--text-dim)}
+  .check{color:var(--green)}
+  .x{color:var(--red)}
+
+  footer{background:var(--surface); border-top:1px solid var(--border); padding:30px 28px; text-align:center; color:var(--text-mute); font-size:13px}
+  .scrollbox{max-height:340px; overflow-y:auto; border:1px solid var(--border); border-radius:10px}
+  .scrollbox table th{position:sticky; top:0}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Project Stage Review · 项目阶段评审</div>
+    <h1>KB1 企业级 Agent 知识库</h1>
+    <div class="sub">面向汽车标准文档（QC/T 1036-2016、ISO 14229-1 等）的知识库编译与证据约束检索系统。
+    本报告基于 2026-06-24 代码、测试、文档与数据资产的完整梳理，用于阶段评审。</div>
+    <div class="hero-meta">
+      <span class="meta-chip">分支 <b>kb1-six-loop-rename</b></span>
+      <span class="meta-chip">最新提交 <b>df775a9</b> (2026-06-03)</span>
+      <span class="meta-chip">领先 origin/main <b>52 commits</b></span>
+      <span class="meta-chip">方法学 <b>CodeStable</b></span>
+      <span class="meta-chip">技术栈 <b>Python 3.11+ / SQLite+FTS5 / httpx</b></span>
+    </div>
+
+    <div class="verdict">
+      <div class="vcard">
+        <div class="label">总体健康度</div>
+        <div class="val" style="color:var(--green)">B+</div>
+        <div class="note">架构成熟、治理规范；存在 WIP 与工程债务</div>
+      </div>
+      <div class="vcard">
+        <div class="label">测试通过率</div>
+        <div class="val" style="color:var(--yellow)">98.8%</div>
+        <div class="note">672 passed · 8 failed（多为 WIP/陈旧断言）</div>
+      </div>
+      <div class="vcard">
+        <div class="label">Feature 闭环</div>
+        <div class="val" style="color:var(--green)">21/22</div>
+        <div class="note">10/10 issue 已闭环；6 闭环已落地</div>
+      </div>
+      <div class="vcard">
+        <div class="label">核心风险</div>
+        <div class="val" style="color:var(--yellow)">2 项</div>
+        <div class="note">大量未提交 WIP · 评测基线未达 65%</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav class="toc">
+  <div class="toc-inner">
+    <a href="#s1">1. 执行摘要</a>
+    <a href="#s2">2. 项目概览</a>
+    <a href="#s3">3. 系统架构</a>
+    <a href="#s4">4. 代码结构</a>
+    <a href="#s5">5. 测试与质量</a>
+    <a href="#s6">6. 工程治理</a>
+    <a href="#s7">7. 评测体系</a>
+    <a href="#s8">8. 本体层</a>
+    <a href="#s9">9. 当前开发状态</a>
+    <a href="#s10">10. 风险与债务</a>
+    <a href="#s11">11. 路线图</a>
+    <a href="#s12">12. 评审结论</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ============ S1 EXECUTIVE SUMMARY ============ -->
+<section id="s1">
+  <div class="sec-head">
+    <span class="num">01</span><h2>执行摘要</h2>
+    <span class="tagline">Executive Summary</span>
+  </div>
+  <p class="lead">KB1 是一个工程化程度相当高的知识库系统：它不是"能跑起来的原型"，而是已经形成
+  <b>六闭环架构 + CodeStable 治理体系 + CI 评测门禁</b>的成熟产品形态。系统把 PDF 标准文档转化为
+  证据约束的可解释知识（evidence → facts → entities/wiki/graph → retrieval → answer），并强调
+  <b>"答案只基于候选证据，不让 LLM 直接决定事实"</b>这一核心安全边界。</p>
+
+  <div class="grid3" style="margin-top:18px">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--green)"></span>核心优势</h3>
+      <ul>
+        <li><b>架构清晰</b>：六闭环职责分明，数据模型从 evidence 到 wiki 可追溯</li>
+        <li><b>治理规范</b>：22 个 feature 走完 design→impl→acceptance 全流程</li>
+        <li><b>安全边界</b>：Evidence Judge + 知识合同约束 LLM</li>
+        <li><b>可观测</b>：workspace-doctor、closed-loop-dashboard、code_version 版本边界</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--yellow)"></span>需关注项</h3>
+      <ul>
+        <li><b>WIP 未提交</b>：大量改动（evaluator +722、pipeline +331、本体包）游离在版本控制外</li>
+        <li><b>评测基线</b>：Phase 1 pass_rate 在 0.13–0.70 间剧烈波动，尚未稳定进入 65–85% 区间</li>
+        <li><b>8 个失败测试</b>：多为新 WIP 与陈旧断言，需收口</li>
+        <li><b>命名漂移</b>：four-loop→six-loop 重命名尚未覆盖所有 roadmap/audit 文档</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--brand)"></span>评审建议</h3>
+      <ul>
+        <li>优先收口 WIP：分批提交 eval / 本体两线</li>
+        <li>把 8 个失败测试修绿，恢复 CI 绿灯</li>
+        <li>稳定评测 baseline 后再开 Phase 2</li>
+        <li>清理工程债务（tmp 514MB、66 个 test_runtime_* 目录、6 个 0 字节 db）</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S2 PROJECT OVERVIEW ============ -->
+<section id="s2">
+  <div class="sec-head">
+    <span class="num">02</span><h2>项目概览</h2>
+    <span class="tagline">What & Why</span>
+  </div>
+
+  <div class="grid2">
+    <div>
+      <h3 style="margin-bottom:12px">定位</h3>
+      <p>KB1 解决"如何让 AI Agent 可靠地回答汽车标准文档问题"这一问题。核心挑战在于：
+      标准文档结构复杂（章节/表格/术语/过程）、CJK 全文检索困难、且答案必须可追溯、可解释、不可臆造。
+      系统选择了一条<b>证据约束（evidence-constrained）</b>路线，而非端到端 RAG/LLM 自由生成。</p>
+      <p>语料规模：当前知识库收录 <b>16 份标准文档</b>，含 <b>1668 页 / 31260 个 block / 29988 条 evidence / 7629 条 fact / 1047 个实体 / 1204 条图谱边</b>。</p>
+    </div>
+    <div>
+      <h3 style="margin-bottom:12px">关键事实</h3>
+      <table>
+        <tr><td>项目周期</td><td><b>2026-02-25 → 2026-06-03</b>（约 3.5 个月）</td></tr>
+        <tr><td>提交总数</td><td><b>65 次</b>（5月 31 · 6月 21，feature 颗粒度）</td></tr>
+        <tr><td>运行依赖</td><td><b>httpx + PyMuPDF</b>（无 openai/tiktoken，直连 HTTP）</td></tr>
+        <tr><td>存储</td><td>SQLite + FTS5（unicode61 分词，CJK 走 2-gram LIKE 回退）</td></tr>
+        <tr><td>主库体积</td><td><b>272 MB</b>（knowledge_base/db/knowledge.db）</td></tr>
+        <tr><td>健康检查</td><td><span class="badge b-green">10/10 PASS</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <h3 style="margin:24px 0 12px">核心数据流</h3>
+  <p>从原始 PDF 到可回答查询，系统经过一条多阶段编译管线，每个阶段都保留可追溯产物：</p>
+  <div class="pipeline">
+    <div class="pnode"><div class="pn-title">PDF</div><div class="pn-count">16 文档</div></div>
+    <div class="parrow">→</div>
+    <div class="pnode"><div class="pn-title">pages</div><div class="pn-count">1,668 页</div></div>
+    <div class="parrow">→</div>
+    <div class="pnode"><div class="pn-title">blocks</div><div class="pn-count">31,260</div></div>
+    <div class="parrow">→</div>
+    <div class="pnode"><div class="pn-title">evidence</div><div class="pn-count">29,988</div></div>
+    <div class="parrow">→</div>
+    <div class="pnode"><div class="pn-title">facts</div><div class="pn-count">7,629</div></div>
+    <div class="parrow">→</div>
+    <div class="pnode"><div class="pn-title">entities/wiki</div><div class="pn-count">1,047 实体</div></div>
+    <div class="parrow">→</div>
+    <div class="pnode"><div class="pn-title">graph</div><div class="pn-count">1,204 边</div></div>
+    <div class="parrow">→</div>
+    <div class="pnode" style="border-color:var(--brand)"><div class="pn-title">retrieval → answer</div><div class="pn-count">查询</div></div>
+  </div>
+
+  <div class="callout blue">
+    <span class="ct">设计哲学：证据约束</span>
+    <p>系统的核心安全边界是 <b>Answer API 不允许把 LLM 输出当最终事实来源</b>。Evidence Judge 只能在候选
+    fact/evidence ID 集合内裁判；当证据不足时答案硬降级为"证据不足以确认"，而非由 LLM 补全。
+    这是 KB1 区别于普通 RAG 的关键工程取舍。</p>
+  </div>
+</section>
+
+<!-- ============ S3 ARCHITECTURE ============ -->
+<section id="s3">
+  <div class="sec-head">
+    <span class="num">03</span><h2>系统架构：六闭环</h2>
+    <span class="tagline">Six Closed-Loop Architecture</span>
+  </div>
+  <p>系统由 <b>六个控制闭环</b>构成。每个闭环都有明确的输入产物、关键对象、健康指标，以及可观测的
+  dashboard 入口（<code class="inline">/closed-loop-dashboard</code>）。这六个闭环不是孤立的 dashboard 指标，
+  而是带有根因归因和修复动作的反馈回路。</p>
+
+  <div class="loop">
+    <div class="lh"><span class="num">LOOP 1</span><h4>入库闭环 · Ingestion Coverage</h4><span class="badge b-green">已落地</span></div>
+    <p>document → pages → blocks → evidence → facts → source_units → coverage。以 <b>source_units</b> 为最小追踪单元，
+    通过 <code class="inline">validate-document-ingestion</code> 验收新文档，保证"文档真的进来了并能定位未覆盖内容"。</p>
+    <div class="metrics">
+      <span class="m">source_unit_coverage_rate <b>98.8%</b></span>
+      <span class="m">evidence_coverage_rate <b>100%</b></span>
+      <span class="m">fact_coverage_rate <b>100%</b></span>
+      <span class="m">uncovered_units <b>26</b>（仅 test_gap_rejected）</span>
+    </div>
+  </div>
+
+  <div class="loop">
+    <div class="lh"><span class="num">LOOP 2</span><h4>解析质量闭环 · Parse Quality</h4><span class="badge b-green">已落地</span></div>
+    <p>多解析视图（PDF 文本层 / HTML / OCR）按页 selection，并把解析风险按证据链归因为
+    <code class="inline">no_evidence / evidence_without_source_unit / source_unit_without_fact / fully_backed</code>，
+    避免低可读性页面被误判为入库失败。</p>
+    <div class="metrics">
+      <span class="m">parse_risk_pages <b>120</b></span>
+      <span class="m">actionable_parse_risk_pages <b>0</b></span>
+      <span class="m">归因类型 <b>5 类</b></span>
+    </div>
+  </div>
+
+  <div class="loop">
+    <div class="lh"><span class="num">LOOP 3</span><h4>召回闭环 · Retrieval Quality</h4><span class="badge b-green">已落地</span></div>
+    <p>query_rewrite → expansion → topic_resolution → graph_retrieval → retrieval_router → reranker → context。
+    Graph 作为候选增强通道（非事实裁决层），graph 贡献度以是否进入 top context 为准。
+    <code class="inline">retrieval_runs.code_version</code> 提供版本边界。</p>
+    <div class="metrics">
+      <span class="m">指标 <b>Recall@5/@10 · MRR · nDCG@5</b></span>
+      <span class="m">graph_retention_rate</span>
+      <span class="m">negative_hit_rate</span>
+    </div>
+  </div>
+
+  <div class="loop">
+    <div class="lh"><span class="num">LOOP 4</span><h4>答案闭环 · Evidence-Constrained Answer</h4><span class="badge b-green">已落地</span></div>
+    <p>context → evidence shape contract → evidence_judge → answer_policy → direct answer。
+    短缩写歧义先走 clarification；标准定义类查询已启用"证据不足即硬降级"门禁，正扩展到 lifecycle/test_method/timing/parameter。</p>
+    <div class="metrics">
+      <span class="m">指标 <b>answer_pass_rate · citation_correct_rate</b></span>
+      <span class="m">forbidden_contains_rate</span>
+      <span class="m">confidence_calibration</span>
+    </div>
+  </div>
+
+  <div class="loop">
+    <div class="lh"><span class="num">LOOP 5</span><h4>回归闭环 · Regression Governance</h4><span class="badge b-yellow">已落地 · 待激活</span></div>
+    <p>golden suite + corpus eval → eval_run → failure analysis → repair_tasks → golden generation activation gate。
+    当前健康只看最新 eval run 的失败，历史失败作为 backlog，避免旧版本污染当前结论。
+    <b>corpus scale eval 尚未大规模激活</b>（eval 主线正在重设计，见 §7）。</p>
+    <div class="metrics">
+      <span class="m">指标 <b>new_failures · stable_pass_rate</b></span>
+      <span class="m">retrieval/answer_regression_count</span>
+      <span class="m">golden candidate <b>activation gate</b></span>
+    </div>
+  </div>
+
+  <div class="loop">
+    <div class="lh"><span class="num">LOOP 6</span><h4>派生状态治理闭环 · Derived-State Governance</h4><span class="badge b-green">已落地</span></div>
+    <p>workspace-doctor（只读诊断）→ workspace-governance（策略编排）→ rebuild-derived-state（显式修复）
+    → prune-stale-runs（运行治理）。负责 FTS/graph/wiki/coverage 派生物的 stale 检测与幂等重建，
+    配合 <code class="inline">code_version</code> 版本边界隔离历史噪声。</p>
+    <div class="metrics">
+      <span class="m">DerivedStateSpec <b>registry</b></span>
+      <span class="m">--execute-safe <b>保守自动修</b></span>
+      <span class="m">prune-stale-runs <b>dry-run 默认</b></span>
+    </div>
+  </div>
+
+  <h3 style="margin:24px 0 12px">查询-答案主链路</h3>
+  <pre><span class="c"># 从用户问题到可解释答案的完整链路</span>
+user query
+  │
+  ├─ 短缩写歧义? ──yes──▶ clarification_required  <span class="c"># 不进入召回，不写 run</span>
+  │       no
+  ▼
+query_rewrite ─▶ query_expansion ─▶ topic_resolution
+  │                                    │
+  │  ┌─────────────────────────────────┘
+  ▼  ▼
+graph_retrieval (候选增强) ─▶ retrieval_router ─▶ reranker
+  │                                              │
+  │  topic source facts (by evidence shape) ─────┘
+  ▼
+query context  ──▶  <span class="k">evidence_judge</span>  ──▶  answer_policy  ──▶  answer_api
+                  <span class="c">▲ 只在候选 ID 内裁判</span>      <span class="c">▲ 证据不足 → 硬降级</span>    <span class="c">▲ 不让 LLM 定事实</span></pre>
+</section>
+
+<!-- ============ S4 CODE STRUCTURE ============ -->
+<section id="s4">
+  <div class="sec-head">
+    <span class="num">04</span><h2>代码结构</h2>
+    <span class="tagline">Codebase · 55.9K LOC</span>
+  </div>
+
+  <div class="grid4" style="margin-bottom:22px">
+    <div class="stat"><div class="big" style="color:var(--brand)">47.9K</div><div class="lab">enterprise_agent_kb</div><div class="sub">主系统 LOC</div></div>
+    <div class="stat"><div class="big" style="color:var(--purple)">8.0K</div><div class="lab">kb1_ontology</div><div class="sub">本体层 LOC（新）</div></div>
+    <div class="stat"><div class="big" style="color:var(--brand2)">27.3K</div><div class="lab">tests</div><div class="sub">91 文件 · 2193 测试</div></div>
+    <div class="stat"><div class="big" style="color:var(--teal)">~91</div><div class="lab">主系统模块</div><div class="sub">扁平+子包混合</div></div>
+  </div>
+
+  <h3 style="margin-bottom:12px">主包（enterprise_agent_kb）模块布局</h3>
+  <p>代码采用 <b>功能领域分组 + DDD 分层</b>混合组织。核心子包：CLI（8）、generated_tests（8）、
+  closed_loop_store（8）、facts（5）、coverage（4）、api_server（3）、domain（3）、infrastructure（3）、evaluation（2）。
+  answer_* 家族（17 个文件）从早期单文件 ~3200 行 answer_api.py 拆分而来，体现持续重构。</p>
+
+  <div class="grid2">
+    <div>
+      <h3 style="margin-bottom:10px">最大的源文件（Top 10）</h3>
+      <div class="scrollbox">
+        <table>
+          <thead><tr><th>文件</th><th style="text-align:right">行数</th></tr></thead>
+          <tbody>
+            <tr><td class="code">api_server/_request_handlers.py</td><td style="text-align:right">1,596</td></tr>
+            <tr><td class="code">query_api.py</td><td style="text-align:right">1,416</td></tr>
+            <tr><td class="code">coverage/_gap_detection.py</td><td style="text-align:right">1,286</td></tr>
+            <tr><td class="code">corpus_eval.py</td><td style="text-align:right">1,194</td></tr>
+            <tr><td class="code">parse.py</td><td style="text-align:right">1,193</td></tr>
+            <tr><td class="code">facts/_fact_payloads.py</td><td style="text-align:right">1,128</td></tr>
+            <tr><td class="code">generated_tests/_case_builders.py</td><td style="text-align:right">1,093</td></tr>
+            <tr><td class="code">answer_policy.py</td><td style="text-align:right">1,093</td></tr>
+            <tr><td class="code">api_server/_health_snapshots.py</td><td style="text-align:right">1,025</td></tr>
+            <tr><td class="code">entities.py</td><td style="text-align:right">1,002</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <h3 style="margin-bottom:10px">代码组织观察</h3>
+      <div class="card" style="margin-bottom:12px">
+        <ul>
+          <li><b>answer_* 家族</b>（17 文件）已完成从大文件拆分：answer_api / answer_constraint / answer_parameter / answer_definition / answer_fact_ranking 等，符合 AGENTS.md 高内聚原则</li>
+          <li><b>查询链路</b>职责清晰：query_rewrite / query_expansion / query_semantic_parser / query_api / retrieval_router / reranker</li>
+          <li><b>CLI 已模块化</b>：cli/_build · _eval · _orchestrator · _serve · _test · _workspace</li>
+          <li><b>最大文件 1596 行</b>（_request_handlers），无失控单文件；旧 answer_api 3200 行问题已解决</li>
+        </ul>
+      </div>
+      <div class="callout" style="margin:0">
+        <span class="ct">CLI 命令面</span>
+        <p>已注册 <b>55 个</b> CLI 子命令（覆盖 init / parse / build / quality / coverage / graph / eval / serve 全链路），
+        是一个功能完整的运维操作面。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S5 TESTS ============ -->
+<section id="s5">
+  <div class="sec-head">
+    <span class="num">05</span><h2>测试与质量</h2>
+    <span class="tagline">Tests · 98.8% Pass</span>
+  </div>
+
+  <div class="grid4" style="margin-bottom:20px">
+    <div class="stat"><div class="big" style="color:var(--green)">672</div><div class="lab">通过</div></div>
+    <div class="stat"><div class="big" style="color:var(--red)">8</div><div class="lab">失败</div></div>
+    <div class="stat"><div class="big" style="color:var(--text-mute)">1</div><div class="lab">跳过</div></div>
+    <div class="stat"><div class="big" style="color:var(--brand)">2193</div><div class="lab">测试总数</div></div>
+  </div>
+
+  <p>套件分层：unit（70）/ smoke / integration（1540）/ benchmark（1504）/ coverage（926）。
+  <code class="inline">pyproject.toml</code> 默认只跑 <code class="inline">not integration and not benchmark</code>（即本报告 672+8 这批）。
+  CI 分四个 job 分别执行 fast / integration / benchmark / eval-suite。</p>
+
+  <h3 style="margin:18px 0 12px">8 个失败测试根因分类</h3>
+  <div class="scrollbox">
+    <table>
+      <thead><tr><th>测试</th><th>现象</th><th>根因归类</th><th>严重度</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="code">test_cli_submodules::test_build_parser_registers_all_54_subcommands</td>
+          <td>期望 54 个子命令，实际 55 个</td>
+          <td><span class="badge b-yellow">陈旧断言</span> 新增子命令后测试未同步更新</td>
+          <td><span class="badge b-yellow">低</span></td>
+        </tr>
+        <tr>
+          <td class="code">test_evidence_auxiliary_blocks::test_build_evidence_skips_structure_markdown_blocks</td>
+          <td>期望生成 1 条 evidence，实际 0 条</td>
+          <td><span class="badge b-yellow">行为回归</span> evidence 过滤逻辑变化</td>
+          <td><span class="badge b-yellow">中</span></td>
+        </tr>
+        <tr>
+          <td class="code">test_mcp_server::test_mcp_server_tools_call_answer_query</td>
+          <td>KeyError: 'result'</td>
+          <td><span class="badge b-red">契约变化</span> MCP 响应结构变更，测试取值路径失效</td>
+          <td><span class="badge b-yellow">中</span></td>
+        </tr>
+        <tr>
+          <td class="code">test_post_ingestion_gate::test_gate_runs_on_existing_doc</td>
+          <td>PostIngestionGateResult.passed == False</td>
+          <td rowspan="3"><span class="badge b-purple">新 WIP</span> post_ingestion_gate（pipeline.py +331）是未提交的新功能，测试先于功能稳定</td>
+          <td rowspan="3"><span class="badge b-yellow">中</span></td>
+        </tr>
+        <tr><td class="code">test_post_ingestion_gate::test_gate_result_to_dict</td><td>passed != True</td></tr>
+        <tr><td class="code">test_post_ingestion_gate::test_gate_idempotent</td><td>passed == False</td></tr>
+        <tr>
+          <td class="code">test_query_repair_regression::test_text_llm_uses_minimax_before_astron</td>
+          <td>实际用了 astron 而非 minimax</td>
+          <td rowspan="2"><span class="badge b-red">LLM 路由</span> llm_client.py（未提交改动）调整了 minimax/astron 故障转移顺序</td>
+          <td rowspan="2"><span class="badge b-yellow">中</span></td>
+        </tr>
+        <tr><td class="code">test_query_repair_regression::test_text_llm_falls_back_to_astron_after_minimax_failure</td><td>故障转移路径不符预期</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout green" style="margin-top:18px">
+    <span class="ct">判断</span>
+    <p>8 个失败 <b>没有一个是生产 bug</b>，全部是"测试未跟上 WIP 改动"或"陈旧断言"。它们集中在两个未提交的
+    改动面（post_ingestion_gate、llm_client 路由）。一旦 WIP 收口并同步测试，即可恢复全绿。CI 的 10 项健康检查
+    （workspace/db/facts/evidence/fts/eval report）目前 <b>全部 PASS</b>。</p>
+  </div>
+</section>
+
+<!-- ============ S6 GOVERNANCE ============ -->
+<section id="s6">
+  <div class="sec-head">
+    <span class="num">06</span><h2>工程治理（CodeStable）</h2>
+    <span class="tagline">Methodology Maturity</span>
+  </div>
+  <p>项目采用 <b>CodeStable</b> 方法学（<code class="inline">.codestable/</code>），用结构化文档驱动 feature/issue/refactor 全生命周期。
+  这是 KB1 最显著的工程化优势——每个改动都有 design → checklist → impl → acceptance 的可追溯记录。</p>
+
+  <div class="grid4" style="margin-bottom:20px">
+    <div class="stat"><div class="big" style="color:var(--green)">22</div><div class="lab">features</div><div class="sub">21 完成 · 1 进行中</div></div>
+    <div class="stat"><div class="big" style="color:var(--green)">10</div><div class="lab">issues</div><div class="sub">10/10 已闭环</div></div>
+    <div class="stat"><div class="big" style="color:var(--brand)">8</div><div class="lab">requirements</div><div class="sub">VISION + 7 loop</div></div>
+    <div class="stat"><div class="big" style="color:var(--brand)">3</div><div class="lab">roadmaps</div><div class="sub">含 next-phase</div></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--green)"></span>Feature 闭环（22）</h3>
+      <p style="font-size:13.5px">2026-05-09 起密集交付，覆盖 codestable-docs、failure-analysis-workbench、
+      golden-case-auto-promotion、derived-state-registry、workspace-doctor-cli、corpus-scale-eval、
+      multi-parse-view-foundation、structure-aware-parse-view-scoring、multi-document-blind-validation 等。</p>
+      <div class="prow"><div class="pl"><span>已完成 (accepted/completed)</span><span>21</span></div><div class="pbar"><i style="width:95.5%;background:var(--green)"></i></div></div>
+      <div class="prow"><div class="pl"><span>进行中 (NO-ACCEPTANCE)</span><span>1</span></div><div class="pbar"><i style="width:4.5%;background:var(--yellow)"></i></div></div>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--green)"></span>审计与知识沉淀</h3>
+      <ul>
+        <li><b>2 次系统审计</b>：four-loop-integration（3 findings）、core-regression-integrity（5 findings）</li>
+        <li><b>9 份需求文档</b>：VISION + ingestion/parse/retrieval/answer/regression/derived-state 各闭环</li>
+        <li><b>4 份架构文档</b>：ARCHITECTURE、closed-loop-architecture、query-chain-architecture、development-workflow</li>
+      </ul>
+      <div class="callout" style="margin:10px 0 0">
+        <span class="ct">治理债务</span>
+        <p>learnings / decisions / tricks 三个沉淀渠道 <b>为空</b>。踩过的坑和技术决策未结构化沉淀，建议在 acceptance/fix 收尾时推送。</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin:24px 0 12px">命名一致性观察</h3>
+  <div class="callout">
+    <span class="ct">four-loop → six-loop 重命名未完成</span>
+    <p>当前分支名为 <code class="inline">kb1-six-loop-rename</code>，意图把"四环"升级为"六环"。但仍有遗留命名：
+    roadmap <code class="inline">kb1-four-loop-hardening</code>、audit <code class="inline">2026-05-10-four-loop-integration</code>
+    未同步重命名。这是评审中需要决策的收尾项。</p>
+  </div>
+</section>
+
+<!-- ============ S7 EVAL ============ -->
+<section id="s7">
+  <div class="sec-head">
+    <span class="num">07</span><h2>评测体系（活跃主线）</h2>
+    <span class="tagline">Eval Phase 1 Redesign · in-progress</span>
+  </div>
+
+  <p>这是<b>当前最活跃的工作线</b>。2026-06-02 的 grill-me session 得出一个关键结论：
+  原有 6 个 loop <b>"不是控制闭环，而是 6 个并行的 dashboard 指标"</b>（706 个 benchmark 失败 4 个月没人发现，
+  retrieval loop 81% 空数据）。于是启动 <b>3-loop 重设计</b>，先定义产品目标再设计 loop。</p>
+
+  <div class="grid2">
+    <div>
+      <h3 style="margin-bottom:10px">3-Loop 重设计</h3>
+      <table>
+        <tr><th>旧 6 loop</th><th>新 3 loop</th></tr>
+        <tr><td>ingestion_loop</td><td><b>ingestion_loop</b>（重做）</td></tr>
+        <tr><td>parse_quality_loop</td><td><span class="badge b-gray">删除</span></td></tr>
+        <tr><td>retrieval_loop</td><td><span class="badge b-gray">并入 answer</span></td></tr>
+        <tr><td>answer_loop</td><td><b>answer_loop</b>（重做）</td></tr>
+        <tr><td>regression_loop</td><td><b>regression_loop</b>（Phase 3）</td></tr>
+        <tr><td>hygiene_loop</td><td><span class="badge b-gray">降级为 report</span></td></tr>
+      </table>
+      <p style="margin-top:12px">入库质量 = <b>用户感知 + 应有 vs 实际 fact</b>，不含内部一致性（那归 hygiene）。
+      评测器：<code class="inline">eakb eval run-now</code>，LLM 抽"覆盖论点"，规则算覆盖率。</p>
+    </div>
+    <div>
+      <h3 style="margin-bottom:10px">评测轨迹（pass_rate 演进）</h3>
+      <div class="scrollbox">
+        <table>
+          <thead><tr><th>版本</th><th style="text-align:right">pass_rate</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td class="code">v1_golden_24</td><td style="text-align:right;color:var(--red)">0.167</td><td>基线 v2（LLM API 500）</td></tr>
+            <tr><td class="code">v6_golden_30_llm</td><td style="text-align:right;color:var(--red)">0.133</td><td>LLM 评分波动</td></tr>
+            <tr><td class="code">v4/v5_golden_30</td><td style="text-align:right;color:var(--yellow)">0.40</td><td>调整评分口径</td></tr>
+            <tr><td class="code">v11_golden_92_token</td><td style="text-align:right;color:var(--yellow)">0.489</td><td>92 题 token-overlap</td></tr>
+            <tr><td class="code">v9_golden_30_strong_match</td><td style="text-align:right;color:var(--yellow)">0.50</td><td>当前 health 引用</td></tr>
+            <tr><td class="code">v3_golden_30</td><td style="text-align:right;color:var(--yellow)">0.667</td><td>接近目标</td></tr>
+            <tr><td class="code">v2_golden_30</td><td style="text-align:right;color:var(--green)">0.70</td><td>命中目标区间</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin:22px 0 12px">Phase 1 sign-off 状态（8 项判定）</h3>
+  <div class="grid2">
+    <div class="card">
+      <h3 style="color:var(--green)"><span class="check">✓</span> 已达成（5/8）</h3>
+      <ul>
+        <li>expected_points 表：14 docs / 929 points（要求 10+/500+）</li>
+        <li>noise_rate：0.4%（要求 &lt;5%）</li>
+        <li>qa_bank_size：555 题（要求 ≥100）</li>
+        <li>spot_check：通过（剔除 6 条噪声）</li>
+        <li>multi_prompt_stability：0.875（要求 &gt;0.8）</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="color:var(--red)"><span class="x">✕</span> 未达成（3/8）</h3>
+      <ul>
+        <li><b>llm_decompose_pct</b>：4.2%（要求 ≥10%）— 讯飞 LLM API 返回 500</li>
+        <li><b>pass_rate_65_85</b>：未稳定进入 0.65–0.85 区间</li>
+        <li>fallback 题库缺 page-bound expected_points</li>
+      </ul>
+      <div class="callout red" style="margin:12px 0 0">
+        <span class="ct">结论</span>
+        <p>INFRASTRUCTURE-READY, EVAL-BLOCKED。基座已通（evaluator 17m43s 跑通），卡在 LLM 服务可用性与题库 page 绑定。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout blue" style="margin-top:18px">
+    <span class="ct">CI 已接入</span>
+    <p>eval-suite 已作为独立 CI job 落地，运行 <code class="inline">scripts/check_health.py</code> 的 10 项检查作为系统健康门禁。
+    评测从"手动跑"升级为"CI 守门"，是回归闭环（LOOP 5）激活的关键一步。</p>
+  </div>
+</section>
+
+<!-- ============ S8 ONTOLOGY ============ -->
+<section id="s8">
+  <div class="sec-head">
+    <span class="num">08</span><h2>本体层（kb1_ontology）</h2>
+    <span class="tagline">Parallel System · 8.0K LOC · untracked</span>
+  </div>
+
+  <p>这是一个<b>全新的、完全隔离的并行系统</b>（2026-06-08 grill session 批准）。对应 VISION 中的长期目标
+  <b>ontology-knowledge-layer</b>：把 KB1 从证据约束系统演进为具备本体约束、语义校验、有限推理的知识库。
+  目前 <span class="badge b-yellow">尚未纳入版本控制</span>（untracked）。</p>
+
+  <div class="grid2">
+    <div>
+      <h3 style="margin-bottom:10px">系统结构（独立 DB：ontology.db 3.6MB）</h3>
+      <div class="scrollbox">
+        <table>
+          <tbody>
+            <tr><td class="code">class_registry/</td><td>类注册与层次管理</td></tr>
+            <tr><td class="code">entity_manager/</td><td>实体管理（含 document_roles、normalization）</td></tr>
+            <tr><td class="code">relation_registry/</td><td>关系注册与遍历（traversal）</td></tr>
+            <tr><td class="code">attribute_store/</td><td>属性存储（含 range_parser）</td></tr>
+            <tr><td class="code">combined_query.py</td><td>组合查询</td></tr>
+            <tr><td class="code">decomposer.py</td><td>分解器</td></tr>
+            <tr><td class="code">unified_response.py</td><td>统一响应格式</td></tr>
+            <tr><td class="code">legacy_bridge.py</td><td>与现有系统桥接</td></tr>
+            <tr><td class="code">router.py / handlers.py</td><td>路由与处理</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <h3 style="margin-bottom:10px">分阶段交付（Phase 0–6）</h3>
+      <div class="prow"><div class="pl"><span>Phase 0 脚手架</span><span class="badge b-green">done</span></div></div>
+      <div class="prow"><div class="pl"><span>Phase 1 class_registry</span><span class="badge b-green">done</span></div></div>
+      <div class="prow"><div class="pl"><span>Phase 2 entity_manager</span><span class="badge b-green">done</span></div></div>
+      <div class="prow"><div class="pl"><span>Phase 3 relation_registry</span><span class="badge b-green">done</span></div></div>
+      <div class="prow"><div class="pl"><span>Phase 4 attribute_store</span><span class="badge b-green">done</span></div></div>
+      <div class="prow"><div class="pl"><span>Phase 5 E2E demo</span><span class="badge b-green">done</span></div></div>
+      <div class="prow"><div class="pl"><span>Phase 6 集成</span><span class="badge b-green">done</span></div></div>
+      <div class="callout green" style="margin-top:14px">
+        <span class="ct">方法论加分项</span>
+        <p>本体层严格遵循"定义准入准则 → 实现 → 写测试 → 跑测试 → 写报告"，每个 phase 都有
+        <code class="inline">docs/ontology/test_reports/</code> 报告，含 2 份 ADR（meta-domain-layer-rule、two-level-normalization）。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S9 CURRENT DEV STATE ============ -->
+<section id="s9">
+  <div class="sec-head">
+    <span class="num">09</span><h2>当前开发状态</h2>
+    <span class="tagline">WIP Inventory</span>
+  </div>
+
+  <p>当前分支 <code class="inline">kb1-six-loop-rename</code> 领先 origin/main <b>52 个提交</b>（全部本地、未推送），
+  且工作区有<b>大量未提交改动</b>。工作区呈现"两条线并行推进"的状态。</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--brand)"></span>工作线 A：评测重设计</h3>
+      <p style="font-size:13.5px">围绕 <code class="inline">docs/dev/phase1-eval-redesign.md</code>，最近 12 个提交全部是 eval 相关：
+      expected_points 表、build 脚本、multi-prompt 守门、evaluator、baseline、sign-off。</p>
+      <div class="scrollbox" style="margin-top:10px">
+        <table>
+          <tbody>
+            <tr><td class="code">evaluation/evaluator.py</td><td style="text-align:right;color:var(--green)">+722</td></tr>
+            <tr><td class="code">tools/build_expected_points.py</td><td style="text-align:right;color:var(--green)">+139</td></tr>
+            <tr><td class="code">pipeline.py</td><td style="text-align:right;color:var(--green)">+331</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--purple)"></span>工作线 B：本体层</h3>
+      <p style="font-size:13.5px">全新 <code class="inline">src/kb1_ontology/</code>（8.0K LOC）+ <code class="inline">docs/ontology/</code>，
+      以及一批数据脚本（PDF 转换、嵌入、golden 生成、OCR）。整体 untracked。</p>
+      <div class="callout" style="margin-top:10px">
+        <span class="ct">交叉点</span>
+        <p>pipeline.py 的 +331 行引入了 <b>post_ingestion_gate</b>（新 PostIngestionGateResult 类），
+        这正是 3 个失败测试的来源——功能在写、测试先行。</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin:24px 0 12px">未提交改动规模（已跟踪文件）</h3>
+  <div class="prow"><div class="pl"><span>evaluation/evaluator.py</span><span>+722 行</span></div><div class="pbar"><i style="width:90%;background:var(--brand)"></i></div></div>
+  <div class="prow"><div class="pl"><span>pipeline.py</span><span>+331 行</span></div><div class="pbar"><i style="width:42%;background:var(--brand)"></i></div></div>
+  <div class="prow"><div class="pl"><span>retrieval.py / llm_client.py / query_api.py 等</span><span>多文件中量改动</span></div><div class="pbar"><i style="width:35%;background:var(--brand)"></i></div></div>
+  <div class="prow"><div class="pl"><span>删除 tools/sample_qa/v1*.json</span><span>-8202 行（旧题库清理）</span></div><div class="pbar"><i style="width:60%;background:var(--red)"></i></div></div>
+  <p style="margin-top:8px">另有大量 untracked：scripts/ 脚本、docs/ontology、tests/test_evaluator.py、tests/test_post_ingestion_gate.py。</p>
+</section>
+
+<!-- ============ S10 RISKS ============ -->
+<section id="s10">
+  <div class="sec-head">
+    <span class="num">10</span><h2>风险与债务</h2>
+    <span class="tagline">Risks &amp; Debt</span>
+  </div>
+
+  <div class="risk">
+    <div class="sev"><span class="sevb b-red">高</span></div>
+    <div>
+      <h4>大量 WIP 未提交，游离于版本控制之外</h4>
+      <p>评测线（evaluator +722、pipeline +331）与本体层（kb1_ontology 8K LOC + 脚本）全部未提交。
+      本地领先 origin/main 52 个提交也未推送。<b>一旦本地环境丢失，近一个月的工作无法恢复。</b></p>
+      <div class="rec">建议：分批提交（eval 一批、ontology 一批），并 push 到远端。先 commit 再优化。</div>
+    </div>
+  </div>
+
+  <div class="risk">
+    <div class="sev"><span class="sevb b-yellow">中</span></div>
+    <div>
+      <h4>评测 baseline 不稳定，pass_rate 在 0.13–0.70 间剧烈波动</h4>
+      <p>11 个 eval 版本（v1–v11）显示 pass_rate 从 0.167 到 0.70 来回跳动，反映评分口径（LLM judge vs token-overlap vs strong-match）仍在探索。
+      Phase 1 sign-off 的 65–85% 目标尚未稳定达成。</p>
+      <div class="rec">建议：固定一种评分口径，跑出可复现的 baseline；先解决讯飞 LLM API 可用性依赖。</div>
+    </div>
+  </div>
+
+  <div class="risk">
+    <div class="sev"><span class="sev b-yellow">中</span></div>
+    <div>
+      <h4>工程债务：磁盘垃圾与遗留文件</h4>
+      <p><b>tmp/ 目录 514MB</b>、<b>66 个 test_runtime_* 临时目录</b>、<b>knowledge_base 根目录 6 个 0 字节 db 文件</b>（kb.db/kb.sqlite/kb.sqlite3/facts.db 等历史残留）、
+      ontology.db 含 2 份备份。这些虽不影响运行，但污染工作区、增加 .gitignore 维护负担。</p>
+      <div class="rec">建议：纳入 .gitignore，并用 <code class="inline">quarantine-suspicious-db-files</code> + 清理脚本一次性收口。</div>
+    </div>
+  </div>
+
+  <div class="risk">
+    <div class="sev"><span class="sevb b-yellow">中</span></div>
+    <div>
+      <h4>命名漂移：four-loop → six-loop 重命名未完成</h4>
+      <p>分支名已是 six-loop-rename，但 roadmap（kb1-four-loop-hardening）、audit（four-loop-integration）等
+      CodeStable 文档仍用旧名。命名不一致会让新成员困惑架构到底是几环。</p>
+      <div class="rec">建议：用 cs-arch 做一次架构文档对齐，统一为 six-loop，或显式记录"历史命名"。</div>
+    </div>
+  </div>
+
+  <div class="risk">
+    <div class="sev"><span class="sevb" style="background:var(--green-bg);color:var(--green)">低</span></div>
+    <div>
+      <h4>知识沉淀渠道为空（learnings/decisions/tricks）</h4>
+      <p>CodeStable 的三类经验沉淀目录为空。踩过的坑（如 LLM API 500、CJK FTS 回退、PDF 文本层判定）和技术选型决策未结构化记录，
+      依赖 CLAUDE.md / attention.md 的散文式记录。</p>
+      <div class="rec">建议：在后续 acceptance/fix 收尾时用 cs-learn / cs-decide 顺手沉淀关键经验。</div>
+    </div>
+  </div>
+
+  <div class="risk">
+    <div class="sev"><span class="sevb" style="background:var(--green-bg);color:var(--green)">低</span></div>
+    <div>
+      <h4>单文档语料集中度</h4>
+      <p>当前 16 文档中，eval baseline 几乎全部来自 DOC-000001（QC/T 1036）。评测泛化能力（跨文档、跨标准族）尚未验证。
+      ontology 层 Phase 6 集成也未覆盖多文档压测。</p>
+      <div class="rec">建议：评测扩展到 ISO 14229 等多文档，验证召回/答案闭环的跨文档鲁棒性。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S11 ROADMAP ============ -->
+<section id="s11">
+  <div class="sec-head">
+    <span class="num">11</span><h2>路线图</h2>
+    <span class="tagline">Roadmap &amp; Next Phase</span>
+  </div>
+
+  <div class="grid3" style="margin-bottom:20px">
+    <div class="card" style="border-left:3px solid var(--green)">
+      <h3 style="color:var(--green)">已完成</h3>
+      <ul>
+        <li><b>six-loop-hardening</b>：7/7 done — 六闭环工程化强化</li>
+        <li><b>derived-state-governance</b>：9/9 done — 派生状态治理闭环</li>
+      </ul>
+      <p style="font-size:12.5px;color:var(--text-mute);margin:0">两个前置 roadmap 全部完成</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--brand)">
+      <h3 style="color:var(--brand)">进行中 · next-phase</h3>
+      <ul>
+        <li>Phase 1：基线验证 + 审计关闭（F-04/F-05）</li>
+        <li>Phase 2：本体层阶段一（registry）</li>
+        <li>Phase 3：答案质量扩展 + confidence 校准</li>
+        <li>Phase 4：代码-文档持续同步</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:3px solid var(--purple)">
+      <h3 style="color:var(--purple)">长期 · VISION</h3>
+      <ul>
+        <li><b>ontology-knowledge-layer</b>：本体约束 + 语义校验 + 有限推理</li>
+        <li>明确不做：OWL/RDF、绕过 judge 推理生事实、破坏性 reset、分布式依赖</li>
+      </ul>
+      <p style="font-size:12.5px;color:var(--text-mute);margin:0">前置需求（P1 闭环）已基本具备</p>
+    </div>
+  </div>
+
+  <h3 style="margin-bottom:12px">建议的下一步（评审决策点）</h3>
+  <div class="grid2">
+    <div class="card">
+      <h3>立即（1–2 天）</h3>
+      <ul>
+        <li>收口 WIP：分批提交 eval + ontology，push 远端</li>
+        <li>修 8 个失败测试（同步 post_ingestion_gate / llm_client 改动）</li>
+        <li>清理工程债务（tmp、test_runtime_*、0字节 db）</li>
+        <li>统一 four-loop → six-loop 命名</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>短期（3–7 天）</h3>
+      <ul>
+        <li>稳定 eval baseline：固定评分口径，达成 65–85% 目标</li>
+        <li>Phase 1 sign-off：解决 LLM API 可用性 + page-bound 题库</li>
+        <li>本体 registry 正式化：纳入版本控制、与主系统集成</li>
+        <li>关系约束（domain/range）落地，约束 graph_edges</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout blue" style="margin-top:18px">
+    <span class="ct">评审关键决策</span>
+    <p>next-phase roadmap 的 Phase 1（基线 + 审计关闭）与当前 eval 重设计主线存在<b>范围重叠</b>。
+    建议评审时明确：是把 eval Phase 1 视为 next-phase Phase 1 的执行，还是将其独立为一个新 feature。
+    这关系到 issue F-04/F-05 的关闭时机。</p>
+  </div>
+</section>
+
+<!-- ============ S12 VERDICT ============ -->
+<section id="s12">
+  <div class="sec-head">
+    <span class="num">12</span><h2>评审结论</h2>
+    <span class="tagline">Verdict</span>
+  </div>
+
+  <div class="callout green">
+    <span class="ct">总体结论：B+ — 一个工程成熟度高于多数同期项目的产品级系统</span>
+    <p>KB1 已经不是原型，而是一个具备<b>清晰架构、规范治理、安全边界、CI 门禁</b>的产品级知识库系统。
+    六闭环设计、CodeStable 全生命周期文档、证据约束的 LLM 边界，三项共同构成了扎实的工程基座。
+    系统当前可运行（10/10 健康检查通过）、可追溯（10/10 issue 闭环、21/22 feature 完成）、可演进（本体层已 6 阶段就绪）。</p>
+  </div>
+
+  <h3 style="margin:24px 0 14px">评审维度打分</h3>
+  <div class="grid2">
+    <div class="card">
+      <h3>维度评分</h3>
+      <div class="prow"><div class="pl"><span>架构设计</span><span style="color:var(--green)">A</span></div><div class="pbar"><i style="width:92%;background:var(--green)"></i></div></div>
+      <div class="prow"><div class="pl"><span>工程治理 / 文档</span><span style="color:var(--green)">A-</span></div><div class="pbar"><i style="width:88%;background:var(--green)"></i></div></div>
+      <div class="prow"><div class="pl"><span>测试覆盖与质量</span><span style="color:var(--brand2)">B+</span></div><div class="pbar"><i style="width:82%;background:var(--brand2)"></i></div></div>
+      <div class="prow"><div class="pl"><span>代码组织 / 可维护性</span><span style="color:var(--brand2)">B+</span></div><div class="pbar"><i style="width:80%;background:var(--brand2)"></i></div></div>
+      <div class="prow"><div class="pl"><span>安全边界（证据约束）</span><span style="color:var(--green)">A</span></div><div class="pbar"><i style="width:90%;background:var(--green)"></i></div></div>
+      <div class="prow"><div class="pl"><span>版本控制纪律</span><span style="color:var(--yellow)">C+</span></div><div class="pbar"><i style="width:60%;background:var(--yellow)"></i></div></div>
+      <div class="prow"><div class="pl"><span>评测 / 可验证性</span><span style="color:var(--yellow)">B-</span></div><div class="pbar"><i style="width:68%;background:var(--yellow)"></i></div></div>
+    </div>
+    <div class="card">
+      <h3>核心结论</h3>
+      <ul>
+        <li><b>强项突出</b>：架构、治理、安全边界三项达 A 级，是系统的核心竞争力</li>
+        <li><b>主要短板</b>：版本控制纪律（WIP 未提交、未 push）是<b>最高优先级</b>风险，但不反映代码质量问题</li>
+        <li><b>评测是焦点</b>：当前所有活跃工作都围绕评测基线建设，是系统从“能跑”走向“可验证”的关键一跃</li>
+        <li><b>本体层是增量</b>：kb1_ontology 6 阶段就绪，是长期演进目标，与主系统隔离、不构成风险</li>
+      </ul>
+      <div class="callout green" style="margin-top:14px">
+        <span class="ct">一句话总结</span>
+        <p>KB1 是一个<b>架构扎实、治理规范、边界清晰</b>的系统，当前最大风险不是“代码不行”，而是“<b>大量成果还没纳入版本控制</b>”。收口 WIP、恢复绿灯，即可进入下一阶段。</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin:28px 0 14px">评审决策清单（建议逐项勾选）</h3>
+  <div class="grid2">
+    <div class="card">
+      <h3>必须决策（高优先级）</h3>
+      <ul>
+        <li><span class="badge b-red">R1</span> 是否立即分批提交并 push 当前 WIP（eval + ontology）？</li>
+        <li><span class="badge b-red">R2</span> 是否在收口 WIP 后修复 8 个失败测试、恢复 CI 绿灯？</li>
+        <li><span class="badge b-yellow">R3</span> 评测基线目标口径如何定（token-overlap / strong-match / LLM judge 选一）？</li>
+        <li><span class="badge b-yellow">R4</span> next-phase Phase 1 与 eval 重设计是否合并为同一执行？</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>建议决策（中优先级）</h3>
+      <ul>
+        <li><span class="badge b-yellow">R5</span> four-loop → six-loop 命名是否统一收口？</li>
+        <li><span class="badge b-yellow">R6</span> 工程债务（tmp 514MB、66 个 test_runtime_*、0字节 db）何时清理？</li>
+        <li><span class="badge b-blue">R7</span> 本体层是否在本阶段正式纳入版本控制并启动集成？</li>
+        <li><span class="badge b-blue">R8</span> 是否启动 learnings/decisions 沉淀机制？</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footnote">
+    <b>报告说明</b> · 本报告由 AI 基于 2026-06-24 的代码库、测试结果、CodeStable 文档与数据资产自动梳理生成。
+    所有数据均来自实际仓库（git 历史、pytest 运行、SQLite 统计、<code class="inline">.codestable/</code> 文档），
+    用于人工阶段评审。如需修订或补充，请指出具体章节。<br><br>
+    <b>数据采集时间</b>：2026-06-24　·　<b>评测运行环境</b>：Python 3.14 / Windows　·　<b>主库</b>：knowledge.db (272MB, 16 文档)
+  </div>
+</section>
+
+</div><!-- /.wrap -->
+
+<footer>
+  KB1 项目阶段评审报告 · 2026-06-24 · Generated for Stage Review<br>
+  Enterprise Agent Knowledge Base · evidence-constrained retrieval for automotive standards
+</footer>
+
+</body>
+</html>

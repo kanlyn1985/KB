@@ -45,6 +45,72 @@ def _should_skip_block(page_status: str, text: str) -> bool:
     return page_status == "blocked"
 
 
+# Minimum meaningful content length (chars)
+_MIN_EVIDENCE_LEN = 20
+
+# Academic / publication header patterns (case-insensitive)
+_ACADEMIC_NOISE_PATTERNS = (
+    "doi:", "doi :", "DOI:",
+    "http://", "https://", "www.",
+    "@",  # email
+    "copyright ©", "© ",
+    "published online", "received ", "revised ", "accepted ",
+    "issn", "isbn",
+    "smart grid",  # journal name (lowercase check)
+    "comprehensive energy systems",
+    "vol. ", "vol.1", "vol 1", "vol. 1", "(eds)",
+    # ISO/IEC standard copyright headers
+    "all rights reserved",  # "© ISO 2015 - All rights reserved"
+    "© iso", "© iec",  # "© ISO 2015", "© IEC 2017"
+    "iso 201", "iec 201",  # "© ISO 2015", "© IEC 2017" (year prefix)
+    "price based on",  # "Price based on xx pages"
+    "reference number",  # "Reference number ISO 14229-7:2015(E)"
+    "international standard",  # "INTERNATIONAL STANDARD"
+)
+
+
+def _is_academic_header_noise(text: str) -> bool:
+    """Detect academic-paper / publication-header noise that should not be
+    indexed as content evidence.
+
+    These are typically the running header, copyright, journal name, DOI,
+    author emails etc. that appear on the first 1-2 pages of a paper.
+    """
+    lowered = text.lower()
+    # Pure header/journal-info line: matches a pattern AND is short (< 300 chars)
+    if len(text) > 300:
+        return False
+    for pattern in _ACADEMIC_NOISE_PATTERNS:
+        if pattern in lowered:
+            # Make sure the text isn't also carrying real content
+            # (real content would have many Chinese chars or be longer)
+            cn_chars = sum(1 for c in text if "一" <= c <= "鿿")
+            if cn_chars < 10 and len(text) < 200:
+                return True
+    return False
+
+
+def _is_noise_block(text: str) -> bool:
+    """Decide if a text block is noise (academic header, page number, etc.).
+
+    Returns True if the block should be skipped during evidence extraction.
+    """
+    if not text or len(text) < _MIN_EVIDENCE_LEN:
+        return True
+    # Pure-punctuation / whitespace blocks
+    stripped = text.strip()
+    if not stripped:
+        return True
+    # Too few Chinese characters and too short = noise
+    cn_chars = sum(1 for c in text if "一" <= c <= "鿿")
+    if len(text) < 30 and cn_chars < 5:
+        return True
+    # Academic header / DOI / journal info
+    if _is_academic_header_noise(text):
+        return True
+    return False
+
+
 def build_evidence_for_document(workspace_root: Path, doc_id: str) -> EvidenceBuildResult:
     paths = AppPaths.from_root(workspace_root)
     connection = connect(paths.db_file)
@@ -77,11 +143,27 @@ def build_evidence_for_document(workspace_root: Path, doc_id: str) -> EvidenceBu
         skipped_block_count = 0
 
         for row in rows:
-            if str(row["block_type"]) == "structure_markdown":
-                skipped_block_count += 1
-                continue
+            block_type = str(row["block_type"])
+            # Previously all structure_markdown blocks were skipped, but
+            # they often contain useful content (Foreword, Introduction,
+            # Scope, full-text of standard clauses).  Now we keep them
+            # unless they look like pure metadata (image-only, copyright).
+            if block_type == "structure_markdown":
+                text_check = (row["text_content"] or "").strip()
+                # Skip pure-image or pure-copyright blocks
+                lowered = text_check.lower()
+                if (not text_check
+                    or "<img " in lowered
+                    or "copyright protected" in lowered
+                    or "all rights reserved" in lowered):
+                    skipped_block_count += 1
+                    continue
             text = (row["text_content"] or "").strip()
             if _should_skip_block(str(row["page_status"]), text):
+                skipped_block_count += 1
+                continue
+            # Skip noise blocks (academic headers, short/empty, etc.)
+            if _is_noise_block(text):
                 skipped_block_count += 1
                 continue
 

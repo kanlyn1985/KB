@@ -47,6 +47,39 @@ SYNONYM_MAP: dict[str, list[str]] = {
         "control pilot",
         "检测点",
     ],
+    "V2L": [
+        "Vehicle-to-Load",
+        "电动汽车对负荷供电",
+        "对外放电",
+        "放电模式",
+    ],
+    "V2V": [
+        "Vehicle-to-Vehicle",
+        "电动汽车之间充放电",
+        "车对车放电",
+        "放电模式",
+    ],
+    "V2G": [
+        "Vehicle-to-Grid",
+        "电动汽车与电网充放电双向互动",
+        "车网互动",
+        "并网放电",
+    ],
+    "放电设备": [
+        "discharging equipment",
+        "充放电设备",
+        "charging and discharging equipment",
+    ],
+    "充放电设备": [
+        "charging and discharging equipment",
+        "放电设备",
+        "discharging equipment",
+    ],
+    "对外放电": [
+        "V2L",
+        "Vehicle-to-Load",
+        "电动汽车对负荷供电",
+    ],
 }
 
 

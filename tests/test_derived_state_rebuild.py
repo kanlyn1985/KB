@@ -289,7 +289,10 @@ def test_rebuild_full_wiki_removes_stale_rows_for_document(tmp_path: Path) -> No
     try:
         page_ids = _ids(connection, "wiki_pages", "page_id")
         assert "WPAGE-STALE" not in page_ids
-        assert "WPAGE-000101" in page_ids
+        # Phase B: wiki_compiler no longer renders new wiki_pages; only
+        # cleans up stale/deprecated rows. Verify the page is gone and no
+        # replacement was created.
+        assert "WPAGE-000101" not in page_ids
     finally:
         connection.close()
 

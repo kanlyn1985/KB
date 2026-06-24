@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KB1 下一阶段开发执行指导书 · Sprint 1 稳定化与恢复绿灯</title>
+<style>
+:root{
+  --bg:#0f1419; --surface:#161b22; --surface2:#1c2330; --surface3:#222b3a; --border:#2d333b;
+  --text:#e6edf3; --dim:#a8b3c2; --mute:#76808d;
+  --blue:#4f9cf9; --green:#3fb950; --yellow:#d29922; --red:#f85149; --purple:#bc8cff; --teal:#39d0d8;
+  --blue-bg:rgba(79,156,249,.12); --green-bg:rgba(63,185,80,.12); --yellow-bg:rgba(210,153,34,.13); --red-bg:rgba(248,81,73,.13); --purple-bg:rgba(188,140,255,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.72}
+a{color:var(--blue);text-decoration:none}
+p{color:var(--dim);margin:0 0 12px}
+b,strong{color:var(--text)}
+code{font-family:"Cascadia Code",Consolas,monospace;background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:1px 6px;color:#9ef0a8;font-size:12.5px}
+pre{font-family:"Cascadia Code",Consolas,monospace;background:#0a0e14;border:1px solid var(--border);border-radius:12px;padding:16px 18px;overflow:auto;font-size:13px;line-height:1.62;color:#d7e0ea;margin:12px 0 16px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px 90px}
+.hero{position:relative;overflow:hidden;padding:58px 28px 44px;background:linear-gradient(135deg,#0d2030 0%,#17263d 48%,#141626 100%);border-bottom:1px solid var(--border)}
+.hero:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 82% 18%,rgba(79,156,249,.16),transparent 38%),radial-gradient(circle at 18% 92%,rgba(63,185,80,.10),transparent 34%)}
+.hero-inner{position:relative;z-index:1;max-width:1200px;margin:0 auto}
+.eyebrow{color:var(--blue);font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:9px}
+h1{font-size:38px;line-height:1.18;letter-spacing:-.4px;margin-bottom:12px}
+.subtitle{max-width:840px;color:var(--dim);font-size:17px}
+.meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.chip{display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:9px;padding:7px 12px;color:var(--dim);font-size:13px}
+.chip b{font-weight:700}
+.verdict{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:30px}
+.vcard{background:rgba(255,255,255,.045);border:1px solid var(--border);border-radius:14px;padding:18px}
+.vcard .k{font-size:12px;color:var(--mute);letter-spacing:.8px;text-transform:uppercase}
+.vcard .v{font-size:29px;font-weight:800;line-height:1.1;margin:7px 0 6px}
+.vcard .n{font-size:12px;color:var(--dim)}
+nav{position:sticky;top:0;z-index:20;background:rgba(15,20,25,.93);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+nav .nav-inner{max-width:1200px;margin:0 auto;padding:9px 28px;display:flex;gap:5px;overflow-x:auto}
+nav a{white-space:nowrap;color:var(--dim);font-size:13px;border-radius:8px;padding:7px 11px}
+nav a:hover{background:var(--surface2);color:var(--text)}
+section{margin-top:44px;scroll-margin-top:64px}
+.sec-head{display:flex;align-items:baseline;gap:12px;border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:20px}
+.sec-head .num{color:var(--blue);background:var(--blue-bg);border:1px solid rgba(79,156,249,.35);border-radius:6px;padding:3px 9px;font-weight:800;font-size:12px}
+h2{font-size:24px;letter-spacing:-.2px}
+.tagline{margin-left:auto;color:var(--mute);font-size:13px}
+h3{font-size:17px;margin:0 0 10px;color:var(--text)}
+h4{font-size:15px;margin:0 0 6px;color:var(--text)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:19px 20px}
+.card.accent-blue{border-left:4px solid var(--blue)}
+.card.accent-green{border-left:4px solid var(--green)}
+.card.accent-yellow{border-left:4px solid var(--yellow)}
+.card.accent-red{border-left:4px solid var(--red)}
+.card.accent-purple{border-left:4px solid var(--purple)}
+ul,ol{margin:8px 0 0 20px;color:var(--dim)}
+li{margin:5px 0;padding-left:2px}
+table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:13.5px;overflow:hidden;border-radius:10px}
+th,td{border-bottom:1px solid var(--border);text-align:left;padding:10px 12px;vertical-align:top}
+th{background:var(--surface2);color:var(--mute);font-size:12px;letter-spacing:.5px;text-transform:uppercase;font-weight:700}
+td{color:var(--dim)}
+td:first-child{color:var(--text)}
+.badge{display:inline-block;border-radius:999px;padding:2px 9px;font-size:11.5px;font-weight:700;letter-spacing:.2px;white-space:nowrap}
+.b-red{background:var(--red-bg);color:var(--red);border:1px solid rgba(248,81,73,.32)}
+.b-yellow{background:var(--yellow-bg);color:var(--yellow);border:1px solid rgba(210,153,34,.32)}
+.b-green{background:var(--green-bg);color:var(--green);border:1px solid rgba(63,185,80,.32)}
+.b-blue{background:var(--blue-bg);color:var(--blue);border:1px solid rgba(79,156,249,.32)}
+.b-purple{background:var(--purple-bg);color:var(--purple);border:1px solid rgba(188,140,255,.32)}
+.callout{border-left:4px solid var(--blue);background:var(--blue-bg);border-radius:0 12px 12px 0;padding:15px 18px;margin:16px 0}
+.callout.yellow{border-color:var(--yellow);background:var(--yellow-bg)}
+.callout.red{border-color:var(--red);background:var(--red-bg)}
+.callout.green{border-color:var(--green);background:var(--green-bg)}
+.callout.purple{border-color:var(--purple);background:var(--purple-bg)}
+.callout .title{display:block;color:var(--text);font-weight:800;margin-bottom:5px}
+.timeline{counter-reset:step}
+.step{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:18px 18px 16px 60px;margin-bottom:13px}
+.step:before{counter-increment:step;content:counter(step);position:absolute;left:18px;top:18px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--blue-bg);color:var(--blue);border:1px solid rgba(79,156,249,.35);font-weight:800}
+.checklist li{list-style:none;position:relative;margin:7px 0;color:var(--dim)}
+.checklist li:before{content:"□";position:absolute;left:-22px;color:var(--blue);font-weight:800}
+.kbd{font-family:"Cascadia Code",Consolas,monospace;color:#d7e0ea;background:#0a0e14;border:1px solid var(--border);border-radius:8px;padding:2px 7px;font-size:12px}
+hr{border:0;border-top:1px solid var(--border);margin:24px 0}
+.footer{margin-top:55px;padding-top:18px;border-top:1px solid var(--border);font-size:12px;color:var(--mute)}
+@media(max-width:900px){.grid2,.grid3,.grid4,.verdict{grid-template-columns:1fr}.tagline{display:none}h1{font-size:30px}.wrap{padding-left:18px;padding-right:18px}.hero{padding-left:18px;padding-right:18px}nav .nav-inner{padding-left:18px;padding-right:18px}}
+@media print{body{background:white;color:#111}.hero,nav{background:white;color:#111}.card,.step,pre{break-inside:avoid}.wrap{max-width:none}.vcard,.card,.step{border-color:#aaa}.subtitle,p,td,li{color:#333}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Execution Guide · 给其它 AI 的开发执行指令书</div>
+    <h1>KB1 下一阶段开发指导：Sprint 1 稳定化与恢复绿灯</h1>
+    <p class="subtitle">本文件面向接手代码库的执行型 AI / Coding Agent。目标不是继续堆新功能，而是先把 KB1 从“大量 WIP + 评测波动 + 部分测试失败”的状态收口为可继续演进的稳定基线。</p>
+    <div class="meta">
+      <span class="chip">项目 <b>KB1 企业级 Agent 知识库</b></span>
+      <span class="chip">当前分支 <b>kb1-six-loop-rename</b></span>
+      <span class="chip">优先级 <b>稳定化 &gt; 评测 &gt; 本体集成</b></span>
+      <span class="chip">生成日期 <b>2026-06-24</b></span>
+    </div>
+    <div class="verdict">
+      <div class="vcard"><div class="k">总体策略</div><div class="v" style="color:var(--green)">先收口</div><div class="n">WIP、CI、baseline 先稳定</div></div>
+      <div class="vcard"><div class="k">禁止动作</div><div class="v" style="color:var(--red)">不重构主线</div><div class="n">未恢复绿灯前不做大改</div></div>
+      <div class="vcard"><div class="k">本轮目标</div><div class="v" style="color:var(--blue)">可交付</div><div class="n">commit / test / eval / report 全闭环</div></div>
+      <div class="vcard"><div class="k">退出条件</div><div class="v" style="color:var(--yellow)">CI 绿灯</div><div class="n">失败测试清零或有明确隔离</div></div>
+    </div>
+  </div>
+</header>
+<nav>
+  <div class="nav-inner">
+    <a href="#s0">0. 执行摘要</a>
+    <a href="#s1">1. 项目背景</a>
+    <a href="#s2">2. 总体原则</a>
+    <a href="#s3">3. Sprint 目标</a>
+    <a href="#s4">4. 执行步骤</a>
+    <a href="#s5">5. 测试修复</a>
+    <a href="#s6">6. Eval 基线</a>
+    <a href="#s7">7. 本体接入</a>
+    <a href="#s8">8. 验收标准</a>
+    <a href="#s9">9. 给 AI 的 Prompt</a>
+  </div>
+</nav>
+<main class="wrap">
+
+<section id="s0">
+  <div class="sec-head"><span class="num">00</span><h2>执行摘要</h2><span class="tagline">Read this first</span></div>
+  <div class="callout red">
+    <span class="title">本轮开发的唯一主线：把项目从“成果很多但状态发散”恢复为“可持续交付基线”。</span>
+    <p>不要马上推进复杂 ontology 推理，不要扩展新的 RAG 能力，不要重写 retrieval/answer 主链路。本轮必须先完成：WIP 分批入版本控制、8 个失败测试收口、评测 baseline 固定、工程垃圾清理、four-loop/six-loop 命名一致化。</p>
+  </div>
+  <div class="grid3">
+    <div class="card accent-green">
+      <h3>应该做</h3>
+      <ul>
+        <li>保存并提交当前 WIP，避免本地成果丢失。</li>
+        <li>优先修复测试和契约漂移。</li>
+        <li>把 eval 从“实验脚本”变成可复现门禁。</li>
+        <li>本体层只做最小接入，不抢主系统控制权。</li>
+      </ul>
+    </div>
+    <div class="card accent-red">
+      <h3>不要做</h3>
+      <ul>
+        <li>不要破坏 evidence-constrained answer 边界。</li>
+        <li>不要让 LLM 直接生成最终事实。</li>
+        <li>不要 reset / 删除数据库 / 批量清空派生状态。</li>
+        <li>不要未测试就批量改 retrieval、answer_policy、graph。</li>
+      </ul>
+    </div>
+    <div class="card accent-blue">
+      <h3>最终交付</h3>
+      <ul>
+        <li>清晰 commit 序列。</li>
+        <li>pytest 结果和失败修复说明。</li>
+        <li>eval baseline 报告。</li>
+        <li>post_ingestion_gate 稳定报告。</li>
+        <li>下一 Sprint 候选任务清单。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="s1">
+  <div class="sec-head"><span class="num">01</span><h2>项目背景与当前状态</h2><span class="tagline">Context</span></div>
+  <p>KB1 是面向汽车标准文档的证据约束知识库系统。主链路是 <code>PDF → pages → blocks → evidence → facts → entities/wiki → graph → retrieval → answer</code>。系统的核心优势是：六闭环架构、CodeStable 治理、Evidence Judge 安全边界、CI 健康检查。</p>
+  <table>
+    <thead><tr><th>维度</th><th>当前状态</th><th>对下一步开发的含义</th></tr></thead>
+    <tbody>
+      <tr><td>健康度</td><td>B+；架构成熟但存在 WIP 和工程债务。</td><td>先稳定，不要贸然扩展。</td></tr>
+      <tr><td>测试</td><td>672 passed / 8 failed；失败多为 WIP、陈旧断言、契约变化。</td><td>恢复 CI 绿灯是 Sprint 1 的硬门槛。</td></tr>
+      <tr><td>WIP</td><td><code>evaluation/evaluator.py +722</code>、<code>pipeline.py +331</code>、<code>kb1_ontology 8K LOC</code> 等未收口。</td><td>先分批 commit/push，再做优化。</td></tr>
+      <tr><td>Eval</td><td>pass_rate 在 0.13–0.70 间波动，Phase 1 尚未稳定进入 65–85%。</td><td>固定主评分口径，形成可复现 baseline。</td></tr>
+      <tr><td>Ontology</td><td>Phase 0–6 已做完，但仍是独立并行系统，部分未纳入版本控制。</td><td>作为约束层接入，不要重写主知识库。</td></tr>
+    </tbody>
+  </table>
+  <div class="callout yellow">
+    <span class="title">判断</span>
+    <p>当前最大风险不是代码质量差，而是“成果太多但没有被干净地纳入版本控制和 CI 体系”。这会导致后续任何 AI 接手时都难以判断哪些行为是设计变更、哪些只是半成品。</p>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="sec-head"><span class="num">02</span><h2>执行原则与硬约束</h2><span class="tagline">Rules</span></div>
+  <div class="grid2">
+    <div class="card accent-red">
+      <h3>不可违反的系统边界</h3>
+      <ul>
+        <li><b>答案事实来源必须来自 evidence/fact 候选集</b>，LLM 不能越过 Evidence Judge 直接定事实。</li>
+        <li><b>证据不足必须硬降级</b>，输出“证据不足以确认”，不能为了好看而补全。</li>
+        <li><b>Graph 只能增强候选召回</b>，不能作为无证据事实生成器。</li>
+        <li><b>Ontology 只能做约束、校验、有限推理</b>，不能绕过 judge 生成新事实。</li>
+        <li><b>禁止破坏性 reset</b>：不得随意删除主库、清空 evidence/facts、重建不可恢复状态。</li>
+      </ul>
+    </div>
+    <div class="card accent-blue">
+      <h3>执行型 AI 工作纪律</h3>
+      <ul>
+        <li>每次改动前先读相关测试和设计文档。</li>
+        <li>每个 work package 单独 commit，不把 eval、ontology、cleanup 混在一起。</li>
+        <li>改代码必须同时改测试、文档或报告。</li>
+        <li>修复失败测试时先判断：是生产 bug、契约变更，还是陈旧断言。</li>
+        <li>每一步输出命令、结果摘要、剩余风险。</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout green">
+    <span class="title">优先级公式</span>
+    <p><b>保住成果 &gt; 恢复绿灯 &gt; 固定评测 &gt; 小步接入 ontology &gt; 新能力开发。</b> 如果出现冲突，以左侧优先级为准。</p>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="sec-head"><span class="num">03</span><h2>Sprint 1 目标定义</h2><span class="tagline">Stabilization Sprint</span></div>
+  <div class="grid4">
+    <div class="card accent-green"><h3>目标 1</h3><p><b>WIP 全部可追溯</b><br/>所有已跟踪改动和 untracked 新系统完成分类、提交、推送或明确隔离。</p></div>
+    <div class="card accent-blue"><h3>目标 2</h3><p><b>测试恢复可信</b><br/>8 个失败测试修复或隔离为明确 WIP，不允许长期红灯。</p></div>
+    <div class="card accent-yellow"><h3>目标 3</h3><p><b>Eval baseline 固定</b><br/>确定一个 CI 主口径，避免 token-overlap / strong-match / LLM judge 来回切换。</p></div>
+    <div class="card accent-purple"><h3>目标 4</h3><p><b>Ontology 最小接入</b><br/>本体层进入版本控制，并只接入 entity/relation/attribute 约束，不改主链路事实边界。</p></div>
+  </div>
+  <h3 style="margin-top:22px">Sprint 1 不做事项</h3>
+  <table>
+    <thead><tr><th>不做</th><th>原因</th><th>未来何时做</th></tr></thead>
+    <tbody>
+      <tr><td>大规模重构 retrieval_router / query_api</td><td>当前测试未绿，改动面会扩大。</td><td>Eval baseline 稳定后。</td></tr>
+      <tr><td>完整 ontology 推理引擎</td><td>容易与 evidence/fact 主链路争夺事实权。</td><td>最小集成验证通过后。</td></tr>
+      <tr><td>新增大批标准文档</td><td>当前入库和评测门禁未稳定。</td><td>post_ingestion_gate 稳定后。</td></tr>
+      <tr><td>更换数据库/向量库/分布式依赖</td><td>与项目轻量化边界冲突。</td><td>除非有明确容量瓶颈证据。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="s4">
+  <div class="sec-head"><span class="num">04</span><h2>推荐执行步骤</h2><span class="tagline">Work Packages</span></div>
+  <div class="timeline">
+    <div class="step">
+      <h3>WP0：建立现场快照，不改一行代码</h3>
+      <p>目的：先知道当前工作区到底是什么状态，避免 AI 边猜边改。</p>
+      <pre>git status --short
+git branch --show-current
+git log --oneline --decorate -20
+git diff --stat
+git diff --name-only
+pytest -q
+python scripts/check_health.py</pre>
+      <ul class="checklist">
+        <li>保存 <code>git status</code>、<code>pytest</code>、<code>check_health</code> 输出到 <code>docs/dev/sprint1-stabilization/initial_snapshot.md</code>。</li>
+        <li>列出 untracked 文件，按 eval / ontology / scripts / tmp / generated 分组。</li>
+        <li>确认当前分支是否确实领先远端 52 commits；若远端不可访问，至少本地创建 safety tag。</li>
+      </ul>
+    </div>
+    <div class="step">
+      <h3>WP1：先做安全提交，保护当前成果</h3>
+      <p>目的：先 commit，再优化。提交要小而清楚，便于回滚。</p>
+      <pre># 建议先打一个安全 tag
+git tag safety/pre-sprint1-stabilization-20260624
+
+# 推荐提交分组
+# 1) eval redesign
+# 2) post_ingestion_gate / pipeline
+# 3) llm_client routing changes
+# 4) kb1_ontology package
+# 5) ontology docs and test reports
+# 6) cleanup scripts / .gitignore</pre>
+      <table>
+        <thead><tr><th>提交组</th><th>包含内容</th><th>commit message 建议</th></tr></thead>
+        <tbody>
+          <tr><td>eval</td><td><code>evaluation/evaluator.py</code>、expected_points、eval scripts、eval tests。</td><td><code>feat(eval): stabilize phase1 evaluator baseline assets</code></td></tr>
+          <tr><td>pipeline</td><td><code>pipeline.py</code>、<code>post_ingestion_gate</code> 相关测试。</td><td><code>feat(ingestion): add post ingestion quality gate</code></td></tr>
+          <tr><td>llm routing</td><td><code>llm_client.py</code>、minimax/astron fallback 测试。</td><td><code>fix(llm): align provider fallback contract</code></td></tr>
+          <tr><td>ontology core</td><td><code>src/kb1_ontology/</code>。</td><td><code>feat(ontology): add isolated ontology knowledge layer</code></td></tr>
+          <tr><td>ontology docs</td><td><code>docs/ontology/</code>、ADR、phase reports。</td><td><code>docs(ontology): add phase reports and ADRs</code></td></tr>
+          <tr><td>hygiene</td><td><code>.gitignore</code>、清理脚本、临时目录治理。</td><td><code>chore(workspace): quarantine generated runtime artifacts</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="step">
+      <h3>WP2：修复 8 个失败测试，恢复测试可信度</h3>
+      <p>目的：把“红灯”从开发常态中移除。每个失败测试必须有根因结论。</p>
+      <pre>pytest -q tests/test_cli_submodules.py::test_build_parser_registers_all_54_subcommands
+pytest -q tests/test_evidence_auxiliary_blocks.py::test_build_evidence_skips_structure_markdown_blocks
+pytest -q tests/test_mcp_server.py::test_mcp_server_tools_call_answer_query
+pytest -q tests/test_post_ingestion_gate.py
+pytest -q tests/test_query_repair_regression.py</pre>
+      <p>详细修复策略见第 5 节。</p>
+    </div>
+    <div class="step">
+      <h3>WP3：固定 Eval 主口径，建立 baseline lock</h3>
+      <p>目的：先让评测可复现，再谈优化。建议当前阶段把 <b>规则型 strong-match / expected_points coverage</b> 作为 CI 主口径，LLM judge 作为非阻塞辅助信号。</p>
+      <pre>eakb eval run-now --help
+eakb eval run-now --mode phase1 --judge strong-match --write-report
+python scripts/check_health.py</pre>
+      <ul class="checklist">
+        <li>新增或更新 <code>docs/dev/eval-baseline-policy.md</code>。</li>
+        <li>记录当前 baseline：版本、题库、评分口径、随机种子、数据版本、代码版本。</li>
+        <li>把 LLM API 500 归为 infra flaky，不让它阻断本地 deterministic baseline。</li>
+        <li>CI gate 分两层：baseline 不退化为硬门槛；65–85% 达标作为 promotion gate。</li>
+      </ul>
+    </div>
+    <div class="step">
+      <h3>WP4：稳定 post_ingestion_gate</h3>
+      <p>目的：把新文档入库从“跑脚本”变成“有质量门禁的生产流程”。</p>
+      <ul class="checklist">
+        <li>明确 <code>PostIngestionGateResult.passed</code> 的判定条件。</li>
+        <li>保证 gate 对同一文档重复运行幂等。</li>
+        <li>输出结构化 dict/json，供 CI 和 dashboard 使用。</li>
+        <li>把测试数据和真实库差异隔离，避免测试依赖污染主库。</li>
+      </ul>
+    </div>
+    <div class="step">
+      <h3>WP5：清理工程债务，但只做可逆清理</h3>
+      <p>目的：清理 tmp、test_runtime、0 字节 db 等污染，同时避免误删真实资产。</p>
+      <pre># 默认 dry-run
+python scripts/quarantine_suspicious_db_files.py --dry-run
+python scripts/prune_test_runtime_dirs.py --dry-run
+
+# 人工确认后再执行
+python scripts/quarantine_suspicious_db_files.py --execute
+python scripts/prune_test_runtime_dirs.py --execute</pre>
+      <ul class="checklist">
+        <li>任何删除都先 quarantine，不直接 rm。</li>
+        <li>将 <code>tmp/</code>、<code>test_runtime_*/</code>、本地生成 db、ontology 备份加入 <code>.gitignore</code>。</li>
+        <li>清理后重新跑 <code>scripts/check_health.py</code>。</li>
+      </ul>
+    </div>
+    <div class="step">
+      <h3>WP6：统一 four-loop → six-loop 命名</h3>
+      <p>目的：让新接手者不再困惑“到底是四环还是六环”。</p>
+      <ul class="checklist">
+        <li>保留历史审计文件原名时，在文档顶部加“历史命名说明”。</li>
+        <li>roadmap / architecture / dashboard / comments 中统一使用 six-loop。</li>
+        <li>不要机械替换所有字符串；历史 commit、旧 audit 名称可以保留，但需解释。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="sec-head"><span class="num">05</span><h2>8 个失败测试修复策略</h2><span class="tagline">Test Repair Plan</span></div>
+  <table>
+    <thead><tr><th>失败项</th><th>判断</th><th>修复动作</th><th>验收</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>test_build_parser_registers_all_54_subcommands</code></td>
+        <td>陈旧断言：CLI 从 54 变 55。</td>
+        <td>改为检测“至少包含关键子命令 + 总数为当前注册表长度”，不要硬编码旧数字；若必须硬编码，更新为 55 并注明原因。</td>
+        <td>CLI 子命令注册测试通过；新增命令有 coverage。</td>
+      </tr>
+      <tr>
+        <td><code>test_build_evidence_skips_structure_markdown_blocks</code></td>
+        <td>行为变化：结构 markdown block 过滤导致 evidence 为 0。</td>
+        <td>先确认产品语义：结构块是否应生成 auxiliary evidence。若新行为正确，更新测试；若误过滤，修复 evidence builder。</td>
+        <td>测试能覆盖“结构块跳过”和“正文块保留”两种路径。</td>
+      </tr>
+      <tr>
+        <td><code>test_mcp_server_tools_call_answer_query</code></td>
+        <td>MCP 响应契约变化，<code>result</code> 路径失效。</td>
+        <td>明确 MCP tool response schema：顶层是否仍保留 <code>result</code>。若契约变更，新增兼容层或同步测试。</td>
+        <td>MCP answer_query 返回结构文档化；测试不再 KeyError。</td>
+      </tr>
+      <tr>
+        <td><code>test_post_ingestion_gate::test_gate_runs_on_existing_doc</code></td>
+        <td rowspan="3">新 WIP：post_ingestion_gate 逻辑未稳定。</td>
+        <td rowspan="3">定义 gate pass 条件、幂等性、to_dict schema。不要让测试依赖完整生产库，构造最小 fixture。</td>
+        <td rowspan="3">三个 post_ingestion_gate 测试全部通过；新增负例测试。</td>
+      </tr>
+      <tr><td><code>test_post_ingestion_gate::test_gate_result_to_dict</code></td></tr>
+      <tr><td><code>test_post_ingestion_gate::test_gate_idempotent</code></td></tr>
+      <tr>
+        <td><code>test_text_llm_uses_minimax_before_astron</code></td>
+        <td rowspan="2">LLM 路由契约变化：minimax/astron fallback 顺序不一致。</td>
+        <td rowspan="2">先定 provider order policy：默认 minimax-first 还是 astron-first。代码、配置、测试、文档必须一致。建议通过配置显式声明，测试读取配置而非隐式猜测。</td>
+        <td rowspan="2">fallback 正常；失败场景有 mock 测试；API 500 不导致主评测不可跑。</td>
+      </tr>
+      <tr><td><code>test_text_llm_falls_back_to_astron_after_minimax_failure</code></td></tr>
+    </tbody>
+  </table>
+  <div class="callout yellow">
+    <span class="title">测试修复原则</span>
+    <p>不要为了“变绿”直接删测试。每个失败项都必须留下：根因、决策、改动文件、回归命令。若某项确实是未完成新功能，允许临时标记 xfail，但必须绑定 issue 和到期条件。</p>
+  </div>
+</section>
+
+<section id="s6">
+  <div class="sec-head"><span class="num">06</span><h2>Eval Baseline 固定方案</h2><span class="tagline">Evaluation Gate</span></div>
+  <p>当前 eval 最大问题不是“分数低”，而是评分口径切换导致无法比较。Sprint 1 的目标是先建立可复现 baseline，然后再提升分数。</p>
+  <div class="grid2">
+    <div class="card accent-blue">
+      <h3>推荐口径</h3>
+      <ul>
+        <li><b>CI 主口径：</b><code>expected_points coverage + strong-match</code>。</li>
+        <li><b>辅助口径：</b>LLM judge，仅作为人工分析，不阻断 CI。</li>
+        <li><b>召回口径：</b>Recall@5 / Recall@10 / citation correctness 单独记录。</li>
+        <li><b>答案口径：</b>unsupported claim rate 必须长期趋近 0。</li>
+      </ul>
+    </div>
+    <div class="card accent-yellow">
+      <h3>Gate 分层</h3>
+      <table>
+        <tr><th>Gate</th><th>含义</th></tr>
+        <tr><td>baseline lock</td><td>分数不能相对当前固定版本明显退化。</td></tr>
+        <tr><td>promotion gate</td><td>pass_rate 稳定进入 0.65–0.85。</td></tr>
+        <tr><td>release gate</td><td>跨文档 eval、citation、unsupported claim 均达标。</td></tr>
+      </table>
+    </div>
+  </div>
+  <h3 style="margin-top:20px">需要生成的报告</h3>
+  <pre>docs/dev/sprint1-stabilization/eval_baseline_report.md
+包含：
+- run_id / code_version / db_version / qa_bank_version
+- scoring_mode
+- pass_rate / coverage_rate / citation_correct_rate / unsupported_claim_rate
+- failed cases top buckets
+- 是否允许进入下一阶段</pre>
+  <div class="callout green">
+    <span class="title">重要判断</span>
+    <p>讯飞 LLM API 500 不能继续让整个 eval 主线卡死。执行 AI 应把 LLM judge 退到 optional，并保证没有外部 LLM 服务时仍能跑 deterministic eval。</p>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="sec-head"><span class="num">07</span><h2>Ontology 最小接入方案</h2><span class="tagline">Minimal Integration</span></div>
+  <p>本体层已经有 <code>class_registry</code>、<code>entity_manager</code>、<code>relation_registry</code>、<code>attribute_store</code>、<code>combined_query.py</code>、<code>legacy_bridge.py</code> 等模块。Sprint 1 只允许做最小接入，不允许改造成大推理系统。</p>
+  <div class="grid3">
+    <div class="card accent-purple">
+      <h3>接入点 1：Entity Type Constraint</h3>
+      <p>把实体类型作为召回/答案前的过滤与校验信号。例如 UDS 服务、DID、NRC、诊断会话、测试条件、参数范围。</p>
+    </div>
+    <div class="card accent-purple">
+      <h3>接入点 2：Relation Domain/Range</h3>
+      <p>校验关系是否合理。例如 <code>applicable_to</code>、<code>belongs_to</code>、<code>has_parameter</code> 的主体/客体类型是否匹配。</p>
+    </div>
+    <div class="card accent-purple">
+      <h3>接入点 3：Answer Post-check</h3>
+      <p>回答生成后做语义一致性检查，但不能改写事实。发现冲突时降级或标记不确定。</p>
+    </div>
+  </div>
+  <h3 style="margin-top:22px">禁止的 ontology 行为</h3>
+  <ul>
+    <li>禁止 ontology 直接生成新的 fact 并进入答案。</li>
+    <li>禁止 ontology 绕过 evidence_judge。</li>
+    <li>禁止引入 OWL/RDF 或重型图数据库作为本阶段依赖。</li>
+    <li>禁止把 ontology.db 作为主事实库替代 knowledge.db。</li>
+  </ul>
+  <pre># 建议新增测试方向
+pytest -q tests/test_ontology_bridge.py
+pytest -q tests/test_ontology_constraints.py
+pytest -q tests/test_answer_ontology_postcheck.py</pre>
+</section>
+
+<section id="s8">
+  <div class="sec-head"><span class="num">08</span><h2>Sprint 1 验收标准</h2><span class="tagline">Definition of Done</span></div>
+  <table>
+    <thead><tr><th>验收项</th><th>必须满足</th><th>证据文件</th></tr></thead>
+    <tbody>
+      <tr><td>版本控制</td><td>WIP 已分批 commit；远端已 push，或离线环境下有 safety tag + bundle。</td><td><code>git log --oneline -10</code>、<code>git status</code></td></tr>
+      <tr><td>测试</td><td>原 8 个失败测试修复；若有 xfail，必须有 issue、原因、到期条件。</td><td><code>docs/dev/sprint1-stabilization/test_repair_report.md</code></td></tr>
+      <tr><td>健康检查</td><td><code>scripts/check_health.py</code> 10 项通过，或失败项有明确非阻塞说明。</td><td><code>health_report.md</code></td></tr>
+      <tr><td>Eval</td><td>baseline 口径固定；deterministic eval 可跑；LLM judge optional。</td><td><code>eval_baseline_report.md</code></td></tr>
+      <tr><td>post_ingestion_gate</td><td>pass 条件明确；to_dict schema 稳定；幂等测试通过。</td><td><code>post_ingestion_gate_report.md</code></td></tr>
+      <tr><td>工程清理</td><td>tmp/test_runtime/0字节db 已 quarantine 或 gitignore；无误删主资产。</td><td><code>workspace_cleanup_report.md</code></td></tr>
+      <tr><td>命名一致性</td><td>six-loop 命名主线明确，历史 four-loop 有说明。</td><td><code>architecture_naming_report.md</code></td></tr>
+      <tr><td>Ontology</td><td>进入版本控制；最小 bridge/constraint 测试通过；未绕过证据边界。</td><td><code>ontology_integration_report.md</code></td></tr>
+    </tbody>
+  </table>
+  <div class="callout red">
+    <span class="title">Sprint 1 Exit Gate</span>
+    <p>只有当“版本控制 + 测试 + eval baseline + post_ingestion_gate”四项同时满足，才允许进入 Sprint 2。否则继续收口，不开新功能。</p>
+  </div>
+</section>
+
+<section id="s9">
+  <div class="sec-head"><span class="num">09</span><h2>可直接给其它 AI 的执行 Prompt</h2><span class="tagline">Copy to Coding Agent</span></div>
+  <p>下面这段可以直接复制给接手代码库的 AI。它明确了角色、目标、边界和输出格式。</p>
+  <pre>你是 KB1 企业级 Agent 知识库项目的执行型 Coding Agent。
+
+当前任务不是开发新功能，而是执行 Sprint 1：稳定化与恢复绿灯。
+请严格按以下优先级工作：
+1. 建立现场快照：git status、git diff --stat、pytest、scripts/check_health.py。
+2. 将当前 WIP 按 eval / pipeline-post_ingestion_gate / llm routing / kb1_ontology / docs / cleanup 分组。
+3. 先做 safety tag，再分批 commit；不要把不同主题混在一个 commit。
+4. 修复当前 8 个失败测试：CLI 子命令数量、evidence auxiliary blocks、MCP result schema、post_ingestion_gate 三项、minimax/astron fallback 两项。
+5. 固定 eval baseline：以 deterministic strong-match / expected_points coverage 作为 CI 主口径，LLM judge 作为 optional。
+6. 稳定 post_ingestion_gate：明确 passed 条件、to_dict schema、幂等性。
+7. 清理工程债务：tmp、test_runtime_*、0 字节 db 只能先 quarantine，不允许直接破坏性删除。
+8. 统一 six-loop 命名，保留历史 four-loop 时必须加说明。
+9. kb1_ontology 只做最小接入：entity type constraint、relation domain/range、answer post-check。禁止绕过 Evidence Judge 生成事实。
+
+硬约束：
+- 不允许让 LLM 直接决定最终事实。
+- 不允许绕过 evidence/fact 候选集回答。
+- 不允许破坏性 reset 主库。
+- 不允许在 CI 未恢复前大规模重构 retrieval/query_api/answer_policy。
+- 每个改动必须有测试或报告。
+
+最终输出：
+- git commit 列表与每个 commit 的目的。
+- 测试修复报告。
+- eval baseline 报告。
+- post_ingestion_gate 报告。
+- workspace cleanup 报告。
+- 剩余风险与 Sprint 2 建议。
+</pre>
+  <div class="callout green">
+    <span class="title">给执行 AI 的最后提醒</span>
+    <p>这轮工作不是炫技。最好的结果是：代码库状态变干净，测试变绿，评测变可复现，后续任何人/AI 都能安全接着开发。做到这件事，比新增十个功能更值钱。</p>
+  </div>
+</section>
+
+<div class="footer">
+  <b>生成说明：</b>本执行指导书基于用户提供的《KB1 项目阶段评审报告 · 2026-06-24》整理，面向后续 Coding Agent 执行。<br/>
+  <b>建议保存位置：</b><code>docs/dev/sprint1-stabilization/kb1_next_development_guide.html</code><br/>
+  <b>推荐下一阶段标题：</b>Sprint 1 · Stabilization & CI Recovery
+</div>
+</main>
+</body>
+</html>

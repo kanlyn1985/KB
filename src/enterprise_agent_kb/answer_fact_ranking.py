@@ -512,10 +512,47 @@ def _filter_facts_by_intent(facts: list[dict[str, object]], intent: str) -> list
 def _rank_facts(facts: list[dict[str, object]], intent: str, query: str = "") -> list[dict[str, object]]:
     target_standard = _normalize_standard_code(_extract_standard_from_query(query)) if intent == "standard" else None
     requested_table_no = _extract_table_no_from_query(query)
+
+    # Pre-compute doc_title match boost per doc_id (avoid duplicate DB hits).
+    doc_title_boost: dict[str, float] = {}
+    if query:
+        from .db import connect as _connect_for_title
+        from .config import AppPaths as _AP
+        try:
+            with _connect_for_title(_AP.from_workspace_root().db_file) as _conn:
+                rows = _conn.execute(
+                    "SELECT doc_id, source_filename FROM documents"
+                ).fetchall()
+                from .reranker import _norm as _norm_filename
+                q_norm = _norm_filename(query)
+                for r in rows:
+                    fn = str(r["source_filename"] or "")
+                    fn_norm = _norm_filename(fn)
+                    if not q_norm or not fn_norm:
+                        continue
+                    # Count overlap of CJK keywords (3+ chars) with the filename
+                    q_cjk = set(re.findall(r"[一-鿿]{3,}", query))
+                    if not q_cjk:
+                        continue
+                    hits = sum(1 for kw in q_cjk if kw in fn_norm)
+                    if hits:
+                        doc_title_boost[r["doc_id"]] = min(0.3 * hits, 1.0)
+        except Exception:
+            pass
+
     def score(item: dict[str, object]) -> tuple[float, float]:
         fact_type = item.get("fact_type")
         confidence = float(item.get("confidence") or 0)
         bonus = 0.0
+        # Doc-title match boost (precomputed above): +0.3 to +1.0
+        # depending on how many query keywords appear in the document's
+        # filename.  Helps the system pick facts from the document the
+        # query is actually about, when the same keyword appears in many
+        # docs (e.g. "逆变器" appears in DOC-000001 and DOC-000002).
+        if doc_title_boost:
+            item_doc = str(item.get("source_doc_id") or "")
+            if item_doc in doc_title_boost:
+                bonus += doc_title_boost[item_doc]
         if intent == "definition":
             if fact_type in {"term_definition", "concept_definition"}:
                 bonus = 4.0
@@ -822,6 +859,9 @@ def _select_answer_facts(
             bonus += 3.0
         elif fact_type == "threshold":
             bonus += 1.0
+        elif fact_type in {"term_definition", "concept_definition"}:
+            # Term definitions are the most direct answer for definition queries
+            bonus += 2.5
         else:
             bonus += 0.2
 
@@ -834,6 +874,10 @@ def _select_answer_facts(
                 bonus -= 2.5
         if re.search(r"(检测点\s*\d)", query):
             if any("检测点" in tag for tag in focus_tags):
+                bonus += 3.0
+        # Definition-like queries: "什么是X", "X是什么" — boost term/concept definitions
+        if re.search(r"(什么是|是什么|指什么|定义|含义|的意思)", query):
+            if fact_type in {"term_definition", "concept_definition"}:
                 bonus += 3.0
         return (bonus, confidence)
 

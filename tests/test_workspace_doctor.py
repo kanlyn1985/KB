@@ -30,6 +30,7 @@ def test_workspace_doctor_reports_missing_fts_without_creating_tables(tmp_path: 
             "facts_fts",
             "evidence_fts",
             "wiki_fts",
+            "wiki_chunks_fts",
         }
         assert any(issue.issue_id == "derived_state_facts_fts_missing" for issue in report.issues)
         assert not _table_exists(connection, "facts_fts")

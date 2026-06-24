@@ -8,6 +8,37 @@ from pathlib import Path
 from .doc_ir import DocIRBlock, DocIRPage, DocumentIR
 
 
+# ISO/IEC standard copyright noise patterns (case-insensitive)
+_STANDARD_COPYRIGHT_PATTERNS = (
+    "© iso", "© iec", "© gb", "© qc",
+    "all rights reserved",
+    "copyright protected",
+    "reference number",
+    "price based on",
+    "international standard",
+    "iso shall not be held responsible",
+    "iec shall not be held responsible",
+)
+
+
+def _is_standard_copyright_noise(text: str) -> bool:
+    """Detect ISO/IEC/GB standard copyright boilerplate that should be
+    excluded from cleaned document IR (and thus from fact extraction)."""
+    lowered = text.lower().strip()
+    if not lowered:
+        return True
+    # Short copyright lines (< 1000 chars) with no real content
+    if len(text) > 1000:
+        return False
+    for pattern in _STANDARD_COPYRIGHT_PATTERNS:
+        if pattern in lowered:
+            # Real content has Chinese chars or is substantial
+            cn_chars = sum(1 for c in text if "一" <= c <= "鿿")
+            if cn_chars < 10 and len(text) < 1000:
+                return True
+    return False
+
+
 @dataclass(frozen=True)
 class CleanedDocumentIR:
     doc_id: str
@@ -52,6 +83,9 @@ def clean_doc_ir(doc_ir: DocumentIR) -> CleanedDocumentIR:
         cleaned_blocks: list[DocIRBlock] = []
         for block in sorted(page.blocks, key=lambda item: item.reading_order):
             if not block.text:
+                continue
+            # Skip standard copyright boilerplate blocks
+            if _is_standard_copyright_noise(block.text):
                 continue
             if block.type in {"table", "figure", "formula"}:
                 cleaned_blocks.append(block)

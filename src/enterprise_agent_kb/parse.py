@@ -15,6 +15,8 @@ from pathlib import Path
 from typing import Any, Callable, Iterator
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+import httpx
+
 import fitz
 
 from .config import AppEndpoints, AppPaths

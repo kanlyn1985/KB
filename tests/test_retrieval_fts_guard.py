@@ -75,7 +75,7 @@ def test_refresh_fts_index_keeps_count_contract(tmp_path: Path) -> None:
 
     counts = refresh_fts_index(paths.root)
 
-    assert counts == {"evidence": 1, "facts": 1, "wiki": 1}
+    assert counts == {"evidence": 1, "facts": 1, "wiki": 1, "wiki_chunks": 0}
 
 
 def _insert_fact(connection, fact_id: str, object_value: str) -> None:

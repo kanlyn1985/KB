@@ -173,14 +173,43 @@ def _select_constraint_answer_facts(
         if any(token in blob for token in ("前言", "前    言", "目 次", "目次")):
             bonus -= 10.0
         topic_scope = f"{topic} {key_scope}".strip()
-        if any(term and topic_scope and term in topic_scope for term in topic_terms):
-            bonus += 7.0
-        elif query_focus and topic_scope and query_focus in topic_scope:
-            bonus += 5.5
-        elif query_focus and query_focus in blob:
-            bonus += 1.5
-        elif query_focus:
-            bonus -= 2.0
+        content = str(payload_dict.get("content") or "").strip()
+        # Use short keywords for matching instead of full query
+        matched = False
+        for term in topic_terms:
+            if term and topic_scope and term in topic_scope:
+                bonus += 7.0
+                matched = True
+                break
+            # Also check if any 2-char keyword from term matches
+            for m in re.finditer(r"[一-鿿]{2,4}", term):
+                kw = m.group()
+                if kw and topic_scope and kw in topic_scope:
+                    bonus += 3.0
+                    matched = True
+                    break
+            if matched:
+                break
+        if not matched:
+            # Check content match - prefer longer keywords
+            content_keywords = []
+            for m in re.finditer(r"[一-鿿]{3,6}", query_focus):
+                kw = m.group()
+                if kw and content and kw in content:
+                    content_keywords.append(kw)
+            # Sort by length (longest first) and pick the best match
+            if content_keywords:
+                content_keywords.sort(key=len, reverse=True)
+                best_kw = content_keywords[0]
+                bonus += 2.0 + (len(best_kw) - 3) * 0.5  # Longer keyword = higher bonus
+                matched = True
+            if not matched:
+                if query_focus and topic_scope and query_focus in topic_scope:
+                    bonus += 5.5
+                elif query_focus and query_focus in blob:
+                    bonus += 1.5
+                elif query_focus:
+                    bonus -= 2.0
         return (bonus + confidence, confidence)
 
     ranked = sorted(ranked, key=constraint_score, reverse=True)
@@ -193,11 +222,22 @@ def _select_constraint_answer_facts(
                 str(payload_dict.get(key) or "").strip()
                 for key in ("topic", "subject", "title")
             )
+            content = str(payload_dict.get("content") or "").strip()
             scope_type = str(payload_dict.get("scope_type") or "").strip()
             if scope_type in {"overview", "preface", "index"}:
                 continue
-            if any(term and term in topic_scope for term in topic_terms):
+            # Check topic/scope first; if no match, fall back to content
+            if any(term and topic_scope and term in topic_scope for term in topic_terms):
                 strong_matches.append(item)
+                continue
+            # Content fallback: check if any 4-8 char CJK phrase from topic_terms
+            # appears in content
+            for term in topic_terms:
+                if len(term) < 3:
+                    continue
+                if term in content:
+                    strong_matches.append(item)
+                    break
         if strong_matches:
             ranked = strong_matches + [item for item in ranked if item not in strong_matches]
 
@@ -241,4 +281,20 @@ def _constraint_target_terms(query: str, rewritten_payload: dict[str, object]) -
         normalized = normalized.replace("的要求", "").strip()
         if normalized and normalized not in cleaned:
             cleaned.append(normalized)
-    return cleaned[:8]
+
+    # Extract short keywords (2-4 chars) for better matching
+    short_keywords: list[str] = []
+    for term in cleaned:
+        # Extract Chinese keywords (2-4 chars)
+        for m in re.finditer(r"[一-鿿]{2,4}", term):
+            kw = m.group()
+            if kw not in short_keywords and kw not in cleaned:
+                short_keywords.append(kw)
+        # Extract English acronyms (2-6 uppercase chars)
+        for m in re.finditer(r"[A-Z]{2,6}", term):
+            acr = m.group()
+            if acr not in short_keywords and acr not in cleaned:
+                short_keywords.append(acr)
+
+    cleaned.extend(short_keywords)
+    return cleaned[:12]

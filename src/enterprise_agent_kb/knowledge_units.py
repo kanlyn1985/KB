@@ -60,6 +60,13 @@ def extract_knowledge_units(cleaned_doc_ir_path: Path) -> KnowledgeUnitBundle:
                 index += 1
                 continue
 
+            # Skip ISO/IEC/GB standard copyright noise (defense in depth -
+            # should already be filtered by clean_doc_ir, but the layout
+            # cleaner filter may have been bypassed on older runs)
+            if _looks_like_standard_copyright_in_ku(text):
+                index += 1
+                continue
+
             if block_type == "heading":
                 heading = _strip_heading_marks(text)
                 if not _looks_like_navigation_heading_noise(heading):
@@ -114,6 +121,10 @@ def extract_knowledge_units(cleaned_doc_ir_path: Path) -> KnowledgeUnitBundle:
 
             if _looks_like_requirement(text):
                 title = current_heading or f"page_{page_no}_requirement"
+                # Skip requirement units whose title is copyright boilerplate
+                if _looks_like_standard_copyright_in_ku(title):
+                    index += 1
+                    continue
                 subject, condition, threshold = _parse_requirement_fields(title, text)
                 topic = _infer_requirement_topic(title, subject, current_heading)
                 scope_type = _infer_requirement_scope_type(title, text, current_section)
@@ -136,6 +147,37 @@ def extract_knowledge_units(cleaned_doc_ir_path: Path) -> KnowledgeUnitBundle:
             index += 1
 
     return KnowledgeUnitBundle(doc_id=doc_id, unit_count=len(units), units=units)
+
+
+# Standard copyright/boilerplate patterns to filter during knowledge unit
+# extraction. Defense-in-depth for cases where clean_doc_ir was bypassed.
+_KU_COPYRIGHT_MARKERS = (
+    "© iso", "© iec", "© gb", "© qc",
+    "all rights reserved",
+    "copyright protected",
+    "reference number",
+    "price based on",
+    "international standard",
+    "iso shall not be held responsible",
+    "iec shall not be held responsible",
+)
+
+
+def _looks_like_standard_copyright_in_ku(text: str) -> bool:
+    """Check if a knowledge-unit text field is copyright boilerplate."""
+    if not text:
+        return False
+    lowered = text.lower()
+    matches = sum(1 for marker in _KU_COPYRIGHT_MARKERS if marker in lowered)
+    # Need at least 2 markers OR one very strong marker
+    if matches >= 2:
+        return True
+    if matches == 1:
+        # Strong markers alone are enough
+        for strong in ("all rights reserved", "copyright protected", "© iso", "© iec", "© gb", "© qc"):
+            if strong in lowered:
+                return True
+    return False
 
 
 def _knowledge_unit(**kwargs: object) -> KnowledgeUnit:
@@ -579,7 +621,21 @@ def _extract_requirement_threshold(text: str) -> str | None:
             return match.group(1).strip()
     percent_match = re.search(r"(±?\s*\d+(?:\.\d+)?\s*%|±?\s*\d+(?:\.\d+)?\s*Hz|±?\s*\d+(?:\.\d+)?\s*s|±?\s*\d+(?:\.\d+)?\s*mA)", text)
     if percent_match:
-        return percent_match.group(1).strip()
+        value = percent_match.group(1).strip()
+        # Sanity check: skip if the value looks like a standard number (ISO/IEC/GB/T followed by digits)
+        # e.g. "ISO 14229", "IEC 61851", "GB/T 18487"
+        if re.search(r"\b(?:ISO|IEC|GB/?T?)\s*\d+", value, re.I):
+            return None
+        # Skip if the value is just a year-like number followed by 's'
+        # e.g. "2015 s" (from "© ISO 2015" being parsed as "2015 s")
+        if re.match(r"^\d{4}\s*s$", value):
+            return None
+        # Skip if the value looks like an ISO standard number mistakenly parsed as a time
+        # ISO standard numbers are 4-6 digits (e.g. 14229, 17987, 18487, 61851)
+        # They are NOT time values.  Reject pure 4-6 digit numbers with "s" unit.
+        if re.match(r"^\d{4,6}\s*s$", value):
+            return None
+        return value
     return None
 
 
