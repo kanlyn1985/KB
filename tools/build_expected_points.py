@@ -61,7 +61,7 @@ import os  # noqa: E402
 
 ANTHROPIC_BASE_URL = os.environ.get("ANTHROPIC_BASE_URL", "")
 ANTHROPIC_AUTH_TOKEN = os.environ.get("ANTHROPIC_AUTH_TOKEN", "")
-LLM_MODEL = os.environ.get("LLM_MODEL", "MiniMax-M2.7")
+LLM_MODEL = os.environ.get("LLM_MODEL", "xopkimik26")
 
 LONG_SECTION_THRESHOLD = 500  # chars; above this, LLM decomposes
 
@@ -302,6 +302,9 @@ def _is_noise(point: str) -> bool:
     - starts with a generic intro prefix ("下列", "本标准", ...)
     - is a pure table row (3+ | separators)
     - is a pure reference list (3+ standard codes)
+    - is mostly copyright/cover/header text (PUBLIC, ©, VDA, etc.)
+    - is a duplicated fragment (e.g. "PUBLICPUBLIC")
+    - is too short to be a meaningful claim
     """
     p = point.strip()
     if not p:
@@ -314,6 +317,21 @@ def _is_noise(point: str) -> bool:
         return True
     # Pure reference lists: many standard codes without a complete sentence
     if (p.count("GB") + p.count("QC/T") + p.count("ISO") + p.count("IEC")) >= 3:
+        return True
+    # Copyright/cover/header text
+    p_upper = p.upper()
+    if p_upper.startswith("©") or "VDA QMC" in p_upper or "VDA-QMC" in p_upper:
+        return True
+    if "PUBLIC" in p_upper and len(p) < 80:
+        return True
+    if p_upper.startswith("HTTP") or p_upper.startswith("WWW."):
+        return True
+    # Duplicated fragments (e.g. "PUBLICPUBLIC", "3.1 3.1")
+    if len(p) < 20 and len(set(p.split())) < len(p.split()) // 2:
+        return True
+    # Too short to be a meaningful claim (less than 12 chars with no Chinese)
+    cn_chars = sum(1 for c in p if "一" <= c <= "鿿")
+    if len(p) < 12 and cn_chars < 4:
         return True
     return False
 
@@ -490,8 +508,123 @@ def apply_migration(db_path: Path) -> None:
     print(f"migration 001 applied (user_version={SCHEMA_VERSION})")
 
 
+def _derive_term_from_point(point_text: str) -> tuple[str, str] | None:
+    """Try to derive a (term, definition) pair from a free-text point.
+
+    Patterns recognized:
+    - "X是一种Y" / "X 是一种 Y" / "X 是指Y"
+    - "X: 装在..." (colon-style, common in term_definition facts)
+    - "X是..." for short subjects
+
+    Returns None if no clean term can be extracted.
+    """
+    text = point_text.strip()
+    if len(text) > 250:
+        return None
+    # Pattern 1: "Term: definition" or "Term（English）: definition"
+    m = re.match(r"^([一-鿿A-Za-z0-9·\-]{2,30})\s*[:：]\s*(.{5,200})$", text, re.DOTALL)
+    if m:
+        term = m.group(1).strip()
+        # Strip English trailing in parens
+        term = re.sub(r"\s*[（(][^)）]*[)）]\s*$", "", term).strip()
+        if len(term) >= 2 and not _is_term_too_generic(term):
+            return term, m.group(2).strip()
+    # Pattern 2: "X是一种Y" or "X 是 Y"
+    m = re.match(r"^([一-鿿A-Za-z0-9·\-]{2,20}(?:\s+[一-鿿A-Za-z0-9·\-]{0,12})?)\s*(?:是一种|是指|是|指)\s*(.{5,200})$", text, re.DOTALL)
+    if m:
+        term = m.group(1).strip()
+        if len(term) >= 2 and not _is_term_too_generic(term):
+            return term, m.group(2).strip()
+    return None
+
+
+def _is_term_too_generic(term: str) -> bool:
+    """Skip overly generic terms that wouldn't be useful as fact keys."""
+    cn_chars = sum(1 for c in term if "一" <= c <= "鿿")
+    if cn_chars < 2:
+        return True
+    if term in {"本标准", "本文件", "本规范", "下列文件", "标准编号", "标准名称"}:
+        return True
+    return False
+
+
+def _sync_term_definitions_to_facts(conn, result: dict) -> int:
+    """Derive term_definition facts from LLM-decomposed points and insert
+    them into the facts table.  This bridges the gap where
+    expected_points contained term definitions that the retrieval layer
+    couldn't see.
+
+    Returns the number of facts inserted.
+    """
+    from enterprise_agent_kb.ids import next_prefixed_id
+
+    doc_id = result["doc_id"]
+    points = result.get("points", []) or []
+    # First, drop existing term_definition facts we previously inserted
+    # (those with predicate='defines_term' and source_doc_id=doc_id and
+    # fact_status='ready_from_expected_points' to mark provenance).
+    # Simpler: drop all term_definitions for this doc, since real
+    # term_definitions are re-derived from evidence by build_facts.
+    conn.execute(
+        "DELETE FROM facts WHERE source_doc_id = ? AND fact_type = 'term_definition' AND fact_status = ?",
+        (doc_id, "ready_from_expected_points"),
+    )
+
+    inserted = 0
+    now = _now()
+    for p in points:
+        text = p.get("point", "")
+        if not text:
+            continue
+        derived = _derive_term_from_point(text)
+        if not derived:
+            continue
+        term, definition = derived
+        # Skip if a term_definition fact with same term already exists
+        existing = conn.execute(
+            "SELECT fact_id FROM facts WHERE source_doc_id = ? AND fact_type = 'term_definition' AND object_value LIKE ?",
+            (doc_id, f'%"{term}"%'),
+        ).fetchone()
+        if existing:
+            continue
+        fact_id = next_prefixed_id(conn, "fact", "FACT")
+        page_no = p.get("page", 0) or 0
+        conn.execute(
+            """
+            INSERT INTO facts (
+                fact_id, fact_type, subject_entity_id, predicate,
+                object_value, object_entity_id, qualifiers_json,
+                confidence, fact_status, source_doc_id,
+                created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                fact_id,
+                "term_definition",
+                None,
+                "defines_term",
+                json.dumps({"term": term, "definition": definition}, ensure_ascii=False),
+                None,
+                json.dumps({"page_no": page_no, "risk_level": "low", "source": "expected_points"}),
+                0.85,
+                "ready_from_expected_points",
+                doc_id,
+                now,
+                now,
+            ),
+        )
+        inserted += 1
+    return inserted
+
+
 def write_points(db_path: Path, result: dict) -> None:
-    """Write a single doc's points to the expected_points table."""
+    """Write a single doc's points to the expected_points table.
+
+    Also derives term_definition facts from LLM-decomposed points and
+    inserts them into the facts table.  This bridges the gap where
+    expected_points contained term definitions that the retrieval layer
+    couldn't see.
+    """
     with connect(db_path) as conn:
         # Replace existing version
         conn.execute(
@@ -513,6 +646,8 @@ def write_points(db_path: Path, result: dict) -> None:
                 "tools/build_expected_points.py",
             ),
         )
+        # Sync term definitions to the facts table so the system can retrieve them.
+        _sync_term_definitions_to_facts(conn, result)
 
 
 def list_doc_ids(db_path: Path) -> list[str]:

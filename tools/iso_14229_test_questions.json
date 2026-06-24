@@ -1,0 +1,112 @@
+{
+  "name": "iso_14229_series",
+  "description": "Test questions for ISO 14229 UDS series (7 documents)",
+  "version": "v1",
+  "questions": [
+    {
+      "id": "iso_14229_1",
+      "doc_id": "DOC-000006",
+      "query": "What is DiagnosticSessionControl service?",
+      "expected_keywords": ["DiagnosticSessionControl", "0x10", "service"],
+      "type": "definition"
+    },
+    {
+      "id": "iso_14229_2",
+      "doc_id": "DOC-000006",
+      "query": "UDS服务默认会话是什么?",
+      "expected_keywords": ["default", "session", "0x01"],
+      "type": "definition"
+    },
+    {
+      "id": "iso_14229_3",
+      "doc_id": "DOC-000011",
+      "query": "What is the timing parameter P2 Server for CAN?",
+      "expected_keywords": ["P2", "Server", "ms", "50"],
+      "type": "parameter"
+    },
+    {
+      "id": "iso_14229_4",
+      "doc_id": "DOC-000011",
+      "query": "UDS on CAN 的网络层定时参数",
+      "expected_keywords": ["P2", "P2*", "N_As", "N_Ar"],
+      "type": "parameter"
+    },
+    {
+      "id": "iso_14229_5",
+      "doc_id": "DOC-000007",
+      "query": "What is TesterPresent service?",
+      "expected_keywords": ["TesterPresent", "0x3E"],
+      "type": "definition"
+    },
+    {
+      "id": "iso_14229_6",
+      "doc_id": "DOC-000009",
+      "query": "UDS on K-Line diagnostic services",
+      "expected_keywords": ["K-Line", "diagnostic", "UDS"],
+      "type": "definition"
+    },
+    {
+      "id": "iso_14229_7",
+      "doc_id": "DOC-000010",
+      "query": "UDS on FlexRay implementation",
+      "expected_keywords": ["FlexRay", "UDS", "implementation"],
+      "type": "definition"
+    },
+    {
+      "id": "iso_14229_8",
+      "doc_id": "DOC-000024",
+      "query": "UDS on LIN slave node requirements",
+      "expected_keywords": ["LIN", "slave", "requirement"],
+      "type": "requirement"
+    },
+    {
+      "id": "iso_14229_9",
+      "doc_id": "DOC-000024",
+      "query": "CommunicationControl service 0x28",
+      "expected_keywords": ["CommunicationControl", "0x28"],
+      "type": "definition"
+    },
+    {
+      "id": "iso_14229_10",
+      "doc_id": "DOC-000007",
+      "query": "session layer services 0x10 0x3E",
+      "expected_keywords": ["session", "0x10", "0x3E"],
+      "type": "definition"
+    },
+    {
+      "id": "iso_14229_11",
+      "doc_id": "DOC-000014",
+      "query": "UDSonFlexRay message format",
+      "expected_keywords": ["FlexRay", "message", "format"],
+      "type": "definition"
+    },
+    {
+      "id": "iso_14229_12",
+      "doc_id": "DOC-000006",
+      "query": "ECUReset service 0x11 requirements",
+      "expected_keywords": ["ECUReset", "0x11"],
+      "type": "requirement"
+    },
+    {
+      "id": "iso_14229_13",
+      "doc_id": "DOC-000006",
+      "query": "SecurityAccess service 0x27",
+      "expected_keywords": ["SecurityAccess", "0x27", "seed", "key"],
+      "type": "definition"
+    },
+    {
+      "id": "iso_14229_14",
+      "doc_id": "DOC-000011",
+      "query": "UDS on CAN frame types",
+      "expected_keywords": ["CAN", "frame", "type"],
+      "type": "definition"
+    },
+    {
+      "id": "iso_14229_15",
+      "doc_id": "DOC-000006",
+      "query": "ReadDataByIdentifier service 0x22",
+      "expected_keywords": ["ReadDataByIdentifier", "0x22", "DID"],
+      "type": "definition"
+    }
+  ]
+}
