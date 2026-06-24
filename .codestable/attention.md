@@ -20,6 +20,9 @@
 - 快速回归优先跑：
   `C:\Python314\python.exe -m pytest tests/test_query_repair_regression.py -q`
 - 带 `-k` 过滤时，pytest 输出大量 `deselected` 是正常现象，表示未匹配过滤表达式的测试被跳过。
+- **默认套件状态（Sprint 1 后，2026-06-24）**：`679 passed, 1 skipped, 1 xfailed, 0 failed`（~5min，默认 deselect integration+benchmark）。全量套件（`-o addopts=""` 取消 deselect）含大量 integration/benchmark，会很慢且有失败，正常回归不要跑全量。
+- **已知 xfail**：`tests/test_mcp_server.py::test_mcp_server_tools_call_answer_query` — answer_api exact-term gate 在 evidence 非空但 facts=0 时错误清零上下文，定义查询降级为文档标题。绑 issue `2026-06-24-definition-query-exact-term-gate-drops-evidence`，strict=True（修好后会自动报错提醒解 xfail）。
+- **post_ingestion_gate 测试**用 `tmp_path` 隔离 fixture，不触生产库；不要改回硬编码 `DOC-000001`（那是孤儿 doc_id）。
 
 ### 命令与脚本陷阱
 - `query-context` 和 `answer-query` 的查询文本必须使用 `--query` 参数，不能作为位置参数传入。
@@ -36,3 +39,7 @@
 - Advanced Query Planner 默认关闭；需要实验链路时设置 `EAKB_ENABLE_ADVANCED_QUERY_PLANNER=1`。
 
 ### 其他
+- **Sprint 1 稳定化（2026-06-24）已完成**：8 个失败测试收口为 0 failed+1 xfail；WIP 分 13 个本地 commit（safety tag `safety/pre-sprint1-stabilization-20260624`，**未 push**，远端不可达）；eval baseline 固定为 token_overlap（deterministic，0.60）；工程清理已 quarantine 0字节db + prune 陈旧 run。详见 `docs/dev/sprint1-stabilization/sprint1_acceptance_report.md`。
+- **文本 LLM 契约**：所有文本 LLM 调用统一走单一 `text_llm` provider（`get_text_llm_settings()` 读 `ANTHROPIC_BASE_URL`/`ANTHROPIC_AUTH_TOKEN`/`TEXT_LLM_MODEL`），无 minimax→astron 两段 fallback。详见 `docs/dev/llm-provider-policy.md`。OCR/parse provider 路由（minimax+astron+paddle）与此无关，仍多 provider。
+- **eval 主口径**：`eakb eval run-now --suite golden --version v1 --max-questions 10`（token_overlap，无 LLM）。`EVAL_USE_LLM=1` 才启用 LLM judge（辅助非阻塞）。详见 `docs/dev/eval-baseline-policy.md`。
+- **命名**：主线 six-loop；历史 `kb1-four-loop-hardening` roadmap 目录与 `four-loop-integration` audit 保留原名（维持引用链），已加历史命名说明；新工作走 `kb1-next-phase`。
