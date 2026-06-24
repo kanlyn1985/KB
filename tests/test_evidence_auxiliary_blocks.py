@@ -64,9 +64,22 @@ def test_build_evidence_skips_structure_markdown_blocks(tmp_path: Path) -> None:
                 "2026-04-20T00:00:00+00:00",
             ),
         )
+        # Use realistic-length content: the noise filter (_is_noise_block)
+        # skips blocks shorter than 30 chars with < 5 CJK chars, so the
+        # content block must carry real clause text to be kept.
         rows = [
-            ("BLK-1", "ocr_markdown", "# 正文", "# 正文"),
-            ("BLK-2", "structure_markdown", "## 结构提示", "## 结构提示"),
+            (
+                "BLK-1",
+                "ocr_markdown",
+                "# 范围\n本标准规定了车载诊断系统的通用要求，适用于M1类车辆的OBD系统。",
+                "# 范围\n本标准规定了车载诊断系统的通用要求，适用于M1类车辆的OBD系统。",
+            ),
+            (
+                "BLK-2",
+                "structure_markdown",
+                "## 结构提示",
+                "## 结构提示",
+            ),
         ]
         for block_id, block_type, text_content, raw_text in rows:
             connection.execute(

@@ -13,7 +13,7 @@ Each submodule exposes:
 
 This file verifies:
 1. The package public surface and submodule entry points exist.
-2. The full argparse parser builds and registers all 54 subcommands.
+2. The full argparse parser builds and registers all registered subcommands.
 3. Argument parsing round-trips for representative commands.
 4. Dispatcher correctly identifies the right family and the others return False.
 5. End-to-end: `init` and `status` work against a real (empty) workspace.
@@ -84,14 +84,34 @@ def test_build_parser_returns_argument_parser() -> None:
     assert parser.prog == "eakb"
 
 
-def test_build_parser_registers_all_54_subcommands() -> None:
+def test_build_parser_registers_all_subcommands() -> None:
     parser = _impl.build_parser()
     # Find the subparsers action (dest='command')
     sub_actions = [a for a in parser._actions if a.dest == "command"]
     assert len(sub_actions) == 1
     choices = sub_actions[0].choices
     assert choices is not None
-    assert len(choices) == 54, f"expected 54 subcommands, got {len(choices)}"
+    # The subcommand count grows as capabilities are added (was 54; became
+    # 55 when the `eval` subcommand was registered in _eval.py). Rather than
+    # hard-coding a stale number, assert a stable lower bound plus the
+    # presence of the canonical command families so this test fails loudly
+    # only on real regressions (a family going missing), not on additive
+    # growth.
+    assert len(choices) >= 54, f"expected >= 54 subcommands, got {len(choices)}"
+    expected_families = {
+        # _workspace
+        "init", "status", "workspace-doctor", "rebuild-derived-state",
+        # _build
+        "build-document", "build-evidence", "build-facts", "build-wiki",
+        # _eval
+        "eval", "generate-golden-candidates",
+        # _test
+        "build-quality", "check-quality",
+        # _serve
+        "serve-api", "serve-mcp", "search", "answer-query",
+    }
+    missing = expected_families - set(choices)
+    assert not missing, f"missing expected subcommands: {missing}"
 
 
 def test_every_registered_subcommand_is_dispatchable() -> None:

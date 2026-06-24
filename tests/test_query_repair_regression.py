@@ -117,19 +117,29 @@ def test_knowledge_unit_factory_preserves_raw_title_and_adds_canonical_metadata(
     assert "layout_title_noise" in (unit.quality_flags or [])
 
 
-def test_text_llm_uses_minimax_before_astron(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_text_llm_routes_through_unified_text_llm_endpoint(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The text-LLM call sites route through ONE unified provider.
+
+    Contract (refactor cdf51d9): ``_call_astron_text`` / ``_call_minimax_text``
+    are legacy aliases that both delegate to the single unified text-LLM
+    endpoint configured by ``get_text_llm_settings()``
+    (ANTHROPIC_BASE_URL / ANTHROPIC_AUTH_TOKEN / TEXT_LLM_MODEL). The old
+    two-stage minimax-primary-then-astron-fallback was intentionally removed
+    in favour of one explicitly-configured provider. This test pins the new
+    contract: exactly one call, against the configured unified endpoint, with
+    ``provider_name="text_llm"``.
+    """
+    monkeypatch.setenv("ANTHROPIC_BASE_URL", "https://unified-llm.example/anthropic")
+    monkeypatch.setenv("ANTHROPIC_AUTH_TOKEN", "unified-key")
+    monkeypatch.setenv("TEXT_LLM_MODEL", "claude-3-5-sonnet-20241022")
+    # Legacy OPENAI_* / LLM_MODEL vars must NOT steer the text-LLM path anymore.
     monkeypatch.setenv("OPENAI_BASE_URL", "https://minimax.example/anthropic")
     monkeypatch.setenv("OPENAI_API_KEY", "minimax-key")
     monkeypatch.setenv("LLM_MODEL", "MiniMax-M2.7")
-    monkeypatch.setenv("ANTHROPIC_BASE_URL", "https://astron.example/anthropic")
-    monkeypatch.setenv("ANTHROPIC_AUTH_TOKEN", "astron-key")
-    monkeypatch.setenv("ANTHROPIC_MODEL", "astron-code-latest")
     calls: list[dict[str, object]] = []
 
-    original_call = query_semantic_parser._call_llm_message
-
     def fake_call(*, api_base: str, auth_token: str, model: str, prompt: str, system_prompt: str, provider_name: str) -> str:
-        calls.append({"api_base": api_base, "model": model})
+        calls.append({"api_base": api_base, "model": model, "provider_name": provider_name})
         return '{"ok": true}'
 
     monkeypatch.setattr(query_semantic_parser, "_call_llm_message", fake_call)
@@ -137,8 +147,10 @@ def test_text_llm_uses_minimax_before_astron(monkeypatch: pytest.MonkeyPatch) ->
 
     assert result == '{"ok": true}'
     assert len(calls) == 1
-    assert str(calls[0]["api_base"]).startswith("https://minimax.example/anthropic")
-    assert calls[0]["model"] == "MiniMax-M2.7"
+    # Routed to the unified endpoint (ANTHROPIC_BASE_URL), NOT the legacy minimax URL.
+    assert str(calls[0]["api_base"]).startswith("https://unified-llm.example/anthropic")
+    assert calls[0]["model"] == "claude-3-5-sonnet-20241022"
+    assert calls[0]["provider_name"] == "text_llm"
 
 
 def test_injected_hit_merge_preserves_graph_provenance_on_replacement() -> None:
@@ -176,28 +188,33 @@ def test_injected_hit_merge_preserves_graph_provenance_on_replacement() -> None:
     assert merged[0]["channels"] == ["direct_term_definition", "graph"]
 
 
-def test_text_llm_falls_back_to_astron_after_minimax_failure(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_text_llm_raises_when_unified_provider_fails(monkeypatch: pytest.MonkeyPatch) -> None:
+    """With the unified single-provider contract there is no silent fallback.
+
+    The removed two-stage behaviour fell back minimax→astron. Under the new
+    contract (refactor cdf51d9) a provider failure is marked and re-raised so
+    callers can decide (the semantic parser falls back to its rule-based
+    default). This test pins that the error propagates instead of silently
+    retrying against a second hardcoded provider.
+    """
+    monkeypatch.setenv("ANTHROPIC_BASE_URL", "https://unified-llm.example/anthropic")
+    monkeypatch.setenv("ANTHROPIC_AUTH_TOKEN", "unified-key")
+    monkeypatch.setenv("TEXT_LLM_MODEL", "claude-3-5-sonnet-20241022")
     monkeypatch.setenv("OPENAI_BASE_URL", "https://minimax.example/anthropic")
     monkeypatch.setenv("OPENAI_API_KEY", "minimax-key")
     monkeypatch.setenv("LLM_MODEL", "MiniMax-M2.7")
-    monkeypatch.setenv("ANTHROPIC_BASE_URL", "https://astron.example/anthropic")
-    monkeypatch.setenv("ANTHROPIC_AUTH_TOKEN", "astron-key")
-    monkeypatch.setenv("ANTHROPIC_MODEL", "astron-code-latest")
     calls: list[str] = []
 
     def fake_call(*, api_base: str, auth_token: str, model: str, prompt: str, system_prompt: str, provider_name: str) -> str:
         calls.append(api_base)
-        if "minimax.example" in api_base:
-            raise TimeoutError("primary timeout")
-        return '{"fallback": true}'
+        raise TimeoutError("primary timeout")
 
     monkeypatch.setattr(query_semantic_parser, "_call_llm_message", fake_call)
-    result = query_semantic_parser._call_astron_text("ping")
-
-    assert result == '{"fallback": true}'
-    assert len(calls) == 2
-    assert calls[0].startswith("https://minimax.example/anthropic")
-    assert calls[1].startswith("https://astron.example/anthropic")
+    # No fallback: the single unified provider failure propagates.
+    with pytest.raises(TimeoutError):
+        query_semantic_parser._call_astron_text("ping")
+    assert len(calls) == 1
+    assert calls[0].startswith("https://unified-llm.example/anthropic")
 
 
 def test_rewrite_preserves_cc_resistance_anchor_for_meaning_query() -> None:
