@@ -381,3 +381,32 @@ CREATE TABLE IF NOT EXISTS low_confidence_queries (
 CREATE INDEX IF NOT EXISTS idx_low_conf_queries_doc_id ON low_confidence_queries(doc_id);
 CREATE INDEX IF NOT EXISTS idx_low_conf_queries_processed ON low_confidence_queries(processed);
 CREATE INDEX IF NOT EXISTS idx_low_conf_queries_created_at ON low_confidence_queries(created_at);
+
+-- Phase A: Wiki chunks — per-section KB-ready markdown, replacing legacy wiki_pages
+CREATE TABLE IF NOT EXISTS wiki_chunks (
+    chunk_id TEXT PRIMARY KEY,
+    doc_id TEXT,
+    source_standard TEXT,
+    section_path TEXT NOT NULL,
+    section_title TEXT NOT NULL,
+    body_text TEXT NOT NULL,
+    source_page_range TEXT,
+    chunk_type TEXT NOT NULL DEFAULT 'section',
+    entity_refs_json TEXT,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (doc_id) REFERENCES documents(doc_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_wiki_chunks_doc_id ON wiki_chunks(doc_id);
+CREATE INDEX IF NOT EXISTS idx_wiki_chunks_section_title ON wiki_chunks(section_title);
+CREATE INDEX IF NOT EXISTS idx_wiki_chunks_source_standard ON wiki_chunks(source_standard);
+
+-- Phase F: Vector embeddings for semantic search
+CREATE TABLE IF NOT EXISTS wiki_chunk_embeddings (
+    chunk_id TEXT PRIMARY KEY,
+    embedding_json TEXT NOT NULL,
+    model_name TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (chunk_id) REFERENCES wiki_chunks(chunk_id)
+);
+CREATE INDEX IF NOT EXISTS idx_wce_chunk_id ON wiki_chunk_embeddings(chunk_id);

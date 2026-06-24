@@ -15,6 +15,7 @@ FTS_TABLES = {
     "evidence": "evidence_fts",
     "facts": "facts_fts",
     "wiki": "wiki_fts",
+    "wiki_chunks": "wiki_chunks_fts",
 }
 
 
@@ -44,6 +45,15 @@ def ensure_fts_schema(connection) -> None:
             searchable_text,
             tokenize = 'unicode61'
         );
+
+        CREATE VIRTUAL TABLE IF NOT EXISTS wiki_chunks_fts USING fts5(
+            chunk_id UNINDEXED,
+            doc_id UNINDEXED,
+            source_standard,
+            section_title,
+            body_text,
+            tokenize = 'unicode61'
+        );
         """
     )
     connection.commit()
@@ -63,6 +73,7 @@ def _refresh_fts_index(connection, paths: AppPaths) -> dict[str, int]:
     connection.execute("DELETE FROM evidence_fts")
     connection.execute("DELETE FROM facts_fts")
     connection.execute("DELETE FROM wiki_fts")
+    connection.execute("DELETE FROM wiki_chunks_fts")
 
     evidence_rows = connection.execute(
         """
@@ -102,7 +113,7 @@ def _refresh_fts_index(connection, paths: AppPaths) -> dict[str, int]:
         SELECT w.page_id, json_extract(w.source_doc_ids_json, '$[0]') AS doc_id, w.title, w.slug
         FROM wiki_pages w
         LEFT JOIN entities e ON e.entity_id = w.entity_id
-        WHERE COALESCE(w.trust_status, '') != 'stale'
+        WHERE COALESCE(w.trust_status, '') NOT IN ('stale', 'deprecated')
           AND (w.entity_id IS NULL OR e.entity_status = 'ready')
         """
     ).fetchall()
@@ -116,12 +127,35 @@ def _refresh_fts_index(connection, paths: AppPaths) -> dict[str, int]:
             (row["page_id"], row["doc_id"], None, searchable),
         )
 
+    wiki_chunk_rows = connection.execute(
+        """
+        SELECT chunk_id, doc_id, source_standard, section_title, body_text
+        FROM wiki_chunks
+        """
+    ).fetchall()
+    for row in wiki_chunk_rows:
+        connection.execute(
+            """
+            INSERT INTO wiki_chunks_fts (
+                chunk_id, doc_id, source_standard, section_title, body_text
+            ) VALUES (?, ?, ?, ?, ?)
+            """,
+            (
+                row["chunk_id"],
+                row["doc_id"],
+                row["source_standard"] or "",
+                row["section_title"] or "",
+                row["body_text"] or "",
+            ),
+        )
+
     connection.commit()
     write_fts_freshness_stamp(paths, connection)
     return {
         "evidence": len(evidence_rows),
         "facts": len(fact_rows),
         "wiki": len(wiki_rows),
+        "wiki_chunks": len(wiki_chunk_rows),
     }
 
 
@@ -148,6 +182,7 @@ def search_knowledge_base_expanded(
     limit: int = 10,
     connection=None,
     result_types: set[str] | None = None,
+    use_embeddings: bool = True,
 ) -> list[dict[str, object]]:
     query = query.strip()
     if not query:
@@ -164,9 +199,10 @@ def search_knowledge_base_expanded(
         expanded_queries = _expanded_queries(query)
         fts_hits = _search_fts(connection, expanded_queries, limit=max(limit * 4, 20), result_types=result_types)
         semantic_hits = _search_semantic(connection, expanded_queries, limit=max(limit * 4, 20), result_types=result_types)
+        embedding_hits = _search_embeddings(connection, query, limit=max(limit * 2, 10)) if use_embeddings else []
 
         merged: dict[tuple[str, str], dict[str, object]] = {}
-        for hit in [*fts_hits, *semantic_hits]:
+        for hit in [*fts_hits, *semantic_hits, *embedding_hits]:
             key = (hit["result_type"], hit["result_id"])
             existing = merged.get(key)
             if existing is None or float(hit["score"]) > float(existing["score"]):
@@ -235,16 +271,24 @@ def _fts_match_expr(query: str) -> str:
     for token in tokens:
         parts = re.split(r"[/\-]", token)
         split_tokens.extend(p for p in parts if p)
+    # Extract CJK n-grams directly from the normalized query. The previous
+    # implementation only extracted them from already-tokenized single-char
+    # tokens, which produced no n-grams (single chars fail the {2,} test).
+    # Extracting from the raw query preserves n-gram coverage.
     cjk_terms: list[str] = []
-    for token in split_tokens:
-        if re.fullmatch(r"[\u4e00-\u9fff]{2,}", token):
-            cjk_terms.extend(_cjk_ngrams(token, n=2))
-            if len(token) >= 3:
-                cjk_terms.extend(_cjk_ngrams(token, n=3))
-    all_tokens = [*split_tokens, *cjk_terms]
+    for n in (2, 3):
+        cjk_terms.extend(_cjk_ngrams(normalized, n=n))
+    # Deduplicate while preserving order
+    seen: set[str] = set()
+    deduped_cjk: list[str] = []
+    for term in cjk_terms:
+        if term and term not in seen:
+            seen.add(term)
+            deduped_cjk.append(term)
+    all_tokens = [*split_tokens, *deduped_cjk]
     if not all_tokens:
         return f'"{query}"'
-    return " OR ".join(f'"{token}"' for token in all_tokens[:10])
+    return " OR ".join(f'"{token}"' for token in all_tokens[:20])
 
 
 def _search_fts(
@@ -257,7 +301,7 @@ def _search_fts(
     seen: set[tuple[str, str]] = set()
     sources = [
         source
-        for source in ("evidence", "facts", "wiki")
+        for source in ("evidence", "facts", "wiki", "wiki_chunks")
         if result_types is None or _source_result_type(source) in result_types
     ]
     for query in queries:
@@ -268,21 +312,37 @@ def _search_fts(
 
 
 def _source_result_type(source: str) -> str:
+    if source == "wiki_chunks":
+        return "wiki_chunk"
     return "wiki" if source == "wiki" else source.rstrip("s")
 
 
 def _search_fts_table(connection, source: str, expr: str, limit: int, seen: set[tuple[str, str]]) -> list[dict[str, object]]:
     table = FTS_TABLES[source]
-    rows = connection.execute(
-        f"""
-        SELECT result_id, doc_id, page_no, bm25({table}) AS rank, searchable_text
-        FROM {table}
-        WHERE {table} MATCH ?
-        ORDER BY rank
-        LIMIT ?
-        """,
-        (expr, limit),
-    ).fetchall()
+    if source == "wiki_chunks":
+        rows = connection.execute(
+            f"""
+            SELECT chunk_id AS result_id, doc_id, NULL AS page_no,
+                   bm25({table}) AS rank,
+                   section_title || ' | ' || body_text AS searchable_text
+            FROM {table}
+            WHERE {table} MATCH ?
+            ORDER BY rank
+            LIMIT ?
+            """,
+            (expr, limit),
+        ).fetchall()
+    else:
+        rows = connection.execute(
+            f"""
+            SELECT result_id, doc_id, page_no, bm25({table}) AS rank, searchable_text
+            FROM {table}
+            WHERE {table} MATCH ?
+            ORDER BY rank
+            LIMIT ?
+            """,
+            (expr, limit),
+        ).fetchall()
 
     hits: list[dict[str, object]] = []
     for row in rows:
@@ -291,8 +351,10 @@ def _search_fts_table(connection, source: str, expr: str, limit: int, seen: set[
             continue
         seen.add(key)
         score = 1.0 / (1.0 + max(float(row["rank"] or 0), 0.0))
-        # Boost evidence and facts over wiki to avoid wiki dominance
-        if source == "evidence":
+        # wiki_chunks get highest boost (curated chapter summaries)
+        if source == "wiki_chunks":
+            score *= 2.0
+        elif source == "evidence":
             score *= 1.5
         elif source == "facts":
             score *= 1.3
@@ -387,8 +449,22 @@ def _semantic_candidates(connection, limit: int, result_types: set[str] | None =
                        w.title || ' ' || w.slug AS snippet
                 FROM wiki_pages w
                 LEFT JOIN entities e ON e.entity_id = w.entity_id
-                WHERE COALESCE(w.trust_status, '') != 'stale'
+                WHERE COALESCE(w.trust_status, '') NOT IN ('stale', 'deprecated')
                   AND (w.entity_id IS NULL OR e.entity_status = 'ready')
+                LIMIT ?
+                """,
+                (limit,),
+            ).fetchall()
+        )
+    if result_types is None or "wiki_chunk" in result_types:
+        rows.extend(
+            dict(row)
+            for row in connection.execute(
+                """
+                SELECT 'wiki_chunk' AS result_type, chunk_id AS result_id, doc_id,
+                       NULL AS page_no,
+                       section_title || ' | ' || body_text AS snippet
+                FROM wiki_chunks
                 LIMIT ?
                 """,
                 (limit,),
@@ -419,3 +495,67 @@ def _cosine_similarity(left: dict[str, float], right: dict[str, float]) -> float
     if len(left) > len(right):
         left, right = right, left
     return sum(value * right.get(key, 0.0) for key, value in left.items())
+
+
+def _search_embeddings(
+    connection,
+    query: str,
+    limit: int = 20,
+) -> list[dict[str, object]]:
+    """Cosine-similarity search against wiki_chunk_embeddings."""
+    try:
+        import json
+        import numpy as np
+        from sentence_transformers import SentenceTransformer
+
+        row = connection.execute(
+            "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='wiki_chunk_embeddings'"
+        ).fetchone()
+        if row[0] == 0:
+            return []
+
+        row = connection.execute(
+            "SELECT COUNT(*) FROM wiki_chunk_embeddings"
+        ).fetchone()
+        if row[0] == 0:
+            return []
+
+        _MODEL_NAME = "all-MiniLM-L6-v2"
+        model = SentenceTransformer(_MODEL_NAME)
+        query_emb = model.encode([query], show_progress_bar=False)[0]
+        query_norm = np.linalg.norm(query_emb)
+        if query_norm == 0:
+            return []
+
+        rows = connection.execute(
+            """
+            SELECT e.chunk_id, e.embedding_json, wc.doc_id
+            FROM wiki_chunk_embeddings e
+            JOIN wiki_chunks wc ON wc.chunk_id = e.chunk_id
+            """
+        ).fetchall()
+
+        scores: list[tuple[float, dict[str, object]]] = []
+        for row in rows:
+            emb = np.array(json.loads(row["embedding_json"]))
+            emb_norm = np.linalg.norm(emb)
+            if emb_norm == 0:
+                continue
+            score = float(np.dot(query_emb, emb) / (query_norm * emb_norm))
+            scores.append((score, {
+                "result_type": "wiki_chunk",
+                "result_id": row["chunk_id"],
+                "doc_id": row["doc_id"],
+                "page_no": None,
+                "score": score,
+                "snippet": "",
+            }))
+
+        scores.sort(key=lambda x: x[0], reverse=True)
+        hits: list[dict[str, object]] = []
+        for score, hit in scores[:limit]:
+            hit["score"] = round(score * 1.8, 6)
+            hits.append(hit)
+        return hits
+    except Exception:
+        return []

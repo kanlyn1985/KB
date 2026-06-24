@@ -81,6 +81,17 @@ _SPECS: tuple[DerivedStateSpec, ...] = (
         rebuild_command="rebuild-derived-state --scope fts",
         description="Full-text search index derived from non-stale wiki pages.",
     ),
+    DerivedStateSpec(
+        state_id="wiki_chunks_fts",
+        kind="fts_index",
+        source_tables=("wiki_chunks",),
+        source_files=(),
+        artifact_tables=("wiki_chunks_fts",),
+        artifact_files=(_FTS_STAMP,),
+        freshness_policy="source_signature_and_count",
+        rebuild_command="rebuild-derived-state --scope fts",
+        description="Full-text search index derived from wiki chunk sections.",
+    ),
 )
 
 
@@ -338,9 +349,18 @@ def _source_signature_rows(connection: Connection, state_id: str) -> list[dict[s
                    COALESCE(e.entity_status, '') AS entity_status
             FROM wiki_pages w
             LEFT JOIN entities e ON e.entity_id = w.entity_id
-            WHERE COALESCE(w.trust_status, '') != 'stale'
+            WHERE COALESCE(w.trust_status, '') NOT IN ('stale', 'deprecated')
               AND (w.entity_id IS NULL OR e.entity_status = 'ready')
             ORDER BY w.page_id
+            """
+        ).fetchall()
+        return [dict(row) for row in rows]
+    if state_id == "wiki_chunks_fts":
+        rows = connection.execute(
+            """
+            SELECT chunk_id, doc_id, source_standard, section_title, body_text
+            FROM wiki_chunks
+            ORDER BY chunk_id
             """
         ).fetchall()
         return [dict(row) for row in rows]
@@ -365,18 +385,22 @@ def _source_ids(connection: Connection, state_id: str) -> tuple[str, ...]:
             SELECT w.page_id
             FROM wiki_pages w
             LEFT JOIN entities e ON e.entity_id = w.entity_id
-            WHERE COALESCE(w.trust_status, '') != 'stale'
+            WHERE COALESCE(w.trust_status, '') NOT IN ('stale', 'deprecated')
               AND (w.entity_id IS NULL OR e.entity_status = 'ready')
             """
         ).fetchall()
         return _row_values(rows, "page_id")
+    if state_id == "wiki_chunks_fts":
+        rows = connection.execute("SELECT chunk_id FROM wiki_chunks").fetchall()
+        return _row_values(rows, "chunk_id")
     raise ValueError(f"Unsupported derived state id: {state_id}")
 
 
 def _artifact_ids(connection: Connection, state_id: str) -> tuple[str, ...]:
     artifact_table = state_id
-    rows = connection.execute(f"SELECT result_id FROM {artifact_table}").fetchall()
-    return _row_values(rows, "result_id")
+    id_column = "chunk_id" if state_id == "wiki_chunks_fts" else "result_id"
+    rows = connection.execute(f"SELECT {id_column} FROM {artifact_table}").fetchall()
+    return _row_values(rows, id_column)
 
 
 def _row_values(rows: Iterable[object], key: str) -> tuple[str, ...]:

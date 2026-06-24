@@ -446,9 +446,16 @@ def _persist_wiki_page_row(
 
 
 def build_wiki_for_document(workspace_root: Path, doc_id: str) -> WikiBuildResult:
-    """Compile wiki pages for *doc_id*: render per-entity markdown, persist
-    to disk and the `wiki_pages` table, and delete any stale pages left from
-    a previous build.
+    """Compile wiki pages for *doc_id*.
+
+    DEPRECATED: The rendering/persistence of new wiki_pages is disabled.
+    Old per-entity template-stitched pages have been replaced by the
+    wiki_chunks table (populated from cleaned per-PDF markdown via
+    scripts/import_wiki_chunks.py). See plan
+    /home/evt/.claude/plans/kind-sniffing-pike.md Phase B.
+
+    The function still cleans up stale/deprecated wiki_pages for the
+    document so that re-running the pipeline keeps the table tidy.
     """
     paths = AppPaths.from_root(workspace_root)
     connection = connect(paths.db_file)
@@ -456,42 +463,12 @@ def build_wiki_for_document(workspace_root: Path, doc_id: str) -> WikiBuildResul
 
     try:
         _mark_doc_wiki_pages_stale(connection, doc_id, now)
-
-        entity_rows = connection.execute(
-            """
-            SELECT DISTINCT e.entity_id, e.canonical_name, e.entity_type, e.description, e.source_confidence
-            FROM entities e
-            JOIN facts f
-              ON f.subject_entity_id = e.entity_id OR f.object_entity_id = e.entity_id
-            WHERE f.source_doc_id = ?
-              AND e.entity_status = 'ready'
-            ORDER BY e.entity_type, e.canonical_name
-            """,
-            (doc_id,),
-        ).fetchall()
-
-        export_paths: list[Path] = []
-
-        for entity in entity_rows:
-            export_paths.extend(
-                _render_and_persist_entity_page(
-                    connection=connection,
-                    entity=entity,
-                    doc_id=doc_id,
-                    paths=paths,
-                    now=now,
-                )
-            )
-
-        extra_pages = _build_extra_wiki_pages(connection, doc_id, paths, now)
-        export_paths.extend(extra_pages)
         _delete_stale_doc_wiki_pages(connection, doc_id)
-
         connection.commit()
         return WikiBuildResult(
             doc_id=doc_id,
-            page_count=len(export_paths),
-            export_paths=export_paths,
+            page_count=0,
+            export_paths=[],
         )
     finally:
         connection.close()

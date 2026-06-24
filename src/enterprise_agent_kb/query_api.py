@@ -273,6 +273,7 @@ def build_query_context(
         evidence_ids = [hit["result_id"] for hit in hits if hit["result_type"] == "evidence"]
         fact_ids = [hit["result_id"] for hit in hits if hit["result_type"] == "fact"]
         wiki_page_ids = [hit["result_id"] for hit in hits if hit["result_type"] == "wiki"]
+        wiki_chunk_ids = [hit["result_id"] for hit in hits if hit["result_type"] == "wiki_chunk"]
 
         evidence_items: list[dict[str, object]] = []
         entity_ids: set[str] = set()
@@ -354,6 +355,20 @@ def build_query_context(
             for item in wiki_items:
                 if item.get("entity_id"):
                     entity_ids.add(item["entity_id"])
+
+        # Phase F: also hydrate wiki_chunks
+        wiki_chunk_items: list[dict[str, object]] = []
+        if wiki_chunk_ids:
+            placeholders = ",".join("?" for _ in wiki_chunk_ids)
+            rows = connection.execute(
+                f"""
+                SELECT chunk_id, doc_id, source_standard, section_title, body_text
+                FROM wiki_chunks
+                WHERE chunk_id IN ({placeholders})
+                """,
+                wiki_chunk_ids,
+            ).fetchall()
+            wiki_chunk_items = [dict(row) for row in rows]
         if topic_resolution.confidence < 0.8 or not topic_resolution.candidate_wiki_pages:
             wiki_items = _augment_query_wiki_items(connection, rewritten, wiki_items, doc_ids, limit)
         candidate_page_ids = {str(item.get("page_id") or "") for item in topic_resolution.candidate_wiki_pages}
@@ -572,6 +587,7 @@ def build_query_context(
             "graph_edges": edge_items,
             "graph_candidates": [candidate.to_hit() for candidate in graph_candidates],
             "wiki_pages": wiki_items,
+            "wiki_chunks": wiki_chunk_items,
             "topic_objects": topic_objects,
             "knowledge_subgraph": knowledge_subgraph,
             "evidence_judgement": evidence_judgement.to_dict(),
@@ -623,6 +639,23 @@ def _safe_json(value: str | None) -> object:
         return json.loads(value)
     except json.JSONDecodeError:
         return value
+
+
+def _doc_title_matches(connection, doc_id: str, terms: list[str]) -> bool:
+    """Check if any search term appears in the document title."""
+    if not doc_id or not terms:
+        return False
+    row = connection.execute(
+        "SELECT source_filename FROM documents WHERE doc_id = ?",
+        (doc_id,),
+    ).fetchone()
+    if not row:
+        return False
+    title = str(row["source_filename"] or "").lower()
+    for term in terms:
+        if len(term) >= 2 and term.lower() in title:
+            return True
+    return False
 
 
 def _extract_standard_from_query(query: str) -> str | None:
@@ -780,7 +813,24 @@ def _inject_direct_requirement_hits(connection, rewritten, hits: list[dict[str, 
         if term.casefold() in {"requirement", "requirements", "shall", "要求"}:
             continue
         terms.append(term)
-    if not terms:
+
+    # Extract short keywords (2-4 chars) from terms for better matching
+    short_keywords: list[str] = []
+    for term in terms:
+        # Extract Chinese keywords (2-4 chars)
+        chars = re.findall(r"[一-鿿]{2,4}", term)
+        for kw in chars:
+            if kw not in short_keywords and kw not in terms:
+                short_keywords.append(kw)
+        # Extract English acronyms (2-6 uppercase chars)
+        acronyms = re.findall(r"[A-Z]{2,6}", term)
+        for acr in acronyms:
+            if acr not in short_keywords and acr not in terms:
+                short_keywords.append(acr)
+
+    # Combine terms with short keywords for search
+    all_search_terms = terms + short_keywords
+    if not all_search_terms:
         return hits
 
     # Extract 2-char Chinese fragments for fine-grained LIKE matching
@@ -795,7 +845,7 @@ def _inject_direct_requirement_hits(connection, rewritten, hits: list[dict[str, 
     direct_hits: list[dict[str, object]] = []
     seen: set[str] = set()
     # Search with full terms first (higher priority)
-    for term in terms[:4]:
+    for term in all_search_terms[:6]:
         rows = connection.execute(
             """
             SELECT fact_id, source_doc_id, json_extract(qualifiers_json, '$.page_no') AS page_no,
@@ -814,13 +864,16 @@ def _inject_direct_requirement_hits(connection, rewritten, hits: list[dict[str, 
             seen.add(row["fact_id"])
             payload = _safe_json(row["object_value"])
             blob = json.dumps(payload, ensure_ascii=False)
+            # Boost score if document title matches query terms
+            doc_title_match = _doc_title_matches(connection, row["source_doc_id"], terms)
+            score = 2.2 + (0.3 if doc_title_match else 0.0)
             direct_hits.append(
                 {
                     "result_type": "fact",
                     "result_id": row["fact_id"],
                     "doc_id": row["source_doc_id"],
                     "page_no": row["page_no"],
-                    "score": 2.2,
+                    "score": score,
                     "snippet": f"direct_requirement {blob[:1200]}",
                     "channel": "direct_requirement",
                     "channels": ["direct_requirement"],

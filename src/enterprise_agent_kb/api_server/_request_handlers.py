@@ -82,7 +82,8 @@ def _resolve(name: str):  # noqa: ANN202
 class ApiServer(ThreadingHTTPServer):
     def __init__(self, server_address: tuple[str, int], workspace_root: Path):
         self.workspace_root = workspace_root
-        self.project_root = Path(__file__).resolve().parents[2]
+        # project_root is src/enterprise_agent_kb/, examples is at repo root
+        self.project_root = Path(__file__).resolve().parents[3]
         self.started_at = datetime.now(UTC).isoformat(timespec="seconds")
         self.jobs: dict[str, dict[str, Any]] = {}
         self.jobs_lock = threading.Lock()
@@ -155,6 +156,7 @@ class ApiRequestHandler(BaseHTTPRequestHandler):
             "/search": self._handle_search,
             "/query-context": self._handle_query_context,
             "/answer-query": self._handle_answer_query,
+            "/combined-query": self._handle_combined_query,
             "/agent-query": self._handle_agent_query,
             "/build-document": self._handle_build_document,
             "/build-document-and-test": self._handle_build_document_and_test,
@@ -263,6 +265,94 @@ class ApiRequestHandler(BaseHTTPRequestHandler):
                 pass  # feedback recording must not break the answer path
 
         self._write_json(HTTPStatus.OK, result)
+
+    def _handle_combined_query(self, body: dict[str, Any]) -> None:
+        """Handle ontology + legacy combined query.
+
+        Request body:
+          - query: str (required)
+          - limit: int (default 8)
+          - preferred_doc_id: str | None
+          - use_legacy: bool (default True) — when True (combined mode), also
+            fetch wiki_chunk context
+          - mode: str (default "combined") — "combined", "ontology", "wiki", "legacy"
+        """
+        query = str(body.get("query", "")).strip()
+        limit = int(body.get("limit", 8))
+        preferred_doc_id = str(body.get("preferred_doc_id", "")).strip() or None
+        use_legacy = bool(body.get("use_legacy", True))
+        mode = str(body.get("mode", "combined")).strip()
+
+        if mode == "legacy":
+            # Pure legacy mode
+            result = answer_query(
+                self.server.workspace_root, query, limit=limit,
+                preferred_doc_id=preferred_doc_id,
+            )
+            from kb1_ontology.unified_response import from_legacy_answer
+            unified = from_legacy_answer(query, result)
+            self._record_audit(
+                "combined_query_legacy",
+                {"query": query, "mode": "legacy"},
+            )
+            self._write_json(HTTPStatus.OK, unified.to_dict())
+            return
+
+        if mode == "ontology":
+            # Pure ontology mode (skip legacy)
+            from kb1_ontology.combined_query import combined_query
+            from kb1_ontology.unified_response import from_combined_answer
+            result = combined_query(
+                self.server.workspace_root, query, limit=limit,
+                use_legacy=False,
+            )
+            unified = from_combined_answer(result)
+            self._record_audit(
+                "combined_query_ontology",
+                {"query": query, "mode": "ontology"},
+            )
+            self._write_json(HTTPStatus.OK, unified.to_dict())
+            return
+
+        if mode == "wiki":
+            # Phase D: pure wiki_chunks mode (no ontology, no legacy)
+            from kb1_ontology.legacy_bridge import wiki_chunk_answer
+            from kb1_ontology.unified_response import from_combined_answer
+            from kb1_ontology.types import Answer
+            wiki = wiki_chunk_answer(self.server.workspace_root, query, limit=limit)
+            if wiki is None:
+                self._write_json(
+                    HTTPStatus.SERVICE_UNAVAILABLE,
+                    {"error": "wiki_chunks database unavailable"},
+                )
+                return
+            answer = Answer(
+                query=query,
+                category="wiki",
+                display=wiki.get("direct_answer", ""),
+                legacy_context=str(wiki.get("chunk_count", 0)) + " chunks",
+            )
+            unified = from_combined_answer(answer)
+            self._record_audit(
+                "combined_query_wiki",
+                {"query": query, "mode": "wiki", "chunk_count": wiki.get("chunk_count", 0)},
+            )
+            self._write_json(HTTPStatus.OK, unified.to_dict())
+            return
+
+        # Default: combined mode (ontology + wiki_chunks)
+        from kb1_ontology.combined_query import combined_query
+        from kb1_ontology.unified_response import from_combined_answer
+        result = combined_query(
+            self.server.workspace_root, query, limit=limit,
+            use_legacy=use_legacy,
+        )
+        unified = from_combined_answer(result)
+        self._record_audit(
+            "combined_query_combined",
+            {"query": query, "mode": "combined", "use_legacy": use_legacy},
+        )
+        self._write_json(HTTPStatus.OK, unified.to_dict())
 
     def _handle_agent_query(self, body: dict[str, Any]) -> None:
         query = str(body.get("query", "")).strip()
@@ -1227,7 +1317,7 @@ class ApiRequestHandler(BaseHTTPRequestHandler):
         return events
 
     def _list_documents(self) -> list[dict[str, Any]]:
-        from .db import connect
+        from ..db import connect
 
         connection = connect(AppPaths.from_root(self.server.workspace_root).db_file)
         try:
@@ -1243,7 +1333,7 @@ class ApiRequestHandler(BaseHTTPRequestHandler):
             connection.close()
 
     def _document_detail(self, doc_id: str) -> dict[str, Any]:
-        from .db import connect
+        from ..db import connect
 
         connection = connect(AppPaths.from_root(self.server.workspace_root).db_file)
         try:
