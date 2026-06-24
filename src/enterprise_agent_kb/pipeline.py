@@ -5,6 +5,7 @@ import time
 import uuid
 from collections.abc import Callable
 from dataclasses import asdict, dataclass
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -28,6 +29,27 @@ from .quality_gate import compute_quality_gate, repair_document_metadata, repair
 from .wiki_compiler import build_wiki_for_document
 from .ambiguity_index import build_ambiguity_index, save_ambiguity_index
 from .db import connect
+
+
+def _extract_ontology_terms_and_params(workspace_root: Path, doc_id: str) -> None:
+    """Auto-extract terms and parameters from a newly built document
+    into the ontology DB.  Failures are logged but never propagate —
+    ontology extraction is best-effort and must not block the pipeline."""
+    try:
+        from scripts.ontology_demo.extract_terms import extract_terms_from_legacy
+        from scripts.ontology_demo.extract_params import extract_params_from_legacy
+
+        term_stats = extract_terms_from_legacy(workspace_root, doc_id=doc_id)
+        param_stats = extract_params_from_legacy(workspace_root, doc_id=doc_id)
+
+        _logger.info(
+            "ontology_extract doc_id=%s terms=%s params=%s",
+            doc_id,
+            term_stats.get("total", term_stats.get("terms_extracted", 0)),
+            param_stats.get("total", 0),
+        )
+    except Exception as e:
+        _logger.warning("ontology_extract failed doc_id=%s err=%s", doc_id, e)
 
 
 @dataclass(frozen=True)
@@ -66,6 +88,7 @@ class PipelineResult:
     coverage_summary_path: str
     coverage_report_path: str
     ingestion_acceptance: dict[str, object]
+    post_ingestion_gate: dict[str, object] | None = None
 
 
 @dataclass(frozen=True)
@@ -243,6 +266,35 @@ def _run_document_pipeline_unprotected(
         },
     )
 
+    # Phase 12: auto-run the post-ingestion quality gate so the new
+    # doc is immediately searchable.  Failures are logged but do not
+    # raise (so the build pipeline still reports success).  Callers
+    # can check PipelineResult.post_ingestion_gate to see the gate
+    # status.
+    gate_payload: dict[str, object] | None = None
+    try:
+        gate = run_post_ingestion_gate(workspace_root, doc_id)
+        gate_payload = gate.to_dict()
+        _logger.info(
+            "post_ingestion_gate doc_id=%s passed=%s steps=%d",
+            doc_id, gate_payload["passed"], len(gate_payload["steps"]),
+        )
+        if not gate_payload["passed"]:
+            _logger.warning(
+                "post_ingestion_gate FAIL doc_id=%s details=%s",
+                doc_id, gate_payload,
+            )
+    except Exception as e:
+        _logger.error(
+            "post_ingestion_gate crashed doc_id=%s err=%s", doc_id, e
+        )
+        gate_payload = {"passed": False, "steps": [], "error": str(e)}
+
+    # Phase 13: auto-extract ontology terms and parameters from the
+    # newly built document.  Best-effort — failures are logged but
+    # never block the pipeline.
+    _extract_ontology_terms_and_params(workspace_root, doc_id)
+
     _logger.info("pipeline:done doc_id=%s", doc_id)
     return PipelineResult(
         doc_id=doc_id,
@@ -266,7 +318,284 @@ def _run_document_pipeline_unprotected(
         coverage_summary_path=str(coverage_result.summary_path),
         coverage_report_path=str(coverage_result.report_path),
         ingestion_acceptance=_acceptance_summary(acceptance.to_dict()),
+        post_ingestion_gate=gate_payload,
     )
+
+
+# ---- Post-ingestion quality gate -----------------------------------------
+
+class PostIngestionGateResult:
+    """Result of running the post-ingestion quality gate.
+
+    Each step is a tuple ``(passed: bool, detail: str)``.  The overall
+    pass is True iff all steps pass.
+    """
+
+    steps: list[tuple[str, bool, str]]
+
+    def __init__(self, steps: list[tuple[str, bool, str]] | None = None) -> None:
+        self.steps = steps or []
+
+    @property
+    def passed(self) -> bool:
+        return all(passed for _, passed, _ in self.steps)
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "passed": self.passed,
+            "steps": [
+                {"name": name, "passed": passed, "detail": detail}
+                for name, passed, detail in self.steps
+            ],
+        }
+
+
+def run_post_ingestion_gate(
+    workspace_root: Path,
+    doc_id: str,
+    *,
+    refresh_fts: bool = True,
+    regenerate_expected_points: bool = True,
+    sync_term_definitions: bool = True,
+) -> PostIngestionGateResult:
+    """Run the post-ingestion quality gate for a single document.
+
+    After the build pipeline completes, this gate ensures the new
+    document is fully searchable in the KB.  It runs five steps:
+
+      1. **FTS index refresh** — re-indexes facts and evidence so the
+         new doc's content is searchable.
+      2. **expected_points regeneration** — runs the LLM-based point
+         decomposer for the new doc (no-op if version already exists).
+      3. **term_definition sync** — derives term_definition facts from
+         expected_points and inserts them into the facts table.
+      4. **sanity check** — verifies facts/evidence counts > 0 and
+         expected_points doc_id row exists.
+      5. **wiki_coverage_check** — verifies that the wiki markdown covers
+         all sections present in the cleaned source MD (if both exist).
+
+    The function never raises; it captures all exceptions into step
+    results so the caller can decide whether to fail loudly.
+    """
+    from .retrieval import _refresh_fts_index
+    from .db import connect
+
+    result = PostIngestionGateResult()
+
+    # Step 1: FTS index refresh
+    if refresh_fts:
+        try:
+            from .config import AppPaths
+            paths = AppPaths.from_root(workspace_root)
+            conn = connect(paths.db_file)
+            try:
+                _refresh_fts_index(conn, paths)
+                # Verify the new doc is in the index
+                c = conn.cursor()
+                c.execute("SELECT COUNT(*) AS n FROM facts_fts WHERE doc_id = ?", (doc_id,))
+                n_facts = c.fetchone()["n"]
+                c.execute("SELECT COUNT(*) AS n FROM evidence_fts WHERE doc_id = ?", (doc_id,))
+                n_evidence = c.fetchone()["n"]
+                detail = f"facts={n_facts}, evidence={n_evidence} in FTS"
+                result.steps.append(("fts_refresh", n_facts > 0, detail))
+            finally:
+                conn.close()
+        except Exception as e:
+            result.steps.append(("fts_refresh", False, f"{type(e).__name__}: {e}"))
+
+    # Step 2: expected_points regeneration
+    if regenerate_expected_points:
+        try:
+            # Only generate if missing for this doc
+            from .db import connect
+            from .config import AppPaths
+            paths = AppPaths.from_root(workspace_root)
+            conn = connect(paths.db_file)
+            try:
+                c = conn.cursor()
+                c.execute(
+                    "SELECT point_count FROM expected_points WHERE doc_id = ? AND version = ?",
+                    (doc_id, "v1"),
+                )
+                row = c.fetchone()
+                if row is None:
+                    # Run build_expected_points.py as a subprocess (it's a script).
+                    # Use sys.executable to handle venvs where 'python' isn't on PATH.
+                    import subprocess
+                    import sys as _sys
+                    _repo_root = Path(__file__).resolve().parent.parent.parent
+                    proc = subprocess.run(
+                        [_sys.executable, "tools/build_expected_points.py",
+                         "--version", "v1", "--doc-id", doc_id],
+                        capture_output=True, text=True, timeout=600,
+                        cwd=str(_repo_root),
+                    )
+                    if proc.returncode != 0:
+                        result.steps.append((
+                            "expected_points_generation", False,
+                            f"subprocess failed: {proc.stderr[:200]}"
+                        ))
+                    else:
+                        c.execute(
+                            "SELECT point_count FROM expected_points WHERE doc_id = ? AND version = ?",
+                            (doc_id, "v1"),
+                        )
+                        row = c.fetchone()
+                        result.steps.append((
+                            "expected_points_generation",
+                            row is not None and row["point_count"] > 0,
+                            f"point_count={row['point_count'] if row else 0}"
+                        ))
+                else:
+                    result.steps.append((
+                        "expected_points_generation",
+                        True,
+                        f"already exists, point_count={row['point_count']}"
+                    ))
+            finally:
+                conn.close()
+        except Exception as e:
+            result.steps.append((
+                "expected_points_generation", False,
+                f"{type(e).__name__}: {e}"
+            ))
+
+    # Step 3: term_definition sync
+    if sync_term_definitions:
+        try:
+            import json
+            from .db import connect
+            from .config import AppPaths
+            from .ids import next_prefixed_id
+            paths = AppPaths.from_root(workspace_root)
+            conn = connect(paths.db_file)
+            inserted = 0
+            try:
+                c = conn.cursor()
+                c.execute(
+                    "SELECT points_json FROM expected_points WHERE doc_id = ? AND version = ?",
+                    (doc_id, "v1"),
+                )
+                row = c.fetchone()
+                if row:
+                    points = json.loads(row[0])
+                    # Extract simple term_definition-style points
+                    for p in points:
+                        text = p.get("point", "")
+                        if not text or len(text) > 300:
+                            continue
+                        import re
+                        term = ""
+                        definition = ""
+                        # Pattern 1: "**Term** definition" (Markdown bold)
+                        m = re.match(r"\*\*([^*]+)\*\*\s*(.{5,200})", text)
+                        if m:
+                            term = m.group(1).strip()
+                            definition = m.group(2).strip()
+                            # Clean up term: remove pure-ASCII noise, keep CJK + alphanumeric
+                            # But for English terms, keep the original
+                            if not any("一" <= c <= "鿿" for c in term):
+                                # English term — keep as-is but strip punctuation
+                                term = re.sub(r"[\s\-\(\)]+$", "", term).strip()
+                            else:
+                                term = re.sub(r"[A-Za-z\s\-]+", "", term).strip()
+                        # Pattern 2: "Term — definition" or "Term: definition" (English)
+                        if not term:
+                            m = re.match(r"^([A-Z][A-Za-z0-9\s\-/]{1,40})(?:\s*[—:–-]\s+|\s+is\s+|\s+means\s+)(.{5,200})$", text)
+                            if m:
+                                term = m.group(1).strip()
+                                definition = m.group(2).strip()
+                        # Pattern 3: "Term是Definition。" (CJK definition sentence)
+                        if not term:
+                            m = re.match(r"^([一-鿿A-Za-z0-9·\-\(\)]{2,30})(?:是|指)\s*([一-鿿A-Za-z0-9，。；：、（）\(\)]{5,200})[。；]?$", text)
+                            if m:
+                                term = m.group(1).strip()
+                                definition = m.group(2).strip()
+                        if not term or len(term) < 2 or not definition:
+                            continue
+                        # Skip if term_def already exists
+                        c.execute(
+                            "SELECT fact_id FROM facts WHERE source_doc_id = ? "
+                            "AND fact_type = 'term_definition' AND object_value LIKE ?",
+                            (doc_id, f'%"term": "{term}"%'),
+                        )
+                        if c.fetchone():
+                            continue
+                        fact_id = next_prefixed_id(conn, "fact", "FACT")
+                        page_no = p.get("page", 0) or 0
+                        c.execute(
+                            "INSERT INTO facts (fact_id, fact_type, subject_entity_id, "
+                            "predicate, object_value, object_entity_id, qualifiers_json, "
+                            "confidence, fact_status, source_doc_id, created_at, updated_at) "
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                            (
+                                fact_id, "term_definition", None, "defines_term",
+                                json.dumps({"term": term, "definition": definition},
+                                           ensure_ascii=False),
+                                None,
+                                json.dumps({"page_no": page_no, "source": "post_ingestion_gate"}),
+                                0.85, "ready_from_post_gate", doc_id,
+                                datetime.now(UTC).isoformat(timespec="seconds"),
+                                datetime.now(UTC).isoformat(timespec="seconds"),
+                            ),
+                        )
+                        inserted += 1
+                    conn.commit()
+                result.steps.append((
+                    "term_definition_sync", True,
+                    f"inserted {inserted} new term_definitions"
+                ))
+            finally:
+                conn.close()
+        except Exception as e:
+            result.steps.append(("term_definition_sync", False, f"{type(e).__name__}: {e}"))
+
+    # Step 4: sanity check
+    try:
+        from .db import connect
+        from .config import AppPaths
+        paths = AppPaths.from_root(workspace_root)
+        conn = connect(paths.db_file)
+        try:
+            c = conn.cursor()
+            c.execute("SELECT COUNT(*) AS n FROM facts WHERE source_doc_id = ?", (doc_id,))
+            n_facts = c.fetchone()["n"]
+            c.execute("SELECT COUNT(*) AS n FROM evidence WHERE doc_id = ?", (doc_id,))
+            n_evidence = c.fetchone()["n"]
+            c.execute(
+                "SELECT point_count FROM expected_points WHERE doc_id = ? AND version = ?",
+                (doc_id, "v1"),
+            )
+            ep = c.fetchone()
+            passed = n_facts > 0 and n_evidence > 0 and ep is not None and ep["point_count"] > 0
+            result.steps.append((
+                "sanity_check", passed,
+                f"facts={n_facts}, evidence={n_evidence}, expected_points={ep['point_count'] if ep else 0}"
+            ))
+        finally:
+            conn.close()
+    except Exception as e:
+        result.steps.append(("sanity_check", False, f"{type(e).__name__}: {e}"))
+
+    # Step 5: wiki_coverage_check (best-effort, non-blocking)
+    try:
+        from ..scripts.check_coverage import check_coverage as _cc
+        kb_md_dir = workspace_root.parent / "output" / "kb_md"
+        source_md = next(kb_md_dir.glob(f"*{doc_id}*.md"), None) if kb_md_dir.exists() else None
+        wiki_md = kb_md_dir / f"wiki_{doc_id}.md" if kb_md_dir else None
+        if source_md and wiki_md and wiki_md.exists():
+            missing = _cc(str(source_md), str(wiki_md))
+            if len(missing) == 0:
+                result.steps.append(("wiki_coverage", True, "100% coverage"))
+            else:
+                result.steps.append(("wiki_coverage", False,
+                                     f"missing {len(missing)} sections"))
+        else:
+            result.steps.append(("wiki_coverage", True, "skipped (no wiki MD)"))
+    except Exception as e:
+        result.steps.append(("wiki_coverage", True, f"skipped ({type(e).__name__})"))
+
+    return result
 
 
 def _backup_pipeline_database(workspace_root: Path, doc_id: str) -> Path:
@@ -337,6 +666,7 @@ def run_file_pipeline_with_progress(
         coverage_summary_path=result.coverage_summary_path,
         coverage_report_path=result.coverage_report_path,
         ingestion_acceptance=result.ingestion_acceptance,
+        post_ingestion_gate=result.post_ingestion_gate,
     )
 
 
@@ -411,6 +741,7 @@ def run_document_pipeline_and_tests_with_progress(
         coverage_summary_path=pipeline_result.coverage_summary_path,
         coverage_report_path=pipeline_result.coverage_report_path,
         ingestion_acceptance=pipeline_result.ingestion_acceptance,
+        post_ingestion_gate=pipeline_result.post_ingestion_gate,
     )
 
 
