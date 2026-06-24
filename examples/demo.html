@@ -1086,6 +1086,11 @@
           <option value="global">全库</option>
           <option value="document">当前文档</option>
         </select>
+        <select class="scope-select" id="queryMode" title="查询模式">
+          <option value="combined">Ontology + Legacy</option>
+          <option value="ontology">Ontology Only</option>
+          <option value="legacy">Legacy Only</option>
+        </select>
         <button class="button ghost" id="healthBtn" type="button">检查接口</button>
         <button class="button primary" id="queryBtn" type="button">执行查询</button>
       </div>
@@ -1284,6 +1289,11 @@
       if (!answer || answer.error) {
         return `<div class="empty">${escapeHtml(answer?.error || "尚未查询。输入问题后，这里显示可读答案。")}</div>`;
       }
+      // UnifiedResponse format (from /combined-query)
+      if (answer.category) {
+        return renderUnifiedAnswer(answer);
+      }
+      // Legacy format (from /answer-query)
       if (answer.clarification_required) {
         const clarification = answer.clarification || answer.context?.clarification || {};
         const options = Array.isArray(clarification.options) ? clarification.options : [];
@@ -1350,6 +1360,127 @@
             </section>
           ` : ""}
           ${renderAnswerRating(answer)}
+        </div>
+      `;
+    }
+
+    function renderListItem(item) {
+      // Render one structured item from the ontology answer.
+      // Supports: typed payload {type,name,value/definition_*}, raw attribute
+      // row {attribute_name, value_text/value_num}, plain strings, or a dict.
+      if (item === null || item === undefined) return "";
+      if (typeof item !== "object") return String(item);
+
+      const keys = Object.keys(item);
+      // Typed behavior payload from match_decomposition
+      if ("type" in item && "name" in item) {
+        if (item.type === "term") {
+          const parts = [item.name];
+          if (item.definition_zh) parts.push(item.definition_zh);
+          if (item.definition_en) parts.push(item.definition_en);
+          return `${item.name} — ${[item.definition_zh, item.definition_en].filter(Boolean).join(" / ")}`;
+        }
+        // attribute
+        return item.value !== null && item.value !== undefined
+          ? `${item.name} = ${item.value}`
+          : String(item.name);
+      }
+      // Raw attribute row
+      if ("attribute_name" in item) {
+        const v = item.value_text ?? (item.value_num !== null && item.value_num !== undefined ? `${item.value_num} ${item.value_unit || ""}`.trim() : null);
+        return v ? `${item.attribute_name} = ${v}` : String(item.attribute_name);
+      }
+      // Term dict {canonical_name, definition_zh, ...}
+      if ("canonical_name" in item) {
+        const def = item.definition_zh || item.definition_en || "";
+        return def ? `${item.canonical_name} — ${def}` : String(item.canonical_name);
+      }
+      // Fallback: show key=value pairs compactly
+      return keys.map((k) => `${k}: ${item[k]}`).join(", ");
+    }
+
+    function renderUnifiedAnswer(answer) {
+      // UnifiedResponse format from combined-query endpoint
+      const category = answer.category || "free_form";
+      const ontology = answer.ontology_answer;
+      const legacy = answer.legacy_answer || "";
+      const sources = Array.isArray(answer.sources) ? answer.sources : [];
+      const warnings = Array.isArray(answer.warnings) ? answer.warnings : [];
+      const confidence = answer.confidence;
+
+      // Build ontology section
+      let ontologyHtml = "";
+      if (ontology && ontology.value !== null) {
+        const value = ontology.value;
+        const type = ontology.type || "unknown";
+        let valueHtml = "";
+        if (Array.isArray(value)) {
+          valueHtml = `<ul class="answer-list">${value.map((item) => `<li>${escapeHtml(renderListItem(item))}</li>`).join("")}</ul>`;
+        } else if (value !== null && typeof value === "object") {
+          valueHtml = `<div class="answer-text" style="font-size:1.05rem;font-weight:600;">${escapeHtml(renderListItem(value))}</div>`;
+        } else {
+          valueHtml = `<div class="answer-text" style="font-size:1.2rem;font-weight:600;">${escapeHtml(String(value))}</div>`;
+        }
+        ontologyHtml = `
+          <section class="answer-section">
+            <div class="answer-label">Structured Answer (Ontology)</div>
+            ${valueHtml}
+            <div class="answer-meta">
+              <span class="tag info">${escapeHtml(type)}</span>
+              <span class="tag info">${escapeHtml(category)}</span>
+            </div>
+          </section>
+        `;
+      }
+
+      // Build legacy section
+      let legacyHtml = "";
+      if (legacy) {
+        legacyHtml = `
+          <section class="answer-section">
+            <div class="answer-label">Context (Legacy)</div>
+            <div class="answer-text">${escapeHtml(legacy)}</div>
+          </section>
+        `;
+      }
+
+      // Build sources section
+      let sourcesHtml = "";
+      if (sources.length) {
+        sourcesHtml = `
+          <section class="answer-section">
+            <h3>证据来源</h3>
+            ${sources.map((s) => `
+              <div class="fact-card">
+                <span>${escapeHtml(s.text || "")}</span>
+                <span class="muted">${escapeHtml(s.doc_id || "")}${s.page_no ? ` · page ${s.page_no}` : ""}${s.confidence !== null && s.confidence !== undefined ? ` · confidence ${s.confidence}` : ""}</span>
+              </div>
+            `).join("")}
+          </section>
+        `;
+      }
+
+      // Build warnings
+      let warningsHtml = "";
+      if (warnings.length) {
+        warningsHtml = `
+          <article class="answer-hero" style="border-color:var(--amber);background:var(--amber-soft);">
+            <div class="answer-label" style="color:var(--amber);">Warnings</div>
+            <ul class="answer-list">${warnings.map((w) => `<li>${escapeHtml(w)}</li>`).join("")}</ul>
+          </article>
+        `;
+      }
+
+      return `
+        <div class="answer-view">
+          ${warningsHtml}
+          ${ontologyHtml}
+          ${legacyHtml}
+          ${sourcesHtml}
+          <div class="answer-meta" style="margin-top:8px;">
+            ${confidence !== null && confidence !== undefined ? `<span class="tag ${Number(confidence) >= 0.7 ? "ok" : "warn"}">confidence ${escapeHtml(confidence)}</span>` : ""}
+            <span class="tag dark">${escapeHtml(category)}</span>
+          </div>
         </div>
       `;
     }
@@ -3406,13 +3537,15 @@
       if (!text) return;
       setQueryText(text);
       const queryScope = $("queryScope")?.value || "global";
-      const requestBody = { query: text, limit: 8 };
+      const queryMode = $("queryMode")?.value || "combined";
+      const requestBody = { query: text, limit: 8, mode: queryMode };
       if (queryScope === "document" && state.selectedDocId) {
         requestBody.preferred_doc_id = state.selectedDocId;
       }
-      setStatus("running query");
+      const endpoint = queryMode === "legacy" ? "/answer-query" : "/combined-query";
+      setStatus("running query (" + queryMode + ")");
       try {
-        const payload = await api("/answer-query", {
+        const payload = await api(endpoint, {
           method: "POST",
           body: JSON.stringify(requestBody),
         });
@@ -3421,24 +3554,19 @@
         state.lastReflection = null;
         $("queryDebugPanel").textContent = pretty({
           query_scope: queryScope,
+          query_mode: queryMode,
           preferred_doc_id: requestBody.preferred_doc_id || null,
-          rewrite: payload.rewrite,
-          debug_query: payload.debug_query,
-          answer_mode: payload.answer_mode,
-          fallback_reason: payload.fallback_reason,
-          confidence_score: payload.confidence_score,
+          category: payload.category,
+          ontology_answer: payload.ontology_answer,
+          legacy_answer: payload.legacy_answer,
+          confidence: payload.confidence,
+          explanation: payload.explanation,
         });
         $("rawPanel").textContent = pretty(payload);
-        const runId = payload.context?.retrieval_run_id || "";
-        if (runId) {
-          state.selectedRetrievalRunId = runId;
-          await loadRetrievalRuns(false);
-          await loadRetrievalRunDetail(runId, false);
-        }
         state.activeTab = "query";
         syncTabs();
         renderMain();
-        setStatus("query completed");
+        setStatus("query completed (" + queryMode + ")");
       } catch (error) {
         state.lastQuery = { error: error.message };
         $("queryDebugPanel").textContent = pretty(state.lastQuery);

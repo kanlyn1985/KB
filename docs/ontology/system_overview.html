@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>KB1 Ontology System Overview</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --fg: #c9d1d9;
+  --accent: #58a6ff;
+  --accent2: #7ee787;
+  --accent3: #f0883e;
+  --border: #30363d;
+  --card: #161b22;
+  --code: #21262d;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans SC", sans-serif;
+  background: var(--bg); color: var(--fg);
+  line-height: 1.7;
+}
+.container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 10px; }
+h2 { color: var(--accent2); margin-top: 40px; border-left: 4px solid var(--accent2); padding-left: 12px; }
+h3 { color: var(--accent3); margin-top: 30px; }
+table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; }
+th, td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; }
+th { background: var(--code); color: var(--accent); font-weight: 600; }
+tr:hover { background: rgba(88,166,255,0.05); }
+code, pre {
+  font-family: "SF Mono", "Fira Code", Consolas, monospace;
+  background: var(--code); padding: 2px 6px; border-radius: 4px;
+  font-size: 13px;
+}
+pre { padding: 15px; overflow-x: auto; line-height: 1.5; }
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 20px; margin: 15px 0;
+}
+.stats-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px; margin: 20px 0;
+}
+.stat-box {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 20px; text-align: center;
+}
+.stat-number { font-size: 36px; font-weight: 700; color: var(--accent); }
+.stat-label { font-size: 13px; color: #8b949e; margin-top: 5px; }
+.pass { color: var(--accent2); font-weight: 600; }
+.fail { color: #f85149; font-weight: 600; }
+.arch-diagram {
+  background: var(--code); border: 1px solid var(--border);
+  border-radius: 8px; padding: 20px; font-family: monospace;
+  white-space: pre; overflow-x: auto; line-height: 1.6;
+  color: var(--fg);
+}
+.layer-box {
+  display: inline-block; padding: 8px 16px; margin: 4px;
+  border-radius: 6px; font-size: 13px; font-weight: 500;
+}
+.layer-meta { background: #1f6feb33; border: 1px solid #1f6feb; }
+.layer-domain { background: #23863633; border: 1px solid #238636; }
+.layer-instance { background: #9e42c333; border: 1px solid #9e42c3; }
+.mermaid { display: none; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>KB1 Ontology System (kb1_ontology)</h1>
+<p>一个与现有 KB1 遗留系统完全隔离的并行本体驱动知识库系统。支持结构化查询（参数、引用、遍历、服务、定义）并自动回退到遗留系统获取散文式上下文。</p>
+
+<div class="stats-grid">
+  <div class="stat-box">
+    <div class="stat-number">198</div>
+    <div class="stat-label">测试全部通过</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-number">28</div>
+    <div class="stat-label">Python 模块</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-number">5,337</div>
+    <div class="stat-label">行代码</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-number">6</div>
+    <div class="stat-label">交付阶段</div>
+  </div>
+</div>
+
+<h2>系统架构</h2>
+
+<div class="arch-diagram">
+User Question
+    |
+    v
+[Router]  (combined_query.py)
+    |
+    +-- parameter  --&gt;  Ontology Handler  --&gt;  Typed Value (50.0 ms)
+    +-- reference  --&gt;  Ontology Handler  --&gt;  Structured Set
+    +-- traversal  --&gt;  Ontology Handler  --&gt;  BFS Paths
+    +-- service    --&gt;  Ontology Handler  --&gt;  Service List
+    +-- definition --&gt;  Ontology Handler  --&gt;  Title String
+    +-- free_form  --&gt;  Legacy Handler    --&gt;  Prose Context
+    |
+    v
+[Combiner] --&gt;  📐 Structured + 📖 Context
+</div>
+
+<h2>三层类层次结构</h2>
+
+<div class="card">
+<h3>Meta Layer（元层）</h3>
+<p>最顶层抽象概念，不可实例化。所有 Domain 类的父类必须是 Meta 层。</p>
+<div>
+  <span class="layer-box layer-meta">Thing</span>
+  <span class="layer-box layer-meta">InformationEntity</span>
+  <span class="layer-box layer-meta">PhysicalEntity</span>
+  <span class="layer-box layer-meta">ProcessEntity</span>
+  <span class="layer-box layer-meta">ConceptEntity</span>
+  <span class="layer-box layer-meta">RoleEntity</span>
+</div>
+
+<h3>Domain Layer（领域层）</h3>
+<p>按工程角色组织，父类必须是 Meta 层。</p>
+<div>
+  <span class="layer-box layer-domain">OBC.Standard</span>
+  <span class="layer-box layer-domain">OBC.Component</span>
+  <span class="layer-box layer-domain">OBC.Parameter</span>
+  <span class="layer-box layer-domain">OBC.Service</span>
+  <span class="layer-box layer-domain">OBC.Requirement</span>
+  <span class="layer-box layer-domain">OBC.TestCase</span>
+  <span class="layer-box layer-domain">Software.ECU</span>
+  <span class="layer-box layer-domain">Electronics.Circuit</span>
+  <span class="layer-box layer-domain">Test.Equipment</span>
+  <span class="layer-box layer-domain">Systems.Process</span>
+</div>
+
+<h3>Instance Layer（实例层）</h3>
+<p>具体实体，如 <code>ISO 14229-1</code>、<code>GB/T 18487.1</code>、<code>P2_Server_Timing</code>。</p>
+</div>
+
+<h2>模块结构</h2>
+
+<table>
+<tr><th>模块</th><th>文件</th><th>行数</th><th>职责</th></tr>
+<tr><td rowspan="4"><strong>class_registry</strong></td><td>schema.py</td><td>99</td><td>ClassDef 数据类 + DDL</td></tr>
+<tr><td>crud.py</td><td>236</td><td>创建/读取/更新/删除 + 验证规则</td></tr>
+<tr><td>hierarchy.py</td><td>117</td><td>递归 CTE 查询（祖先/后代/环检测）</td></tr>
+<tr><td>seeds.py</td><td>243</td><td>16 个核心类种子数据</td></tr>
+<tr><td rowspan="4"><strong>entity_manager</strong></td><td>schema.py</td><td>153</td><td>Entity + DocumentRole + DDL</td></tr>
+<tr><td>crud.py</td><td>292</td><td>实体 CRUD + 别名合并</td></tr>
+<tr><td>normalization.py</td><td>92</td><td>两级规范化（canonical vs alias）</td></tr>
+<tr><td>document_roles.py</td><td>122</td><td>岗位角色管理（系统/软件/电子/测试工程师）</td></tr>
+<tr><td rowspan="4"><strong>relation_registry</strong></td><td>schema.py</td><td>154</td><td>RelationDef + RelationInstance + DDL</td></tr>
+<tr><td>crud.py</td><td>286</td><td>关系定义/实例 CRUD</td></tr>
+<tr><td>traversal.py</td><td>147</td><td>BFS 图遍历（支持 per-path 防环）</td></tr>
+<tr><td>seeds.py</td><td>105</td><td>4 个核心关系种子（is-a, part-of, references, cites）</td></tr>
+<tr><td rowspan="3"><strong>attribute_store</strong></td><td>schema.py</td><td>117</td><td>Attribute 数据类 + DDL</td></tr>
+<tr><td>crud.py</td><td>253</td><td>属性设置/查询 + 自动解析数值</td></tr>
+<tr><td>range_parser.py</td><td>111</td><td>范围值解析（"50 ± 10 ms" → nominal/min/max/unit）</td></tr>
+<tr><td colspan="2"><strong>combined_query.py</strong></td><td>~340</td><td>路由 + 6 类查询处理器 + 结果合并</td></tr>
+<tr><td colspan="2"><strong>legacy_bridge.py</strong></td><td>~80</td><td>遗留系统桥接（唯一允许导入 enterprise_agent_kb 的模块）</td></tr>
+<tr><td colspan="2"><strong>db.py</strong></td><td>~60</td><td>SQLite 连接 + 默认路径</td></tr>
+</table>
+
+<h2>数据规模</h2>
+
+<table>
+<tr><th>表</th><th>记录数</th><th>说明</th></tr>
+<tr><td>entity</td><td>13</td><td>标准实体（ISO 14229-1~7, GB/T 18487.1/4/5, ISO 15118, QC/T 1036）</td></tr>
+<tr><td>class_def</td><td>16</td><td>6 Meta + 10 Domain 类</td></tr>
+<tr><td>attribute</td><td>27</td><td>参数值（P2/S3 时序、额定电压/电流、服务码等）</td></tr>
+<tr><td>relation</td><td>13</td><td>标准间引用关系（ISO 14229 家族引用图）</td></tr>
+<tr><td>relation_def</td><td>4</td><td>is-a, part-of, references, cites</td></tr>
+</table>
+
+<h2>查询路由</h2>
+
+<table>
+<tr><th>类别</th><th>触发模式</th><th>处理器</th><th>返回类型</th></tr>
+<tr><td>parameter</td><td>"P2 timing", "额定电压", "50 ms"</td><td>_handle_parameter</td><td>typed_value: "50.0 ms"</td></tr>
+<tr><td>reference</td><td>"引用了", "depends on", "reference"</td><td>_handle_reference</td><td>structured_set: ["ISO 14229-1", ...]</td></tr>
+<tr><td>traversal</td><td>"2 跳可达", "2-hop", "reachable"</td><td>_handle_traversal</td><td>bfs_paths: ["A → B → C", ...]</td></tr>
+<tr><td>service</td><td>"UDS 服务", "0x10", "services defined"</td><td>_handle_service</td><td>structured_list: ["DiagnosticSessionControl: 0x10", ...]</td></tr>
+<tr><td>definition</td><td>"是什么", "definition", "what is"</td><td>_handle_definition</td><td>structured_string: "Road vehicles — UDS — Application layer"</td></tr>
+<tr><td>free_form</td><td>（其他所有查询）</td><td>legacy_answer</td><td>prose text</td></tr>
+</table>
+
+<h2>测试覆盖</h2>
+
+<table>
+<tr><th>阶段</th><th>测试文件</th><th>测试数</th><th>关键验证点</th></tr>
+<tr><td>Phase 0</td><td>test_scaffolding.py</td><td>6</td><td>物理隔离、零干扰、模块可加载、独立 DB</td></tr>
+<tr><td>Phase 1</td><td>test_class_registry.py</td><td>32</td><td>类注册、层次查询、环检测、种子数据</td></tr>
+<tr><td>Phase 2</td><td>test_entity_manager.py</td><td>34</td><td>实体 CRUD、别名合并、规范化、文档角色</td></tr>
+<tr><td>Phase 3</td><td>test_relation_registry.py</td><td>28</td><td>关系定义、实例创建、BFS 遍历、 inverse 查询</td></tr>
+<tr><td>Phase 4</td><td>test_attribute_store.py</td><td>24</td><td>属性设置、范围解析、数值自动提取</td></tr>
+<tr><td>Phase 5</td><td>test_obc_demo.py</td><td>5</td><td>OBC 端到端 Demo（实体、关系、属性）</td></tr>
+<tr><td>Phase 6</td><td>test_combined_query.py</td><td>14</td><td>路由、CombinedAnswer 结构、真实数据查询</td></tr>
+<tr><td>Phase 6</td><td>test_combined_e2e.py</td><td>55</td><td>G1-G6 端到端（路由、结构化、遗留回退、并行、真实场景、鲁棒性）</td></tr>
+</table>
+
+<p class="pass">总计: 198 / 198 通过</p>
+
+<h2>设计决策记录 (ADR)</h2>
+
+<table>
+<tr><th>ADR</th><th>主题</th><th>决策</th></tr>
+<tr><td>0001</td><td>Meta-Domain 层规则</td><td>Domain 类的父类必须是 Meta 层；Meta 类的父类也必须是 Meta 层</td></tr>
+<tr><td>0002</td><td>两级规范化</td><td>canonical_name 使用激进规范化（去空格、去大小写、去年份）；alias 使用轻量规范化（仅空格+大小写）</td></tr>
+</table>
+
+<h2>与遗留系统的集成</h2>
+
+<div class="card">
+<p><strong>隔离原则 (T2)</strong>：除 <code>legacy_bridge.py</code> 外，所有新系统模块禁止导入 <code>enterprise_agent_kb</code>。</p>
+<p><strong>组合查询流程</strong>：</p>
+<ol>
+<li>Router 将查询分类为 6 类之一</li>
+<li>如果是结构化查询（parameter/reference/traversal/service/definition），走 Ontology 路径（&lt;100ms）</li>
+<li>同时走 Legacy 路径获取散文上下文（3-30s，LLM 驱动）</li>
+<li>Combiner 将两部分结果合并为统一输出</li>
+<li>如果是 free_form，仅走 Legacy 路径</li>
+</ol>
+<p><strong>性能对比</strong>：Ontology 路径 &lt;100ms vs Legacy 路径 3-30s。</p>
+</div>
+
+<h2>Demo 脚本</h2>
+
+<table>
+<tr><th>脚本</th><th>功能</th></tr>
+<tr><td>build_obc_ontology.py</td><td>构建 OBC 本体（13 实体、13 关系、27 属性）</td></tr>
+<tr><td>query_obc_ontology.py</td><td>5 个 Demo 查询（参数、引用、遍历、服务、定义）</td></tr>
+<tr><td>compare_with_legacy.py</td><td>5 问题 side-by-side 对比</td></tr>
+<tr><td>batch_compare.py</td><td>25 问题批量对比（5 类别 × 5 问题）</td></tr>
+<tr><td>combined_query_demo.py</td><td>10 问题组合查询演示</td></tr>
+</table>
+
+<h2>文件布局</h2>
+
+<pre>
+KB1/
+├── src/kb1_ontology/              # 新本体系统（完全隔离）
+│   ├── __init__.py
+│   ├── db.py
+│   ├── combined_query.py          # 路由 + 组合查询
+│   ├── legacy_bridge.py           # 遗留系统桥接
+│   ├── class_registry/            # 类注册
+│   │   ├── schema.py, crud.py, hierarchy.py, seeds.py
+│   ├── entity_manager/            # 实体管理
+│   │   ├── schema.py, crud.py, normalization.py, document_roles.py
+│   ├── relation_registry/         # 关系注册
+│   │   ├── schema.py, crud.py, traversal.py, seeds.py
+│   ├── attribute_store/             # 属性存储
+│   │   ├── schema.py, crud.py, range_parser.py
+│   └── tests/                     # 198 测试
+│       ├── test_scaffolding.py
+│       ├── test_class_registry.py
+│       ├── test_entity_manager.py
+│       ├── test_relation_registry.py
+│       ├── test_attribute_store.py
+│       ├── test_obc_demo.py
+│       ├── test_combined_query.py
+│       └── test_combined_e2e.py
+├── scripts/ontology_demo/         # Demo 脚本
+├── docs/ontology/                 # 文档 + ADR + 测试报告
+│   ├── CONTEXT.md
+│   ├── ROADMAP.md
+│   ├── adr/
+│   └── test_reports/
+└── src/enterprise_agent_kb/       # 遗留系统（零修改）
+</pre>
+
+</div>
+</body>
+</html>
