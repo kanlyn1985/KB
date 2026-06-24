@@ -43,3 +43,4 @@
 - **文本 LLM 契约**：所有文本 LLM 调用统一走单一 `text_llm` provider（`get_text_llm_settings()` 读 `ANTHROPIC_BASE_URL`/`ANTHROPIC_AUTH_TOKEN`/`TEXT_LLM_MODEL`），无 minimax→astron 两段 fallback。详见 `docs/dev/llm-provider-policy.md`。OCR/parse provider 路由（minimax+astron+paddle）与此无关，仍多 provider。
 - **eval 主口径**：`eakb eval run-now --suite golden --version v1 --max-questions 10`（token_overlap，无 LLM）。`EVAL_USE_LLM=1` 才启用 LLM judge（辅助非阻塞）。详见 `docs/dev/eval-baseline-policy.md`。
 - **命名**：主线 six-loop；历史 `kb1-four-loop-hardening` roadmap 目录与 `four-loop-integration` audit 保留原名（维持引用链），已加历史命名说明；新工作走 `kb1-next-phase`。
+- **项目阶段评审报告（持续更新）**：`docs/kb1_project_review_2026-06-24.html` 是<b>活的评审报告</b>，<b>每个 Sprint 完成后必须更新</b>（用户拿它做阶段评审）。新增 §09 "Sprint 进展"章节按 Sprint 追加；同步更新执行摘要(§01)/测试(§05)/当前状态(§10)/风险(§11)/结论(§13) 的统计与评级。更新后用 Python HTMLParser 校验标签平衡。Sprint 1 已更新（2026-06-25，总体 A-）。
