@@ -13,6 +13,8 @@ tags:
 
 # KB1 六闭环强化 Roadmap
 
+> **历史命名说明**：目录名与文件名仍保留旧的 `kb1-four-loop-hardening`（2026-05 初版时为四闭环）。2026-05 重命名为六闭环（commit `0b23bbe`，分支 `kb1-six-loop-rename`）时，内容已更新为六闭环（slug=`kb1-six-loop-hardening`、标题“六闭环”、tag `six-loop`），但目录/文件名未同步重命名，以避免破坏 15+ feature 文档 frontmatter 中的 `roadmap: kb1-four-loop-hardening` 引用。新工作请使用 `kb1-next-phase` roadmap；本 roadmap 视为已完成的历史规划归档。
+
 ## 1. 背景
 
 KB1 当前已经具备文档入库、结构化召回、证据约束答案和回归评测的基础能力，但历史文档分散在 `docs/`，CodeStable 新结构下缺少统一的需求、规划、feature 和开发指南入口。后续继续修查询链路时，需要先让开发流程本身可追踪。

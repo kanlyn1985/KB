@@ -190,7 +190,7 @@ C:\Python314\python.exe .codestable\tools\validate-yaml.py --dir .codestable --r
 对纯 YAML 文件：
 
 ```powershell
-C:\Python314\python.exe .codestable\tools\validate-yaml.py --file .codestable\roadmap\kb1-four-loop-hardening\kb1-six-loop-hardening-items.yaml --yaml-only
+C:\Python314\python.exe .codestable\tools\validate-yaml.py --file .codestable\roadmap\kb1-four-loop-hardening\kb1-four-loop-hardening-items.yaml --yaml-only
 ```
 
 ## 文档流程
@@ -224,7 +224,7 @@ C:\Python314\python.exe .codestable\tools\validate-yaml.py --file .codestable\ro
 - `.codestable/architecture/ARCHITECTURE.md`
 - `.codestable/architecture/closed-loop-architecture.md`
 - `.codestable/architecture/query-chain-architecture.md`
-- `.codestable/roadmap/kb1-four-loop-hardening/kb1-six-loop-hardening-roadmap.md`
+- `.codestable/roadmap/kb1-four-loop-hardening/kb1-four-loop-hardening-roadmap.md`
 - `docs/dev/query-chain-development-guide.md`
 - `docs/dev/ingestion-coverage-development-guide.md`
 - `docs/dev/regression-eval-development-guide.md`

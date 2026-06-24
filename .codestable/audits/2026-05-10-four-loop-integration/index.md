@@ -19,6 +19,8 @@ tags:
 
 # Four Loop Integration Audit
 
+> **历史命名说明**：本次审计（2026-05-10）在四闭环时期执行，审计名为 `four-loop-integration`，保留原名以维持 `source_audit:` 引用链（多个 issue fix-note 指向本审计）。项目已于 2026-05 升级为六闭环（commit `0b23bbe`），当前主线命名统一为 six-loop。本审计记录的是四闭环时期的集成现状，结论已被后续 six-loop 重构覆盖。
+
 ## Scope
 
 本次审计聚焦四个闭环的集成点：入库覆盖、召回记录、答案质量、失败归因和 golden 沉淀。目标是检查“看起来接上了”的链路是否能产生可信指标。
