@@ -18,6 +18,7 @@ from .reranker import rerank_candidates
 from .retrieval_router import route_retrieval
 from .routing_summary import direct_routing_hits
 from .topic_resolution import resolve_topic_entities
+from .ontology_adapter import analyze as _analyze_ontology_signal
 
 
 def _safe_json(value: str | None) -> object:
@@ -591,6 +592,12 @@ def build_query_context(
             "topic_objects": topic_objects,
             "knowledge_subgraph": knowledge_subgraph,
             "evidence_judgement": evidence_judgement.to_dict(),
+            # Read-only ontology signal (Sprint 2 WP3). Default mode is 'off' →
+            # empty signal, zero cost. In 'shadow' mode this attaches entity
+            # constraints / relation checks WITHOUT changing hits/evidence/
+            # facts ordering or the answer. The adapter never raises and never
+            # generates facts; it is a constraint/validation layer only.
+            "ontology_signal": _analyze_ontology_signal(query, paths.root).to_dict(),
         }
     finally:
         connection.close()
