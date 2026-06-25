@@ -748,7 +748,14 @@ def _inject_direct_term_definition_hits(connection, rewritten, hits: list[dict[s
     if rewritten.query_type != "definition":
         return hits
     acronyms = _short_definition_acronyms(rewritten)
-    if not acronyms:
+    # Only fall back to full CJK term matching when there is no short acronym.
+    # An acronym (CP, CC) is a stronger signal and is handled by the acronym
+    # branch; term matching here is specifically for definition queries whose
+    # subject is a full Chinese term (e.g. '控制导引电路') that yields no
+    # acronym. Injecting term_definition candidates alongside an acronym
+    # would dilute the acronym's authoritative definition.
+    terms = [] if acronyms else _definition_term_candidates(rewritten)
+    if not acronyms and not terms:
         return hits
 
     direct_hits: list[dict[str, object]] = []
@@ -784,6 +791,51 @@ def _inject_direct_term_definition_hits(connection, rewritten, hits: list[dict[s
                 {
                     "result_type": "fact",
                     "result_id": row["fact_id"],
+                    "doc_id": row["source_doc_id"],
+                    "page_no": row["page_no"],
+                    "score": score,
+                    "snippet": f"direct_term_definition {blob[:1200]}",
+                    "channel": "direct_term_definition",
+                    "channels": ["direct_term_definition"],
+                }
+            )
+
+    for term in terms[:6]:
+        rows = connection.execute(
+            """
+            SELECT fact_id, source_doc_id, json_extract(qualifiers_json, '$.page_no') AS page_no,
+                   object_value, confidence
+            FROM facts
+            WHERE fact_type IN ('term_definition', 'concept_definition')
+              AND object_value LIKE ?
+            ORDER BY confidence DESC, fact_id ASC
+            LIMIT ?
+            """,
+            (f"%{term}%", limit),
+        ).fetchall()
+        for row in rows:
+            fact_id = row["fact_id"]
+            if any(h.get("result_id") == fact_id for h in direct_hits if isinstance(h, dict)):
+                continue
+            payload = _safe_json(row["object_value"])
+            blob = json.dumps(payload, ensure_ascii=False)
+            # Prefer authoritative dictionary terms: the `term` field that
+            # *starts with* the query term (after stripping markdown **) is the
+            # canonical definition, not a long sentence that merely contains it.
+            term_text = str((payload or {}).get("term") or "")
+            stripped_term = term_text.replace("*", "").strip()
+            if term and stripped_term.startswith(term):
+                score = 3.6
+            elif term and term in term_text and len(stripped_term) <= 40:
+                score = 3.2
+            elif term and term in term_text:
+                score = 3.0
+            else:
+                score = 2.6
+            direct_hits.append(
+                {
+                    "result_type": "fact",
+                    "result_id": fact_id,
                     "doc_id": row["source_doc_id"],
                     "page_no": row["page_no"],
                     "score": score,
@@ -1028,6 +1080,51 @@ def _short_definition_acronyms(rewritten) -> list[str]:
             if cleaned not in acronyms:
                 acronyms.append(cleaned)
     return acronyms
+
+
+def _definition_term_candidates(rewritten) -> list[str]:
+    """Non-acronym (CJK / multi-word) terms for definition queries.
+
+    `_short_definition_acronyms` only captures pure-Latin acronyms (CC, CP).
+    Definition queries with full Chinese terms (e.g. '控制导引电路') return
+    no acronyms, so the authoritative `term_definition` fact is never
+    injected. This collects the substantive CJK terms from the rewritten
+    query so they can be matched against `term_definition` / `concept_definition`
+    facts and injected as high-confidence hits.
+    """
+    raw = [
+        str(getattr(rewritten, "target_topic", "") or "").strip(),
+        str(getattr(rewritten, "normalized_query", "") or "").strip(),
+        *[str(item).strip() for item in getattr(rewritten, "aliases", []) or []],
+        *[str(item).strip() for item in getattr(rewritten, "should_terms", []) or []],
+        *[str(item).strip() for item in getattr(rewritten, "must_terms", []) or []],
+    ]
+    terms: list[str] = []
+    seen_lower: set[str] = set()
+    for value in raw:
+        if not value:
+            continue
+        # Strip punctuation / question marks and whitespace.
+        cleaned = re.sub(r"[\s\?\!_，.,;:：；()（）*]+", "", value)
+        if not cleaned:
+            continue
+        # Skip pure-Latin acronyms (already handled) and overly short tokens.
+        if re.fullmatch(r"[A-Za-z0-9/\-]+", cleaned):
+            continue
+        # Keep only tokens that contain at least one CJK run of length >= 2.
+        cjk_runs = re.findall(r"[一-鿿]{2,}", cleaned)
+        if not cjk_runs:
+            continue
+        for run in cjk_runs:
+            key = run.lower()
+            if key in seen_lower:
+                continue
+            # Skip generic noise fragments.
+            if run in {"是什么", "是什么意思", "是什么意思吗", "指的是"}:
+                continue
+            seen_lower.add(key)
+            terms.append(run)
+    return terms
 
 
 def _row_to_fact(row) -> dict[str, object]:

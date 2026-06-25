@@ -62,14 +62,6 @@ def _has_doc(filename_stem: str) -> bool:
     not _has_doc("18487.1"),
     reason="18487.1.pdf not in current knowledge_base",
 )
-@pytest.mark.xfail(
-    reason="answer_api exact-term gate zeroes out context when facts=0 even "
-           "though evidence was retrieved; definition query falls back to "
-           "document title. Tracked in issue "
-           "2026-06-24-definition-query-exact-term-gate-drops-evidence. "
-           "Sprint 1 WP2: not a stale assertion — real answer-pipeline bug.",
-    strict=True,
-)
 def test_mcp_server_tools_call_answer_query() -> None:
     proc = subprocess.Popen(
         [sys.executable, "-m", "enterprise_agent_kb.cli", "--root", "knowledge_base", "serve-mcp"],
