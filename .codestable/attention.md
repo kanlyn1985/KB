@@ -40,7 +40,8 @@
 
 ### 其他
 - **Sprint 1 稳定化（2026-06-24）已完成**：8 个失败测试收口为 0 failed+1 xfail；WIP 分 13 个本地 commit（safety tag `safety/pre-sprint1-stabilization-20260624`，**未 push**，远端不可达）；eval baseline 固定为 token_overlap（deterministic，0.60）；工程清理已 quarantine 0字节db + prune 陈旧 run。详见 `docs/dev/sprint1-stabilization/sprint1_acceptance_report.md`。
+- **Sprint 2（2026-06-25）进展**：(1) WP0 67+ commit 已 push 到 origin/kb1-six-loop-rename（成果保护完成）；(2) WP2 定义查询 bug 修复（CJK term_definition 召回），MCP xfail 解除，默认套件 696 passed/0 failed/0 xfail；(3) WP3/WP4 ontology 最小接入（off/shadow/guard 只读 adapter，默认 off 零开销，`answer_changed_by_ontology` 全程 False）；(4) WP5 eval 采样修复——`_round_robin_sample` 跨文档采样 + 问题提质过滤，**诚实锁定真实跨文档基线 pass_rate=0.30**（0.60 旧值是单文档偶然，作废）。详见 `docs/dev/sprint2-ontology-and-bugfix/`。
 - **文本 LLM 契约**：所有文本 LLM 调用统一走单一 `text_llm` provider（`get_text_llm_settings()` 读 `ANTHROPIC_BASE_URL`/`ANTHROPIC_AUTH_TOKEN`/`TEXT_LLM_MODEL`），无 minimax→astron 两段 fallback。详见 `docs/dev/llm-provider-policy.md`。OCR/parse provider 路由（minimax+astron+paddle）与此无关，仍多 provider。
-- **eval 主口径**：`eakb eval run-now --suite golden --version v1 --max-questions 10`（token_overlap，无 LLM）。`EVAL_USE_LLM=1` 才启用 LLM judge（辅助非阻塞）。详见 `docs/dev/eval-baseline-policy.md`。
+- **eval 主口径**：`eakb eval run-now --suite golden --version v1 --max-questions 10`（token_overlap，无 LLM，跨文档轮询采样）。当前基线 **pass_rate=0.30（跨文档真实值）**，CI smoke floor `--min-token-pass 0.20`。`EVAL_USE_LLM=1` 才启用 LLM judge（辅助非阻塞）。详见 `docs/dev/eval-baseline-policy.md`。
 - **命名**：主线 six-loop；历史 `kb1-four-loop-hardening` roadmap 目录与 `four-loop-integration` audit 保留原名（维持引用链），已加历史命名说明；新工作走 `kb1-next-phase`。
 - **项目阶段评审报告（持续更新）**：`docs/kb1_project_review_2026-06-24.html` 是<b>活的评审报告</b>，<b>每个 Sprint 完成后必须更新</b>（用户拿它做阶段评审）。新增 §09 "Sprint 进展"章节按 Sprint 追加；同步更新执行摘要(§01)/测试(§05)/当前状态(§10)/风险(§11)/结论(§13) 的统计与评级。更新后用 Python HTMLParser 校验标签平衡。Sprint 1 已更新（2026-06-25，总体 A-）。

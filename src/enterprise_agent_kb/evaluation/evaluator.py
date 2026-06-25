@@ -121,6 +121,13 @@ def _is_substantive(p: dict) -> bool:
     # Skip points that are mostly section headers (short + no content)
     if len(text) < 20 and not any(c in text for c in ["应", "必须", "不得", "要求", "是", "为"]):
         return False
+    # Skip points with too little Chinese content: these are usually English
+    # spec fragments, code identifiers, or SC-codes (e.g. "PwrMod = OFF/awake",
+    # "SC4100048", "The Systems Engineer") that cannot yield a meaningful
+    # Chinese question and only produce near-zero-coverage noise questions.
+    cn_chars = sum(1 for c in text if "一" <= c <= "鿿")
+    if cn_chars < 4:
+        return False
     if any(text.startswith(n) for n in NOISE_PREFIXES):
         return False
     return True
@@ -280,14 +287,19 @@ def _generate_questions_for_point(p: dict) -> list:
                 questions.append((query_text, "explain"))
                 break
 
-    # Ensure at least one question - but avoid generic "第 X 节" questions
+    # Ensure at least one question - but avoid generic "第 X 节" questions.
+    # Only emit a fallback question when the point has enough Chinese content
+    # to form a meaningful query; otherwise skip the point entirely (returning
+    # no questions) so it does not pollute the suite with near-zero-coverage
+    # noise like "请解释: <English fragment>".
     if not questions:
-        # Use the first 20 chars of the point as a hint
-        hint = clean_text[:20].strip()
-        if len(hint) > 5:
-            questions.append((f"请解释: {hint}", "generic_hint"))
-        else:
-            questions.append((f"第 {sec} 节的内容是什么? (第 {page} 页)", "generic"))
+        cn = sum(1 for c in clean_text if "一" <= c <= "鿿")
+        if cn >= 6:
+            hint = clean_text[:20].strip()
+            if len(hint) > 5:
+                questions.append((f"请解释: {hint}", "generic_hint"))
+            else:
+                questions.append((f"第 {sec} 节的内容是什么? (第 {page} 页)", "generic"))
 
     return questions[:2]  # Max 2 variants per point
 
@@ -511,6 +523,41 @@ def _load_questions(version: str, suite: str) -> list:
     return all_questions
 
 
+def _round_robin_sample(questions: list, max_questions: int) -> list:
+    """Sample up to ``max_questions`` questions by cycling across source docs.
+
+    Without this, ``questions[:max_questions]`` slices the first document(s)
+    enumerated, so a small CI sample can be 100% from one document — an
+    unrepresentative fluke. Round-robin guarantees document diversity in the
+    sample while remaining fully deterministic.
+    """
+    if max_questions <= 0 or not questions:
+        return []
+    buckets: dict[str, list] = {}
+    order: list[str] = []
+    for q in questions:
+        doc_id = str(q.get("doc_id") or "?")
+        if doc_id not in buckets:
+            buckets[doc_id] = []
+            order.append(doc_id)
+        buckets[doc_id].append(q)
+    sampled: list = []
+    idx = 0
+    while len(sampled) < max_questions:
+        progressed = False
+        for doc_id in order:
+            bucket = buckets[doc_id]
+            if idx < len(bucket):
+                sampled.append(bucket[idx])
+                progressed = True
+                if len(sampled) >= max_questions:
+                    break
+        idx += 1
+        if not progressed:
+            break
+    return sampled
+
+
 # ---- Suite runner -------------------------------------------------------
 
 def run_suite(suite: str = "golden", version: str = "v1",
@@ -524,10 +571,14 @@ def run_suite(suite: str = "golden", version: str = "v1",
     questions = _load_questions(version, suite)
     if suite == "golden":
         # Default golden cap raised from 30 to 120 (statistical significance)
-        # Override with max_questions param if provided.
         questions = questions[:120]
     if max_questions is not None:
-        questions = questions[:max_questions]
+        # Cross-document round-robin sampling: take questions cyclically across
+        # all source documents so a small CI sample (e.g. max_questions=10) is
+        # representative of the corpus instead of being dominated by whichever
+        # document's points were enumerated first. This is a sampling fix, not
+        # a metric change — token_overlap scoring is untouched.
+        questions = _round_robin_sample(questions, max_questions)
     print(f"Running {suite} suite: {len(questions)} questions (scorer={'llm+fallback' if use_llm else 'token_overlap'})\n")
     per_question: list = []
     by_doc: dict = {}

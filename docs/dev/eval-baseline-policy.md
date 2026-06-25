@@ -28,23 +28,25 @@
 | Gate | 含义 | 当前 |
 |---|---|---|
 | baseline lock | 分数不得明显退化 | **本 WP 固定** |
-| promotion gate | pass_rate 稳定进入 0.65–0.85 | 未达（0.60） |
+| promotion gate | pass_rate 稳定进入 0.65–0.85 | 未达（0.30 跨文档真实值；Sprint 3 提升路线） |
 | release gate | 跨文档 eval + citation + unsupported_claim 达标 | 未启用 |
 
-## 4. 当前 baseline 快照（2026-06-24，deterministic）
+## 4. 当前 baseline 快照（2026-06-25 Sprint 2 WP5，deterministic，跨文档采样）
 
 ```
-run_id       : sprint1-wp3-golden-10-deterministic-20260624
-code_version : 28fb5b7
-db_version   : schema user_version=1 (knowledge.db)
-qa_bank      : 确定性构建，104 questions（17 docs × expected_points v1），suite=golden cap=10
+run_id       : sprint2-wp5-golden-10-crossdoc-20260625
+code_version : 本 WP5 提交
+qa_bank      : 确定性构建，104 questions（9 docs 通过提质过滤），suite=golden cap=10
+sampling     : 跨文档轮询（_round_robin_sample），9 个文档各 1 题 + DOC-000015 2 题
 scoring_mode : token_overlap (COVERAGE_THRESHOLD=0.30)
-result       : total=10, passed=6, pass_rate=0.60, avg_coverage=0.462, multi_prompt_stability=1.0
-verdict      : FAIL promotion gate (0.60 < 0.65) — 已知，Phase 1 未达 65–85%
+result       : total=10, passed=3, pass_rate=0.30, multi_prompt_stability=1.0
+verdict      : FAIL promotion gate (0.30 < 0.65) — 真实跨文档值，Sprint 3 提升路线
 LLM          : 未使用（deterministic）
 ```
 
-**结论**：INFRASTRUCTURE-READY（可复现、可跑、不依赖 LLM）；EVAL-NOT-YET-PASSING（0.60 < 0.65）。这与 Phase 1 signoff 的"基础设施就绪、评测待提升"一致。本 WP 不负责提升分数，只负责**锁定可复现基线**。
+**0.60 旧值作废**：Sprint 1 的 0.60 是「10 题全来自 DOC-000015」的单文档偶然值，不代表语料库。修复采样后真实跨文档值为 0.30。详见 `docs/dev/sprint2-ontology-and-bugfix/wp5_eval_uplift_report.md`。
+
+**结论**：INFRASTRUCTURE-READY（可复现、可跑、不依赖 LLM、跨文档采样）；EVAL-NOT-YET-PASSING（0.30 < 0.65）。0.65–0.85 需答案质量提升（召回措辞对齐、答案组装），属 Sprint 3 范围（Sprint 2 硬约束禁改答案主路径）。本 WP 负责**诚实锁定可复现跨文档基线**。
 
 ## 5. 复现命令
 
