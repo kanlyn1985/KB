@@ -72,13 +72,15 @@
 
 ## 4. 修复优先级（高 ROI → 低）
 
+> **2026-06-25 修正**：补采 judgement sufficient/confidence 后发现，**doc-mismatch 是主信号，sufficient/confidence 不可靠**——[17] suff=True conf=0.95 但答错文档，[5] suff=False conf=0.95。故 P0 降级只能诚实地处理 [4][13]（conf=0.0，本就是 routing-miss），**不提分**；真正提分靠 P1（跨文档选文档）+ P2（召回）。
+
 | 优先级 | 方向 | 对应 WP | 预期影响 |
 |---|---|---|---|
-| **P0** | answer policy 硬降级：`evidence_judgement.sufficient=False`（尤其 conf 极低）时输出「证据不足以确认」而非低质章节标题/错段 | WP2 | 直接消掉 [4][5][13][17] 的错答；安全指标↑；可能把若干 fail 变 not-found（诚实但不刷分） |
-| **P1** | 跨文档选文档修复：`_choose_primary_doc_id` / topic_resolution 优先 actual recalled evidence/fact 的文档，不被 graph_candidates 压过（Sprint 2 已发现此缺陷，见 issue fix-note） | WP3 | 让 hits 落到正确文档，[4][5][13] 召回对文档后才有机会答对 |
-| **P2** | 英文/长段落召回：扩展 LIKE fallback 覆盖英文术语；V2G/V2L 等明确术语加 exact/contains boost | WP3 | [6][7][15] 等召回 miss 转为有证据 |
-| **P3** | pseudo_question 收紧：generic_hint 兜底必须有可验证实体/术语锚点，否则跳过 | WP1 延续 | [2][10][19] 不再生成无意义题；样本更真实 |
-| **P4** | citation / unsupported claim 门禁（提分后回归保护） | WP4 | 防止 P0-P3 提分时引入 unsupported claim |
+| **P0** | answer policy 硬降级：`sufficient=False` **且** confidence 极低（如 <0.2）时输出「证据不足以确认」而非低质章节标题 | WP2 | **诚实性↑但不提分**：[4][13] 错章节标题→未找到（仍 fail）。安全改进，为 P1 提分做诚实底 |
+| **P1** | 跨文档选文档修复：`_choose_doc_from_routed_hits` 优先 actual recalled evidence/fact 的文档，不被 graph_candidates 压过；topic_resolution 保留 doc hints | WP3 | **主提分项**：[5][17] 召回到错文档（suff=True/False 都有），选对文档后才有机会答对 |
+| **P2** | 英文/长段落召回：0-hits 类（[1][6][7][11][15][19][20]）扩展 LIKE fallback 覆盖英文术语；V2G/V2L 加 exact/contains boost | WP3 | 0-hits→有证据，转可答 |
+| **P3** | pseudo_question 收紧：generic_hint 兜底必须有可验证实体/术语锚点 | WP1 延续 | [2][10][19] 不再生成无意义题 |
+| **P4** | citation / unsupported claim 门禁（提分后回归保护） | WP4 | 防止提分时引入 unsupported claim |
 
 ## 5. 关键判断与风险
 
