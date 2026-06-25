@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KB1 Sprint 3 开发执行指导书</title>
+<style>
+:root{--bg:#0f1419;--surface:#161b22;--surface2:#1c2330;--border:#2d333b;--text:#e6edf3;--dim:#a7b0bb;--mute:#768390;--brand:#4f9cf9;--green:#3fb950;--yellow:#d29922;--red:#f85149;--purple:#bc8cff;--teal:#39d0d8;--bluebg:rgba(79,156,249,.10);--greenbg:rgba(63,185,80,.12);--yellowbg:rgba(210,153,34,.12);--redbg:rgba(248,81,73,.12);--purplebg:rgba(188,140,255,.12);--tealbg:rgba(57,208,216,.10)}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.72;font-size:15px}.hero{padding:54px 28px 42px;border-bottom:1px solid var(--border);background:radial-gradient(circle at 82% 20%,rgba(79,156,249,.18),transparent 34%),radial-gradient(circle at 18% 88%,rgba(188,140,255,.12),transparent 35%),linear-gradient(135deg,#0d2030 0%,#16263d 52%,#111a25 100%)}.hero-inner,.wrap{max-width:1180px;margin:0 auto}.eyebrow{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--brand);font-weight:700}h1{font-size:38px;line-height:1.2;margin:10px 0;letter-spacing:-.5px}.sub{max-width:940px;color:var(--dim);font-size:17px}.meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}.chip{border:1px solid var(--border);background:rgba(255,255,255,.055);color:var(--dim);border-radius:999px;padding:7px 12px;font-size:12.5px}.chip b{color:var(--text)}.verdict{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:30px}.vcard{background:rgba(255,255,255,.045);border:1px solid var(--border);border-radius:14px;padding:18px}.vcard .label{font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:1px}.vcard .value{font-size:30px;font-weight:800;margin-top:4px;line-height:1}.vcard .note{font-size:12.5px;color:var(--dim);margin-top:7px}nav{position:sticky;top:0;z-index:20;background:rgba(15,20,25,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}nav .nav-inner{max-width:1180px;margin:0 auto;display:flex;gap:4px;overflow-x:auto;padding:10px 28px}nav a{color:var(--dim);text-decoration:none;padding:7px 11px;border-radius:8px;white-space:nowrap;font-size:13px}nav a:hover{background:var(--surface2);color:var(--text)}.wrap{padding:0 28px 100px}section{margin-top:44px;scroll-margin-top:64px}.sec-head{display:flex;align-items:baseline;gap:12px;border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:20px}.sec-head .num{font-size:13px;font-weight:800;color:var(--brand);background:var(--bluebg);border:1px solid rgba(79,156,249,.35);padding:3px 9px;border-radius:7px}.sec-head h2{font-size:24px;letter-spacing:-.3px}.sec-head .tag{margin-left:auto;color:var(--mute);font-size:13px}p{color:var(--dim);margin-bottom:13px}b,strong{color:var(--text)}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}@media(max-width:860px){.grid2,.grid3,.grid4,.verdict{grid-template-columns:1fr}}.card,.task,.gate{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px}.card h3,.task h3,.gate h3{font-size:16px;margin-bottom:9px}ul{list-style:none;margin:0}li{position:relative;padding:5px 0 5px 20px;color:var(--dim);font-size:14px}li:before{content:"›";position:absolute;left:0;color:var(--brand);font-weight:800}.badge{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:700;border:1px solid var(--border)}.green{color:var(--green)}.yellow{color:var(--yellow)}.red{color:var(--red)}.purple{color:var(--purple)}.brand{color:var(--brand)}.teal{color:var(--teal)}.b-green{background:var(--greenbg);color:var(--green);border-color:rgba(63,185,80,.35)}.b-yellow{background:var(--yellowbg);color:var(--yellow);border-color:rgba(210,153,34,.35)}.b-red{background:var(--redbg);color:var(--red);border-color:rgba(248,81,73,.35)}.b-blue{background:var(--bluebg);color:var(--brand);border-color:rgba(79,156,249,.35)}.b-purple{background:var(--purplebg);color:var(--purple);border-color:rgba(188,140,255,.35)}.b-teal{background:var(--tealbg);color:var(--teal);border-color:rgba(57,208,216,.35)}.callout{border-left:4px solid var(--brand);background:var(--bluebg);border-radius:0 12px 12px 0;padding:14px 16px;margin:16px 0}.callout.green{border-color:var(--green);background:var(--greenbg)}.callout.yellow{border-color:var(--yellow);background:var(--yellowbg)}.callout.red{border-color:var(--red);background:var(--redbg)}.callout.purple{border-color:var(--purple);background:var(--purplebg)}.callout .ct{display:block;font-weight:800;color:var(--text);margin-bottom:4px}code.inline{font-family:"Cascadia Code",Consolas,monospace;background:var(--surface2);color:#7ee787;border:1px solid var(--border);padding:1px 6px;border-radius:6px;font-size:12.5px}pre{font-family:"Cascadia Code",Consolas,monospace;background:#0a0e14;border:1px solid var(--border);border-radius:12px;padding:15px 16px;overflow:auto;color:#d8dee9;font-size:13px;line-height:1.58;margin:10px 0 14px}table{width:100%;border-collapse:collapse;margin:8px 0;font-size:13.5px}th,td{border-bottom:1px solid var(--border);padding:10px 11px;text-align:left;vertical-align:top}th{background:var(--surface2);color:var(--mute);text-transform:uppercase;letter-spacing:.5px;font-size:12px}td{color:var(--dim)}td code{font-family:"Cascadia Code",Consolas,monospace;color:#7ee787}.timeline{display:grid;gap:14px}.task{border-left:4px solid var(--brand)}.task.must{border-left-color:var(--red)}.task.eval{border-left-color:var(--green)}.task.answer{border-left-color:var(--brand)}.task.ontology{border-left-color:var(--purple)}.task.data{border-left-color:var(--teal)}.task.docs{border-left-color:var(--yellow)}.task .head{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}.task .head h3{margin:0}.kv{display:grid;grid-template-columns:190px 1fr;gap:6px 12px;margin-top:10px;font-size:13.5px}.kv div:nth-child(odd){color:var(--mute)}.kv div:nth-child(even){color:var(--dim)}.checklist li:before{content:"□";color:var(--yellow)}.done li:before{content:"✓";color:var(--green)}.no li:before{content:"✕";color:var(--red)}.footer{margin-top:48px;border-top:1px solid var(--border);padding-top:16px;color:var(--mute);font-size:12.5px}.flow{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}.node{border:1px solid var(--border);background:var(--surface);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--dim)}.arrow{color:var(--mute);padding:10px 0}
+</style>
+</head>
+<body>
+<header class="hero"><div class="hero-inner"><div class="eyebrow">KB1 Development Instruction · Sprint 3</div><h1>KB1 Sprint 3 开发执行指导书</h1><p class="sub">面向其它 AI / 开发 Agent 的可执行文档。Sprint 2 已完成定义查询修复、Ontology 最小安全接入、成果 push 与 eval 诚实化；Sprint 3 的核心任务不是继续堆新能力，而是把真实跨文档 eval baseline 从 0.30 提升到 0.65–0.85，并保持证据约束边界不被破坏。</p><div class="meta"><span class="chip">项目 <b>KB1 企业级 Agent 知识库</b></span><span class="chip">当前状态 <b>Sprint 2 已完成</b></span><span class="chip">质量状态 <b>696 passed / 0 failed / 0 xfail</b></span><span class="chip">Eval 真实基线 <b>0.30</b></span><span class="chip">Promotion Gate <b>0.65–0.85</b></span><span class="chip">Ontology <b>off / shadow / guard</b></span></div><div class="verdict"><div class="vcard"><div class="label">Sprint 3 主目标</div><div class="value green">提质</div><div class="note">答案质量驱动 eval 提升</div></div><div class="vcard"><div class="label">禁止路径</div><div class="value red">刷分</div><div class="note">不得换 metric / 删题 / 降标准</div></div><div class="vcard"><div class="label">Ontology 策略</div><div class="value purple">评估</div><div class="note">主动召回过滤先 shadow A/B</div></div><div class="vcard"><div class="label">最终门禁</div><div class="value yellow">0.65+</div><div class="note">跨文档 deterministic baseline</div></div></div></div></header>
+<nav><div class="nav-inner"><a href="#s0">0. 总指令</a><a href="#s1">1. 当前状态</a><a href="#s2">2. 不可违反约束</a><a href="#s3">3. Sprint 3 目标</a><a href="#s4">4. 工作包</a><a href="#s5">5. 技术方案</a><a href="#s6">6. 测试矩阵</a><a href="#s7">7. 提交顺序</a><a href="#s8">8. 禁止事项</a><a href="#s9">9. 交付物</a></div></nav>
+<main class="wrap">
+<section id="s0"><div class="sec-head"><span class="num">00</span><h2>给执行 AI 的总指令</h2><span class="tag">Read First</span></div><div class="callout red"><span class="ct">你不是来重写 KB1 的。你是来把真实答案质量提上去的。</span><p>当前系统已经完成 Sprint 2：代码已 push，定义查询 xfail 已解除，Ontology 已以 off/shadow/guard 方式安全接入，测试全绿。Sprint 3 的核心是：在不改变评测口径、不让 Ontology 生成事实、不绕过 evidence_judge 的前提下，把跨文档真实 eval baseline 从 0.30 提升到 0.65–0.85。</p></div><div class="grid3"><div class="card"><h3>先诊断，不盲修</h3><ul class="checklist"><li>先跑并保存 0.30 baseline。</li><li>把失败样本按原因分桶。</li><li>先修高频、可验证、低风险 bucket。</li></ul></div><div class="card"><h3>只做证据内提质</h3><ul class="checklist"><li>修召回、rerank、answer policy、citation 对齐。</li><li>完善 expected_points 绑定。</li><li>修 orphan facts 与 source_unit 追踪。</li></ul></div><div class="card"><h3>不要走捷径</h3><ul class="no"><li>不得换更宽松 metric。</li><li>不得删除困难样本。</li><li>不得让 LLM / Ontology 补无证据事实。</li></ul></div></div></section>
+<section id="s1"><div class="sec-head"><span class="num">01</span><h2>当前项目状态摘要</h2><span class="tag">Post Sprint 2</span></div><table><tr><th>维度</th><th>状态</th><th>Sprint 3 含义</th></tr><tr><td>分支与远端</td><td><code>kb1-six-loop-rename</code>，67+ commits 已 push 到 <code>origin/kb1-six-loop-rename</code></td><td>成果保护已完成，可以进入质量提升开发。</td></tr><tr><td>测试状态</td><td>696 passed / 0 failed / 0 xfail；health 10/10 PASS</td><td>任何 Sprint 3 改动必须保持 fast suite 全绿。</td></tr><tr><td>定义查询</td><td>CJK term_definition 召回修复，MCP xfail 已解除</td><td>定义/术语类可以作为 eval 提分的低风险样本池继续优化。</td></tr><tr><td>Ontology</td><td>ADR 0003：只作约束/校验/召回辅助，不生成事实；<code>answer_changed_by_ontology=False</code></td><td>Sprint 3 可评估主动召回过滤，但必须先 shadow A/B，不可直接影响答案事实。</td></tr><tr><td>Eval</td><td>跨文档真实 deterministic token_overlap baseline = 0.30</td><td>唯一核心风险。Sprint 3 必须靠答案质量提升冲 0.65–0.85。</td></tr><tr><td>遗留项</td><td>guard warning 并入 answer warnings、104 题 golden 基线超时、orphan facts 治理</td><td>这些应作为提质工程的一部分，不要拆成无关大重构。</td></tr></table></section>
+<section id="s2"><div class="sec-head"><span class="num">02</span><h2>不可违反的系统约束</h2><span class="tag">Non-negotiables</span></div><div class="grid2"><div class="card"><h3>证据边界</h3><ul><li><code class="inline">evidence_judge</code> 仍然是事实裁决边界。</li><li>答案只能来自候选 evidence / fact / context。</li><li>证据不足必须降级，不能靠 LLM 或 Ontology 补条文。</li><li>Ontology 的输出只能是 signal / constraint / warning / validation。</li></ul></div><div class="card"><h3>评测边界</h3><ul><li>主口径仍为 deterministic + token_overlap。</li><li>不得切换到 strong-match / LLM judge 来制造更高分。</li><li>不得删除困难样本，除非有明确噪声判定与审计记录。</li><li>每次提分必须记录 improved / regressed cases。</li></ul></div></div><div class="callout yellow"><span class="ct">Sprint 3 的正确姿势</span><p>把 0.30 看成真实体检结果，不要嫌难看。现在最有价值的是把失败样本分清楚：到底是召回没拿到证据、rerank 排错、answer policy 表达不覆盖 expected point、citation 错，还是 expected_points 绑定本身有问题。</p></div></section>
+<section id="s3"><div class="sec-head"><span class="num">03</span><h2>Sprint 3 总目标与 Exit Gate</h2><span class="tag">5–10 Days</span></div><div class="grid4"><div class="gate"><h3><span class="badge b-blue">Gate 0</span> Baseline 可复现</h3><p>重新跑出 0.30 左右的跨文档 deterministic baseline，并输出失败样本清单。</p></div><div class="gate"><h3><span class="badge b-green">Gate 1</span> Eval 进入 0.65+</h3><p>在不换 metric、不删题的前提下，pass_rate 达到 0.65–0.85。</p></div><div class="gate"><h3><span class="badge b-purple">Gate 2</span> Ontology A/B 安全</h3><p>主动召回过滤只在 shadow A/B 中验证，证明不回归核心证据后再决策是否 guard 化。</p></div><div class="gate"><h3><span class="badge b-teal">Gate 3</span> 104 题基线可跑</h3><p>解决超时或拆分批跑，产出完整 golden baseline 报告。</p></div></div></section>
+<section id="s4"><div class="sec-head"><span class="num">04</span><h2>工作包拆解</h2><span class="tag">Work Packages</span></div><div class="timeline">
+<article class="task must"><div class="head"><span class="badge b-red">WP0 · 必做</span><h3>Sprint 3 现场快照与 baseline 冻结</h3></div><p><b>目的：</b>进入开发前先确认当前代码、测试、eval 与 Sprint 2 报告一致。不要在未复现 baseline 的情况下开始“凭感觉修”。</p><pre># 0.1 只读确认
+git status --short
+git branch --show-current
+git log --oneline --decorate --max-count=20
+git fetch origin
+git status -sb
+
+# 0.2 快速测试与健康检查
+python -m pytest -q -m "not integration and not benchmark"
+python scripts/check_health.py
+
+# 0.3 复现 Sprint 2 诚实基线
+eakb eval run-now --profile deterministic --metric token_overlap
+
+# 0.4 保存报告
+# docs/dev/sprint3_baseline_report.md
+# - commit
+# - pytest result
+# - health result
+# - eval pass_rate
+# - failed cases export path
+# - runtime / timeout status</pre><div class="kv"><div>验收标准</div><div>baseline 可复现；若 pass_rate 明显偏离 0.30，先暂停并分析环境/采样/数据差异。</div><div>提交建议</div><div><code>docs(sprint3): record baseline snapshot</code></div></div></article>
+<article class="task eval"><div class="head"><span class="badge b-green">WP1</span><h3>失败样本分桶：不要先写代码</h3></div><p><b>目的：</b>把 eval 失败拆成可修的工程问题。0.30 → 0.65 的路径不能靠“碰运气调权重”，必须知道 70% 失败到底死在哪里。</p><table><tr><th>Failure Bucket</th><th>判定方式</th><th>优先级</th></tr><tr><td>Retrieval Miss</td><td>候选 context 中没有覆盖 expected point 的 evidence。</td><td>最高</td></tr><tr><td>Rerank Misorder</td><td>证据存在但排在后面，answer context 没吃到。</td><td>高</td></tr><tr><td>Answer Under-coverage</td><td>证据存在，答案只覆盖部分 expected points。</td><td>高</td></tr><tr><td>Citation Mismatch</td><td>答案正确但 citation 指错、漏引或引用标题块。</td><td>中</td></tr><tr><td>Expected Point Binding Error</td><td>题库 expected_points 本身 page/doc 绑定不准。</td><td>中</td></tr><tr><td>Unsupported Claim</td><td>答案多说了证据没有的内容。</td><td>高，安全类</td></tr><tr><td>Timeout / Pipeline Cost</td><td>104 题完整基线跑不完。</td><td>中，高影响回归治理</td></tr></table><pre># 建议输出
+docs/dev/sprint3_failure_taxonomy_report.md
+
+# 最少包含：
+# - total cases
+# - passed / failed
+# - failed bucket count
+# - top 10 high-impact failure patterns
+# - suggested repair order
+# - cases not to modify because expected_points are suspicious</pre><div class="kv"><div>验收标准</div><div>每个失败样本至少归入一个主 bucket；识别出前 3 个最高 ROI 修复方向。</div><div>禁止</div><div>没有分桶就开始改 retrieval / answer_api。</div></div></article>
+<article class="task answer"><div class="head"><span class="badge b-blue">WP2</span><h3>答案质量修复 A：定义 / 术语 / 参数类高频失败</h3></div><p><b>目的：</b>优先修复标准文档知识库最常见、最容易验证的 query 类型：定义、术语、参数、条件、测试方法。这类问题通常能在不大改主链路的情况下显著提分。</p><div class="grid2"><div class="card"><h3>建议修复方向</h3><ul><li>沿用 Sprint 2 的 CJK term_definition 直达召回思路。</li><li>扩展标准定义类 query pattern：是什么、定义、含义、指什么、缩写。</li><li>参数类 query 要保留数值、单位、范围、条件。</li><li>测试方法类 query 要保留步骤、判定条件、引用标准章节。</li></ul></div><div class="card"><h3>不要做的事</h3><ul class="no"><li>不要靠 prompt 让 LLM 猜定义。</li><li>不要把文档标题块当定义证据。</li><li>不要为了 token_overlap 堆无证据关键词。</li><li>不要绕过 answer_policy 的证据不足降级。</li></ul></div></div><pre># 建议局部测试
+python -m pytest -q tests/test_mcp_server.py
+python -m pytest -q tests/test_answer_definition*.py tests/test_query*.py
+
+# 每个修复点后跑一次小样本 eval
+eakb eval run-now --profile deterministic --metric token_overlap --case-filter definition,term,parameter</pre><div class="kv"><div>验收标准</div><div>定义/术语/参数类失败明显下降；不新增 unsupported claim；citation 不回归。</div><div>提交建议</div><div><code>fix(answer): improve evidence-backed definition and parameter coverage</code></div></div></article>
+<article class="task answer"><div class="head"><span class="badge b-blue">WP3</span><h3>答案质量修复 B：召回与 rerank 的证据覆盖</h3></div><p><b>目的：</b>针对 Retrieval Miss 与 Rerank Misorder。先保证 evidence 能进候选，再保证正确 evidence 排到 answer 可见位置。</p><div class="flow"><div class="node">query</div><div class="arrow">→</div><div class="node">rewrite / expansion</div><div class="arrow">→</div><div class="node">retrieval candidates</div><div class="arrow">→</div><div class="node">rerank</div><div class="arrow">→</div><div class="node">context</div><div class="arrow">→</div><div class="node">evidence_judge</div></div><table><tr><th>问题</th><th>推荐修复</th><th>验证</th></tr><tr><td>CJK 分词导致术语召回弱</td><td>保留 2-gram LIKE fallback；针对标准术语加 exact / contains boost。</td><td>中文长术语命中率提升。</td></tr><tr><td>文档标题 / 目录块抢占 top context</td><td>降低 metadata/title-only block 权重；内容证据优先。</td><td>不再答标题，citation 指向内容 evidence。</td></tr><tr><td>跨文档采样后选错文档</td><td>topic_resolution 中保留 doc hints；但不能硬编码 DOC id。</td><td>跨文档 eval 提升。</td></tr><tr><td>graph 候选噪声</td><td>graph 只作候选增强；加入 negative-hit 统计。</td><td>Recall 提升且 negative_hit_rate 不升。</td></tr></table><div class="kv"><div>验收标准</div><div>Retrieval Miss / Rerank Misorder 两类失败下降；答案仍只基于候选证据。</div><div>提交建议</div><div><code>fix(retrieval): improve cross-document evidence coverage</code></div></div></article>
+<article class="task answer"><div class="head"><span class="badge b-blue">WP4</span><h3>Citation 与 unsupported claim 安全门禁</h3></div><p><b>目的：</b>eval 提分不能牺牲安全性。所有答案质量提升都必须同时维护 citation correctness 和 unsupported claim 检查。</p><div class="grid2"><div class="card"><h3>新增或强化测试</h3><ul><li>答案每个关键断言能对应 evidence id。</li><li>citation 不允许只指向文档标题、目录、封面。</li><li>证据不足时不输出“看似完整”的标准结论。</li><li>多文档查询不串文档。</li></ul></div><div class="card"><h3>建议指标</h3><ul><li><code class="inline">citation_correct_rate</code></li><li><code class="inline">unsupported_claim_rate</code></li><li><code class="inline">title_block_citation_rate</code></li><li><code class="inline">answer_coverage_rate</code></li></ul></div></div><div class="kv"><div>验收标准</div><div>eval 提分后 unsupported_claim_rate 不上升；citation_correct_rate 不下降。</div><div>提交建议</div><div><code>test(answer): guard citations and unsupported claims during eval uplift</code></div></div></article>
+<article class="task ontology"><div class="head"><span class="badge b-purple">WP5</span><h3>Ontology 主动召回过滤：只做 Shadow A/B，不直接启用</h3></div><p><b>目的：</b>评估 Ontology 是否能帮助减少噪声召回、关系错配和实体类型混淆。Sprint 3 只允许 shadow A/B，不允许把 Ontology 过滤直接作为生产门禁。</p><div class="callout red"><span class="ct">硬边界</span><p>Ontology 可以建议“这个候选可能类型不匹配”，但不能删除唯一证据、不能生成事实、不能绕过 evidence_judge。任何主动过滤必须先证明不会降低 recall。</p></div><pre># 推荐实验模式
+KB1_ONTOLOGY_MODE=off      # control
+KB1_ONTOLOGY_MODE=shadow   # 记录如果过滤会发生什么
+KB1_ONTOLOGY_MODE=guard    # 只输出 warning，不改变 answer
+
+# 推荐 A/B 输出
+docs/dev/sprint3_ontology_retrieval_ab_report.md
+# - off pass_rate
+# - shadow projected pass_rate
+# - candidates_would_drop
+# - evidence_loss_cases
+# - false_positive_filter_cases
+# - safe_filter_candidates</pre><table><tr><th>指标</th><th>含义</th><th>Gate</th></tr><tr><td>projected_precision_gain</td><td>如果启用 ontology 过滤，噪声是否下降。</td><td>越高越好</td></tr><tr><td>evidence_loss_rate</td><td>被过滤掉的候选中是否有真实所需 evidence。</td><td>必须接近 0</td></tr><tr><td>false_positive_filter_cases</td><td>Ontology 误判导致正确证据被标红。</td><td>必须逐例审计</td></tr><tr><td>answer_changed_by_ontology</td><td>Sprint 3 是否直接改答案。</td><td>必须仍为 false</td></tr></table><div class="kv"><div>验收标准</div><div>产出 A/B 报告；证明是否值得 Sprint 4 进入 guard retrieval；Sprint 3 不直接生产启用过滤。</div><div>提交建议</div><div><code>feat(ontology): evaluate retrieval filtering in shadow mode</code></div></div></article>
+<article class="task ontology"><div class="head"><span class="badge b-purple">WP6</span><h3>Guard warning 并入 Answer Warnings</h3></div><p><b>目的：</b>Sprint 2 已经有 ontology guard post-check，但遗留项是 warning 还没有自然并入 answer warnings。Sprint 3 可以把它作为可观测输出接入，但仍不得改写 answer text。</p><pre>{
+  "answer": "...",
+  "citations": [...],
+  "warnings": [
+    {
+      "source": "ontology_guard",
+      "type": "relation_unknown|relation_conflict|entity_type_mismatch",
+      "severity": "info|warning",
+      "message": "...",
+      "changed_answer": false
+    }
+  ],
+  "ontology": {
+    "mode": "guard",
+    "answer_changed_by_ontology": false
+  }
+}</pre><div class="kv"><div>验收标准</div><div>guard warning 可在 answer envelope 中被调用方看见；默认不改变答案正文和事实裁决。</div><div>提交建议</div><div><code>feat(answer): surface ontology guard warnings without changing answers</code></div></div></article>
+<article class="task data"><div class="head"><span class="badge b-teal">WP7</span><h3>Orphan facts 治理：DOC-000001 / DOC-000008 优先</h3></div><p><b>目的：</b>orphan facts 会污染 evidence → fact → answer 的可追溯链路。Sprint 3 需要先诊断、隔离、修复高影响 orphan facts，尤其是报告点名的 DOC-000001 / DOC-000008。</p><pre># 建议新增/使用诊断命令，名称按现有 CLI 调整
+eakb facts audit-orphans --doc-id DOC-000001
+eakb facts audit-orphans --doc-id DOC-000008
+
+# 输出
+docs/dev/sprint3_orphan_facts_report.md
+# - orphan count by doc
+# - orphan type
+# - source_unit missing?
+# - evidence missing?
+# - fact payload malformed?
+# - repair action
+# - re-run coverage result</pre><div class="grid2"><div class="card"><h3>修复优先级</h3><ul><li>会影响 eval 的 orphan facts 先修。</li><li>会导致 citation 错误的 orphan facts 先修。</li><li>仅历史残留、不入 answer 链路的先 quarantine。</li></ul></div><div class="card"><h3>禁止动作</h3><ul class="no"><li>不要直接删库。</li><li>不要破坏 source_unit coverage。</li><li>不要把 orphan fact 当作无证据答案来源。</li></ul></div></div><div class="kv"><div>验收标准</div><div>DOC-000001 / DOC-000008 orphan facts 有报告、有修复或隔离策略；coverage/health 不回归。</div><div>提交建议</div><div><code>fix(facts): audit and repair high-impact orphan facts</code></div></div></article>
+<article class="task eval"><div class="head"><span class="badge b-green">WP8</span><h3>完整 104 题 golden baseline：解决超时或分批运行</h3></div><p><b>目的：</b>当前完整 104 题 golden 基线超时，导致回归闭环不能充分激活。Sprint 3 要么优化答案流水线速度，要么实现可审计的分批运行与合并报告。</p><div class="grid2"><div class="card"><h3>优先方案 A：分批可合并</h3><ul><li>按 doc_id / query_type 分片运行。</li><li>每片保存 run_id、commit、metric、case list。</li><li>合并报告计算总 pass_rate 与 bucket。</li></ul></div><div class="card"><h3>方案 B：性能优化</h3><ul><li>缓存稳定派生结果。</li><li>减少重复 parse/retrieval 初始化。</li><li>只优化无行为变化的 runtime 热点。</li></ul></div></div><pre># 示例：实际参数按项目 CLI 调整
+eakb eval run-now --profile deterministic --metric token_overlap --shard 1/4
+eakb eval run-now --profile deterministic --metric token_overlap --shard 2/4
+eakb eval merge-runs --input runs/shard_* --output docs/dev/sprint3_golden104_report.md</pre><div class="kv"><div>验收标准</div><div>104 题完整 baseline 可复现；报告含 runtime、pass_rate、failure buckets、regression list。</div><div>提交建议</div><div><code>feat(eval): support reproducible golden baseline sharding</code></div></div></article>
+<article class="task eval"><div class="head"><span class="badge b-green">WP9</span><h3>Eval 提分验收：0.30 → 0.65–0.85</h3></div><p><b>目的：</b>把前面修复汇总成最终评测结果。必须记录为什么提升、哪些样本改善、哪些样本回归、是否牺牲安全指标。</p><pre># 最终评测
+python -m pytest -q -m "not integration and not benchmark"
+python scripts/check_health.py
+eakb eval run-now --profile deterministic --metric token_overlap
+
+# 若 104 题可跑，则同时输出完整 golden
+eakb eval run-now --profile deterministic --metric token_overlap --suite golden104</pre><div class="callout green"><span class="ct">通过条件</span><p>主 baseline 达到 0.65–0.85；citation correctness 不下降；unsupported claim 不上升；没有通过换 metric、删题、放宽标准、Ontology 补事实来提分。</p></div><div class="kv"><div>验收标准</div><div>输出 <code>docs/dev/sprint3_eval_acceptance_report.md</code>，包含 baseline 对比、case-level diff、failure buckets 与安全指标。</div><div>提交建议</div><div><code>fix(eval): raise honest cross-document baseline through answer quality</code></div></div></article>
+<article class="task docs"><div class="head"><span class="badge b-yellow">WP10</span><h3>CodeStable / ADR / Sprint 3 验收收口</h3></div><p><b>目的：</b>把 Sprint 3 的技术选择沉淀成可追溯记录，不让下一轮 AI 又从聊天记录猜。</p><ul class="checklist"><li>新增 <code class="inline">docs/dev/sprint3_acceptance_report.md</code>。</li><li>新增或更新 <code class="inline">docs/dev/sprint3_eval_acceptance_report.md</code>。</li><li>新增 <code class="inline">docs/dev/sprint3_ontology_retrieval_ab_report.md</code>。</li><li>新增 <code class="inline">docs/dev/sprint3_orphan_facts_report.md</code>。</li><li>若决定 Sprint 4 启用 ontology retrieval guard，必须先写 ADR，不得口头决定。</li></ul><div class="kv"><div>验收标准</div><div>新接手者只看文档即可理解 Sprint 3 做了什么、提升从哪里来、还剩什么风险。</div><div>提交建议</div><div><code>docs(sprint3): record eval uplift and ontology retrieval decisions</code></div></div></article>
+</div></section>
+<section id="s5"><div class="sec-head"><span class="num">05</span><h2>建议技术方案：答案质量提升链路</h2><span class="tag">Quality Uplift Architecture</span></div><p>Sprint 3 不建议先动大架构。推荐围绕“失败样本 → 证据链路 → answer coverage”的最短闭环迭代。</p><pre>eval failed case
+  │
+  ├─ expected_points
+  │
+  ├─ retrieval trace
+  │    ├─ evidence absent?     → retrieval/query expansion fix
+  │    ├─ evidence low-ranked? → rerank/context selection fix
+  │    └─ evidence present?    → answer_policy/citation fix
+  │
+  ├─ answer trace
+  │    ├─ missed expected point
+  │    ├─ unsupported extra claim
+  │    └─ citation mismatch
+  │
+  └─ repair task
+       ├─ unit/regression test
+       ├─ local eval
+       ├─ full eval
+       └─ case-level diff report</pre><div class="grid2"><div class="card"><h3>推荐新增中间产物</h3><pre>@dataclass
+class EvalFailureBucket:
+    case_id: str
+    doc_id: str
+    query_type: str
+    bucket: Literal[
+      "retrieval_miss",
+      "rerank_misorder",
+      "answer_undercoverage",
+      "citation_mismatch",
+      "expected_point_binding",
+      "unsupported_claim",
+      "timeout"
+    ]
+    evidence_ids: list[str]
+    expected_points: list[str]
+    repair_hint: str</pre></div><div class="card"><h3>推荐追踪指标</h3><pre>eval.pass_rate
+eval.pass_rate_by_doc
+eval.pass_rate_by_query_type
+eval.retrieval_miss_rate
+eval.answer_undercoverage_rate
+eval.citation_correct_rate
+eval.unsupported_claim_rate
+eval.title_block_citation_rate
+eval.runtime_seconds</pre></div></div></section>
+<section id="s6"><div class="sec-head"><span class="num">06</span><h2>测试矩阵与质量门禁</h2><span class="tag">Quality Gates</span></div><table><tr><th>测试层</th><th>必须覆盖</th><th>通过标准</th></tr><tr><td>Unit</td><td>失败分桶、definition/parameter answer policy、citation guard、ontology warning envelope。</td><td>新增逻辑均有最小单测。</td></tr><tr><td>Regression</td><td>Sprint 2 definition query fix、MCP answer_query、ontology changed_answer=false。</td><td>不得回归；0 xfail。</td></tr><tr><td>Fast suite</td><td><code>not integration and not benchmark</code></td><td>0 failed；不新增非必要 xfail。</td></tr><tr><td>Health</td><td><code>scripts/check_health.py</code></td><td>10/10 PASS。</td></tr><tr><td>Eval baseline</td><td>deterministic + token_overlap 主口径。</td><td>0.65–0.85；必须保留 case-level diff。</td></tr><tr><td>Golden104</td><td>完整 104 题或分片合并。</td><td>可复现、不超时或有可审计分片策略。</td></tr><tr><td>Safety</td><td>citation correctness / unsupported claim / evidence insufficiency degrade。</td><td>不因提分而下降。</td></tr></table><div class="callout green"><span class="ct">Sprint 3 最终 Exit Gate</span><p>同时满足：fast suite 全绿、health 10/10、主 eval 0.65–0.85、104 题 baseline 可运行或可分片合并、ontology 主动过滤仅 shadow A/B、answer_changed_by_ontology 仍为 false、orphan facts 高影响项有治理报告。</p></div></section>
+<section id="s7"><div class="sec-head"><span class="num">07</span><h2>推荐提交顺序</h2><span class="tag">Commit Plan</span></div><pre>0. docs(sprint3): record baseline snapshot
+1. feat(eval): add failure bucket export for deterministic runs
+2. docs(eval): classify sprint3 baseline failures
+3. fix(answer): improve evidence-backed definition and parameter coverage
+4. fix(retrieval): improve cross-document evidence coverage
+5. test(answer): guard citations and unsupported claims during eval uplift
+6. feat(ontology): evaluate retrieval filtering in shadow mode
+7. feat(answer): surface ontology guard warnings without changing answers
+8. fix(facts): audit and repair high-impact orphan facts
+9. feat(eval): support reproducible golden baseline sharding
+10. fix(eval): raise honest cross-document baseline through answer quality
+11. docs(sprint3): record acceptance and next decisions</pre><div class="callout yellow"><span class="ct">提交纪律</span><p>不要把 eval 分桶、answer 修复、ontology A/B、orphan facts、文档收口混在一个大 commit。每个行为变化都要有测试；每个 eval 提升都要有 case-level diff。</p></div></section>
+<section id="s8"><div class="sec-head"><span class="num">08</span><h2>禁止事项清单</h2><span class="tag">Do Not</span></div><div class="grid2"><div class="card"><h3>架构层禁止</h3><ul class="no"><li>不要重写 query_api / answer_api 主链路。</li><li>不要绕过 evidence_judge。</li><li>不要把 Ontology 输出当事实写进答案。</li><li>不要让 LLM 自由补标准条文。</li><li>不要在 Sprint 3 直接启用 ontology retrieval filtering 生产模式。</li></ul></div><div class="card"><h3>评测层禁止</h3><ul class="no"><li>不要切换 metric 来获得更高分。</li><li>不要删除困难样本但不记录。</li><li>不要降低 expected_points 标准。</li><li>不要只报告 pass_rate，不报告 regression cases。</li><li>不要牺牲 citation correctness 或 unsupported claim 率。</li></ul></div></div></section>
+<section id="s9"><div class="sec-head"><span class="num">09</span><h2>最终交付物清单</h2><span class="tag">Deliverables</span></div><table><tr><th>交付物</th><th>位置建议</th><th>内容</th></tr><tr><td>Sprint 3 baseline report</td><td><code>docs/dev/sprint3_baseline_report.md</code></td><td>commit、测试、health、eval 0.30 复现结果、运行耗时。</td></tr><tr><td>Failure taxonomy report</td><td><code>docs/dev/sprint3_failure_taxonomy_report.md</code></td><td>失败样本分桶、top failure patterns、修复优先级。</td></tr><tr><td>Answer quality fixes</td><td>answer / retrieval / policy 相关模块</td><td>定义、术语、参数、测试方法类提质；证据覆盖与 citation 修复。</td></tr><tr><td>Eval uplift report</td><td><code>docs/dev/sprint3_eval_acceptance_report.md</code></td><td>0.30 → 0.65–0.85 的 case-level diff、improved/regressed cases、安全指标。</td></tr><tr><td>Ontology A/B report</td><td><code>docs/dev/sprint3_ontology_retrieval_ab_report.md</code></td><td>主动召回过滤 shadow A/B、evidence_loss_rate、false positive cases、是否建议 Sprint 4 guard 化。</td></tr><tr><td>Guard warning integration</td><td>answer envelope / tests</td><td>ontology guard warnings 可观测，<code>answer_changed_by_ontology=false</code>。</td></tr><tr><td>Orphan facts report</td><td><code>docs/dev/sprint3_orphan_facts_report.md</code></td><td>DOC-000001 / DOC-000008 orphan facts 诊断、修复、隔离策略。</td></tr><tr><td>Golden104 report</td><td><code>docs/dev/sprint3_golden104_report.md</code></td><td>完整 104 题或分片合并 baseline，含 runtime 与 failure buckets。</td></tr><tr><td>Acceptance report</td><td><code>docs/dev/sprint3_acceptance_report.md</code></td><td>Sprint 3 Exit Gate 逐项证据、遗留风险、Sprint 4 建议。</td></tr></table><div class="callout green"><span class="ct">一句话目标</span><p>Sprint 3 做完后，KB1 应从“测试全绿但 eval 真实基线 0.30 的证据约束知识库”，升级为“跨文档答案质量达到 promotion gate、回归评测可运行、Ontology 过滤风险已被量化”的可推广版本。</p></div><div class="footer"><p>文档生成时间：2026-06-25。依据：KB1 项目阶段评审报告 Sprint 2 更新版。适用对象：接手开发的 AI Agent / 人类开发者。执行原则：真实基线、证据提质、小步可回滚、严禁刷分。</p></div></section>
+</main>
+</body>
+</html>
