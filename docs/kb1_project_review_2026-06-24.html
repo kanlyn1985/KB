@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KB1 项目阶段评审报告 · 2026-06-25 (Sprint 1 更新)</title>
+<title>KB1 项目阶段评审报告 · 2026-06-25 (Sprint 2 更新)</title>
 <style>
   :root{
     --bg:#0f1419; --surface:#161b22; --surface2:#1c2330; --border:#2d333b;
@@ -167,11 +167,11 @@
     <div class="eyebrow">Project Stage Review · 项目阶段评审</div>
     <h1>KB1 企业级 Agent 知识库</h1>
     <div class="sub">面向汽车标准文档（QC/T 1036-2016、ISO 14229-1 等）的知识库编译与证据约束检索系统。
-    本报告基于 2026-06-25 代码、测试、文档与数据资产的完整梳理（含 Sprint 1 稳定化成果），用于阶段评审。</div>
+    本报告基于 2026-06-25 代码、测试、文档与数据资产的完整梳理（含 Sprint 1 稳定化与 Sprint 2 定义查询修复 + Ontology 最小接入 + Eval 诚实基线），用于阶段评审。</div>
     <div class="hero-meta">
       <span class="meta-chip">分支 <b>kb1-six-loop-rename</b></span>
-      <span class="meta-chip">最新提交 <b>eb53f1c</b> (2026-06-25 · Sprint 1 完成)</span>
-      <span class="meta-chip">领先 origin/main <b>66 commits</b>（本地）</span>
+      <span class="meta-chip">最新提交 <b>16142de</b> (2026-06-25 · Sprint 2 WP5)</span>
+      <span class="meta-chip">已 push origin/kb1-six-loop-rename</span>
       <span class="meta-chip">方法学 <b>CodeStable</b></span>
       <span class="meta-chip">技术栈 <b>Python 3.11+ / SQLite+FTS5 / httpx</b></span>
     </div>
@@ -180,22 +180,22 @@
       <div class="vcard">
         <div class="label">总体健康度</div>
         <div class="val" style="color:var(--green)">A-</div>
-        <div class="note">Sprint 1 后：架构成熟、治理规范、测试全绿</div>
+        <div class="note">Sprint 2 后：架构成熟、治理规范、测试全绿、Ontology 安全接入</div>
       </div>
       <div class="vcard">
         <div class="label">测试通过率</div>
         <div class="val" style="color:var(--green)">100%</div>
-        <div class="note">679 passed · 0 failed · 1 xfail（绑 issue）</div>
+        <div class="note">696 passed · 0 failed · 0 xfail（xfail 已解除）</div>
       </div>
       <div class="vcard">
         <div class="label">Feature 闭环</div>
         <div class="val" style="color:var(--green)">21/22</div>
-        <div class="note">10/10 issue 已闭环；6 闭环已落地</div>
+        <div class="note">10/10 issue 已闭环；6 闭环已落地；Ontology ADR 0003</div>
       </div>
       <div class="vcard">
         <div class="label">核心风险</div>
         <div class="val" style="color:var(--yellow)">1 项</div>
-        <div class="note">66 commits 未 push（本地）；可离线备份</div>
+        <div class="note">eval 真实基线 0.30 距 0.65 promotion gate 仍有差距（Sprint 3）</div>
       </div>
     </div>
   </div>
@@ -247,16 +247,17 @@
       <ul>
         <li><span class="check">✓</span> <b>WIP 已全部分批提交</b>：14 个逻辑 commit + safety tag，工作树干净</li>
         <li><span class="check">✓</span> <b>8 失败测试已收口</b>：0 failed / 1 xfail（MCP，绑 issue）</li>
-        <li><span class="check">✓</span> <b>评测 baseline 固定</b>：token_overlap 主口径，deterministic 0.60 可复现</li>
+        <li><span class="check">✓</span> <b>评测 baseline 诚实化</b>：发现 0.60 是单文档偶然值，修复跨文档采样后锁定真实基线 0.30（deterministic，未改指标）</li>
         <li><span class="check">✓</span> <b>命名统一</b>：six-loop 主线 + 历史 four-loop 说明；工程债务已清理</li>
       </ul>
     </div>
     <div class="card">
       <h3><span class="dot" style="background:var(--brand)"></span>后续建议</h3>
       <ul>
-        <li><b>最高优先</b>：66 commits 全本地未 push，建议 push 或离线 <code class="inline">git bundle</code> 备份</li>
+        <li><b>最高优先</b>：eval 真实基线 0.30 距 promotion gate 0.65-0.85 仍有差距，需答案质量提升（Sprint 3）</li>
         <li>修 issue <code class="inline">definition-query-exact-term-gate-drops-evidence</code>，解 MCP xfail</li>
-        <li>Sprint 2：Ontology 最小接入（3 个接入点，不绕 evidence_judge）</li>
+        <li>Sprint 2：定义查询修复 + Ontology 最小接入（约束层 only，已落地 ADR 0003）+ eval 诚实化 ✓ 已完成</li>
+        <li>Sprint 3：eval 提分至 0.65-0.85（答案质量提升）+ Ontology 主动召回过滤评估 + orphan facts 治理</li>
         <li>eval 提分至 0.65–0.85 后启用 AUTO 模式</li>
       </ul>
     </div>
@@ -482,23 +483,23 @@ query context  ──▶  <span class="k">evidence_judge</span>  ──▶  answ
 <section id="s5">
   <div class="sec-head">
     <span class="num">05</span><h2>测试与质量</h2>
-    <span class="tagline">Tests · 100% Pass（Sprint 1 后）</span>
+    <span class="tagline">Tests · 100% Pass（Sprint 2 后）</span>
   </div>
 
   <div class="grid4" style="margin-bottom:20px">
-    <div class="stat"><div class="big" style="color:var(--green)">679</div><div class="lab">通过</div></div>
+    <div class="stat"><div class="big" style="color:var(--green)">696</div><div class="lab">通过</div></div>
     <div class="stat"><div class="big" style="color:var(--green)">0</div><div class="lab">失败</div></div>
     <div class="stat"><div class="big" style="color:var(--text-mute)">1</div><div class="lab">xfail（绑 issue）</div></div>
     <div class="stat"><div class="big" style="color:var(--brand)">2193</div><div class="lab">测试总数</div></div>
   </div>
 
   <p>套件分层：unit（70）/ smoke / integration（1540）/ benchmark（1504）/ coverage（926）。
-  <code class="inline">pyproject.toml</code> 默认只跑 <code class="inline">not integration and not benchmark</code>（即本报告 679 这批）。
+  <code class="inline">pyproject.toml</code> 默认只跑 <code class="inline">not integration and not benchmark</code>（即本报告 696 这批）。
   CI 分四个 job 分别执行 fast / integration / benchmark / eval-suite。</p>
 
   <div class="callout green" style="margin-top:18px">
-    <span class="ct">Sprint 1 成果：8 个失败已全部收口</span>
-    <p>原 8 个失败在 Sprint 1（WP2/WP4）中全部处理：6 个是<b>陈旧断言/契约变更</b>直接修测试（CLI 计数、evidence fixture、LLM 路由×2、post_ingestion_gate×3）；
+    <span class="ct">Sprint 1 成果：8 个失败已全部收口；Sprint 2：xfail 解除</span>
+    <p>原 8 个失败在 Sprint 1（WP2/WP4）中全部处理：6 个是<b>陈旧断言/契约变更</b>直接修测试（CLI 计数、evidence fixture、LLM 路由×2、post_ingestion_gate×3）；1 个（MCP definition-query）因属 answer 主链路 bug 先 <code class="inline">xfail</code> 绑 issue。Sprint 2 WP2 修复定义查询根因（CJK term_definition 召回），<b>xfail 已解除</b>，现 696 passed / 0 failed / 0 xfail。
     1 个是<b>真实答案管线 bug</b>（MCP 定义查询答文档标题），用 <code class="inline">xfail(strict=True)</code> 绑定 CodeStable issue <code class="inline">definition-query-exact-term-gate-drops-evidence</code>，不在本轮动 answer 主链路。
     <b>没有一个是生产阻断问题</b>。CI 的 10 项健康检查全部 PASS。</p>
   </div>
@@ -765,14 +766,47 @@ query context  ──▶  <span class="k">evidence_judge</span>  ──▶  answ
     </div>
   </div>
 
-  <!-- ===== Sprint 2 placeholder ===== -->
-  <div class="loop" style="border-left-color:var(--border); opacity:.6">
+  <!-- ===== Sprint 2 ===== -->
+  <div class="loop" style="border-left-color:var(--green)">
     <div class="lh">
       <span class="num">SPRINT 2</span>
-      <h4>待启动（Ontology 最小接入 + 修复定义查询 bug）</h4>
-      <span class="badge b-gray" style="margin-left:auto">规划中</span>
+      <h4>定义查询修复 + Ontology 最小接入 + Eval 诚实基线</h4>
+      <span class="badge b-green" style="margin-left:auto">已完成 · 2026-06-25</span>
     </div>
-    <p>候选任务见 <code class="inline">sprint1_acceptance_report.md §6</code>。Sprint 2 完成后在此追加成果。</p>
+    <p><b>目标</b>：成果保护 &gt; 修复定义查询主路径 bug &gt; Ontology 最小安全接入 &gt; eval 提分。<b>全程不改答案主路径逻辑、ontology 不生成事实、<code class="inline">answer_changed_by_ontology=False</code></b>。</p>
+    <p style="margin-top:8px"><b>达成</b>：67+ commit push 到 origin（成果保护）；定义查询 bug 修复（CJK term_definition 召回），MCP xfail 解除；Ontology off/shadow/guard 只读 adapter 接入（默认 off 零开销）；eval 采样修复后发现 0.60 是单文档偶然值，诚实锁定真实跨文档基线 0.30。<b>4 Gate 中 3 完全达成（0/1/2），1 部分达成并诚实记录（3）</b>。</p>
+    <div class="metrics">
+      <span class="m"><b>696</b> passed（+17）</span>
+      <span class="m"><b>0</b> failed / <b>0</b> xfail</span>
+      <span class="m">eval <b>0.30</b> 跨文档真实</span>
+      <span class="m">check_health <b>10/10</b></span>
+      <span class="m">ontology <b>off/shadow/guard</b></span>
+    </div>
+    <h3 style="margin:16px 0 10px; font-size:14px">7 个工作包（WP）完成情况</h3>
+    <div class="scrollbox">
+      <table>
+        <thead><tr><th>WP</th><th>内容</th><th>关键产物</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr><td>WP0</td><td>git bundle + push 到 origin（成果保护）</td><td class="code">sprint2_prework_report.md</td><td><span class="badge b-green">完成</span></td></tr>
+          <tr><td>WP1</td><td>Sprint 2 baseline 确认</td><td class="code">sprint2_baseline_report.md</td><td><span class="badge b-green">完成</span></td></tr>
+          <tr><td>WP2</td><td>定义查询 bug 修复 + xfail 解除</td><td class="code">...analysis.md + 代码修复</td><td><span class="badge b-green">完成</span></td></tr>
+          <tr><td>WP3</td><td>Ontology shadow 只读 adapter</td><td class="code">ontology_adapter.py + 14 测试</td><td><span class="badge b-green">完成</span></td></tr>
+          <tr><td>WP4</td><td>Ontology guard post-check 接线</td><td class="code">answer_api envelope 字段 + 2 测试</td><td><span class="badge b-green">完成</span></td></tr>
+          <tr><td>WP5</td><td>eval 跨文档采样 + 诚实锁定 0.30</td><td class="code">wp5_eval_uplift_report.md</td><td><span class="badge b-yellow">部分</span></td></tr>
+          <tr><td>WP6</td><td>ADR 0003 + decision + 验收报告</td><td class="code">sprint2_acceptance_report.md</td><td><span class="badge b-green">完成</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout green" style="margin-top:14px">
+      <span class="ct">Sprint 2 关键决策</span>
+      <p>(1) <b>定义查询根因修正</b>：原 issue 报告猜「exact-term gate 清零 evidence」是错的；真根因是 <code class="inline">_inject_direct_term_definition_hits</code> 只处理短缩写、不处理中文长术语，导致选错文档回填标题。Fix A 扩展中文术语召回即解，无需动选文档逻辑（保主链路）。
+      (2) <b>Ontology 约束层 ADR</b>（0003）：ontology 只作约束/校验/召回辅助，永久不生成事实、不绕 evidence_judge；Sprint 2 <code class="inline">answer_changed_by_ontology=False</code>。
+      (3) <b>Eval 诚实化</b>：0.60 是「10 题全来自 DOC-000015」的单文档偶然值；修复 <code class="inline">_is_substantive</code> 过滤 + <code class="inline">_round_robin_sample</code> 跨文档采样后真实值 0.30。未改评测指标。</p>
+    </div>
+    <div class="callout yellow" style="margin-top:10px">
+      <span class="ct">遗留到 Sprint 3</span>
+      <p>(1) eval 0.65-0.85 promotion gate（需答案质量提升，Sprint 2 受「不改答案主路径」约束）；(2) Ontology 主动召回过滤（需独立 ADR + 不回归证据）；(3) guard warning 并入 answer warnings；(4) 完整 104 题 golden 基线（超时）；(5) orphan facts 治理。</p>
+    </div>
   </div>
 </section>
 
@@ -836,24 +870,24 @@ query context  ──▶  <span class="k">evidence_judge</span>  ──▶  answ
 
   <div class="callout green" style="margin-bottom:16px">
     <span class="ct">Sprint 1 风险收口情况</span>
-    <p>原 4 个主要风险中：<b>WIP 未提交（高）</b> 已转为“已提交但未 push”；<b>评测 baseline（中）</b> 已固定为可复现的 deterministic 口径；<b>工程债务（中）</b> 已清理；<b>命名漂移（中）</b> 已统一。仅“未 push”这一项仍是<b>唯一高优先级风险</b>。</p>
-  </div>
-
-  <div class="risk">
-    <div class="sev"><span class="sevb b-red">高</span></div>
-    <div>
-      <h4>66 commits 全本地未 push，远端不可达</h4>
-      <p>WIP 已在 Sprint 1 WP1 中分 14 个逻辑 commit 全部提交，工作树干净。但远端无 upstream，本地领先 origin/main <b>66 个提交</b>未推送。<b>一旦本地环境丢失，近一个月的工作无法恢复。</b></p>
-      <div class="rec">建议：恢复网络后 push 到远端；或先用 <code class="inline">git bundle create ../kb1-backup.bundle --all</code> 做离线备份。这是当前<b>唯一高优先级风险</b>。</div>
-    </div>
+    <p>原 4 个主要风险中：<b>WIP 未提交（高）</b> 已在 Sprint 2 WP0 完全解决（push 到 origin）；<b>评测 baseline（中）</b> 已诚实化（0.60 单文档偶然 → 0.30 真实跨文档，可复现）；<b>工程债务（中）</b> 已清理；<b>命名漂移（中）</b> 已统一。Sprint 2 后唯一中高优先级风险是<b>eval 真实基线 0.30 距 promotion gate 0.65-0.85 仍有差距</b>（需答案质量提升，属 Sprint 3）。</p>
   </div>
 
   <div class="risk">
     <div class="sev"><span class="sev" style="background:var(--green-bg);color:var(--green)">低（已收口）</span></div>
     <div>
-      <h4>评测 baseline 已固定（原：不稳定）</h4>
-      <p>Sprint 1 WP3 固定 <b>token_overlap</b> 为 CI 主口径（确定性，<code class="inline">COVERAGE_THRESHOLD=0.30</code>，无 LLM）。当前 baseline pass_rate=<b>0.60</b>（10 题）、multi_prompt_stability=<b>1.0</b>，可复现。LLM judge（<code class="inline">EVAL_USE_LLM=1</code>）为辅助非阻塞。详见 <code class="inline">eval-baseline-policy.md</code>。</p>
-      <div class="rec">遗留：0.60 &lt; 0.65 promotion gate 未达，提分属 Phase 1 后续（依赖修定义查询 issue）。</div>
+      <h4>成果已 push 到 origin（原：66 commits 全本地未 push）</h4>
+      <p>WIP 已在 Sprint 1 WP1 中分 14 个逻辑 commit 全部提交，工作树干净。Sprint 2 WP0 进一步 <b>push 到 origin/kb1-six-loop-rename</b>（upstream tracking 已配置），并另存 git bundle 双保险。<b>成果丢失风险已消除。</b></p>
+      <div class="rec">已解决：远端可达后已 push；离线 bundle 亦存档于 <code class="inline">docs/dev/sprint2-ontology-and-bugfix/</code>。</div>
+    </div>
+  </div>
+
+  <div class="risk">
+    <div class="sev"><span class="sevb b-yellow">中</span></div>
+    <div>
+      <h4>eval 真实基线 0.30 距 promotion gate 0.65-0.85 仍有差距</h4>
+      <p>Sprint 2 WP5 发现原 0.60 是「10 题全来自 DOC-000015」的单文档偶然值。修复 <code class="inline">_is_substantive</code> 过滤 + <code class="inline">_round_robin_sample</code> 跨文档采样后，诚实锁定真实跨文档基线 <b>0.30</b>（deterministic，未改指标）。CI smoke floor <code class="inline">--min-token-pass 0.20</code> 仍通过。提分需答案质量提升（召回措辞对齐、答案组装），Sprint 2 受「不改答案主路径」约束未做。</p>
+      <div class="rec">遗留至 Sprint 3：答案质量提升路线（不赛分、不改指标）。</div>
     </div>
   </div>
 
@@ -978,34 +1012,34 @@ query context  ──▶  <span class="k">evidence_judge</span>  ──▶  answ
   </div>
 
   <div class="callout green">
-    <span class="ct">总体结论：A- — Sprint 1 后工程成熟度进一步提升，可验证性已成型</span>
+    <span class="ct">总体结论：A- — Sprint 2 后工程成熟度进一步巩固，Ontology 安全接入、定义查询修复、评测诚实化</span>
     <p>KB1 已经不是原型，而是一个具备<b>清晰架构、规范治理、安全边界、CI 门禁</b>的产品级知识库系统。
-    <b>Sprint 1 稳定化</b>后：测试全绿（679 passed / 0 failed）、WIP 全部入库（工作树干净）、评测可复现、工程债务清理。六闭环设计、CodeStable 全生命周期文档、证据约束的 LLM 边界，三项共同构成了扎实的工程基座。系统当前可运行（10/10 健康检查）、可追溯（10/10 issue 闭环、21/22 feature 完成）、可演进（本体层已 6 阶段就绪）。<b>唯一剩余高风险是 66 commits 未 push。</b></p>
+    <b>Sprint 2</b>后：测试全绿（696 passed / 0 failed / 0 xfail）、成果已 push 远端、定义查询主路径 bug 修复、Ontology 以约束层身份安全最小接入（ADR 0003，<code class="inline">answer_changed_by_ontology=False</code>）、评测从虚高 0.60 诚实化为真实跨文档 0.30。六闭环设计、CodeStable 全生命周期文档、证据约束的 LLM 边界，三项共同构成了扎实的工程基座。系统当前可运行（10/10 健康检查）、可追溯（10/10 issue 闭环、21/22 feature 完成）、可演进（本体层已接入主链路 shadow/guard）。<b>唯一中高优先级风险是 eval 真实基线 0.30 距 promotion gate 0.65-0.85 仍有差距</b>（需答案质量提升，属 Sprint 3）。</p>
   </div>
 
   <h3 style="margin:24px 0 14px">评审维度打分</h3>
   <div class="grid2">
     <div class="card">
-      <h3>维度评分（Sprint 1 后）</h3>
+      <h3>维度评分（Sprint 2 后）</h3>
       <div class="prow"><div class="pl"><span>架构设计</span><span style="color:var(--green)">A</span></div><div class="pbar"><i style="width:92%;background:var(--green)"></i></div></div>
       <div class="prow"><div class="pl"><span>工程治理 / 文档</span><span style="color:var(--green)">A-</span></div><div class="pbar"><i style="width:88%;background:var(--green)"></i></div></div>
-      <div class="prow"><div class="pl"><span>测试覆盖与质量</span><span style="color:var(--green)">A-</span> <span class="badge b-green" style="margin-left:4px">↑</span></div><div class="pbar"><i style="width:88%;background:var(--green)"></i></div></div>
+      <div class="prow"><div class="pl"><span>测试覆盖与质量</span><span style="color:var(--green)">A-</span> <span class="badge b-green" style="margin-left:4px">↑</span></div><div class="pbar"><i style="width:90%;background:var(--green)"></i></div></div>
       <div class="prow"><div class="pl"><span>代码组织 / 可维护性</span><span style="color:var(--brand2)">B+</span></div><div class="pbar"><i style="width:82%;background:var(--brand2)"></i></div></div>
-      <div class="prow"><div class="pl"><span>安全边界（证据约束）</span><span style="color:var(--green)">A</span></div><div class="pbar"><i style="width:90%;background:var(--green)"></i></div></div>
-      <div class="prow"><div class="pl"><span>版本控制纪律</span><span style="color:var(--brand2)">B</span> <span class="badge b-green" style="margin-left:4px">↑ (原 C+)</span></div><div class="pbar"><i style="width:75%;background:var(--brand2)"></i></div></div>
-      <div class="prow"><div class="pl"><span>评测 / 可验证性</span><span style="color:var(--brand2)">B</span> <span class="badge b-green" style="margin-left:4px">↑ (原 B-)</span></div><div class="pbar"><i style="width:78%;background:var(--brand2)"></i></div></div>
+      <div class="prow"><div class="pl"><span>安全边界（证据约束）</span><span style="color:var(--green)">A</span> <span class="badge b-green" style="margin-left:4px">↑</span></div><div class="pbar"><i style="width:93%;background:var(--green)"></i></div></div>
+      <div class="prow"><div class="pl"><span>版本控制纪律</span><span style="color:var(--green)">A-</span> <span class="badge b-green" style="margin-left:4px">↑ (原 B)</span></div><div class="pbar"><i style="width:90%;background:var(--green)"></i></div></div>
+      <div class="prow"><div class="pl"><span>评测 / 可验证性</span><span style="color:var(--brand2)">B</span></div><div class="pbar"><i style="width:78%;background:var(--brand2)"></i></div></div>
     </div>
     <div class="card">
       <h3>核心结论</h3>
       <ul>
-        <li><b>强项突出</b>：架构、治理、安全边界、测试质量四项达 A 级</li>
-        <li><b>Sprint 1 交付</b>：WIP 全入库、测试全绿、评测可复现、债务清理 → 版本控制 B、评测 B 均提升</li>
-        <li><b>唯一高优先级风险</b>：66 commits 未 push（不反映代码质量问题，仅备份问题）</li>
-        <li><b>评测仍是焦点</b>：baseline 已锁定，下一步是提分至 0.65–0.85 并修定义查询 bug</li>
+        <li><b>强项突出</b>：架构、治理、安全边界、测试质量四项达 A 级；安全边界因 Ontology 约束层 ADR 进一步巩固</li>
+        <li><b>Sprint 2 交付</b>：成果 push 远端、定义查询修复、Ontology 安全接入、评测诚实化 → 版本控制 B→A-、安全边界 A→A（巩固）</li>
+        <li><b>唯一中高优先级风险</b>：eval 真实基线 0.30 距 promotion gate 0.65-0.85 仍有差距（需答案质量提升）</li>
+        <li><b>评测仍是焦点</b>：baseline 已诚实锁定，下一步是答案质量提升提分（Sprint 3，不赛分不改指标）</li>
       </ul>
       <div class="callout green" style="margin-top:14px">
         <span class="ct">一句话总结</span>
-        <p>Sprint 1 后 KB1 已是<b>架构扎实、测试全绿、成果全入库、评测可复现</b>的系统。唯一剩余风险是<b>成果尚未 push 到远端</b>——尽快 push 或离线备份，即可安心进入 Sprint 2。</p>
+        <p>Sprint 2 后 KB1 已是<b>架构扎实、测试全绿、成果已 push 远端、Ontology 安全接入、评测诚实可复现</b>的系统。唯一剩余风险是<b>eval 真实基线距 promotion gate 仍有差距</b>——需答案质量提升，即可进入 Sprint 3 提分。</p>
       </div>
     </div>
   </div>
@@ -1013,33 +1047,36 @@ query context  ──▶  <span class="k">evidence_judge</span>  ──▶  answ
   <h3 style="margin:28px 0 14px">评审决策清单（Sprint 1 后更新）</h3>
   <div class="grid2">
     <div class="card">
-      <h3>已达成（Sprint 1）</h3>
+      <h3>已达成（Sprint 1 + Sprint 2）</h3>
       <ul>
-        <li><span class="badge b-green">✓ R1</span> WIP 已分批提交（14 commit + safety tag）— <span class="x">未 push 仍待决</span></li>
-        <li><span class="badge b-green">✓ R2</span> 8 个失败测试已收口（0 failed / 1 xfail 绑 issue）</li>
+        <li><span class="badge b-green">✓ R1</span> WIP 已分批提交（14 commit + safety tag）</li>
+        <li><span class="badge b-green">✓ R1b</span> 67+ commits 已 push 到 origin/kb1-six-loop-rename + git bundle 双保险</li>
+        <li><span class="badge b-green">✓ R2</span> 8 个失败测试已收口（0 failed / 0 xfail）</li>
+        <li><span class="badge b-green">✓ R2b</span> 定义查询 bug 已修复，MCP xfail 已解除（Sprint 2 WP2）</li>
         <li><span class="badge b-green">✓ R3</span> 评测口径已定：token_overlap 主口径（deterministic）</li>
         <li><span class="badge b-green">✓ R5</span> 命名已统一（six-loop 主线 + 历史说明）</li>
         <li><span class="badge b-green">✓ R6</span> 工程债务已清理（quarantine + prune）</li>
-        <li><span class="badge b-green">✓ R7</span> 本体层已纳入版本控制（commit 29e5cfd）</li>
+        <li><span class="badge b-green">✓ R7</span> 本体层已纳入版本控制 + 最小安全接入（ADR 0003）</li>
+        <li><span class="badge b-green">✓ R8</span> learnings/decisions 沉淀机制已启动（ADR 0003 + compound decision）</li>
       </ul>
     </div>
     <div class="card">
-      <h3>待决策（Sprint 2+）</h3>
+      <h3>待决策（Sprint 3+）</h3>
       <ul>
-        <li><span class="badge b-red">R1b</span> 是否尽快 push 66 commits 或做离线备份？</li>
-        <li><span class="badge b-yellow">R2b</span> 是否在 Sprint 2 修定义查询 bug 解 MCP xfail？</li>
-        <li><span class="badge b-yellow">R3b</span> eval 提分至 0.65–0.85 后是否启用 AUTO 模式？</li>
+        <li><span class="badge b-yellow">R3b</span> eval 提分至 0.65–0.85（真实跨文档基线 0.30，需答案质量提升）</li>
+        <li><span class="badge b-blue">R9</span> Ontology 主动召回过滤（需独立 ADR + 不回归基线证据）</li>
         <li><span class="badge b-blue">R4</span> next-phase Phase 1 与 eval 重设计是否合并执行？</li>
-        <li><span class="badge b-blue">R8</span> 是否启动 learnings/decisions 沉淀机制？</li>
+        <li><span class="badge b-blue">R10</span> orphan facts 治理（DOC-000001/DOC-000008）</li>
+        <li><span class="badge b-blue">R11</span> 完整 104 题 golden 基线（现超时，需答案流水线提速）</li>
       </ul>
     </div>
   </div>
 
   <div class="footnote">
-    <b>报告说明</b> · 本报告由 AI 基于代码库、测试结果、CodeStable 文档与数据资产自动梳理生成，并在<b>每个 Sprint 完成后更新</b>（最新更新：2026-06-25，含 Sprint 1 成果）。
+    <b>报告说明</b> · 本报告由 AI 基于代码库、测试结果、CodeStable 文档与数据资产自动梳理生成，并在<b>每个 Sprint 完成后更新</b>（最新更新：2026-06-25，含 Sprint 1 + Sprint 2 成果）。
     所有数据均来自实际仓库（git 历史、pytest 运行、SQLite 统计、<code class="inline">.codestable/</code> 文档），
     用于人工阶段评审。如需修订或补充，请指出具体章节。<br><br>
-    <b>数据采集时间</b>：2026-06-25（Sprint 1 后）· <b>评测运行环境</b>：Python 3.14 / Windows · <b>主库</b>：knowledge.db (272MB, 16 文档)
+    <b>数据采集时间</b>：2026-06-25（Sprint 2 后）· <b>评测运行环境</b>：Python 3.14 / Windows · <b>主库</b>：knowledge.db (272MB, 16 文档)
   </div>
 </section>
 
