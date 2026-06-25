@@ -36,7 +36,13 @@ git bundle create docs/dev/sprint2-ontology-and-bugfix/kb1_sprint2_prework_backu
 git push -u origin kb1-six-loop-rename
 ```
 
-（执行后补充实际输出与 upstream 设置结果）
+**结果：成功**
+- `* [new branch] kb1-six-loop-rename -> kb1-six-loop-rename`
+- upstream = `origin/kb1-six-loop-rename` 已配置
+- ahead 0 / behind 0（本地与远端完全同步）
+- local HEAD = remote = `f6b8c70`
+- 远端现有两个分支：`kb1-six-loop-rename` (f6b8c70) + `main` (6ee044e)
+- 67 commits 全部安全推送到 GitHub，本地机器丢失亦可恢复
 
 ## 3. WP1 入口确认
 
@@ -46,6 +52,9 @@ git push -u origin kb1-six-loop-rename
 
 | 验收项 | 状态 |
 |---|---|
-| 67 commits 已 push 或 bundle verify 通过 | （执行后填） |
+| 67 commits 已 push 到远端 | ✅ origin/kb1-six-loop-rename @ f6b8c70，ahead/behind 均 0 |
+| bundle verify 通过 | ✅ 见 §2.1 |
 | bundle 路径写入本报告 | ✅ 见 §2.1 |
 | 未备份前不动代码 | ✅ 备份先行 |
+
+**Gate 0 达成。** 评审报告中的“唯一高优先级风险”（66-67 commits 未 push）已解除。
