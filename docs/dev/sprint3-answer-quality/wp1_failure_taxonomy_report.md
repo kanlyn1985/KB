@@ -36,9 +36,24 @@
 - **[13] 室内温度范围** → 同 [4]，答错章节。
 - **[17] 输入直流电路电压应满足什么要求** → facts=12 但答「模式1和模式2供电接口…GB/T 1002」，错段。
 
-**根因双因**：
-1. **召回/选文档**：跨文档查询时，topic_resolution / `_choose_primary_doc_id` 选错文档，或召回根本没从正确文档取证据（hits 全集中在错文档）。
-2. **answer policy 不降级**：`evidence_judgement.sufficient=False`（甚至 conf=0.0）时，系统仍输出低质答案（章节标题/错段），而非硬降级「证据不足以确认」。这是**安全 + 质量**双缺陷。
+**根因（2026-06-25 第三次修正，已用调用链证据验证）**：
+
+逐层追踪 case [5]（EP 在 DOC-000012，含 检测点3/4V/开关S2）：
+
+| 调用点 | DOC-000012 命中 | 结论 |
+|---|---|---|
+| `_search_fts`（底层 FTS） | 8/8 全 DOC-000012 ✅ | **FTS 召回完全正确，分词没问题** |
+| `_inject_direct_requirement_hits` | 12（DOC-000012）vs 8（DOC-000003）✅ | 注入也对，DOC-000012 更多 |
+| `build_query_context` limit=8 最终 | **0** ❌ | DOC-000012 被 top-8 截断挤掉 |
+| `build_query_context` limit=40 | 13 | 证据都在，只是排名靠后 |
+
+**得分对比**：
+- DOC-000003 的 `routing_summary` 命中：score **3.44-3.62**（top-4 全占，错文档「检测点1 模式3」表格噪声）
+- DOC-000012 的 `direct_requirement` 命中：score **仅 2.30**（含正确锚点的真实证据）
+
+**真正根因**：`routing_summary`/`graph` 通道命中被通道加权提到 ~3.5 分，且**不校验是否含查询强锚点 token**（must_terms 里的 检测点3/4V/开关S2），所以错文档的无关表格噪声也能霸占 top-N；而含锚点的 `direct_requirement` 真实证据只有 ~2.3 分被截断挤掉。
+
+> **前两次判断修正**：(1) 第一版认为 P0 硬降级能提分——错，sufficient/confidence 不可靠（[17] suff=True conf=0.95 仍答错），P0 只能诚实化 [4][13]，不提分。(2) 第二版认为是 FTS 分词缺陷（CJK+数字 token 拆错）——错，`_search_fts` 底层对 DOC-000012 召回 8/8 全中，分词没问题。问题在 reranker/channel 加权，不在分词。
 
 ### 2.2 genuine_retrieval_miss（次高 ROI）
 
@@ -72,12 +87,12 @@
 
 ## 4. 修复优先级（高 ROI → 低）
 
-> **2026-06-25 修正**：补采 judgement sufficient/confidence 后发现，**doc-mismatch 是主信号，sufficient/confidence 不可靠**——[17] suff=True conf=0.95 但答错文档，[5] suff=False conf=0.95。故 P0 降级只能诚实地处理 [4][13]（conf=0.0，本就是 routing-miss），**不提分**；真正提分靠 P1（跨文档选文档）+ P2（召回）。
+> **2026-06-25 第三次修正（最终）**：补采 judgement sufficient/confidence 发现其不可靠（[17] suff=True conf=0.95 仍答错）；进一步追踪 case [5] 调用链发现**底层 FTS 召回正确（DOC-000012 8/8 全中），问题在 reranker/channel 加权**——无锚点的 routing_summary 命中（~3.5 分）挤掉含锚点的 direct_requirement 证据（~2.3 分）。故 P0 降级只诚实化 [4][13] 不提分；真正提分靠 P1 通道加权/锚点校验（非选文档、非分词）。详见 §2.1 调用链证据。
 
 | 优先级 | 方向 | 对应 WP | 预期影响 |
 |---|---|---|---|
 | **P0** | answer policy 硬降级：`sufficient=False` **且** confidence 极低（如 <0.2）时输出「证据不足以确认」而非低质章节标题 | WP2 | **诚实性↑但不提分**：[4][13] 错章节标题→未找到（仍 fail）。安全改进，为 P1 提分做诚实底 |
-| **P1** | 跨文档选文档修复：`_choose_doc_from_routed_hits` 优先 actual recalled evidence/fact 的文档，不被 graph_candidates 压过；topic_resolution 保留 doc hints | WP3 | **主提分项**：[5][17] 召回到错文档（suff=True/False 都有），选对文档后才有机会答对 |
+| **P1** | **通道加权/锚点校验**（非选文档、非分词）：含查询强锚点 token（must_terms 里的 检测点3/4V/开关S2）的 `direct_requirement` 命中提分；不含锚点的 `routing_summary`/`graph` 命中降权。只调 reranker/channel 权重 | WP3 | **主提分项**：[4][5][13][17] 让含锚点的真实证据进 top-N，挤掉无锚点的表格噪声 |
 | **P2** | 英文/长段落召回：0-hits 类（[1][6][7][11][15][19][20]）扩展 LIKE fallback 覆盖英文术语；V2G/V2L 加 exact/contains boost | WP3 | 0-hits→有证据，转可答 |
 | **P3** | pseudo_question 收紧：generic_hint 兜底必须有可验证实体/术语锚点 | WP1 延续 | [2][10][19] 不再生成无意义题 |
 | **P4** | citation / unsupported claim 门禁（提分后回归保护） | WP4 | 防止提分时引入 unsupported claim |
@@ -94,6 +109,15 @@
 - [1] `PwrMod = OFF/awake 时: (1) DCLV...` —— expected_point 本身是代码/参数表片段，question 也是片段。这是 expected_points 生成质量问题，不是答案问题。**不通过改答案修，留 expected_points 绑定治理**。
 - [2] `PUBLICPUBLIC 过程参考模型` —— expected_point 含重复噪声「PUBLICPUBLIC」，疑似解析 artifact。**留 expected_points 治理**。
 
-## 7. 下一步（WP2 起需确认）
+## 7. 下一步（已暂停代码，详谈后定方案）
 
-WP1 结论：**先做 P0（answer policy 硬降级）+ P1（跨文档选文档）**，这两项是最高 ROI 且证据内、不刷分。具体代码改动方案将在 WP2/WP3 开始前提交用户确认（按「每个有后果动作前确认」约束）。
+**进度**：P0（answer policy 硬降级）已完成并 push（`e3e4da7`），诚实化 [4][13]，0 回归，696/0/0。P0 不提分（预期内）。
+
+**P1 暂停**：前两次根因判断不准（先判 P0 提分、再判 FTS 分词），第三次用调用链证据定位到**通道加权/锚点校验**才是真根因。鉴于判断迭代多次，**先修报告、详谈修复范围后再动代码**（用户决策）。
+
+待确认的 P1 修复落点（三选一，未定）：
+1. 锚点提分 + 通道降权（推荐）：含锚点 direct_requirement 提分 + 无锚点 routing_summary/graph 降权。
+2. 只降权无锚点 routing（更保守，提分可能不足）。
+3. 其他（详谈中）。
+
+**教训**：根因必须用调用链证据验证，不能靠单点观测猜。本报告已三次修正，最终根因为通道加权，有 case [5] 完整调用链为证。
