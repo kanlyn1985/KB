@@ -54,6 +54,9 @@ htmlcov/
 .coverage
 .coverage.*
 
+# Git bundle offline backups (binary, large — never track)
+*.bundle
+
 # Dashboards (session artifacts)
 tmp_dashboard.json
 kb1_pattern_analysis_dashboard.html
