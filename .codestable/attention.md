@@ -20,8 +20,8 @@
 - 快速回归优先跑：
   `C:\Python314\python.exe -m pytest tests/test_query_repair_regression.py -q`
 - 带 `-k` 过滤时，pytest 输出大量 `deselected` 是正常现象，表示未匹配过滤表达式的测试被跳过。
-- **默认套件状态（Sprint 1 后，2026-06-24）**：`679 passed, 1 skipped, 1 xfailed, 0 failed`（~5min，默认 deselect integration+benchmark）。全量套件（`-o addopts=""` 取消 deselect）含大量 integration/benchmark，会很慢且有失败，正常回归不要跑全量。
-- **已知 xfail**：`tests/test_mcp_server.py::test_mcp_server_tools_call_answer_query` — answer_api exact-term gate 在 evidence 非空但 facts=0 时错误清零上下文，定义查询降级为文档标题。绑 issue `2026-06-24-definition-query-exact-term-gate-drops-evidence`，strict=True（修好后会自动报错提醒解 xfail）。
+- **默认套件状态（Sprint 2 WP2 后，2026-06-25）**：`680 passed, 1 skipped, 0 failed, 0 xfailed`（~6min，默认 deselect integration+benchmark）。全量套件（`-o addopts=""` 取消 deselect）含大量 integration/benchmark，会很慢且有失败，正常回归不要跑全量。
+- **定义查询 xfail 已解除（Sprint 2 WP2）**：原 `test_mcp_server_tools_call_answer_query` 的 xfail 已移除并通过。根因是 `_inject_direct_term_definition_hits` 只处理短缩写，中文长术语定义查询（如 `什么是控制导引电路？`）没注入权威 term_definition，导致选错文档回填标题。修复见 issue `2026-06-24-definition-query-exact-term-gate-drops-evidence`。
 - **post_ingestion_gate 测试**用 `tmp_path` 隔离 fixture，不触生产库；不要改回硬编码 `DOC-000001`（那是孤儿 doc_id）。
 
 ### 命令与脚本陷阱

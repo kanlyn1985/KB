@@ -2,7 +2,7 @@
 doc_type: architecture
 slug: query-chain-architecture
 status: current
-last_reviewed: 2026-05-19
+last_reviewed: 2026-06-25
 implements:
   - retrieval-quality-loop
   - evidence-constrained-answer-loop
@@ -64,4 +64,5 @@ flowchart TD
 - Supporting evidence 展示清洗和 direct answer 清洗不是同一层。
 - 生命周期活动召回的 BP sibling 扩展必须在 topN 截断前完成。同一 BP 的中英文重复证据要按查询语言和焦点词选择代表项，避免中文活动问题保留英文 BP、丢掉中文 must-hit 锚点。
 - 参数召回必须同时满足对象锚点和物理量意图。电阻/阻值问题要求候选具备 `电阻`、`阻值`、`Ω`、`Rn` 或 `resistance` 证据，不能只凭 `CC/CP` 表级标签命中。
+- **定义查询的术语召回**：`_inject_direct_term_definition_hits` 对 `definition` 查询注入 `term_definition`/`concept_definition` fact 作为 `direct_term_definition` channel hit。短缩写（`CP`/`CC` 等 `[A-Z]{2,6}`）走 acronym 分支；**仅在无短缩写时**才走中文长术语分支（`_definition_term_candidates`，从 `target_topic`/`aliases`/`should_terms`/`must_terms` 抽取 ≥2 字 CJK run）。评分优先权威字典术语（去 markdown `**` 后 `term` 字段以查询术语开头）。注入的是 KB 真实 fact（有 evidence 溯源），符合证据约束。参见 issue `2026-06-24-definition-query-exact-term-gate-drops-evidence`。
 - Retrieval quality 的 negative hit 只针对用户可见证据内容，不把 `graph_fact`、`table_requirement` 等内部候选标签当作正文命中。
