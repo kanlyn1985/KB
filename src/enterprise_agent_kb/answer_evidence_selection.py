@@ -56,13 +56,29 @@ def _should_downgrade_for_insufficient_evidence(
         return False
     if fallback_reason in {"fallback_to_related_concept", "clarification_required"}:
         return False
+    # standard_lookup with a document_standard fact keeps the standard code as
+    # the core answer even when the judge (expecting term_definition) says
+    # insufficient. This exemption must run BEFORE the P0 confidence gate so a
+    # missing-confidence standard_lookup is not wrongly degraded.
     if answer_mode == "standard_lookup" and query_type == "standard_lookup":
-        # Don't downgrade if we have document_standard facts — that's the
-        # correct evidence shape for standard lookup, even if the judgement
-        # expected term_definition.
         context_facts = context.get("facts", [])
         if any(f.get("fact_type") == "document_standard" for f in context_facts if isinstance(f, dict)):
             return False
+        return True
+    # P0 (Sprint 3): hard-degrade when evidence_judge is insufficient AND has
+    # near-zero confidence. This catches cross-doc routing misses where no
+    # real evidence/fact was judged (best_evidence_ids/best_fact_ids empty,
+    # confidence ~0.0) yet build_direct_answer still stitches a low-quality
+    # section-title answer. Honest degradation: surface 'insufficient evidence'
+    # instead of a wrong section heading. NOTE: this does NOT lift pass_rate
+    # (a not-found answer still fails token_overlap) — it is a safety/honesty
+    # guard. High-confidence insufficient cases (e.g. suff=False conf=0.95)
+    # are left for P1 doc-selection to fix.
+    try:
+        conf = float(judgement.get("confidence") or 0.0)
+    except (TypeError, ValueError):
+        conf = 0.0
+    if conf < 0.2:
         return True
     return False
 
