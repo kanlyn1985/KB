@@ -203,3 +203,31 @@ def test_to_dict_roundtrip_shape():
     assert d["query_entities"][0]["mention"] == "X"
     assert d["changed_retrieval"] is False
     assert d["changed_answer"] is False
+
+
+@pytest.mark.skipif(not HAS_ONTOLOGY_DB, reason="ontology.db not available")
+class TestAnswerQueryGuardWiring:
+    """WP4: answer_query exposes ontology post-check fields and never mutates
+    the answer, regardless of mode."""
+
+    def test_off_mode_post_check_skipped(self, monkeypatch):
+        monkeypatch.delenv("KB1_ONTOLOGY_MODE", raising=False)
+        from enterprise_agent_kb.answer_api import answer_query
+
+        payload = answer_query(KB_ROOT, "什么是控制导引电路？", limit=4)
+        assert payload["ontology_post_check_status"] == "skipped"
+        assert payload["answer_changed_by_ontology"] is False
+        assert payload["ontology_post_checks"] == []
+        # the answer itself is unaffected by the adapter
+        assert "控制导引电路" in str(payload.get("direct_answer") or "")
+
+    def test_guard_mode_runs_post_check_without_mutating_answer(self, monkeypatch):
+        monkeypatch.setenv("KB1_ONTOLOGY_MODE", "guard")
+        from enterprise_agent_kb.answer_api import answer_query
+
+        payload = answer_query(KB_ROOT, "什么是控制导引电路？", limit=4)
+        assert payload["ontology_post_check_status"] == "completed"
+        assert payload["answer_changed_by_ontology"] is False
+        assert isinstance(payload["ontology_post_checks"], list)
+        # guard never rewrites the answer text
+        assert "控制导引电路" in str(payload.get("direct_answer") or "")

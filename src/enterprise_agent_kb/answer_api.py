@@ -58,6 +58,11 @@ from .answer_constraint import (
     _constraint_target_terms,
 )
 from .answer_comparison import _select_comparison_answer_facts
+from .ontology_adapter import (
+    EntityConstraint,
+    OntologySignal,
+    post_check as _ontology_post_check,
+)
 
 
 def answer_query(
@@ -366,6 +371,40 @@ def _compose_final_answer(
         warnings=warnings,
     )
 
+    # --- Ontology guard post-check (Sprint 2 WP4) ---
+    # Read-only consistency audit of the produced answer. Runs ONLY in guard
+    # mode. It produces warnings but MUST NOT mutate direct_answer; the
+    # answer_changed_by_ontology flag stays False for the whole of Sprint 2.
+    ontology_signal_raw = context.get("ontology_signal") or {}
+    ontology_mode = str(ontology_signal_raw.get("mode") or "off")
+    ontology_post_checks: list[dict[str, object]] = []
+    answer_changed_by_ontology = False
+    ontology_post_check_status = "skipped"
+    if ontology_mode == "guard":
+        try:
+            signal = OntologySignal(
+                mode=ontology_mode,
+                query_entities=[
+                    EntityConstraint(
+                        mention=str(e.get("mention") or ""),
+                        class_id=e.get("class_id"),
+                        class_name=e.get("class_name"),
+                        confidence=float(e.get("confidence") or 0.0),
+                    )
+                    for e in ontology_signal_raw.get("query_entities", [])
+                ],
+            )
+            checks = _ontology_post_check(
+                query, direct_answer, signal, workspace_root=workspace_root
+            )
+            ontology_post_checks = [
+                {"type": c.type, "severity": c.severity, "message": c.message}
+                for c in checks
+            ]
+            ontology_post_check_status = "completed"
+        except Exception as exc:  # pragma: no cover - defensive, never blocks
+            ontology_post_check_status = f"error: {exc}"
+
     return {
         "query": query,
         "rewrite": rewritten.to_dict(),
@@ -390,6 +429,9 @@ def _compose_final_answer(
         "topic_entities": aligned_topic_entities[:5],
         "warnings": warnings,
         "fallback_reason": fallback_reason,
+        "ontology_post_check_status": ontology_post_check_status,
+        "ontology_post_checks": ontology_post_checks,
+        "answer_changed_by_ontology": answer_changed_by_ontology,
         "hit_count": len(fact_items) + len(evidence_items),
         "facts": fact_items,
         "evidence": evidence_items,
