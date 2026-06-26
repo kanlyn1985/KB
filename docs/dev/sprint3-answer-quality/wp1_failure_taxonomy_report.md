@@ -113,11 +113,19 @@
 
 **进度**：P0（answer policy 硬降级）已完成并 push（`e3e4da7`），诚实化 [4][13]，0 回归，696/0/0。P0 不提分（预期内）。
 
-**P1 暂停**：前两次根因判断不准（先判 P0 提分、再判 FTS 分词），第三次用调用链证据定位到**通道加权/锚点校验**才是真根因。鉴于判断迭代多次，**先修报告、详谈修复范围后再动代码**（用户决策）。
+**P1 暂停（第 4 次修正后）**：前三次根因判断迭代（选文档→分词→通道加权），第三次定位到通道加权。但模拟 P1 修复方案（snippet 锚点提分+通道降权）时发现**致命问题**：
 
-待确认的 P1 修复落点（三选一，未定）：
-1. 锚点提分 + 通道降权（推荐）：含锚点 direct_requirement 提分 + 无锚点 routing_summary/graph 降权。
-2. 只降权无锚点 routing（更保守，提分可能不足）。
-3. 其他（详谈中）。
+**锚点 token 不在 snippet 里**。case [5] 的 must_terms 含 `检测点3`/`4V`/`开关S2`，但查所有 hits 的 snippet（截断到 120/1200 字）：
 
-**教训**：根因必须用调用链证据验证，不能靠单点观测猜。本报告已三次修正，最终根因为通道加权，有 case [5] 完整调用链为证。
+| doc | channel | snippet 含 `检测点3`? | 含 `检测点`? | 含 `4v`? |
+|---|---|---|---|---|
+| DOC-000003 | routing_summary | False | True | False |
+| DOC-000012 | direct_requirement | **False** | **False** | False |
+
+**DOC-000012 的正确命中 snippet 里也没有 `检测点3`**——snippet 只截了 fact payload 的 title 字段（"4 车桩成功鉴权后..."），真正的锚点 `检测点3`/`开关S2` 在完整 evidence 文本（EV-050280）和 fact object_value 全文里，不在 snippet。模拟结果：DOC-000012 始终进不了 top-8（无论强/弱锚点），因为锚点根本不在 snippet。
+
+**结论**：snippet-based 锚点校验**不可行**。P1 修复若要做，必须读取完整 fact object_value / evidence normalized_text 做锚点匹配（查 DB 读全文，比 snippet 校验重），或在 `_inject_direct_requirement_hits` 里直接用 must_terms 混合 token 做 LIKE 全文匹配并提分（不依赖 reranker snippet）。这比预想复杂。
+
+**决策（用户）**：P1 暂停，转去做根因更清晰、风险更低的 **P2（英文/长段落召回）+ P3（pseudo_question 收紧）**，先稳提分；P1 等全文锚点方案想清楚再动。
+
+**教训**：根因必须用调用链证据验证，修复方案必须先模拟验证可行再动代码。本报告已四次修正，最终判定：case [5] 真根因是通道加权使无锚点 routing_summary 命中挤掉 direct_requirement 证据，但修复需全文锚点匹配（非 snippet），故 P1 暂缓。
