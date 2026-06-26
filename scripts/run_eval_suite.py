@@ -40,9 +40,10 @@ def main() -> int:
         help="suite name (default golden)",
     )
     parser.add_argument(
-        "--max-questions", type=int, default=5,
-        help="limit number of questions (default 5 for CI speed; "
-             "use 30+ for full eval)",
+        "--max-questions", type=int, default=20,
+        help="limit number of questions (default 20 for CI sample stability; "
+             "use 0/full count for complete eval). The earlier default of 5/10 "
+             "was too small to reflect real quality.",
     )
     parser.add_argument(
         "--use-llm", action="store_true",

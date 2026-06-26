@@ -65,7 +65,11 @@ jobs:
   eval-suite:
     # Runs the Phase 1 evaluator (token-overlap) and asserts a minimum
     # pass rate.  This is the regression gate for system answer quality.
-    # Uses --max-questions 10 for CI speed (full 30+ takes 5+ minutes).
+    # Uses --max-questions 20 for sample stability: the earlier 10-question
+    # round-robin sample was too small to reflect real quality (it happened
+    # to pick hard/degradation cases and never showed uplift from fixes whose
+    # affected cases land outside the first 10). 20 questions (~6 min) gives
+    # a more stable, honest signal. Full 87-question suite is run offline.
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -83,7 +87,7 @@ jobs:
         run: python -m pytest tests/test_evaluator.py -v --tb=short
 
       - name: Run evaluator suite (smoke)
-        run: python scripts/run_eval_suite.py --max-questions 10 --min-token-pass 0.20
+        run: python scripts/run_eval_suite.py --max-questions 20 --min-token-pass 0.20
         # Adjust --min-token-pass based on the baseline pass rate.
         # 0.20 is a conservative floor for smoke testing.
 

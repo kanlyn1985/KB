@@ -85,6 +85,39 @@ def _token_overlap_ratio(answer: str, point_text: str) -> float:
     return len(pt_tokens & ans_tokens) / len(pt_tokens)
 
 
+# Sprint 3: degradation-answer guard. When the system answer is a degradation /
+# not-found / insufficient-evidence message, it must NOT score token_overlap
+# coverage even if it shares generic tokens (process/definition/system or
+# echoed anchor words) with the expected point. Previously, P0 hard-degrade
+# text like '当前候选证据不足以给出确定性答案。期望证据形状：term_definition、
+# parameter_definition、process_activity...' shared English tokens with English
+# expected points and falsely passed (cov 0.59-0.81). This guard forces cov=0
+# for degradation answers, so the metric reflects real answer quality, not
+# shared tokens in a refusal message. Not a metric change (still token_overlap);
+# only prevents refusal text from scoring.
+_DEGRADED_ANSWER_MARKERS = (
+    "当前候选证据不足以给出确定性答案",
+    "知识库中未找到与该查询相关的信息",
+    "知识库中未找到",
+    "未找到",
+    "无法回答",
+    "无法给出",
+    "insufficient evidence",
+    "not found",
+)
+
+
+def _is_degraded_answer(answer: str) -> bool:
+    """Return True if the answer is a degradation / refusal / not-found message.
+
+    Only flags explicit refusal / not-found / insufficient-evidence text via
+    markers. Does NOT flag short answers (a 6-char Chinese answer like
+    '汽车电源逆变器' is a valid real answer, not a refusal)."""
+    if not answer or not answer.strip():
+        return True
+    return any(marker in answer for marker in _DEGRADED_ANSWER_MARKERS)
+
+
 # ---- Noise filtering ----------------------------------------------------
 
 NOISE_PREFIXES = (
@@ -93,6 +126,44 @@ NOISE_PREFIXES = (
     "前    言", "前 言", "前  言", "目 次", "目次", "ICS ",
     "All listed documents", "For dated referenced", "For undated referenced",
 )
+
+# Sprint 3 (P3): noise expected-point detection. Some expected_points are not
+# answerable substance but document metadata / cover page / page header /
+# SC-code table rows / English section descriptors. These survive _is_substantive
+# (they have >=6 CJK chars) but only yield meaningless '请解释: <fragment>'
+# generic_hint questions with near-zero real coverage (and worse, they can
+# produce token_overlap artifacts when the point text shares tokens with a
+# degradation answer). This helper identifies them so the generic_hint fallback
+# can skip them entirely. Verified on the 8 generic_hint points: catches 7
+# noise, preserves the 1 real V2G paragraph (DOC-000013). Does NOT delete the
+# expected_points data — only skips question generation for noise points.
+_NOISE_POINT_PATTERNS = (
+    re.compile(r'(版本\s*[:：]|作者\s*[:：]|标题\s*[:：]|日期\s*[:：]|©|PUBLICPUBLIC|版权|all\s+rights\s+reserved)', re.I),
+    re.compile(r'^\s*\d+\s*/\s*\d+'),  # page header/footer N/M
+    re.compile(r'(SC\d{4,}|BP\d\s*[:：]|编号\s*[:：]|SYS\.\d|FSR\d)'),  # SC/BP table rows
+)
+_NOISE_POINT_PREDICATES = ('应', '必须', '不得', '要求', '是', '为', '构建', '包括', '包含', '提供', '采用')
+
+
+def _is_noise_expected_point(text: str) -> bool:
+    """Return True if an expected_point is non-answerable noise (cover/header/table-row)."""
+    if not text:
+        return True
+    t = text.strip()
+    for pat in _NOISE_POINT_PATTERNS:
+        if pat.search(t):
+            return True
+    # pure section-number + short title without a real predicate
+    if re.match(r'^\s*\d+(\.\d+)+\s+\S', t):
+        if not any(k in t for k in _NOISE_POINT_PREDICATES):
+            return True
+    # English-dominant fragment (little CJK, many Latin words)
+    cn = sum(1 for c in t if '一' <= c <= '鿿')
+    lat_words = len(re.findall(r'[A-Za-z]{3,}', t))
+    if lat_words >= 3 and cn < 12:
+        return True
+    return False
+
 
 
 def _is_substantive(p: dict) -> bool:
@@ -202,6 +273,16 @@ def _generate_questions_for_point(p: dict) -> list:
     # Remove section markers like "### 3.3"
     clean_text = re.sub(r'#{1,6}\s*\d+(\.\d+)*\s*', '', clean_text).strip()
 
+    # Sprint 3 (P3): skip noise points (cover/header/SC-table-row/English
+    # descriptor) at the TOP, before any pattern match. Previously the check
+    # was only in the generic_hint fallback, but noise points usually match the
+    # explain pattern first, so they still produced meaningless 'explain'
+    # questions like 'PUBLICPUBLIC 过程参考模型 版本 4.0 标题:'. Moving the
+    # check here skips them entirely. Verified: 142 substantive noise points
+    # are now skipped (was 0 skipped when check was only in generic_hint).
+    if _is_noise_expected_point(clean_text):
+        return []
+
     # Extract key terms from the point
     # Try to find a term definition pattern: **term** ... definition
     term_match = re.search(r'\*\*([^*]+)\*\*', clean_text)
@@ -293,6 +374,12 @@ def _generate_questions_for_point(p: dict) -> list:
     # no questions) so it does not pollute the suite with near-zero-coverage
     # noise like "请解释: <English fragment>".
     if not questions:
+        # Sprint 3 (P3): skip noise points (cover/header/SC-table-row/English
+        # descriptor) entirely — they only yield meaningless generic_hint
+        # questions and can produce token_overlap artifacts. Verified to catch
+        # 7 noise points while preserving the 1 real V2G paragraph.
+        if _is_noise_expected_point(clean_text):
+            return []
         cn = sum(1 for c in clean_text if "一" <= c <= "鿿")
         if cn >= 6:
             hint = clean_text[:20].strip()
@@ -343,6 +430,15 @@ def score_answer(question: str, system_answer: str,
         return ScoreResult(
             question=question, doc_id="", system_answer=system_answer,
             coverage=0.0, pass_=False, template_id="?", multi_prompt_stable=True,
+        )
+    # Sprint 3: degradation answers (insufficient-evidence / not-found) must
+    # not score token_overlap coverage even when they share generic tokens with
+    # the expected point. Force coverage=0 so the metric reflects real quality.
+    if _is_degraded_answer(system_answer):
+        return ScoreResult(
+            question=question, doc_id="", system_answer=system_answer,
+            coverage=0.0, pass_=False, template_id="deterministic",
+            multi_prompt_stable=True,
         )
     ratios = [_token_overlap_ratio(system_answer, p.get("point", ""))
               for p in expected_points]
@@ -471,6 +567,13 @@ def score_answer_hybrid(question: str, system_answer: str,
         return ScoreResult(
             question=question, doc_id="", system_answer=system_answer,
             coverage=0.0, pass_=False, template_id="?", multi_prompt_stable=True,
+        )
+    # Sprint 3: degradation answers must not score (same guard as score_answer).
+    if _is_degraded_answer(system_answer):
+        return ScoreResult(
+            question=question, doc_id="", system_answer=system_answer,
+            coverage=0.0, pass_=False, template_id="degraded",
+            multi_prompt_stable=True,
         )
     # Try LLM first
     llm_cov = _llm_score(question, system_answer, expected_points)

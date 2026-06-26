@@ -20,6 +20,8 @@ from enterprise_agent_kb.evaluation.evaluator import (
     ScoreResult,
     _extract_tokens,
     _generate_questions_for_point,
+    _is_degraded_answer,
+    _is_noise_expected_point,
     _is_substantive,
     _load_questions,
     _parse_llm_coverage,
@@ -127,6 +129,74 @@ def test_is_substantive_filters_short() -> None:
 
 def test_is_substantive_filters_html() -> None:
     assert _is_substantive({"point": "<div>html only</div>"}) is False
+
+
+# ---------------------------------------------------------------------------
+# Sprint 3 P3: noise expected-point detection + degradation-answer guard
+# ---------------------------------------------------------------------------
+
+def test_is_noise_expected_point_flags_cover_metadata() -> None:
+    assert _is_noise_expected_point(
+        "PUBLICPUBLIC\n过程参考模型\n版本 4.0\n标题:\nAutomotive SPICE 作者: VDA"
+    ) is True
+
+
+def test_is_noise_expected_point_flags_page_header() -> None:
+    assert _is_noise_expected_point("1/148\nCCU 软件功能开发需求规格书") is True
+
+
+def test_is_noise_expected_point_flags_sc_table_row() -> None:
+    assert _is_noise_expected_point(
+        "7.4.3.1 SC44047 FSR07 V1 DCDC 温度检测\n编号:SC44047"
+    ) is True
+
+
+def test_is_noise_expected_point_flags_english_descriptor() -> None:
+    assert _is_noise_expected_point(
+        "The Systems Engineering process group includes the subsystem SYS.4"
+    ) is True
+
+
+def test_is_noise_expected_point_keeps_real_paragraph() -> None:
+    # Real V2G paragraph (DOC-000013) must NOT be flagged as noise.
+    assert _is_noise_expected_point(
+        "山博轩和杨郁构建了一套“2+1”的源网荷储交直流绿色微能源网，光伏发电累计85万千瓦时。"
+    ) is False
+
+
+def test_generate_questions_skips_noise_generic_hint() -> None:
+    # A noise point (cover metadata) must yield no question at all, not a
+    # meaningless 'explain'/'generic_hint' question. The noise check runs at
+    # the top of _generate_questions_for_point, before any pattern match.
+    p = {"point": "PUBLICPUBLIC\n过程参考模型\n版本 4.0\n标题:\nAutomotive SPICE 作者: VDA", "section": "1", "page": 1}
+    assert _generate_questions_for_point(p) == []
+    # SC-code table row also skipped
+    p2 = {"point": "7.4.3.1 SC44047 FSR07 V1 DCDC 温度检测\n编号:SC44047 版本:V1", "section": "7", "page": 1}
+    assert _generate_questions_for_point(p2) == []
+
+
+def test_is_degraded_answer_flags_refusal() -> None:
+    assert _is_degraded_answer("当前候选证据不足以给出确定性答案。期望证据形状：term_definition。") is True
+    assert _is_degraded_answer("知识库中未找到与该查询相关的信息。") is True
+
+
+def test_is_degraded_answer_keeps_real_answer() -> None:
+    # Short but real Chinese answers must NOT be flagged as degraded.
+    assert _is_degraded_answer("汽车电源逆变器") is False
+    assert _is_degraded_answer("控制导引电路 control pilot circuit: 设计用于信号传输。") is False
+
+
+def test_score_answer_degradation_forces_zero_coverage() -> None:
+    # A degradation answer that shares tokens with the expected point must
+    # score 0.0 (not a false high overlap from shared process/definition tokens).
+    result = score_answer(
+        "Q",
+        "当前候选证据不足以给出确定性答案。期望证据形状：term_definition、parameter_definition、process_activity。",
+        [{"point": "The Systems Engineering process group includes process activity definitions."}],
+    )
+    assert result.coverage == 0.0
+    assert result.pass_ is False
+
 
 
 # ---------------------------------------------------------------------------
