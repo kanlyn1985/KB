@@ -35,12 +35,12 @@
 
 ```
 run_id       : sprint3-p3-golden-20-crossdoc-20260626
-code_version : Sprint 3 P3 提交（WP2 doc-selection fix + P0 硬降级 + P3 噪声题收紧 + metric 防降级）
+code_version : Sprint 3 P3+[6] 提交（WP2 doc-selection fix + P0 硬降级 + P3 噪声题收紧 + metric 防降级 + [6] 学术元数据降权）
 qa_bank      : 确定性构建，87 questions（噪声 point 跳过后，原 100 题）
 sampling     : 跨文档轮询（_round_robin_sample），20 题覆盖多文档
 scoring_mode : token_overlap (COVERAGE_THRESHOLD=0.30) + 防降级守卫
-result       : total=20, passed=8, pass_rate=0.40, avg_coverage~0.30
-verdict      : FAIL promotion gate (0.40 < 0.65) — 诚实真实值（0 artifact）
+result       : total=20, passed=7, pass_rate=0.35, avg_coverage~0.28
+verdict      : FAIL promotion gate (0.35 < 0.65) — 诚实真实值（0 artifact，[6] 元数据降权去 [14] artifact 后）
 LLM          : 未使用（deterministic）
 ```
 
@@ -52,7 +52,7 @@ LLM          : 未使用（deterministic）
 2. **metric 防降级**：P0 硬降级文本（`当前候选证据不足以给出确定性答案。期望证据
    形状：term_definition、parameter_definition...`）含通用英文词，与英文 expected_point
    共享 token 曾算出 cov=0.59-0.81 假通过。`_is_degraded_answer` 现让降级答案强制
-   cov=0，消除 artifact。0.45→0.40 不是回退，是去 artifact 后的诚实值。
+   cov=0，消除 artifact。0.40→0.35 不是回退，是去 artifact 后的诚实值。
 3. **P3 噪声题清理**：题池 100→87（移除 13 噪声题：封面/页眉/SC码/英文片段），
    0 噪声残留，V2G 实质段落保留。
 

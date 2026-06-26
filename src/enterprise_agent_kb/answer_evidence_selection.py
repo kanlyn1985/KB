@@ -104,6 +104,35 @@ def _build_insufficient_evidence_answer(context: dict[str, object]) -> str:
     return "".join(parts)
 
 
+def _is_academic_metadata_evidence(text: str) -> bool:
+    """Detect academic-paper metadata blocks (journal info, author+DOI+abstract,
+    Keywords) that should not surface as the top answer snippet.
+
+    Sprint 3 [6]: such blocks (e.g. '山博轩，杨郁\\nDOI: 10.12677/sg.2024.142002\\n
+    ...comprehensive energy systems...Keywords V2G') were ranking first because
+    they share the V2G token with the query, producing author+DOI answers
+    instead of real content. These survive ingest noise filtering because they
+    mix CJK (author names, journal title) with long English (abstract),
+    exceeding the _is_academic_header_noise len/cn thresholds.
+    """
+    if not text:
+        return False
+    lowered = text.lower()
+    # Explicit DOI / Keywords / Published Online journal markers
+    if any(m in lowered for m in ("doi:", "doi :", "keywords", "published online", "hans pub", "hanspub")):
+        return True
+    # Journal citation line: 'Smart Grid, 2024, 14(2), 11-20' style (short CJK
+    # journal name + year/volume/page numbers)
+    if re.search(r"[一-鿿]{2,8},\s*\d{4},\s*\d+\(\d+\)\s*,\s*\d+", text):
+        return True
+    # Author-byline + long English abstract: few CJK chars but many Latin words
+    cn_chars = sum(1 for c in text if "一" <= c <= "鿿")
+    lat_words = len(re.findall(r"[A-Za-z]{4,}", text))
+    if cn_chars < 20 and lat_words >= 8 and len(text) > 100:
+        return True
+    return False
+
+
 def _select_supporting_evidence(
     workspace_root: Path,
     facts: list[dict[str, object]],
@@ -169,6 +198,14 @@ def _rank_evidence(evidence: list[dict[str, object]], query: str, intent: str) -
                 bonus += 0.6
             if any(token in text for token in ("定义", "范围", "适用于")):
                 bonus += 0.4
+        # Sprint 3 [6]: penalize academic-paper metadata evidence (journal info,
+        # author+DOI+abstract, Keywords) so it never becomes the top answer
+        # snippet. Such blocks (e.g. '山博轩，杨郁 DOI: 10.12677/sg.2024.142002 ...'
+        # or 'Smart Grid, 2024, 14(2), 11-20 Published Online ...') were surfacing
+        # as ctx.evidence[0] and producing author+DOI answers instead of real
+        # content. Applied across all intents (metadata is never a good answer).
+        if _is_academic_metadata_evidence(text):
+            bonus -= 2.5
         if query and query.replace("？", "").replace("?", "")[:8] in text:
             bonus += 0.8
         return (bonus + confidence, confidence)
