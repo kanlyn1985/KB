@@ -584,6 +584,51 @@ def _aliases(original_query: str, normalized_query: str, must_terms: list[str]) 
     return alias_candidates[:12]
 
 
+def _split_long_cjk_sentence_to_anchors(text: str) -> list[str]:
+    """Split a long no-space CJK sentence into meaningful 2-6 char anchors.
+
+    Sprint 3 WP3: queries like '室外使用的供电设备正常工作的温度范围' become a
+    single long must_term with empty should_terms, so the reranker has no
+    anchor signal and FTS returns generic matches (any paragraph containing
+    '温度'/'范围'), burying the specific answer. This splits such sentences
+    into known domain compound terms + single domain keywords so they become
+    should_terms anchors that drive FTS seeds (_structured_search_seeds,
+    _direct_fact_hits) and reranker lexical scoring. Only fires on long
+    no-space CJK sentences; short queries and Latin queries are unaffected.
+    """
+    if not text:
+        return []
+    stripped = text.strip()
+    # Only process long no-space CJK sentences (>= 8 CJK chars, no spaces)
+    cjk_chars = sum(1 for c in stripped if "一" <= c <= "鿿")
+    if cjk_chars < 8 or " " in stripped:
+        return []
+    anchors: list[str] = []
+    seen: set[str] = set()
+    # Known domain compound terms (2-6 char) — checked against the sentence
+    domain_compounds = [
+        "温度范围", "工作温度", "相对湿度", "最高温度", "最低温度",
+        "供电设备", "车载充电", "控制导引", "双向充电", "双向放电",
+        "动力蓄电池", "充放电设备", "负荷供电", "室外使用", "室内使用",
+        "正常工作", "工作温度范围", "连接确认", "能量传输",
+    ]
+    for compound in domain_compounds:
+        if compound in stripped and compound not in seen:
+            anchors.append(compound)
+            seen.add(compound)
+    # Single domain keywords (2 char) present in the sentence
+    keywords = [
+        "温度", "湿度", "范围", "室外", "室内", "供电", "充电", "放电",
+        "蓄电池", "负荷", "电网", "电压", "电流", "功率", "通信", "调度",
+        "控制器", "接触器", "插头", "插座", "充电机",
+    ]
+    for kw in keywords:
+        if kw in stripped and kw not in seen:
+            anchors.append(kw)
+            seen.add(kw)
+    return anchors[:12]
+
+
 def _should_terms(
     normalized_query: str,
     aliases: list[str],
@@ -600,6 +645,14 @@ def _should_terms(
             and cleaned not in negative_terms
         ):
             terms.append(cleaned)
+    # Sprint 3 WP3: if no should_terms emerged (long-sentence must_term with
+    # no aliases), split long CJK must_terms into domain anchors so the
+    # reranker and FTS seeds get a discriminating signal.
+    if not terms:
+        for mt in must_terms:
+            for anchor in _split_long_cjk_sentence_to_anchors(str(mt)):
+                if anchor not in terms and anchor not in negative_terms:
+                    terms.append(anchor)
     return terms[:12]
 
 

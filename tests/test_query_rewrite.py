@@ -4,6 +4,7 @@ import pytest
 
 from enterprise_agent_kb.query_rewrite import (
     _has_explicit_constraint_intent,
+    _split_long_cjk_sentence_to_anchors,
     _strip_constraint_intent_suffix,
     rewrite_query,
 )
@@ -115,3 +116,39 @@ class TestStripConstraintIntentSuffix:
     def test_protection_restart_strips_duration_suffix(self) -> None:
         # "时长" is also stripped as an intent suffix
         assert _strip_constraint_intent_suffix("逆变器保护重启时长") == "逆变器保护重启"
+
+
+# ---------------------------------------------------------------------------
+# Sprint 3 WP3: long-sentence anchor splitting
+# ---------------------------------------------------------------------------
+
+def test_split_long_cjk_sentence_temperature_range() -> None:
+    anchors = _split_long_cjk_sentence_to_anchors("室外使用的供电设备正常工作的温度范围")
+    assert "温度范围" in anchors
+    assert "供电设备" in anchors
+    assert "室外使用" in anchors
+
+
+def test_split_long_cjk_sentence_humidity() -> None:
+    anchors = _split_long_cjk_sentence_to_anchors("室内设备在最高温度为+40℃时，其相对湿度")
+    assert "相对湿度" in anchors
+    assert "最高温度" in anchors
+
+
+def test_split_short_query_returns_empty() -> None:
+    # Short queries and Latin queries are unaffected
+    assert _split_long_cjk_sentence_to_anchors("V2G") == []
+    assert _split_long_cjk_sentence_to_anchors("温度") == []
+
+
+def test_split_spaced_query_returns_empty() -> None:
+    # Queries with spaces are not long no-space CJK sentences
+    assert _split_long_cjk_sentence_to_anchors("control pilot circuit 定义") == []
+
+
+def test_rewrite_scope_query_gets_anchor_should_terms() -> None:
+    # A scope query with a long-sentence must_term should now get should_terms
+    # anchors (was empty before the split fix).
+    rw = rewrite_query("室外使用的供电设备正常工作的温度范围")
+    assert "温度范围" in rw.should_terms
+    assert "供电设备" in rw.should_terms
