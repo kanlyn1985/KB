@@ -129,3 +129,33 @@
 **决策（用户）**：P1 暂停，转去做根因更清晰、风险更低的 **P2（英文/长段落召回）+ P3（pseudo_question 收紧）**，先稳提分；P1 等全文锚点方案想清楚再动。
 
 **教训**：根因必须用调用链证据验证，修复方案必须先模拟验证可行再动代码。本报告已四次修正，最终判定：case [5] 真根因是通道加权使无锚点 routing_summary 命中挤掉 direct_requirement 证据，但修复需全文锚点匹配（非 snippet），故 P1 暂缓。
+
+## 8. 最终逐案根因汇总（P1/P2 调查后的定论）
+
+> 经过 P1（4 次修正）和 P2 调查，发现**各失败案的根因不同，不能用单一修复覆盖**。下表是逐案验证后的定论（每条都有调用链证据）。
+
+| 案例 | doc | 现象 | **已验证真根因** | 可修方向 |
+|---|---|---|---|---|
+| [4][13] | 000003 | 答错章节标题 | sufficient=False conf=0.0，仍输出低质答案 | **P0 已修**（硬降级，e3e4da7）✅ |
+| [5] | 000012 | hits 全错文档 | 底层 FTS 召回正确（8/8 DOC-000012），但 routing_summary 通道加权（3.5）挤掉 direct_requirement（2.3）于 top-8 | P1 通道加权（锚点在 payload 不在 snippet，需全文方案）⏸ |
+| [6] | 000013 | 有 6 hits sufficient=True 却答「未找到」 | `_choose_doc_from_evidence_judgement` 要求 best_fact_ids 非空，但本案 best_fact_ids=[]（只有 best_evidence_ids），选不到文档→fallback 错文档→restrict 清空 | **answer_context_routing：sufficient=True 时应能用 best_evidence_ids 选文档**（新发现） |
+| [11][20] | 000005 | 召回 8 hits 但无 DOC-000005 | raw_fts=8（DOC-000010/004/007等），但**无 DOC-000005**（Engineer 内容所在）；真召回 miss | 英文 term boost / LIKE 兜底 |
+| [1] | 000015 | 答未找到 | raw_fts=8, ctx_hits=8, sufficient=False conf=0.244 best_fact=[] | P0 类（conf 低，已修 e3e4da7 应降级；待验证） |
+| [7] | 000013 | 答未找到 | raw_fts=38, ctx_hits=8 (DOC-000013/10/16), sufficient=False conf=0.0 | P0 类（conf=0.0 已修；待验证） |
+| [15] | 000013 | 0 ctx_hits 答未找到 | **同 [6]**：raw_fts=40, sufficient=True conf=0.872, best_fact=[] best_ev=[5项] → 选文档失败清空 | **同 [6] 缺陷**（sufficient=True 但 best_fact_ids 空） |
+| [2][10][19] | 各 | 伪问题退化答案 | generic_hint 兜底生成无意义题 | P3 pseudo_question 收紧 |
+| [17] | 000019 | suff=True conf=0.95 答错文档 | 同 [5]：routing_summary 通道加权挤掉正确证据 | P1（同 [5]）⏸ |
+
+**关键修正**：
+1. **P2 前提错**：[1][6][7][11][15][20] 的底层 `_search_fts` **全部返回了 hits**（8-40 不等），不是召回 miss。问题在 build_query_context 之后被选文档/通道加权/截断丢掉。真召回 miss 仅 [11][20]（没取到预期 DOC-000005）。
+2. **[6][15] 共享同一可修缺陷**：sufficient=True 但 best_fact_ids=[]（只有 best_evidence_ids）→ `_choose_doc_from_evidence_judgement` 要求 best_fact_ids 非空故选不到文档 → fallback 错文档 → restrict 清空。这是 answer_context_routing 的独立缺陷，**根因清晰、范围小、可独立修**，是当前最优先修复项。
+3. **P1 [5][17] 仍暂停**：锚点在 payload 不在 snippet，需全文方案。
+4. **真召回 miss 仅 [1][7][11][15][20] 部分**：需逐案验证哪些是 [6] 类（有 hits 被丢）、哪些是真召回空。
+
+**修复顺序建议（按根因清晰度+风险）**：
+1. **[6] 类缺陷**（sufficient=True 但 best_fact_ids 空时选文档）——根因清晰、范围小、独立可修，优先。
+2. **P3 pseudo_question 收紧**——根因清晰、风险低。
+3. **P1 [5][17] 通道加权**——需全文锚点方案，复杂，后做。
+4. **真召回 miss**——需逐案定位，后做。
+
+> 本附录取代前文 §1-§4 的分桶（分桶是基于表层现象，逐案根因才精确）。
