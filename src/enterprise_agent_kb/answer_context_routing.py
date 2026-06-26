@@ -75,7 +75,42 @@ def _choose_doc_from_evidence_judgement(context: dict[str, object]) -> str | Non
 
     best_fact_ids = [str(item).strip() for item in judgement.get("best_fact_ids") or [] if str(item).strip()]
     if not best_fact_ids:
-        _logger.info("no best_fact_ids in judgement; primary doc will fall through")
+        # Sprint 3: when the judge is sufficient but only returned best_evidence_ids
+        # (no best_fact_ids), fall back to deriving the primary doc from the
+        # evidence documents. Previously this returned None, causing doc selection
+        # to fall through to a wrong doc and _restrict_context_to_doc to empty
+        # all hits -> 'not found' despite sufficient=True with real evidence.
+        # Only triggers on the currently-broken path; happy path (best_fact_ids
+        # present) is unaffected. Evidence-driven, no LLM, no main-path rewrite.
+        best_evidence_ids = [str(item).strip() for item in judgement.get("best_evidence_ids") or [] if str(item).strip()]
+        if not best_evidence_ids:
+            _logger.info("no best_fact_ids and no best_evidence_ids in judgement; primary doc will fall through")
+            return None
+        evidence_docs: dict[str, str] = {}
+        for evidence in context.get("evidence", []):
+            if not isinstance(evidence, dict):
+                continue
+            ev_id = str(evidence.get("evidence_id") or evidence.get("result_id") or "").strip()
+            doc_id = str(evidence.get("doc_id") or evidence.get("source_doc_id") or "").strip()
+            if ev_id and doc_id:
+                evidence_docs[ev_id] = doc_id
+        for hit in context.get("hits", []):
+            if not isinstance(hit, dict) or hit.get("result_type") != "evidence":
+                continue
+            ev_id = str(hit.get("result_id") or "").strip()
+            doc_id = str(hit.get("doc_id") or "").strip()
+            if ev_id and doc_id:
+                evidence_docs.setdefault(ev_id, doc_id)
+        doc_votes: dict[str, int] = {}
+        for ev_id in best_evidence_ids:
+            doc_id = evidence_docs.get(ev_id)
+            if doc_id:
+                doc_votes[doc_id] = doc_votes.get(doc_id, 0) + 1
+        if doc_votes:
+            chosen = sorted(doc_votes.items(), key=lambda pair: (-pair[1], pair[0]))[0][0]
+            _logger.info("primary doc derived from best_evidence_ids: %s (votes=%s)", chosen, doc_votes)
+            return chosen
+        _logger.info("best_evidence_ids present but no doc mapping found; primary doc will fall through")
         return None
 
     fact_docs: dict[str, str] = {}
