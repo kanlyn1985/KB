@@ -159,3 +159,57 @@
 4. **真召回 miss**——需逐案定位，后做。
 
 > 本附录取代前文 §1-§4 的分桶（分桶是基于表层现象，逐案根因才精确）。
+
+---
+
+## 第 6 次根因深化：evidence_judge `_anchors` 对中文查询返回空（judgement 核心缺陷）
+
+> 承接 WP3 query_rewrite 锚点拆分后的深入诊断。
+
+### 核心缺陷
+
+`evidence_judge.py` 的 `_anchors(query, expansion)` 只提取硬锚点：
+- 电压值 `[+-]?\d+...V`
+- 大写缩写 `[A-Z]{2,6}\d*`（CP/OBC 等）
+- 检测点 N、表号、PWM、控制导引、状态/电压/时序（特殊信号/时序查询）
+
+**对中文实质查询（温度范围、相对湿度、V2G 等）完全不提取任何锚点 → 返回 []**。
+
+### 后果链
+
+```
+_anchors 返回 [] 
+  → _score_candidates: matched = [anchor for anchor in [] ...] = [] 
+  → 每个候选 score = 0 
+  → top_score = 0 < 1.1 阈值 
+  → sufficient = False 
+  → 降级（insufficient）
+```
+
+这解释了为什么 5/6 降级 case（[1][2][4][7][12][19]，都是中文实质查询）即使正确证据在候选里也被判 insufficient：
+scope/general_search query_type 的中文查询，_anchors 永远返回空，judgement 永远 insufficient。
+
+### 验证
+
+[4] "室外使用的供电设备正常工作的温度范围"：
+- 当前 _anchors 返回 []（无电压/缩写/检测点/表号/PWM）
+- 加 soft anchors（温度范围/室外/供电设备 from query_rewrite should_terms）后：
+  EV-049796 score = 0.440（2 个锚点匹配 × 0.22），仍 < 1.1 阈值
+- **同时存在两个 gap**：(a) _anchors 不提取 CJK 锚点，(b) 即使加上锚点，0.22 权重 × 2 匹配 = 0.44 < 1.1 阈值
+
+### 数据完整性验证
+
+对 6 个降级 case 检查 expected_point 关键短语是否在 evidence 表中：
+- [1][2][7][12][19]：答案内容在 evidence 里（YES）
+- [4][12]：温度范围值（-25℃～+40℃ / -5℃～+40℃）的完整短语不在，但部分短语在
+- **结论：主要不是数据缺失，是 _anchors/judgement 评分缺陷**
+
+### 修复复杂度（诚实评估）
+
+修复 _anchors CJK 锚点支持 + 让中文匹配达到 sufficient 阈值，需要同时调整：
+1. `_anchors` 从 context["rewrite"] 提取 should_terms/must_terms 作为 soft anchors
+2. `_score_candidates` 的 0.22 权重或 1.1 阈值需要重新校准（CJK 锚点 vs Latin 硬锚点行为不同）
+3. 校准必须全量回归（影响所有 query_type 的 judgement）
+
+这是 evidence_judge 核心评分逻辑的改动，风险高，超出 Sprint 3「不重写主链路」的轻量修复范畴。
+建议作为独立工作包（带全量回归校准），不混在提分修复里。
