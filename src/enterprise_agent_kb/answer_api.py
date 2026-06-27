@@ -402,6 +402,20 @@ def _compose_final_answer(
                 for c in checks
             ]
             ontology_post_check_status = "completed"
+            # Sprint 3 WP6: surface guard post-checks into the answer warnings
+            # array as observable entries (source=ontology_guard). These are
+            # observation-only: changed_answer stays False and direct_answer is
+            # never mutated. Existing string warnings are preserved alongside.
+            for c in checks:
+                warnings.append(
+                    {
+                        "source": "ontology_guard",
+                        "type": c.type,
+                        "severity": c.severity,
+                        "message": c.message,
+                        "changed_answer": False,
+                    }
+                )
         except Exception as exc:  # pragma: no cover - defensive, never blocks
             ontology_post_check_status = f"error: {exc}"
 

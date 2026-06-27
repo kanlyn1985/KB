@@ -233,6 +233,38 @@ class TestAnswerQueryGuardWiring:
         # guard never rewrites the answer text
         assert "控制导引电路" in str(payload.get("direct_answer") or "")
 
+    def test_wp6_guard_findings_merged_into_warnings(self, monkeypatch):
+        """Sprint 3 WP6: guard post-check findings surface in answer warnings.
+
+        Monkeypatch the ontology post_check to return a synthetic finding and
+        assert it appears as a structured ontology_guard warning (source/type/
+        severity/message, changed_answer=False) without mutating direct_answer.
+        """
+        monkeypatch.setenv("KB1_ONTOLOGY_MODE", "guard")
+        import enterprise_agent_kb.answer_api as aa
+        from enterprise_agent_kb.ontology_adapter import AnswerPostCheck
+
+        synthetic = [AnswerPostCheck(
+            type="entity_type_mismatch", severity="warning",
+            message="synthetic finding for test",
+        )]
+        monkeypatch.setattr(aa, "_ontology_post_check", lambda *a, **k: synthetic)
+
+        payload = aa.answer_query(KB_ROOT, "什么是控制导引电路？", limit=4)
+        guard_warnings = [
+            w for w in payload["warnings"]
+            if isinstance(w, dict) and w.get("source") == "ontology_guard"
+        ]
+        assert len(guard_warnings) == 1
+        assert guard_warnings[0]["type"] == "entity_type_mismatch"
+        assert guard_warnings[0]["severity"] == "warning"
+        assert guard_warnings[0]["changed_answer"] is False
+        # answer text unchanged, flag stays false
+        assert payload["answer_changed_by_ontology"] is False
+        assert "控制导引电路" in str(payload.get("direct_answer") or "")
+        # the finding also appears in ontology_post_checks
+        assert payload["ontology_post_checks"][0]["type"] == "entity_type_mismatch"
+
 
 
 # ── Sprint 3 WP5: projected retrieval filtering (shadow A/B) ────────────
