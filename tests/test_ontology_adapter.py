@@ -16,6 +16,7 @@ from enterprise_agent_kb.ontology_adapter import (
     EntityConstraint,
     OntologySignal,
     analyze,
+    project_retrieval_filtering,
     get_ontology_mode,
     post_check,
 )
@@ -231,3 +232,35 @@ class TestAnswerQueryGuardWiring:
         assert isinstance(payload["ontology_post_checks"], list)
         # guard never rewrites the answer text
         assert "控制导引电路" in str(payload.get("direct_answer") or "")
+
+
+
+# ── Sprint 3 WP5: projected retrieval filtering (shadow A/B) ────────────
+
+
+@pytest.mark.unit
+class TestProjectedRetrievalFiltering:
+    def test_no_candidates_returns_no_candidates_reason(self, tmp_path) -> None:
+        r = project_retrieval_filtering("anything", [], tmp_path)
+        assert r["reason"] == "no_candidates"
+        assert r["candidates_would_drop"] == []
+
+    def test_never_raises_on_missing_db(self, tmp_path) -> None:
+        # tmp_path has no ontology.db -> graceful reason, no exception
+        r = project_retrieval_filtering("ISO 14229", [{"evidence_id":"EV-1","snippet":"x"}], tmp_path)
+        assert "reason" in r
+        assert r["candidates_would_drop"] == []
+
+    def test_projected_filtering_never_mutates_input(self, tmp_path) -> None:
+        cands = [{"evidence_id": "EV-1", "snippet": "text"}]
+        before = list(cands)
+        project_retrieval_filtering("ISO 14229", cands, tmp_path)
+        assert cands == before  # input list untouched (read-only)
+
+    def test_returns_structured_metrics_fields(self, tmp_path) -> None:
+        r = project_retrieval_filtering("x", [], tmp_path)
+        for k in ("enabled", "query_class_ids", "candidates_total",
+                  "candidates_would_drop", "evidence_loss_cases",
+                  "false_positive_filter_cases", "safe_filter_candidates",
+                  "reason"):
+            assert k in r

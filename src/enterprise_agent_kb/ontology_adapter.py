@@ -390,3 +390,119 @@ def _entity_index_from_signal(signal: OntologySignal) -> list[tuple[str, str | N
         (e.mention, e.class_id, e.class_name, e.confidence)
         for e in signal.query_entities
     ]
+
+
+# ── Sprint 3 WP5: shadow A/B projected retrieval filtering ──────────────
+
+
+def project_retrieval_filtering(
+    query: str,
+    candidates: list[dict[str, object]],
+    workspace_root: Path,
+) -> dict[str, object]:
+    """Project which retrieval candidates ontology type constraints WOULD filter.
+
+    Sprint 3 WP5 shadow A/B. This NEVER actually filters — it only records what
+    *would* be dropped if entity-type-mismatch filtering were enabled, so an A/B
+    report can measure ``evidence_loss_rate`` and ``false_positive_filter_cases``
+    before any decision to guard-ize in Sprint 4.
+
+    A candidate is *projected-filtered* only when:
+      1. The query has at least one entity with a known class, AND
+      2. The candidate text mentions an ontology entity of a DIFFERENT class, AND
+      3. The candidate text does NOT mention any entity of the query's class.
+
+    This is conservative: a candidate is dropped only when it is *exclusively*
+    about a different-class entity, never when it also mentions the query class.
+    It can never delete the only evidence because it only flags candidates that
+    are about a different class entirely.
+    """
+    result: dict[str, object] = {
+        "enabled": False,
+        "query_class_ids": [],
+        "candidates_total": len(candidates),
+        "candidates_would_drop": [],
+        "evidence_loss_cases": [],
+        "false_positive_filter_cases": [],
+        "safe_filter_candidates": [],
+        "reason": "",
+    }
+    if not candidates:
+        result["reason"] = "no_candidates"
+        return result
+
+    signal = analyze(query, workspace_root, mode="shadow")
+    query_class_ids = {
+        e.class_id for e in signal.query_entities if e.class_id
+    }
+    result["query_class_ids"] = sorted(query_class_ids)
+
+    # If the query has no entity class, or the ontology has only one class
+    # (no class diversity), projected filtering cannot help — nothing is dropped.
+    if not query_class_ids:
+        result["reason"] = "query_has_no_known_entity_class"
+        return result
+
+    # Load the full entity index to detect which entities each candidate mentions.
+    db_path = _ontology_db_path(workspace_root)
+    if not db_path.exists():
+        result["reason"] = f"ontology db not found: {db_path}"
+        return result
+    try:
+        connection = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+        connection.row_factory = sqlite3.Row
+        index = _load_entity_index(connection)
+        connection.close()
+    except sqlite3.Error as exc:  # pragma: no cover - defensive
+        result["reason"] = f"ontology read failed: {exc}"
+        return result
+
+    # Group entity surfaces by class.
+    surfaces_by_class: dict[str | None, list[str]] = {}
+    for surface, class_id, _class_name, _confidence in index:
+        if len(surface) < 2:
+            continue
+        surfaces_by_class.setdefault(class_id, []).append(surface)
+    distinct_classes = {c for c in surfaces_by_class if c is not None}
+    if len(distinct_classes) <= 1:
+        # Single-class ontology: type-mismatch filtering is structurally a no-op.
+        result["reason"] = (
+            "single_class_ontology_no_diversity: type-mismatch filtering cannot "
+            "distinguish candidates when all entities share one class"
+        )
+        return result
+
+    result["enabled"] = True
+    query_surfaces = set()
+    for cid in query_class_ids:
+        for s in surfaces_by_class.get(cid, []):
+            query_surfaces.add(s.lower())
+
+    for cand in candidates:
+        cid = cand.get("evidence_id") or cand.get("fact_id") or cand.get("id") or "?"
+        text = str(
+            cand.get("snippet")
+            or cand.get("normalized_text")
+            or cand.get("text")
+            or cand.get("object_value")
+            or ""
+        )
+        text_low = text.lower()
+        mentions_query_class = any(s in text_low for s in query_surfaces)
+        mentions_other_class = False
+        for other_cid, surfaces in surfaces_by_class.items():
+            if other_cid in query_class_ids or other_cid is None:
+                continue
+            if any(s.lower() in text_low for s in surfaces):
+                mentions_other_class = True
+                break
+        if mentions_other_class and not mentions_query_class:
+            drop = {"id": cid, "reason": "type_mismatch_other_class_only"}
+            result["candidates_would_drop"].append(drop)
+            result["safe_filter_candidates"].append(cid)
+        else:
+            result["evidence_loss_cases"].append(cid) if (
+                mentions_query_class is False and mentions_other_class is False
+            ) else None
+    result["reason"] = "projected"
+    return result
