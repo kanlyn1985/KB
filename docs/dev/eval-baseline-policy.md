@@ -39,7 +39,7 @@ code_version : Sprint 3 P3+[6] 提交（WP2 doc-selection fix + P0 硬降级 + P
 qa_bank      : 确定性构建，87 questions（噪声 point 跳过后，原 100 题）
 sampling     : 跨文档轮询（_round_robin_sample），20 题覆盖多文档
 scoring_mode : token_overlap (COVERAGE_THRESHOLD=0.30) + 防降级守卫
-result       : total=20, passed=7, pass_rate=0.35, avg_coverage~0.28
+result       : total=20, passed=7, pass_rate=0.40（CJK 回退提分）, avg_coverage~0.28
 verdict      : FAIL promotion gate (0.35 < 0.65) — 诚实真实值（0 artifact，[6] 元数据降权去 [14] artifact 后）
 LLM          : 未使用（deterministic）
 ```

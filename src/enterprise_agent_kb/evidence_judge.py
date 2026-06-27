@@ -479,6 +479,23 @@ def _anchors(query: str, expansion: dict[str, object]) -> list[str]:
         add("时序")
         add("控制时序")
         add("状态转换")
+    # Sprint 3 WP3: when hard anchors yield nothing (CJK substantive queries like
+    # '室外使用的供电设备正常工作的温度范围'), every candidate scores 0 and
+    # judgement is always insufficient. Fall back to CJK terms from query_rewrite
+    # should_terms/must_terms so _score_candidates gets a discriminating signal.
+    # Only fires when hard anchors is empty to avoid regressing queries that
+    # already have hard anchors (verified: adds no regression to [6][13][15]).
+    if not anchors:
+        try:
+            from .query_rewrite import rewrite_query
+            rw = rewrite_query(query)
+            for term in list(rw.should_terms) + list(rw.must_terms):
+                s = str(term).strip()
+                # Only meaningful 2-8 char CJK terms, skip full sentences
+                if 2 <= len(s) <= 8 and any("一" <= c <= "鿿" for c in s):
+                    add(s)
+        except Exception:
+            pass
     return anchors[:16]
 
 

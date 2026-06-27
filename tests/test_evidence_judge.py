@@ -174,3 +174,32 @@ class TestJudgeEvidenceRules:
         assert "sufficient" in d
         assert "confidence" in d
         assert "matched_anchors" in d
+
+# ── Sprint 3 WP3: _anchors CJK fallback ────────────────────────────────
+
+
+@pytest.mark.unit
+class TestAnchorsCjkFallback:
+    def test_hard_anchors_returned_when_present(self) -> None:
+        # Latin uppercase acronym CP -> control 导引 hard anchor present, no CJK fallback
+        anchors = _anchors("CP 控制导引是什么意思", {})
+        assert "控制导引" in anchors
+
+    def test_cjk_fallback_for_chinese_substantive_query(self) -> None:
+        # Pure CJK substantive query with no hard anchors -> CJK fallback fires
+        anchors = _anchors("室外使用的供电设备正常工作的温度范围", {})
+        # Should contain CJK soft anchors derived from query_rewrite should_terms
+        assert any("温度" in a or "范围" in a for a in anchors)
+        assert len(anchors) > 0
+
+    def test_cjk_fallback_excludes_full_sentences(self) -> None:
+        # The full-sentence must_term should be split, not added wholesale
+        anchors = _anchors("室外使用的供电设备正常工作的温度范围", {})
+        for a in anchors:
+            # CJK fallback only adds 2-8 char terms, never the full sentence
+            assert len(a) <= 8 or not any("一" <= c <= "鿿" for c in a)
+
+    def test_voltage_anchor_takes_priority(self) -> None:
+        # When a voltage hard anchor exists, CJK fallback does not fire
+        anchors = _anchors("检测点3电压4V是多少", {})
+        assert "4V" in anchors or any("4V" in a for a in anchors)
