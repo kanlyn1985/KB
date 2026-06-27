@@ -24,6 +24,7 @@ ROOT = Path(__file__).resolve().parent.parent.parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
 from enterprise_agent_kb.answer_api import answer_query  # noqa: E402
+from enterprise_agent_kb.answer_safety import diagnose_answer_safety  # noqa: E402
 
 WORKSPACE = ROOT / "knowledge_base"
 QA_DIR = ROOT / "tools" / "sample_qa"
@@ -402,6 +403,8 @@ class ScoreResult:
     pass_: bool
     template_id: str
     multi_prompt_stable: bool
+    # Sprint 3 WP4: read-only safety diagnostics for this answer (may be empty).
+    safety: dict = field(default_factory=dict)
 
 
 @dataclass
@@ -414,6 +417,9 @@ class EvalResult:
     multi_prompt_stability: float
     by_doc: dict = field(default_factory=dict)
     per_question: list = field(default_factory=list)
+    # Sprint 3 WP4: safety metrics (citation correctness / unsupported claim /
+    # title-block citation). Computed read-only over the answer payloads.
+    safety_metrics: dict = field(default_factory=dict)
 
     def to_dict(self) -> dict:
         return {
@@ -421,6 +427,7 @@ class EvalResult:
             "pass_rate": self.pass_rate, "avg_coverage": self.avg_coverage,
             "multi_prompt_stability": self.multi_prompt_stability,
             "by_doc": self.by_doc,
+            "safety_metrics": self.safety_metrics,
         }
 
 
@@ -695,6 +702,7 @@ def run_suite(suite: str = "golden", version: str = "v1",
             sys_answer = ans.get("direct_answer", "") if isinstance(ans, dict) else str(ans)
         except Exception as e:
             print(f"[{i+1}/{len(questions)}] {doc_id}: answer_query failed: {e}")
+            ans = {}
             sys_answer = ""
         # Use hybrid scorer if LLM enabled, else token-overlap
         if use_llm:
@@ -702,6 +710,9 @@ def run_suite(suite: str = "golden", version: str = "v1",
         else:
             result = score_answer(q["question"], sys_answer, ep)
         result.doc_id = doc_id
+        # Sprint 3 WP4: compute read-only safety diagnostics per answer.
+        if isinstance(ans, dict):
+            result.safety = diagnose_answer_safety(ans)
         per_question.append(result)
         if doc_id not in by_doc:
             by_doc[doc_id] = {"total": 0, "passed": 0, "cov_sum": 0.0}
@@ -720,9 +731,23 @@ def run_suite(suite: str = "golden", version: str = "v1",
         stats["pass_rate"] = stats["passed"] / n
         stats["avg_coverage"] = stats["cov_sum"] / n
         del stats["cov_sum"]
+    # Sprint 3 WP4: aggregate safety metrics across all answered questions.
+    safety_metrics: dict = {}
+    if per_question:
+        n = len(per_question)
+        cite_ok = sum(1 for r in per_question if getattr(r, "safety", {}).get("citation_correct"))
+        unsup = sum(1 for r in per_question if getattr(r, "safety", {}).get("unsupported_claim"))
+        title = sum(1 for r in per_question if getattr(r, "safety", {}).get("title_block_citation"))
+        degraded = sum(1 for r in per_question if getattr(r, "safety", {}).get("degraded_answer"))
+        safety_metrics = {
+            "citation_correct_rate": round(cite_ok / n, 3),
+            "unsupported_claim_rate": round(unsup / n, 3),
+            "title_block_citation_rate": round(title / n, 3),
+            "degraded_answer_rate": round(degraded / n, 3),
+        }
     return EvalResult(
         suite=suite, total=total, passed=passed,
         pass_rate=passed / max(total, 1),
         avg_coverage=avg_cov, multi_prompt_stability=stable,
-        by_doc=by_doc, per_question=per_question,
+        by_doc=by_doc, per_question=per_question, safety_metrics=safety_metrics,
     )
