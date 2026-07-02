@@ -96,6 +96,7 @@ def _refresh_fts_index(connection, paths: AppPaths) -> dict[str, int]:
         SELECT fact_id, source_doc_id, json_extract(qualifiers_json, '$.page_no') AS page_no,
                predicate, object_value
         FROM facts
+        WHERE fact_status IS NULL OR fact_status != 'quarantined_orphan'
         """
     ).fetchall()
     for row in fact_rows:

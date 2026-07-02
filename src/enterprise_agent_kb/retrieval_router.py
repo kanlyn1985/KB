@@ -239,6 +239,7 @@ def _direct_fact_hits(connection, rewritten: RewrittenQuery, limit: int) -> list
                    object_value, confidence
             FROM facts
             WHERE fact_type IN ('requirement', 'table_requirement', 'threshold', 'parameter_value', 'process_fact', 'transition_fact', 'section_heading')
+              AND (fact_status IS NULL OR fact_status != 'quarantined_orphan')
               AND object_value LIKE ?
             ORDER BY confidence DESC, fact_id ASC
             LIMIT ?
@@ -352,6 +353,7 @@ def _direct_parameter_fact_hits(connection, rewritten: RewrittenQuery, limit: in
                object_value, confidence
         FROM facts
         WHERE fact_type = 'parameter_value'
+          AND (fact_status IS NULL OR fact_status != 'quarantined_orphan')
         ORDER BY confidence DESC, fact_id ASC
         """
     ).fetchall()
@@ -402,6 +404,7 @@ def _direct_parameter_fact_hits(connection, rewritten: RewrittenQuery, limit: in
                        object_value, confidence
                 FROM facts
                 WHERE fact_type IN ('requirement', 'threshold')
+                  AND (fact_status IS NULL OR fact_status != 'quarantined_orphan')
                   AND object_value LIKE ?
                 ORDER BY confidence DESC, fact_id ASC
                 LIMIT ?
@@ -690,6 +693,7 @@ def _augment_process_code_siblings(connection, hits: list[dict[str, object]], li
                    object_value, confidence
             FROM facts
             WHERE fact_type IN ('process_fact', 'table_requirement')
+              AND (fact_status IS NULL OR fact_status != 'quarantined_orphan')
               AND object_value LIKE ?
             ORDER BY fact_id ASC
             LIMIT ?

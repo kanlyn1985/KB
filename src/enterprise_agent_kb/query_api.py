@@ -614,6 +614,7 @@ def _inject_exact_standard_hits(connection, query: str, hits: list[dict[str, obj
         SELECT fact_id, source_doc_id, object_value, confidence
         FROM facts
         WHERE fact_type = 'document_standard'
+          AND (fact_status IS NULL OR fact_status != 'quarantined_orphan')
         """
     ).fetchall()
 
@@ -689,6 +690,7 @@ def _augment_standard_facts(connection, query: str, fact_items: list[dict[str, o
                source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
         FROM facts
         WHERE fact_type IN ('document_standard', 'document_lifecycle', 'document_versioning')
+          AND (fact_status IS NULL OR fact_status != 'quarantined_orphan')
         ORDER BY fact_id
         """
     ).fetchall()
@@ -740,6 +742,7 @@ def _augment_parameter_facts(connection, rewritten, fact_items: list[dict[str, o
                source_doc_id, subject_entity_id, object_entity_id, qualifiers_json
         FROM facts
         WHERE fact_type = 'parameter_value'
+          AND (fact_status IS NULL OR fact_status != 'quarantined_orphan')
         ORDER BY fact_id
         """
     ).fetchall()
@@ -773,6 +776,7 @@ def _inject_direct_term_definition_hits(connection, rewritten, hits: list[dict[s
                    object_value, confidence
             FROM facts
             WHERE fact_type IN ('term_definition', 'concept_definition')
+              AND (fact_status IS NULL OR fact_status != 'quarantined_orphan')
               AND (
                 object_value LIKE ?
                 OR object_value LIKE ?
@@ -814,6 +818,7 @@ def _inject_direct_term_definition_hits(connection, rewritten, hits: list[dict[s
                    object_value, confidence
             FROM facts
             WHERE fact_type IN ('term_definition', 'concept_definition')
+              AND (fact_status IS NULL OR fact_status != 'quarantined_orphan')
               AND object_value LIKE ?
             ORDER BY confidence DESC, fact_id ASC
             LIMIT ?
@@ -911,6 +916,7 @@ def _inject_direct_requirement_hits(connection, rewritten, hits: list[dict[str, 
                    object_value, confidence
             FROM facts
             WHERE fact_type IN ('requirement', 'threshold', 'table_requirement')
+              AND (fact_status IS NULL OR fact_status != 'quarantined_orphan')
               AND object_value LIKE ?
             ORDER BY confidence DESC, fact_id ASC
             LIMIT ?
@@ -949,7 +955,7 @@ def _inject_direct_requirement_hits(connection, rewritten, hits: list[dict[str, 
     generic_frags = []
     for frag in cjk_frags[:6]:
         frag_count = connection.execute(
-            "SELECT count(*) FROM facts WHERE fact_type IN ('requirement', 'threshold', 'table_requirement') AND object_value LIKE ?",
+            "SELECT count(*) FROM facts WHERE fact_type IN ('requirement', 'threshold', 'table_requirement') AND (fact_status IS NULL OR fact_status != 'quarantined_orphan') AND object_value LIKE ?",
             (f"%{frag}%",),
         ).fetchone()[0]
         if frag_count <= MAX_GENERIC_MATCH_COUNT:
@@ -968,6 +974,7 @@ def _inject_direct_requirement_hits(connection, rewritten, hits: list[dict[str, 
                    object_value, confidence
             FROM facts
             WHERE fact_type IN ('requirement', 'threshold', 'table_requirement')
+              AND (fact_status IS NULL OR fact_status != 'quarantined_orphan')
               AND ({like_clauses})
             ORDER BY confidence DESC, fact_id ASC
             LIMIT ?
@@ -1032,7 +1039,7 @@ def _inject_direct_test_method_hits(connection, rewritten, hits: list[dict[str, 
     if not required_terms:
         return hits
 
-    where_parts = ["fact_type = 'process_fact'"]
+    where_parts = ["fact_type = 'process_fact'", "(fact_status IS NULL OR fact_status != 'quarantined_orphan')"]
     params: list[object] = []
     for term in required_terms:
         where_parts.append("object_value LIKE ?")

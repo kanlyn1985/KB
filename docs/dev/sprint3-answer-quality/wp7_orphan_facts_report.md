@@ -38,4 +38,20 @@ Per Sprint 3 constraints: no direct DB deletion, auditable, must not break sourc
 
 ## 5. Status
 
-Investigation complete. Governance DB writes are mutating operations and await explicit user confirmation per the persistent constraint. Report will be finalized with before/after counts after execution..
+Governance executed 2026-06-27 after user confirmed. See section 6.
+
+## 6. Governance Executed (2026-06-27)
+
+User confirmed full governance. Pre-WP7 backup saved at knowledge_base/db/knowledge.db.prewp7.bak (284520448 bytes).
+
+1. 72 facts quarantined: fact_status set to quarantined_orphan for DOC-000001 (14) and DOC-000008 (58). Before: DOC-000001 (5 ready_from_expected_points + 9 ready_from_post_gate), DOC-000008 (48 ready + 10 ready_from_post_gate). After: 72 quarantined_orphan.
+2. 48 dangling fact_evidence_map rows deleted (evidence_id pointing to non-existent evidence). Before 48 dangling, after 0.
+3. Recall exclusion filter added: fact_status exclusion (IS NULL OR != quarantined_orphan) added to 8 fact-recall queries in query_api.py and 4 in retrieval_router.py, plus _refresh_fts_index in retrieval.py now excludes quarantined facts from facts_fts.
+4. 202 DOC-000001 source_units status set to quarantined_orphan (original u2_fact_no_object preserved in metadata_json._prewp7_status).
+
+## 7. Verification
+
+- check_health 10/10 PASS; facts_fts rows 7636 -> 7564 (72 excluded).
+- facts_fts contains 0 quarantined_orphan fact_ids.
+- Recallable orphan-doc term_definition facts: 0 (was 14).
+- 20q eval pass_rate 0.40 (8/20) unchanged (no regression); safety_metrics citation_correct_rate 0.45, unsupported_claim_rate 0.35, title_block_citation_rate 0.0, degraded_answer_rate 0.2.
