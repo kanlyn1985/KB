@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import math
+import os
 import re
 from pathlib import Path
 from typing import Iterable
@@ -96,7 +97,6 @@ def _refresh_fts_index(connection, paths: AppPaths) -> dict[str, int]:
         SELECT fact_id, source_doc_id, json_extract(qualifiers_json, '$.page_no') AS page_no,
                predicate, object_value
         FROM facts
-        WHERE fact_status IS NULL OR fact_status != 'quarantined_orphan'
         """
     ).fetchall()
     for row in fact_rows:
@@ -378,6 +378,11 @@ def _search_semantic(
     limit: int,
     result_types: set[str] | None = None,
 ) -> list[dict[str, object]]:
+    # Sprint 3 WP9: semantic search (TF-IDF cosine over all candidates) is a
+    # compute-heavy optional channel. Allow disabling it via env var for
+    # deterministic eval / CI where the FTS channel is the primary recall path.
+    if os.environ.get("EAKB_DISABLE_SEMANTIC_SEARCH", "0") == "1":
+        return []
     query_vec = _semantic_vector(" ".join(queries))
     candidates = _semantic_candidates(connection, limit=max(limit * 2, 40), result_types=result_types)
     hits: list[dict[str, object]] = []
@@ -505,6 +510,13 @@ def _search_embeddings(
 ) -> list[dict[str, object]]:
     """Cosine-similarity search against wiki_chunk_embeddings."""
     try:
+        # Sprint 3 WP9: embedding search loads a SentenceTransformer model on
+        # EVERY call, which makes route_retrieval extremely slow (model load +
+        # encode per seed x per channel). Allow disabling it via env var for
+        # deterministic eval / CI where the FTS+semantic channels are the
+        # primary recall path and embedding search is an optional enhancement.
+        if os.environ.get("EAKB_DISABLE_EMBEDDING_SEARCH", "0") == "1":
+            return []
         import json
         import numpy as np
         from sentence_transformers import SentenceTransformer
