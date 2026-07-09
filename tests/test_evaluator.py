@@ -27,8 +27,10 @@ from enterprise_agent_kb.evaluation.evaluator import (
     _parse_llm_coverage,
     _token_overlap_ratio,
     compute_coverage,
+    merge_shard_results,
     score_answer,
     score_answer_hybrid,
+    shard_result_from_dict,
 )
 
 
@@ -432,3 +434,75 @@ def test_evalresult_to_dict() -> None:
     assert d["total"] == 10
     assert d["passed"] == 5
     assert d["pass_rate"] == 0.5
+
+
+# ---------------------------------------------------------------------------
+# Sprint 3 WP8: sharded run merge
+# ---------------------------------------------------------------------------
+
+def _shard_score(idx: int, doc: str, cov: float, passed: bool) -> ScoreResult:
+    return ScoreResult(
+        question=f"q{idx}", doc_id=doc, system_answer=f"a{idx}",
+        coverage=cov, pass_=passed, template_id="t",
+        multi_prompt_stable=True,
+        safety={"citation_correct": passed} if passed else {},
+    )
+
+
+def test_to_full_dict_includes_per_question() -> None:
+    r = EvalResult(
+        suite="golden", total=1, passed=1, pass_rate=1.0,
+        avg_coverage=0.5, multi_prompt_stability=1.0,
+        per_question=[_shard_score(1, "DOC-A", 0.5, True)],
+    )
+    d = r.to_full_dict()
+    assert "per_question" in d
+    assert len(d["per_question"]) == 1
+    assert d["per_question"][0]["doc_id"] == "DOC-A"
+
+
+def test_shard_result_roundtrip() -> None:
+    r = EvalResult(
+        suite="golden", total=2, passed=1, pass_rate=0.5,
+        avg_coverage=0.3, multi_prompt_stability=1.0,
+        per_question=[_shard_score(1, "DOC-A", 0.5, True),
+                      _shard_score(2, "DOC-A", 0.1, False)],
+    )
+    back = shard_result_from_dict(r.to_full_dict())
+    assert back.total == 2
+    assert back.passed == 1
+    assert len(back.per_question) == 2
+
+
+def test_merge_shard_results_aggregates() -> None:
+    s1 = EvalResult(
+        suite="golden", total=2, passed=1, pass_rate=0.5,
+        avg_coverage=0.3, multi_prompt_stability=1.0,
+        per_question=[_shard_score(1, "DOC-A", 0.5, True),
+                      _shard_score(2, "DOC-A", 0.1, False)],
+    )
+    s2 = EvalResult(
+        suite="golden", total=2, passed=2, pass_rate=1.0,
+        avg_coverage=0.8, multi_prompt_stability=1.0,
+        per_question=[_shard_score(3, "DOC-B", 0.9, True),
+                      _shard_score(4, "DOC-B", 0.7, True)],
+    )
+    m = merge_shard_results([s1, s2])
+    assert m.total == 4
+    assert m.passed == 3
+    assert m.pass_rate == 0.75
+    assert "DOC-A" in m.by_doc and "DOC-B" in m.by_doc
+    assert m.by_doc["DOC-B"]["passed"] == 2
+    assert m.safety_metrics["citation_correct_rate"] == 0.75
+
+
+def test_merge_shard_results_from_dicts() -> None:
+    s1 = EvalResult(
+        suite="golden", total=1, passed=1, pass_rate=1.0,
+        avg_coverage=0.5, multi_prompt_stability=1.0,
+        per_question=[_shard_score(1, "DOC-A", 0.5, True)],
+    )
+    d = s1.to_full_dict()
+    m = merge_shard_results([d])
+    assert m.total == 1
+    assert m.passed == 1

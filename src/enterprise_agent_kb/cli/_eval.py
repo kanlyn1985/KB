@@ -207,6 +207,30 @@ def register_subcommand(subparsers) -> None:
                     help="Cap number of questions (for quick smoke tests)")
     rn.add_argument("--root", type=Path, default=Path("knowledge_base"),
                     help="Workspace root (default: knowledge_base)")
+    # --- Sprint 3 WP8: sharded golden baseline ---
+    sr = eval_subs.add_parser(
+        "shard-run",
+        help="Run one shard of the golden suite for parallel/large baseline runs.",
+    )
+    sr.add_argument("--suite", choices=["golden", "full"], default="golden",
+                    help="golden = capped question set; full = all questions")
+    sr.add_argument("--version", default="v1", help="expected_points version")
+    sr.add_argument("--shard-index", type=int, required=True,
+                    help="Zero-based shard index to run (0..shard-count-1)")
+    sr.add_argument("--shard-count", type=int, required=True,
+                    help="Total number of shards to split the question set into")
+    sr.add_argument("--output", type=Path, required=True,
+                    help="Output JSON path for this shard's full result (per-question included)")
+    sr.add_argument("--root", type=Path, default=Path("knowledge_base"),
+                    help="Workspace root (default: knowledge_base)")
+    mr = eval_subs.add_parser(
+        "merge-shards",
+        help="Merge multiple shard-run JSON files into one aggregated result.",
+    )
+    mr.add_argument("--input", action="append", required=True,
+                    help="Shard JSON path. Repeat for each shard file.")
+    mr.add_argument("--output", type=Path, required=True,
+                    help="Output JSON path for the merged result.")
 
 
 def handle_command(args, schema_path) -> bool:
@@ -245,6 +269,48 @@ def handle_command(args, schema_path) -> bool:
             print(f"\nFAIL: pass_rate={result.pass_rate:.2f} < 0.65")
         elif result.pass_rate > 0.85:
             print(f"\nFAIL: pass_rate={result.pass_rate:.2f} > 0.85")
+        return True
+
+    # --- eval shard-run ---
+    if getattr(args, "command", None) == "eval" and getattr(args, "eval_command", None) == "shard-run":
+        from enterprise_agent_kb.evaluation import run_suite
+        try:
+            result = run_suite(
+                suite=args.suite,
+                version=args.version,
+                workspace_root=args.root,
+                shard_index=args.shard_index,
+                shard_count=args.shard_count,
+            )
+        except FileNotFoundError as e:
+            print(f"ERROR: {e}")
+            return True
+        payload = result.to_full_dict()
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(json.dumps({
+            "shard_index": args.shard_index, "shard_count": args.shard_count,
+            "total": result.total, "passed": result.passed,
+            "pass_rate": result.pass_rate, "output": str(args.output),
+        }, ensure_ascii=False, indent=2))
+        return True
+
+    # --- eval merge-shards ---
+    if getattr(args, "command", None) == "eval" and getattr(args, "eval_command", None) == "merge-shards":
+        from enterprise_agent_kb.evaluation.evaluator import shard_result_from_dict, merge_shard_results
+        shards = []
+        for path in args.input:
+            shards.append(shard_result_from_dict(json.loads(Path(path).read_text(encoding="utf-8"))))
+        merged = merge_shard_results(shards)
+        payload = merged.to_full_dict()
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(json.dumps({
+            "total": merged.total, "passed": merged.passed,
+            "pass_rate": merged.pass_rate, "avg_coverage": round(merged.avg_coverage, 3),
+            "by_doc": merged.by_doc, "safety_metrics": merged.safety_metrics,
+            "output": str(args.output),
+        }, ensure_ascii=False, indent=2))
         return True
 
     # --- existing eval handlers (graph-report, run-corpus-retrieval-eval, etc.) ---

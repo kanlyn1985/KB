@@ -430,6 +430,32 @@ class EvalResult:
             "safety_metrics": self.safety_metrics,
         }
 
+    def to_full_dict(self) -> dict:
+        """Full serialization including per-question case details.
+
+        Used by sharded runs so the per-question records can be persisted to
+        disk and later merged via merge_shard_results(). to_dict() omits
+        per_question for backward compatibility with the CLI summary output.
+        """
+        return {
+            "suite": self.suite, "total": self.total, "passed": self.passed,
+            "pass_rate": self.pass_rate, "avg_coverage": self.avg_coverage,
+            "multi_prompt_stability": self.multi_prompt_stability,
+            "by_doc": self.by_doc,
+            "safety_metrics": self.safety_metrics,
+            "per_question": [
+                {
+                    "question": r.question, "doc_id": r.doc_id,
+                    "system_answer": r.system_answer,
+                    "coverage": r.coverage, "pass": r.pass_,
+                    "template_id": r.template_id,
+                    "multi_prompt_stable": r.multi_prompt_stable,
+                    "safety": getattr(r, "safety", {}) or {},
+                }
+                for r in self.per_question
+            ],
+        }
+
 
 def score_answer(question: str, system_answer: str,
                 expected_points: list) -> ScoreResult:
@@ -672,7 +698,9 @@ def _round_robin_sample(questions: list, max_questions: int) -> list:
 
 def run_suite(suite: str = "golden", version: str = "v1",
               workspace_root = None, max_questions = None,
-              use_llm: bool | None = None) -> EvalResult:
+              use_llm: bool | None = None,
+              shard_index: int | None = None,
+              shard_count: int | None = None) -> EvalResult:
     if workspace_root is None:
         workspace_root = WORKSPACE
     # Resolve LLM mode: explicit param > env var > default False
@@ -689,7 +717,21 @@ def run_suite(suite: str = "golden", version: str = "v1",
         # document's points were enumerated first. This is a sampling fix, not
         # a metric change — token_overlap scoring is untouched.
         questions = _round_robin_sample(questions, max_questions)
-    print(f"Running {suite} suite: {len(questions)} questions (scorer={'llm+fallback' if use_llm else 'token_overlap'})\n")
+    # Sprint 3 WP8: sharding support. When shard_index/shard_count are given,
+    # split the question list into shard_count contiguous slices and keep only
+    # the slice for shard_index (0-based). This lets a 104-question golden run
+    # that times out at 540s be run as e.g. 4 shards of ~26 questions each, then
+    # merged via merge_shard_results. Sharding is applied AFTER max_questions
+    # sampling so the two compose correctly.
+    if shard_count and shard_count > 1 and shard_index is not None:
+        n = len(questions)
+        base = n // shard_count
+        rem = n % shard_count
+        start = shard_index * base + min(shard_index, rem)
+        end = start + base + (1 if shard_index < rem else 0)
+        questions = questions[start:end]
+    shard_tag = f" shard {shard_index}/{shard_count}" if (shard_count and shard_count > 1 and shard_index is not None) else ""
+    print(f"Running {suite} suite: {len(questions)} questions (scorer={'llm+fallback' if use_llm else 'token_overlap'}){shard_tag}\n")
     per_question: list = []
     by_doc: dict = {}
     for i, q in enumerate(questions):
@@ -750,4 +792,91 @@ def run_suite(suite: str = "golden", version: str = "v1",
         pass_rate=passed / max(total, 1),
         avg_coverage=avg_cov, multi_prompt_stability=stable,
         by_doc=by_doc, per_question=per_question, safety_metrics=safety_metrics,
+    )
+
+
+# ---- Sprint 3 WP8: sharded run merge -----------------------------------
+
+
+def shard_result_from_dict(data: dict) -> EvalResult:
+    """Reconstruct an EvalResult from a full-dict (to_full_dict) payload.
+
+    Used by merge_shard_results to load persisted shard JSON files.
+    """
+    per_question: list = []
+    for case in data.get("per_question", []):
+        per_question.append(ScoreResult(
+            question=case.get("question", ""),
+            doc_id=case.get("doc_id", "?"),
+            system_answer=case.get("system_answer", ""),
+            coverage=case.get("coverage", 0.0),
+            pass_=bool(case.get("pass", False)),
+            template_id=case.get("template_id", ""),
+            multi_prompt_stable=case.get("multi_prompt_stable", True),
+            safety=case.get("safety", {}) or {},
+        ))
+    return EvalResult(
+        suite=data.get("suite", "golden"),
+        total=data.get("total", len(per_question)),
+        passed=data.get("passed", sum(1 for r in per_question if r.pass_)),
+        pass_rate=data.get("pass_rate", 0.0),
+        avg_coverage=data.get("avg_coverage", 0.0),
+        multi_prompt_stability=data.get("multi_prompt_stability", 1.0),
+        by_doc=data.get("by_doc", {}),
+        per_question=per_question,
+        safety_metrics=data.get("safety_metrics", {}),
+    )
+
+
+def merge_shard_results(shards: list) -> EvalResult:
+    """Merge a list of EvalResult shards into one aggregated EvalResult.
+
+    Re-aggregates total/passed/avg_coverage/multi_prompt_stability/by_doc and
+    safety_metrics from the per_question records of all shards. This is pure
+    arithmetic over already-scored cases - no re-scoring, no metric change.
+    """
+    all_cases: list = []
+    suite = "golden"
+    for s in shards:
+        if isinstance(s, EvalResult):
+            all_cases.extend(s.per_question)
+            suite = s.suite or suite
+        elif isinstance(s, dict):
+            er = shard_result_from_dict(s)
+            all_cases.extend(er.per_question)
+            suite = er.suite or suite
+    total = len(all_cases)
+    passed = sum(1 for r in all_cases if r.pass_)
+    avg_cov = sum(r.coverage for r in all_cases) / max(total, 1)
+    stable = sum(1 for r in all_cases if r.multi_prompt_stable) / max(total, 1)
+    by_doc: dict = {}
+    for r in all_cases:
+        d = r.doc_id or "?"
+        if d not in by_doc:
+            by_doc[d] = {"total": 0, "passed": 0}
+        by_doc[d]["total"] += 1
+        if r.pass_:
+            by_doc[d]["passed"] += 1
+    for d, stats in by_doc.items():
+        n = max(stats["total"], 1)
+        stats["pass_rate"] = stats["passed"] / n
+        stats["avg_coverage"] = 0.0  # not tracked per-case here; optional
+    safety_metrics: dict = {}
+    if all_cases:
+        n = len(all_cases)
+        cite_ok = sum(1 for r in all_cases if getattr(r, "safety", {}).get("citation_correct"))
+        unsup = sum(1 for r in all_cases if getattr(r, "safety", {}).get("unsupported_claim"))
+        title = sum(1 for r in all_cases if getattr(r, "safety", {}).get("title_block_citation"))
+        degraded = sum(1 for r in all_cases if getattr(r, "safety", {}).get("degraded_answer"))
+        safety_metrics = {
+            "citation_correct_rate": round(cite_ok / n, 3),
+            "unsupported_claim_rate": round(unsup / n, 3),
+            "title_block_citation_rate": round(title / n, 3),
+            "degraded_answer_rate": round(degraded / n, 3),
+        }
+    return EvalResult(
+        suite=suite, total=total, passed=passed,
+        pass_rate=passed / max(total, 1),
+        avg_coverage=avg_cov, multi_prompt_stability=stable,
+        by_doc=by_doc, per_question=all_cases, safety_metrics=safety_metrics,
     )
