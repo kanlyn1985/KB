@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KB1 项目阶段评审报告 · 2026-06-25 (Sprint 2 更新)</title>
+<title>KB1 项目阶段评审报告 · 2026-06-30 (Sprint 3 更新)</title>
 <style>
   :root{
     --bg:#0f1419; --surface:#161b22; --surface2:#1c2330; --border:#2d333b;
@@ -170,7 +170,7 @@
     本报告基于 2026-06-25 代码、测试、文档与数据资产的完整梳理（含 Sprint 1 稳定化与 Sprint 2 定义查询修复 + Ontology 最小接入 + Eval 诚实基线），用于阶段评审。</div>
     <div class="hero-meta">
       <span class="meta-chip">分支 <b>kb1-six-loop-rename</b></span>
-      <span class="meta-chip">最新提交 <b>16142de</b> (2026-06-25 · Sprint 2 WP5)</span>
+      <span class="meta-chip">最新提交 <b>fa5667e</b> (2026-06-30 · Sprint 3 WP9)</span>
       <span class="meta-chip">已 push origin/kb1-six-loop-rename</span>
       <span class="meta-chip">方法学 <b>CodeStable</b></span>
       <span class="meta-chip">技术栈 <b>Python 3.11+ / SQLite+FTS5 / httpx</b></span>
@@ -180,12 +180,12 @@
       <div class="vcard">
         <div class="label">总体健康度</div>
         <div class="val" style="color:var(--green)">A-</div>
-        <div class="note">Sprint 2 后：架构成熟、治理规范、测试全绿、Ontology 安全接入</div>
+        <div class="note">Sprint 3 后：eval 真实提分 0.30->0.40 + 性能修复解锁 104q 分片 + orphan 治理</div>
       </div>
       <div class="vcard">
         <div class="label">测试通过率</div>
         <div class="val" style="color:var(--green)">100%</div>
-        <div class="note">696 passed · 0 failed · 0 xfail（xfail 已解除）</div>
+        <div class="note">716+ passed · 0 failed · 0 xfail（Sprint 3 持续绿灯）</div>
       </div>
       <div class="vcard">
         <div class="label">Feature 闭环</div>
@@ -195,7 +195,7 @@
       <div class="vcard">
         <div class="label">核心风险</div>
         <div class="val" style="color:var(--yellow)">1 项</div>
-        <div class="note">eval 真实基线 0.30 距 0.65 promotion gate 仍有差距（Sprint 3）</div>
+        <div class="note">eval 真实基线 0.40 距 0.65 promotion gate 仍有 0.25 差距（Sprint 4 P1 full-payload anchor）</div>
       </div>
     </div>
   </div>
@@ -254,7 +254,7 @@
     <div class="card">
       <h3><span class="dot" style="background:var(--brand)"></span>后续建议</h3>
       <ul>
-        <li><b>最高优先</b>：eval 真实基线 0.30 距 promotion gate 0.65-0.85 仍有差距，需答案质量提升（Sprint 3）</li>
+        <li><b>最高优先</b>：eval 真实基线 0.40 距 promotion gate 0.65-0.85 仍有 0.25 差距，需 P1 full-payload anchor（Sprint 4）</li>
         <li>修 issue <code class="inline">definition-query-exact-term-gate-drops-evidence</code>，解 MCP xfail</li>
         <li>Sprint 2：定义查询修复 + Ontology 最小接入（约束层 only，已落地 ADR 0003）+ eval 诚实化 ✓ 已完成</li>
         <li>Sprint 3：eval 提分至 0.65-0.85（答案质量提升）+ Ontology 主动召回过滤评估 + orphan facts 治理</li>
@@ -808,6 +808,53 @@ query context  ──▶  <span class="k">evidence_judge</span>  ──▶  answ
       <p>(1) eval 0.65-0.85 promotion gate（需答案质量提升，Sprint 2 受「不改答案主路径」约束）；(2) Ontology 主动召回过滤（需独立 ADR + 不回归证据）；(3) guard warning 并入 answer warnings；(4) 完整 104 题 golden 基线（超时）；(5) orphan facts 治理。</p>
     </div>
   </div>
+  <!-- ===== Sprint 3 ===== -->
+  <div class="loop" style="border-left-color:var(--green)">
+    <div class="lh">
+      <span class="num">SPRINT 3</span>
+      <h4>答案质量驱动的 Eval 提分 + Orphan 治理 + 104 题分片</h4>
+      <span class="badge b-green" style="margin-left:auto">已完成 · 2026-06-30</span>
+    </div>
+    <p><b>目标</b>：把真实跨文档 token_overlap baseline 从 0.30 提到 0.65-0.85，不破坏证据约束边界。核心指令「你不是来重写 KB1 的，你是来把真实答案质量提上去的」。</p>
+    <p style="margin-top:8px"><b>达成</b>：4 Gate 中 3 完全达成（0 baseline 复现 / 2 ontology A/B 安全 / 3 104 题分片可跑），1 部分达成并诚实记录（1 eval 提分 0.30->0.40，距 0.65 deferred Sprint 4）。首提真实提分（_anchors CJK fallback，0 artifact）；反 metric-gaming（anti-degradation guard 清假阳性 PASS）；性能修复解锁 20q 从 20+min 降到 7.5min。</p>
+    <div class="metrics">
+      <span class="m"><b>716+</b> passed</span>
+      <span class="m"><b>0</b> failed / <b>0</b> xfail</span>
+      <span class="m">eval <b>0.40</b> 真实（0 artifact）</span>
+      <span class="m">20q <b>453s</b>（原 20+min）</span>
+      <span class="m">check_health <b>10/10</b></span>
+    </div>
+    <h3 style="margin:16px 0 10px; font-size:14px">11 个工作包（WP）完成情况</h3>
+    <div class="scrollbox">
+      <table>
+        <thead><tr><th>WP</th><th>内容</th><th>关键产物</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr><td>WP0</td><td>baseline 快照+冻结 0.30</td><td class="code">wp0_baseline_report.md</td><td><span class="badge b-green">完成</span></td></tr>
+          <tr><td>WP1</td><td>失败样本分桶（6 次根因修正）</td><td class="code">wp1_failure_taxonomy_report.md</td><td><span class="badge b-green">完成</span></td></tr>
+          <tr><td>WP2</td><td>P0 硬降级 + doc-selection + P3 noise + metadata 降权</td><td class="code">wp2_*_report.md</td><td><span class="badge b-green">完成</span></td></tr>
+          <tr><td>WP3</td><td>query_rewrite 锚点拆分 + _anchors CJK fallback</td><td class="code">wp3_*_report.md</td><td><span class="badge b-green">完成</span></td></tr>
+          <tr><td>WP4</td><td>citation + unsupported-claim 只读诊断</td><td class="code">answer_safety.py + 9 测试</td><td><span class="badge b-green">完成</span></td></tr>
+          <tr><td>WP5</td><td>ontology shadow A/B 投影过滤</td><td class="code">wp5_ontology_retrieval_ab_report.md</td><td><span class="badge b-green">完成</span></td></tr>
+          <tr><td>WP6</td><td>guard warning 并入 answer envelope</td><td class="code">wp6_guard_warning_merge_report.md</td><td><span class="badge b-green">完成</span></td></tr>
+          <tr><td>WP7</td><td>orphan facts 治理（72 隔离 + 12 召回过滤）</td><td class="code">wp7_orphan_facts_report.md</td><td><span class="badge b-green">完成</span></td></tr>
+          <tr><td>WP8</td><td>104 题 golden 分片（shard-run/merge-shards）</td><td class="code">wp8_golden104_sharding_report.md</td><td><span class="badge b-green">完成</span></td></tr>
+          <tr><td>WP9</td><td>eval 性能修复 + 提分验收（0.30->0.40）</td><td class="code">wp9_eval_uplift_report.md</td><td><span class="badge b-yellow">部分</span></td></tr>
+          <tr><td>WP10</td><td>CodeStable/ADR/验收收口</td><td class="code">sprint3_acceptance_report.md</td><td><span class="badge b-green">完成</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout green" style="margin-top:14px">
+      <span class="ct">Sprint 3 关键诚实判断</span>
+      <p>(1) <b>首提真实提分</b>：_anchors CJK fallback（fb82215）把 [4][12] 从 degradation 转 PASS，20q 0.35->0.40（0 artifact）。
+      (2) <b>反 metric-gaming</b>：P3 anti-degradation guard 把 degradation 文本与英文 expected_point 共享 token 的假阳性 PASS 正确归零，表观 0.45->0.40 是诚实下降非 regression。
+      (3) <b>Gate 1 未达</b>：0.40 距 0.65 差 0.25，主因 P1 channel-weighting 需 full-payload（object_value）anchor 匹配，snippet 截断不含锚点，4 次根因迭代后确认 deferred Sprint 4。
+      (4) <b>性能修复解锁</b>：WP7 facts_fts 排除导致 derived-state stale，每次搜索触发 ~15s 全量重建；修复后 20q 20+min->7.5min。</p>
+    </div>
+    <div class="callout yellow" style="margin-top:10px">
+      <span class="ct">遗留到 Sprint 4</span>
+      <p>(1) P1 full-payload anchor 匹配方案（Gate 1 提分主路径）；(2) [6] V2G wording alignment；(3) ontology.db class 多样性补齐（当前 364 entity 单类，A/B filtering 结构性 no-op）；(4) full 104q golden baseline 正式运行；(5) AUTO eval mode（promotion gate 达标后）。</p>
+    </div>
+  </div>
 </section>
 
 <!-- ============ S10 CURRENT DEV STATE ============ -->
@@ -870,7 +917,7 @@ query context  ──▶  <span class="k">evidence_judge</span>  ──▶  answ
 
   <div class="callout green" style="margin-bottom:16px">
     <span class="ct">Sprint 1 风险收口情况</span>
-    <p>原 4 个主要风险中：<b>WIP 未提交（高）</b> 已在 Sprint 2 WP0 完全解决（push 到 origin）；<b>评测 baseline（中）</b> 已诚实化（0.60 单文档偶然 → 0.30 真实跨文档，可复现）；<b>工程债务（中）</b> 已清理；<b>命名漂移（中）</b> 已统一。Sprint 2 后唯一中高优先级风险是<b>eval 真实基线 0.30 距 promotion gate 0.65-0.85 仍有差距</b>（需答案质量提升，属 Sprint 3）。</p>
+    <p>原 4 个主要风险中：<b>WIP 未提交（高）</b> 已在 Sprint 2 WP0 完全解决（push 到 origin）；<b>评测 baseline（中）</b> 已诚实化（0.60 单文档偶然 → 0.30 真实跨文档，可复现）；<b>工程债务（中）</b> 已清理；<b>命名漂移（中）</b> 已统一。Sprint 3 后唯一中高优先级风险是<b>eval 真实基线 0.40 距 promotion gate 0.65-0.85 仍有 0.25 差距</b>（需 P1 full-payload anchor，属 Sprint 4）。</p>
   </div>
 
   <div class="risk">
@@ -885,8 +932,8 @@ query context  ──▶  <span class="k">evidence_judge</span>  ──▶  answ
   <div class="risk">
     <div class="sev"><span class="sevb b-yellow">中</span></div>
     <div>
-      <h4>eval 真实基线 0.30 距 promotion gate 0.65-0.85 仍有差距</h4>
-      <p>Sprint 2 WP5 发现原 0.60 是「10 题全来自 DOC-000015」的单文档偶然值。修复 <code class="inline">_is_substantive</code> 过滤 + <code class="inline">_round_robin_sample</code> 跨文档采样后，诚实锁定真实跨文档基线 <b>0.30</b>（deterministic，未改指标）。CI smoke floor <code class="inline">--min-token-pass 0.20</code> 仍通过。提分需答案质量提升（召回措辞对齐、答案组装），Sprint 2 受「不改答案主路径」约束未做。</p>
+      <h4>eval 真实基线 0.40 距 promotion gate 0.65-0.85 仍有 0.25 差距</h4>
+      <p>Sprint 2 WP5 发现原 0.60 是「10 题全来自 DOC-000015」的单文档偶然值。修复 <code class="inline">_is_substantive</code> 过滤 + <code class="inline">_round_robin_sample</code> 跨文档采样后，诚实锁定真实跨文档基线 <b>0.30</b>（deterministic，未改指标）。Sprint 3 首提真实提分至 <b>0.40</b>（0 artifact，_anchors CJK fallback + doc-selection 修复 + anti-degradation guard）。距 0.65 仍差 0.25，主因 P1 channel-weighting 需 full-payload anchor 匹配（snippet 截断不含锚点），deferred Sprint 4。CI smoke floor <code class="inline">--min-token-pass 0.20</code> 仍通过。</p>
       <div class="rec">遗留至 Sprint 3：答案质量提升路线（不赛分、不改指标）。</div>
     </div>
   </div>
@@ -1014,7 +1061,7 @@ query context  ──▶  <span class="k">evidence_judge</span>  ──▶  answ
   <div class="callout green">
     <span class="ct">总体结论：A- — Sprint 2 后工程成熟度进一步巩固，Ontology 安全接入、定义查询修复、评测诚实化</span>
     <p>KB1 已经不是原型，而是一个具备<b>清晰架构、规范治理、安全边界、CI 门禁</b>的产品级知识库系统。
-    <b>Sprint 2</b>后：测试全绿（696 passed / 0 failed / 0 xfail）、成果已 push 远端、定义查询主路径 bug 修复、Ontology 以约束层身份安全最小接入（ADR 0003，<code class="inline">answer_changed_by_ontology=False</code>）、评测从虚高 0.60 诚实化为真实跨文档 0.30。六闭环设计、CodeStable 全生命周期文档、证据约束的 LLM 边界，三项共同构成了扎实的工程基座。系统当前可运行（10/10 健康检查）、可追溯（10/10 issue 闭环、21/22 feature 完成）、可演进（本体层已接入主链路 shadow/guard）。<b>唯一中高优先级风险是 eval 真实基线 0.30 距 promotion gate 0.65-0.85 仍有差距</b>（需答案质量提升，属 Sprint 3）。</p>
+    <b>Sprint 3</b>后：测试持续全绿（716+ passed / 0 failed / 0 xfail）、eval 首提真实提分 0.30->0.40（0 artifact）、orphan facts 治理完成（72 隔离 + 12 召回过滤）、104 题 golden 分片机制就绪、性能修复使 20q 从 20+min 降到 7.5min。六闭环设计、CodeStable 全生命周期文档、证据约束的 LLM 边界，三项共同构成了扎实的工程基座。系统当前可运行（10/10 健康检查）、可追溯（10/10 issue 闭环、21/22 feature 完成）、可演进（本体层已接入主链路 shadow/guard）。<b>唯一中高优先级风险是 eval 真实基线 0.40 距 promotion gate 0.65-0.85 仍有 0.25 差距</b>（需 P1 full-payload anchor，属 Sprint 4）。</p>
   </div>
 
   <h3 style="margin:24px 0 14px">评审维度打分</h3>
@@ -1034,7 +1081,7 @@ query context  ──▶  <span class="k">evidence_judge</span>  ──▶  answ
       <ul>
         <li><b>强项突出</b>：架构、治理、安全边界、测试质量四项达 A 级；安全边界因 Ontology 约束层 ADR 进一步巩固</li>
         <li><b>Sprint 2 交付</b>：成果 push 远端、定义查询修复、Ontology 安全接入、评测诚实化 → 版本控制 B→A-、安全边界 A→A（巩固）</li>
-        <li><b>唯一中高优先级风险</b>：eval 真实基线 0.30 距 promotion gate 0.65-0.85 仍有差距（需答案质量提升）</li>
+        <li><b>唯一中高优先级风险</b>：eval 真实基线 0.40 距 promotion gate 0.65-0.85 仍有 0.25 差距（需 P1 full-payload anchor，Sprint 4）</li>
         <li><b>评测仍是焦点</b>：baseline 已诚实锁定，下一步是答案质量提升提分（Sprint 3，不赛分不改指标）</li>
       </ul>
       <div class="callout green" style="margin-top:14px">
