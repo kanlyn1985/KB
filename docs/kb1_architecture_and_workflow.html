@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KB1 整体架构与项目运行流程 · 2026-07-09</title>
+<style>
+:root{
+  --bg:#0f1419; --card:#161b22; --card2:#1c2330; --border:#2d333b;
+  --text:#e6edf3; --text2:#9da7b3; --text3:#6e7681;
+  --blue:#58a6ff; --green:#3fb950; --yellow:#d29922; --red:#f85149;
+  --purple:#bc8cff; --cyan:#39d2c0; --orange:#e8873a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:"Segoe UI","Microsoft YaHei",system-ui,sans-serif;line-height:1.7;font-size:15px}
+.wrap{max-width:1200px;margin:0 auto;padding:32px 24px 80px}
+.hero{background:linear-gradient(135deg,#1a2332,#0d1117);border:1px solid var(--border);border-radius:16px;padding:40px 36px;margin-bottom:28px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;top:-40%;right:-10%;width:60%;height:180%;background:radial-gradient(circle,rgba(88,166,255,0.08),transparent 60%)}
+.hero h1{font-size:30px;font-weight:700;letter-spacing:-0.5px;margin-bottom:10px;position:relative}
+.hero .sub{color:var(--text2);font-size:15px;position:relative}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;position:relative}
+.chip{background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:5px 14px;font-size:13px;color:var(--text2)}
+.chip b{color:var(--blue)}
+section{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px 30px;margin-bottom:24px}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.sec-head .num{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;font-weight:700;font-size:14px;width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sec-head h2{font-size:21px;font-weight:600}
+.sec-head .tag{margin-left:auto;color:var(--text3);font-size:12px;font-style:italic}
+h3{font-size:16px;font-weight:600;color:var(--cyan);margin:24px 0 12px;display:flex;align-items:center;gap:8px}
+h3::before{content:"";width:4px;height:16px;background:var(--cyan);border-radius:2px}
+h4{font-size:14px;font-weight:600;color:var(--yellow);margin:18px 0 10px}
+p{margin-bottom:12px;color:var(--text)}
+.muted{color:var(--text2)}
+code{background:var(--card2);border:1px solid var(--border);border-radius:5px;padding:1px 7px;font-family:"Cascadia Code",Consolas,monospace;font-size:13px;color:var(--green)}
+pre{background:#0d1117;border:1px solid var(--border);border-radius:10px;padding:16px;overflow-x:auto;margin:12px 0}
+pre code{background:none;border:none;padding:0;color:var(--text);font-size:13px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:16px}
+.card.accent{border-left:3px solid var(--blue)}
+.card.green{border-left:3px solid var(--green)}
+.card.purple{border-left:3px solid var(--purple)}
+.card.yellow{border-left:3px solid var(--yellow)}
+.card.orange{border-left:3px solid var(--orange)}
+.card h4{margin-top:0}
+.stat{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;text-align:center}
+.stat b{display:block;font-size:24px;color:var(--blue);font-weight:700}
+.stat span{font-size:12px;color:var(--text3)}
+.stats-row{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin:16px 0}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+th{background:var(--card2);color:var(--cyan);text-align:left;padding:9px 12px;border:1px solid var(--border);font-weight:600;white-space:nowrap}
+td{padding:8px 12px;border:1px solid var(--border);color:var(--text);vertical-align:top}
+tr:nth-child(even) td{background:rgba(255,255,255,0.015)}
+.badge{display:inline-block;padding:2px 9px;border-radius:12px;font-size:11px;font-weight:600}
+.b-green{background:rgba(63,185,80,0.15);color:var(--green);border:1px solid rgba(63,185,80,0.3)}
+.b-blue{background:rgba(88,166,255,0.15);color:var(--blue);border:1px solid rgba(88,166,255,0.3)}
+.b-yellow{background:rgba(210,153,34,0.15);color:var(--yellow);border:1px solid rgba(210,153,34,0.3)}
+.b-purple{background:rgba(188,140,255,0.15);color:var(--purple);border:1px solid rgba(188,140,255,0.3)}
+.b-orange{background:rgba(232,135,58,0.15);color:var(--orange);border:1px solid rgba(232,135,58,0.3)}
+.b-red{background:rgba(248,81,73,0.15);color:var(--red);border:1px solid rgba(248,81,73,0.3)}
+.flow{background:#0d1117;border:1px solid var(--border);border-radius:10px;padding:20px;margin:14px 0;font-family:monospace;font-size:13px;overflow-x:auto;line-height:2}
+.flow .step{display:inline-block;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:4px 12px;margin:3px 0;color:var(--text)}
+.flow .arrow{color:var(--blue);margin:0 6px}
+.flow .phase{color:var(--text3);font-size:11px;margin-right:4px}
+.callout{border-radius:10px;padding:14px 16px;margin:14px 0;border-left:3px solid var(--blue);background:rgba(88,166,255,0.06)}
+.callout.green{border-left-color:var(--green);background:rgba(63,185,80,0.06)}
+.callout.yellow{border-left-color:var(--yellow);background:rgba(210,153,34,0.06)}
+.callout.red{border-left-color:var(--red);background:rgba(248,81,73,0.06)}
+.callout .ct{font-size:12px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:block}
+.callout.green .ct{color:var(--green)}
+.callout.yellow .ct{color:var(--yellow)}
+.callout.red .ct{color:var(--red)}
+.loop{border-left:3px solid var(--green);background:var(--card2);border-radius:0 10px 10px 0;padding:16px 18px;margin-bottom:14px}
+.loop .lh{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.loop .lh .ln{background:var(--green);color:#0f1419;font-weight:700;font-size:11px;padding:2px 9px;border-radius:10px}
+.loop .lh h4{margin:0;color:var(--text)}
+.loop .lh .st{margin-left:auto}
+.toc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px 28px;margin-bottom:24px}
+.toc h3{margin-top:0}
+.toc ol{padding-left:22px}
+.toc li{margin-bottom:6px}
+.toc a{color:var(--blue);text-decoration:none;font-size:14px}
+.toc a:hover{text-decoration:underline}
+.loop-tier{display:inline-block;font-size:11px;padding:1px 8px;border-radius:10px;margin-left:6px}
+.kbd{background:var(--card2);border:1px solid var(--border);border-bottom-width:2px;border-radius:5px;padding:1px 6px;font-family:monospace;font-size:12px;color:var(--yellow)}
+@media(max-width:760px){.grid2,.grid3,.stats-row{grid-template-columns:1fr 1fr}.stats-row{gap:8px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HERO -->
+<div class="hero">
+  <h1>KB1 整体架构与项目运行流程</h1>
+  <div class="sub">Enterprise Agent Knowledge Base · 汽车标准文档知识库编译与检索系统（QC/T 1036-2016、GB/T 18487、ISO 14229 等）</div>
+  <div class="chips">
+    <span class="chip">包名 <b>enterprise-agent-kb v0.1.0</b></span>
+    <span class="chip">Python <b>≥3.11</b></span>
+    <span class="chip">依赖 <b>httpx + PyMuPDF</b></span>
+    <span class="chip">存储 <b>SQLite + FTS5</b></span>
+    <span class="chip">分支 <b>kb1-six-loop-rename</b></span>
+    <span class="chip">HEAD <b>293babd</b> (2026-07-09)</span>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <h3>目录</h3>
+  <ol>
+    <li><a href="#s1">项目定位与核心理念</a></li>
+    <li><a href="#s2">整体架构总览</a></li>
+    <li><a href="#s3">六闭环架构</a></li>
+    <li><a href="#s4">数据模型与流转</a></li>
+    <li><a href="#s5">文档入库 Pipeline（13 阶段）</a></li>
+    <li><a href="#s6">查询与答案链路</a></li>
+    <li><a href="#s7">Ontology 约束层</a></li>
+    <li><a href="#s8">评测体系</a></li>
+    <li><a href="#s9">项目运行流程与 CLI 命令</a></li>
+    <li><a href="#s10">部署与服务</a></li>
+    <li><a href="#s11">LLM 与 Provider 边界</a></li>
+    <li><a href="#s12">当前数据资产与状态</a></li>
+  </ol>
+</div>
+
+<!-- ============ S1 ============ -->
+<section id="s1">
+  <div class="sec-head">
+    <span class="num">01</span>
+    <h2>项目定位与核心理念</h2>
+    <span class="tag">Positioning</span>
+  </div>
+
+  <p>KB1 是一个面向<b>汽车行业标准文档</b>（QC/T 1036-2016、GB/T 18487 系列、ISO 14229 等）的企业知识库编译与检索系统。它把原始 PDF 标准文档编译成可追溯、可证据约束、可回归保护的结构化知识库，再对外提供查询与答案服务。</p>
+
+  <div class="callout">
+    <span class="ct">核心数据流</span>
+    <div class="flow">
+      <span class="phase">编译期:</span>
+      <span class="step">raw PDF</span><span class="arrow">→</span>
+      <span class="step">pages/blocks</span><span class="arrow">→</span>
+      <span class="step">evidence</span><span class="arrow">→</span>
+      <span class="step">facts</span><span class="arrow">→</span>
+      <span class="step">entities/wiki/graph</span><span class="arrow">→</span>
+      <span class="step">coverage/golden</span>
+      <br>
+      <span class="phase">运行期:</span>
+      <span class="step">retrieval</span><span class="arrow">→</span>
+      <span class="step">answer</span><span class="arrow">→</span>
+      <span class="step">evidence-constrained response</span>
+    </div>
+  </div>
+
+  <div class="grid3">
+    <div class="card green">
+      <h4>证据约束</h4>
+      <p class="muted" style="font-size:13px">答案只来自候选证据/事实/上下文。<code>evidence_judge</code> 是唯一事实裁决边界；LLM 不决定事实；证据不足必须降级而非补充。</p>
+    </div>
+    <div class="card accent">
+      <h4>可追溯</h4>
+      <p class="muted" style="font-size:13px">每条 fact → evidence → block → page → document 全链路溯源。source_units 是入库覆盖最小追踪单元，golden suite 提供回归保护。</p>
+    </div>
+    <div class="card purple">
+      <h4>闭环治理</h4>
+      <p class="muted" style="font-size:13px">六个闭环（入库/解析/召回/答案/回归/派生状态）持续度量与修复，证明系统"越改越稳"而非"看起来能跑"。</p>
+    </div>
+  </div>
+
+  <div class="callout yellow">
+    <span class="ct">设计原则</span>
+    <p style="font-size:13px">单节点优先，不引入分布式依赖；偏好的是<b>增量 schema 迁移</b>而非破坏性重置；跨每个处理阶段保留质量元数据；数据模型可从 <code>evidence</code> 追溯到 <code>facts</code> 再到 <code>wiki</code>。</p>
+  </div>
+</section>
+
+<!-- ============ S2 ============ -->
+<section id="s2">
+  <div class="sec-head">
+    <span class="num">02</span>
+    <h2>整体架构总览</h2>
+    <span class="tag">Architecture Overview</span>
+  </div>
+
+  <p>系统分为三大层：<b>编译层</b>（把 PDF 变成结构化知识库）、<b>查询层</b>（召回 + 证据裁判 + 答案组装）、<b>治理层</b>（六闭环 + 派生状态 + 评测）。所有数据落在一个主 SQLite 库 <code>knowledge_base/db/knowledge.db</code>，外加只读本体库 <code>ontology.db</code>。</p>
+
+  <div class="flow" style="line-height:2.2;font-size:12px">
+    <span class="phase">┌─ 编译层（CLI: build-document / build-batch）</span><br>
+    <span class="step">register</span><span class="arrow">→</span>
+    <span class="step">parse (PDF→pages→blocks)</span><span class="arrow">→</span>
+    <span class="step">quality</span><span class="arrow">→</span>
+    <span class="step">evidence</span><span class="arrow">→</span>
+    <span class="step">facts</span><span class="arrow">→</span>
+    <span class="step">entities</span><span class="arrow">→</span>
+    <span class="step">wiki</span><span class="arrow">→</span>
+    <span class="step">graph</span><span class="arrow">→</span>
+    <span class="step">coverage</span><span class="arrow">→</span>
+    <span class="step">acceptance</span><span class="arrow">→</span>
+    <span class="step">post_ingestion_gate</span><span class="arrow">→</span>
+    <span class="step">ontology terms</span>
+    <br><br>
+    <span class="phase">┌─ 查询层（CLI: answer-query / serve-api / serve-mcp）</span><br>
+    <span class="step">user query</span><span class="arrow">→</span>
+    <span class="step">query_rewrite</span><span class="arrow">→</span>
+    <span class="step">query_expansion</span><span class="arrow">→</span>
+    <span class="step">topic_resolution</span><span class="arrow">→</span>
+    <span class="step">retrieval_router (FTS+semantic+graph)</span><span class="arrow">→</span>
+    <span class="step">rerank</span><span class="arrow">→</span>
+    <span class="step">evidence_judge</span><span class="arrow">→</span>
+    <span class="step">answer_policy</span><span class="arrow">→</span>
+    <span class="step">answer_api response</span>
+    <br><br>
+    <span class="phase">┌─ 治理层（CLI: workspace-doctor / eval / prune-stale-runs）</span><br>
+    <span class="step">six loops dashboard</span><span class="arrow">→</span>
+    <span class="step">derived-state governance</span><span class="arrow">→</span>
+    <span class="step">golden suite + eval</span><span class="arrow">→</span>
+    <span class="step">repair tasks</span>
+  </div>
+
+  <h3>核心包结构</h3>
+  <table>
+    <thead><tr><th>模块</th><th>职责</th><th>关键文件</th></tr></thead>
+    <tbody>
+      <tr><td><code>cli</code></td><td>操作者命令入口（55 个子命令）</td><td><code>cli/</code> 子包</td></tr>
+      <tr><td><code>bootstrap</code></td><td>工作区初始化、schema 建立</td><td><code>bootstrap.py</code></td></tr>
+      <tr><td><code>db</code> + <code>migrations</code></td><td>SQLite 连接、schema.sql + NNN_*.sql 迁移</td><td><code>db.py</code>, <code>migrations.py</code></td></tr>
+      <tr><td><code>pipeline</code></td><td>文档编译 13 阶段编排、PipelineEvent 可观测</td><td><code>pipeline.py</code></td></tr>
+      <tr><td><code>parse</code> + <code>quality</code></td><td>PDF 解析（fast-text/OCR）、多视图选择、质量报告</td><td><code>parse.py</code>, <code>quality/</code></td></tr>
+      <tr><td><code>evidence</code> + <code>facts</code></td><td>证据抽取、事实构建（fact_payloads）</td><td><code>evidence.py</code>, <code>facts/</code></td></tr>
+      <tr><td><code>query_rewrite</code> + <code>query_expansion</code></td><td>查询改写、结构化扩写（带规则准入门）</td><td><code>query_rewrite.py</code>, <code>query_expansion.py</code></td></tr>
+      <tr><td><code>retrieval</code> + <code>retrieval_router</code></td><td>FTS5/语义/embedding 召回、路由</td><td><code>retrieval.py</code>, <code>retrieval_router.py</code></td></tr>
+      <tr><td><code>evidence_judge</code> + <code>answer_*</code></td><td>证据裁判 + 答案策略（17 个 answer_*.py 模块）</td><td><code>evidence_judge.py</code>, <code>answer_*.py</code></td></tr>
+      <tr><td><code>ontology_adapter</code></td><td>本体约束层（off/shadow/guard，只读）</td><td><code>ontology_adapter.py</code></td></tr>
+      <tr><td><code>evaluation</code></td><td>token_overlap 评测、golden suite、分片</td><td><code>evaluation/evaluator.py</code></td></tr>
+      <tr><td><code>derived_state</code> + <code>workspace_*</code></td><td>派生状态治理（FTS/运行/孤立数据）</td><td><code>derived_state.py</code>, <code>workspace_*.py</code></td></tr>
+      <tr><td><code>api_server</code></td><td>HTTP REST + MCP 服务</td><td><code>api_server/</code> 子包</td></tr>
+      <tr><td><code>kb1_ontology</code>（独立）</td><td>并行元域层（class/entity/relation/attribute）</td><td><code>src/kb1_ontology/</code></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ S3 ============ -->
+<section id="s3">
+  <div class="sec-head">
+    <span class="num">03</span>
+    <h2>六闭环架构</h2>
+    <span class="tag">Six Closed Loops</span>
+  </div>
+
+  <p>KB1 用六个闭环度量并修复系统。每个闭环有明确的关键对象、指标和修复动作，全部汇总到 <code>/closed-loop-dashboard</code>。这是"系统越改越稳"的核心机制。</p>
+
+  <div class="loop">
+    <div class="lh">
+      <span class="ln">LOOP 1</span>
+      <h4>入库闭环 · Ingestion-Coverage</h4>
+      <span class="st"><span class="badge b-green">P0 已落地</span></span>
+    </div>
+    <p class="muted" style="font-size:13px"><b>职责</b>：证明文档真的进来了，并定位未覆盖内容。<b>最小追踪单元</b>：<code>source_units</code>（4266 个），通过 <code>source_unit_fact_map</code> / <code>source_unit_evidence_map</code> 映射到 facts/evidence。<b>验收入口</b>：<code>validate-document-ingestion</code>。</p>
+    <p style="font-size:13px"><b>指标</b>：source_unit_coverage_rate <b>0.988</b>、evidence_coverage_rate <b>1.0</b>、fact_coverage_rate <b>1.0</b>、uncovered_units <b>26</b>（actionable 0，仅 test_gap_rejected）。</p>
+  </div>
+
+  <div class="loop" style="border-left-color:var(--blue)">
+    <div class="lh">
+      <span class="ln" style="background:var(--blue)">LOOP 2</span>
+      <h4>解析质量闭环 · Parse-Quality</h4>
+      <span class="st"><span class="badge b-blue">P1 已落地</span></span>
+    </div>
+    <p class="muted" style="font-size:13px"><b>职责</b>：把解析风险拆成可处理根因，避免低可读性页面被误当入库失败。PDF provider 路由用 fast-text-first（<code>_profile_pdf_text_layer</code> 统计覆盖率/可读性），不达标回退 minimax+astron+paddle 慢路径。多解析视图 <code>parse_views</code> + <code>page_parse_selection</code> 选最可靠视图。</p>
+    <p style="font-size:13px"><b>指标</b>：parse_risk_pages <b>120</b>、actionable_parse_risk_pages <b>0</b>。归因类型：provider_quality_issue / selection_rule_issue / extraction_chain_issue / review_only / test_coverage_gap。</p>
+  </div>
+
+  <div class="loop" style="border-left-color:var(--purple)">
+    <div class="lh">
+      <span class="ln" style="background:var(--purple)">LOOP 3</span>
+      <h4>召回闭环 · Retrieval-Quality</h4>
+      <span class="st"><span class="badge b-purple">P1 已落地</span></span>
+    </div>
+    <p class="muted" style="font-size:13px"><b>职责</b>：证明用户问法能找到正确内容并解释召回失败。召回路径：query_rewrite -> expansion -> topic_resolution -> graph_candidates -> retrieval_router -> rerank。<code>retrieval_runs.code_version</code> 是版本边界。</p>
+    <p style="font-size:13px"><b>指标</b>：Recall@5/10、MRR、nDCG@5、negative_hit_rate、must_hit_coverage、graph_retention_rate。Graph 是候选增强通道<b>非事实裁决</b>。</p>
+  </div>
+
+  <div class="loop" style="border-left-color:var(--orange)">
+    <div class="lh">
+      <span class="ln" style="background:var(--orange)">LOOP 4</span>
+      <h4>答案闭环 · Evidence-Constrained-Answer</h4>
+      <span class="st"><span class="badge b-orange">P1 已落地</span></span>
+    </div>
+    <p class="muted" style="font-size:13px"><b>职责</b>：让答案只基于候选证据输出，歧义先澄清，不让 LLM 直接决定事实。evidence shape contract -> evidence_judge -> answer_policy -> direct answer。<code>evidence_judge.sufficient=false</code> 是硬门（sufficient=False AND conf&lt;0.2 触发硬降级）。</p>
+    <p style="font-size:13px"><b>指标</b>：answer_pass_rate、citation_correct_rate、forbidden_contains_rate、answer_mode_accuracy、confidence_calibration。</p>
+  </div>
+
+  <div class="loop" style="border-left-color:var(--yellow)">
+    <div class="lh">
+      <span class="ln" style="background:var(--yellow);color:#0f1419">LOOP 5</span>
+      <h4>回归闭环 · Regression-Governance</h4>
+      <span class="st"><span class="badge b-yellow">P0 已落地</span></span>
+    </div>
+    <p class="muted" style="font-size:13px"><b>职责</b>：用 golden suite（1466 case）+ corpus eval + 失败归因证明系统越改越稳。<code>eval_runs.code_version</code> 是版本边界；历史 repair_tasks 只作 backlog。Golden 候选生成有 readiness/activation gate，LLM 不直接决定。</p>
+    <p style="font-size:13px"><b>指标</b>：new_failures、fixed_failures、stable_pass_rate、retrieval/answer_regression_count。</p>
+  </div>
+
+  <div class="loop" style="border-left-color:var(--cyan)">
+    <div class="lh">
+      <span class="ln" style="background:var(--cyan);color:#0f1419">LOOP 6</span>
+      <h4>派生状态治理闭环 · Derived-State-Governance</h4>
+      <span class="st"><span class="badge b-green">P1 已落地</span></span>
+    </div>
+    <p class="muted" style="font-size:13px"><b>职责</b>：发现、刷新、隔离过期派生数据（FTS 索引、retrieval/eval runs、孤立 DB 文件）。<code>DerivedStateSpec</code> registry + <code>check_derived_state</code> 返回 fresh/stale/missing。<b>全部 dry-run 默认</b>，严格安全边界（不删 golden/repair/facts/evidence/wiki/graph）。</p>
+    <p style="font-size:13px"><b>工具</b>：workspace-doctor（只读诊断）、workspace-governance（策略编排）、rebuild-derived-state（显式修复）、prune-stale-runs（运行派生物治理）、quarantine-suspicious-db-files（可疑 DB 隔离）。</p>
+  </div>
+
+  <div class="callout">
+    <span class="ct">闭环依赖关系</span>
+    <p style="font-size:13px">入库闭环是<b>所有闭环的前置基础</b>；回归闭环依赖召回+答案闭环产出；本体层是长期目标，依赖所有 P1 闭环稳定。解析依赖入库；召回依赖解析；答案依赖召回。</p>
+  </div>
+</section>
+
+<!-- ============ S4 ============ -->
+<section id="s4">
+  <div class="sec-head">
+    <span class="num">04</span>
+    <h2>数据模型与流转</h2>
+    <span class="tag">Data Model</span>
+  </div>
+
+  <p>主库 <code>knowledge_base/db/knowledge.db</code>（272MB）持有 30+ 张表。核心数据按 <code>document -> page -> block -> evidence -> fact</code> 链路组织，并衍生出 entities/wiki/graph/source_units/golden。</p>
+
+  <h3>核心主数据链路</h3>
+  <div class="flow" style="font-size:12px;line-height:2.4">
+    <span class="step">documents</span><span class="arrow">-></span>
+    <span class="step">pages (parse_views/page_parse_selection)</span><span class="arrow">-></span>
+    <span class="step">blocks</span><span class="arrow">-></span>
+    <span class="step">evidence</span><span class="arrow">-></span>
+    <span class="step">facts</span>
+    <br>
+    <span class="step">facts</span> <span class="arrow">--fact_evidence_map--></span> <span class="step">evidence</span>
+    <span class="arrow">|</span>
+    <span class="step">facts</span> <span class="arrow">--></span> <span class="step">entities</span> <span class="arrow">--graph_edges/edge_evidence_map--></span> <span class="step">graph</span>
+    <span class="arrow">|</span>
+    <span class="step">entities/facts</span> <span class="arrow">--></span> <span class="step">wiki_pages (+ wiki_chunks/embeddings)</span>
+    <br>
+    <span class="step">source_units</span> <span class="arrow">--source_unit_fact_map/source_unit_evidence_map--></span> <span class="step">facts/evidence</span> <span class="arrow">--></span> <span class="step">coverage</span>
+    <span class="arrow">|</span>
+    <span class="step">source_units + eval failures</span> <span class="arrow">--></span> <span class="step">golden_cases (corpus_eval/generated)</span>
+  </div>
+
+  <h3>关键表清单</h3>
+  <table>
+    <thead><tr><th>表</th><th>角色</th><th>当前行数</th></tr></thead>
+    <tbody>
+      <tr><td><code>documents</code></td><td>注册的标准文档（16 篇）</td><td>16</td></tr>
+      <tr><td><code>pages</code> / <code>blocks</code></td><td>解析产物：页面 / 文本块</td><td>1668 / 31260</td></tr>
+      <tr><td><code>evidence</code></td><td>归一化证据（带 evidence_fts）</td><td>29988</td></tr>
+      <tr><td><code>facts</code></td><td>结构化事实（fact_type + fact_status）</td><td>7636</td></tr>
+      <tr><td><code>entities</code> / <code>graph_edges</code></td><td>实体与关系图</td><td>1047 / 1204</td></tr>
+      <tr><td><code>wiki_pages</code> / <code>wiki_chunks</code></td><td>编译的 wiki + 语义检索分块</td><td>1893 / (语义检索)</td></tr>
+      <tr><td><code>source_units</code> + 2 张 map</td><td>覆盖追踪最小单元</td><td>4266</td></tr>
+      <tr><td><code>golden_cases</code></td><td>回归保护用例</td><td>1466</td></tr>
+      <tr><td><code>retrieval_runs</code> / <code>eval_runs</code> / <code>eval_results</code></td><td>运行派生物（带 code_version）</td><td>治理对象</td></tr>
+      <tr><td><code>expected_points</code></td><td>评测期望点（migrations/001 定义）</td><td>17 docs</td></tr>
+      <tr><td><code>repair_tasks</code> / <code>audit_log</code> / <code>jobs</code></td><td>治理与后台任务</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout yellow">
+    <span class="ct">FTS 派生索引（4 张）</span>
+    <p style="font-size:13px"><code>evidence_fts</code>、<code>facts_fts</code>、<code>wiki_fts</code>、<code>wiki_chunks_fts</code> 由 <code>_refresh_fts_index</code> 从主表重建，freshness 由 <code>logs/fts_index.stamp</code> 记录。检索主链路有 FTS freshness guard：缺失/过期时自动重建，避免看见陈旧索引。</p>
+  </div>
+</section>
+
+<!-- ============ S5 ============ -->
+<section id="s5">
+  <div class="sec-head">
+    <span class="num">05</span>
+    <h2>文档入库 Pipeline（13 阶段）</h2>
+    <span class="tag">Ingestion Pipeline</span>
+  </div>
+
+  <p>文档编译由 <code>pipeline._run_document_pipeline_unprotected</code> 编排，按顺序执行 13 个阶段。每阶段通过统一 <code>PipelineEvent</code> 上报进度（CLI <code>--progress</code> 和 API background job 消费同一套事件）。任一阶段失败即中断，最后一条 stage event 是定位根因的第一证据。</p>
+
+  <table>
+    <thead><tr><th>阶段</th><th>名称</th><th>产物</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><code>register</code></td><td>documents 表登记源文档</td></tr>
+      <tr><td>2</td><td><code>parse</code></td><td>pages + blocks（PDF->文本块，fast-text/OCR 路由）</td></tr>
+      <tr><td>3</td><td><code>quality</code></td><td>quality_reports + parse_risk_profile</td></tr>
+      <tr><td>4</td><td><code>evidence</code></td><td>evidence 表 + evidence_fts</td></tr>
+      <tr><td>5</td><td><code>facts</code></td><td>facts 表（fact_type 分类）+ fact_evidence_map</td></tr>
+      <tr><td>6</td><td><code>entities</code></td><td>entities 表 + fact 关联</td></tr>
+      <tr><td>7</td><td><code>wiki</code></td><td>wiki_pages + wiki_chunks（语义分块）</td></tr>
+      <tr><td>8</td><td><code>graph</code></td><td>graph_edges + edge_evidence_map</td></tr>
+      <tr><td>9</td><td><code>coverage</code></td><td>source_units + 映射表 + 覆盖报告</td></tr>
+      <tr><td>10</td><td><code>ingestion_acceptance</code></td><td>验收报告（文档能否跑完整过程的主证据）</td></tr>
+      <tr><td>11</td><td><code>golden</code></td><td>golden 候选生成/激活</td></tr>
+      <tr><td>12</td><td><code>post_ingestion_gate</code></td><td>5 步质量门：fts_refresh / expected_points_generation / term_definition_sync / sanity_check / wiki_coverage_check（best-effort，从不阻塞 pipeline）</td></tr>
+      <tr><td>13</td><td><code>ontology terms/params</code></td><td>从文档抽取本体术语与参数（best-effort）</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <span class="ct">知识类型合同层</span>
+    <p style="font-size:13px"><code>knowledge_contracts</code> 按 <code>standard_metadata / definition / parameter / process_activity / requirement / test_method</code> 声明 source unit 类型、fact types、expected evidence shape 和 golden 一致性要求。合同检查"文档里已出现的知识类型"是否从 source_unit 追溯到 evidence/fact 并进入 golden 回归保护，<code>failed</code>=链路断裂，<code>warn</code>=链路可用但未完整产品化。</p>
+  </div>
+
+  <h3>典型编译命令</h3>
+  <pre><code># 单文档全流程编译（register 到 golden）
+python -m enterprise_agent_kb.cli --root knowledge_base build-document --doc-id DOC-000002
+
+# 批量编译
+python -m enterprise_agent_kb.cli --root knowledge_base build-batch
+
+# 仅解析/转换（停在 normalized 输出）
+python -m enterprise_agent_kb.cli --root knowledge_base convert-document --doc-id DOC-000002</code></pre>
+</section>
+
+<!-- ============ S6 ============ -->
+<section id="s6">
+  <div class="sec-head">
+    <span class="num">06</span>
+    <h2>查询与答案链路</h2>
+    <span class="tag">Query &amp; Answer Chain</span>
+  </div>
+
+  <p>查询链路从用户问题到可解释答案，全程遵守 LLM 边界：LLM 可扩写检索计划但保留硬锚点；Evidence Judge 只在候选 ID 集合内裁判；Answer API 不把 LLM 输出当最终事实。</p>
+
+  <div class="flow" style="font-size:12px;line-height:2.6">
+    <span class="step">user query</span>
+    <span class="arrow">-></span>
+    <span class="step">短缩写歧义? yes -> clarification_required</span>
+    <span class="arrow">-> no -></span>
+    <span class="step">query_rewrite</span>
+    <span class="arrow">-></span>
+    <span class="step">query_expansion (规则准入门 + fallback)</span>
+    <span class="arrow">-></span>
+    <span class="step">advanced_query_planner (默认关闭)</span>
+    <span class="arrow">-></span>
+    <span class="step">topic_resolution</span>
+    <br>
+    <span class="step">topic_resolution</span>
+    <span class="arrow">-></span>
+    <span class="step">graph_retrieval (候选增强)</span>
+    <span class="arrow">+ -></span>
+    <span class="step">retrieval_router (FTS + semantic + embedding)</span>
+    <span class="arrow">-></span>
+    <span class="step">BP sibling expansion (topN 前)</span>
+    <span class="arrow">-></span>
+    <span class="step">rerank (rerank_explanations)</span>
+    <span class="arrow">-></span>
+    <span class="step">query context + retrieval_runs</span>
+    <br>
+    <span class="step">context</span>
+    <span class="arrow">-></span>
+    <span class="step">evidence shape contract</span>
+    <span class="arrow">-></span>
+    <span class="step">evidence_judge (sufficient/confidence)</span>
+    <span class="arrow">-></span>
+    <span class="step">answer_policy</span>
+    <span class="arrow">-></span>
+    <span class="step">direct_answer + supporting_facts/evidence</span>
+    <span class="arrow">+ ontology post_check (guard)</span>
+  </div>
+
+  <h3>关键入口</h3>
+  <table>
+    <thead><tr><th>入口</th><th>作用</th></tr></thead>
+    <tbody>
+      <tr><td><code>query_api.build_query_context</code></td><td>构建结构化召回上下文；短缩写歧义先返回 clarification（不写 retrieval_runs）</td></tr>
+      <tr><td><code>answer_api.answer_query</code></td><td>构建可解释答案；含 ontology post_check 与 warnings</td></tr>
+      <tr><td><code>query_expansion.expand_query</code></td><td>结构化扩写，带规则准入门和 fallback</td></tr>
+      <tr><td><code>evidence_judge.judge_evidence</code></td><td>按 evidence shape + 候选约束判定证据是否足够</td></tr>
+    </tbody>
+  </table>
+
+  <h3>answer_api 模块化（17 个模块）</h3>
+  <p class="muted" style="font-size:13px">原 ~3200 行 answer_api.py 已拆为：<code>answer_policy</code>、<code>answer_fact_ranking</code>、<code>answer_process</code>、<code>answer_definition</code>、<code>answer_subgraph</code>、<code>answer_standard</code>、<code>answer_parameter</code>、<code>answer_comparison</code>、<code>answer_constraint</code>、<code>answer_context_routing</code>、<code>answer_evidence_selection</code>、<code>answer_query_parsing</code>、<code>answer_quality</code>、<code>answer_feedback</code>、<code>answer_utils</code> + <code>api_server/</code> 子包。</p>
+
+  <div class="callout green">
+    <span class="ct">LLM 边界（硬约束）</span>
+    <p style="font-size:13px">① Query Expansion 可扩写检索计划但必须保留硬锚点；② Advanced Query Planner 默认关闭；③ Evidence Judge 只在候选 fact/evidence ID 集合内裁判；④ Answer API 不把 LLM 输出当最终事实来源；⑤ 短缩写定义查询先歧义澄清/规则回退，不先交 LLM 扩写；⑥ Graph 是候选增强非事实裁决。</p>
+  </div>
+
+  <div class="callout yellow">
+    <span class="ct">已知边界规则</span>
+    <p style="font-size:13px">标准号查询（GB/T/GBT/GB/ISO/IEC）必须先解析 standard/document 实体，不沿 has_process 扩散；生命周期 BP sibling 扩展须在 topN 截断前；参数召回须同时满足对象锚点 + 物理量意图；定义查询术语召回：短缩写走 acronym 分支，无缩写才走中文长术语分支（Sprint 2 修复）。</p>
+  </div>
+</section>
+
+<!-- ============ S7 ============ -->
+<section id="s7">
+  <div class="sec-head">
+    <span class="num">07</span>
+    <h2>Ontology 约束层</h2>
+    <span class="tag">Ontology Layer</span>
+  </div>
+
+  <p>KB1 有两个相互独立但已最小接入的本体系统：<b>主链路 ontology_adapter</b>（约束层，ADR 0003）和<b>独立 kb1_ontology</b>（元域层，8041 LOC）。</p>
+
+  <div class="grid2">
+    <div class="card purple">
+      <h4>ontology_adapter（主链路约束层）</h4>
+      <p class="muted" style="font-size:13px">连接只读 <code>ontology.db</code>（3.6MB，13 表：class_def/entity/term/relation/attribute 等）。三模式 <code>OntologyMode</code>：<b>off</b>（默认，零开销）/ <b>shadow</b>（只读信号）/ <b>guard</b>（post_check 警告）。</p>
+      <p style="font-size:13px"><b>产出</b>：<code>OntologySignal</code>（query_entities、relation_checks、post_checks、changed_retrieval=False、changed_answer=False）。已在 <code>build_query_context</code> 和 <code>answer_api._compose_final_answer</code> 两处接入。</p>
+    </div>
+    <div class="card accent">
+      <h4>kb1_ontology（独立元域层）</h4>
+      <p class="muted" style="font-size:13px">8041 LOC，phase 0-6 全完成。子包：class_registry / entity_manager / relation_registry / attribute_store。含 ADR 0001（元域层规则）、ADR 0002（两级归一化）。</p>
+      <p style="font-size:13px"><b>当前状态</b>：结构正确但功能受限——364 个 entity 共享单类 <code>CLS-OBC-STANDARD</code>，relation_checks 恒空，guard post_check 从不告警。更丰富信号需 ontology.db 增加类多样性。</p>
+    </div>
+  </div>
+
+  <div class="callout red">
+    <span class="ct">ADR 0003：本体是约束/校验层 only（永久约束）</span>
+    <p style="font-size:13px">① 不生成事实；② 不绕过 evidence_judge；③ <b>Sprint 2 不改答案</b>（<code>answer_changed_by_ontology=false</code>，Sprint 3 起需独立 ADR 才可放松）；④ adapter 内无 LLM；⑤ 不引入 OWL/RDF 或重型图数据库；⑥ ontology.db 不作主事实存储。约束 1/2/4/6 永久，约束 3 可经独立 ADR 放松。</p>
+  </div>
+</section>
+
+<!-- ============ S8 ============ -->
+<section id="s8">
+  <div class="sec-head">
+    <span class="num">08</span>
+    <h2>评测体系</h2>
+    <span class="tag">Evaluation</span>
+  </div>
+
+  <p>评测用确定性 token_overlap 覆盖率（无 LLM）作为主口径，<code>COVERAGE_THRESHOLD=0.30</code>，pass_rate = passed/total。问题从 <code>expected_points</code> 表确定性生成（含噪声过滤），跨文档轮询采样。</p>
+
+  <div class="stats-row">
+    <div class="stat"><b>0.40</b><span>20 题真实 pass_rate</span></div>
+    <div class="stat"><b>0</b><span>artifact（反 metric-gaming）</span></div>
+    <div class="stat"><b>453s</b><span>20 题耗时（原 20+min）</span></div>
+    <div class="stat"><b>0.20</b><span>CI smoke floor</span></div>
+    <div class="stat"><b>87</b><span>题池（噪声过滤后）</span></div>
+    <div class="stat"><b>104</b><span>full golden 题数</span></div>
+  </div>
+
+  <h3>三层 Gate</h3>
+  <table>
+    <thead><tr><th>Gate</th><th>含义</th><th>当前</th></tr></thead>
+    <tbody>
+      <tr><td>Baseline lock</td><td>不回归（硬门）</td><td><span class="badge b-green">0.40 通过</span></td></tr>
+      <tr><td>Promotion gate</td><td>0.65-0.85</td><td><span class="badge b-yellow">未达（0.40）</span></td></tr>
+      <tr><td>Release gate</td><td>跨文档 eval + citation + unsupported-claim 检测</td><td><span class="badge b-yellow">Sprint 4</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="grid2">
+    <div class="card green">
+      <h4>反 metric-gaming 机制</h4>
+      <p style="font-size:13px">① <code>_is_noise_expected_point</code> 在题生成顶部跳过噪声点（封面/页眉/SC 码/英文片段），题池 100->87；② <code>_is_degraded_answer</code> 让降级答案强制 cov=0，消除降级文本与英文 expected_point 共享 token 的假通过。</p>
+    </div>
+    <div class="card accent">
+      <h4>104 题分片（WP8）</h4>
+      <p style="font-size:13px"><code>eakb eval shard-run --shard-index I --shard-count N --output PATH</code> + <code>merge-shards</code>。轮询采样后切连续分片，<code>to_full_dict</code> 持久化 per_question，<code>merge_shard_results</code> 纯算术重聚合。</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="ct">安全诊断（WP4，只读）</span>
+    <p style="font-size:13px"><code>answer_safety.diagnose_answer_safety</code> 计算 citation_correct / unsupported_claim / title_block_citation / degraded_answer 四个 flag，集成进 EvalResult 的 <code>safety_metrics</code>。纯 Python、确定性、不调 LLM、不写 DB、不改答案。</p>
+  </div>
+</section>
+
+<!-- ============ S9 ============ -->
+<section id="s9">
+  <div class="sec-head">
+    <span class="num">09</span>
+    <h2>项目运行流程与 CLI 命令</h2>
+    <span class="tag">Run Workflow</span>
+  </div>
+
+  <p>CLI 入口是 <code>python -m enterprise_agent_kb.cli</code>（console script <code>eakb = cli:main</code>，eakb 不在 PATH 需全 Python 调用）。共 55 个子命令，按功能分组：</p>
+
+  <h3>典型运行流程</h3>
+  <div class="flow" style="font-size:12px;line-height:2.4">
+    <span class="phase">1. 初始化:</span>
+    <span class="step">init</span><span class="arrow">-></span>
+    <span class="step">register (源文档)</span>
+    <br>
+    <span class="phase">2. 编译:</span>
+    <span class="step">build-document / build-batch</span><span class="arrow">(13 阶段)</span>
+    <br>
+    <span class="phase">3. 验收:</span>
+    <span class="step">validate-document-ingestion</span><span class="arrow">-></span>
+    <span class="step">document-diagnostics</span><span class="arrow">-></span>
+    <span class="step">uncovered-priority-report</span>
+    <br>
+    <span class="phase">4. 治理:</span>
+    <span class="step">workspace-doctor</span><span class="arrow">-></span>
+    <span class="step">workspace-governance</span><span class="arrow">-></span>
+    <span class="step">rebuild-derived-state / prune-stale-runs</span>
+    <br>
+    <span class="phase">5. 查询:</span>
+    <span class="step">answer-query / query-context / agent-query / search</span>
+    <br>
+    <span class="phase">6. 评测:</span>
+    <span class="step">eval run-now / shard-run / merge-shards</span><span class="arrow">-></span>
+    <span class="step">run-corpus-retrieval-eval / generate-golden-candidates</span>
+    <br>
+    <span class="phase">7. 服务:</span>
+    <span class="step">serve-api (HTTP) / serve-mcp</span>
+  </div>
+
+  <h3>命令分组（55 个子命令）</h3>
+  <table>
+    <thead><tr><th>分组</th><th>命令</th></tr></thead>
+    <tbody>
+      <tr><td><b>工作区/治理</b></td><td><code>init</code> <code>status</code> <code>workspace-doctor</code> <code>workspace-governance</code> <code>rebuild-derived-state</code> <code>prune-stale-runs</code> <code>quarantine-suspicious-db-files</code> <code>reset-workspace</code></td></tr>
+      <tr><td><b>编译</b></td><td><code>register</code> <code>parse-document</code> <code>convert-document</code> <code>build-document</code> <code>build-file</code> <code>build-document-and-test</code> <code>build-file-and-test</code> <code>build-batch</code> <code>run-jobs</code></td></tr>
+      <tr><td><b>阶段单步</b></td><td><code>quality-document</code> <code>quality-batch</code> <code>build-evidence</code> <code>build-facts</code> <code>build-entities</code> <code>build-wiki</code> <code>build-graph</code> <code>graph-report</code> <code>build-coverage</code></td></tr>
+      <tr><td><b>覆盖/golden</b></td><td><code>build-test-gaps</code> <code>generate-coverage-test-drafts</code> <code>close-coverage-test-gaps</code> <code>validate-coverage-test-drafts</code> <code>assess-coverage-test-draft-readiness</code> <code>promote-coverage-test-drafts</code> <code>run-coverage-promoted-tests</code> <code>auto-close-coverage</code> <code>revalidate-golden</code> <code>generate-golden-candidates</code></td></tr>
+      <tr><td><b>诊断</b></td><td><code>document-diagnostics</code> <code>parse-risk-actions</code> <code>parse-risk-repair-review</code> <code>validate-document-ingestion</code> <code>uncovered-priority-report</code> <code>build-quality</code> <code>check-quality</code></td></tr>
+      <tr><td><b>查询</b></td><td><code>search</code> <code>query-context</code> <code>answer-query</code> <code>agent-query</code></td></tr>
+      <tr><td><b>评测</b></td><td><code>eval</code>（run-now/shard-run/merge-shards/eval-mode）<code>run-query-repair-smoke</code> <code>run-user-query-retrieval-eval</code> <code>generate-corpus-eval-cases</code> <code>run-corpus-retrieval-eval</code></td></tr>
+      <tr><td><b>服务</b></td><td><code>serve-api</code> <code>serve-mcp</code></td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout yellow">
+    <span class="ct">常用命令</span>
+    <pre style="margin:8px 0 0;background:none;border:none;padding:0"><code># 查询
+python -m enterprise_agent_kb.cli --root knowledge_base answer-query --query "什么是控制导引电路？"
+
+# 评测（性能模式）
+EAKB_DISABLE_EMBEDDING_SEARCH=1 EAKB_DISABLE_SEMANTIC_SEARCH=1 EAKB_ENABLE_LLM_EVIDENCE_JUDGE=0 \
+  python -m enterprise_agent_kb.cli --root knowledge_base eval run-now --suite golden --version v1 --max-questions 20
+
+# 健康检查
+python scripts/check_health.py --root knowledge_base</code></pre>
+  </div>
+</section>
+
+<!-- ============ S10 ============ -->
+<section id="s10">
+  <div class="sec-head">
+    <span class="num">10</span>
+    <h2>部署与服务</h2>
+    <span class="tag">Deployment</span>
+  </div>
+
+  <p>KB1 是<b>单节点优先</b>系统，不引入分布式依赖。生产数据落在本地 SQLite，对外通过 HTTP REST 和 MCP 两种服务暴露。</p>
+
+  <div class="grid2">
+    <div class="card accent">
+      <h4>HTTP REST API</h4>
+      <p style="font-size:13px"><code>serve-api</code> 启动 FastAPI 服务。<code>api_server/</code> 子包含 <code>_request_handlers.py</code>（1596 行，最大单文件）。关键端点：<code>/health</code>、<code>/closed-loop-dashboard</code>（六闭环只读看板）、<code>/answer</code>、<code>/query-context</code>。支持后台 job（<code>run-jobs</code>）。</p>
+    </div>
+    <div class="card purple">
+      <h4>MCP 服务</h4>
+      <p style="font-size:13px"><code>serve-mcp</code> 暴露 MCP tool（如 <code>answer_query</code>），供 agent 调用。MCP 测试是回归保护的一部分（Sprint 2 修复的定义查询 xfail 即通过 MCP tool 验证）。</p>
+    </div>
+  </div>
+
+  <h3>本地运行环境</h3>
+  <table>
+    <thead><tr><th>项</th><th>值</th></tr></thead>
+    <tbody>
+      <tr><td>工作目录</td><td><code>E:\AI_Project\opencode_workspace\KB1</code></td></tr>
+      <tr><td>Python</td><td><code>C:\Python314\python.exe</code>（要求 ≥3.11）</td></tr>
+      <tr><td>知识库根</td><td><code>knowledge_base</code>（CLI 需显式 <code>--root knowledge_base</code>）</td></tr>
+      <tr><td>主库</td><td><code>knowledge_base/db/knowledge.db</code>（272MB，<b>非</b> knowledge_base/knowledge.db 0 字节垃圾文件）</td></tr>
+      <tr><td>本体库</td><td><code>ontology.db</code>（3.6MB，只读）</td></tr>
+      <tr><td>API 启动</td><td><code>python -m enterprise_agent_kb.cli --root knowledge_base serve-api --host 127.0.0.1 --port 8000</code></td></tr>
+      <tr><td>健康检查</td><td><code>http://127.0.0.1:8000/health</code>（10/10 PASS）</td></tr>
+      <tr><td>CI</td><td><code>.github/workflows/tests.yml</code>：fast tests (3.11/3.12/3.13) + integration (3.12) + benchmark (3.12) + eval-suite (3.12, --max-questions 20)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout green">
+    <span class="ct">当前测试状态</span>
+    <p style="font-size:13px">Fast suite：<b>716+ passed / 0 failed / 0 xfailed</b>（默认 deselect integration+benchmark）。check_health <b>10/10 PASS</b>。CI eval-suite 用 <code>--min-token-pass 0.20</code> 保守 smoke floor。</p>
+  </div>
+</section>
+
+<!-- ============ S11 ============ -->
+<section id="s11">
+  <div class="sec-head">
+    <span class="num">11</span>
+    <h2>LLM 与 Provider 边界</h2>
+    <span class="tag">LLM Boundary</span>
+  </div>
+
+  <p>KB1 区分两套独立的 provider 路由：<b>文本 LLM</b>（统一单 provider）和 <b>PDF 解析 OCR</b>（多 provider）。两者互不影响。</p>
+
+  <div class="grid2">
+    <div class="card green">
+      <h4>文本 LLM（统一 provider）</h4>
+      <p style="font-size:13px"><code>get_text_llm_settings()</code> 读 <code>ANTHROPIC_BASE_URL</code>（api_base）/ <code>ANTHROPIC_AUTH_TOKEN</code> 或 <code>ANTHROPIC_API_KEY</code>（key）/ <code>TEXT_LLM_MODEL</code> 或 <code>CLAUDE_MODEL</code>（默认 claude-3-5-sonnet）。</p>
+      <p style="font-size:13px"><b>单 provider 契约</b>：已移除 minimax->astron 两段 fallback。本地 Anthropic 兼容代理识别 Claude 模型名（路由到 GLM），拒绝厂商名如 astron-code-latest。详见 <code>docs/dev/llm-provider-policy.md</code>。</p>
+    </div>
+    <div class="card orange">
+      <h4>PDF 解析 OCR（多 provider）</h4>
+      <p style="font-size:13px"><code>parse._profile_pdf_text_layer</code> 统计文本覆盖率/可读性/符号率。fast-text-first：<b>覆盖率+可读性同时达标</b>才用 <code>pymupdf_fast_text</code>；否则回退 <code>minimax_primary + astron_backup + paddlevl</code> 慢路径。</p>
+      <p style="font-size:13px">PyMuPDF fast text 非"裸文本直通"--会按章节号/附录号/步骤号拆 heading/paragraph blocks，保证 procedure/requirement/section facts 可从数字 PDF 形成独立知识单元。</p>
+    </div>
+  </div>
+
+  <h3>eval 性能开关（环境变量）</h3>
+  <table>
+    <thead><tr><th>环境变量</th><th>作用</th><th>默认</th></tr></thead>
+    <tbody>
+      <tr><td><code>EAKB_DISABLE_EMBEDDING_SEARCH=1</code></td><td>跳过 SentenceTransformer embedding 搜索（每次调用重载模型，慢）</td><td>off（启用）</td></tr>
+      <tr><td><code>EAKB_DISABLE_SEMANTIC_SEARCH=1</code></td><td>跳过 TF-IDF cosine 语义通道</td><td>off（启用）</td></tr>
+      <tr><td><code>EAKB_ENABLE_LLM_EVIDENCE_JUDGE=0</code></td><td>禁用 evidence judge 的 LLM override（确定性评测）</td><td>off（启用 LLM override）</td></tr>
+      <tr><td><code>EAKB_ENABLE_ADVANCED_QUERY_PLANNER=1</code></td><td>启用实验性多视角查询规划</td><td>off（关闭）</td></tr>
+      <tr><td><code>KB1_ONTOLOGY_MODE=off|shadow|guard</code></td><td>本体约束层模式</td><td>off</td></tr>
+      <tr><td><code>EVAL_USE_LLM=1</code></td><td>评测启用 LLM judge（辅助非阻塞）</td><td>0（token_overlap）</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ S12 ============ -->
+<section id="s12">
+  <div class="sec-head">
+    <span class="num">12</span>
+    <h2>当前数据资产与状态</h2>
+    <span class="tag">Current State</span>
+  </div>
+
+  <p>截至 2026-07-09（Sprint 3 完成，HEAD 293babd），系统处于可运行、可追溯、可演进状态。</p>
+
+  <div class="stats-row" style="grid-template-columns:repeat(6,1fr)">
+    <div class="stat"><b>16</b><span>documents</span></div>
+    <div class="stat"><b>1668</b><span>pages</span></div>
+    <div class="stat"><b>31260</b><span>blocks</span></div>
+    <div class="stat"><b>29988</b><span>evidence</span></div>
+    <div class="stat"><b>7636</b><span>facts</span></div>
+    <div class="stat"><b>1047</b><span>entities</span></div>
+  </div>
+  <div class="stats-row" style="grid-template-columns:repeat(6,1fr);margin-top:12px">
+    <div class="stat"><b>1204</b><span>graph_edges</span></div>
+    <div class="stat"><b>1893</b><span>wiki_pages</span></div>
+    <div class="stat"><b>4266</b><span>source_units</span></div>
+    <div class="stat"><b>1466</b><span>golden_cases</span></div>
+    <div class="stat"><b>716+</b><span>tests passed</span></div>
+    <div class="stat"><b>0.40</b><span>eval pass_rate</span></div>
+  </div>
+
+  <h3>Sprint 演进轨迹</h3>
+  <table>
+    <thead><tr><th>Sprint</th><th>主题</th><th>关键成果</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr><td>Sprint 1</td><td>稳定化与恢复绿灯</td><td>WIP 分批提交 + safety tag；8 失败收口；eval baseline 固定；命名统一</td><td><span class="badge b-green">完成</span></td></tr>
+      <tr><td>Sprint 2</td><td>定义查询修复 + Ontology 最小接入 + Eval 诚实化</td><td>67+ commit push origin；MCP xfail 解除；ontology off/shadow/guard；eval 诚实锁定 0.30（0.60 是单文档偶然）</td><td><span class="badge b-green">完成</span></td></tr>
+      <tr><td>Sprint 3</td><td>答案质量驱动的 Eval 提分</td><td>首提真实提分 0.30->0.40（0 artifact）；orphan 治理；104 题分片；性能修复 20q 20+min->7.5min</td><td><span class="badge b-green">完成</span></td></tr>
+      <tr><td>Sprint 4</td><td>Gate 1 提分 0.40->0.65-0.85</td><td>P1 full-payload anchor 匹配；V2G wording 对齐；ontology class 多样性；full 104q baseline</td><td><span class="badge b-yellow">待启动</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout yellow">
+    <span class="ct">已知风险与遗留</span>
+    <p style="font-size:13px">① <b>唯一中高优先级风险</b>：eval 真实基线 0.40 距 promotion gate 0.65-0.85 仍差 0.25（需 P1 full-payload anchor，Sprint 4）；② ontology.db 364 entity 单类，A/B filtering 结构性 no-op；③ CI eval-suite 走 GitHub Actions windows-latest。</p>
+  </div>
+
+  <div class="callout">
+    <span class="ct">关联文档</span>
+    <p style="font-size:13px">架构：<code>.codestable/architecture/closed-loop-architecture.md</code>、<code>query-chain-architecture.md</code>；愿景：<code>.codestable/requirements/VISION.md</code>；评测策略：<code>docs/dev/eval-baseline-policy.md</code>；LLM 策略：<code>docs/dev/llm-provider-policy.md</code>；本体 ADR：<code>docs/ontology/adr/0003-ontology-constraint-layer-only.md</code>；阶段评审：<code>docs/kb1_project_review_2026-06-24.html</code>；Sprint 3 验收：<code>docs/dev/sprint3-answer-quality/sprint3_acceptance_report.md</code>。</p>
+  </div>
+</section>
+
+<div style="text-align:center;color:var(--text3);font-size:12px;padding:24px 0;border-top:1px solid var(--border);margin-top:12px">
+  KB1 整体架构与项目运行流程 · 生成于 2026-07-09 · 基于 HEAD 293babd (Sprint 3 完成)
+</div>
+
+</div>
+</body>
+</html>
