@@ -67,6 +67,7 @@ class RequirementExtractionService:
     """
 
     ATOM_RULES: tuple[dict[str, Any], ...] = (
+        # --- DCDC electrical parameters (original MVP rules) ---
         {
             "atom_id": "REQATOM-DCDC-OUTPUT-RIPPLE",
             "aliases": ("输出纹波", "纹波电压", "纹波", "output ripple", "ripple"),
@@ -84,6 +85,125 @@ class RequirementExtractionService:
             "aliases": ("休眠电流", "静态电流", "sleep current"),
             "default_unit": "mA",
             "parameter_name": "sleep_current",
+        },
+        # --- CCU VAVE spec: signal detection (SC41003) ---
+        {
+            "atom_id": "REQATOM-CCU-CC-CP-DETECT",
+            "aliases": ("CC 和CP 信号检测", "CC/CP 信号", "CC CP 检测", "CC和CP"),
+            "default_unit": "V",
+            "parameter_name": "cc_cp_signal_detect",
+        },
+        # --- CCU VAVE spec: V2L/V2V capability (SC41011) ---
+        {
+            "atom_id": "REQATOM-CCU-V2L-V2V-CAPABILITY",
+            "aliases": ("V2L/V2V 能力", "V2L V2V", "V2L能力", "V2V能力", "V2L/V2V"),
+            "default_unit": None,
+            "parameter_name": "v2l_v2v_capability",
+        },
+        # --- CCU VAVE spec: network management wakeup/sleep (SC03003) ---
+        {
+            "atom_id": "REQATOM-CCU-NM-WAKEUP-SLEEP",
+            "aliases": ("主动唤醒网络和休眠", "网络管理唤醒", "NM 唤醒", "同步唤醒和休眠", "CAN NM"),
+            "default_unit": "ms",
+            "parameter_name": "nm_wakeup_sleep",
+        },
+        # --- CCU VAVE spec: OBC charge control ---
+        {
+            "atom_id": "REQATOM-CCU-OBC-STOP-CHARGE",
+            "aliases": ("OBC 停止充电", "停止充电", "OBC停止", "stop charging"),
+            "default_unit": None,
+            "parameter_name": "obc_stop_charge",
+        },
+        {
+            "atom_id": "REQATOM-CCU-OBC-OUTPUT-POWER",
+            "aliases": ("OBC 输出功率", "输出功率", "OBC功率", "output power"),
+            "default_unit": "kW",
+            "parameter_name": "obc_output_power",
+        },
+        # --- CCU VAVE spec: DCDC discharge control (SC44040/SC44034) ---
+        {
+            "atom_id": "REQATOM-CCU-DCDC-ACTIVE-DISCHARGE",
+            "aliases": ("DCDC 主动放电", "主动放电", "Active discharge", "active discharge"),
+            "default_unit": "ms",
+            "parameter_name": "dcdc_active_discharge",
+        },
+        {
+            "atom_id": "REQATOM-CCU-DCDC-DISCHARGE-MODE",
+            "aliases": ("放电模式管理", "discharge 模式", "discharge mode"),
+            "default_unit": None,
+            "parameter_name": "dcdc_discharge_mode",
+        },
+        # --- CCU VAVE spec: DCDC mode management (SC44019/SC44004/SC44009/SC44017/SC44024) ---
+        {
+            "atom_id": "REQATOM-CCU-DCDC-BOOST-MODE",
+            "aliases": ("Boost 模式管理", "Boost 模式", "Boost control", "boost mode"),
+            "default_unit": None,
+            "parameter_name": "dcdc_boost_mode",
+        },
+        {
+            "atom_id": "REQATOM-CCU-DCDC-BUCK-MODE",
+            "aliases": ("Buck 模式管理", "Buck 模式", "buck mode"),
+            "default_unit": None,
+            "parameter_name": "dcdc_buck_mode",
+        },
+        {
+            "atom_id": "REQATOM-CCU-DCDC-INIT-MODE",
+            "aliases": ("INIT 模式", "INIT 模式默认状态", "init mode"),
+            "default_unit": None,
+            "parameter_name": "dcdc_init_mode",
+        },
+        {
+            "atom_id": "REQATOM-CCU-DCDC-READY-MODE",
+            "aliases": ("Ready 模式管理", "Ready 模式", "ready mode"),
+            "default_unit": None,
+            "parameter_name": "dcdc_ready_mode",
+        },
+        {
+            "atom_id": "REQATOM-CCU-DCDC-STANDBY-MODE",
+            "aliases": ("Standby 模式管理", "Standby 模式", "standby mode"),
+            "default_unit": None,
+            "parameter_name": "dcdc_standby_mode",
+        },
+        {
+            "atom_id": "REQATOM-CCU-DCDC-MODE-REQUEST",
+            "aliases": ("模式请求管理", "模式请求", "mode request"),
+            "default_unit": None,
+            "parameter_name": "dcdc_mode_request",
+        },
+        # --- CCU VAVE spec: crash protection power-down (SC44023) ---
+        {
+            "atom_id": "REQATOM-CCU-CRASH-POWER-DOWN",
+            "aliases": ("碰撞保护下电", "碰撞下电", "crash protection", "crash power down"),
+            "default_unit": "ms",
+            "parameter_name": "crash_power_down",
+        },
+        # --- CCU VAVE spec: electronic lock (SC40045/SC41015) ---
+        {
+            "atom_id": "REQATOM-CCU-ELECTRONIC-LOCK",
+            "aliases": ("电子锁上锁", "执行电子锁", "electronic lock", "e-lock"),
+            "default_unit": None,
+            "parameter_name": "electronic_lock",
+        },
+        # --- CCU VAVE spec: security vulnerability (SC7000024) ---
+        {
+            "atom_id": "REQATOM-CCU-VULNERABILITY-UPGRADE",
+            "aliases": ("漏洞升级", "漏洞", "vulnerability upgrade", "vulnerability"),
+            "default_unit": None,
+            "parameter_name": "vulnerability_upgrade",
+        },
+        # --- CCU VAVE spec: PT-CAN communication fault (SC40053) ---
+        {
+            "atom_id": "REQATOM-CCU-PTCAN-FAULT-RESPONSE",
+            "aliases": ("PT-CAN 通讯故障", "PT-CAN 故障", "通讯故障响应", "PT-CAN fault"),
+            "default_unit": None,
+            "parameter_name": "ptcan_fault_response",
+        },
+        # --- CCU VAVE spec: sentinel power optimization ---
+        {
+            "atom_id": "REQATOM-CCU-SENTINEL-POWER",
+            "aliases": ("哨兵功耗优化", "哨兵待命", "sentinel power", "sentinel"),
+            "default_unit": "mA",
+            "parameter_name": "sentinel_power",
         },
     )
 
@@ -188,29 +308,32 @@ class RequirementExtractionService:
             "candidates": [candidate.to_dict() for candidate in candidates],
         }
 
-    def extract_from_facts(self, *, doc_id: str | None = None, profile_id: str | None = None, limit: int = 50) -> dict[str, Any]:
+    def extract_from_facts(self, *, doc_id: str | None = None, profile_id: str | None = None, limit: int = 500) -> dict[str, Any]:
         self.repo.initialize_schema()
-        where = ""
+        where = "WHERE (fact_status IS NULL OR fact_status != 'quarantined_orphan')"
         params: list[Any] = []
         if doc_id:
-            where = "WHERE source_doc_id = ?"
+            where += " AND source_doc_id = ?"
             params.append(doc_id)
         with self.repo._conn_ctx() as connection:
             rows = connection.execute(
                 f"""
-                SELECT fact_id, source_doc_id, object_value, predicate
+                SELECT fact_id, source_doc_id, object_value, predicate, fact_type
                 FROM facts
                 {where}
-                ORDER BY updated_at DESC, fact_id ASC
+                ORDER BY fact_type ASC, fact_id ASC
                 LIMIT ?
                 """,
                 [*params, limit],
             ).fetchall()
         chunks = []
         for row in rows:
-            text = row["object_value"] or row["predicate"] or ""
+            # object_value may be JSON (with title/content/subject fields) or
+            # plain text. Extract the richest text representation.
+            raw = row["object_value"] or row["predicate"] or ""
+            text = self._extract_text_from_object_value(raw)
             if text:
-                chunks.append(str(text))
+                chunks.append(text)
         return self.extract_from_text(
             "\n".join(chunks),
             source_type="facts",
@@ -438,6 +561,35 @@ class RequirementExtractionService:
             condition_json=parsed.get("condition_json") or {},
             confidence=round(confidence, 3),
         )
+
+    def _extract_text_from_object_value(self, raw: str) -> str:
+        """Extract the richest text from a fact object_value.
+
+        object_value may be plain text or a JSON object with title/content/
+        subject fields. For JSON we prefer content (full requirement text)
+        falling back to subject+title. For plain text we return as-is.
+        """
+        if not raw:
+            return ""
+        raw = raw.strip()
+        # Try JSON parse for structured fact payloads
+        if raw.startswith("{"):
+            try:
+                obj = json.loads(raw)
+                if isinstance(obj, dict):
+                    parts = []
+                    if obj.get("content"):
+                        parts.append(str(obj["content"]))
+                    elif obj.get("title"):
+                        # title-only facts (section headings, TOC) are weaker
+                        # but still useful for atom matching
+                        parts.append(str(obj["title"]))
+                    if obj.get("subject") and obj.get("subject") not in parts:
+                        parts.append(str(obj["subject"]))
+                    return " ".join(parts) if parts else ""
+            except (json.JSONDecodeError, TypeError):
+                pass
+        return raw
 
     def _split_requirement_sentences(self, text: str) -> list[str]:
         raw_parts = re.split(r"[\n。；;]+", text or "")

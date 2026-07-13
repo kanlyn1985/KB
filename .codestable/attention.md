@@ -75,3 +75,16 @@
   tests in test_requirement_eco_transaction.py verifying rollback on impact
   analysis failure, gate evaluation failure, and approval creation failure).
 - Tech debt item 2 (transaction boundaries) in architecture doc RESOLVED.
+
+## Phase 4: 真实数据接入 - CCU 规格书候选提取 (2026-07-13)
+
+- 在生产 knowledge.db 初始化 requirement schema（28 表，KB1 既有 16 docs/7636 facts 不变）。
+- ATOM_RULES 从 3 个 DCDC 规则扩展到 21 个领域规则（18 个 CCU VAVE 规则覆盖
+  CC/CP 信号检测、V2L/V2V、网络管理、OBC 充电控制、DCDC 模式管理、碰撞保护、
+  电子锁、漏洞升级、PT-CAN 故障、哨兵功耗等）。
+- extract_from_facts 改进：加 fact_status!='quarantined_orphan' 过滤，limit 50->500，
+  新增 _extract_text_from_object_value 解析 JSON payload 的 content/subject/title 字段。
+- 从 DOC-000015（CCU VAVE V3.0，148 页，824 facts）提取 317 个候选需求，
+  182 个匹配 atom（57.4% 匹配率），135 个 NO_MATCH 进入 review 队列。
+- 管道闭环：PDF -> KB1 解析 -> facts -> extract_from_facts -> RequirementCandidate
+  -> list-candidates -> promote-candidate（LLM 只生成候选不改变有效需求）。
