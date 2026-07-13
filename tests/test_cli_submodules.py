@@ -48,6 +48,10 @@ from enterprise_agent_kb.cli._serve import (
     register_subcommand as _serve_register,
     handle_command as _serve_handle,
 )
+from enterprise_agent_kb.cli._requirement import (
+    register_subcommand as _requirement_register,
+    handle_command as _requirement_handle,
+)
 
 
 # ---- submodule surface ----------------------------------------------------
@@ -58,6 +62,7 @@ ALL_FAMILIES = (
     ("eval",      _eval_register,      _eval_handle),
     ("test",      _test_register,      _test_handle),
     ("serve",     _serve_register,     _serve_handle),
+    ("requirement", _requirement_register, _requirement_handle),
 )
 
 

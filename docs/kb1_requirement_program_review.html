@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KB1 Requirement Resolver 子系统合并评审报告 · 2026-07-13</title>
+<style>
+:root{
+  --bg:#0d1117; --card:#161b22; --border:#30363d; --text:#c9d1d9; --muted:#8b949e;
+  --accent:#58a6ff; --green:#3fb950; --red:#f85149; --yellow:#d29922; --purple:#bc8cff;
+}
+*{box-sizing:border-box;}
+body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg); color:var(--text); margin:0; padding:0; line-height:1.65;}
+.container{max-width:1180px; margin:0 auto; padding:28px 24px 80px;}
+.hero{background:linear-gradient(135deg,#1f2937,#0f172a); border:1px solid var(--border);
+  border-radius:14px; padding:34px 30px; margin-bottom:28px;}
+.hero h1{margin:0 0 6px; font-size:26px; color:#fff;}
+.hero .sub{color:var(--muted); font-size:14px; margin-bottom:18px;}
+.chips{display:flex; flex-wrap:wrap; gap:8px;}
+.chip{background:rgba(88,166,255,.12); border:1px solid rgba(88,166,255,.35);
+  color:var(--accent); padding:4px 12px; border-radius:999px; font-size:12.5px;}
+.chip.green{background:rgba(63,185,80,.12); border-color:rgba(63,185,80,.4); color:var(--green);}
+.chip.yellow{background:rgba(210,153,34,.12); border-color:rgba(210,153,34,.4); color:var(--yellow);}
+.chip.red{background:rgba(248,81,73,.12); border-color:rgba(248,81,73,.4); color:var(--red);}
+section{background:var(--card); border:1px solid var(--border); border-radius:12px;
+  padding:26px 28px; margin-bottom:22px;}
+h2{margin:0 0 16px; font-size:19px; color:#fff; border-left:3px solid var(--accent);
+  padding-left:12px;}
+h3{margin:20px 0 10px; font-size:15px; color:var(--purple);}
+p{margin:10px 0;}
+table{width:100%; border-collapse:collapse; margin:14px 0; font-size:13px;}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top;}
+th{background:#21262d; color:#fff; font-weight:600;}
+tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+code{background:#21262d; padding:2px 6px; border-radius:4px; font-size:12.5px;
+  font-family:"SFMono-Regular",Consolas,monospace; color:#79c0ff;}
+pre{background:#0d1117; border:1px solid var(--border); border-radius:8px; padding:14px;
+  overflow-x:auto; font-size:12.5px; line-height:1.5;}
+.callout{border-left:3px solid; padding:12px 16px; border-radius:0 8px 8px 0; margin:14px 0;}
+.callout.ok{border-color:var(--green); background:rgba(63,185,80,.08);}
+.callout.warn{border-color:var(--yellow); background:rgba(210,153,34,.08);}
+.callout.danger{border-color:var(--red); background:rgba(248,81,73,.08);}
+.callout.info{border-color:var(--accent); background:rgba(88,166,255,.08);}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+.stat{background:#0d1117; border:1px solid var(--border); border-radius:8px; padding:16px;}
+.stat .num{font-size:26px; font-weight:700; color:#fff;}
+.stat .lbl{color:var(--muted); font-size:12px; margin-top:2px;}
+.tag{display:inline-block; padding:1px 7px; border-radius:4px; font-size:11px; font-weight:600;}
+.tag.pass{background:rgba(63,185,80,.2); color:var(--green);}
+.tag.fail{background:rgba(248,81,73,.2); color:var(--red);}
+.tag.warn{background:rgba(210,153,34,.2); color:var(--yellow);}
+ul{margin:8px 0; padding-left:22px;} li{margin:4px 0;}
+.footer{color:var(--muted); font-size:12px; text-align:center; margin-top:30px;}
+a{color:var(--accent); text-decoration:none;}
+.toc{background:#0d1117; border:1px solid var(--border); border-radius:10px; padding:18px 24px; margin-bottom:24px;}
+.toc h3{margin:0 0 10px; color:#fff;}
+.toc ol{margin:0; padding-left:22px;}
+.toc li{margin:5px 0;} .toc a{color:var(--accent);}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+  <h1>KB1 Requirement Resolver 子系统合并评审报告</h1>
+  <div class="sub">基于现有 KB1 的持续开发合并评估 · 评审分支 <code>feature/requirement-resolver</code> · 生成于 2026-07-13</div>
+  <div class="chips">
+    <span class="chip green">功能验证通过</span>
+    <span class="chip green">KB1 fast suite 810 passed / 0 failed</span>
+    <span class="chip green">check_health 10/10</span>
+    <span class="chip yellow">3 项技术债待治理</span>
+    <span class="chip">默认关闭软路由</span>
+    <span class="chip">28 张新表 IF NOT EXISTS</span>
+  </div>
+</div>
+
+<div class="toc">
+<h3>目录</h3>
+<ol>
+<li><a href="#s1">评审结论与合并建议</a></li>
+<li><a href="#s2">子系统全景</a></li>
+<li><a href="#s3">数据模型：28 张新表</a></li>
+<li><a href="#s4">三个集成点与爆炸半径</a></li>
+<li><a href="#s5">测试矩阵</a></li>
+<li><a href="#s6">KB1 既有边界兼容性</a></li>
+<li><a href="#s7">已知技术债</a></li>
+<li><a href="#s8">合并前门禁</a></li>
+<li><a href="#s9">落地顺序</a></li>
+<li><a href="#s10">持续 Review Checklist</a></li>
+<li><a href="#s11">文件清单与变更足迹</a></li>
+</ol>
+</div>
+
+<section id="s1">
+<h2>1. 评审结论与合并建议</h2>
+<div class="callout ok">
+<strong>结论：可以合并。</strong>Requirement Resolver 子系统是一个客户/项目维度的 OBC/DCDC 需求治理叠加层，对 KB1 既有主链路零侵入（默认关闭），结构安全、爆炸半径可控、功能验证通过。建议在完成 §8 合并前门禁（schema 迁移规整 + .gitignore + 路径修复）后合入主干。
+</div>
+
+<div class="grid2">
+<div class="stat"><div class="num">28</div><div class="lbl">新增 requirement_* 表（IF NOT EXISTS，不与现有 30 表冲突）</div></div>
+<div class="stat"><div class="num">21</div><div class="lbl">requirements/ 子包 Python 模块（6559 LOC）</div></div>
+<div class="stat"><div class="num">9</div><div class="lbl">answer_api 主链新增行数（仅 +6 行软路由守卫）</div></div>
+<div class="stat"><div class="num">810</div><div class="lbl">KB1 fast suite passed / 0 failed（基线 734 +76）</div></div>
+</div>
+
+<h3>三档风险评级</h3>
+<table>
+<tr><th>风险项</th><th>等级</th><th>状态</th><th>说明</th></tr>
+<tr><td>既有主链路被改写</td><td>低</td><td><span class="tag pass">已控制</span></td><td>answer_api 仅 +6 行软路由守卫；query_api/retrieval/evidence_judge 零改动；软路由默认返回 None。</td></tr>
+<tr><td>Schema 冲突</td><td>低</td><td><span class="tag pass">已验证</span></td><td>28 表全部 CREATE TABLE IF NOT EXISTS，命名 requirement_* 前缀，与 KB1 30 表无重名。</td></tr>
+<tr><td>evidence_judge 被绕过</td><td>无</td><td><span class="tag pass">合规</span></td><td>解析器确定性，不让 LLM 决定有效需求值；软路由仅 3 种意图且 confidence&lt;0.75 时不介入。</td></tr>
+<tr><td>测试路径假设失效</td><td>中</td><td><span class="tag warn">已修复</span></td><td>4 个测试硬编码旧叠加包布局路径，已修为相对 repo root 解析。</td></tr>
+<tr><td>Schema 定义在模块级 SQL</td><td>中</td><td><span class="tag warn">技术债</span></td><td>requirements/schema.py SCHEMA_SQL 应迁移到 migrations/0xx_requirement_program.sql。</td></tr>
+</table>
+</section>
+
+<section id="s2">
+<h2>2. 子系统全景</h2>
+<p>Requirement Resolver 是面向客户/项目维度的 OBC/DCDC 需求治理子系统，叠加在 KB1 之上，提供从需求包导入到 ECO 闭环的完整治理管线。它不替代 KB1 的证据约束答案链，而是作为<strong>独立的需求维度治理层</strong>，仅在显式启用时通过软路由回答需求类查询。</p>
+
+<h3>完整治理管线</h3>
+<pre><code>客户/项目需求包导入 (import-package)
+    ↓
+候选抽取 (extract-candidates)        ← 规则优先半自动，仅候选不直接生效
+    ↓
+人工评审/提升 (review → promote-candidate)
+    ↓
+客户/项目 Profile（含继承） (profile inheritance)
+    ↓
+有效需求解析 (resolve / resolve-project)   ← 确定性解析：standard → baseline → customer → project_overlay
+    ↓
+差异与冲突扫描 (diff / scan-conflicts)
+    ↓
+合规矩阵 (compliance)
+    ↓
+影响分析 (impact)
+    ↓
+审批治理 (approval: request → approve → reject)
+    ↓
+基线冻结 (freeze-baseline)
+    ↓
+基线版本对比与漂移检测 (diff-baselines / baseline-drift)
+    ↓
+DV/PV/SOP 发布门禁 (release-gate)
+    ↓
+ECO 工程变更闭环 (create-eco → submit → approve → apply → close)
+    ↓
+自动化验证报告 (run-eco-cycle)</code></pre>
+
+<h3>解析路径示例（确定性）</h3>
+<p>以"客户A P1项目 DCDC 输出纹波"为例，解析链如下（全部有证据绑定，不让 LLM 决定值）：</p>
+<pre><code>standard_mandatory   PROFILE-STD-DCDC-MANDATORY   DCDC 输出纹波 ≤ 80mV   (base_constraint)
+product_family_baseline  PROFILE-DCDC-BASELINE    DCDC 输出纹波 ≤ 50mV   (tighten)
+customer_common      PROFILE-CUST-A-DCDC-COMMON   客户A DCDC 输出纹波 ≤ 30mV (tighten)
+project_overlay      PROFILE-CUST-A-P1            P1 DCDC 输出纹波 ≤ 30mV @ 85℃ (clarify)
+→ 最终有效需求：≤ 30mV @ 85℃  冲突状态：none  证据状态：verified</code></pre>
+
+<h3>CLI 子命令族</h3>
+<p>通过 <code>eakb requirement &lt;subaction&gt;</code> 暴露 38 个子动作，覆盖 schema 初始化、种子数据、解析、差异、冲突扫描、审批、候选、导入包、基线、发布门禁、ECO 全生命周期：</p>
+<pre><code>init-schema  seed-sample  resolve  resolve-project  diff  scan-conflicts
+plan-query  ask  impact  compliance  review
+list-approvals  request-approval  approve  reject
+extract-candidates  list-candidates  promote-candidate  reject-candidate
+import-package  list-import-packages  refresh-import-package
+freeze-baseline  list-baselines  show-baseline  diff-baselines  baseline-drift  rollback-baseline
+release-gate  list-release-gates  show-release-gate
+create-eco  submit-eco  approve-eco  apply-eco  close-eco  run-eco-cycle  list-ecos  show-eco</code></pre>
+</section>
+
+<section id="s3">
+<h2>3. 数据模型：28 张新表</h2>
+<p>全部通过 <code>CREATE TABLE IF NOT EXISTS</code> 创建，统一 <code>requirement_</code> 前缀，与 KB1 既有 30 张表（documents/pages/blocks/evidence/facts/entities/graph_edges/wiki_pages/source_units/... 等）<strong>无命名冲突</strong>。按治理阶段分组如下：</p>
+
+<table>
+<tr><th>阶段</th><th>表名</th><th>职责</th></tr>
+<tr><td rowspan="2">客户/项目</td><td>requirement_customers / requirement_customer_projects</td><td>客户与项目实体</td></tr>
+<tr><td>requirement_import_packages / requirement_import_events</td><td>需求包导入与事件审计</td></tr>
+<tr><td rowspan="4">需求原子与变体</td><td>requirement_atoms</td><td>可解析的需求原子（如 DCDC-OUTPUT-RIPPLE）</td></tr>
+<tr><td>requirement_variants</td><td>需求变体（标准/基线/客户/项目四级）</td></tr>
+<tr><td>requirement_profiles / requirement_profile_inheritance</td><td>Profile 及继承关系</td></tr>
+<tr><td>requirement_overrides</td><td>项目级覆盖</td></tr>
+<tr><td>有效需求</td><td>effective_requirements</td><td>解析后的最终有效需求（带冲突/验证/审批状态）</td></tr>
+<tr><td rowspan="2">证据与测试</td><td>requirement_evidence_bindings</td><td>有效需求到证据 ID 的绑定（不绕过 KB1 证据约束）</td></tr>
+<tr><td>requirement_test_methods / requirement_test_cases / requirement_test_results</td><td>测试方法/用例/结果</td></tr>
+<tr><td>审批</td><td>requirement_approvals / requirement_approval_events</td><td>审批请求与事件流</td></tr>
+<tr><td rowspan="2">候选</td><td>requirement_candidate_batches / requirement_candidates / requirement_candidate_events</td><td>抽取候选批次与评审</td></tr>
+<tr><td>requirement_resolution_runs</td><td>解析运行记录</td></tr>
+<tr><td rowspan="5">基线</td><td>requirement_baselines / requirement_baseline_items / requirement_baseline_events</td><td>基线冻结与版本</td></tr>
+<tr><td>requirement_release_gate_runs / requirement_release_gate_findings</td><td>DV/PV/SOP 发布门禁</td></tr>
+<tr><td>requirement_eco_orders / requirement_eco_actions / requirement_eco_events</td><td>ECO 工程变更订单</td></tr>
+<tr><td colspan="2" style="color:var(--muted)">合计 28 张表，全部 IF NOT EXISTS，幂等可重入。</td></tr>
+</table>
+
+<div class="callout info">
+<strong>边界合规：</strong>requirement_evidence_bindings 引用证据 ID 但不创建/修改 KB1 evidence 表；有效需求值由确定性解析产生（standard→baseline→customer→project_overlay 四级取紧/澄清），<strong>不让 LLM 决定有效需求值</strong>，符合 KB1 evidence_judge 作为唯一事实裁决边界的约束。
+</div>
+</section>
+
+<section id="s4">
+<h2>4. 三个集成点与爆炸半径</h2>
+<p>Requirement Resolver 通过三个集成点接入 KB1，每个都设计为<strong>默认关闭、opt-in、可回退</strong>。</p>
+
+<h3>集成点 1：CLI 子命令族（<code>cli/_requirement.py</code>）</h3>
+<p>KB1 的 CLI 是模块化子命令族架构（每个域 <code>_workspace/_build/_eval/_test/_serve</code> 暴露 <code>register_subcommand</code> + <code>handle_command</code>）。新建 <code>cli/_requirement.py</code> 适配器遵循同一模式，在 <code>_orchestrator.py</code> 注册。</p>
+<pre><code># cli/_requirement.py（32 行适配器，非侵入）
+def register_subcommand(subparsers):
+    parser = subparsers.add_parser("requirement", help="...")
+    _configure_requirement_parser(parser)
+
+def handle_command(args, schema_path) -> bool:
+    if args.command != "requirement":
+        return False
+    result = handle_requirement_command(args.root, args)
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    return True</code></pre>
+<p><strong>爆炸半径：</strong>仅在 <code>_orchestrator.py</code> 新增 1 行 import + 1 行 register + 1 行 handle 调度（共 +3 行）。不修改任何既有子命令族。</p>
+
+<h3>集成点 2：answer_api 软路由（默认关闭）</h3>
+<p>在 <code>answer_query</code> 入口、docstring 之后插入软路由守卫。环境变量 <code>EAKB_ENABLE_REQUIREMENT_ROUTER=1</code> 才启用，默认返回 None（既有答案链完全不受影响）。</p>
+<pre><code>def answer_query(workspace_root, query, limit=8, preferred_doc_id=None):
+    """Public entrypoint: ..."""
+    # requirement_router_mvp: opt-in soft route (default off)
+    requirement_answer = try_answer_requirement_query(workspace_root, query)
+    if requirement_answer is not None:
+        return requirement_answer
+    # ... 既有答案链不变 ...</code></pre>
+<p>软路由仅在以下条件<strong>全部满足</strong>时介入：①环境变量启用；②requirement schema 存在；③意图属于 <code>requirement_effective / requirement_diff / requirement_conflict_scan</code>；④planner confidence &ge; 0.75。否则返回 None，既有答案链接管。</p>
+<p><strong>爆炸半径：</strong>仅 +6 行（1 import + 5 行守卫），默认关闭。</p>
+
+<h3>集成点 3：api_server FastAPI 适配（可选）</h3>
+<p>提供框架中性 handler + 可选 FastAPI router。集成脚本仅在识别到安全 FastAPI 模式时自动 patch，否则拒绝并提示手工介入。</p>
+<p><strong>爆炸半径：</strong>仅当 api_server 识别为 FastAPI 模式才生效；当前 KB1 api_server 形态需手工确认，不会自动改动。</p>
+
+<div class="callout ok">
+<strong>实测验证：</strong>软路由关闭时 <code>try_answer_requirement_query</code> 返回 None（既有链路零影响）；启用时返回 <code>answer_mode=requirement_effective</code> 的正确需求答案。definition 查询、CP 缩写查询、既有 eval 基线均无回归。
+</div>
+</section>
+
+<section id="s5">
+<h2>5. 测试矩阵</h2>
+<h3>5.1 Requirement 子系统自身测试</h3>
+<p>23 个测试文件位于 <code>tests/requirement/</code>，覆盖 resolver/query/api/compliance/impact/approval/extraction/package_import/baseline/release_gate/eco 全模块，以及 CLI/answer_api 软路由集成。</p>
+<table>
+<tr><th>项</th><th>结果</th><th>说明</th></tr>
+<tr><td>requirement 测试总数</td><td><span class="tag pass">71 passed</span></td><td>含 38 个子动作的功能测试 + 软路由开关测试</td></tr>
+<tr><td>路径假设修复</td><td><span class="tag pass">4 已修</span></td><td>test_program_plan_exists / 2 个 api_integration_script / extraction tearDown 改为 repo-root 相对路径 + Windows 容错</td></tr>
+<tr><td>功能端到端 smoke</td><td><span class="tag pass">通过</span></td><td>init-schema -> seed-sample -> resolve -> ask 全链路成功，解析链正确（≤30mV @85℃）</td></tr>
+<tr><td>软路由默认关闭</td><td><span class="tag pass">验证</span></td><td>EAKB_ENABLE_REQUIREMENT_ROUTER 未设时返回 None</td></tr>
+<tr><td>软路由启用</td><td><span class="tag pass">验证</span></td><td>启用时返回 requirement_effective 答案</td></tr>
+</table>
+
+<h3>5.2 KB1 既有套件回归</h3>
+<table>
+<tr><th>套件</th><th>合并前基线</th><th>合并后</th><th>结论</th></tr>
+<tr><td>KB1 fast suite（非 integration/benchmark）</td><td>734 passed / 0 failed / 1 skip</td><td><span class="tag pass">810 passed / 0 failed / 1 skip</span></td><td>+76（71 requirement 测试 + CLI 覆盖），零回归</td></tr>
+<tr><td>test_cli_submodules（子命令族一致性）</td><td>通过</td><td><span class="tag pass">通过（已修）</span></td><td>ALL_FAMILIES 新增 requirement 项，一致性校验通过</td></tr>
+<tr><td>test_mcp_server（answer_query）</td><td>通过</td><td><span class="tag pass">通过</span></td><td>definition 查询、CP 缩写查询无回归</td></tr>
+<tr><td>check_health（生产 DB 完整性）</td><td>10/10 PASS</td><td><span class="tag pass">10/10 PASS</span></td><td>16 docs / 7636 facts / 29988 evidence / facts_fts 7636 未变</td></tr>
+<tr><td>生产 DB 变更</td><td>—</td><td><span class="tag pass">无</span></td><td>集成仅读不写；requirement schema 在独立 workspace 初始化</td></tr>
+</table>
+
+<div class="callout ok">
+<strong>回归门禁通过。</strong>KB1 fast suite 810 passed / 0 failed，既有 eval 基线（token_overlap 0.40）、check_health、definition/CP 查询全部无回归。生产 knowledge.db 未被触碰。
+</div>
+</section>
+
+<section id="s6">
+<h2>6. KB1 既有边界兼容性</h2>
+<p>Requirement Resolver 的设计与 KB1 的核心不变量完全兼容。逐项核对如下：</p>
+<table>
+<tr><th>KB1 不变量</th><th>Requirement Resolver 行为</th><th>合规</th></tr>
+<tr><td>evidence_judge 是唯一事实裁决边界</td><td>解析器确定性，不让 LLM 决定有效需求值；证据绑定引用但不裁决</td><td><span class="tag pass">合规</span></td></tr>
+<tr><td>答案只能来自候选证据/事实/上下文</td><td>软路由返回需求治理数据，非 KB1 evidence；仅 3 种需求意图介入</td><td><span class="tag pass">合规</span></td></tr>
+<tr><td>证据不足应降级而非补全</td><td>confidence&lt;0.75 时软路由不介入，回退到既有答案链（含降级）</td><td><span class="tag pass">合规</span></td></tr>
+<tr><td>不重写 query_api/answer_api 主链路</td><td>answer_api 仅 +6 行软路由守卫，query_api 零改动</td><td><span class="tag pass">合规</span></td></tr>
+<tr><td>无新向量库/分布式服务</td><td>使用 SQLite（同 KB1），无外部依赖</td><td><span class="tag pass">合规</span></td></tr>
+<tr><td>Ontology 输出只能是 signal/constraint</td><td>Requirement Resolver 与 Ontology 独立，不交互</td><td><span class="tag pass">N/A</span></td></tr>
+<tr><td>answer_changed_by_ontology 必须 false</td><td>软路由独立于 ontology post-check，互不影响</td><td><span class="tag pass">合规</span></td></tr>
+<tr><td>schema 变更应走 migrations/ 而非模块级 SQL</td><td>当前 schema 在 requirements/schema.py（技术债，待迁移）</td><td><span class="tag warn">技术债</span></td></tr>
+</table>
+</section>
+
+<section id="s7">
+<h2>7. 已知技术债</h2>
+<div class="callout warn">
+<strong>3 项技术债，均非阻塞合并，但应在合并后短期治理：</strong>
+</div>
+
+<h3>技术债 1：Schema 定义在模块级 SQL</h3>
+<p><code>requirements/schema.py</code> 的 <code>SCHEMA_SQL</code> 常量定义了 28 张表。应迁移到 <code>src/enterprise_agent_kb/migrations/0xx_requirement_program.sql</code>，纳入 KB1 的 NNN_*.sql 迁移系统（<code>apply_pending_migrations</code> 按 version 号词法序应用）。</p>
+<p><strong>影响：</strong>当前 schema 由 <code>requirement init-schema</code> 命令触发，未纳入 bootstrap.initialize_workspace 的统一迁移路径。<strong>修复成本：</strong>低（拆 SQL 文件 + 注册 version）。</p>
+
+<h3>技术债 2：事务边界</h3>
+<p>ECO/基线/审批的跨表操作需要服务级事务收敛。当前各模块独立提交，长事务场景下可能出现部分提交。<strong>修复成本：</strong>中（需引入服务层事务封装）。</p>
+
+<h3>技术债 3：API 适配器双路径</h3>
+<p>api.py 同时提供框架中性 handler 和可选 FastAPI router。合并后应选择唯一集成路径，避免双路径维护负担。<strong>修复成本：</strong>低（确认 KB1 api_server 形态后删一路径）。</p>
+
+<div class="callout info">
+<strong>抽取阶段边界：</strong>extraction 是规则优先半自动候选生成，仅产出候选，<strong>绝不直接提升为有效需求</strong>。必须经 promote-candidate 人工评审。这是设计约束，非技术债。
+</div>
+</section>
+
+<section id="s8">
+<h2>8. 合并前门禁</h2>
+<p>以下门禁建议在合入主干前完成（均已完成或待用户确认）：</p>
+<table>
+<tr><th>#</th><th>门禁</th><th>状态</th><th>说明</th></tr>
+<tr><td>G1</td><td>KB1 fast suite 零回归</td><td><span class="tag pass">已完成</span></td><td>810 passed / 0 failed / 0 xfail</td></tr>
+<tr><td>G2</td><td>check_health 10/10</td><td><span class="tag pass">已完成</span></td><td>生产 DB 未变</td></tr>
+<tr><td>G3</td><td>软路由默认关闭验证</td><td><span class="tag pass">已完成</span></td><td>EAKB_ENABLE_REQUIREMENT_ROUTER 未设时返回 None</td></tr>
+<tr><td>G4</td><td>功能端到端 smoke</td><td><span class="tag pass">已完成</span></td><td>init-schema -> seed -> resolve -> ask 全链路</td></tr>
+<tr><td>G5</td><td>.gitignore 覆盖运行时目录</td><td><span class="tag pass">已完成</span></td><td>.requirement_program_runtime/ 已加入 .gitignore</td></tr>
+<tr><td>G6</td><td>测试路径假设修复</td><td><span class="tag pass">已完成</span></td><td>4 个测试改为 repo-root 相对路径 + Windows 容错</td></tr>
+<tr><td>G7</td><td>CLI 子命令族一致性</td><td><span class="tag pass">已完成</span></td><td>ALL_FAMILIES 新增 requirement，一致性校验通过</td></tr>
+<tr><td>G8</td><td>docs 同步</td><td><span class="tag warn">待完成</span></td><td>需更新 .codestable architecture/requirement 文档（见 §9）</td></tr>
+<tr><td>G9</td><td>schema 迁移规整</td><td><span class="tag warn">技术债</span></td><td>迁移到 migrations/0xx_requirement_program.sql（可合并后治理）</td></tr>
+<tr><td>G10</td><td>用户确认合并</td><td><span class="tag warn">待确认</span></td><td>需用户明确确认后执行 git commit + push</td></tr>
+</table>
+</section>
+
+<section id="s9">
+<h2>9. 落地顺序</h2>
+<p>建议按以下顺序完成合并闭环（每步可独立验证）：</p>
+<ol>
+<li><strong>文档同步（CodeStable）：</strong>更新 <code>.codestable/architecture/</code> 记录 requirement 子系统结构；新建 <code>.codestable/requirements/</code> 愿景文档；在 attention.md 记录"requirement 软路由默认关闭、EAKB_ENABLE_REQUIREMENT_ROUTER=1 启用"。</li>
+<li><strong>Git 提交（本地）：</strong>按用户惯例本地提交，commit message 覆盖 cli 适配器 + answer_api 软路由 + requirements 子包 + tests + docs。</li>
+<li><strong>用户确认 push：</strong>按用户"每个有后果的动作做之前会跟你确认"的约束，push 到 origin 前需用户确认。</li>
+<li><strong>上传到 GitHub kanlyn1985/KB（新仓库）：</strong>用户要求整体上传到新仓库供他人持续 review。需确认仓库创建与 remote 配置。</li>
+<li><strong>schema 迁移规整（合并后短期）：</strong>将 SCHEMA_SQL 拆到 migrations/0xx_requirement_program.sql，纳入统一迁移路径。</li>
+<li><strong>技术债治理（中期）：</strong>事务边界收敛 + API 适配器唯一路径。</li>
+</ol>
+</section>
+
+<section id="s10">
+<h2>10. 持续 Review Checklist</h2>
+<p>供他人在 GitHub 上持续 review 时逐项核对：</p>
+<table>
+<tr><th>维度</th><th>Checklist 项</th><th>位置</th></tr>
+<tr><td rowspan="3">结构</td><td>requirements/ 子包是否独立（仅从 resolver 导入）</td><td>src/enterprise_agent_kb/requirements/</td></tr>
+<tr><td>是否与 KB1 30 表无重名</td><td>28 表均 requirement_* 前缀</td></tr>
+<tr><td>是否全部 IF NOT EXISTS</td><td>requirements/schema.py SCHEMA_SQL</td></tr>
+<tr><td rowspan="4">边界</td><td>软路由是否默认关闭</td><td>requirements/router.py + answer_api.py:76</td></tr>
+<tr><td>是否不让 LLM 决定有效需求值</td><td>resolver 确定性解析</td></tr>
+<tr><td>是否仅在 3 种意图 + confidence≥0.75 介入</td><td>router.SUPPORTED_ROUTED_INTENTS</td></tr>
+<tr><td>query_api/retrieval/evidence_judge 是否零改动</td><td>git diff 确认</td></tr>
+<tr><td rowspan="3">测试</td><td>fast suite 是否零回归</td><td>810 passed / 0 failed</td></tr>
+<tr><td>软路由开关测试是否覆盖</td><td>tests/requirement/</td></tr>
+<tr><td>功能端到端是否可复现</td><td>init-schema -> seed -> resolve -> ask</td></tr>
+<tr><td rowspan="2">技术债</td><td>schema 是否已迁移到 migrations/</td><td>待治理（G9）</td></tr>
+<tr><td>事务边界是否收敛</td><td>待治理（技术债 2）</td></tr>
+</table>
+</section>
+
+<section id="s11">
+<h2>11. 文件清单与变更足迹</h2>
+<h3>新增文件</h3>
+<table>
+<tr><th>路径</th><th>说明</th><th>规模</th></tr>
+<tr><td>src/enterprise_agent_kb/cli/_requirement.py</td><td>CLI 子命令族适配器</td><td>32 行</td></tr>
+<tr><td>src/enterprise_agent_kb/requirements/（21 模块）</td><td>resolver/models/repository/comparator/diff/query/answer/router/api/compliance/impact/approval/extraction/package_import/baseline/release_gate/eco/schema/seed/cli/answer</td><td>6559 LOC</td></tr>
+<tr><td>tests/requirement/（23 测试 + __init__.py）</td><td>全模块功能测试 + 集成测试</td><td>71 测试</td></tr>
+<tr><td>docs/requirement-program/（13 文档）</td><td>PROGRAM_PLAN/VALIDATION_GATES/ECO/BASELINE/RELEASE/INTEGRATION_AUDIT 等</td><td>13 md</td></tr>
+<tr><td>scripts/（3 集成脚本 + 1 audit + 1 smoke runner）</td><td>apply_requirement_cli/api/_integration + audit + run_requirement_program</td><td>5 脚本</td></tr>
+</table>
+
+<h3>修改文件（爆炸半径）</h3>
+<table>
+<tr><th>路径</th><th>变更</th><th>行数</th></tr>
+<tr><td>src/enterprise_agent_kb/cli/_orchestrator.py</td><td>+1 import +1 register +1 handle 调度</td><td>+3 行</td></tr>
+<tr><td>src/enterprise_agent_kb/answer_api.py</td><td>+1 import +5 行软路由守卫（docstring 之后）</td><td>+6 行</td></tr>
+<tr><td>tests/test_cli_submodules.py</td><td>+1 import 块 +1 ALL_FAMILIES 项</td><td>+4 行</td></tr>
+<tr><td>.gitignore</td><td>+.requirement_program_runtime/</td><td>+1 行</td></tr>
+</table>
+
+<div class="callout ok">
+<strong>总爆炸半径：answer_api 主链 +6 行，_orchestrator +3 行。</strong>requirements/ 子包完全隔离，仅在显式启用软路由时影响答案链。这是叠加层设计的核心安全保证。
+</div>
+</section>
+
+<div class="footer">
+KB1 Requirement Resolver 子系统合并评审报告 · 生成于 2026-07-13 · 供 GitHub kanlyn1985/KB 持续 review
+</div>
+
+</div>
+</body>
+</html>

@@ -63,6 +63,7 @@ from .ontology_adapter import (
     OntologySignal,
     post_check as _ontology_post_check,
 )
+from .requirements.router import try_answer_requirement_query
 
 
 def answer_query(
@@ -77,6 +78,11 @@ def answer_query(
     gather and rank candidate facts/evidence/wiki, (3) compose the final
     answer with confidence scoring.
     """
+    # requirement_router_mvp: opt-in soft route for customer/project requirement questions.
+    requirement_answer = try_answer_requirement_query(workspace_root, query)
+    if requirement_answer is not None:
+        return requirement_answer
+
     routed = _resolve_intent_and_context(workspace_root, query, limit, preferred_doc_id)
     if routed is None:
         # Ambiguous query that requires clarification; the routing stage

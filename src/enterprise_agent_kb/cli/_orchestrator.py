@@ -29,6 +29,7 @@ from ._build import register_subcommand as _build_register, handle_command as _b
 from ._eval import register_subcommand as _eval_register, handle_command as _eval_handle
 from ._test import register_subcommand as _test_register, handle_command as _test_handle
 from ._serve import register_subcommand as _serve_register, handle_command as _serve_handle
+from ._requirement import register_subcommand as _requirement_register, handle_command as _requirement_handle
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -51,6 +52,7 @@ def build_parser() -> argparse.ArgumentParser:
     _eval_register(subparsers)
     _test_register(subparsers)
     _serve_register(subparsers)
+    _requirement_register(subparsers)
 
     return parser
 
@@ -70,6 +72,7 @@ def main() -> None:
         _eval_handle,
         _test_handle,
         _serve_handle,
+        _requirement_handle,
     ):
         if handler(args, schema_path):
             return
