@@ -133,6 +133,7 @@ class AuditRunner:
         self.check_no_build_artifacts()
         self.check_python_syntax()
         self.check_schema_tables()
+        self.check_migration_file()
         self.check_orchestrator_gates()
         self.check_integration_scripts_are_guarded()
         self.check_module_size_hotspots()
@@ -212,23 +213,47 @@ class AuditRunner:
             self.add("python.syntax", "passed", "blocker", "all Python files parse", python_file_count=len(py_files))
 
     def check_schema_tables(self) -> None:
+        # Primary source of truth is now the migration file; schema.py
+        # SCHEMA_SQL is kept as a legacy fallback mirror.
+        migration_path = self.repo_root / "src" / "enterprise_agent_kb" / "migrations" / "002_requirement_program.sql"
         schema_path = self.requirements_dir / "schema.py"
-        if not schema_path.exists():
-            self.add("schema.tables", "failed", "blocker", "schema.py missing")
+        sources: list[tuple[str, str]] = []
+        if migration_path.exists():
+            sources.append((str(migration_path.name), migration_path.read_text(encoding="utf-8")))
+        if schema_path.exists():
+            sources.append(("schema.py", schema_path.read_text(encoding="utf-8")))
+        if not sources:
+            self.add("schema.tables", "failed", "blocker", "neither 002_requirement_program.sql nor schema.py found")
             return
-        text = schema_path.read_text(encoding="utf-8")
-        found = sorted(set(re.findall(r"CREATE TABLE IF NOT EXISTS\s+([a-zA-Z0-9_]+)", text)))
+        # Union of tables declared across all sources (handles migration + fallback mirror).
+        found = sorted(set(t for _, text in sources for t in re.findall(r"CREATE TABLE IF NOT EXISTS\s+([a-zA-Z0-9_]+)", text)))
         missing = [t for t in EXPECTED_TABLES if t not in found]
         if missing:
             self.add("schema.tables", "failed", "blocker", "expected requirement tables missing", missing=missing, found=found)
         else:
-            self.add("schema.tables", "passed", "blocker", "all expected requirement tables declared", table_count=len(found))
+            self.add("schema.tables", "passed", "blocker", "all expected requirement tables declared", table_count=len(found), sources=[name for name, _ in sources])
 
-        if "CREATE INDEX IF NOT EXISTS" not in text:
-            self.add("schema.indexes", "warning", "major", "no indexes found in schema.py; query performance may degrade")
+        any_indexes = any("CREATE INDEX IF NOT EXISTS" in text for _, text in sources)
+        if not any_indexes:
+            self.add("schema.indexes", "warning", "major", "no indexes found in schema sources; query performance may degrade")
         else:
-            index_count = text.count("CREATE INDEX IF NOT EXISTS")
-            self.add("schema.indexes", "passed", "major", "requirement indexes declared", index_count=index_count)
+            index_count = sum(text.count("CREATE INDEX IF NOT EXISTS") for _, text in sources)
+            # Count unique indexes (migration + fallback mirror may duplicate).
+            index_names = set(re.findall(r"CREATE INDEX IF NOT EXISTS\s+([a-zA-Z0-9_]+)", "\n".join(text for _, text in sources)))
+            self.add("schema.indexes", "passed", "major", "requirement indexes declared", index_count=len(index_names), raw_count=index_count)
+
+    def check_migration_file(self) -> None:
+        """Verify the Phase 2 migration file exists and is well-formed."""
+        migration_path = self.repo_root / "src" / "enterprise_agent_kb" / "migrations" / "002_requirement_program.sql"
+        if not migration_path.exists():
+            self.add("migration.file", "failed", "major", "002_requirement_program.sql missing (Phase 2 schema migration)")
+            return
+        text = migration_path.read_text(encoding="utf-8")
+        if "CREATE TABLE IF NOT EXISTS" not in text:
+            self.add("migration.file", "failed", "major", "migration file has no CREATE TABLE statements")
+            return
+        tables = re.findall(r"CREATE TABLE IF NOT EXISTS\s+([a-zA-Z0-9_]+)", text)
+        self.add("migration.file", "passed", "major", "Phase 2 migration file present", table_count=len(tables))
 
     def check_orchestrator_gates(self) -> None:
         runner_path = self.repo_root / "scripts" / "run_requirement_program.py"

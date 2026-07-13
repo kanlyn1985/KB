@@ -9,6 +9,7 @@ from typing import Any, Iterable
 
 from ..config import AppPaths
 from ..db import connect
+from ..migrations import apply_pending_migrations, current_version
 from .models import (
     CustomerProject,
     EffectiveRequirement,
@@ -33,9 +34,23 @@ class RequirementRepository:
         return connect(self.paths.db_file)
 
     def initialize_schema(self) -> list[str]:
+        """Create or upgrade requirement management tables via the KB1
+        migration framework (PRAGMA user_version + migrations/NNN_*.sql).
+
+        Applies all pending migrations whose version > current user_version,
+        including 002_requirement_program.sql (the 28 requirement_* tables).
+        Falls back to the legacy SCHEMA_SQL executescript path if the
+        migrations directory cannot be located (e.g. running from a source
+        layout where the package migrations/ dir is not co-located).
+        """
         self.paths.db_dir.mkdir(parents=True, exist_ok=True)
+        migrations_dir = Path(__file__).resolve().parents[1] / "migrations"
         with closing(self.connection()) as connection:
-            connection.executescript(SCHEMA_SQL)
+            if migrations_dir.is_dir():
+                apply_pending_migrations(connection, migrations_dir)
+            else:
+                # Fallback: legacy inline SCHEMA_SQL path (idempotent).
+                connection.executescript(SCHEMA_SQL)
             connection.commit()
             rows = connection.execute(
                 """

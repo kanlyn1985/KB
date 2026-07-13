@@ -1,24 +1,26 @@
-from __future__ import annotations
+-- Migration 002: Requirement Resolver program subsystem schema.
+--
+-- Creates 28 tables for the customer/project requirement governance layer
+-- (Requirement Resolver overlay). All tables use IF NOT EXISTS so this
+-- migration is idempotent: re-running on a DB where requirement_* tables
+-- already exist (e.g. created by the legacy requirements/schema.py
+-- SCHEMA_SQL executescript path) is a safe no-op.
+--
+-- Tables: customers, customer_projects, requirement_atoms,
+-- requirement_profiles, requirement_profile_inheritance, requirement_variants,
+-- requirement_overrides, effective_requirements, requirement_evidence_bindings,
+-- requirement_test_methods, requirement_test_cases, requirement_test_results,
+-- requirement_approvals, requirement_approval_events, requirement_candidate_batches,
+-- requirement_candidates, requirement_candidate_events, requirement_import_packages,
+-- requirement_import_events, requirement_resolution_runs, requirement_baselines,
+-- requirement_baseline_items, requirement_baseline_events, requirement_release_gate_runs,
+-- requirement_release_gate_findings, requirement_eco_orders, requirement_eco_actions,
+-- requirement_eco_events.
+--
+-- Coexists with KB1's 30 base tables (documents, pages, blocks, evidence,
+-- facts, ...) and the 001_expected_points migration. Shares the same
+-- knowledge.db and PRAGMA user_version sequence.
 
-# Note (Phase 2 schema migration): The authoritative DDL for the 28
-# requirement_* tables now lives in
-#   src/enterprise_agent_kb/migrations/002_requirement_program.sql
-# and is applied via the KB1 migration framework (PRAGMA user_version +
-# apply_pending_migrations). SCHEMA_SQL below is kept as a legacy fallback
-# mirror for environments where the migrations/ directory is not co-located
-# (e.g. some packaged/install layouts). The two MUST stay in sync; see
-# tests/requirement/test_schema_migration.py::TestSchemaSqlMirror which
-# asserts the table sets are identical.
-
-PROFILE_PRIORITY: dict[str, int] = {
-    "standard_mandatory": 100,
-    "product_family_baseline": 200,
-    "customer_common": 300,
-    "customer_platform": 400,
-    "project_overlay": 500,
-}
-
-SCHEMA_SQL = """
 CREATE TABLE IF NOT EXISTS customers (
     customer_id TEXT PRIMARY KEY,
     customer_name TEXT NOT NULL,
@@ -511,5 +513,3 @@ CREATE INDEX IF NOT EXISTS idx_requirement_eco_actions_eco
     ON requirement_eco_actions(eco_id, status, action_type);
 CREATE INDEX IF NOT EXISTS idx_requirement_eco_events_eco
     ON requirement_eco_events(eco_id, created_at);
-
-"""
