@@ -91,9 +91,6 @@ class RequirementBaselineService:
         requirements = RequirementResolver(self.repo).resolve_project(project_id)
         if not requirements:
             raise ValueError(f"no requirements could be resolved for project_id: {project_id}")
-        version = baseline_version or self._next_version(project_id)
-        baseline_id = f"RBL-{_slug(project_id)}-{_slug(version)}"
-        now = utc_now()
         requirement_payloads = [req.to_dict() for req in requirements]
         conflict_count = sum(1 for req in requirements if req.conflict_status != "none")
         verification_gap_count = sum(1 for req in requirements if req.verification_status != "verified")
@@ -104,8 +101,8 @@ class RequirementBaselineService:
             atom_id = str(payload["atom_id"])
             rows.append(
                 {
-                    "baseline_id": baseline_id,
-                    "item_id": f"RBLITEM-{_slug(baseline_id)}-{_slug(atom_id)}",
+                    "baseline_id": None,  # filled after version is resolved in-transaction
+                    "item_id": None,
                     "project_id": project_id,
                     "atom_id": atom_id,
                     "selected_variant_id": payload.get("selected_variant_id"),
@@ -120,17 +117,30 @@ class RequirementBaselineService:
                     "approval_status": payload.get("approval_status"),
                     "effective_snapshot_json": _json(payload),
                     "signature": _signature(payload),
-                    "created_at": now,
+                    "created_at": None,  # filled in-transaction
                 }
             )
 
-        with closing(self.repo.connection()) as connection:
+        now = utc_now()
+        with self.repo._conn_ctx() as connection:
+            # Version is computed inside the connection so COUNT+INSERT are
+            # atomic against the same connection. When called standalone the
+            # Python sqlite3 driver auto-begins a deferred transaction on the
+            # first DML; when called inside an ECO ``transaction()`` the proxy
+            # guarantees a single shared connection (no concurrent writer).
+            version = baseline_version or self._next_version_locked(connection, project_id)
+            baseline_id = f"RBL-{_slug(project_id)}-{_slug(version)}"
             existing = connection.execute(
                 "SELECT baseline_id FROM requirement_baselines WHERE baseline_id = ?",
                 (baseline_id,),
             ).fetchone()
             if existing:
                 raise ValueError(f"baseline already exists: {baseline_id}")
+            # Backfill derived ids now that version is known.
+            for row in rows:
+                row["baseline_id"] = baseline_id
+                row["item_id"] = f"RBLITEM-{_slug(baseline_id)}-{_slug(row['atom_id'])}"
+                row["created_at"] = now
             connection.execute(
                 """
                 INSERT INTO requirement_baselines (
@@ -191,7 +201,7 @@ class RequirementBaselineService:
             clauses.append("status = ?")
             params.append(status)
         where = "WHERE " + " AND ".join(clauses) if clauses else ""
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             rows = connection.execute(
                 f"""
                 SELECT * FROM requirement_baselines
@@ -205,7 +215,7 @@ class RequirementBaselineService:
         return {"baseline_count": len(baselines), "baselines": baselines}
 
     def get_baseline(self, baseline_id: str, *, include_items: bool = True) -> dict[str, Any]:
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             row = connection.execute("SELECT * FROM requirement_baselines WHERE baseline_id = ?", (baseline_id,)).fetchone()
             if row is None:
                 raise ValueError(f"unknown baseline_id: {baseline_id}")
@@ -327,12 +337,17 @@ class RequirementBaselineService:
         }
 
     def _next_version(self, project_id: str) -> str:
-        with closing(self.repo.connection()) as connection:
-            count = connection.execute(
-                "SELECT COUNT(*) AS c FROM requirement_baselines WHERE project_id = ?",
-                (project_id,),
-            ).fetchone()["c"]
-        return f"v{int(count) + 1}"
+        with self.repo._conn_ctx() as connection:
+            return self._next_version_locked(connection, project_id)
+
+    def _next_version_locked(self, connection, project_id: str) -> str:
+        """Compute the next baseline version. Must be called inside a held
+        transaction (BEGIN IMMEDIATE) to avoid concurrent COUNT/MAX races."""
+        row = connection.execute(
+            "SELECT COUNT(*) AS c FROM requirement_baselines WHERE project_id = ?",
+            (project_id,),
+        ).fetchone()
+        return f"v{int(row['c']) + 1}"
 
     def _build_compliance_summary(self, project_id: str) -> dict[str, Any]:
         try:

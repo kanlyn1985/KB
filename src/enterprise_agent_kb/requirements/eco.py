@@ -67,7 +67,7 @@ class RequirementEcoService:
     ) -> dict[str, Any]:
         now = utc_now()
         eco_id = f"ECO-{_slug(project_id)}-{_slug(variant_id)}-{now.replace(':', '').replace('-', '').replace('.', '')}"
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             connection.execute(
                 """
                 INSERT INTO requirement_eco_orders (
@@ -105,7 +105,7 @@ class RequirementEcoService:
         summary = impact.get("summary", {})
         now = utc_now()
         actions = self._actions_from_impact(eco_id, impact, now)
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             connection.execute(
                 """
                 UPDATE requirement_eco_orders
@@ -144,43 +144,46 @@ class RequirementEcoService:
         eco = self.get_change_order(eco_id, include_actions=True, include_events=False)
         if eco.get("status") == "draft":
             eco = self.analyze_impact(eco_id, actor=submitted_by)
-        approval = RequirementApprovalService(self.repo).create_approval_request(
-            target_type="eco",
-            target_id=eco_id,
-            project_id=eco.get("project_id"),
-            risk_level=self._risk_level_for_eco(eco),
-            reason=reason or eco.get("title"),
-            requested_by=submitted_by,
-        )
         now = utc_now()
-        with closing(self.repo.connection()) as connection:
-            connection.execute(
-                """
-                UPDATE requirement_eco_orders
-                SET status='approval_pending', approval_summary_json=?, updated_at=?, submitted_at=?
-                WHERE eco_id=?
-                """,
-                (_json({"approval_id": approval["approval_id"], "approval_status": approval["approval_status"]}), now, now, eco_id),
+        # Single transaction: approval creation + ECO status update share one
+        # connection so a failure between them rolls back both.
+        with self.repo.transaction():
+            approval = RequirementApprovalService(self.repo).create_approval_request(
+                target_type="eco",
+                target_id=eco_id,
+                project_id=eco.get("project_id"),
+                risk_level=self._risk_level_for_eco(eco),
+                reason=reason or eco.get("title"),
+                requested_by=submitted_by,
             )
-            self._insert_event(connection, eco_id, "submitted_for_approval", submitted_by, reason, {"approval_id": approval["approval_id"]})
-            connection.commit()
+            with self.repo._conn_ctx() as connection:
+                connection.execute(
+                    """
+                    UPDATE requirement_eco_orders
+                    SET status='approval_pending', approval_summary_json=?, updated_at=?, submitted_at=?
+                    WHERE eco_id=?
+                    """,
+                    (_json({"approval_id": approval["approval_id"], "approval_status": approval["approval_status"]}), now, now, eco_id),
+                )
+                self._insert_event(connection, eco_id, "submitted_for_approval", submitted_by, reason, {"approval_id": approval["approval_id"]})
         return self.get_change_order(eco_id)
 
     def approve(self, eco_id: str, *, approver: str, comment: str | None = None) -> dict[str, Any]:
         approval_id = f"APR-eco-{eco_id}"
-        approval = RequirementApprovalService(self.repo).approve(approval_id, approver=approver, comment=comment)
         now = utc_now()
-        with closing(self.repo.connection()) as connection:
-            connection.execute(
-                """
-                UPDATE requirement_eco_orders
-                SET status='approved', approval_summary_json=?, updated_at=?, approved_at=?
-                WHERE eco_id=?
-                """,
-                (_json({"approval_id": approval_id, "approval_status": approval.get("approval_status"), "approver": approver}), now, now, eco_id),
-            )
-            self._insert_event(connection, eco_id, "approved", approver, comment, {"approval_id": approval_id})
-            connection.commit()
+        # Single transaction: approval decide + ECO status share one connection.
+        with self.repo.transaction():
+            approval = RequirementApprovalService(self.repo).approve(approval_id, approver=approver, comment=comment)
+            with self.repo._conn_ctx() as connection:
+                connection.execute(
+                    """
+                    UPDATE requirement_eco_orders
+                    SET status='approved', approval_summary_json=?, updated_at=?, approved_at=?
+                    WHERE eco_id=?
+                    """,
+                    (_json({"approval_id": approval_id, "approval_status": approval.get("approval_status"), "approver": approver}), now, now, eco_id),
+                )
+                self._insert_event(connection, eco_id, "approved", approver, comment, {"approval_id": approval_id})
         return self.get_change_order(eco_id)
 
     def apply_change(self, eco_id: str, *, applied_by: str | None = None, refresh_effective: bool = True) -> dict[str, Any]:
@@ -195,37 +198,39 @@ class RequirementEcoService:
         new_operator = proposed.get("operator", variant.get("operator")) or variant.get("operator")
         text = proposed.get("requirement_text") or self._render_variant_text(variant, new_operator, new_value, new_unit)
         now = utc_now()
-        with closing(self.repo.connection()) as connection:
-            connection.execute(
-                """
-                UPDATE requirement_variants
-                SET operator=COALESCE(?, operator), value_numeric=COALESCE(?, value_numeric),
-                    unit=COALESCE(?, unit), requirement_text=?, updated_at=?
-                WHERE variant_id=?
-                """,
-                (new_operator, new_value, new_unit, text, now, variant_id),
-            )
-            self._insert_event(connection, eco_id, "change_applied", applied_by, None, {"variant_id": variant_id, "proposed_change": proposed})
-            connection.execute(
-                """
-                UPDATE requirement_eco_orders
-                SET status='applied', updated_at=?, applied_at=?
-                WHERE eco_id=?
-                """,
-                (now, now, eco_id),
-            )
-            connection.commit()
-
         refreshed: list[dict[str, Any]] = []
-        if refresh_effective:
-            impact = RequirementImpactAnalyzer(self.repo).analyze_variant_change(variant_id, proposed)
-            projects = sorted({item.get("project_id") for item in impact.get("affected_projects", []) if item.get("project_id")})
-            resolver = RequirementResolver(self.repo)
-            for project_id in projects:
-                try:
-                    refreshed.append({"project_id": project_id, "requirements": [item.to_dict() for item in resolver.resolve_project(str(project_id))]})
-                except Exception as exc:
-                    refreshed.append({"project_id": project_id, "error": str(exc)})
+        # Single transaction: variant update + ECO status + event + effective
+        # refresh all share one connection. If effective refresh fails the
+        # variant update and ECO status are rolled back together.
+        with self.repo.transaction():
+            with self.repo._conn_ctx() as connection:
+                connection.execute(
+                    """
+                    UPDATE requirement_variants
+                    SET operator=COALESCE(?, operator), value_numeric=COALESCE(?, value_numeric),
+                        unit=COALESCE(?, unit), requirement_text=?, updated_at=?
+                    WHERE variant_id=?
+                    """,
+                    (new_operator, new_value, new_unit, text, now, variant_id),
+                )
+                self._insert_event(connection, eco_id, "change_applied", applied_by, None, {"variant_id": variant_id, "proposed_change": proposed})
+                connection.execute(
+                    """
+                    UPDATE requirement_eco_orders
+                    SET status='applied', updated_at=?, applied_at=?
+                    WHERE eco_id=?
+                    """,
+                    (now, now, eco_id),
+                )
+            if refresh_effective:
+                impact = RequirementImpactAnalyzer(self.repo).analyze_variant_change(variant_id, proposed)
+                projects = sorted({item.get("project_id") for item in impact.get("affected_projects", []) if item.get("project_id")})
+                resolver = RequirementResolver(self.repo)
+                for project_id in projects:
+                    try:
+                        refreshed.append({"project_id": project_id, "requirements": [item.to_dict() for item in resolver.resolve_project(str(project_id))]})
+                    except Exception as exc:
+                        refreshed.append({"project_id": project_id, "error": str(exc)})
         eco = self.get_change_order(eco_id)
         eco["refreshed_effective_requirements"] = refreshed
         return eco
@@ -243,38 +248,42 @@ class RequirementEcoService:
             raise ValueError(f"ECO must be applied before close_with_release_gate: {eco_id}")
         project_id = str(eco.get("project_id"))
         baseline_payload: dict[str, Any] | None = None
-        if freeze_baseline:
-            baseline_payload = RequirementBaselineService(self.repo).freeze_project_baseline(
-                project_id,
-                baseline_name=f"{eco_id} post-change baseline",
-                source_type="eco_close",
-                source_id=eco_id,
-                frozen_by=closed_by,
-                comment=f"Baseline frozen during ECO closure: {eco_id}",
-            )
-        baseline_after_id = baseline_payload.get("baseline_id") if baseline_payload else eco.get("baseline_after_id")
-        gate = RequirementReleaseGateService(self.repo).evaluate_project(
-            project_id,
-            stage=stage,
-            baseline_id=baseline_after_id,
-            evaluated_by=closed_by,
-            persist=True,
-        )
-        final_status = "closed" if gate.get("readiness_status") in {"pass", "conditional_pass"} else "gate_blocked"
+        gate: dict[str, Any] | None = None
         now = utc_now()
-        with closing(self.repo.connection()) as connection:
-            connection.execute(
-                """
-                UPDATE requirement_eco_orders
-                SET status=?, baseline_after_id=?, release_gate_after_id=?, updated_at=?, closed_at=CASE WHEN ?='closed' THEN ? ELSE closed_at END
-                WHERE eco_id=?
-                """,
-                (final_status, baseline_after_id, gate.get("run_id"), now, final_status, now, eco_id),
+        # Single transaction: baseline freeze + gate evaluate + ECO status
+        # share one connection. If gate evaluation fails the baseline freeze
+        # is rolled back too, avoiding an orphan baseline.
+        with self.repo.transaction():
+            if freeze_baseline:
+                baseline_payload = RequirementBaselineService(self.repo).freeze_project_baseline(
+                    project_id,
+                    baseline_name=f"{eco_id} post-change baseline",
+                    source_type="eco_close",
+                    source_id=eco_id,
+                    frozen_by=closed_by,
+                    comment=f"Baseline frozen during ECO closure: {eco_id}",
+                )
+            baseline_after_id = baseline_payload.get("baseline_id") if baseline_payload else eco.get("baseline_after_id")
+            gate = RequirementReleaseGateService(self.repo).evaluate_project(
+                project_id,
+                stage=stage,
+                baseline_id=baseline_after_id,
+                evaluated_by=closed_by,
+                persist=True,
             )
-            self._insert_event(connection, eco_id, "release_gate_evaluated", closed_by, None, {"gate_run_id": gate.get("run_id"), "readiness_status": gate.get("readiness_status")})
-            if final_status == "closed":
-                self._insert_event(connection, eco_id, "closed", closed_by, None, {"baseline_id": baseline_after_id})
-            connection.commit()
+            final_status = "closed" if gate.get("readiness_status") in {"pass", "conditional_pass"} else "gate_blocked"
+            with self.repo._conn_ctx() as connection:
+                connection.execute(
+                    """
+                    UPDATE requirement_eco_orders
+                    SET status=?, baseline_after_id=?, release_gate_after_id=?, updated_at=?, closed_at=CASE WHEN ?='closed' THEN ? ELSE closed_at END
+                    WHERE eco_id=?
+                    """,
+                    (final_status, baseline_after_id, gate.get("run_id"), now, final_status, now, eco_id),
+                )
+                self._insert_event(connection, eco_id, "release_gate_evaluated", closed_by, None, {"gate_run_id": gate.get("run_id"), "readiness_status": gate.get("readiness_status")})
+                if final_status == "closed":
+                    self._insert_event(connection, eco_id, "closed", closed_by, None, {"baseline_id": baseline_after_id})
         payload = self.get_change_order(eco_id)
         payload["post_change_baseline"] = baseline_payload
         payload["release_gate"] = gate
@@ -308,7 +317,7 @@ class RequirementEcoService:
             clauses.append("status = ?")
             params.append(status)
         where = "WHERE " + " AND ".join(clauses) if clauses else ""
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             rows = connection.execute(
                 f"""
                 SELECT * FROM requirement_eco_orders
@@ -322,7 +331,7 @@ class RequirementEcoService:
         return {"eco_count": len(orders), "ecos": orders}
 
     def get_change_order(self, eco_id: str, *, include_actions: bool = True, include_events: bool = True) -> dict[str, Any]:
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             row = connection.execute("SELECT * FROM requirement_eco_orders WHERE eco_id=?", (eco_id,)).fetchone()
             if row is None:
                 raise ValueError(f"unknown eco_id: {eco_id}")
@@ -342,7 +351,7 @@ class RequirementEcoService:
         return payload
 
     def _load_variant(self, variant_id: str) -> dict[str, Any]:
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             row = connection.execute("SELECT * FROM requirement_variants WHERE variant_id=?", (variant_id,)).fetchone()
         if row is None:
             raise ValueError(f"unknown variant_id: {variant_id}")

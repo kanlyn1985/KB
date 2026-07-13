@@ -185,7 +185,7 @@ class RequirementImpactAnalyzer:
         }
 
     def _find_projects_inheriting_profile(self, profile_id: str) -> list[str]:
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             rows = connection.execute(
                 """
                 SELECT profile_id, owner_id
@@ -206,7 +206,7 @@ class RequirementImpactAnalyzer:
     def _load_variant_by_id(self, variant_id: str | None) -> RequirementVariant:
         if not variant_id:
             raise ValueError("variant_id is required")
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             row = connection.execute(
                 "SELECT * FROM requirement_variants WHERE variant_id = ?",
                 (variant_id,),
@@ -261,7 +261,7 @@ class RequirementImpactAnalyzer:
         }
 
     def _load_test_methods(self, atom_id: str) -> list[dict[str, Any]]:
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             rows = connection.execute(
                 """
                 SELECT test_method_id, atom_id, name, description, evidence_id
@@ -274,7 +274,7 @@ class RequirementImpactAnalyzer:
         return [dict(row) for row in rows]
 
     def _load_test_cases(self, project_id: str, test_method_id: str) -> list[dict[str, Any]]:
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             rows = connection.execute(
                 """
                 SELECT test_case_id, test_method_id, project_id, name, condition_json
@@ -289,7 +289,7 @@ class RequirementImpactAnalyzer:
         return [dict(row) for row in rows]
 
     def _load_latest_test_result(self, project_id: str, test_case_id: str) -> dict[str, Any] | None:
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             row = connection.execute(
                 """
                 SELECT result_id, test_case_id, project_id, measured_value_numeric,

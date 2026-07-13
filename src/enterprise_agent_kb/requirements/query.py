@@ -349,7 +349,7 @@ class RequirementQueryPlanner:
         return query.strip().lower().replace("／", "/").replace("，", ",")
 
     def _load_projects(self) -> list[dict[str, Any]]:
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             rows = connection.execute(
                 """
                 SELECT project_id, customer_id, project_code, project_name, product_family
@@ -360,7 +360,7 @@ class RequirementQueryPlanner:
         return [dict(row) for row in rows]
 
     def _load_atoms(self) -> list[dict[str, Any]]:
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             rows = connection.execute(
                 """
                 SELECT atom_id, domain, category, canonical_name, parameter_name, default_unit, constraint_kind
@@ -413,7 +413,7 @@ class RequirementQueryPlanner:
         return unique[0] if len(unique) == 1 else None
 
     def _find_customer_common_profile(self, project_id: str) -> str | None:
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             project = connection.execute(
                 "SELECT customer_id, product_family FROM customer_projects WHERE project_id = ?",
                 (project_id,),
@@ -436,7 +436,7 @@ class RequirementQueryPlanner:
         return str(row["profile_id"]) if row else None
 
     def _match_customer(self, normalized_query: str) -> str | None:
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             rows = connection.execute(
                 """
                 SELECT customer_id, customer_name, customer_code
@@ -454,7 +454,7 @@ class RequirementQueryPlanner:
         return unique[0] if len(unique) == 1 else None
 
     def _find_customer_common_variant(self, customer_id: str, atom_id: str) -> str | None:
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             row = connection.execute(
                 """
                 SELECT v.variant_id

@@ -169,3 +169,33 @@ python scripts/run_requirement_program.py --root .requirement_program_runtime/kn
 ```
 
 审计脚本已经加入 `base.repository.files` 检查；如果没有在真实仓库根目录运行，会直接失败并提示缺失基础文件。
+
+## Phase 3: 事务模型硬化（2026-07-13）
+
+Phase 3 修复了 Requirement Resolver 的系统性事务边界缺陷。所有改动均为内部事务收敛，不改变对外 API 契约。
+
+### 根因缺陷（7 项）
+
+1. ECO `apply_change`：variant 更新+事件+ECO 状态在一个 connection 提交，但 effective 刷新在独立的 per-project connection 中执行。若刷新失败，variant 已变更且 ECO 状态已 'applied'，但 effective 需求是 stale 的。
+2. ECO `close_with_release_gate`：调用 baseline freeze（独立 connection+commit）、gate evaluate（独立 connection+commit）、再更新 ECO 状态。任一中途失败，baseline 已冻结但 ECO 状态未更新。
+3. ECO `submit_for_approval`：先创建 approval（独立 connection+commit），再更新 ECO 状态到 'approval_pending'。第二步失败则 approval 已存在但 ECO 状态 stale。
+4. ECO 无并发保护：两个并发 `apply_change` 可同时修改同一 requirement_variant，无锁、无版本检查。
+5. Approval 无正式状态机：状态转换无校验（'rejected' -> 'approved' 未被阻止）；事件用 INSERT OR REPLACE 导致重复 event_id 静默覆盖。
+6. Baseline `_next_version` 用 COUNT(*)+1 生成版本号，并发 freeze 可产生相同 baseline_version。
+7. Baseline compliance 异常未与 freeze 操作隔离。
+
+### 修复方案
+
+**Repository 层（repository.py）**：新增 `_TxnConnectionProxy` 代理类，`transaction()` 上下文管理器绑定单一 connection，`connection()`/`_conn_ctx()` 在事务激活时返回代理。代理的 `commit()`/`close()` 为 no-op，`rollback()` 透传，其他方法通过 `__getattr__` 透传到真实 connection。59 个 `closing(self.connection())` / `closing(self.repo.connection())` 调用替换为 `self._conn_ctx()` / `self.repo._conn_ctx()`。
+
+**Approval 状态机（approval.py）**：`approve()`/`reject()` 预检查 `current_status != 'submitted'` 则 raise；原子 `UPDATE ... WHERE approval_status='submitted'`，`cursor.rowcount==0` 则 rollback 并 raise "state changed concurrently"。Override 更新条件为 `approval_status='draft'`（override 初始为 draft）。
+
+**Baseline 事务（baseline.py）**：移除显式 `BEGIN IMMEDIATE`（proxy 模式下会冲突；Python sqlite3 自动 deferred BEGIN；proxy 保证 ECO 内单 connection 无并发竞争）；版本在持有 connection 内计算；重复 baseline_id raise 并回滚；compliance 失败回滚整个 freeze。
+
+**ECO 单事务边界（eco.py）**：`submit_for_approval`/`approve`/`apply_change`/`close_with_release_gate` 四个跨服务方法用 `self.repo.transaction()` 包裹。子服务（approval/baseline/gate/resolver）通过共享 repo 自动复用 proxy connection，内部 `commit()` 变 no-op，仅外层 ECO owner 提交。任一子步骤失败则整个操作回滚。
+
+### 验证
+
+- 95 个 requirement 测试通过（92 既有 + 3 新事务边界测试）
+- 3 个 ECO 事务边界测试验证关键回滚场景：impact 分析失败回滚 variant+ECO status；gate 评估失败回滚 baseline；approval 创建失败不前进 ECO status
+- KB1 主线回归无影响（cli_submodules 22/22、closed_loop_schema 21/21、answer_safety 9/9）

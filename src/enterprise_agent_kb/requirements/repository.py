@@ -2,8 +2,35 @@ from __future__ import annotations
 
 import json
 import sqlite3
-from contextlib import closing
+from contextlib import closing, contextmanager
 from datetime import datetime, timezone
+
+
+class _TxnConnectionProxy:
+    """Proxy wrapping a real sqlite3.Connection while a transaction is bound.
+
+    ``commit`` and ``close`` are no-ops so that inner services (approval,
+    baseline, gate, resolver) sharing the same repository do not prematurely
+    commit or close the outer ECO transaction. ``rollback`` and all other
+    attributes pass through to the real connection.
+    """
+
+    __slots__ = ("_real",)
+
+    def __init__(self, real: sqlite3.Connection):
+        object.__setattr__(self, "_real", real)
+
+    def commit(self) -> None:  # no-op: outer transaction owns commit
+        pass
+
+    def close(self) -> None:  # no-op: outer transaction owns lifecycle
+        pass
+
+    def rollback(self) -> None:
+        self._real.rollback()
+
+    def __getattr__(self, name: str):
+        return getattr(self._real, name)
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -29,9 +56,53 @@ class RequirementRepository:
     def __init__(self, root: Path):
         self.root = root
         self.paths = AppPaths.from_root(root)
+        self._txn_conn: sqlite3.Connection | None = None
 
-    def connection(self) -> sqlite3.Connection:
+    def connection(self) -> sqlite3.Connection | _TxnConnectionProxy:
+        """Return the current transaction connection if one is active, else a
+        fresh connection. When a transaction is active (via ``transaction()``
+        context manager), all services sharing this repo reuse the same
+        proxied connection so cross-service operations stay within one
+        transaction and inner ``commit()``/``close()`` become no-ops."""
+        if self._txn_conn is not None:
+            return _TxnConnectionProxy(self._txn_conn)
         return connect(self.paths.db_file)
+
+    @contextmanager
+    def transaction(self):
+        """Bind a single connection to this repo for the duration of the
+        ``with`` block. All ``connection()`` / ``_conn_ctx()`` calls return a
+        proxy over this connection, so multi-service operations (e.g. ECO
+        ``apply_change`` calling resolver + variant update + approval) share
+        one transaction. The proxy no-ops inner ``commit``/``close`` so only
+        the outer owner commits. On exception the transaction is rolled back.
+        """
+        if self._txn_conn is not None:
+            # Nested: yield a proxy over the outer connection, do not own it.
+            yield _TxnConnectionProxy(self._txn_conn)
+            return
+        real = connect(self.paths.db_file)
+        self._txn_conn = real
+        try:
+            yield _TxnConnectionProxy(real)
+            real.commit()
+        except Exception:
+            real.rollback()
+            raise
+        finally:
+            self._txn_conn = None
+            real.close()
+
+    @contextmanager
+    def _conn_ctx(self):
+        """Connection context manager. If a transaction is bound, yields a
+        proxy (commit/close are no-ops) without closing. Otherwise opens and
+        closes a fresh connection."""
+        if self._txn_conn is not None:
+            yield _TxnConnectionProxy(self._txn_conn)
+            return
+        with closing(connect(self.paths.db_file)) as conn:
+            yield conn
 
     def initialize_schema(self) -> list[str]:
         """Create or upgrade requirement management tables via the KB1
@@ -45,7 +116,7 @@ class RequirementRepository:
         """
         self.paths.db_dir.mkdir(parents=True, exist_ok=True)
         migrations_dir = Path(__file__).resolve().parents[1] / "migrations"
-        with closing(self.connection()) as connection:
+        with self._conn_ctx() as connection:
             if migrations_dir.is_dir():
                 apply_pending_migrations(connection, migrations_dir)
             else:
@@ -63,7 +134,7 @@ class RequirementRepository:
             return [row["name"] for row in rows]
 
     def load_project(self, project_id: str) -> CustomerProject:
-        with closing(self.connection()) as connection:
+        with self._conn_ctx() as connection:
             row = connection.execute(
                 "SELECT * FROM customer_projects WHERE project_id = ?",
                 (project_id,),
@@ -81,7 +152,7 @@ class RequirementRepository:
         )
 
     def load_atom(self, atom_id: str) -> RequirementAtom:
-        with closing(self.connection()) as connection:
+        with self._conn_ctx() as connection:
             row = connection.execute(
                 "SELECT * FROM requirement_atoms WHERE atom_id = ?",
                 (atom_id,),
@@ -95,7 +166,7 @@ class RequirementRepository:
         if not profile_ids:
             return []
         placeholders = ",".join("?" for _ in profile_ids)
-        with closing(self.connection()) as connection:
+        with self._conn_ctx() as connection:
             rows = connection.execute(
                 f"""
                 SELECT DISTINCT a.*
@@ -109,7 +180,7 @@ class RequirementRepository:
         return [self._atom_from_row(row) for row in rows]
 
     def find_project_profile(self, project_id: str) -> RequirementProfile | None:
-        with closing(self.connection()) as connection:
+        with self._conn_ctx() as connection:
             row = connection.execute(
                 """
                 SELECT * FROM requirement_profiles
@@ -125,7 +196,7 @@ class RequirementRepository:
         return self._profile_from_row(row) if row else None
 
     def load_profile(self, profile_id: str) -> RequirementProfile:
-        with closing(self.connection()) as connection:
+        with self._conn_ctx() as connection:
             row = connection.execute(
                 "SELECT * FROM requirement_profiles WHERE profile_id = ?",
                 (profile_id,),
@@ -142,7 +213,7 @@ class RequirementRepository:
             if current_id in seen:
                 return
             seen.add(current_id)
-            with closing(self.connection()) as connection:
+            with self._conn_ctx() as connection:
                 parent_rows = connection.execute(
                     """
                     SELECT parent_profile_id
@@ -163,7 +234,7 @@ class RequirementRepository:
         if not profile_ids:
             return []
         placeholders = ",".join("?" for _ in profile_ids)
-        with closing(self.connection()) as connection:
+        with self._conn_ctx() as connection:
             rows = connection.execute(
                 f"""
                 SELECT * FROM requirement_variants
@@ -178,7 +249,7 @@ class RequirementRepository:
         if not profile_ids:
             return []
         placeholders = ",".join("?" for _ in profile_ids)
-        with closing(self.connection()) as connection:
+        with self._conn_ctx() as connection:
             rows = connection.execute(
                 f"""
                 SELECT * FROM requirement_overrides
@@ -193,7 +264,7 @@ class RequirementRepository:
         selected = effective.selected_variant_id
         effective_id = f"EFF-{effective.project_id}-{effective.atom_id}"
         now = utc_now()
-        with closing(self.connection()) as connection:
+        with self._conn_ctx() as connection:
             connection.execute(
                 """
                 INSERT INTO effective_requirements (
@@ -247,7 +318,7 @@ class RequirementRepository:
         placeholders = ", ".join("?" for _ in keys)
         columns = ", ".join(keys)
         sql = f"INSERT OR REPLACE INTO {table} ({columns}) VALUES ({placeholders})"
-        with closing(self.connection()) as connection:
+        with self._conn_ctx() as connection:
             connection.executemany(sql, [[row.get(key) for key in keys] for row in rows])
             connection.commit()
         return len(rows)

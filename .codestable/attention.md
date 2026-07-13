@@ -51,3 +51,27 @@
 - **NEXT_DEVELOPMENT_PLAN Phase 1 进行中（验证链修复）**：6 阶段工程收敛路线图（docs/NEXT_DEVELOPMENT_PLAN.md，用户在 GitHub 主分支直接编写）。Phase 1 三任务：①修复 run_requirement_program.py / audit_requirement_program.py 的测试发现路径（tests/requirement/）与 audit 期望（cli/ 包结构、docs/requirement-program/ 子目录）；②重写 3 个 apply_requirement_*.py 集成脚本适配模块化 cli/ 架构，提供函数式库 API（integrate_cli/integrate_answer_api/integrate_api_server）+ CLI 幂等包装，72 requirement 测试全过；③在 .github/workflows/tests.yml 新增 requirement-program CI job（windows-latest + Python 3.12，7 步：checkout/setup/install/clean pycache/pytest tests/requirement/audit/smoke）。17/17 smoke gate + 11/11 audit 通过。
 - **NEXT_DEVELOPMENT_PLAN Phase 2 完成（Schema Migration 化）**：requirement 子系统 schema 从 `requirements/schema.py` 模块级 SQL 迁移到 `migrations/002_requirement_program.sql`，复用 KB1 PRAGMA user_version 机制（与 001_expected_points.sql 一致）。`repository.initialize_schema()` 改为调用 `apply_pending_migrations`（migrations 目录找不到时回退到 SCHEMA_SQL executescript）。兼容性：CREATE TABLE IF NOT EXISTS 幂等，已有 requirement 表的 DB 重复执行安全；生产 DB（user_version=1 无 requirement 表）升级到 2 且保留原有 KB1 表。新增 audit `migration.file` 检查（12/12 PASSED）。10 个迁移单元测试（新 DB/幂等/user_version=1 升级/SCHEMA_SQL 镜像一致性）。requirement 套件 82 passed（基线 72+10）。SCHEMA_SQL 保留为 fallback 镜像，由 TestSchemaSqlMirror 断言两源表集一致。
 - **项目阶段评审报告（持续更新）**：`docs/kb1_project_review_2026-06-24.html` 是<b>活的评审报告</b>，<b>每个 Sprint 完成后必须更新</b>（用户拿它做阶段评审）。新增 §09 "Sprint 进展"章节按 Sprint 追加；同步更新执行摘要(§01)/测试(§05)/当前状态(§10)/风险(§11)/结论(§13) 的统计与评级。更新后用 Python HTMLParser 校验标签平衡。Sprint 1 已更新（2026-06-25，总体 A-）。
+
+## Phase 3: Transaction model hardening (2026-07-13)
+
+- Approval state machine: approve/reject only valid from status='submitted' via
+  BEGIN IMMEDIATE + atomic UPDATE WHERE approval_status='submitted'; override
+  updates conditioned on approval_status='draft' (overrides start as draft).
+  Concurrent state change blocks via cursor.rowcount==0 check.
+- Baseline freeze transaction: version computed inside held connection (no
+  explicit BEGIN IMMEDIATE; Python sqlite3 auto-begins deferred txn; proxy
+  guarantees single connection in ECO context); duplicate baseline_id raises
+  and rolls back; compliance failure rolls back entire freeze.
+- ECO cross-service single transaction: submit_for_approval / approve /
+  apply_change / close_with_release_gate now wrap cross-service calls
+  (approval/baseline/gate/resolver) in self.repo.transaction(). All services
+  share one proxied connection; inner commit()/close() are no-ops so only the
+  outer ECO owner commits. On any sub-step failure the entire operation rolls
+  back (no orphan baselines, no half-applied variants, no stale ECO status).
+- _TxnConnectionProxy in repository.py wraps real connection: commit/close
+  no-op, rollback passthrough, all else __getattr__ to real. 59 closing()
+  calls across 10 service files replaced with self._conn_ctx()/self.repo._conn_ctx().
+- Tests: 95 requirement tests pass (92 existing + 3 new transaction boundary
+  tests in test_requirement_eco_transaction.py verifying rollback on impact
+  analysis failure, gate evaluation failure, and approval creation failure).
+- Tech debt item 2 (transaction boundaries) in architecture doc RESOLVED.

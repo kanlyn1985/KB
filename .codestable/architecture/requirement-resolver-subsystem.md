@@ -47,7 +47,7 @@ schema 真相源已从 `requirements/schema.py` SCHEMA_SQL 迁移到 `migrations
 ## 5. 已知技术债
 
 1. ~~schema 定义在 requirements/schema.py SCHEMA_SQL，待迁移到 migrations/0xx_requirement_program.sql。~~ **已解决（Phase 2）**：已迁移到 `migrations/002_requirement_program.sql`，复用 KB1 user_version 机制。SCHEMA_SQL 保留为 fallback 镜像。
-2. ECO/基线/审批跨表操作需服务级事务收敛（Phase 3 目标）。
+2. ~~ECO/基线/审批跨表操作需服务级事务收敛（Phase 3 目标）。~~ **已解决（Phase 3）**：Repository 新增 `transaction()` 上下文管理器 + `_TxnConnectionProxy` 代理，ECO 的 submit/approve/apply/close 四个跨服务方法用单事务包裹；Approval 状态机（submitted 唯一可转换态）+ Baseline freeze 事务（重复 ID 回滚）。59 个 `closing(self.connection())` 调用替换为 `self._conn_ctx()`，在事务激活时复用代理连接，内部 `commit()`/`close()` 变 no-op。
 3. API 适配器双路径（handler + FastAPI router）待选择唯一集成路径。
 
 ## 6. 爆炸半径
@@ -57,4 +57,4 @@ schema 真相源已从 `requirements/schema.py` SCHEMA_SQL 迁移到 `migrations
 - cli/_requirement.py: 32 行新适配器
 - requirements/: 21 模块 6559 LOC（完全隔离）
 - migrations/002_requirement_program.sql: 28 表 + 25 索引（Phase 2）
-- tests/requirement/: 24 测试文件 82 测试（含 10 个 schema migration 测试）
+- tests/requirement/: 27 测试文件 95 测试（含 10 个 schema migration 测试 + 7 个 approval 状态机测试 + 3 个 baseline 事务测试 + 3 个 ECO 事务边界测试）

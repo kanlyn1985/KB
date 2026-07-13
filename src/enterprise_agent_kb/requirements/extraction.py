@@ -129,7 +129,7 @@ class RequirementExtractionService:
             if candidate:
                 candidates.append(candidate)
 
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             connection.execute(
                 """
                 INSERT INTO requirement_candidate_batches (
@@ -195,7 +195,7 @@ class RequirementExtractionService:
         if doc_id:
             where = "WHERE source_doc_id = ?"
             params.append(doc_id)
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             rows = connection.execute(
                 f"""
                 SELECT fact_id, source_doc_id, object_value, predicate
@@ -240,7 +240,7 @@ class RequirementExtractionService:
             clauses.append("suggested_profile_id = ?")
             params.append(profile_id)
         where = "WHERE " + " AND ".join(clauses) if clauses else ""
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             rows = connection.execute(
                 f"""
                 SELECT * FROM requirement_candidates
@@ -268,7 +268,7 @@ class RequirementExtractionService:
     ) -> dict[str, Any]:
         self.repo.initialize_schema()
         now = utc_now()
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             row = connection.execute("SELECT * FROM requirement_candidates WHERE candidate_id = ?", (candidate_id,)).fetchone()
             if row is None:
                 raise ValueError(f"unknown candidate_id: {candidate_id}")
@@ -368,7 +368,7 @@ class RequirementExtractionService:
     def reject_candidate(self, candidate_id: str, *, reviewer: str | None = None, reason: str | None = None) -> dict[str, Any]:
         self.repo.initialize_schema()
         now = utc_now()
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             row = connection.execute("SELECT * FROM requirement_candidates WHERE candidate_id = ?", (candidate_id,)).fetchone()
             if row is None:
                 raise ValueError(f"unknown candidate_id: {candidate_id}")
@@ -385,7 +385,7 @@ class RequirementExtractionService:
         return {"status": "rejected", "candidate": self.get_candidate(candidate_id)}
 
     def get_candidate(self, candidate_id: str) -> dict[str, Any]:
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             row = connection.execute("SELECT * FROM requirement_candidates WHERE candidate_id = ?", (candidate_id,)).fetchone()
         if row is None:
             raise ValueError(f"unknown candidate_id: {candidate_id}")

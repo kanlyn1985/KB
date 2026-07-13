@@ -82,7 +82,7 @@ class RequirementPackageImportService:
             context["project_profile_id"] if profile_scope == "project_overlay" else context["customer_profile_id"]
         )
 
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             connection.execute(
                 """
                 INSERT INTO requirement_import_packages (
@@ -152,7 +152,7 @@ class RequirementPackageImportService:
         status = "promoted" if promoted else "pending_review"
         if not candidates:
             status = "no_candidates"
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             connection.execute(
                 """
                 UPDATE requirement_import_packages
@@ -219,7 +219,7 @@ class RequirementPackageImportService:
             clauses.append("status = ?")
             params.append(status)
         where = "WHERE " + " AND ".join(clauses) if clauses else ""
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             rows = connection.execute(
                 f"""
                 SELECT * FROM requirement_import_packages
@@ -244,7 +244,7 @@ class RequirementPackageImportService:
         requirements = [
             item.to_dict() for item in RequirementResolver(self.repo).resolve_project(package["project_id"])
         ]
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             connection.execute(
                 """
                 UPDATE requirement_import_packages
@@ -259,7 +259,7 @@ class RequirementPackageImportService:
 
     def get_import_package(self, package_id: str) -> dict[str, Any]:
         self.repo.initialize_schema()
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             row = connection.execute("SELECT * FROM requirement_import_packages WHERE package_id = ?", (package_id,)).fetchone()
         if row is None:
             raise ValueError(f"unknown package_id: {package_id}")
@@ -278,7 +278,7 @@ class RequirementPackageImportService:
         customer_profile_id = self._profile_id("PROFILE", customer_id, product_family, "COMMON")
         project_profile_id = self._profile_id("PROFILE", project_id)
         product_family = product_family.upper()
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             connection.execute(
                 """
                 INSERT INTO customers (customer_id, customer_name, customer_code, region, status, created_at, updated_at)

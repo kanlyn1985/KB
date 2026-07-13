@@ -168,7 +168,7 @@ class RequirementReleaseGateService:
             clauses.append("readiness_status = ?")
             params.append(status)
         where = "WHERE " + " AND ".join(clauses) if clauses else ""
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             rows = connection.execute(
                 f"""
                 SELECT run_id, project_id, stage, baseline_id, readiness_status,
@@ -185,7 +185,7 @@ class RequirementReleaseGateService:
         return {"run_count": len(runs), "runs": runs}
 
     def get_run(self, run_id: str) -> dict[str, Any]:
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             row = connection.execute("SELECT * FROM requirement_release_gate_runs WHERE run_id = ?", (run_id,)).fetchone()
             if row is None:
                 raise ValueError(f"unknown release gate run_id: {run_id}")
@@ -232,7 +232,7 @@ class RequirementReleaseGateService:
 
     def _persist_run(self, result: dict[str, Any]) -> None:
         now = utc_now()
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             connection.execute(
                 """
                 INSERT INTO requirement_release_gate_runs (

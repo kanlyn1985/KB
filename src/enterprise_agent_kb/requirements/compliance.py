@@ -116,7 +116,7 @@ class RequirementComplianceService:
         }
 
     def _load_test_methods(self, atom_id: str) -> list[RequirementTestMethod]:
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             rows = connection.execute(
                 """
                 SELECT * FROM requirement_test_methods
@@ -128,7 +128,7 @@ class RequirementComplianceService:
         return [self._method_from_row(row) for row in rows]
 
     def _load_test_cases(self, project_id: str, test_method_id: str) -> list[RequirementTestCase]:
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             rows = connection.execute(
                 """
                 SELECT * FROM requirement_test_cases
@@ -142,7 +142,7 @@ class RequirementComplianceService:
         return [self._case_from_row(row) for row in rows]
 
     def _load_latest_test_result(self, project_id: str, test_case_id: str) -> RequirementTestResult | None:
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             row = connection.execute(
                 """
                 SELECT * FROM requirement_test_results

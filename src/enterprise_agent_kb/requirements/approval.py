@@ -60,7 +60,7 @@ class RequirementApprovalService:
     ) -> dict[str, Any]:
         now = utc_now()
         approval_id = f"APR-{target_type}-{target_id}".replace("/", "-")
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             connection.execute(
                 """
                 INSERT INTO requirement_approvals (
@@ -105,25 +105,40 @@ class RequirementApprovalService:
 
     def approve(self, approval_id: str, *, approver: str, evidence_id: str | None = None, comment: str | None = None) -> dict[str, Any]:
         approval = self.get_approval(approval_id)
+        current_status = approval.get("approval_status")
+        if current_status != "submitted":
+            raise ValueError(
+                f"approval {approval_id} cannot be approved from status '{current_status}' "
+                f"(only 'submitted' approvals can be decided)"
+            )
         now = utc_now()
         final_evidence_id = evidence_id or approval.get("evidence_id")
-        with closing(self.repo.connection()) as connection:
-            connection.execute(
+        with self.repo._conn_ctx() as connection:
+            # Atomic state transition: only succeeds if status is still 'submitted'.
+            # This guards against concurrent approve/reject racing on the same row.
+            connection.execute("BEGIN IMMEDIATE")
+            cursor = connection.execute(
                 """
                 UPDATE requirement_approvals
                 SET approval_status='approved', approver=?, evidence_id=COALESCE(?, evidence_id),
                     updated_at=?, decided_at=?
-                WHERE approval_id=?
+                WHERE approval_id=? AND approval_status='submitted'
                 """,
                 (approver, evidence_id, now, now, approval_id),
             )
+            if cursor.rowcount == 0:
+                connection.rollback()
+                raise ValueError(
+                    f"approval {approval_id} state changed concurrently; cannot approve "
+                    f"(expected status 'submitted')"
+                )
             if approval.get("override_id"):
                 connection.execute(
                     """
                     UPDATE requirement_overrides
                     SET approval_status='approved', approver=?, approved_at=?,
                         evidence_id=COALESCE(?, evidence_id), updated_at=?
-                    WHERE override_id=?
+                    WHERE override_id=? AND approval_status='draft'
                     """,
                     (approver, now, final_evidence_id, now, approval["override_id"]),
                 )
@@ -133,23 +148,37 @@ class RequirementApprovalService:
 
     def reject(self, approval_id: str, *, approver: str, reason: str | None = None) -> dict[str, Any]:
         approval = self.get_approval(approval_id)
+        current_status = approval.get("approval_status")
+        if current_status != "submitted":
+            raise ValueError(
+                f"approval {approval_id} cannot be rejected from status '{current_status}' "
+                f"(only 'submitted' approvals can be decided)"
+            )
         now = utc_now()
-        with closing(self.repo.connection()) as connection:
-            connection.execute(
+        with self.repo._conn_ctx() as connection:
+            # Atomic state transition: only succeeds if status is still 'submitted'.
+            connection.execute("BEGIN IMMEDIATE")
+            cursor = connection.execute(
                 """
                 UPDATE requirement_approvals
                 SET approval_status='rejected', approver=?, reason=COALESCE(?, reason),
                     updated_at=?, decided_at=?
-                WHERE approval_id=?
+                WHERE approval_id=? AND approval_status='submitted'
                 """,
                 (approver, reason, now, now, approval_id),
             )
+            if cursor.rowcount == 0:
+                connection.rollback()
+                raise ValueError(
+                    f"approval {approval_id} state changed concurrently; cannot reject "
+                    f"(expected status 'submitted')"
+                )
             if approval.get("override_id"):
                 connection.execute(
                     """
                     UPDATE requirement_overrides
                     SET approval_status='rejected', approver=?, updated_at=?
-                    WHERE override_id=?
+                    WHERE override_id=? AND approval_status='draft'
                     """,
                     (approver, now, approval["override_id"]),
                 )
@@ -158,7 +187,7 @@ class RequirementApprovalService:
         return self.get_approval(approval_id)
 
     def get_approval(self, approval_id: str) -> dict[str, Any]:
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             row = connection.execute(
                 "SELECT * FROM requirement_approvals WHERE approval_id = ?",
                 (approval_id,),
@@ -180,7 +209,7 @@ class RequirementApprovalService:
         if where:
             sql += " WHERE " + " AND ".join(where)
         sql += " ORDER BY updated_at DESC, approval_id ASC"
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             rows = connection.execute(sql, params).fetchall()
         return [dict(row) for row in rows]
 
@@ -218,7 +247,7 @@ class RequirementApprovalService:
             params.append(project_id)
         placeholders = ",".join("?" for _ in RISKY_OVERRIDE_TYPES)
         params = [*sorted(RISKY_OVERRIDE_TYPES), *params]
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             rows = connection.execute(
                 f"""
                 SELECT o.*, p.owner_id AS project_id
@@ -296,7 +325,7 @@ class RequirementApprovalService:
         return items
 
     def _load_project_ids(self) -> list[str]:
-        with closing(self.repo.connection()) as connection:
+        with self.repo._conn_ctx() as connection:
             rows = connection.execute("SELECT project_id FROM customer_projects ORDER BY project_id ASC").fetchall()
         return [str(row["project_id"]) for row in rows]
 
