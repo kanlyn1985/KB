@@ -145,11 +145,13 @@ class AuditRunner:
 
 
     def check_base_repository_files(self) -> None:
+        # KB1 CLI is a modular package (cli/ with submodules), not a single cli.py.
         required = [
             "pyproject.toml",
             "src/enterprise_agent_kb/config.py",
             "src/enterprise_agent_kb/db.py",
-            "src/enterprise_agent_kb/cli.py",
+            "src/enterprise_agent_kb/cli/__init__.py",
+            "src/enterprise_agent_kb/cli/_orchestrator.py",
         ]
         missing = [item for item in required if not (self.repo_root / item).exists()]
         if missing:
@@ -166,26 +168,38 @@ class AuditRunner:
     def check_required_files(self) -> None:
         missing_modules = [m for m in REQUIRED_MODULES if not (self.requirements_dir / m).exists()]
         missing_scripts = [s for s in REQUIRED_SCRIPTS if not (self.repo_root / "scripts" / s).exists()]
-        missing_docs = [d for d in REQUIRED_DOCS if not (self.repo_root / "docs" / d).exists()]
-        missing = missing_modules + [f"scripts/{s}" for s in missing_scripts] + [f"docs/{d}" for d in missing_docs]
+        # Requirement docs live under docs/requirement-program/ (not docs/ root).
+        docs_subdir = self.repo_root / "docs" / "requirement-program"
+        missing_docs = [d for d in REQUIRED_DOCS if not (docs_subdir / d).exists()]
+        missing = missing_modules + [f"scripts/{s}" for s in missing_scripts] + [f"docs/requirement-program/{d}" for d in missing_docs]
         if missing:
             self.add("required.files", "failed", "blocker", "required files missing", missing=missing)
         else:
             self.add("required.files", "passed", "blocker", "all required modules/scripts/docs exist", count=len(REQUIRED_MODULES)+len(REQUIRED_SCRIPTS)+len(REQUIRED_DOCS))
 
     def check_no_build_artifacts(self) -> None:
+        # Scope the scan to the requirement package + scripts + tests/requirement
+        # so KB1's own __pycache__ elsewhere is not flagged as a package defect.
         forbidden = []
-        for path in self.repo_root.rglob("*"):
-            parts = set(path.parts)
-            if "__pycache__" in parts or path.suffix in {".pyc", ".pyo"}:
-                forbidden.append(str(path.relative_to(self.repo_root)))
+        scan_roots = [
+            self.requirements_dir,
+            self.repo_root / "scripts",
+            self.repo_root / "tests" / "requirement",
+        ]
+        for root in scan_roots:
+            if not root.exists():
+                continue
+            for path in root.rglob("*"):
+                parts = set(path.parts)
+                if "__pycache__" in parts or path.suffix in {".pyc", ".pyo"}:
+                    forbidden.append(str(path.relative_to(self.repo_root)))
         if forbidden:
             self.add("no.build.artifacts", "failed", "major", "build artifacts found in package", artifacts=forbidden[:50], count=len(forbidden))
         else:
             self.add("no.build.artifacts", "passed", "major", "no pycache/pyc artifacts found")
 
     def check_python_syntax(self) -> None:
-        py_files = list((self.repo_root / "src").rglob("*.py")) + list((self.repo_root / "scripts").glob("*.py")) + list((self.repo_root / "tests").glob("*.py"))
+        py_files = list((self.repo_root / "src").rglob("*.py")) + list((self.repo_root / "scripts").glob("*.py")) + list((self.repo_root / "tests").rglob("*.py"))
         failures: list[dict[str, str]] = []
         for path in py_files:
             try:
@@ -261,7 +275,8 @@ class AuditRunner:
             self.add("module.size", "passed", "minor", "no requirement module exceeds 700 lines")
 
     def check_tests_present(self) -> None:
-        tests_dir = self.repo_root / "tests"
+        # Tests live under tests/requirement/ (module-layout convention).
+        tests_dir = self.repo_root / "tests" / "requirement"
         tests = sorted(str(p.relative_to(self.repo_root)) for p in tests_dir.glob("test_requirement_*.py")) if tests_dir.exists() else []
         required_keywords = ["resolver", "query", "api", "compliance", "impact", "approval", "extraction", "package", "baseline", "release_gate", "eco"]
         missing_keywords = [kw for kw in required_keywords if not any(kw in t for t in tests)]
@@ -271,7 +286,14 @@ class AuditRunner:
             self.add("tests.coverage.files", "passed", "blocker", "test files exist for all expected areas", test_count=len(tests))
 
     def check_documentation_consistency(self) -> None:
-        docs_text = "\n".join(p.read_text(encoding="utf-8") for p in (self.repo_root / "docs").glob("*.md")) if (self.repo_root / "docs").exists() else ""
+        # Requirement docs live under docs/requirement-program/; also scan docs/ root
+        # so KB1's own docs are still considered for term coverage.
+        docs_root = self.repo_root / "docs"
+        md_paths = []
+        if docs_root.exists():
+            md_paths.extend(docs_root.glob("*.md"))
+            md_paths.extend((docs_root / "requirement-program").glob("*.md"))
+        docs_text = "\n".join(p.read_text(encoding="utf-8") for p in md_paths)
         required_terms = ["Requirement Resolver", "Compliance", "Baseline", "Release", "ECO", "Gate"]
         missing = [term for term in required_terms if term.lower() not in docs_text.lower()]
         if missing:
@@ -280,7 +302,7 @@ class AuditRunner:
             self.add("docs.consistency", "passed", "minor", "documentation mentions all major capabilities")
 
     def run_unit_tests(self) -> None:
-        proc = subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "tests", "-v"], cwd=self.repo_root, text=True, capture_output=True)
+        proc = subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "tests/requirement", "-v"], cwd=self.repo_root, text=True, capture_output=True)
         status = "passed" if proc.returncode == 0 else "failed"
         severity = "blocker" if proc.returncode != 0 else "blocker"
         self.add("unit.tests.execution", status, severity, "unit test execution completed", returncode=proc.returncode, stdout=proc.stdout[-4000:], stderr=proc.stderr[-4000:])

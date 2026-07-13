@@ -113,3 +113,38 @@ jobs:
         # workspace_exists, db_file_exists, db_connect, active_documents,
         # facts_populated, evidence_populated, expected_points_populated,
         # fts_index_populated, fact_type_diversity, latest_eval_report_exists.
+
+  requirement-program:
+    # Requirement Resolver subsystem gate: unit tests + static audit +
+    # end-to-end smoke. Runs independently of the KB1 main suite so a
+    # requirement regression is visible without masking KB1 failures.
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Clean build artifacts
+        # Ensure a clean scan for the no-build-artifacts audit check.
+        run: |
+          python -c "import shutil, pathlib; [shutil.rmtree(p, ignore_errors=True) for p in pathlib.Path('src').rglob('__pycache__')]"
+          python -c "import shutil, pathlib; [shutil.rmtree(p, ignore_errors=True) for p in pathlib.Path('tests/requirement').rglob('__pycache__')]"
+
+      - name: Run requirement unit tests
+        run: python -m pytest tests/requirement/ -v --tb=short -q
+
+      - name: Run requirement program audit
+        # Static audit: file presence, schema tables, syntax, orchestrator
+        # gates, integration script safety. Exits nonzero on blocker failure.
+        run: python scripts/audit_requirement_program.py --repo-root .
+
+      - name: Run requirement smoke gates
+        # End-to-end smoke: schema init, seed, resolver, diff, query, etc.
+        run: python scripts/run_requirement_program.py --mode smoke

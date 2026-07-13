@@ -129,18 +129,12 @@ class RequirementProgramRunner:
 
     def run_unit_tests(self) -> GateResult:
         if self.mode == "smoke":
-            tests = [
-                "tests/test_requirement_resolver_mvp.py",
-                "tests/test_requirement_query_adapter.py",
-                "tests/test_requirement_compliance.py",
-                "tests/test_requirement_impact.py",
-                "tests/test_requirement_package_import.py",
-                "tests/test_requirement_release_gate.py",
-                "tests/test_requirement_eco.py",
-            ]
-            cmd = [sys.executable, "-m", "unittest", "-v", *tests]
+            # Tests live under tests/requirement/ (module-layout convention).
+            # Use unittest discover on the requirement subdir so new test files
+            # are picked up automatically instead of being hard-coded here.
+            cmd = [sys.executable, "-m", "unittest", "discover", "-s", "tests/requirement", "-v"]
         else:
-            cmd = [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-v"]
+            cmd = [sys.executable, "-m", "unittest", "discover", "-s", "tests/requirement", "-v"]
         return self.run_command(cmd)
 
     def reset_workspace(self) -> dict[str, Any]:
