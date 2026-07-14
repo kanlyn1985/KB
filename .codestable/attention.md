@@ -88,3 +88,19 @@
   182 个匹配 atom（57.4% 匹配率），135 个 NO_MATCH 进入 review 队列。
 - 管道闭环：PDF -> KB1 解析 -> facts -> extract_from_facts -> RequirementCandidate
   -> list-candidates -> promote-candidate（LLM 只生成候选不改变有效需求）。
+
+## Phase 5: 知识图谱融合 (2026-07-13)
+
+- 改进 extract_from_facts 为逐条 fact 提取，100% 保留 fact_id/evidence_id
+  关联（之前 0% -> 现在 100%），通过 fact_evidence_map 表解析 evidence_id。
+- 新增 graph_fusion.py 模块：RequirementGraphFusion 将 5 种 requirement
+  关系投影到 KB1 graph_edges 表：
+  - supported_by: requirement_evidence_bindings -> evidence
+  - verified_by: requirement_test_results -> test_result
+  - impacts: effective_requirements -> project
+  - changed_by: requirement_eco_orders -> eco_order
+  - approved_by: requirement_approvals -> user
+- 投影器幂等（ON CONFLICT DO UPDATE），不重复；graph_edges 表不存在时
+  安全跳过（standalone requirement workspace 兼容）。
+- CLI 新增 graph-fusion 和 list-fusion-edges 子命令。
+- 101 个 requirement 测试通过（+6 graph fusion 测试）。

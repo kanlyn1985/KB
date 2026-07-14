@@ -309,6 +309,13 @@ class RequirementExtractionService:
         }
 
     def extract_from_facts(self, *, doc_id: str | None = None, profile_id: str | None = None, limit: int = 500) -> dict[str, Any]:
+        """Extract candidates from KB1 facts, preserving per-fact provenance.
+
+        Each fact is extracted individually so the resulting candidates retain
+        their source fact_id. Evidence linkage is resolved via the
+        fact_evidence_map table, enabling Phase 5 graph fusion (supported_by
+        Evidence relations).
+        """
         self.repo.initialize_schema()
         where = "WHERE (fact_status IS NULL OR fact_status != 'quarantined_orphan')"
         params: list[Any] = []
@@ -326,21 +333,105 @@ class RequirementExtractionService:
                 """,
                 [*params, limit],
             ).fetchall()
-        chunks = []
+            # Pre-fetch evidence_id mapping for all facts in one query.
+            fact_ids = [row["fact_id"] for row in rows]
+            ev_map: dict[str, str | None] = {}
+            if fact_ids:
+                placeholders = ",".join("?" for _ in fact_ids)
+                ev_rows = connection.execute(
+                    f"SELECT fact_id, evidence_id FROM fact_evidence_map WHERE fact_id IN ({placeholders})",
+                    fact_ids,
+                ).fetchall()
+                for er in ev_rows:
+                    # Keep first evidence_id per fact (one-to-many; first is fine for provenance).
+                    if er["fact_id"] not in ev_map:
+                        ev_map[er["fact_id"]] = er["evidence_id"]
+        # Extract per-fact, sharing one batch_id.
+        now = utc_now()
+        batch_id = self._new_id("RCB")
+        all_candidates: list[RequirementCandidate] = []
         for row in rows:
-            # object_value may be JSON (with title/content/subject fields) or
-            # plain text. Extract the richest text representation.
             raw = row["object_value"] or row["predicate"] or ""
             text = self._extract_text_from_object_value(raw)
-            if text:
-                chunks.append(text)
-        return self.extract_from_text(
-            "\n".join(chunks),
-            source_type="facts",
-            source_id=doc_id,
-            profile_id=profile_id,
-            document_id=doc_id,
-        )
+            if not text:
+                continue
+            fact_id = row["fact_id"]
+            evidence_id = ev_map.get(fact_id)
+            sentences = self._split_requirement_sentences(text)
+            for index, sentence in enumerate(sentences, start=1):
+                candidate = self._build_candidate(
+                    sentence,
+                    batch_id=batch_id,
+                    index=len(all_candidates) + 1,
+                    source_type="facts",
+                    source_id=doc_id,
+                    profile_id=profile_id,
+                    document_id=doc_id,
+                    fact_id=fact_id,
+                    evidence_id=evidence_id,
+                )
+                if candidate:
+                    all_candidates.append(candidate)
+        # Persist batch + candidates.
+        with self.repo._conn_ctx() as connection:
+            connection.execute(
+                """
+                INSERT INTO requirement_candidate_batches (
+                    batch_id, source_type, source_id, profile_id, document_id,
+                    status, candidate_count, created_at, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (batch_id, "facts", doc_id, profile_id, doc_id, "pending_review", len(all_candidates), now, now),
+            )
+            for candidate in all_candidates:
+                connection.execute(
+                    """
+                    INSERT INTO requirement_candidates (
+                        candidate_id, batch_id, candidate_type, status, source_type, source_id,
+                        document_id, fact_id, evidence_id, raw_text, normalized_text,
+                        suggested_atom_id, suggested_profile_id, operator, value_numeric,
+                        value_text, unit, condition_json, confidence, promoted_variant_id,
+                        review_note, created_at, updated_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        candidate.candidate_id,
+                        candidate.batch_id,
+                        candidate.candidate_type,
+                        candidate.status,
+                        candidate.source_type,
+                        candidate.source_id,
+                        candidate.document_id,
+                        candidate.fact_id,
+                        candidate.evidence_id,
+                        candidate.raw_text,
+                        candidate.normalized_text,
+                        candidate.suggested_atom_id,
+                        candidate.suggested_profile_id,
+                        candidate.operator,
+                        candidate.value_numeric,
+                        candidate.value_text,
+                        candidate.unit,
+                        json.dumps(candidate.condition_json, ensure_ascii=False, sort_keys=True),
+                        candidate.confidence,
+                        candidate.promoted_variant_id,
+                        None,
+                        now,
+                        now,
+                    ),
+                )
+            self._insert_event(connection, batch_id, "batch_created", "extractor", f"{len(all_candidates)} candidates extracted from {len(rows)} facts")
+            connection.commit()
+        return {
+            "batch_id": batch_id,
+            "source_type": "facts",
+            "source_id": doc_id,
+            "profile_id": profile_id,
+            "candidate_count": len(all_candidates),
+            "candidates": [candidate.to_dict() for candidate in all_candidates[:20]],
+            "facts_scanned": len(rows),
+            "facts_with_evidence": sum(1 for row in rows if row["fact_id"] in ev_map),
+        }
 
     def list_candidates(
         self,

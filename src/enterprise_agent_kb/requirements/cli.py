@@ -234,6 +234,14 @@ def configure_parser(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
     show_eco_parser = subparsers.add_parser("show-eco", help="Show one engineering change order.")
     show_eco_parser.add_argument("--eco-id", required=True)
 
+    # Phase 5: graph fusion
+    graph_fusion_parser = subparsers.add_parser("graph-fusion", help="Project requirement relationships into KB1 graph_edges (supported_by/verified_by/impacts/changed_by/approved_by).")
+    graph_fusion_parser.add_argument("--relation", choices=["supported_by", "verified_by", "impacts", "changed_by", "approved_by"], help="Project only one relation type.")
+
+    list_fusion_parser = subparsers.add_parser("list-fusion-edges", help="List requirement fusion edges currently in KB1 graph_edges.")
+    list_fusion_parser.add_argument("--relation", help="Filter by relation type.")
+    list_fusion_parser.add_argument("--limit", type=int, default=100)
+
     return parser
 
 
@@ -517,6 +525,26 @@ def handle_requirement_command(root: Path, args: argparse.Namespace) -> dict[str
 
     if args.requirement_command == "show-eco":
         return RequirementEcoService(repo).get_change_order(args.eco_id)
+
+    if args.requirement_command == "graph-fusion":
+        from .graph_fusion import RequirementGraphFusion
+        fusion = RequirementGraphFusion(repo)
+        if args.relation:
+            # Project single relation type
+            method_map = {
+                "supported_by": fusion._project_supported_by,
+                "verified_by": fusion._project_verified_by,
+                "impacts": fusion._project_impacts,
+                "changed_by": fusion._project_changed_by,
+                "approved_by": fusion._project_approved_by,
+            }
+            return {"fusion_relation": args.relation, "result": method_map[args.relation]()}
+        return fusion.project_all()
+
+    if args.requirement_command == "list-fusion-edges":
+        from .graph_fusion import RequirementGraphFusion
+        fusion = RequirementGraphFusion(repo)
+        return fusion.list_fusion_edges(relation=args.relation, limit=args.limit)
 
     raise ValueError(f"unsupported requirement command: {args.requirement_command}")
 
