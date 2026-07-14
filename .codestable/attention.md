@@ -104,3 +104,30 @@
   安全跳过（standalone requirement workspace 兼容）。
 - CLI 新增 graph-fusion 和 list-fusion-edges 子命令。
 - 101 个 requirement 测试通过（+6 graph fusion 测试）。
+
+## Phase 6: 生产化 (2026-07-13)
+
+4 个子领域全部完成：
+
+### 6.1 RBAC 权限模型 (rbac.py)
+- 4 角色：viewer < reviewer < approver < admin，13 项权限。
+- 全局角色 + 项目级角色覆盖，未知用户默认 viewer。
+- require_permission() 抛 PermissionError，has_permission() 返回 bool。
+- migration 003 (requirement_users 表)，CLI: assign-role/list-users/check-permission。
+
+### 6.2 Audit Log 统一 (audit.py)
+- RequirementAuditLogger 把 requirement 事件写入 KB1 audit_log 表。
+- ECO 的 submit/approve/apply/close 四个关键操作已集成审计日志。
+- 事件格式 requirement.{event_type}，best-effort 不抛异常。
+- CLI: list-audit。
+
+### 6.3 多项目隔离加固 (isolation.py)
+- assert_project_scope() 验证资源 project_id 匹配。
+- ECO get_change_order 和 baseline get_baseline 添加 project_id 参数。
+- 跨项目访问抛 PermissionError。
+
+### 6.4 API 版本化
+- api_server do_GET/do_POST 支持 /v1/ 前缀路由，旧路径向后兼容。
+- /v1/health 等同 /health，/v1/search 等同 /search。
+
+122 个 requirement 测试 + 22 个 CLI 测试通过，0 回归。

@@ -103,7 +103,14 @@ class ApiRequestHandler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:
         parsed = urlparse(self.path)
-        if parsed.path == "/health":
+        path = parsed.path
+        # API versioning: /v1/ prefix is accepted and stripped for routing.
+        # Legacy paths (without /v1/) continue to work for backward compat.
+        if path.startswith("/v1/"):
+            path = path[3:]  # strip "/v1" -> keep leading slash
+        elif path == "/v1":
+            path = "/"
+        if path == "/health":
             self._write_json(
                 HTTPStatus.OK,
                 {
@@ -117,19 +124,19 @@ class ApiRequestHandler(BaseHTTPRequestHandler):
                 },
             )
             return
-        if parsed.path == "/documents":
+        if path == "/documents":
             self._write_json(HTTPStatus.OK, {"documents": self._list_documents()})
             return
-        if parsed.path == "/jobs":
+        if path == "/jobs":
             self._write_json(HTTPStatus.OK, {"jobs": self._list_jobs()})
             return
-        if parsed.path == "/audit-log":
+        if path == "/audit-log":
             self._write_json(HTTPStatus.OK, {"events": self._read_audit_events()})
             return
-        if parsed.path == "/closed-loop-dashboard":
+        if path == "/closed-loop-dashboard":
             self._write_json(HTTPStatus.OK, self._closed_loop_dashboard())
             return
-        if parsed.path == "/favicon.ico":
+        if path == "/favicon.ico":
             favicon_svg = (
                 "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
                 "<rect width='32' height='32' rx='9' fill='#2563eb'/>"
@@ -141,13 +148,19 @@ class ApiRequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(favicon_svg)
             return
-        if parsed.path in {"/", "/demo"}:
+        if path in {"/", "/demo"}:
             self._write_file(self.server.project_root / "examples" / "demo.html", "text/html; charset=utf-8")
             return
         self._write_json(HTTPStatus.NOT_FOUND, {"error": "not_found"})
 
     def do_POST(self) -> None:
         parsed = urlparse(self.path)
+        path = parsed.path
+        # API versioning: /v1/ prefix is accepted and stripped for routing.
+        if path.startswith("/v1/"):
+            path = path[3:]
+        elif path == "/v1":
+            path = "/"
         body = self._read_json_body()
         if body is None:
             return
@@ -207,7 +220,7 @@ class ApiRequestHandler(BaseHTTPRequestHandler):
             "/low-confidence-queries": self._handle_low_confidence_queries,
             "/schedule-quality-improvement": self._handle_schedule_quality_improvement,
         }
-        handler = routes.get(parsed.path)
+        handler = routes.get(path)
         if handler is None:
             self._write_json(HTTPStatus.NOT_FOUND, {"error": "not_found"})
             return

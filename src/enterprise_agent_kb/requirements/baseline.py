@@ -214,12 +214,15 @@ class RequirementBaselineService:
         baselines = [self._baseline_row_to_dict(row) for row in rows]
         return {"baseline_count": len(baselines), "baselines": baselines}
 
-    def get_baseline(self, baseline_id: str, *, include_items: bool = True) -> dict[str, Any]:
+    def get_baseline(self, baseline_id: str, *, include_items: bool = True, project_id: str | None = None) -> dict[str, Any]:
         with self.repo._conn_ctx() as connection:
             row = connection.execute("SELECT * FROM requirement_baselines WHERE baseline_id = ?", (baseline_id,)).fetchone()
             if row is None:
                 raise ValueError(f"unknown baseline_id: {baseline_id}")
             baseline = self._baseline_row_to_dict(row)
+            if project_id is not None:
+                from .isolation import assert_project_scope
+                assert_project_scope(baseline, project_id, "baseline", baseline_id)
             if include_items:
                 items = connection.execute(
                     """

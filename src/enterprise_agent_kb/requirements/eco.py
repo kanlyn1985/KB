@@ -48,6 +48,8 @@ class RequirementEcoService:
     def __init__(self, repo: RequirementRepository):
         self.repo = repo
         self.repo.initialize_schema()
+        from .audit import RequirementAuditLogger
+        self._audit = RequirementAuditLogger(repo)
 
     @classmethod
     def from_root(cls, root: Path) -> "RequirementEcoService":
@@ -166,6 +168,7 @@ class RequirementEcoService:
                     (_json({"approval_id": approval["approval_id"], "approval_status": approval["approval_status"]}), now, now, eco_id),
                 )
                 self._insert_event(connection, eco_id, "submitted_for_approval", submitted_by, reason, {"approval_id": approval["approval_id"]})
+        self._audit.log(event_type="eco_submitted", actor=submitted_by, project_id=eco.get("project_id"), payload={"eco_id": eco_id, "approval_id": approval["approval_id"]})
         return self.get_change_order(eco_id)
 
     def approve(self, eco_id: str, *, approver: str, comment: str | None = None) -> dict[str, Any]:
@@ -184,6 +187,7 @@ class RequirementEcoService:
                     (_json({"approval_id": approval_id, "approval_status": approval.get("approval_status"), "approver": approver}), now, now, eco_id),
                 )
                 self._insert_event(connection, eco_id, "approved", approver, comment, {"approval_id": approval_id})
+        self._audit.log(event_type="eco_approved", actor=approver, payload={"eco_id": eco_id, "approval_id": approval_id})
         return self.get_change_order(eco_id)
 
     def apply_change(self, eco_id: str, *, applied_by: str | None = None, refresh_effective: bool = True) -> dict[str, Any]:
@@ -233,6 +237,7 @@ class RequirementEcoService:
                         refreshed.append({"project_id": project_id, "error": str(exc)})
         eco = self.get_change_order(eco_id)
         eco["refreshed_effective_requirements"] = refreshed
+        self._audit.log(event_type="eco_applied", actor=applied_by, project_id=eco.get("project_id"), payload={"eco_id": eco_id, "variant_id": variant_id, "refreshed_count": len(refreshed)})
         return eco
 
     def close_with_release_gate(
@@ -287,6 +292,7 @@ class RequirementEcoService:
         payload = self.get_change_order(eco_id)
         payload["post_change_baseline"] = baseline_payload
         payload["release_gate"] = gate
+        self._audit.log(event_type="eco_closed", actor=closed_by, project_id=project_id, payload={"eco_id": eco_id, "final_status": final_status, "baseline_id": baseline_after_id, "gate_run_id": gate.get("run_id") if gate else None})
         return payload
 
     def run_full_cycle(
@@ -330,12 +336,15 @@ class RequirementEcoService:
         orders = [self._order_from_row(row, include_actions=False, include_events=False) for row in rows]
         return {"eco_count": len(orders), "ecos": orders}
 
-    def get_change_order(self, eco_id: str, *, include_actions: bool = True, include_events: bool = True) -> dict[str, Any]:
+    def get_change_order(self, eco_id: str, *, include_actions: bool = True, include_events: bool = True, project_id: str | None = None) -> dict[str, Any]:
         with self.repo._conn_ctx() as connection:
             row = connection.execute("SELECT * FROM requirement_eco_orders WHERE eco_id=?", (eco_id,)).fetchone()
             if row is None:
                 raise ValueError(f"unknown eco_id: {eco_id}")
             payload = self._order_from_row(row, include_actions=False, include_events=False)
+            if project_id is not None:
+                from .isolation import assert_project_scope
+                assert_project_scope(payload, project_id, "ECO", eco_id)
             if include_actions:
                 actions = connection.execute(
                     "SELECT * FROM requirement_eco_actions WHERE eco_id=? ORDER BY created_at ASC, action_id ASC",

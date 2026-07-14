@@ -242,6 +242,25 @@ def configure_parser(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
     list_fusion_parser.add_argument("--relation", help="Filter by relation type.")
     list_fusion_parser.add_argument("--limit", type=int, default=100)
 
+    # Phase 6: RBAC
+    assign_role_parser = subparsers.add_parser("assign-role", help="Assign a role (viewer/reviewer/approver/admin) to a user.")
+    assign_role_parser.add_argument("--user-id", required=True)
+    assign_role_parser.add_argument("--role", required=True, choices=["viewer", "reviewer", "approver", "admin"])
+    assign_role_parser.add_argument("--project-id", help="Project-scoped role (omit for global).")
+    assign_role_parser.add_argument("--display-name")
+
+    list_users_parser = subparsers.add_parser("list-users", help="List users and their roles.")
+    list_users_parser.add_argument("--project-id", help="Filter by project.")
+
+    check_permission_parser = subparsers.add_parser("check-permission", help="Check if a user has a permission.")
+    check_permission_parser.add_argument("--user-id", required=True)
+    check_permission_parser.add_argument("--permission", required=True)
+    check_permission_parser.add_argument("--project-id")
+
+    # Phase 6: Audit log
+    list_audit_parser = subparsers.add_parser("list-audit", help="List requirement audit events from the unified audit_log.")
+    list_audit_parser.add_argument("--limit", type=int, default=100)
+
     return parser
 
 
@@ -545,6 +564,26 @@ def handle_requirement_command(root: Path, args: argparse.Namespace) -> dict[str
         from .graph_fusion import RequirementGraphFusion
         fusion = RequirementGraphFusion(repo)
         return fusion.list_fusion_edges(relation=args.relation, limit=args.limit)
+
+    if args.requirement_command == "assign-role":
+        from .rbac import RequirementRbacService
+        return RequirementRbacService(repo).assign_role(
+            user_id=args.user_id, role=args.role, project_id=args.project_id, display_name=args.display_name
+        )
+
+    if args.requirement_command == "list-users":
+        from .rbac import RequirementRbacService
+        return RequirementRbacService(repo).list_users(project_id=args.project_id)
+
+    if args.requirement_command == "check-permission":
+        from .rbac import RequirementRbacService
+        rbac = RequirementRbacService(repo)
+        granted = rbac.has_permission(args.user_id, args.permission, args.project_id)
+        return {"user_id": args.user_id, "permission": args.permission, "project_id": args.project_id, "granted": granted}
+
+    if args.requirement_command == "list-audit":
+        from .audit import RequirementAuditLogger
+        return RequirementAuditLogger(repo).list_events(limit=args.limit)
 
     raise ValueError(f"unsupported requirement command: {args.requirement_command}")
 
