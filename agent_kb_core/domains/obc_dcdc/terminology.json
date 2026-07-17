@@ -1,0 +1,22 @@
+{
+  "terms": {
+    "DCDC_OUTPUT_RIPPLE": {
+      "aliases": ["输出纹波", "低压输出纹波", "纹波电压", "LV ripple", "output ripple", "ripple voltage", "12V rail ripple"]
+    },
+    "DCDC_OUTPUT_VOLTAGE": {
+      "aliases": ["输出电压", "低压输出电压", "LV output voltage", "12V output voltage", "Vout"]
+    },
+    "DCDC_OUTPUT_CURRENT": {
+      "aliases": ["输出电流", "低压输出电流", "LV output current", "Iout"]
+    },
+    "DCDC_EFFICIENCY": {
+      "aliases": ["效率", "转换效率", "conversion efficiency", "efficiency"]
+    },
+    "DCDC_STANDBY_CURRENT": {
+      "aliases": ["待机电流", "静态电流", "sleep current", "standby current", "quiescent current"]
+    },
+    "DCDC_OVP_THRESHOLD": {
+      "aliases": ["过压保护阈值", "输出过压", "OVP", "over voltage protection"]
+    }
+  }
+}
