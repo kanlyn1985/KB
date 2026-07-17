@@ -1,0 +1,25 @@
+{
+  "answer_contracts": {
+    "definition": {
+      "intent": "definition",
+      "required_sections": ["definition", "supporting_evidence"],
+      "optional_sections": ["related_concepts", "warnings"],
+      "preferred_object_types": ["Concept", "Definition"],
+      "preferred_fact_types": ["term_definition", "section_intro"]
+    },
+    "procedure": {
+      "intent": "procedure",
+      "required_sections": ["procedure", "supporting_evidence"],
+      "optional_sections": ["preconditions", "risks", "knowledge_gaps"],
+      "preferred_object_types": ["Procedure", "Rule"],
+      "preferred_fact_types": ["process_step", "procedure"]
+    },
+    "summary": {
+      "intent": "summary",
+      "required_sections": ["summary", "supporting_evidence"],
+      "optional_sections": ["key_terms", "warnings", "knowledge_gaps"],
+      "preferred_object_types": ["DocumentSection", "Concept"],
+      "preferred_fact_types": ["section_summary", "document_summary"]
+    }
+  }
+}
