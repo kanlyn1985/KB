@@ -53,6 +53,32 @@ plain text
 
 该链路可以在没有领域包的情况下抽取 generic fact；在加载领域包时，可用 terminology 把文本中的别名链接到 canonical subject。
 
+Phase 3 已把编译结果接入 Agent Context Pack：
+
+```text
+KnowledgeCompilation
+  -> ContextFact / ContextEvidence
+  -> ObjectProjection
+  -> RetrievalCard
+  -> QueryFrame
+  -> AgentContextPack
+```
+
+主要入口：
+
+```python
+from agent_kb.pipeline import compile_text_to_context_pack
+```
+
+CLI：
+
+```bash
+agent-kb compile-context \
+  --text-file ./sample.txt \
+  --query "输出纹波要求是多少？" \
+  --domain-dir ./domains/obc_dcdc
+```
+
 ## 当前目录
 
 ```text
@@ -72,11 +98,10 @@ python -m pytest
 
 ## 下一步
 
-Phase 3 需要把 Phase 2 编译结果接入已有 projection / retrieval card / context pack 层：
+Phase 4 建议开始迁移旧项目中的真实查询能力：
 
 ```text
-KnowledgeCompilation
-  -> ObjectProjection
-  -> RetrievalCard
-  -> AgentContextPack
+retrieval router / FTS adapter / reranker / evidence judge / eval golden suite
 ```
+
+Phase 4 的目标不是引入更多业务插件，而是让 Phase 3 的 in-memory RetrievalCard/ContextPack 可以接入可评测的多路召回链路。
