@@ -28,9 +28,9 @@ Generic Evidence-grounded Agent Knowledge Compiler
 4. **Object-centered retrieval**：召回不只找 chunk，还要找对象、别名、关系和 retrieval card。
 5. **Context Pack for Agent**：知识库主要输出给智能体消费的结构化上下文，而不是只输出最终自然语言答案。
 
-## MVP 范围
+## 当前 MVP 能力
 
-当前第一版只搭建框架骨架：
+Phase 1 已完成架构骨架：
 
 - domain pack loader
 - query frame schema
@@ -40,7 +40,18 @@ Generic Evidence-grounded Agent Knowledge Compiler
 - generic + obc_dcdc 示例 domain pack
 - 架构说明与迁移计划
 
-后续再从旧项目迁移文档解析、证据构建、检索、重排、LLM query parser、evaluation 等模块。
+Phase 2 已加入第一条可执行编译链：
+
+```text
+plain text
+  -> DocumentRecord
+  -> EvidenceBlock
+  -> SourceUnit
+  -> Fact
+  -> KnowledgeCompilation
+```
+
+该链路可以在没有领域包的情况下抽取 generic fact；在加载领域包时，可用 terminology 把文本中的别名链接到 canonical subject。
 
 ## 当前目录
 
@@ -50,4 +61,22 @@ agent_kb_core/
   src/agent_kb/
   domains/
   tests/
+```
+
+## 本地验证
+
+```bash
+cd agent_kb_core
+python -m pytest
+```
+
+## 下一步
+
+Phase 3 需要把 Phase 2 编译结果接入已有 projection / retrieval card / context pack 层：
+
+```text
+KnowledgeCompilation
+  -> ObjectProjection
+  -> RetrievalCard
+  -> AgentContextPack
 ```
