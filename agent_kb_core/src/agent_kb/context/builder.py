@@ -88,12 +88,19 @@ def _select_relations(relations: list[ObjectRelation], target_object_ids: set[st
 
 def _select_facts(facts: list[ContextFact], target_object_ids: set[str], frame: QueryFrame) -> list[ContextFact]:
     selected: list[ContextFact] = []
+    object_matches: list[ContextFact] = []
     preferred = set(frame.preferred_fact_types)
     for fact in facts:
         object_match = not target_object_ids or fact.subject in target_object_ids or str(fact.object_value) in target_object_ids
+        if object_match:
+            object_matches.append(fact)
         type_match = not preferred or fact.fact_type in preferred
         if object_match and type_match:
             selected.append(fact)
+    if not selected and object_matches:
+        # Evidence-shape preferences guide ranking; they must not erase the only
+        # evidence linked to the correctly identified object.
+        selected = object_matches
     if not selected and preferred:
         selected = [fact for fact in facts if fact.fact_type in preferred]
     return selected[:16]
