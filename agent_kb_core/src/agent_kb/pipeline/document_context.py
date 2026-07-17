@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from typing import Any
 
 from agent_kb.context.builder import build_context_pack
@@ -15,20 +15,16 @@ from agent_kb.query.query_frame import QueryFrame
 from agent_kb.query.understanding import UnderstandingOptions, understand_query
 from agent_kb.retrieval.card_builder import build_retrieval_cards
 from agent_kb.retrieval.cards import RetrievalCard
+from agent_kb.retrieval.engine import retrieve
+from agent_kb.retrieval.models import RetrievalResult
 
 
 @dataclass(frozen=True)
 class CompiledKnowledgeIndex:
     """Reusable in-memory index built from one compilation result.
 
-    The index is intentionally light-weight for Phase 3. It is not a database,
-    vector store, or final search engine. It materializes the normalized objects
-    required by the Agent Context Pack builder:
-
-    - context facts
-    - context evidence
-    - object projections
-    - retrieval cards
+    The index materializes stable retrieval surfaces. Storage adapters, vector
+    providers, and graph backends can implement the same field contract later.
     """
 
     compilation: KnowledgeCompilation
@@ -66,12 +62,14 @@ class DocumentContextResult:
 
     query_frame: QueryFrame
     compiled_index: CompiledKnowledgeIndex
+    retrieval_result: RetrievalResult
     context_pack: AgentContextPack
 
     def to_dict(self) -> dict[str, Any]:
         return {
             "query_frame": self.query_frame.to_dict(),
             "compiled_index": self.compiled_index.to_dict(),
+            "retrieval_result": self.retrieval_result.to_dict(),
             "context_pack": self.context_pack.to_dict(),
         }
 
@@ -80,6 +78,11 @@ class DocumentContextResult:
         payload = dict(self.compiled_index.summary)
         payload.update(
             {
+                "retrieval_candidates": len(self.retrieval_result.candidates),
+                "retrieved_objects": len(self.retrieval_result.selected_object_ids),
+                "retrieved_cards": len(self.retrieval_result.selected_card_ids),
+                "retrieved_facts": len(self.retrieval_result.selected_fact_ids),
+                "retrieved_evidence": len(self.retrieval_result.selected_evidence_ids),
                 "selected_objects": len(self.context_pack.target_objects),
                 "selected_cards": len(self.context_pack.retrieval_cards),
                 "selected_facts": len(self.context_pack.facts),
@@ -126,22 +129,31 @@ def build_context_pack_from_compilation(
     *,
     domain_pack: DomainPack | None = None,
     understanding_options: UnderstandingOptions | None = None,
+    retrieval_top_k: int = 12,
 ) -> DocumentContextResult:
-    """Build an Agent Context Pack from a precompiled document."""
+    """Build an Agent Context Pack through QueryFrame-aware retrieval."""
 
     frame = understand_query(query, domain_pack=domain_pack, options=understanding_options)
     compiled_index = build_compiled_knowledge_index(compilation, domain_pack=domain_pack)
+    retrieval_result = retrieve(frame, compiled_index, top_k=retrieval_top_k)
+
+    selected_objects = _select_objects(compiled_index.object_projections, retrieval_result.selected_object_ids)
+    selected_cards = _select_cards(compiled_index.retrieval_cards, retrieval_result.selected_card_ids)
+    selected_facts = _select_facts(compiled_index.context_facts, retrieval_result.selected_fact_ids)
+    selected_evidence = _select_evidence(compiled_index.context_evidence, retrieval_result.selected_evidence_ids)
+
     context_pack = build_context_pack(
         query_frame=frame,
         domain_pack=domain_pack,
-        objects=compiled_index.object_projections,
-        retrieval_cards=compiled_index.retrieval_cards,
-        facts=compiled_index.context_facts,
-        evidence=compiled_index.context_evidence,
+        objects=selected_objects,
+        retrieval_cards=selected_cards,
+        facts=selected_facts,
+        evidence=selected_evidence,
     )
     return DocumentContextResult(
         query_frame=frame,
         compiled_index=compiled_index,
+        retrieval_result=retrieval_result,
         context_pack=context_pack,
     )
 
@@ -157,8 +169,9 @@ def compile_text_to_context_pack(
     metadata: dict[str, Any] | None = None,
     max_evidence_chars: int = 900,
     understanding_options: UnderstandingOptions | None = None,
+    retrieval_top_k: int = 12,
 ) -> DocumentContextResult:
-    """Compile text and immediately produce an Agent Context Pack for a query."""
+    """Compile text and immediately produce a retrieved Agent Context Pack."""
 
     compilation = compile_text_document(
         text,
@@ -174,6 +187,7 @@ def compile_text_to_context_pack(
         compilation,
         domain_pack=domain_pack,
         understanding_options=understanding_options,
+        retrieval_top_k=retrieval_top_k,
     )
 
 
@@ -240,7 +254,6 @@ def _build_object_projections(
 def _generic_projections(compilation: KnowledgeCompilation, facts: list[ContextFact]) -> list[ObjectProjection]:
     projections: list[ObjectProjection] = []
     seen: set[str] = set()
-    pseudo_domain = "generic"
     for fact in facts:
         subject = str(fact.subject or "").strip()
         if not subject or subject in seen:
@@ -249,8 +262,8 @@ def _generic_projections(compilation: KnowledgeCompilation, facts: list[ContextF
         evidence_block = _evidence_by_id(compilation.evidence_blocks, fact.evidence_ids[0] if fact.evidence_ids else "")
         projections.append(
             ObjectProjection(
-                object_id=_safe_object_id(subject),
-                domain=pseudo_domain,
+                object_id=subject,
+                domain="generic",
                 object_type="Concept",
                 canonical_name=subject,
                 description="Generic concept projected from compiled facts.",
@@ -267,14 +280,28 @@ def _generic_projections(compilation: KnowledgeCompilation, facts: list[ContextF
     return projections
 
 
+def _select_objects(items: list[ObjectProjection], selected_ids: list[str]) -> list[ObjectProjection]:
+    wanted = set(selected_ids)
+    return [item for item in items if item.object_id in wanted]
+
+
+def _select_cards(items: list[RetrievalCard], selected_ids: list[str]) -> list[RetrievalCard]:
+    wanted = set(selected_ids)
+    return [item for item in items if item.card_id in wanted]
+
+
+def _select_facts(items: list[ContextFact], selected_ids: list[str]) -> list[ContextFact]:
+    wanted = set(selected_ids)
+    return [item for item in items if item.fact_id in wanted]
+
+
+def _select_evidence(items: list[ContextEvidence], selected_ids: list[str]) -> list[ContextEvidence]:
+    wanted = set(selected_ids)
+    return [item for item in items if item.evidence_id in wanted]
+
+
 def _evidence_by_id(blocks: list[EvidenceBlock], evidence_id: str) -> EvidenceBlock | None:
     for block in blocks:
         if block.evidence_id == evidence_id:
             return block
     return None
-
-
-def _safe_object_id(value: str) -> str:
-    cleaned = "".join(char if char.isalnum() else "_" for char in value.strip())
-    cleaned = "_".join(part for part in cleaned.split("_") if part)
-    return cleaned[:64] or "generic_concept"
