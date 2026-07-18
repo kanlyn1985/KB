@@ -18,6 +18,7 @@ dev = [
 
 [project.scripts]
 agent-kb = "agent_kb.cli:main"
+agent-kb-ops = "agent_kb.operations.cli:main"
 agent-kb-recovery = "agent_kb.recovery_cli:main"
 
 [tool.setuptools]
