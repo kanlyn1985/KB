@@ -175,7 +175,102 @@ PHASE7_MIGRATIONS: tuple[Migration, ...] = (
 )
 
 
-ALL_MIGRATIONS: tuple[Migration, ...] = PHASE6_MIGRATIONS + PHASE7_MIGRATIONS
+PHASE8_MIGRATIONS: tuple[Migration, ...] = (
+    Migration(
+        version=6,
+        name="phase8_distributed_coordination",
+        statements=(
+            """
+            CREATE TABLE IF NOT EXISTS distributed_rate_limits (
+                bucket_key TEXT NOT NULL,
+                window_start TEXT NOT NULL,
+                count INTEGER NOT NULL,
+                updated_at TEXT NOT NULL,
+                PRIMARY KEY (bucket_key, window_start)
+            )
+            """,
+            "CREATE INDEX IF NOT EXISTS idx_distributed_rate_window ON distributed_rate_limits(window_start)",
+            """
+            CREATE TABLE IF NOT EXISTS worker_heartbeats (
+                worker_id TEXT PRIMARY KEY,
+                tenant_id TEXT NOT NULL,
+                status TEXT NOT NULL,
+                capabilities_json TEXT NOT NULL,
+                heartbeat_at TEXT NOT NULL,
+                expires_at TEXT NOT NULL,
+                metadata_json TEXT NOT NULL
+            )
+            """,
+            "CREATE INDEX IF NOT EXISTS idx_worker_tenant_expiry ON worker_heartbeats(tenant_id, expires_at)",
+        ),
+    ),
+    Migration(
+        version=7,
+        name="phase8_retention_and_legal_hold",
+        statements=(
+            """
+            CREATE TABLE IF NOT EXISTS legal_holds (
+                hold_id TEXT PRIMARY KEY,
+                tenant_id TEXT NOT NULL,
+                logical_document_id TEXT NOT NULL,
+                reason TEXT NOT NULL,
+                status TEXT NOT NULL,
+                created_by TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                released_at TEXT,
+                metadata_json TEXT NOT NULL
+            )
+            """,
+            "CREATE INDEX IF NOT EXISTS idx_legal_hold_document ON legal_holds(logical_document_id, status)",
+            """
+            CREATE TABLE IF NOT EXISTS retention_runs (
+                run_id TEXT PRIMARY KEY,
+                policy_id TEXT NOT NULL,
+                tenant_id TEXT NOT NULL,
+                evaluated_count INTEGER NOT NULL,
+                eligible_json TEXT NOT NULL,
+                held_json TEXT NOT NULL,
+                purged_json TEXT NOT NULL,
+                dry_run INTEGER NOT NULL,
+                created_at TEXT NOT NULL
+            )
+            """,
+            "CREATE INDEX IF NOT EXISTS idx_retention_tenant_created ON retention_runs(tenant_id, created_at)",
+        ),
+    ),
+    Migration(
+        version=8,
+        name="phase8_idempotency_and_replication",
+        statements=(
+            """
+            CREATE TABLE IF NOT EXISTS job_idempotency (
+                tenant_id TEXT NOT NULL,
+                idempotency_key TEXT NOT NULL,
+                job_id TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                PRIMARY KEY (tenant_id, idempotency_key)
+            )
+            """,
+            "CREATE INDEX IF NOT EXISTS idx_job_idempotency_job ON job_idempotency(job_id)",
+            """
+            CREATE TABLE IF NOT EXISTS backup_replications (
+                replication_id TEXT PRIMARY KEY,
+                backup_id TEXT NOT NULL,
+                tenant_id TEXT NOT NULL,
+                destination TEXT NOT NULL,
+                sha256 TEXT NOT NULL,
+                size_bytes INTEGER NOT NULL,
+                verified INTEGER NOT NULL,
+                created_at TEXT NOT NULL
+            )
+            """,
+            "CREATE INDEX IF NOT EXISTS idx_replication_backup ON backup_replications(backup_id, created_at)",
+        ),
+    ),
+)
+
+
+ALL_MIGRATIONS: tuple[Migration, ...] = PHASE6_MIGRATIONS + PHASE7_MIGRATIONS + PHASE8_MIGRATIONS
 
 
 class SchemaMigrator:
