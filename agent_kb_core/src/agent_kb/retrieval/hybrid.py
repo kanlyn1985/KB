@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import Counter
 from dataclasses import replace
 from typing import Protocol
 
@@ -22,7 +23,7 @@ def hybrid_retrieve(
     top_k: int = 12,
     candidate_pool_size: int = 48,
 ) -> RetrievalResult:
-    """Fuse the Phase 4 in-memory baseline with a persistent search adapter."""
+    """Fuse the deterministic in-memory baseline with replaceable providers."""
 
     pool_size = max(top_k, candidate_pool_size)
     baseline = retrieve(query_frame, index, top_k=pool_size)
@@ -42,9 +43,13 @@ def hybrid_retrieve(
     executed = list(baseline.diagnostics.executed_channels)
     counts = dict(baseline.diagnostics.channel_candidate_counts)
     if persistent_provider is not None:
-        if "persistent_search" not in executed:
-            executed.append("persistent_search")
+        _append_unique(executed, "persistent_search")
         counts["persistent_search"] = len(persistent)
+        adapter_counts = _adapter_counts(persistent)
+        for adapter, count in adapter_counts.items():
+            diagnostic_name = f"{adapter}_search"
+            _append_unique(executed, diagnostic_name)
+            counts[diagnostic_name] = count
 
     diagnostics = RetrievalDiagnostics(
         requested_channels=list(baseline.diagnostics.requested_channels),
@@ -92,12 +97,15 @@ def _merge_candidates(
         for channel in [existing.channel, candidate.channel]:
             if channel and channel not in channels:
                 channels.append(channel)
+        for channel in payload.get("production_channels") or []:
+            if channel and channel not in channels:
+                channels.append(channel)
         payload["channels"] = channels
 
-        # The second source is corroborating evidence, not an unbounded score sum.
         corroboration = min(existing.score, candidate.score) * 0.20
+        winner = existing if existing.score >= candidate.score else candidate
         merged[key] = replace(
-            existing if existing.score >= candidate.score else candidate,
+            winner,
             score=max(existing.score, candidate.score) + corroboration,
             matched_terms=matched_terms,
             reasons=reasons + (["cross_index_corroboration"] if "cross_index_corroboration" not in reasons else []),
@@ -105,6 +113,19 @@ def _merge_candidates(
             channel="hybrid",
         )
     return list(merged.values())
+
+
+def _adapter_counts(candidates: list[RetrievalCandidate]) -> dict[str, int]:
+    counts: Counter[str] = Counter()
+    for candidate in candidates:
+        adapters = list(candidate.payload.get("production_channels") or [])
+        if not adapters and candidate.channel:
+            adapters = [candidate.channel]
+        for adapter in adapters:
+            normalized = str(adapter).strip()
+            if normalized and normalized not in {"hybrid", "production", "persistent_search"}:
+                counts[normalized] += 1
+    return dict(counts)
 
 
 def _selected_ids(
@@ -134,3 +155,8 @@ def _selected_ids(
                 evidence_ids.append(str(evidence_id))
 
     return object_ids, card_ids, fact_ids, evidence_ids
+
+
+def _append_unique(values: list[str], value: str) -> None:
+    if value not in values:
+        values.append(value)
