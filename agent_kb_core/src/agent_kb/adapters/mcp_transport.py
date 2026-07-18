@@ -10,7 +10,7 @@ from .mcp import AgentKBMCPAdapter
 @dataclass(frozen=True)
 class MCPServerInfo:
     name: str = "agent-kb-core"
-    version: str = "0.4.0"
+    version: str = "0.5.0"
 
 
 class MCPJSONRPCServer:
