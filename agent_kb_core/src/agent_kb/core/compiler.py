@@ -45,13 +45,16 @@ def compile_text_document(
     domain_pack: DomainPack | None = None,
     source_type: str = "text",
     source_uri: str | None = None,
+    version_label: str | None = None,
+    language: str | None = None,
     metadata: dict[str, Any] | None = None,
     max_evidence_chars: int = 900,
 ) -> KnowledgeCompilation:
     """Compile text into generic evidence-bound knowledge objects.
 
-    This is the first Phase 2 vertical slice. It intentionally does not require
-    vector stores, databases, LLMs, or domain-specific plugins.
+    The compiler remains storage- and provider-neutral. Version and language
+    metadata are carried by DocumentRecord so lifecycle adapters can manage
+    multiple compiled versions without changing evidence/fact contracts.
     """
 
     document = register_text_document(
@@ -59,6 +62,8 @@ def compile_text_document(
         title=title,
         source_type=source_type,
         source_uri=source_uri,
+        version_label=version_label,
+        language=language,
         metadata=metadata,
     )
     evidence_blocks = build_evidence_blocks(document, text, max_chars=max_evidence_chars)
