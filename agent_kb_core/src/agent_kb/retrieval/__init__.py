@@ -3,6 +3,14 @@
 from .card_builder import build_retrieval_card, build_retrieval_cards
 from .cards import RetrievalCard, card_search_terms
 from .engine import RetrievalIndexView, retrieve
+from .external_vector import (
+    ExternalVectorBackend,
+    ExternalVectorBackendError,
+    ExternalVectorCandidateProvider,
+    HTTPVectorBackend,
+    InMemoryVectorBackend,
+    VectorRecord,
+)
 from .hybrid import PersistentCandidateProvider, hybrid_retrieve
 from .models import RetrievalCandidate, RetrievalDiagnostics, RetrievalResult
 from .production import CandidateProvider, ProductionCandidateProvider
@@ -12,6 +20,11 @@ from .vector import SQLiteVectorIndex, VectorIndexSummary
 __all__ = [
     "CandidateProvider",
     "DeterministicReranker",
+    "ExternalVectorBackend",
+    "ExternalVectorBackendError",
+    "ExternalVectorCandidateProvider",
+    "HTTPVectorBackend",
+    "InMemoryVectorBackend",
     "PersistentCandidateProvider",
     "ProductionCandidateProvider",
     "Reranker",
@@ -22,6 +35,7 @@ __all__ = [
     "RetrievalResult",
     "SQLiteVectorIndex",
     "VectorIndexSummary",
+    "VectorRecord",
     "build_retrieval_card",
     "build_retrieval_cards",
     "card_search_terms",
