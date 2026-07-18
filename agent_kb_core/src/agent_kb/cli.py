@@ -4,6 +4,7 @@ import argparse
 import json
 from pathlib import Path
 
+from agent_kb.adapters import build_openapi_spec
 from agent_kb.core.compiler import compile_text_document
 from agent_kb.domains.loader import load_domain_pack
 from agent_kb.evaluation import RetrievalGoldenCase, evaluate_feedback, evaluate_retrieval
@@ -18,8 +19,21 @@ from agent_kb.pipeline import (
     query_production_store,
     set_production_document_status,
 )
-from agent_kb.service import AgentKBService, create_http_server
-from agent_kb.storage import SchemaMigrator, SQLiteKnowledgeStore
+from agent_kb.runtime import SQLiteJobQueue
+from agent_kb.security import APIKeyAuthenticator
+from agent_kb.service import (
+    AgentKBService,
+    HardenedAgentKBService,
+    HardenedServiceConfig,
+    create_http_server,
+    create_secure_http_server,
+)
+from agent_kb.storage import (
+    KnowledgeMaintenance,
+    SchemaMigrator,
+    SQLiteBackupManager,
+    SQLiteKnowledgeStore,
+)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -70,6 +84,7 @@ def build_parser() -> argparse.ArgumentParser:
     _add_index_arguments(index_production)
     index_production.add_argument("--version-label")
     index_production.add_argument("--logical-document-id")
+    index_production.add_argument("--tenant-id", default="default")
     index_production.add_argument("--summary-only", action="store_true")
 
     query_production = subparsers.add_parser(
@@ -90,6 +105,32 @@ def build_parser() -> argparse.ArgumentParser:
     document_status.add_argument("--logical-document-id", required=True)
     document_status.add_argument("--status", choices=["active", "deprecated", "deleted"], required=True)
 
+    purge_document = subparsers.add_parser(
+        "purge-document",
+        help="Transactionally remove one logical document and derived index surfaces.",
+    )
+    purge_document.add_argument("--db", type=Path, required=True)
+    purge_document.add_argument("--logical-document-id", required=True)
+
+    backup = subparsers.add_parser("backup", help="Create and verify a SQLite online backup.")
+    backup.add_argument("--db", type=Path, required=True)
+    backup.add_argument("--backup-dir", type=Path, required=True)
+    backup.add_argument("--tenant-id", default="default")
+
+    queue_index = subparsers.add_parser("queue-index", help="Submit a persistent background index job.")
+    queue_index.add_argument("--db", type=Path, required=True)
+    queue_index.add_argument("--text-file", type=Path, required=True)
+    queue_index.add_argument("--title", default="")
+    queue_index.add_argument("--logical-document-id")
+    queue_index.add_argument("--version-label")
+    queue_index.add_argument("--tenant-id", default="default")
+    queue_index.add_argument("--max-attempts", type=int, default=3)
+
+    worker_once = subparsers.add_parser("worker-once", help="Claim and execute at most one background job.")
+    worker_once.add_argument("--db", type=Path, required=True)
+    worker_once.add_argument("--domain-dir", type=Path)
+    worker_once.add_argument("--worker-id", default="cli-worker")
+
     feedback = subparsers.add_parser("feedback", help="Attach explicit feedback to a retrieval run.")
     feedback.add_argument("--db", type=Path, required=True)
     feedback.add_argument("--run-id", required=True)
@@ -103,11 +144,26 @@ def build_parser() -> argparse.ArgumentParser:
     )
     eval_feedback.add_argument("--db", type=Path, required=True)
 
-    serve = subparsers.add_parser("serve", help="Run the versioned standard-library JSON service.")
+    openapi = subparsers.add_parser("openapi", help="Print the Phase 7 OpenAPI 3.1 contract.")
+    openapi.add_argument("--output", type=Path)
+
+    serve = subparsers.add_parser("serve", help="Run the trusted-network JSON service.")
     serve.add_argument("--db", type=Path, required=True)
     serve.add_argument("--domain-dir", type=Path)
     serve.add_argument("--host", default="127.0.0.1")
     serve.add_argument("--port", type=int, default=8080)
+
+    secure_serve = subparsers.add_parser(
+        "secure-serve",
+        help="Run the authenticated, RBAC and tenant-isolated JSON service.",
+    )
+    secure_serve.add_argument("--tenant-db-root", type=Path, required=True)
+    secure_serve.add_argument("--backup-root", type=Path, required=True)
+    secure_serve.add_argument("--domain-dir", type=Path)
+    secure_serve.add_argument("--host", default="127.0.0.1")
+    secure_serve.add_argument("--port", type=int, default=8443)
+    secure_serve.add_argument("--rate-limit-capacity", type=int, default=60)
+    secure_serve.add_argument("--rate-limit-refill", type=float, default=1.0)
 
     return parser
 
@@ -133,17 +189,15 @@ def main() -> None:
     args = parser.parse_args()
 
     if args.command == "inspect-domain":
-        pack = load_domain_pack(args.domain_dir)
-        print(json.dumps(_domain_summary(pack), ensure_ascii=False, indent=2))
+        _print(_domain_summary(load_domain_pack(args.domain_dir)))
         return
 
     if args.command == "compile-context":
-        domain_pack = _load_optional_domain(args.domain_dir)
         result = compile_text_to_context_pack(
             args.text_file.read_text(encoding="utf-8"),
             query=args.query,
             title=args.title or args.text_file.stem,
-            domain_pack=domain_pack,
+            domain_pack=_load_optional_domain(args.domain_dir),
             source_uri=str(args.text_file),
             max_evidence_chars=args.max_evidence_chars,
             retrieval_top_k=max(1, args.retrieval_top_k),
@@ -200,6 +254,7 @@ def main() -> None:
             source_uri=str(args.text_file),
             version_label=args.version_label,
             logical_document_id=args.logical_document_id,
+            tenant_id=args.tenant_id,
             max_evidence_chars=args.max_evidence_chars,
         )
         _print(result.summary if args.summary_only else result.to_dict())
@@ -238,6 +293,41 @@ def main() -> None:
         _print({"logical_document_id": args.logical_document_id, "status": args.status})
         return
 
+    if args.command == "purge-document":
+        with SQLiteKnowledgeStore(args.db) as store:
+            _print(KnowledgeMaintenance(store.connection).purge_document(args.logical_document_id).to_dict())
+        return
+
+    if args.command == "backup":
+        record = SQLiteBackupManager(args.db, tenant_id=args.tenant_id).create_backup(args.backup_dir)
+        _print(record.to_dict())
+        return
+
+    if args.command == "queue-index":
+        payload = {
+            "text": args.text_file.read_text(encoding="utf-8"),
+            "title": args.title or args.text_file.stem,
+            "logical_document_id": args.logical_document_id,
+            "version_label": args.version_label,
+            "source_uri": str(args.text_file),
+        }
+        with SQLiteKnowledgeStore(args.db) as store:
+            job = SQLiteJobQueue(store.connection).submit(
+                "index_text",
+                payload,
+                tenant_id=args.tenant_id,
+                max_attempts=max(1, args.max_attempts),
+            )
+        _print(job.to_dict())
+        return
+
+    if args.command == "worker-once":
+        service = AgentKBService(db_path=args.db, domain_pack=_load_optional_domain(args.domain_dir))
+        with SQLiteKnowledgeStore(args.db) as store:
+            job = SQLiteJobQueue(store.connection).run_once(args.worker_id, {"index_text": service.index})
+        _print({"job": job.to_dict() if job else None})
+        return
+
     if args.command == "feedback":
         metadata = {"reason": args.reason} if args.reason else None
         feedback_id = add_persistent_feedback(
@@ -254,19 +344,46 @@ def main() -> None:
         _print(evaluate_feedback(args.db).to_dict())
         return
 
+    if args.command == "openapi":
+        payload = build_openapi_spec()
+        if args.output:
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            args.output.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+            _print({"output": str(args.output)})
+        else:
+            _print(payload)
+        return
+
     if args.command == "serve":
         service = AgentKBService(db_path=args.db, domain_pack=_load_optional_domain(args.domain_dir))
-        server = create_http_server(service, host=args.host, port=args.port)
-        print(json.dumps({"status": "serving", "host": args.host, "port": args.port}, ensure_ascii=False))
-        try:
-            server.serve_forever()
-        except KeyboardInterrupt:
-            pass
-        finally:
-            server.server_close()
+        _serve(create_http_server(service, host=args.host, port=args.port), args.host, args.port, secure=False)
+        return
+
+    if args.command == "secure-serve":
+        hardened = HardenedAgentKBService(
+            config=HardenedServiceConfig(
+                tenant_db_root=args.tenant_db_root,
+                backup_root=args.backup_root,
+                rate_limit_capacity=max(1, args.rate_limit_capacity),
+                rate_limit_refill_per_second=max(0.001, args.rate_limit_refill),
+            ),
+            authenticator=APIKeyAuthenticator.from_environment(),
+            domain_pack=_load_optional_domain(args.domain_dir),
+        )
+        _serve(create_secure_http_server(hardened, host=args.host, port=args.port), args.host, args.port, secure=True)
         return
 
     parser.error(f"unsupported command: {args.command}")
+
+
+def _serve(server, host: str, port: int, *, secure: bool) -> None:
+    print(json.dumps({"status": "serving", "host": host, "port": port, "authenticated": secure}, ensure_ascii=False))
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        server.server_close()
 
 
 def _load_optional_domain(path: Path | None):
