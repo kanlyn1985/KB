@@ -270,7 +270,30 @@ PHASE8_MIGRATIONS: tuple[Migration, ...] = (
 )
 
 
-ALL_MIGRATIONS: tuple[Migration, ...] = PHASE6_MIGRATIONS + PHASE7_MIGRATIONS + PHASE8_MIGRATIONS
+PHASE9_MIGRATIONS: tuple[Migration, ...] = (
+    Migration(
+        version=9,
+        name="phase9_scheduler_leadership",
+        statements=(
+            """
+            CREATE TABLE IF NOT EXISTS leader_leases (
+                lease_name TEXT PRIMARY KEY,
+                holder_id TEXT NOT NULL,
+                acquired_at TEXT NOT NULL,
+                renewed_at TEXT NOT NULL,
+                expires_at TEXT NOT NULL,
+                metadata_json TEXT NOT NULL
+            )
+            """,
+            "CREATE INDEX IF NOT EXISTS idx_leader_lease_expiry ON leader_leases(expires_at)",
+        ),
+    ),
+)
+
+
+ALL_MIGRATIONS: tuple[Migration, ...] = (
+    PHASE6_MIGRATIONS + PHASE7_MIGRATIONS + PHASE8_MIGRATIONS + PHASE9_MIGRATIONS
+)
 
 
 class SchemaMigrator:
