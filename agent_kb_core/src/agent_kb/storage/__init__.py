@@ -5,10 +5,12 @@ from .lifecycle import DocumentLifecycleRecord, DocumentLifecycleStore, Document
 from .maintenance import KnowledgeMaintenance, PurgeReport
 from .migrations import (
     ALL_MIGRATIONS,
+    CORE_MIGRATIONS,
     PHASE6_MIGRATIONS,
     PHASE7_MIGRATIONS,
     PHASE8_MIGRATIONS,
     PHASE9_MIGRATIONS,
+    PLATFORM_MIGRATIONS,
     Migration,
     SchemaMigrator,
 )
@@ -35,6 +37,7 @@ __all__ = [
     "BackupRecord",
     "BackupReplicator",
     "BackupRetentionPolicy",
+    "CORE_MIGRATIONS",
     "DEFAULT_REQUIRED_TABLES",
     "DocumentLifecycleRecord",
     "DocumentLifecycleStore",
@@ -49,6 +52,7 @@ __all__ = [
     "PHASE7_MIGRATIONS",
     "PHASE8_MIGRATIONS",
     "PHASE9_MIGRATIONS",
+    "PLATFORM_MIGRATIONS",
     "PersistentIndexView",
     "PurgeReport",
     "RecoveryDrillReport",
