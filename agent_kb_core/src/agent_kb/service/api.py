@@ -9,6 +9,7 @@ from typing import Any
 
 from agent_kb.domains.schema import DomainPack
 from agent_kb.embeddings import EmbeddingProvider
+from agent_kb.graph import RelationExtractor
 from agent_kb.pipeline.persistent_context import add_persistent_feedback
 from agent_kb.pipeline.production_context import (
     compile_text_to_production_store,
@@ -16,6 +17,7 @@ from agent_kb.pipeline.production_context import (
     query_production_store,
     set_production_document_status,
 )
+from agent_kb.retrieval.external_vector import ExternalVectorBackend
 from agent_kb.storage.migrations import SchemaMigrator
 from agent_kb.storage.sqlite_store import SQLiteKnowledgeStore
 
@@ -43,10 +45,16 @@ class AgentKBService:
         db_path: str | Path,
         domain_pack: DomainPack | None = None,
         embedding_provider: EmbeddingProvider | None = None,
+        external_vector_backend: ExternalVectorBackend | None = None,
+        relation_extractor: RelationExtractor | None = None,
+        tenant_id: str = "default",
     ) -> None:
         self.db_path = Path(db_path)
         self.domain_pack = domain_pack
         self.embedding_provider = embedding_provider
+        self.external_vector_backend = external_vector_backend
+        self.relation_extractor = relation_extractor
+        self.tenant_id = tenant_id
 
     def health(self) -> ServiceHealth:
         with SQLiteKnowledgeStore(self.db_path) as store:
@@ -68,6 +76,9 @@ class AgentKBService:
             db_path=self.db_path,
             domain_pack=self.domain_pack,
             embedding_provider=self.embedding_provider,
+            external_vector_backend=self.external_vector_backend,
+            relation_extractor=self.relation_extractor,
+            tenant_id=self.tenant_id,
             source_type=str(payload.get("source_type") or "text"),
             source_uri=_optional_text(payload.get("source_uri")),
             version_label=_optional_text(payload.get("version_label")),
@@ -86,6 +97,7 @@ class AgentKBService:
             db_path=self.db_path,
             domain_pack=self.domain_pack,
             embedding_provider=self.embedding_provider,
+            external_vector_backend=self.external_vector_backend,
             retrieval_top_k=max(1, int(payload.get("top_k") or 12)),
         )
         return result.to_dict()
@@ -120,10 +132,13 @@ def create_http_server(
     host: str = "127.0.0.1",
     port: int = 8080,
 ) -> ThreadingHTTPServer:
-    """Create a standard-library HTTP server exposing versioned JSON endpoints."""
+    """Create a basic JSON server for trusted embedded deployments.
+
+    Internet-facing deployments should use `create_secure_http_server`.
+    """
 
     class Handler(BaseHTTPRequestHandler):
-        server_version = "AgentKBCore/0.2"
+        server_version = "AgentKBCore/0.3"
 
         def do_GET(self) -> None:  # noqa: N802
             if self.path == "/health" or self.path == "/v1/health":
