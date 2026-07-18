@@ -7,7 +7,13 @@ from pathlib import Path
 from agent_kb.core.compiler import compile_text_document
 from agent_kb.domains.loader import load_domain_pack
 from agent_kb.evaluation import RetrievalGoldenCase, evaluate_retrieval
-from agent_kb.pipeline import build_compiled_knowledge_index, compile_text_to_context_pack
+from agent_kb.pipeline import (
+    add_persistent_feedback,
+    build_compiled_knowledge_index,
+    compile_text_to_context_pack,
+    compile_text_to_store,
+    query_persistent_store,
+)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -42,6 +48,35 @@ def build_parser() -> argparse.ArgumentParser:
     eval_retrieval.add_argument("--title", default="")
     eval_retrieval.add_argument("--domain-dir", type=Path)
     eval_retrieval.add_argument("--max-evidence-chars", type=int, default=900)
+
+    index_text = subparsers.add_parser(
+        "index-text",
+        help="Compile a text file and persist objects, cards, facts, evidence, and FTS surfaces.",
+    )
+    index_text.add_argument("--text-file", type=Path, required=True)
+    index_text.add_argument("--db", type=Path, required=True)
+    index_text.add_argument("--title", default="")
+    index_text.add_argument("--domain-dir", type=Path)
+    index_text.add_argument("--max-evidence-chars", type=int, default=900)
+
+    query_store = subparsers.add_parser(
+        "query-store",
+        help="Query a persisted SQLite knowledge index with hybrid retrieval and evidence judging.",
+    )
+    query_store.add_argument("--db", type=Path, required=True)
+    query_store.add_argument("--query", required=True)
+    query_store.add_argument("--domain-dir", type=Path)
+    query_store.add_argument("--retrieval-top-k", type=int, default=12)
+    query_store.add_argument("--summary-only", action="store_true")
+
+    feedback = subparsers.add_parser(
+        "feedback",
+        help="Attach explicit feedback to a persisted retrieval run.",
+    )
+    feedback.add_argument("--db", type=Path, required=True)
+    feedback.add_argument("--run-id", required=True)
+    feedback.add_argument("--rating", type=int, required=True)
+    feedback.add_argument("--comment", default="")
 
     return parser
 
@@ -88,6 +123,52 @@ def main() -> None:
         cases = [RetrievalGoldenCase(**item) for item in raw_cases if isinstance(item, dict)]
         report = evaluate_retrieval(cases, index, domain_pack=domain_pack)
         print(json.dumps(report.to_dict(), ensure_ascii=False, indent=2))
+        return
+
+    if args.command == "index-text":
+        domain_pack = load_domain_pack(args.domain_dir) if args.domain_dir else None
+        text = args.text_file.read_text(encoding="utf-8")
+        index, store_summary = compile_text_to_store(
+            text,
+            title=args.title or args.text_file.stem,
+            db_path=args.db,
+            domain_pack=domain_pack,
+            source_uri=str(args.text_file),
+            max_evidence_chars=args.max_evidence_chars,
+        )
+        print(
+            json.dumps(
+                {
+                    "db": str(args.db),
+                    "compiled_index": index.summary,
+                    "store": store_summary,
+                },
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+        return
+
+    if args.command == "query-store":
+        domain_pack = load_domain_pack(args.domain_dir) if args.domain_dir else None
+        result = query_persistent_store(
+            args.query,
+            db_path=args.db,
+            domain_pack=domain_pack,
+            retrieval_top_k=max(1, args.retrieval_top_k),
+        )
+        payload = result.summary if args.summary_only else result.to_dict()
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
+        return
+
+    if args.command == "feedback":
+        feedback_id = add_persistent_feedback(
+            db_path=args.db,
+            run_id=args.run_id,
+            rating=args.rating,
+            comment=args.comment,
+        )
+        print(json.dumps({"feedback_id": feedback_id, "run_id": args.run_id}, ensure_ascii=False, indent=2))
         return
 
     parser.error(f"unsupported command: {args.command}")
