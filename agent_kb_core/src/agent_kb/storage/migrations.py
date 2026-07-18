@@ -100,10 +100,88 @@ PHASE6_MIGRATIONS: tuple[Migration, ...] = (
 )
 
 
+PHASE7_MIGRATIONS: tuple[Migration, ...] = (
+    Migration(
+        version=4,
+        name="phase7_jobs_audit_backups",
+        statements=(
+            """
+            CREATE TABLE IF NOT EXISTS background_jobs (
+                job_id TEXT PRIMARY KEY,
+                tenant_id TEXT NOT NULL,
+                job_type TEXT NOT NULL,
+                payload_json TEXT NOT NULL,
+                status TEXT NOT NULL,
+                attempts INTEGER NOT NULL,
+                max_attempts INTEGER NOT NULL,
+                available_at TEXT NOT NULL,
+                locked_by TEXT,
+                locked_at TEXT,
+                result_json TEXT,
+                error TEXT,
+                created_at TEXT NOT NULL,
+                updated_at TEXT NOT NULL
+            )
+            """,
+            "CREATE INDEX IF NOT EXISTS idx_jobs_claim ON background_jobs(status, available_at, created_at)",
+            "CREATE INDEX IF NOT EXISTS idx_jobs_tenant ON background_jobs(tenant_id, status)",
+            """
+            CREATE TABLE IF NOT EXISTS audit_events (
+                event_id TEXT PRIMARY KEY,
+                tenant_id TEXT NOT NULL,
+                principal_id TEXT NOT NULL,
+                action TEXT NOT NULL,
+                resource_type TEXT NOT NULL,
+                resource_id TEXT,
+                outcome TEXT NOT NULL,
+                metadata_json TEXT NOT NULL,
+                created_at TEXT NOT NULL
+            )
+            """,
+            "CREATE INDEX IF NOT EXISTS idx_audit_tenant_created ON audit_events(tenant_id, created_at)",
+            "CREATE INDEX IF NOT EXISTS idx_audit_principal ON audit_events(principal_id, created_at)",
+            """
+            CREATE TABLE IF NOT EXISTS backup_history (
+                backup_id TEXT PRIMARY KEY,
+                tenant_id TEXT NOT NULL,
+                path TEXT NOT NULL,
+                sha256 TEXT NOT NULL,
+                size_bytes INTEGER NOT NULL,
+                status TEXT NOT NULL,
+                created_at TEXT NOT NULL
+            )
+            """,
+            "CREATE INDEX IF NOT EXISTS idx_backup_tenant_created ON backup_history(tenant_id, created_at)",
+        ),
+    ),
+    Migration(
+        version=5,
+        name="phase7_graph_extraction_governance",
+        statements=(
+            """
+            CREATE TABLE IF NOT EXISTS graph_extraction_runs (
+                run_id TEXT PRIMARY KEY,
+                tenant_id TEXT NOT NULL,
+                extractor_id TEXT NOT NULL,
+                candidate_count INTEGER NOT NULL,
+                accepted_count INTEGER NOT NULL,
+                metrics_json TEXT NOT NULL,
+                created_at TEXT NOT NULL
+            )
+            """,
+            "CREATE INDEX IF NOT EXISTS idx_graph_extraction_tenant ON graph_extraction_runs(tenant_id, created_at)",
+        ),
+    ),
+)
+
+
+ALL_MIGRATIONS: tuple[Migration, ...] = PHASE6_MIGRATIONS + PHASE7_MIGRATIONS
+
+
 class SchemaMigrator:
     """Monotonic SQLite migration runner used by production adapters."""
 
-    def __init__(self, connection: sqlite3.Connection, migrations: Iterable[Migration] = PHASE6_MIGRATIONS) -> None:
+    def __init__(self, connection: sqlite3.Connection, migrations: Iterable[Migration] = ALL_MIGRATIONS) -> None:
         self.connection = connection
         self.migrations = tuple(sorted(migrations, key=lambda item: item.version))
 
