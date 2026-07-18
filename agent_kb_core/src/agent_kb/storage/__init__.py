@@ -22,6 +22,7 @@ from .retention import (
     LegalHold,
     LegalHoldStore,
     RetentionManager,
+    RetentionPlan,
     RetentionPolicy,
     RetentionRun,
 )
@@ -48,6 +49,7 @@ __all__ = [
     "PurgeReport",
     "ReplicationResult",
     "RetentionManager",
+    "RetentionPlan",
     "RetentionPolicy",
     "RetentionRun",
     "SQLiteBackupManager",
