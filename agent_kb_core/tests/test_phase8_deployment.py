@@ -12,8 +12,13 @@ from agent_kb.observability import InMemoryTelemetryExporter, Tracer
 from agent_kb.pipeline import compile_text_to_production_store
 from agent_kb.retrieval import QdrantVectorBackend, VectorRecord
 from agent_kb.runtime import SQLiteDistributedRateLimiter, SQLiteJobQueue, SQLiteWorkerRegistry
-from agent_kb.security import AuthenticationError, JSONFileSecretProvider, RotatingAPIKeyAuthenticator
-from agent_kb.service import AgentKBService, TLSConfig
+from agent_kb.security import (
+    APIKeyAuthenticator,
+    AuthenticationError,
+    JSONFileSecretProvider,
+    RotatingAPIKeyAuthenticator,
+)
+from agent_kb.service import AgentKBService, HardenedAgentKBService, HardenedServiceConfig, TLSConfig
 from agent_kb.storage import (
     DocumentLifecycleStore,
     FilesystemBackupReplicator,
@@ -22,6 +27,7 @@ from agent_kb.storage import (
     RetentionPolicy,
     SQLiteBackupManager,
     SQLiteKnowledgeStore,
+    run_recovery_drill,
 )
 from agent_kb.testing import ChaosInjector, ChaosPolicy, run_load_test, run_security_probes
 
@@ -123,7 +129,7 @@ def test_distributed_rate_limit_worker_registry_and_idempotent_jobs(tmp_path: Pa
         assert finished.result == {"value": 1}
 
 
-def test_retention_legal_hold_backup_replication_and_mcp(tmp_path: Path) -> None:
+def test_retention_legal_hold_backup_replication_recovery_and_mcp(tmp_path: Path) -> None:
     db = tmp_path / "retention.sqlite3"
     pack = load_domain_pack(ROOT / "domains" / "obc_dcdc")
     for document_id, value in (("ldoc_hold", 30), ("ldoc_purge", 25)):
@@ -167,6 +173,11 @@ def test_retention_legal_hold_backup_replication_and_mcp(tmp_path: Path) -> None
     replication = FilesystemBackupReplicator(tmp_path / "replica").replicate(backup)
     assert replication.verified
     assert Path(replication.destination).exists()
+    recovery = run_recovery_drill(backup.path)
+    assert recovery.status == "passed"
+    assert recovery.integrity_ok
+    assert recovery.schema_version == 8
+    assert recovery.cleanup_performed
 
     service = AgentKBService(db_path=db, domain_pack=pack)
     transport = MCPJSONRPCServer(AgentKBMCPAdapter(service))
@@ -178,6 +189,86 @@ def test_retention_legal_hold_backup_replication_and_mcp(tmp_path: Path) -> None
     tools = transport.handle({"jsonrpc": "2.0", "id": 2, "method": "tools/list"})
     assert tools is not None
     assert any(item["name"] == "agent_kb_query" for item in tools["result"]["tools"])
+
+
+def test_hardened_retention_cleans_external_vector_backend(tmp_path: Path) -> None:
+    class RecordingVectorBackend:
+        backend_id = "recording-vector"
+
+        def __init__(self) -> None:
+            self.records: dict[tuple[str, str], VectorRecord] = {}
+            self.deleted: list[tuple[str, tuple[str, ...]]] = []
+
+        def upsert(self, records):
+            for record in records:
+                self.records[(record.source_type, record.source_id)] = record
+            return len(records)
+
+        def search(self, vector, *, limit=32):
+            return []
+
+        def delete(self, source_type, source_ids):
+            ids = tuple(str(value) for value in source_ids)
+            self.deleted.append((source_type, ids))
+            for source_id in ids:
+                self.records.pop((source_type, source_id), None)
+            return len(ids)
+
+    pack = load_domain_pack(ROOT / "domains" / "obc_dcdc")
+    backend = RecordingVectorBackend()
+    authenticator = APIKeyAuthenticator.from_mapping(
+        {
+            KEY_A: {
+                "principal_id": "admin-a",
+                "tenant_id": "tenant-a",
+                "roles": ["admin"],
+            }
+        }
+    )
+    hardened = HardenedAgentKBService(
+        config=HardenedServiceConfig(
+            tenant_db_root=tmp_path / "tenants",
+            backup_root=tmp_path / "backups",
+        ),
+        authenticator=authenticator,
+        domain_pack=pack,
+        external_vector_backend=backend,
+    )
+    principal = hardened.authenticate(f"Bearer {KEY_A}", "tenant-a")
+    hardened.index(
+        principal,
+        {
+            "text": "DCDC 输出纹波在额定负载下应不大于 30mVpp。",
+            "title": "retention target",
+            "logical_document_id": "ldoc_external_retention",
+        },
+    )
+    db_path = hardened.router.path_for("tenant-a")
+    with SQLiteKnowledgeStore(db_path) as store:
+        lifecycle = DocumentLifecycleStore(store.connection)
+        lifecycle.set_status("ldoc_external_retention", "deprecated")
+        store.connection.execute(
+            "UPDATE documents SET updated_at = '2000-01-01T00:00:00Z'"
+        )
+        store.connection.commit()
+
+    result = hardened.run_retention(
+        principal,
+        {
+            "policy_id": "external-cleanup",
+            "retain_days": 1,
+            "dry_run": False,
+        },
+    )
+    assert result["purged_document_ids"] == ["ldoc_external_retention"]
+    assert set(result["external_vector_cleanup"]["ldoc_external_retention"]) == {
+        "evidence",
+        "fact",
+        "card",
+        "object",
+    }
+    assert backend.deleted
+    assert hardened.documents(principal)["documents"] == []
 
 
 def test_qdrant_contract_telemetry_tls_and_reliability_harness(monkeypatch, tmp_path: Path) -> None:
