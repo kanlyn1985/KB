@@ -28,8 +28,9 @@ Generic Evidence-grounded Agent Knowledge Compiler
 4. **Object-centered retrieval**：召回不只找 chunk，还要找对象、别名、关系和 retrieval card。
 5. **Context Pack for Agent**：知识库主要输出给智能体消费的结构化上下文，而不是只输出最终自然语言答案。
 6. **Retrieval must be measurable**：任何召回升级都必须通过 golden cases 和指标验证。
+7. **Persistent and auditable**：持久化检索结果、证据充分性判断和用户反馈必须可审计。
 
-## 当前 MVP 能力
+## 当前能力
 
 ### Phase 1：架构骨架
 
@@ -98,6 +99,30 @@ QueryFrame
 
 当前 `semantic` channel 是无外部依赖的领域对象/别名语义回退，不代表已接入 embedding/vector provider。
 
+### Phase 5：持久化、混合召回与证据治理
+
+```text
+CompiledKnowledgeIndex
+  -> SQLite relational store
+  -> optional FTS5 / LIKE fallback
+  -> hybrid retrieval
+  -> deterministic reranker
+  -> AgentContextPack
+  -> evidence sufficiency judgement
+  -> retrieval run audit / feedback
+```
+
+Phase 5 已加入：
+
+- SQLite 持久化对象、Retrieval Card、Fact 和 Evidence
+- FTS5 检索与无 FTS5 环境下的 LIKE 回退
+- 持久化索引重建
+- 内存召回与持久化检索的混合融合
+- 可插拔 `Reranker` 接口及确定性基线实现
+- `sufficient / partial / insufficient` 证据充分性判断
+- retrieval run 审计记录
+- 用户反馈持久化
+
 ## CLI
 
 编译文档并生成带召回诊断的 Context Pack：
@@ -119,6 +144,34 @@ agent-kb eval-retrieval \
   --domain-dir ./domains/obc_dcdc
 ```
 
+编译并写入持久化索引：
+
+```bash
+agent-kb index-text \
+  --text-file ./sample.txt \
+  --db ./agent-kb.sqlite3 \
+  --domain-dir ./domains/obc_dcdc
+```
+
+查询持久化索引：
+
+```bash
+agent-kb query-store \
+  --db ./agent-kb.sqlite3 \
+  --query "输出纹波要求是多少？" \
+  --domain-dir ./domains/obc_dcdc
+```
+
+提交检索反馈：
+
+```bash
+agent-kb feedback \
+  --db ./agent-kb.sqlite3 \
+  --run-id run_xxx \
+  --rating 1 \
+  --comment "retrieval is relevant"
+```
+
 ## 当前目录
 
 ```text
@@ -132,6 +185,7 @@ agent_kb_core/
     retrieval/
     evaluation/
     context/
+    storage/
     pipeline/
   domains/
   tests/
@@ -144,17 +198,19 @@ cd agent_kb_core
 python -m pytest
 ```
 
+GitHub Actions 会在 Python 3.11、3.12 和 3.13 上执行安装、`compileall` 和完整测试。
+
 ## 下一步
 
-Phase 5 应在现有可评测基线上增加持久化和真实检索适配器：
+Phase 6 应在当前持久化、可评测基线上增加生产适配层：
 
 ```text
-SQLite/FTS index
-  + embedding provider interface
-  + vector adapter
-  + reranker interface
-  + evidence sufficiency judge
-  + retrieval run persistence
+embedding provider interface
+  + vector index adapter
+  + graph persistence/traversal
+  + service/API layer
+  + schema migrations and document lifecycle
+  + feedback-driven evaluation
 ```
 
-这些能力必须复用 Phase 4 的 `RetrievalResult` 和 golden evaluation contracts，不能绕开评测重新建立一套不可比较的检索链路。
+任何新检索适配器必须继续输出现有 `RetrievalResult`，并通过同一套 golden evaluation contracts 对比效果。
