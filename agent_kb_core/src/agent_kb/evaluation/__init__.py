@@ -1,5 +1,6 @@
-"""Golden-case retrieval evaluation contracts and runners."""
+"""Golden-case and feedback-driven evaluation contracts."""
 
+from .feedback_eval import FeedbackEvaluationReport, FeedbackSlice, evaluate_feedback
 from .retrieval_eval import (
     RetrievalCaseResult,
     RetrievalEvaluationReport,
@@ -8,8 +9,11 @@ from .retrieval_eval import (
 )
 
 __all__ = [
+    "FeedbackEvaluationReport",
+    "FeedbackSlice",
     "RetrievalGoldenCase",
     "RetrievalCaseResult",
     "RetrievalEvaluationReport",
+    "evaluate_feedback",
     "evaluate_retrieval",
 ]
