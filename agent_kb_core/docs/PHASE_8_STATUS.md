@@ -68,33 +68,45 @@ operational CI evidence artifact
 
 ## Validation
 
-The `Agent KB Core CI` release gate now has two levels.
+The `Agent KB Core CI` release gate has two levels.
 
 ### Test matrix
 
 ```text
-Python 3.11
-Python 3.12
-Python 3.13
+Python 3.11  success
+Python 3.12  success
+Python 3.13  success
 ```
 
-Each matrix job performs editable installation, `compileall`, and the complete pytest suite.
+Each matrix job performed editable installation, `compileall`, and the complete pytest suite.
 
 ### Operational gate
 
-After the matrix succeeds, the workflow performs:
-
 ```text
-production indexing
-production query
-verified backup
-isolated recovery drill
-read-only readiness evaluation
-generated client compilation
-operational evidence upload
+production indexing                 success
+production query                    success
+verified backup                     success
+isolated recovery drill             success
+read-only readiness evaluation      success
+generated client compilation        success
+operational evidence upload         success
 ```
 
-Phase 8 R2 is complete only while the matrix and the operational gate pass on the current pull-request head. The authoritative result is the GitHub Actions status attached to the PR.
+Validated workflow run:
+
+```text
+Agent KB Core CI #271
+head: c201677a8f05f8ac002771dad181c5b65f6c3a9a
+```
+
+Operational artifact:
+
+```text
+agent-kb-operational-evidence
+retention: 14 days
+```
+
+Phase 8 R2 validation gate is satisfied.
 
 ## Remaining Phase 9 work
 
