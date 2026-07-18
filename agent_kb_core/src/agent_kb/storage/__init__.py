@@ -1,4 +1,4 @@
-"""Persistent storage, migrations, lifecycle, backup, retention, and maintenance adapters."""
+"""Persistent storage, migrations, lifecycle, backup, retention, recovery, and maintenance adapters."""
 
 from .backup import BackupRecord, SQLiteBackupManager
 from .lifecycle import DocumentLifecycleRecord, DocumentLifecycleStore, DocumentVersion
@@ -11,6 +11,7 @@ from .migrations import (
     Migration,
     SchemaMigrator,
 )
+from .recovery import DEFAULT_REQUIRED_TABLES, RecoveryDrillReport, run_recovery_drill
 from .replication import (
     BackupReplicator,
     BackupRetentionPolicy,
@@ -33,6 +34,7 @@ __all__ = [
     "BackupRecord",
     "BackupReplicator",
     "BackupRetentionPolicy",
+    "DEFAULT_REQUIRED_TABLES",
     "DocumentLifecycleRecord",
     "DocumentLifecycleStore",
     "DocumentVersion",
@@ -47,6 +49,7 @@ __all__ = [
     "PHASE8_MIGRATIONS",
     "PersistentIndexView",
     "PurgeReport",
+    "RecoveryDrillReport",
     "ReplicationResult",
     "RetentionManager",
     "RetentionPlan",
@@ -55,4 +58,5 @@ __all__ = [
     "SQLiteBackupManager",
     "SQLiteKnowledgeStore",
     "SchemaMigrator",
+    "run_recovery_drill",
 ]
