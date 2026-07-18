@@ -78,9 +78,47 @@ jobs:
         if: steps.pytest.outputs.exit_code != '0'
         run: exit 1
 
+  container-platform:
+    name: container and deployment gate
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Build non-root image
+        run: docker build --tag agent-kb-core:ci agent_kb_core
+
+      - name: Validate container entrypoints
+        run: |
+          docker run --rm agent-kb-core:ci agent-kb --help
+          docker run --rm agent-kb-core:ci agent-kb-worker --help
+          docker run --rm agent-kb-core:ci agent-kb-platform --help
+          docker run --rm agent-kb-core:ci python -c "import os; assert os.getuid() == 10001"
+
+      - name: Render Docker Compose configuration
+        run: |
+          mkdir -p agent_kb_core/platform-output
+          docker compose \
+            -f agent_kb_core/deploy/docker-compose.yml \
+            config > agent_kb_core/platform-output/docker-compose.rendered.yaml
+
+      - name: Capture image metadata
+        run: |
+          docker image inspect agent-kb-core:ci > agent_kb_core/platform-output/image-inspect.json
+
+      - name: Upload platform evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-kb-platform-evidence
+          path: agent_kb_core/platform-output
+          if-no-files-found: error
+          retention-days: 14
+
   operational-smoke:
     name: operational recovery and readiness gate
-    needs: test
+    needs: [test, container-platform]
     runs-on: ubuntu-latest
 
     defaults:
@@ -124,6 +162,29 @@ jobs:
             --domain-dir domains/obc_dcdc \
             --query "输出纹波要求是多少？" \
             --summary-only > operations-output/query.json
+
+      - name: Exercise continuous worker
+        shell: bash
+        run: |
+          mkdir -p .ci-runtime/tenants
+          cp .ci-runtime/agent-kb.sqlite3 .ci-runtime/tenants/default.sqlite3
+          cat > .ci-runtime/worker.txt <<'EOF'
+          输出纹波测试方法应使用示波器测量。
+          EOF
+          agent-kb queue-index \
+            --db .ci-runtime/tenants/default.sqlite3 \
+            --text-file .ci-runtime/worker.txt \
+            --tenant-id default \
+            --logical-document-id ci-worker \
+            --idempotency-key ci-worker-job > operations-output/worker-job.json
+          agent-kb-worker \
+            --tenant-db-root .ci-runtime/tenants \
+            --tenant-id default \
+            --domain-dir domains/obc_dcdc \
+            --worker-id ci-worker \
+            --poll-interval 0 \
+            --max-jobs 1 \
+            --max-iterations 3 > operations-output/worker-run.json
 
       - name: Create verified backup
         id: backup
