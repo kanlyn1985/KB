@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from agent_kb.projection.models import ObjectProjection, ObjectRelation
 from agent_kb.query.query_frame import QueryFrame
-from agent_kb.retrieval.cards import RetrievalCard
+
+if TYPE_CHECKING:
+    from agent_kb.retrieval.cards import RetrievalCard
 
 
 @dataclass(frozen=True)
