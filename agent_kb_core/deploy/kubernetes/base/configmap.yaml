@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: agent-kb-core-config
+  namespace: agent-kb
+data:
+  AGENT_KB_TENANT_ID: default
+  AGENT_KB_DOMAIN_DIR: /app/domains/obc_dcdc
+  AGENT_KB_TENANT_DB_ROOT: /data/tenants
+  AGENT_KB_BACKUP_ROOT: /data/backups
+  AGENT_KB_WORKER_POLL_INTERVAL: "1"
+  AGENT_KB_WORKER_HEARTBEAT_INTERVAL: "10"
+  AGENT_KB_WORKER_LEASE_SECONDS: "45"
