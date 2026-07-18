@@ -4,9 +4,10 @@ import json
 import os
 import threading
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Protocol
+from urllib import error, parse, request
 
 from .auth import APIKeyAuthenticator, Principal
 
@@ -35,7 +36,51 @@ class JSONFileSecretProvider:
         payload = json.loads(self.path.read_text(encoding="utf-8"))
         if not isinstance(payload, dict) or name not in payload:
             raise KeyError(name)
-        return str(payload[name])
+        value = payload[name]
+        return value if isinstance(value, str) else json.dumps(value, ensure_ascii=False, sort_keys=True)
+
+
+@dataclass(frozen=True)
+class HTTPSecretProvider:
+    """Generic secret-manager adapter using GET `/secrets/{name}`."""
+
+    base_url: str
+    bearer_token: str = ""
+    headers: dict[str, str] = field(default_factory=dict)
+    timeout_seconds: float = 10.0
+
+    def __post_init__(self) -> None:
+        if not self.base_url.startswith(("http://", "https://")):
+            raise ValueError("secret manager URL must use http or https")
+
+    def get_secret(self, name: str) -> str:
+        headers = {"Accept": "application/json", **self.headers}
+        if self.bearer_token:
+            headers["Authorization"] = f"Bearer {self.bearer_token}"
+        outbound = request.Request(
+            self.base_url.rstrip("/") + "/secrets/" + parse.quote(name, safe=""),
+            headers=headers,
+            method="GET",
+        )
+        try:
+            with request.urlopen(outbound, timeout=self.timeout_seconds) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+        except error.HTTPError as exc:
+            if exc.code == 404:
+                raise KeyError(name) from exc
+            raise RuntimeError(f"secret manager HTTP {exc.code}") from exc
+        except (error.URLError, TimeoutError, json.JSONDecodeError) as exc:
+            raise RuntimeError(f"secret manager request failed: {type(exc).__name__}") from exc
+        if not isinstance(payload, dict) or "value" not in payload:
+            raise RuntimeError("secret manager response must contain value")
+        value = payload["value"]
+        return value if isinstance(value, str) else json.dumps(value, ensure_ascii=False, sort_keys=True)
+
+    def __repr__(self) -> str:
+        return (
+            "HTTPSecretProvider("
+            f"base_url={self.base_url!r}, timeout_seconds={self.timeout_seconds})"
+        )
 
 
 class CompositeSecretProvider:
