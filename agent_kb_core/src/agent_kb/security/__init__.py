@@ -1,5 +1,6 @@
-"""Authentication, authorization, and tenant-isolation contracts."""
+"""Authentication, authorization, tenant isolation, and audit contracts."""
 
+from .audit import AuditEvent, AuditLog
 from .auth import (
     APIKeyAuthenticator,
     APIKeyRecord,
@@ -16,6 +17,8 @@ from .auth import (
 __all__ = [
     "APIKeyAuthenticator",
     "APIKeyRecord",
+    "AuditEvent",
+    "AuditLog",
     "AuthenticationError",
     "AuthorizationError",
     "Principal",
