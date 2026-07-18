@@ -7,15 +7,22 @@ from .distributed import (
     WorkerRecord,
 )
 from .jobs import BackgroundJob, SQLiteJobQueue
+from .leadership import LeaderLease, SQLiteLeaderLeaseStore
 from .rate_limit import RateLimitDecision, TokenBucketRateLimiter
+from .worker_daemon import MultiTenantWorkerDaemon, WorkerDaemonConfig, WorkerDaemonReport
 
 __all__ = [
     "BackgroundJob",
     "DistributedRateLimitDecision",
+    "LeaderLease",
+    "MultiTenantWorkerDaemon",
     "RateLimitDecision",
     "SQLiteDistributedRateLimiter",
     "SQLiteJobQueue",
+    "SQLiteLeaderLeaseStore",
     "SQLiteWorkerRegistry",
     "TokenBucketRateLimiter",
+    "WorkerDaemonConfig",
+    "WorkerDaemonReport",
     "WorkerRecord",
 ]
