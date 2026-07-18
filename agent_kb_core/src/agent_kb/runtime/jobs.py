@@ -40,7 +40,7 @@ class BackgroundJob:
 
 
 class SQLiteJobQueue:
-    """Transactional at-least-once background job queue."""
+    """Transactional at-least-once queue with idempotent submission support."""
 
     TERMINAL_STATUSES = {"succeeded", "failed", "cancelled"}
 
@@ -57,41 +57,99 @@ class SQLiteJobQueue:
         tenant_id: str = "default",
         max_attempts: int = 3,
         delay_seconds: float = 0.0,
+        idempotency_key: str | None = None,
     ) -> BackgroundJob:
         if not job_type.strip():
             raise ValueError("job_type is required")
         if max_attempts < 1:
             raise ValueError("max_attempts must be positive")
+        normalized_key = str(idempotency_key or "").strip() or None
+        if normalized_key:
+            existing = self.connection.execute(
+                """
+                SELECT job_id FROM job_idempotency
+                WHERE tenant_id = ? AND idempotency_key = ?
+                """,
+                (tenant_id, normalized_key),
+            ).fetchone()
+            if existing is not None:
+                job = self.get(str(existing["job_id"]))
+                if job is not None:
+                    return job
+
         now = _utc_now()
         job_id = f"job_{uuid4().hex}"
         available = now + timedelta(seconds=max(0.0, float(delay_seconds)))
-        with self.connection:
-            self.connection.execute(
+        try:
+            with self.connection:
+                self.connection.execute(
+                    """
+                    INSERT INTO background_jobs(
+                        job_id, tenant_id, job_type, payload_json, status, attempts,
+                        max_attempts, available_at, locked_by, locked_at, result_json,
+                        error, created_at, updated_at
+                    ) VALUES (?, ?, ?, ?, 'queued', 0, ?, ?, NULL, NULL, NULL, NULL, ?, ?)
+                    """,
+                    (
+                        job_id,
+                        tenant_id,
+                        job_type.strip(),
+                        json.dumps(payload, ensure_ascii=False, sort_keys=True),
+                        int(max_attempts),
+                        _iso(available),
+                        _iso(now),
+                        _iso(now),
+                    ),
+                )
+                if normalized_key:
+                    self.connection.execute(
+                        """
+                        INSERT INTO job_idempotency(tenant_id, idempotency_key, job_id, created_at)
+                        VALUES (?, ?, ?, ?)
+                        """,
+                        (tenant_id, normalized_key, job_id, _iso(now)),
+                    )
+        except sqlite3.IntegrityError:
+            if not normalized_key:
+                raise
+            row = self.connection.execute(
                 """
-                INSERT INTO background_jobs(
-                    job_id, tenant_id, job_type, payload_json, status, attempts,
-                    max_attempts, available_at, locked_by, locked_at, result_json,
-                    error, created_at, updated_at
-                ) VALUES (?, ?, ?, ?, 'queued', 0, ?, ?, NULL, NULL, NULL, NULL, ?, ?)
+                SELECT job_id FROM job_idempotency
+                WHERE tenant_id = ? AND idempotency_key = ?
                 """,
-                (
-                    job_id,
-                    tenant_id,
-                    job_type.strip(),
-                    json.dumps(payload, ensure_ascii=False, sort_keys=True),
-                    int(max_attempts),
-                    _iso(available),
-                    _iso(now),
-                    _iso(now),
-                ),
-            )
+                (tenant_id, normalized_key),
+            ).fetchone()
+            if row is None:
+                raise
+            existing = self.get(str(row["job_id"]))
+            if existing is None:
+                raise RuntimeError("idempotency record references a missing job")
+            return existing
         job = self.get(job_id)
         assert job is not None
         return job
 
-    def claim(self, worker_id: str, *, lease_seconds: int = 300) -> BackgroundJob | None:
+    def claim(
+        self,
+        worker_id: str,
+        *,
+        lease_seconds: int = 300,
+        tenant_id: str | None = None,
+        job_types: set[str] | None = None,
+    ) -> BackgroundJob | None:
         now = _iso()
         stale_before = _iso(_utc_now() - timedelta(seconds=max(1, int(lease_seconds))))
+        filters = ["status = 'queued'", "available_at <= ?", "attempts < max_attempts"]
+        params: list[Any] = [now]
+        if tenant_id:
+            filters.append("tenant_id = ?")
+            params.append(tenant_id)
+        if job_types:
+            normalized_types = sorted(str(item) for item in job_types if str(item))
+            if not normalized_types:
+                return None
+            filters.append(f"job_type IN ({','.join('?' for _ in normalized_types)})")
+            params.extend(normalized_types)
         with self.connection:
             self.connection.execute(
                 """
@@ -102,13 +160,13 @@ class SQLiteJobQueue:
                 (now, stale_before),
             )
             row = self.connection.execute(
-                """
+                f"""
                 SELECT job_id FROM background_jobs
-                WHERE status = 'queued' AND available_at <= ? AND attempts < max_attempts
+                WHERE {' AND '.join(filters)}
                 ORDER BY created_at, job_id
                 LIMIT 1
                 """,
-                (now,),
+                params,
             ).fetchone()
             if row is None:
                 return None
@@ -166,25 +224,36 @@ class SQLiteJobQueue:
         row = self.connection.execute("SELECT * FROM background_jobs WHERE job_id = ?", (job_id,)).fetchone()
         return _job_from_row(row) if row is not None else None
 
-    def list(self, *, status: str | None = None, limit: int = 100) -> list[BackgroundJob]:
+    def list(
+        self,
+        *,
+        status: str | None = None,
+        tenant_id: str | None = None,
+        limit: int = 100,
+    ) -> list[BackgroundJob]:
+        filters: list[str] = []
+        params: list[Any] = []
         if status:
-            rows = self.connection.execute(
-                "SELECT * FROM background_jobs WHERE status = ? ORDER BY created_at DESC LIMIT ?",
-                (status, max(1, int(limit))),
-            )
-        else:
-            rows = self.connection.execute(
-                "SELECT * FROM background_jobs ORDER BY created_at DESC LIMIT ?",
-                (max(1, int(limit)),),
-            )
-        return [_job_from_row(row) for row in rows]
+            filters.append("status = ?")
+            params.append(status)
+        if tenant_id:
+            filters.append("tenant_id = ?")
+            params.append(tenant_id)
+        query = "SELECT * FROM background_jobs"
+        if filters:
+            query += " WHERE " + " AND ".join(filters)
+        query += " ORDER BY created_at DESC LIMIT ?"
+        params.append(max(1, int(limit)))
+        return [_job_from_row(row) for row in self.connection.execute(query, params)]
 
     def run_once(
         self,
         worker_id: str,
         handlers: dict[str, Callable[[dict[str, Any]], dict[str, Any] | None]],
+        *,
+        tenant_id: str | None = None,
     ) -> BackgroundJob | None:
-        job = self.claim(worker_id)
+        job = self.claim(worker_id, tenant_id=tenant_id, job_types=set(handlers))
         if job is None:
             return None
         handler = handlers.get(job.job_type)
