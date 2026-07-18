@@ -77,3 +77,102 @@ jobs:
       - name: Fail when tests fail
         if: steps.pytest.outputs.exit_code != '0'
         run: exit 1
+
+  operational-smoke:
+    name: operational recovery and readiness gate
+    needs: test
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: agent_kb_core
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: agent_kb_core/pyproject.toml
+
+      - name: Install Agent KB Core
+        run: |
+          python -m pip install --quiet --upgrade pip setuptools wheel
+          python -m pip install --quiet -e ".[dev]"
+
+      - name: Build operational fixture
+        shell: bash
+        run: |
+          rm -rf .ci-runtime operations-output
+          mkdir -p .ci-runtime/backups operations-output
+          cat > .ci-runtime/sample.txt <<'EOF'
+          DCDC 输出纹波在额定负载下应不大于 30mVpp。
+          输出纹波测试应使用示波器，并记录额定负载测试条件。
+          EOF
+          agent-kb index-production \
+            --text-file .ci-runtime/sample.txt \
+            --db .ci-runtime/agent-kb.sqlite3 \
+            --domain-dir domains/obc_dcdc \
+            --logical-document-id ci-ripple \
+            --version-label ci-v1 \
+            --summary-only > operations-output/index.json
+          agent-kb query-production \
+            --db .ci-runtime/agent-kb.sqlite3 \
+            --domain-dir domains/obc_dcdc \
+            --query "输出纹波要求是多少？" \
+            --summary-only > operations-output/query.json
+
+      - name: Create verified backup
+        id: backup
+        shell: bash
+        run: |
+          agent-kb backup \
+            --db .ci-runtime/agent-kb.sqlite3 \
+            --backup-dir .ci-runtime/backups \
+            --tenant-id ci \
+            --keep-last 2 \
+            --keep-days 30 > operations-output/backup.json
+          backup_path=$(python - <<'PY'
+          import json
+          from pathlib import Path
+          payload = json.loads(Path("operations-output/backup.json").read_text(encoding="utf-8"))
+          print(payload["path"])
+          PY
+          )
+          echo "backup_path=$backup_path" >> "$GITHUB_OUTPUT"
+
+      - name: Run isolated recovery drill
+        run: |
+          agent-kb-ops recovery-drill \
+            --backup-path "${{ steps.backup.outputs.backup_path }}" \
+            --output operations-output/recovery.json
+
+      - name: Run release readiness gate
+        run: |
+          agent-kb-ops readiness \
+            --db .ci-runtime/agent-kb.sqlite3 \
+            --min-schema-version 8 \
+            --require-documents \
+            --require-backup \
+            --max-failed-jobs 0 \
+            --max-stale-running-jobs 0 \
+            --output operations-output/readiness.json
+
+      - name: Generate and compile API client
+        run: |
+          agent-kb generate-client \
+            --output operations-output/agent_kb_client.py \
+            --class-name CIAgentKBClient
+          python -m py_compile operations-output/agent_kb_client.py
+
+      - name: Upload operational evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-kb-operational-evidence
+          path: agent_kb_core/operations-output
+          if-no-files-found: error
+          retention-days: 14
