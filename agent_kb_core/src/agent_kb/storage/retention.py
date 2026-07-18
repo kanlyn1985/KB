@@ -123,6 +123,20 @@ class RetentionPolicy:
 
 
 @dataclass(frozen=True)
+class RetentionPlan:
+    tenant_id: str
+    policy_id: str
+    cutoff: str
+    eligible_document_ids: list[str]
+    held_document_ids: list[str]
+    purgeable_document_ids: list[str]
+    evaluated_at: str
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
 class RetentionRun:
     run_id: str
     policy_id: str
@@ -144,7 +158,7 @@ class RetentionManager:
         self.connection.row_factory = sqlite3.Row
         SchemaMigrator(connection).migrate()
 
-    def execute(self, policy: RetentionPolicy, *, now: datetime | None = None) -> RetentionRun:
+    def plan(self, policy: RetentionPolicy, *, now: datetime | None = None) -> RetentionPlan:
         current = now or _utc_now()
         cutoff = _iso(current - timedelta(days=policy.retain_days))
         placeholders = ",".join("?" for _ in policy.statuses)
@@ -161,23 +175,36 @@ class RetentionManager:
         eligible = [str(row["logical_document_id"]) for row in rows]
         hold_store = LegalHoldStore(self.connection)
         held = [document_id for document_id in eligible if hold_store.active_for(document_id)]
-        purgeable = [document_id for document_id in eligible if document_id not in set(held)]
-        purged: list[str] = []
-        if not policy.dry_run:
-            maintenance = KnowledgeMaintenance(self.connection)
-            for document_id in purgeable:
-                maintenance.purge_document(document_id)
-                purged.append(document_id)
+        held_set = set(held)
+        purgeable = [document_id for document_id in eligible if document_id not in held_set]
+        return RetentionPlan(
+            tenant_id=policy.tenant_id,
+            policy_id=policy.policy_id,
+            cutoff=cutoff,
+            eligible_document_ids=eligible,
+            held_document_ids=held,
+            purgeable_document_ids=purgeable,
+            evaluated_at=_iso(current),
+        )
+
+    def record(
+        self,
+        policy: RetentionPolicy,
+        plan: RetentionPlan,
+        *,
+        purged_document_ids: list[str] | None = None,
+        held_document_ids: list[str] | None = None,
+    ) -> RetentionRun:
         run = RetentionRun(
             run_id=f"ret_{uuid4().hex}",
             policy_id=policy.policy_id,
             tenant_id=policy.tenant_id,
-            evaluated_count=len(eligible),
-            eligible_document_ids=eligible,
-            held_document_ids=held,
-            purged_document_ids=purged,
+            evaluated_count=len(plan.eligible_document_ids),
+            eligible_document_ids=list(plan.eligible_document_ids),
+            held_document_ids=sorted(set(held_document_ids or plan.held_document_ids)),
+            purged_document_ids=sorted(set(purged_document_ids or [])),
             dry_run=policy.dry_run,
-            created_at=_iso(current),
+            created_at=plan.evaluated_at,
         )
         with self.connection:
             self.connection.execute(
@@ -200,6 +227,16 @@ class RetentionManager:
                 ),
             )
         return run
+
+    def execute(self, policy: RetentionPolicy, *, now: datetime | None = None) -> RetentionRun:
+        plan = self.plan(policy, now=now)
+        purged: list[str] = []
+        if not policy.dry_run:
+            maintenance = KnowledgeMaintenance(self.connection)
+            for document_id in plan.purgeable_document_ids:
+                maintenance.purge_document(document_id)
+                purged.append(document_id)
+        return self.record(policy, plan, purged_document_ids=purged)
 
 
 def _from_row(row: sqlite3.Row) -> LegalHold:
