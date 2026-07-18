@@ -1,0 +1,24 @@
+{
+  "object_types": {
+    "Concept": {
+      "description": "Generic named idea or domain concept.",
+      "properties": ["canonical_name", "aliases", "definition"]
+    },
+    "DocumentSection": {
+      "description": "A semantically meaningful section in a source document.",
+      "properties": ["document_id", "section_path", "title", "page_range"]
+    },
+    "Definition": {
+      "description": "A term definition grounded in source evidence.",
+      "properties": ["term", "definition_text", "source"]
+    },
+    "Rule": {
+      "description": "A normative or procedural rule extracted from evidence.",
+      "properties": ["rule_text", "scope", "condition"]
+    },
+    "Procedure": {
+      "description": "A sequence of steps or process guidance.",
+      "properties": ["name", "steps", "scope"]
+    }
+  }
+}

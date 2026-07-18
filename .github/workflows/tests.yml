@@ -2,7 +2,17 @@ name: Tests
 
 on:
   push:
+    paths-ignore:
+      - "agent_kb_core/**"
+      - ".github/workflows/agent-kb-core.yml"
   pull_request:
+    paths-ignore:
+      - "agent_kb_core/**"
+      - ".github/workflows/agent-kb-core.yml"
+
+concurrency:
+  group: legacy-tests-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
@@ -64,12 +74,8 @@ jobs:
 
   eval-suite:
     # Runs the Phase 1 evaluator (token-overlap) and asserts a minimum
-    # pass rate.  This is the regression gate for system answer quality.
-    # Uses --max-questions 20 for sample stability: the earlier 10-question
-    # round-robin sample was too small to reflect real quality (it happened
-    # to pick hard/degradation cases and never showed uplift from fixes whose
-    # affected cases land outside the first 10). 20 questions (~6 min) gives
-    # a more stable, honest signal. Full 87-question suite is run offline.
+    # pass rate. This remains a legacy-system gate and does not run for
+    # agent_kb_core-only changes.
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -88,12 +94,9 @@ jobs:
 
       - name: Run evaluator suite (smoke)
         run: python scripts/run_eval_suite.py --max-questions 20 --min-token-pass 0.20
-        # Adjust --min-token-pass based on the baseline pass rate.
-        # 0.20 is a conservative floor for smoke testing.
 
   health-check:
-    # Runs the system health check to verify the KB is in a working state.
-    # Use as a gate for deployments.
+    # Legacy KB health gate. Agent KB Core has its own isolated CI workflow.
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -109,15 +112,9 @@ jobs:
 
       - name: Run system health check
         run: python scripts/check_health.py
-        # Fails CI if any of the 10 health checks fail:
-        # workspace_exists, db_file_exists, db_connect, active_documents,
-        # facts_populated, evidence_populated, expected_points_populated,
-        # fts_index_populated, fact_type_diversity, latest_eval_report_exists.
 
   requirement-program:
-    # Requirement Resolver subsystem gate: unit tests + static audit +
-    # end-to-end smoke. Runs independently of the KB1 main suite so a
-    # requirement regression is visible without masking KB1 failures.
+    # Requirement Resolver subsystem gate: unit tests + static audit + smoke.
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -132,7 +129,6 @@ jobs:
           pip install -e ".[dev]"
 
       - name: Clean build artifacts
-        # Ensure a clean scan for the no-build-artifacts audit check.
         run: |
           python -c "import shutil, pathlib; [shutil.rmtree(p, ignore_errors=True) for p in pathlib.Path('src').rglob('__pycache__')]"
           python -c "import shutil, pathlib; [shutil.rmtree(p, ignore_errors=True) for p in pathlib.Path('tests/requirement').rglob('__pycache__')]"
@@ -141,10 +137,7 @@ jobs:
         run: python -m pytest tests/requirement/ -v --tb=short -q
 
       - name: Run requirement program audit
-        # Static audit: file presence, schema tables, syntax, orchestrator
-        # gates, integration script safety. Exits nonzero on blocker failure.
         run: python scripts/audit_requirement_program.py --repo-root .
 
       - name: Run requirement smoke gates
-        # End-to-end smoke: schema init, seed, resolver, diff, query, etc.
         run: python scripts/run_requirement_program.py --mode smoke

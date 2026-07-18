@@ -1,0 +1,239 @@
+name: Agent KB Core CI
+
+on:
+  pull_request:
+    paths:
+      - "agent_kb_core/**"
+      - ".github/workflows/agent-kb-core.yml"
+  push:
+    branches:
+      - main
+      - rebuild/agent-kb-core
+    paths:
+      - "agent_kb_core/**"
+      - ".github/workflows/agent-kb-core.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: agent-kb-core-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: pytest (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+
+    defaults:
+      run:
+        working-directory: agent_kb_core
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: agent_kb_core/pyproject.toml
+
+      - name: Upgrade packaging tools
+        run: python -m pip install --quiet --upgrade pip setuptools wheel
+
+      - name: Install Agent KB Core
+        run: python -m pip install --quiet -e ".[dev]"
+
+      - name: Compile Python sources
+        run: python -m compileall -q src tests
+
+      - name: Run test suite
+        id: pytest
+        shell: bash
+        run: |
+          set +e
+          python -m pytest -q --tb=short > pytest-output.txt 2>&1
+          status=$?
+          cat pytest-output.txt
+          echo "exit_code=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Upload pytest output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-output-${{ matrix.python-version }}
+          path: agent_kb_core/pytest-output.txt
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Fail when tests fail
+        if: steps.pytest.outputs.exit_code != '0'
+        run: exit 1
+
+  container-platform:
+    name: container and deployment gate
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Build non-root image
+        run: docker build --tag agent-kb-core:ci agent_kb_core
+
+      - name: Validate container entrypoints
+        run: |
+          docker run --rm agent-kb-core:ci agent-kb --help
+          docker run --rm agent-kb-core:ci agent-kb-worker --help
+          docker run --rm agent-kb-core:ci agent-kb-platform --help
+          docker run --rm agent-kb-core:ci python -c "import os; assert os.getuid() == 10001"
+
+      - name: Render Docker Compose configuration
+        run: |
+          mkdir -p agent_kb_core/platform-output
+          docker compose \
+            -f agent_kb_core/deploy/docker-compose.yml \
+            config > agent_kb_core/platform-output/docker-compose.rendered.yaml
+
+      - name: Capture image metadata
+        run: |
+          docker image inspect agent-kb-core:ci > agent_kb_core/platform-output/image-inspect.json
+
+      - name: Upload platform evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-kb-platform-evidence
+          path: agent_kb_core/platform-output
+          if-no-files-found: error
+          retention-days: 14
+
+  operational-smoke:
+    name: operational recovery and readiness gate
+    needs: [test, container-platform]
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: agent_kb_core
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: agent_kb_core/pyproject.toml
+
+      - name: Install Agent KB Core
+        run: |
+          python -m pip install --quiet --upgrade pip setuptools wheel
+          python -m pip install --quiet -e ".[dev]"
+
+      - name: Build operational fixture
+        shell: bash
+        run: |
+          rm -rf .ci-runtime operations-output
+          mkdir -p .ci-runtime/backups operations-output
+          cat > .ci-runtime/sample.txt <<'EOF'
+          DCDC 输出纹波在额定负载下应不大于 30mVpp。
+          输出纹波测试应使用示波器，并记录额定负载测试条件。
+          EOF
+          agent-kb index-production \
+            --text-file .ci-runtime/sample.txt \
+            --db .ci-runtime/agent-kb.sqlite3 \
+            --domain-dir domains/obc_dcdc \
+            --logical-document-id ci-ripple \
+            --version-label ci-v1 \
+            --summary-only > operations-output/index.json
+          agent-kb query-production \
+            --db .ci-runtime/agent-kb.sqlite3 \
+            --domain-dir domains/obc_dcdc \
+            --query "输出纹波要求是多少？" \
+            --summary-only > operations-output/query.json
+
+      - name: Exercise continuous worker
+        shell: bash
+        run: |
+          mkdir -p .ci-runtime/tenants
+          cp .ci-runtime/agent-kb.sqlite3 .ci-runtime/tenants/default.sqlite3
+          cat > .ci-runtime/worker.txt <<'EOF'
+          输出纹波测试方法应使用示波器测量。
+          EOF
+          agent-kb queue-index \
+            --db .ci-runtime/tenants/default.sqlite3 \
+            --text-file .ci-runtime/worker.txt \
+            --tenant-id default \
+            --logical-document-id ci-worker \
+            --idempotency-key ci-worker-job > operations-output/worker-job.json
+          agent-kb-worker \
+            --tenant-db-root .ci-runtime/tenants \
+            --tenant-id default \
+            --domain-dir domains/obc_dcdc \
+            --worker-id ci-worker \
+            --poll-interval 0 \
+            --max-jobs 1 \
+            --max-iterations 3 > operations-output/worker-run.json
+
+      - name: Create verified backup
+        id: backup
+        shell: bash
+        run: |
+          agent-kb backup \
+            --db .ci-runtime/agent-kb.sqlite3 \
+            --backup-dir .ci-runtime/backups \
+            --tenant-id ci \
+            --keep-last 2 \
+            --keep-days 30 > operations-output/backup.json
+          backup_path=$(python - <<'PY'
+          import json
+          from pathlib import Path
+          payload = json.loads(Path("operations-output/backup.json").read_text(encoding="utf-8"))
+          print(payload["path"])
+          PY
+          )
+          echo "backup_path=$backup_path" >> "$GITHUB_OUTPUT"
+
+      - name: Run isolated recovery drill
+        run: |
+          agent-kb-ops recovery-drill \
+            --backup-path "${{ steps.backup.outputs.backup_path }}" \
+            --output operations-output/recovery.json
+
+      - name: Run release readiness gate
+        run: |
+          agent-kb-ops readiness \
+            --db .ci-runtime/agent-kb.sqlite3 \
+            --min-schema-version 8 \
+            --require-documents \
+            --require-backup \
+            --max-failed-jobs 0 \
+            --max-stale-running-jobs 0 \
+            --output operations-output/readiness.json
+
+      - name: Generate and compile API client
+        run: |
+          agent-kb generate-client \
+            --output operations-output/agent_kb_client.py \
+            --class-name CIAgentKBClient
+          python -m py_compile operations-output/agent_kb_client.py
+
+      - name: Upload operational evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-kb-operational-evidence
+          path: agent_kb_core/operations-output
+          if-no-files-found: error
+          retention-days: 14
