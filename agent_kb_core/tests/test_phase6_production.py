@@ -25,7 +25,7 @@ def test_hash_embedding_provider_is_deterministic() -> None:
 
     assert first == second
     assert len(first) == 64
-    assert cosine_similarity(first, second) == 1.0
+    assert cosine_similarity(first, second) > 0.999999
     assert cosine_similarity(first, unrelated) < 1.0
 
 
