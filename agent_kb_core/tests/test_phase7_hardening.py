@@ -123,7 +123,7 @@ def test_jobs_backup_purge_hardened_service_and_tenant_isolation(tmp_path: Path)
             "version_label": "v1",
         },
     )
-    assert indexed["schema_version"] == 5
+    assert indexed["schema_version"] == 8
     assert len(hardened.documents(admin)["documents"]) == 1
     assert hardened.documents(reader)["documents"] == []
 
@@ -193,4 +193,4 @@ def test_job_queue_graph_evaluation_openapi_and_mcp(tmp_path: Path) -> None:
     adapter = AgentKBMCPAdapter(service)
     names = {tool["name"] for tool in adapter.list_tools()}
     assert "agent_kb_query" in names
-    assert adapter.call_tool("agent_kb_health", {})["schema_version"] == 5
+    assert adapter.call_tool("agent_kb_health", {})["schema_version"] == 8
