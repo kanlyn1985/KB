@@ -62,21 +62,15 @@ load / chaos / security tests
 
 ## Validation
 
-Final Phase 8 head:
+The `Agent KB Core CI` branch gate performs editable installation, `compileall`, and the complete pytest suite on:
 
 ```text
-4790af26830b9bdaea771ab0e78254cfadabe203
+Python 3.11
+Python 3.12
+Python 3.13
 ```
 
-`Agent KB Core CI` run #251 completed the editable install, `compileall`, and full pytest suite successfully on:
-
-```text
-Python 3.11  success
-Python 3.12  success
-Python 3.13  success
-```
-
-Phase 8 validation gate is satisfied.
+Phase 8 is considered complete only while all three matrix jobs pass on the current pull-request head. The authoritative run result is the GitHub Actions status attached to the PR rather than a commit identifier embedded in this document.
 
 ## Remaining Phase 9 work
 
