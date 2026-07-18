@@ -6,7 +6,7 @@ from dataclasses import asdict, dataclass
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
-from agent_kb.storage.migrations import SchemaMigrator
+from agent_kb.storage.migrations import PLATFORM_MIGRATIONS, SchemaMigrator
 
 
 def _utc_now() -> datetime:
@@ -49,7 +49,7 @@ class SQLiteLeaderLeaseStore:
     def __init__(self, connection: sqlite3.Connection) -> None:
         self.connection = connection
         self.connection.row_factory = sqlite3.Row
-        SchemaMigrator(connection).migrate()
+        SchemaMigrator(connection, migrations=PLATFORM_MIGRATIONS).migrate()
 
     def acquire(
         self,
