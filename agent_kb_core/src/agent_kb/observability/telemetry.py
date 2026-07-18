@@ -158,8 +158,12 @@ class OTLPHTTPJSONExporter:
 
 
 class Tracer:
+    """Request-safe tracer: exporter failures never replace business results."""
+
     def __init__(self, exporter: TelemetryExporter | None = None) -> None:
         self.exporter = exporter
+        self.export_error_count = 0
+        self.last_export_error: str | None = None
 
     @contextmanager
     def span(
@@ -197,7 +201,11 @@ class Tracer:
                 error=error_text,
             )
             if self.exporter is not None:
-                self.exporter.export_spans([span])
+                try:
+                    self.exporter.export_spans([span])
+                except Exception as exc:  # exporter is an operational side channel
+                    self.export_error_count += 1
+                    self.last_export_error = f"{type(exc).__name__}: {exc}"
 
 
 def _otlp_span(span: TraceSpan) -> dict[str, Any]:
@@ -209,10 +217,9 @@ def _otlp_span(span: TraceSpan) -> dict[str, Any]:
     ]
     if span.error:
         attributes.append({"key": "error.message", "value": {"stringValue": span.error}})
-    return {
+    payload: dict[str, Any] = {
         "traceId": span.trace_id,
         "spanId": span.span_id,
-        "parentSpanId": span.parent_span_id or "",
         "name": span.name,
         "kind": 1,
         "startTimeUnixNano": started_ns,
@@ -220,6 +227,9 @@ def _otlp_span(span: TraceSpan) -> dict[str, Any]:
         "attributes": attributes,
         "status": {"code": 2 if span.status == "error" else 1},
     }
+    if span.parent_span_id:
+        payload["parentSpanId"] = span.parent_span_id
+    return payload
 
 
 def _otlp_value(value: Any) -> dict[str, Any]:
