@@ -14,6 +14,7 @@ from .external_vector import (
 from .hybrid import PersistentCandidateProvider, hybrid_retrieve
 from .models import RetrievalCandidate, RetrievalDiagnostics, RetrievalResult
 from .production import CandidateProvider, ProductionCandidateProvider
+from .qdrant import QdrantVectorBackend
 from .reranker import DeterministicReranker, Reranker
 from .vector import SQLiteVectorIndex, VectorIndexSummary
 
@@ -27,6 +28,7 @@ __all__ = [
     "InMemoryVectorBackend",
     "PersistentCandidateProvider",
     "ProductionCandidateProvider",
+    "QdrantVectorBackend",
     "Reranker",
     "RetrievalCard",
     "RetrievalCandidate",
