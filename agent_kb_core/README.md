@@ -23,14 +23,14 @@ Generic Evidence-grounded Agent Knowledge Compiler
 
 ## 核心原则
 
-1. **Core 不绑定领域**：领域术语、对象、关系、回答契约和规则位于 `domains/<domain>/`。
+1. **Core 不绑定领域**：术语、对象、关系、回答契约和规则位于 `domains/<domain>/`。
 2. **Evidence-first**：结构化事实、对象和关系必须可回溯到原文证据。
 3. **Object-centered retrieval**：召回对象、别名、关系和 Retrieval Card，而不只召回文本 chunk。
 4. **Context Pack for Agent**：主要输出是结构化智能体上下文，而非不可审计的最终文本。
 5. **Measurable retrieval**：召回升级必须通过 golden cases、反馈和图谱指标验证。
 6. **Replaceable adapters**：embedding、vector、graph、service、storage 和 transport 可替换，但不得破坏核心契约。
-7. **Explicit tenant boundaries**：当前嵌入式部署采用每租户独立 SQLite 数据库。
-8. **Operational truthfulness**：基线适配器和生产托管服务必须明确区分，不把 hash embedding 或 SQLite scan 描述为学习型模型或大规模向量数据库。
+7. **Explicit tenant boundaries**：嵌入式部署采用每租户独立 SQLite 数据库。
+8. **Operational truthfulness**：基线适配器和托管服务必须明确区分。
 
 ## 能力演进
 
@@ -80,8 +80,6 @@ CompiledKnowledgeIndex
 - deterministic `HashEmbeddingProvider`
 - `SQLiteVectorIndex`
 - `SQLiteGraphStore`
-- `ProductionCandidateProvider`
-- 单调 schema migration
 - logical document/version lifecycle
 - production index/query pipeline
 - versioned JSON service
@@ -91,84 +89,75 @@ CompiledKnowledgeIndex
 ### Phase 7：生产硬化
 
 - `RemoteJSONEmbeddingProvider`
-- `ExternalVectorBackend`、HTTP adapter 和内存验证后端
+- `ExternalVectorBackend`
 - 显式关系抽取及 graph precision/recall/F1
 - API-key authentication、RBAC、物理租户隔离
 - token-bucket rate limiting
 - 持久化安全审计
 - 后台任务、租约和重试
-- SQLite 在线备份、SHA-256 和完整性检查
-- 事务化文档及派生索引清理
-- OpenAPI 3.1 和 MCP-compatible tool adapter
+- 在线备份和事务化清理
+- OpenAPI 3.1 和 MCP-compatible adapter
 
-### Phase 8：部署级可靠性
+### Phase 8：部署级可靠性与发布门禁
+
+- rotating Secret Provider
+- SQLite 跨进程限流和 worker registry
+- tenant-aware、idempotent background jobs
+- TLS / mTLS
+- Qdrant REST adapter
+- MCP JSON-RPC stdio transport
+- OTLP-compatible telemetry adapter
+- backup replication、pruning 和 isolated recovery drill
+- retention、legal hold 和外部向量同步清理
+- load、chaos 和 security harness
+- `agent-kb-ops readiness`
+- GitHub Actions operational evidence gate
+
+### Phase 9 R1：平台部署基线
 
 ```text
-Client / MCP host
-  -> TLS or mTLS
-  -> rotating secrets
-  -> authentication / RBAC / tenant binding
-  -> local or SQLite-coordinated rate limiting
-  -> idempotent jobs / worker registry
-  -> lexical + learned embedding + Qdrant + graph retrieval
-  -> Context Pack
-  -> audit + metrics + OTLP traces
+non-root container
+  -> API process
+  -> continuous worker process
+  -> shared tenant data volume
+  -> authenticated probes
+  -> backup / recovery / readiness gates
 ```
 
-Phase 8 已加入：
+已加入：
 
-- 环境变量、JSON 文件、HTTP 和组合式 Secret Provider
-- 无需重启的 API-key 轮换
-- SQLite 跨进程固定窗口限流基线
-- worker heartbeat、capability 和 lease registry
-- tenant-aware、job-type-aware、idempotent background jobs
-- 原生 TLS 和可选 mTLS
-- `QdrantVectorBackend`
-- 直接清理和 retention 清理时的外部向量同步删除
-- MCP JSON-RPC stdio transport
-- dependency-free Python client generator
-- trace span 和最小 OTLP/HTTP JSON exporter
-- telemetry failure isolation
-- backup replication、pruning 和 isolated recovery drill
-- retention planning、legal hold 和 retention-run audit
-- load、chaos 和 security validation harness
+- package version `0.5.0`
+- multi-stage non-root Docker image
+- Docker Compose API/worker topology
+- Kubernetes one-replica StatefulSet topology
+- continuous multi-tenant worker
+- SIGTERM/SIGINT graceful shutdown
+- worker heartbeat 和 readiness-file lifecycle
+- optional SQLite scheduler leader lease
+- container、Compose 和 deployment CI gate
 
 详细设计：
 
 ```text
-docs/PHASE_8_DEPLOYMENT_RELIABILITY.md
-docs/PHASE_8_STATUS.md
+docs/PHASE_9_R1_PLATFORM_DEPLOYMENT.md
+docs/PHASE_9_R1_STATUS.md
 ```
 
 ## Package 与 Schema
 
 ```text
-package version: 0.4.0
-schema version: 8
+package version: 0.5.0
+Core schema version: 8
+platform schema version: 9 when leader leases are enabled
 ```
 
-```text
-1 document lifecycle
-2 vector index
-3 graph index
-4 jobs / audit / backup history
-5 graph extraction governance
-6 distributed rate limits / worker heartbeats
-7 legal holds / retention runs
-8 job idempotency / backup replication records
-```
+Core 普通运行保持 schema v8。只有实例化 `SQLiteLeaderLeaseStore` 时才应用可选平台迁移 v9。
 
 ## CLI
 
-### 文档编译与召回
+### 文档编译与查询
 
 ```bash
-agent-kb compile-context \
-  --text-file ./sample.txt \
-  --query "输出纹波要求是多少？" \
-  --domain-dir ./domains/obc_dcdc \
-  --retrieval-top-k 12
-
 agent-kb index-production \
   --text-file ./sample.txt \
   --db ./agent-kb.sqlite3 \
@@ -182,58 +171,40 @@ agent-kb query-production \
   --domain-dir ./domains/obc_dcdc
 ```
 
-### Idempotent job 和 worker
+### 队列与持续 Worker
 
 ```bash
 agent-kb queue-index \
-  --db ./agent-kb.sqlite3 \
+  --db ./tenants/default.sqlite3 \
   --text-file ./sample.txt \
-  --tenant-id tenant-a \
-  --idempotency-key import-2026-07-18-ripple
+  --tenant-id default \
+  --idempotency-key import-ripple-v1
 
-agent-kb worker-once \
-  --db ./agent-kb.sqlite3 \
+agent-kb-worker \
+  --tenant-db-root ./tenants \
   --domain-dir ./domains/obc_dcdc \
-  --tenant-id tenant-a \
-  --worker-id worker-a
+  --worker-id worker-a \
+  --ready-file /tmp/agent-kb-worker.ready
 ```
 
-### Legal hold 和 retention
-
-```bash
-agent-kb legal-hold \
-  --db ./agent-kb.sqlite3 \
-  --tenant-id tenant-a \
-  --logical-document-id ldoc_ripple \
-  --reason "litigation"
-
-agent-kb retention \
-  --db ./agent-kb.sqlite3 \
-  --tenant-id tenant-a \
-  --retain-days 365
-
-agent-kb retention \
-  --db ./agent-kb.sqlite3 \
-  --tenant-id tenant-a \
-  --retain-days 365 \
-  --execute
-```
-
-### Backup、复制、保留和恢复演练
+### 备份、恢复与 Readiness
 
 ```bash
 agent-kb backup \
   --db ./agent-kb.sqlite3 \
   --backup-dir ./backups \
-  --replica-dir ./backup-replica \
   --keep-last 10 \
   --keep-days 90
 
-agent-kb-recovery \
-  --backup ./backups/tenant-a-backup_x.sqlite3
-```
+agent-kb-ops recovery-drill \
+  --backup-path ./backups/default-backup_x.sqlite3
 
-恢复演练在隔离目录中还原数据库，检查 SQLite integrity、required tables、table counts 和 schema version，不修改在线数据库。
+agent-kb-ops readiness \
+  --db ./agent-kb.sqlite3 \
+  --min-schema-version 8 \
+  --require-documents \
+  --require-backup
+```
 
 ### OpenAPI、客户端和 MCP
 
@@ -243,9 +214,45 @@ agent-kb generate-client --output ./agent_kb_client.py
 agent-kb mcp-stdio --db ./agent-kb.sqlite3
 ```
 
-## Secure deployment
+## 容器部署
 
-### 环境变量 API-key 映射
+### Docker
+
+```bash
+docker build -t agent-kb-core:0.5.0 agent_kb_core
+```
+
+镜像使用 UID/GID `10001`，不以 root 运行，持久化边界为 `/data`。
+
+### Docker Compose
+
+```bash
+cd agent_kb_core
+docker compose -f deploy/docker-compose.yml up --build
+```
+
+Compose 文件中的 API key 仅用于本地验证，部署前必须替换。
+
+### Kubernetes
+
+替换镜像地址和 `secret.example.yaml` 后：
+
+```bash
+kubectl apply -k agent_kb_core/deploy/kubernetes/base
+```
+
+当前 Kubernetes 基线固定为：
+
+```text
+one StatefulSet replica
+one Pod
+API + worker sidecars
+one ReadWriteOnce PVC
+```
+
+使用 SQLite 时禁止直接增加副本数。
+
+## Secure service
 
 ```bash
 export AGENT_KB_API_KEYS='{
@@ -255,58 +262,14 @@ export AGENT_KB_API_KEYS='{
     "roles": ["admin"]
   }
 }'
-```
-
-### TLS + Qdrant + OTLP
-
-```bash
-export AGENT_KB_EMBEDDING_URL='https://embedding.example/v1/embeddings'
-export AGENT_KB_EMBEDDING_MODEL='enterprise-embedding-model'
-export AGENT_KB_EMBEDDING_DIMENSIONS='1024'
-export AGENT_KB_EMBEDDING_API_KEY='...'
-export QDRANT_API_KEY='...'
-export OTEL_EXPORTER_OTLP_ENDPOINT='https://otel-collector.example:4318'
 
 agent-kb secure-serve \
   --tenant-db-root ./tenants \
   --backup-root ./backups \
-  --backup-replica-dir ./backup-replica \
   --domain-dir ./domains/obc_dcdc \
-  --remote-embedding \
-  --qdrant-url https://qdrant.example \
-  --qdrant-collection agent-kb \
   --distributed-rate-limit \
-  --otlp \
-  --tls-cert ./certs/server.crt \
-  --tls-key ./certs/server.key \
-  --tls-ca ./certs/clients-ca.crt \
-  --require-client-cert \
   --host 0.0.0.0 \
-  --port 8443
-```
-
-目标 Qdrant collection 必须预先创建，并与 embedding dimensions 匹配。
-
-### Hardened endpoints
-
-```text
-GET  /v1/health
-GET  /v1/documents
-GET  /v1/jobs/{job_id}
-GET  /v1/metrics
-GET  /v1/audit
-GET  /v1/openapi.json
-GET  /v1/admin/workers
-POST /v1/index
-POST /v1/query
-POST /v1/feedback
-POST /v1/jobs/index
-POST /v1/admin/worker-once
-POST /v1/admin/backup
-POST /v1/admin/purge
-POST /v1/admin/legal-holds
-POST /v1/admin/legal-holds/release
-POST /v1/admin/retention
+  --port 8080
 ```
 
 请求头：
@@ -316,33 +279,6 @@ Authorization: Bearer <api-key>
 X-Tenant-ID: tenant-a
 ```
 
-## 目录
-
-```text
-agent_kb_core/
-  docs/
-  domains/
-  src/agent_kb/
-    adapters/
-    context/
-    core/
-    domains/
-    embeddings/
-    evaluation/
-    graph/
-    observability/
-    pipeline/
-    projection/
-    query/
-    retrieval/
-    runtime/
-    security/
-    service/
-    storage/
-    testing/
-  tests/
-```
-
 ## 验证
 
 ```bash
@@ -350,34 +286,56 @@ cd agent_kb_core
 python -m pytest
 ```
 
-GitHub Actions 在 Python 3.11、3.12 和 3.13 上执行 editable install、`compileall` 和完整测试。
+GitHub Actions 执行：
 
-## 边界
+```text
+Python 3.11 / 3.12 / 3.13 tests
+Docker image build
+non-root UID assertion
+container entrypoint validation
+Docker Compose render
+continuous-worker job execution
+backup and isolated restore
+readiness gate
+operational and platform evidence artifacts
+```
 
-Phase 8 是部署可靠性基线，不等同于无限水平扩展：
+## 目录
 
-- SQLite coordination 不是 Redis 或分布式事务协调器；
-- Qdrant collection provisioning 属于部署职责；
-- OTLP exporter 是最小依赖实现，不是完整 OpenTelemetry SDK；
-- MCP transport 当前为 stdio JSON-RPC；
-- HTTP backup replication 会把备份载入内存；
-- 证书签发、续期、信任治理和企业级 legal-hold 授权仍需接入组织基础设施。
+```text
+agent_kb_core/
+  Dockerfile
+  deploy/
+    docker-compose.yml
+    kubernetes/base/
+  docs/
+  domains/
+  src/agent_kb/
+  tests/
+```
+
+## 平台边界
+
+Phase 9 R1 是单节点平台基线，不是无限水平扩展方案：
+
+- SQLite coordination 不是 Redis、etcd 或分布式事务协调器；
+- Kubernetes StatefulSet 目前只能保持一个副本；
+- Qdrant collection provisioning 仍属于部署职责；
+- OTLP exporter 不是完整 OpenTelemetry SDK；
+- 证书签发、续期和企业级 legal-hold 授权仍需接入组织基础设施。
 
 ## 下一步
 
-Phase 9 聚焦平台化部署和持续运营：
+Phase 9 R2 聚焦多节点运行依赖：
 
 ```text
-container / Kubernetes deployment
-  + Redis and production queue adapters
-  + Vault / cloud secret-manager implementations
+Redis coordination and queue adapters
+  + platform-native leader election
+  + continuous scheduler daemon
+  + Vault / cloud secret managers
+  + image signing / provenance / SBOM gates
   + managed Qdrant provisioning
   + OpenTelemetry SDK and context propagation
-  + continuous worker and scheduler services
-  + SLO dashboards and alerting
-  + SBOM / dependency / security gates
+  + SLO dashboards and alerts
   + staging recovery drills
-  + enterprise policy integration
 ```
-
-所有后续适配器必须继续输出既有 `RetrievalResult` 和 `AgentContextPack`，并通过统一的 golden、graph、feedback 和 reliability evaluation contracts 验证。
