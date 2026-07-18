@@ -60,11 +60,23 @@ retention and legal hold
 load / chaos / security tests
 ```
 
-## Validation gate
+## Validation
 
-The `Agent KB Core CI` workflow installs the editable package, runs `compileall`, and executes the complete test suite on Python 3.11, 3.12, and 3.13.
+Final Phase 8 head:
 
-Phase 8 is complete only when all three matrix jobs pass on the final Phase 8 head commit.
+```text
+4790af26830b9bdaea771ab0e78254cfadabe203
+```
+
+`Agent KB Core CI` run #251 completed the editable install, `compileall`, and full pytest suite successfully on:
+
+```text
+Python 3.11  success
+Python 3.12  success
+Python 3.13  success
+```
+
+Phase 8 validation gate is satisfied.
 
 ## Remaining Phase 9 work
 
