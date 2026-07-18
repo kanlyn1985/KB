@@ -8,6 +8,7 @@ from .migrations import (
     PHASE6_MIGRATIONS,
     PHASE7_MIGRATIONS,
     PHASE8_MIGRATIONS,
+    PHASE9_MIGRATIONS,
     Migration,
     SchemaMigrator,
 )
@@ -47,6 +48,7 @@ __all__ = [
     "PHASE6_MIGRATIONS",
     "PHASE7_MIGRATIONS",
     "PHASE8_MIGRATIONS",
+    "PHASE9_MIGRATIONS",
     "PersistentIndexView",
     "PurgeReport",
     "RecoveryDrillReport",
