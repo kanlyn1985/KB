@@ -20,6 +20,10 @@
 - Added isolated backup recovery drills.
 - Added retention planning, legal holds, execution records, and external cleanup synchronization.
 - Added load, chaos, and security validation harnesses.
+- Added read-only release-readiness evaluation.
+- Added `agent-kb-ops` readiness and recovery-drill commands.
+- Added an operational GitHub Actions gate after the Python test matrix.
+- Added operational evidence artifact generation.
 - Added Phase 8 schema migrations, CLI integration, documentation, and regression tests.
 
 ## Package and schema
@@ -58,11 +62,15 @@ backup replication and pruning
 isolated recovery drill
 retention and legal hold
 load / chaos / security tests
+read-only release readiness gate
+operational CI evidence artifact
 ```
 
 ## Validation
 
-The `Agent KB Core CI` branch gate performs editable installation, `compileall`, and the complete pytest suite on:
+The `Agent KB Core CI` release gate now has two levels.
+
+### Test matrix
 
 ```text
 Python 3.11
@@ -70,7 +78,23 @@ Python 3.12
 Python 3.13
 ```
 
-Phase 8 is considered complete only while all three matrix jobs pass on the current pull-request head. The authoritative run result is the GitHub Actions status attached to the PR rather than a commit identifier embedded in this document.
+Each matrix job performs editable installation, `compileall`, and the complete pytest suite.
+
+### Operational gate
+
+After the matrix succeeds, the workflow performs:
+
+```text
+production indexing
+production query
+verified backup
+isolated recovery drill
+read-only readiness evaluation
+generated client compilation
+operational evidence upload
+```
+
+Phase 8 R2 is complete only while the matrix and the operational gate pass on the current pull-request head. The authoritative result is the GitHub Actions status attached to the PR.
 
 ## Remaining Phase 9 work
 
@@ -83,5 +107,5 @@ Phase 8 is considered complete only while all three matrix jobs pass on the curr
 - add continuous worker daemons, scheduler leadership, and graceful shutdown;
 - add SLO/error-budget dashboards and alert rules;
 - add penetration-test automation and dependency/SBOM policy gates;
-- execute documented backup recovery drills in CI and staging;
+- execute documented backup recovery drills in staging environments;
 - define enterprise authorization policies for legal hold and data retention.
