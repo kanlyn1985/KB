@@ -33,29 +33,72 @@ class SourceUnit:
 
 
 def build_source_units(evidence_blocks: list[EvidenceBlock]) -> list[SourceUnit]:
-    """Classify evidence blocks into generic semantic units."""
+    """Split evidence blocks into semantic units and classify each unit.
+
+    Evidence blocks are optimized for traceability and storage, so one block may
+    contain several paragraphs carrying different knowledge roles. Source units
+    therefore segment a block again at semantic paragraph boundaries while
+    retaining the original ``evidence_id`` for provenance.
+    """
 
     units: list[SourceUnit] = []
     for block in evidence_blocks:
-        unit_type = classify_source_unit(block.normalized_text, block_type=block.block_type)
-        unit_id = _source_unit_id(block.evidence_id, unit_type, block.normalized_text)
-        title = _extract_title(block.normalized_text) or block.section_path
-        units.append(
-            SourceUnit(
-                unit_id=unit_id,
-                document_id=block.document_id,
-                evidence_id=block.evidence_id,
-                unit_type=unit_type,
-                text=block.text,
-                normalized_text=block.normalized_text,
-                title=title,
-                content_role=_content_role(unit_type),
-                expected_knowledge_type=_expected_knowledge_type(unit_type),
-                confidence=_classification_confidence(unit_type),
-                metadata={"source_block_type": block.block_type},
+        segments = _semantic_segments(block.normalized_text)
+        for segment_no, segment in enumerate(segments, start=1):
+            unit_type = classify_source_unit(segment, block_type=block.block_type)
+            unit_id = _source_unit_id(block.evidence_id, unit_type, segment)
+            title = _extract_title(segment) or block.section_path
+            units.append(
+                SourceUnit(
+                    unit_id=unit_id,
+                    document_id=block.document_id,
+                    evidence_id=block.evidence_id,
+                    unit_type=unit_type,
+                    text=segment,
+                    normalized_text=segment,
+                    title=title,
+                    content_role=_content_role(unit_type),
+                    expected_knowledge_type=_expected_knowledge_type(unit_type),
+                    confidence=_classification_confidence(unit_type),
+                    metadata={
+                        "source_block_type": block.block_type,
+                        "source_block_no": block.block_no,
+                        "segment_no": segment_no,
+                    },
+                )
             )
-        )
     return units
+
+
+def _semantic_segments(text: str) -> list[str]:
+    """Return paragraph-level semantic segments without losing section headings."""
+
+    paragraphs = [part.strip() for part in re.split(r"\n\s*\n", text.strip()) if part.strip()]
+    if len(paragraphs) <= 1:
+        return paragraphs
+
+    segments: list[str] = []
+    index = 0
+    while index < len(paragraphs):
+        paragraph = paragraphs[index]
+        if _looks_like_heading(paragraph) and index + 1 < len(paragraphs):
+            segments.append(f"{paragraph}\n{paragraphs[index + 1]}".strip())
+            index += 2
+            continue
+        segments.append(paragraph)
+        index += 1
+    return segments
+
+
+def _looks_like_heading(text: str) -> bool:
+    compact = text.strip()
+    if not compact or len(compact) > 120 or "\n" in compact:
+        return False
+    return bool(
+        re.match(r"^(?:第\s*)?\d+(?:\.\d+)*[、.\s]+", compact)
+        or re.match(r"^[A-Z]?(?:\d+\.)+\d*\s*", compact)
+        or compact.endswith(("：", ":"))
+    )
 
 
 def classify_source_unit(text: str, *, block_type: str = "text") -> str:
