@@ -1,7 +1,7 @@
 """Persistent storage, migrations, and document lifecycle adapters."""
 
-from .lifecycle import DocumentLifecycleRecord, DocumentLifecycleStore, DocumentVersion
 from .migrations import Migration, PHASE6_MIGRATIONS, SchemaMigrator
+from .lifecycle import DocumentLifecycleRecord, DocumentLifecycleStore, DocumentVersion
 from .sqlite_store import PersistentIndexView, SQLiteKnowledgeStore
 
 __all__ = [
