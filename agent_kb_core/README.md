@@ -29,6 +29,7 @@ Generic Evidence-grounded Agent Knowledge Compiler
 5. **Context Pack for Agent**：知识库主要输出给智能体消费的结构化上下文，而不是只输出最终自然语言答案。
 6. **Retrieval must be measurable**：任何召回升级都必须通过 golden cases 和指标验证。
 7. **Persistent and auditable**：持久化检索结果、证据充分性判断和用户反馈必须可审计。
+8. **Adapters are replaceable**：embedding、vector、graph、service 和 storage 适配器不得改变核心检索与上下文契约。
 
 ## 当前能力
 
@@ -40,7 +41,6 @@ Generic Evidence-grounded Agent Knowledge Compiler
 - retrieval card schema
 - context pack schema
 - generic + obc_dcdc 示例 domain pack
-- 架构说明与迁移计划
 
 ### Phase 2：通用文档编译
 
@@ -52,8 +52,6 @@ plain text
   -> Fact
   -> KnowledgeCompilation
 ```
-
-该链路可以在没有领域包的情况下抽取 generic fact；在加载领域包时，可用 terminology 把文本中的别名链接到 canonical subject。
 
 ### Phase 3：文档到 Agent Context Pack
 
@@ -83,21 +81,7 @@ QueryFrame
   -> retrieved Context Pack subset
 ```
 
-当前实现包括：
-
-- object-card retrieval
-- fact retrieval
-- table retrieval
-- evidence retrieval
-- keyword retrieval
-- domain-alias semantic fallback
-- 显式 skipped-channel diagnostics
-- Hit@K
-- Mean Reciprocal Rank
-- object/card/fact/evidence recall
-- golden-case evaluation CLI
-
-当前 `semantic` channel 是无外部依赖的领域对象/别名语义回退，不代表已接入 embedding/vector provider。
+包括 object-card、fact、table、evidence、keyword、领域别名语义回退、召回诊断、Hit@K、MRR、object/card/fact/evidence recall 和 golden-case evaluation。
 
 ### Phase 5：持久化、混合召回与证据治理
 
@@ -112,20 +96,40 @@ CompiledKnowledgeIndex
   -> retrieval run audit / feedback
 ```
 
-Phase 5 已加入：
+包括 SQLite 持久化、FTS5/LIKE 回退、可插拔 reranker、证据充分性判断、retrieval run 审计和用户反馈。
 
-- SQLite 持久化对象、Retrieval Card、Fact 和 Evidence
-- FTS5 检索与无 FTS5 环境下的 LIKE 回退
-- 持久化索引重建
-- 内存召回与持久化检索的混合融合
-- 可插拔 `Reranker` 接口及确定性基线实现
-- `sufficient / partial / insufficient` 证据充分性判断
-- retrieval run 审计记录
-- 用户反馈持久化
+### Phase 6：生产适配层
+
+```text
+Document version
+  -> schema migration + lifecycle
+  -> lexical index
+  -> embedding provider + vector index
+  -> graph persistence/traversal
+  -> production candidate provider
+  -> hybrid retrieval
+  -> Context Pack + evidence judgement
+  -> service API + feedback evaluation
+```
+
+Phase 6 已加入：
+
+- provider-neutral `EmbeddingProvider`
+- deterministic `HashEmbeddingProvider` baseline
+- `SQLiteVectorIndex`
+- `SQLiteGraphStore`
+- `ProductionCandidateProvider`
+- monotonic `SchemaMigrator`
+- logical document/version lifecycle
+- production indexing/query pipeline
+- versioned JSON service endpoints
+- feedback-driven evaluation
+
+`HashEmbeddingProvider` 和 SQLite cosine scan 是无外部依赖的契约验证基线，不等同于已经接入学习型 embedding 模型或大规模向量数据库。
 
 ## CLI
 
-编译文档并生成带召回诊断的 Context Pack：
+文档到 Context Pack：
 
 ```bash
 agent-kb compile-context \
@@ -135,7 +139,7 @@ agent-kb compile-context \
   --retrieval-top-k 12
 ```
 
-运行召回评测：
+召回评测：
 
 ```bash
 agent-kb eval-retrieval \
@@ -144,32 +148,76 @@ agent-kb eval-retrieval \
   --domain-dir ./domains/obc_dcdc
 ```
 
-编译并写入持久化索引：
+Phase 5 持久化索引：
 
 ```bash
 agent-kb index-text \
   --text-file ./sample.txt \
   --db ./agent-kb.sqlite3 \
   --domain-dir ./domains/obc_dcdc
-```
 
-查询持久化索引：
-
-```bash
 agent-kb query-store \
   --db ./agent-kb.sqlite3 \
   --query "输出纹波要求是多少？" \
   --domain-dir ./domains/obc_dcdc
 ```
 
-提交检索反馈：
+Phase 6 生产索引和查询：
 
 ```bash
+agent-kb migrate-db --db ./agent-kb.sqlite3
+
+agent-kb index-production \
+  --text-file ./sample.txt \
+  --db ./agent-kb.sqlite3 \
+  --domain-dir ./domains/obc_dcdc \
+  --logical-document-id ldoc_ripple \
+  --version-label v1
+
+agent-kb query-production \
+  --db ./agent-kb.sqlite3 \
+  --query "输出纹波要求是多少？" \
+  --domain-dir ./domains/obc_dcdc
+```
+
+生命周期和反馈：
+
+```bash
+agent-kb documents --db ./agent-kb.sqlite3
+
+agent-kb document-status \
+  --db ./agent-kb.sqlite3 \
+  --logical-document-id ldoc_ripple \
+  --status deprecated
+
 agent-kb feedback \
   --db ./agent-kb.sqlite3 \
   --run-id run_xxx \
   --rating 1 \
   --comment "retrieval is relevant"
+
+agent-kb eval-feedback --db ./agent-kb.sqlite3
+```
+
+服务：
+
+```bash
+agent-kb serve \
+  --db ./agent-kb.sqlite3 \
+  --domain-dir ./domains/obc_dcdc \
+  --host 127.0.0.1 \
+  --port 8080
+```
+
+HTTP 端点：
+
+```text
+GET  /v1/health
+GET  /v1/documents
+POST /v1/index
+POST /v1/query
+POST /v1/feedback
+POST /v1/documents/{logical_document_id}/status
 ```
 
 ## 当前目录
@@ -183,10 +231,13 @@ agent_kb_core/
     query/
     projection/
     retrieval/
+    embeddings/
+    graph/
     evaluation/
     context/
     storage/
     pipeline/
+    service/
   domains/
   tests/
 ```
@@ -202,15 +253,17 @@ GitHub Actions 会在 Python 3.11、3.12 和 3.13 上执行安装、`compileall`
 
 ## 下一步
 
-Phase 6 应在当前持久化、可评测基线上增加生产适配层：
+Phase 7 应聚焦生产硬化，而不是继续堆叠新的抽象：
 
 ```text
-embedding provider interface
-  + vector index adapter
-  + graph persistence/traversal
-  + service/API layer
-  + schema migrations and document lifecycle
-  + feedback-driven evaluation
+learned embedding providers and secret management
+  + external vector backend
+  + relation extraction and graph evaluation
+  + authentication / RBAC / tenant isolation
+  + transactional document cleanup
+  + background jobs and concurrency control
+  + OpenAPI / gRPC / MCP adapters
+  + metrics / tracing / backup / recovery
 ```
 
-任何新检索适配器必须继续输出现有 `RetrievalResult`，并通过同一套 golden evaluation contracts 对比效果。
+所有后续适配器必须继续输出既有 `RetrievalResult` 和 `AgentContextPack`，并通过同一套 golden 与 feedback evaluation contracts 对比效果。
