@@ -30,6 +30,7 @@ Generic Evidence-grounded Agent Knowledge Compiler
 6. **Retrieval must be measurable**：任何召回升级都必须通过 golden cases 和指标验证。
 7. **Persistent and auditable**：持久化检索结果、证据充分性判断和用户反馈必须可审计。
 8. **Adapters are replaceable**：embedding、vector、graph、service 和 storage 适配器不得改变核心检索与上下文契约。
+9. **Tenant boundaries are explicit**：当前嵌入式部署采用每租户独立 SQLite 数据库，避免依赖易漏写的查询过滤条件。
 
 ## 当前能力
 
@@ -112,20 +113,48 @@ Document version
   -> service API + feedback evaluation
 ```
 
-Phase 6 已加入：
-
-- provider-neutral `EmbeddingProvider`
-- deterministic `HashEmbeddingProvider` baseline
-- `SQLiteVectorIndex`
-- `SQLiteGraphStore`
-- `ProductionCandidateProvider`
-- monotonic `SchemaMigrator`
-- logical document/version lifecycle
-- production indexing/query pipeline
-- versioned JSON service endpoints
-- feedback-driven evaluation
+Phase 6 已加入 provider-neutral `EmbeddingProvider`、`SQLiteVectorIndex`、`SQLiteGraphStore`、`ProductionCandidateProvider`、单调迁移、文档版本生命周期、生产查询链路和版本化 JSON 服务。
 
 `HashEmbeddingProvider` 和 SQLite cosine scan 是无外部依赖的契约验证基线，不等同于已经接入学习型 embedding 模型或大规模向量数据库。
+
+### Phase 7：生产硬化
+
+```text
+Client
+  -> API-key authentication
+  -> Principal / tenant binding
+  -> RBAC
+  -> rate limiting
+  -> tenant database router
+  -> lexical / local-vector / external-vector / graph retrieval
+  -> Context Pack
+  -> audit / metrics / feedback
+```
+
+Phase 7 已加入：
+
+- `RemoteJSONEmbeddingProvider` 与环境变量密钥配置
+- `ExternalVectorBackend`、`HTTPVectorBackend` 和测试用 `InMemoryVectorBackend`
+- 显式关系抽取接口与 graph precision/recall/F1 评测
+- API-key authentication、RBAC、物理租户隔离
+- token-bucket rate limiting
+- 持久化安全审计
+- 后台任务队列、租约、重试和 worker
+- 在线 SQLite 备份、SHA-256 和完整性验证
+- 事务化文档及派生索引清理
+- 指标计数和耗时摘要
+- OpenAPI 3.1 与 MCP-compatible 工具适配层
+- hardened HTTP service
+
+当前 schema version：
+
+```text
+1 document lifecycle
+2 vector index
+3 graph index
+4 jobs / audit / backup history
+5 graph extraction governance
+```
 
 ## CLI
 
@@ -148,21 +177,7 @@ agent-kb eval-retrieval \
   --domain-dir ./domains/obc_dcdc
 ```
 
-Phase 5 持久化索引：
-
-```bash
-agent-kb index-text \
-  --text-file ./sample.txt \
-  --db ./agent-kb.sqlite3 \
-  --domain-dir ./domains/obc_dcdc
-
-agent-kb query-store \
-  --db ./agent-kb.sqlite3 \
-  --query "输出纹波要求是多少？" \
-  --domain-dir ./domains/obc_dcdc
-```
-
-Phase 6 生产索引和查询：
+生产索引和查询：
 
 ```bash
 agent-kb migrate-db --db ./agent-kb.sqlite3
@@ -180,45 +195,84 @@ agent-kb query-production \
   --domain-dir ./domains/obc_dcdc
 ```
 
-生命周期和反馈：
+后台任务、备份和清理：
 
 ```bash
-agent-kb documents --db ./agent-kb.sqlite3
-
-agent-kb document-status \
+agent-kb queue-index \
   --db ./agent-kb.sqlite3 \
-  --logical-document-id ldoc_ripple \
-  --status deprecated
+  --text-file ./sample.txt \
+  --logical-document-id ldoc_ripple
 
-agent-kb feedback \
+agent-kb worker-once \
   --db ./agent-kb.sqlite3 \
-  --run-id run_xxx \
-  --rating 1 \
-  --comment "retrieval is relevant"
+  --domain-dir ./domains/obc_dcdc
 
-agent-kb eval-feedback --db ./agent-kb.sqlite3
+agent-kb backup \
+  --db ./agent-kb.sqlite3 \
+  --backup-dir ./backups
+
+agent-kb purge-document \
+  --db ./agent-kb.sqlite3 \
+  --logical-document-id ldoc_ripple
 ```
 
-服务：
+OpenAPI：
 
 ```bash
-agent-kb serve \
-  --db ./agent-kb.sqlite3 \
+agent-kb openapi --output ./openapi.json
+```
+
+## Hardened service
+
+配置 API keys：
+
+```bash
+export AGENT_KB_API_KEYS='{
+  "replace-with-a-long-random-token": {
+    "principal_id": "operator-1",
+    "tenant_id": "tenant-a",
+    "roles": ["admin"]
+  }
+}'
+```
+
+启动：
+
+```bash
+agent-kb secure-serve \
+  --tenant-db-root ./tenants \
+  --backup-root ./backups \
   --domain-dir ./domains/obc_dcdc \
   --host 127.0.0.1 \
-  --port 8080
+  --port 8443
 ```
 
-HTTP 端点：
+请求头：
+
+```text
+Authorization: Bearer <api-key>
+X-Tenant-ID: tenant-a
+```
+
+Hardened endpoints：
 
 ```text
 GET  /v1/health
 GET  /v1/documents
+GET  /v1/jobs/{job_id}
+GET  /v1/metrics
+GET  /v1/audit
+GET  /v1/openapi.json
 POST /v1/index
 POST /v1/query
 POST /v1/feedback
-POST /v1/documents/{logical_document_id}/status
+POST /v1/jobs/index
+POST /v1/admin/worker-once
+POST /v1/admin/backup
+POST /v1/admin/purge
 ```
+
+`secure-serve` 表示已经加入认证、RBAC、限流、审计和租户隔离；它仍然使用标准库 HTTP server，不提供内建 TLS。对外部署必须放在 TLS 终止代理之后。
 
 ## 当前目录
 
@@ -226,18 +280,22 @@ POST /v1/documents/{logical_document_id}/status
 agent_kb_core/
   docs/
   src/agent_kb/
+    adapters/
+    context/
     core/
     domains/
-    query/
-    projection/
-    retrieval/
     embeddings/
-    graph/
     evaluation/
-    context/
-    storage/
+    graph/
+    observability/
     pipeline/
+    projection/
+    query/
+    retrieval/
+    runtime/
+    security/
     service/
+    storage/
   domains/
   tests/
 ```
@@ -253,17 +311,18 @@ GitHub Actions 会在 Python 3.11、3.12 和 3.13 上执行安装、`compileall`
 
 ## 下一步
 
-Phase 7 应聚焦生产硬化，而不是继续堆叠新的抽象：
+Phase 8 聚焦部署级可靠性，而不是继续堆叠核心抽象：
 
 ```text
-learned embedding providers and secret management
-  + external vector backend
-  + relation extraction and graph evaluation
-  + authentication / RBAC / tenant isolation
-  + transactional document cleanup
-  + background jobs and concurrency control
-  + OpenAPI / gRPC / MCP adapters
-  + metrics / tracing / backup / recovery
+distributed rate limiting and job coordination
+  + managed vector database connectors
+  + secret-manager adapters and key rotation
+  + TLS/mTLS deployment profiles
+  + full MCP transport and generated SDKs
+  + OpenTelemetry metrics/traces
+  + backup retention and recovery drills
+  + load / chaos / security testing
+  + policy-driven retention and legal hold
 ```
 
-所有后续适配器必须继续输出既有 `RetrievalResult` 和 `AgentContextPack`，并通过同一套 golden 与 feedback evaluation contracts 对比效果。
+所有后续适配器必须继续输出既有 `RetrievalResult` 和 `AgentContextPack`，并通过同一套 golden、graph 和 feedback evaluation contracts 对比效果。
