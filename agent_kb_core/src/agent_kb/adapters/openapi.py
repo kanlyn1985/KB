@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 
-def build_openapi_spec(*, title: str = "Agent KB Core API", version: str = "0.4.0") -> dict[str, Any]:
+def build_openapi_spec(*, title: str = "Agent KB Core API", version: str = "0.5.0") -> dict[str, Any]:
     security = [{"bearerAuth": []}]
     simple_response = lambda description: {"200": {"description": description}}
     return {
