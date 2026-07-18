@@ -16,6 +16,7 @@ from .auth import (
 from .secrets import (
     CompositeSecretProvider,
     EnvironmentSecretProvider,
+    HTTPSecretProvider,
     JSONFileSecretProvider,
     RotatingAPIKeyAuthenticator,
     SecretProvider,
@@ -30,6 +31,7 @@ __all__ = [
     "AuthorizationError",
     "CompositeSecretProvider",
     "EnvironmentSecretProvider",
+    "HTTPSecretProvider",
     "JSONFileSecretProvider",
     "Principal",
     "ROLE_PERMISSIONS",
