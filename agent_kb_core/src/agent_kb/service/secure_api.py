@@ -350,8 +350,30 @@ class HardenedAgentKBService:
             statuses=tuple(str(value) for value in payload.get("statuses") or ["deprecated", "deleted"]),
             dry_run=bool(payload.get("dry_run", True)),
         )
-        with SQLiteKnowledgeStore(self.router.path_for(principal.tenant_id)) as store:
-            run = RetentionManager(store.connection).execute(policy)
+        db_path = self.router.path_for(principal.tenant_id)
+        with SQLiteKnowledgeStore(db_path) as store:
+            plan = RetentionManager(store.connection).plan(policy)
+
+        purged: list[str] = []
+        held = list(plan.held_document_ids)
+        external_cleanup: dict[str, dict[str, int]] = {}
+        if not policy.dry_run:
+            for document_id in plan.purgeable_document_ids:
+                try:
+                    result = self.purge(principal, document_id)
+                except AuthorizationError:
+                    held.append(document_id)
+                    continue
+                purged.append(document_id)
+                external_cleanup[document_id] = dict(result.get("external_vector_cleanup") or {})
+
+        with SQLiteKnowledgeStore(db_path) as store:
+            run = RetentionManager(store.connection).record(
+                policy,
+                plan,
+                purged_document_ids=purged,
+                held_document_ids=held,
+            )
             AuditLog(store.connection).record(
                 tenant_id=principal.tenant_id,
                 principal_id=principal.principal_id,
@@ -363,9 +385,10 @@ class HardenedAgentKBService:
                     "eligible": len(run.eligible_document_ids),
                     "held": len(run.held_document_ids),
                     "purged": len(run.purged_document_ids),
+                    "external_cleanup_documents": len(external_cleanup),
                 },
             )
-        return run.to_dict()
+        return {**run.to_dict(), "external_vector_cleanup": external_cleanup}
 
     def audit_events(self, principal: Principal, *, limit: int = 100) -> dict[str, Any]:
         require_permission(principal, "admin:operate")
