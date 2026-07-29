@@ -1,0 +1,24 @@
+{
+  "relation_types": {
+    "verified_by": {
+      "description": "参数或要求由某种测试方法验证",
+      "inverse_name": "verifies"
+    },
+    "constrained_by": {
+      "description": "参数受到某种要求约束",
+      "inverse_name": "constrains"
+    },
+    "defined_in": {
+      "description": "实体在某标准或规范中定义",
+      "inverse_name": "defines"
+    },
+    "defines": {
+      "description": "标准定义了某参数或要求",
+      "inverse_name": "defined_in"
+    },
+    "has_part": {
+      "description": "产品或子系统包含的下属组件",
+      "inverse_name": "part_of"
+    }
+  }
+}

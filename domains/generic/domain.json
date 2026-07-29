@@ -1,0 +1,6 @@
+{
+  "domain_id": "generic",
+  "name": "Generic Domain",
+  "version": "0.1.0",
+  "description": "Minimal domain pack for domains without specialized ontology. Only provides a catch-all Concept class."
+}

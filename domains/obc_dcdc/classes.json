@@ -1,0 +1,212 @@
+{
+  "classes": {
+    "Product": {
+      "description": "产品——一个完整的功能单元（OBC、DCDC、Wallbox 等）。",
+      "attributes": {
+        "name": {
+          "value_type": "string",
+          "required": true,
+          "description": "产品名称"
+        },
+        "description": {
+          "value_type": "string",
+          "required": false,
+          "description": "产品描述"
+        },
+        "power_rating": {
+          "value_type": "string",
+          "required": false,
+          "description": "功率等级，如 6.6kW、11kW"
+        }
+      },
+      "relation_roles": [
+        { "relation_type": "has_part", "target_classes": ["Subsystem", "Parameter"] },
+        { "relation_type": "references", "target_classes": ["Standard"] }
+      ],
+      "identity_attributes": ["name"],
+      "identity_rule": "产品名相同视为同一产品",
+      "display_primary": "name",
+      "display_secondary": ["power_rating", "description"]
+    },
+
+    "Subsystem": {
+      "description": "子系统——产品内部的功能模块（PFC 级、DCDC 变换级、辅助电源等）。",
+      "attributes": {
+        "name": {
+          "value_type": "string",
+          "required": true,
+          "description": "子系统名称"
+        },
+        "description": {
+          "value_type": "string",
+          "required": false,
+          "description": "子系统描述"
+        }
+      },
+      "relation_roles": [
+        { "relation_type": "part_of", "target_classes": ["Product"] },
+        { "relation_type": "has_part", "target_classes": ["Parameter"] }
+      ],
+      "identity_attributes": ["name"],
+      "identity_rule": "子系统名 + 所属产品相同视为同一子系统",
+      "display_primary": "name",
+      "display_secondary": ["description"]
+    },
+
+    "Parameter": {
+      "description": "工程参数——有量化值和测量条件的可量化指标（输出纹波、效率、过压保护阈值等）。",
+      "attributes": {
+        "name": {
+          "value_type": "string",
+          "required": true,
+          "description": "参数名称，如 输出纹波、转换效率"
+        },
+        "value": {
+          "value_type": "number",
+          "required": false,
+          "description": "参数值"
+        },
+        "unit": {
+          "value_type": "string",
+          "required": false,
+          "description": "单位，如 mVpp、V、A、kW、%"
+        },
+        "operator": {
+          "value_type": "string",
+          "required": false,
+          "description": "约束运算符",
+          "enum_values": ["<=", ">=", "=", ">", "<", "~"]
+        },
+        "condition": {
+          "value_type": "string",
+          "required": false,
+          "description": "适用工况或条件，如 额定负载、满载、空载"
+        },
+        "tolerance": {
+          "value_type": "string",
+          "required": false,
+          "description": "容差范围，如 ±10%"
+        },
+        "description": {
+          "value_type": "string",
+          "required": false,
+          "description": "参数说明"
+        }
+      },
+      "relation_roles": [
+        { "relation_type": "part_of", "target_classes": ["Product", "Subsystem"] },
+        { "relation_type": "verified_by", "target_classes": ["Method"] },
+        { "relation_type": "constrained_by", "target_classes": ["Requirement"] },
+        { "relation_type": "defined_in", "target_classes": ["Standard"] }
+      ],
+      "identity_attributes": ["name", "condition"],
+      "identity_rule": "参数名 + 工况条件相同视为同一参数实体；不同工况下的同名参数为不同实体",
+      "display_primary": "name",
+      "display_secondary": ["value", "unit", "operator", "condition"]
+    },
+
+    "Standard": {
+      "description": "标准文件——行业或国家标准（ISO 14229、GB/T 18487、IEC 61851 等）。",
+      "attributes": {
+        "code": {
+          "value_type": "string",
+          "required": true,
+          "description": "标准编号，如 ISO 14229-1、GB/T 18487.1-2023"
+        },
+        "title": {
+          "value_type": "string",
+          "required": false,
+          "description": "标准标题"
+        },
+        "version": {
+          "value_type": "string",
+          "required": false,
+          "description": "标准版本年份，如 2023"
+        },
+        "scope": {
+          "value_type": "string",
+          "required": false,
+          "description": "标准适用范围"
+        }
+      },
+      "relation_roles": [
+        { "relation_type": "references", "target_classes": ["Standard"] },
+        { "relation_type": "defines", "target_classes": ["Parameter", "Requirement"] }
+      ],
+      "identity_attributes": ["code"],
+      "identity_rule": "标准编号相同视为同一标准",
+      "display_primary": "code",
+      "display_secondary": ["title", "version"]
+    },
+
+    "Method": {
+      "description": "测试方法——用于验证参数或要求的测量或试验方法。",
+      "attributes": {
+        "name": {
+          "value_type": "string",
+          "required": true,
+          "description": "方法名称"
+        },
+        "instrument": {
+          "value_type": "string",
+          "required": false,
+          "description": "所需仪器，如 示波器、万用表"
+        },
+        "procedure": {
+          "value_type": "string",
+          "required": false,
+          "description": "测试步骤或条件描述"
+        },
+        "condition": {
+          "value_type": "string",
+          "required": false,
+          "description": "测试条件"
+        }
+      },
+      "relation_roles": [
+        { "relation_type": "defined_in", "target_classes": ["Standard"] },
+        { "relation_type": "references", "target_classes": ["Parameter"] }
+      ],
+      "identity_attributes": ["name"],
+      "identity_rule": "方法名相同视为同一方法",
+      "display_primary": "name",
+      "display_secondary": ["instrument", "condition"]
+    },
+
+    "Requirement": {
+      "description": "规范要求——来自标准或产品规格的强制性或推荐性要求。",
+      "attributes": {
+        "name": {
+          "value_type": "string",
+          "required": true,
+          "description": "要求标题或概述"
+        },
+        "text": {
+          "value_type": "string",
+          "required": false,
+          "description": "要求原文或描述"
+        },
+        "type": {
+          "value_type": "string",
+          "required": false,
+          "description": "要求类型",
+          "enum_values": ["mandatory", "recommended", "informative"]
+        },
+        "condition": {
+          "value_type": "string",
+          "required": false,
+          "description": "适用条件"
+        }
+      },
+      "relation_roles": [
+        { "relation_type": "defined_in", "target_classes": ["Standard"] },
+        { "relation_type": "verified_by", "target_classes": ["Method"] },
+        { "relation_type": "references", "target_classes": ["Parameter"] }
+      ],
+      "identity_attributes": ["name", "condition"],
+      "identity_rule": "要求标题 + 条件相同视为同一要求",
+      "display_primary": "name",
+      "display_secondary": ["type", "condition"]
+    }
+  }
+}

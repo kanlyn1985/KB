@@ -1,0 +1,6 @@
+{
+  "domain_id": "obc_dcdc",
+  "name": "OBC / DCDC Engineering Knowledge",
+  "version": "0.2.0",
+  "description": "OBC/DCDC 车载充电机与 DC-DC 变换器工程知识本体。覆盖产品、子系统、参数、标准、方法和要求六类实体。"
+}

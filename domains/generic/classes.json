@@ -1,0 +1,27 @@
+{
+  "classes": {
+    "Concept": {
+      "description": "通用概念，用于没有专门 Class 定义时的兜底。",
+      "attributes": {
+        "name": {
+          "value_type": "string",
+          "required": true,
+          "description": "概念名称"
+        },
+        "description": {
+          "value_type": "string",
+          "required": false,
+          "description": "概念描述"
+        }
+      },
+      "relation_roles": [
+        { "relation_type": "part_of", "target_classes": ["Concept"] },
+        { "relation_type": "references", "target_classes": ["Concept"] }
+      ],
+      "identity_attributes": ["name"],
+      "identity_rule": "name 相同视为同一 Concept",
+      "display_primary": "name",
+      "display_secondary": ["description"]
+    }
+  }
+}

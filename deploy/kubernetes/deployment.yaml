@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kb-ontology
+  labels:
+    app: kb-ontology
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kb-ontology
+  template:
+    metadata:
+      labels:
+        app: kb-ontology
+    spec:
+      containers:
+        - name: api
+          image: kb-ontology:0.1.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - kb-ontology
+            - secure-serve
+            - --tenant-db-root
+            - /data/tenants
+            - --domain-dir
+            - /app/domains/obc_dcdc
+            - --host
+            - 0.0.0.0
+            - --port
+            - "8080"
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: KB_ONTOLOGY_API_KEYS
+              valueFrom:
+                secretKeyRef:
+                  name: kb-ontology-secrets
+                  key: api-keys
+            - name: AGENT_KB_LLM_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: kb-ontology-secrets
+                  key: llm-api-key
+                  optional: true
+            - name: AGENT_KB_LLM_ENDPOINT
+              value: "https://api.cdn-krill-ai.com/v1"
+            - name: AGENT_KB_LLM_MODEL
+              value: "grok-4.5"
+            - name: AGENT_KB_LLM_API_FORMAT
+              value: "openai"
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          readinessProbe:
+            httpGet:
+              path: /v1/health
+              port: http
+              httpHeaders:
+                - name: Authorization
+                  value: Bearer readiness-probe-placeholder
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+      volumes:
+        - name: data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kb-ontology
+spec:
+  selector:
+    app: kb-ontology
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http

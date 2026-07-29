@@ -1,0 +1,42 @@
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: kb-ontology:0.1.0
+    command:
+      - kb-ontology
+      - secure-serve
+      - --tenant-db-root
+      - /data/tenants
+      - --domain-dir
+      - /app/domains/obc_dcdc
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8080"
+    environment:
+      KB_ONTOLOGY_API_KEYS: >-
+        {"development-health-key-000000000000":{"principal_id":"compose-admin","tenant_id":"default","roles":["admin"]}}
+      # Optional LLM (extract / semantic judgement):
+      # AGENT_KB_LLM_ENDPOINT: https://api.cdn-krill-ai.com/v1
+      # AGENT_KB_LLM_MODEL: grok-4.5
+      # AGENT_KB_LLM_API_KEY: nb_…
+      # AGENT_KB_LLM_API_FORMAT: openai
+    ports:
+      - "8080:8080"
+    volumes:
+      - kb-ontology-data:/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          python -c "import json,urllib.request; r=urllib.request.Request('http://127.0.0.1:8080/v1/health',headers={'Authorization':'Bearer development-health-key-000000000000'}); print(json.load(urllib.request.urlopen(r,timeout=5))['status'])"
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  kb-ontology-data:

@@ -1,0 +1,93 @@
+{
+  "terms": {
+    "DCDC_OUTPUT_RIPPLE": {
+      "aliases": ["输出纹波", "低压输出纹波", "纹波电压", "LV ripple", "output ripple", "ripple voltage", "12V rail ripple"]
+    },
+    "DCDC_OUTPUT_VOLTAGE": {
+      "aliases": ["输出电压", "低压输出电压", "LV output voltage", "12V output voltage", "Vout"]
+    },
+    "DCDC_OUTPUT_CURRENT": {
+      "aliases": ["输出电流", "低压输出电流", "LV output current", "Iout"]
+    },
+    "DCDC_EFFICIENCY": {
+      "aliases": ["效率", "转换效率", "conversion efficiency", "efficiency"]
+    },
+    "DCDC_STANDBY_CURRENT": {
+      "aliases": ["待机电流", "静态电流", "sleep current", "standby current", "quiescent current"]
+    },
+    "DCDC_OVP_THRESHOLD": {
+      "aliases": ["过压保护阈值", "输出过压", "OVP", "over voltage protection", "overvoltage threshold"]
+    },
+    "DCDC_OCP_THRESHOLD": {
+      "aliases": ["过流保护阈值", "输出过流", "OCP", "over current protection", "overcurrent threshold"]
+    },
+    "PFC_BUS_VOLTAGE": {
+      "aliases": ["母线电压", "PFC母线电压", "bus voltage", "Vbulk", "DC bus voltage"]
+    },
+    "SWING_FREQUENCY": {
+      "aliases": ["抖频频率", "开关频率", "switching frequency", "抖频策略"]
+    },
+    "LEAKAGE_INRUSH": {
+      "aliases": ["漏电流", "inrush current", "浪涌电流"]
+    },
+    "INSULATION_RESISTANCE": {
+      "aliases": ["绝缘电阻", "insulation resistance", "绝缘阻抗"]
+    },
+    "OBC": {
+      "aliases": ["车载充电机", "On-Board Charger", "onboard charger", "OBC"]
+    },
+    "DCDC": {
+      "aliases": [
+        "DC-DC变换器",
+        "DC-DC转换器",
+        "车载DC-DC转换器",
+        "直流变换器",
+        "DC-DC converter",
+        "直流降压",
+        "DCDC"
+      ]
+    },
+    "SLOW_CHARGE": {
+      "aliases": ["慢充系统", "慢充", "交流慢充", "AC slow charge", "slow charge"]
+    },
+    "FAST_CHARGE": {
+      "aliases": ["快充系统", "快充", "直流快充", "DC fast charge", "fast charge"]
+    },
+    "OBC_TOPOLOGY": {
+      "aliases": ["OBC电路拓扑", "电路拓扑", "OBC拓扑", "拓扑工作原理", "PFC+LLC"]
+    },
+    "SWING_FREQ_STRATEGY": {
+      "aliases": ["抖频策略", "DCDC抖频", "G5抖频", "11kW抖频", "frequency dithering"]
+    },
+    "CBC_STRATEGY": {
+      "aliases": ["CBC策略", "CBC", "电流模式控制", "cycle by cycle", "Cycle-by-Cycle"]
+    },
+    "PEAK_POWER": {
+      "aliases": ["峰值功率策略", "DCDC峰值功率", "peak power"]
+    },
+    "V2L": {
+      "aliases": ["Vehicle to Load", "对外放电", "V2L放电", "vehicle-to-load"]
+    },
+    "CC_SIGNAL": {
+      "aliases": ["CC信号", "充电连接确认", "Connection Confirm", "CC"]
+    },
+    "CP_SIGNAL": {
+      "aliases": ["CP信号", "控制导引", "Control Pilot", "CP", "PWM占空比", "充电引导信号"]
+    },
+    "PRECHARGE": {
+      "aliases": ["预充", "预充电", "预充策略", "DC启动预充", "precharge"]
+    },
+    "ISO_14229": {
+      "aliases": ["ISO 14229", "UDS", "Unified Diagnostic Services", "诊断服务"]
+    },
+    "GBT_18487": {
+      "aliases": ["GB/T 18487", "GBT 18487", "电动汽车传导充电", "EV charging standard"]
+    },
+    "AUTOSAR": {
+      "aliases": ["AUTOSAR", "汽车开放系统架构", "AUTOSAR CP"]
+    },
+    "MISRA_C": {
+      "aliases": ["MISRA C", "MISRA C:2012", "MISRA", "C编码规范"]
+    }
+  }
+}
