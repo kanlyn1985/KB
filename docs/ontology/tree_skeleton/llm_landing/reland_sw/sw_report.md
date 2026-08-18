@@ -1,0 +1,71 @@
+# 软件类文档专项 LLM 落位报告
+- 模型: deepseek-v4-flash | 文档: 640 | 内容单元: 78563
+- LLM 归属率: 72626/78563 = 92.4%
+- 复核队列: 5935
+- LLM 用量: {"input_tokens": 919601, "output_tokens": 1190028, "calls": 2150, "errors": 0, "model": "deepseek-v4-flash"}
+
+## LLM 落位按节点 TOP 30
+
+- G-METHOD-AUTOSAR AUTOSAR 配置方法（Neusar/RTE/EB/代码生成）: 30510
+- P-SW-BSW BSW（服务/ECU抽象/MCAL）: 6098
+- R-STD 标准条款（GB/T 40432/24347/18487/ISO14229/企标…全量）: 3290
+- R-SW 软件需求（SWRD：功率转换/通信/诊断/刷写）: 2520
+- R-FSC 功能安全需求（ISO 26262：SG→FSR→TSR→HSR/SSR）: 2128
+- P-SW-ASW-OBCSTATE OBCState（状态管理）: 1917
+- L-STATE 状态管理（OBC/DCDC/休眠唤醒/AC Relay 状态机）: 1512
+- L-FAULT 故障判定逻辑域（检测/判定/恢复逻辑）: 1295
+- L-COMM 通信协议逻辑域（CAN/诊断/ISO15118 协议逻辑）: 1002
+- P-SW-ASW-ACRELAY ACRelayCtrl: 1001
+- G-METHOD-MBD MBD 建模方法（Simulink/Stateflow/模型检查）: 951
+- P-CAL 标定数据树（降额曲线/阈值/增益）: 898
+- P-HW-CTRL-MCU MCU/DSP: 886
+- P-SW-RTE RTE: 877
+- G-METHOD-TOOL 工具使用方法（gitlab/Matlab/Polarion/测试工具）: 816
+- G-ASSET 可复用资产（代码资产/文档模板/CBB设计标准）: 779
+- G-VERIFY 验证活动树（测试/检测/试验）: 721
+- P-SW-ASW-CAL Calibration（标定）: 672
+- G-PROC-STD ASPICE 流程（SYS/SWE/SUP/MAN/ACQ）: 595
+- P-SW-ASW-ADC ADCSignal（采样）: 560
+- P-SW-ASW 应用层 ASW: 546
+- P-SW-ASW-SLEEPWAKE SleepWake（休眠唤醒）: 499
+- R-IF 接口与通信需求（CAN 矩阵/状态机要求）: 453
+- P-SW-ASW-CANREPORT CANReport: 428
+- P-SW-ASW-ORINGOVP ORingOVP: 425
+- P-SW-ASW-INSDET INSDET（绝缘检测）: 411
+- P-SW-ASW-DCDCFAULTDET DCDCFaultDetect: 391
+- P-HW-CTRL-SENSE 采样电路: 380
+- P-HW-OBC-ACRELAY AC 继电器: 367
+- P-SW-ASW-CANRCV CAN_Receive: 347
+
+## P-SW 节点归属统计
+
+- P-SW-BSW BSW（服务/ECU抽象/MCAL）: 6098
+- P-SW-ASW-OBCSTATE OBCState（状态管理）: 1917
+- P-SW-ASW-ACRELAY ACRelayCtrl: 1001
+- P-SW-RTE RTE: 877
+- P-SW-ASW-CAL Calibration（标定）: 672
+- P-SW-ASW-ADC ADCSignal（采样）: 560
+- P-SW-ASW 应用层 ASW: 546
+- P-SW-ASW-SLEEPWAKE SleepWake（休眠唤醒）: 499
+- P-SW-ASW-CANREPORT CANReport: 428
+- P-SW-ASW-ORINGOVP ORingOVP: 425
+- P-SW-ASW-INSDET INSDET（绝缘检测）: 411
+- P-SW-ASW-DCDCFAULTDET DCDCFaultDetect: 391
+- P-SW-ASW-CANRCV CAN_Receive: 347
+- P-SW-ASW-OBCFAULTDET OBCFaultDetect: 324
+- P-SW-ASW-CPOUT CPOUT: 319
+- P-SW-ASW-CP CP: 305
+- P-SW-ASW-TEMP Temp（温度管理）: 299
+- P-SW-ASW-OBCPWRCTRL OBCPowerCtrl（OBC功率控制）: 298
+- P-SW-ASW-OBCFAULTRPT OBCFaultReport: 296
+- P-SW-ASW-INTERLOCK Interlock（高压互锁）: 293
+- P-SW-ASW-DCDCPWRCTRL DCDCPowerCtrl（DCDC功率控制）: 277
+- P-SW-ASW-DCDCFAULTRPT DCDCFaultReport: 272
+- P-SW-ASW-CC CC（控制导引）: 272
+- P-SW-ASW-ELECLOCK ELEclock: 268
+- P-SW-ASW-GUNMANAGE GunManage: 253
+- P-SW-ASW-DCDCSTATE DCDCState: 243
+- P-SW-ASW-GUNTEMP GunTemp: 233
+- P-SW 软件树: 227
+- P-SW-ASW-S2 S2: 193
+- P-SW-ASW-UDMANAGE UDManage: 150
