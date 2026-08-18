@@ -43,6 +43,10 @@ NOISE_PATH = re.compile(
     r"^([A-Za-z]:[\\/]|N:\\\\|\\\\|/mnt/|/home/|http[s]?://|ftp://|\\\\192\.)"
 )
 NOISE_ATTACH = re.compile(r"^(\[附件:|!\[|<!-- unsupported DingTalk block|dingtalk-resource://)")
+# 钉钉接口错误 / 元数据引用行 / HTML 注释片段（v0.4.1：覆盖提取层漏判的噪声）
+NOISE_ERROR = re.compile(r"^(ERROR: HTTP|Error:|Traceback|Exception)")
+NOISE_META = re.compile(r"^>\s*(\*\*)?(来源|日期|时间|创建人|上次更新|转换日期|作者|版本)(\*\*)?[：: ]")
+NOISE_COMMENT = re.compile(r"^<!--.*(-->)?$|^<!--")
 NOISE_TABLE_HEADER = re.compile(
     r"^(\|?\s*(ID|序号|No\.?|Item|Date|Author|版本|时间|备注|说明|V\d\.\d)[\s|]*(\|?\s*)*$|^V\d\.\d\s*\|\s*(Date|Author|EVT|初稿))",
     re.IGNORECASE,
@@ -62,6 +66,12 @@ def is_noise_text(text: str) -> bool:
     if not t:
         return True
     if NOISE_ATTACH.search(t):
+        return True
+    if NOISE_ERROR.match(t):
+        return True
+    if NOISE_META.match(t):
+        return True
+    if NOISE_COMMENT.match(t):
         return True
     if NOISE_SN.match(t):
         return True
