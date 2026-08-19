@@ -217,7 +217,10 @@ def query_production_store(
             retrieval_result=retrieval_result,
             domain_pack=domain_pack,
         )
-        judgement = judge_context_pack(context_pack)
+        judgement = judge_context_pack(
+            context_pack,
+            relevance_score=_top_candidate_score(retrieval_result),
+        )
         context_pack = _apply_judgement(context_pack, judgement)
         run_id = store.record_retrieval(
             query_frame=frame,
@@ -278,6 +281,12 @@ def _record_graph_extraction(
             ),
         )
     return run_id
+
+
+def _top_candidate_score(retrieval_result: RetrievalResult) -> float:
+    """检索 top1 候选的融合分（相关性信号）。"""
+    candidates = retrieval_result.candidates
+    return float(candidates[0].score) if candidates else 0.0
 
 
 def _context_from_retrieval(

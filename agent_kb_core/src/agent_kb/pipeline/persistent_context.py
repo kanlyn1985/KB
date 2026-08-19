@@ -111,7 +111,13 @@ def query_persistent_store(
             retrieval_result=retrieval_result,
             domain_pack=domain_pack,
         )
-        judgement = judge_context_pack(context_pack)
+        judgement = judge_context_pack(
+            context_pack,
+            relevance_score=(
+                float(retrieval_result.candidates[0].score)
+                if retrieval_result.candidates else 0.0
+            ),
+        )
         context_pack = _apply_judgement(context_pack, judgement)
         run_id = store.record_retrieval(
             query_frame=frame,

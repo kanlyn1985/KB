@@ -126,6 +126,17 @@ def build_parser() -> argparse.ArgumentParser:
     )
     _add_query_arguments(query_production)
 
+    answer_query = subparsers.add_parser(
+        "answer-query",
+        help="End-to-end Q&A: retrieve -> context pack -> LLM answer "
+             "(abstains when evidence is insufficient).",
+    )
+    answer_query.add_argument("--db", type=Path, required=True)
+    answer_query.add_argument("--query", required=True)
+    answer_query.add_argument("--domain-dir", type=Path)
+    answer_query.add_argument("--llm-understanding", action="store_true")
+    answer_query.add_argument("--max-answer-chars", type=int, default=2000)
+
     migrate_db = subparsers.add_parser("migrate-db", help="Apply monotonic production schema migrations.")
     migrate_db.add_argument("--db", type=Path, required=True)
 
@@ -262,6 +273,12 @@ def _add_query_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--domain-dir", type=Path)
     parser.add_argument("--retrieval-top-k", type=int, default=12)
     parser.add_argument("--summary-only", action="store_true")
+    parser.add_argument(
+        "--llm-understanding",
+        action="store_true",
+        help="Use LLM semantic decomposition when rule matching is uncertain "
+             "(falls back to rules if LLM gateway unavailable).",
+    )
 
 
 def main() -> None:
@@ -351,13 +368,27 @@ def main() -> None:
         return
 
     if args.command == "query-production":
+        from agent_kb.query.understanding import UnderstandingOptions
+        opts = UnderstandingOptions(use_llm=bool(getattr(args, "llm_understanding", False)))
         result = query_production_store(
             args.query,
             db_path=args.db,
             domain_pack=_load_optional_domain(args.domain_dir),
+            understanding_options=opts,
             retrieval_top_k=max(1, args.retrieval_top_k),
         )
         _print(result.summary if args.summary_only else result.to_dict())
+        return
+
+    if args.command == "answer-query":
+        from agent_kb.commands.answer_query import answer_query as _answer
+        _print(_answer(
+            args.query,
+            db_path=args.db,
+            domain_dir=args.domain_dir,
+            use_llm_understanding=args.llm_understanding,
+            max_answer_chars=args.max_answer_chars,
+        ))
         return
 
     if args.command == "migrate-db":

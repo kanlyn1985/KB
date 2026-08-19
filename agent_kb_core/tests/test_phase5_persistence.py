@@ -99,3 +99,31 @@ def test_evidence_judge_marks_empty_context_insufficient() -> None:
     assert judgement.status == "insufficient"
     assert judgement.score < 0.4
     assert judgement.missing_shapes
+
+
+def test_evidence_judge_low_relevance_downgrades_sufficient() -> None:
+    """相关性过低（top1 score < 1.5）时，即使有证据也降级（防误报）。"""
+    pack = load_domain_pack(ROOT / "domains" / "obc_dcdc")
+    frame = understand_query("输出纹波要求是多少？", domain_pack=pack)
+    # 模拟有证据但检索相关性低（库外查询的典型情况）
+    judgement = judge_context_pack(
+        AgentContextPack(
+            query_frame=frame,
+            facts=[],  # 无事实
+            evidence=[],  # 无证据
+        ),
+        relevance_score=0.73,
+    )
+    assert any("relevance" in reason for reason in judgement.reasons)
+    assert judgement.score <= 0.74
+
+
+def test_evidence_judge_high_relevance_keeps_score() -> None:
+    """相关性高时不降级，判定由证据形状决定。"""
+    pack = load_domain_pack(ROOT / "domains" / "obc_dcdc")
+    frame = understand_query("输出纹波要求是多少？", domain_pack=pack)
+    judgement = judge_context_pack(
+        AgentContextPack(query_frame=frame),
+        relevance_score=2.8,
+    )
+    assert not any("relevance" in reason for reason in judgement.reasons)

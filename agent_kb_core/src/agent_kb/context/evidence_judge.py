@@ -34,7 +34,17 @@ _REQUIRED_GROUPS: dict[str, list[set[str]]] = {
 }
 
 
-def judge_context_pack(context_pack: AgentContextPack) -> EvidenceJudgement:
+def judge_context_pack(
+    context_pack: AgentContextPack,
+    *,
+    relevance_score: float | None = None,
+) -> EvidenceJudgement:
+    """判断证据充分性。
+
+    relevance_score：检索 top1 候选分（来自融合排序）。正常查询通常 ≥1.5，
+    库外/不相关查询 ≤0.8。相关性过低时即使有证据绑定也降级，
+    避免"有证据但内容不相关"的误报（sufficient 误判）。
+    """
     frame = context_pack.query_frame
     fact_types = {fact.fact_type for fact in context_pack.facts}
     evidence_ids = {item.evidence_id for item in context_pack.evidence}
@@ -73,6 +83,10 @@ def judge_context_pack(context_pack: AgentContextPack) -> EvidenceJudgement:
         reasons.append("no source evidence was selected")
     if context_pack.facts and not bound_fact_count:
         reasons.append("selected facts are not bound to selected evidence")
+    # 相关性阈值：检索 top1 分过低 → 召回内容与查询不相关，降级
+    if relevance_score is not None and relevance_score < 1.5:
+        reasons.append(f"retrieval relevance is low ({relevance_score:.2f})")
+        score = min(score, 0.74)
     if frame.missing_slots:
         reasons.append("query contains unresolved required slots")
         score = min(score, 0.74)
