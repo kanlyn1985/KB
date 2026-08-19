@@ -1,0 +1,116 @@
+[
+ {
+  "case_id": "obc_principle",
+  "query": "帮我介绍一下OBC的工作原理",
+  "expected": [
+   "P-KNOW-OBC"
+  ]
+ },
+ {
+  "case_id": "dcdc_principle",
+  "query": "DCDC的工作原理是什么",
+  "expected": [
+   "P-KNOW-DCDC"
+  ]
+ },
+ {
+  "case_id": "ripple_req",
+  "query": "输出纹波要求是多少",
+  "expected": [
+   "R-PERF",
+   "DCDC_OUTPUT_RIPPLE"
+  ]
+ },
+ {
+  "case_id": "thermal_sim",
+  "query": "热仿真怎么做",
+  "expected": [
+   "G-VERIFY-CAE-THERMAL",
+   "G-METHOD-CAE-THERMAL"
+  ]
+ },
+ {
+  "case_id": "modal_analysis",
+  "query": "模态分析的方法",
+  "expected": [
+   "G-METHOD-CAE-STRUCT-MODAL",
+   "G-VERIFY-CAE-VIBRATION"
+  ]
+ },
+ {
+  "case_id": "autosar_comm",
+  "query": "AUTOSAR通信怎么配置",
+  "expected": [
+   "G-METHOD-AUTOSAR-COMM"
+  ]
+ },
+ {
+  "case_id": "mcu_safety",
+  "query": "MCU安全监控机制",
+  "expected": [
+   "P-HW-CTRL-MCU",
+   "R-FSC"
+  ]
+ },
+ {
+  "case_id": "potting",
+  "query": "灌封胶选型要求",
+  "expected": [
+   "G-PROD-POTTING-POT",
+   "G-PROD-POTTING-THERMAL"
+  ]
+ },
+ {
+  "case_id": "fault_diag",
+  "query": "故障诊断逻辑",
+  "expected": [
+   "L-FAULT",
+   "P-SW-ASW-DCDCFAULTDET"
+  ]
+ },
+ {
+  "case_id": "vibration_test",
+  "query": "振动测试标准",
+  "expected": [
+   "G-VERIFY-VIBRATION-VIB"
+  ]
+ },
+ {
+  "case_id": "can_comm",
+  "query": "CAN通信协议",
+  "expected": [
+   "L-COMM",
+   "G-METHOD-AUTOSAR-COMM"
+  ]
+ },
+ {
+  "case_id": "safety_req",
+  "query": "功能安全要求",
+  "expected": [
+   "R-FSC"
+  ]
+ },
+ {
+  "case_id": "efficiency",
+  "query": "OBC效率要求",
+  "expected": [
+   "R-PERF"
+  ]
+ },
+ {
+  "case_id": "assembl",
+  "query": "装配工艺要求",
+  "expected": [
+   "G-PROD-ASSEMBLY",
+   "G-PROD-ASSEMBLY-GEN"
+  ]
+ },
+ {
+  "case_id": "sealing",
+  "query": "密封测试方法",
+  "expected": [
+   "G-VERIFY-AIRTIGHT",
+   "G-PROD-POTTING-SEAL"
+  ]
+ }
+]

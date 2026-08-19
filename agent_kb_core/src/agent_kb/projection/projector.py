@@ -88,7 +88,24 @@ def merge_projection_aliases(projections: list[ObjectProjection]) -> dict[str, l
     return result
 
 
+# 骨架节点层前缀 → 对象类型（与 skeleton 的 layer 对应）
+_LAYER_PREFIX_TO_TYPE = {
+    "P": "PhysicalComponent",
+    "F": "Function",
+    "L": "Logic",
+    "R": "Requirement",
+    "G": "Process",
+    "Q": "Experience",
+    "M": "ProjectInstance",
+}
+
+
 def _infer_object_type(canonical_id: str, domain_pack: DomainPack) -> str:
+    # 骨架节点 ID（如 P-HW-OBC / G-METHOD-AUTOSAR）：按层前缀推断类型
+    prefix = canonical_id.split("-", 1)[0] if "-" in canonical_id else canonical_id
+    mapped = _LAYER_PREFIX_TO_TYPE.get(prefix)
+    if mapped and mapped in domain_pack.object_types:
+        return mapped
     if "Parameter" in domain_pack.object_types:
         return "Parameter"
     if domain_pack.object_types:

@@ -98,12 +98,20 @@ def _find_domain_subject(text: str, domain_pack: DomainPack | None) -> str | Non
     if not domain_pack:
         return None
     lowered = text.lower()
+    # 最长匹配别名优先；等长时优先含中文的别名（领域特征更强），
+    # 避免 "DCDC"/"OBC" 这类短模块名污染 subject 判定。
+    best: tuple[int, bool, str] | None = None
     for canonical, aliases in domain_pack.terminology.items():
         candidates = [canonical, *aliases]
         for alias in candidates:
-            if str(alias).strip() and str(alias).lower() in lowered:
-                return canonical
-    return None
+            value = str(alias).strip()
+            if not value or len(value) <= 1 or value.lower() not in lowered:
+                continue
+            has_cjk = any("\u4e00" <= ch <= "\u9fff" for ch in value)
+            key = (len(value), has_cjk)
+            if best is None or key > (best[0], best[1]):
+                best = (key[0], key[1], canonical)
+    return best[2] if best else None
 
 
 def _fallback_subject(text: str) -> str | None:

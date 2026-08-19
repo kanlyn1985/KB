@@ -44,9 +44,9 @@ _INTENT_TO_CHANNELS: dict[str, list[str]] = {
     "constraint_lookup": ["object_card", "fact", "table", "graph", "evidence"],
     "test_method": ["object_card", "fact", "graph", "wiki_chunk", "evidence"],
     "comparison": ["object_card", "graph", "fact", "wiki_chunk"],
-    "procedure": ["fact", "wiki_chunk", "evidence"],
-    "evidence_lookup": ["evidence", "source_unit", "document"],
-    "general_search": ["keyword", "semantic", "wiki_chunk", "evidence"],
+    "procedure": ["object_card", "fact", "wiki_chunk", "evidence"],
+    "evidence_lookup": ["object_card", "evidence", "source_unit", "document"],
+    "general_search": ["object_card", "keyword", "semantic", "wiki_chunk", "evidence"],
 }
 
 
