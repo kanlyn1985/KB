@@ -131,10 +131,20 @@ def _link_target_objects(query: str, domain_pack: DomainPack | None) -> list[Tar
     matches: list[TargetObject] = []
     for canonical_id, aliases in domain_pack.terminology.items():
         candidates = [canonical_id, *aliases]
-        best_match = ""
+        # 别名中的斜杠/顿号分隔词也作为候选（如"电压转换/低压输出"→"电压转换"）
+        expanded: list[str] = []
         for candidate in candidates:
             text = str(candidate or "").strip()
-            if text and text.lower() in lowered:
+            if not text:
+                continue
+            expanded.append(text)
+            for part in re.split(r"[,，/、]", text):
+                part = part.strip()
+                if len(part) >= 2 and part not in expanded:
+                    expanded.append(part)
+        best_match = ""
+        for text in expanded:
+            if text.lower() in lowered:
                 if len(text) > len(best_match):
                     best_match = text
         if not best_match:

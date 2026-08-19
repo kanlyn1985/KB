@@ -114,5 +114,114 @@
    "G-VERIFY-AIRTIGHT",
    "G-PROD-POTTING-SEAL"
   ]
+ },
+ {
+  "case_id": "charge_func",
+  "query": "OBC充电功能是什么",
+  "expected": [
+   "F-OBC-CHARGE",
+   "F-OBC"
+  ]
+ },
+ {
+  "case_id": "discharge_v2l",
+  "query": "V2L放电功能",
+  "expected": [
+   "F-OBC-DISCHARGE"
+  ]
+ },
+ {
+  "case_id": "cp_cc",
+  "query": "CP控制导引信号",
+  "expected": [
+   "F-OBC-CP"
+  ]
+ },
+ {
+  "case_id": "obc_protect",
+  "query": "OBC有哪些保护功能",
+  "expected": [
+   "F-OBC-PROTECT"
+  ]
+ },
+ {
+  "case_id": "dcdc_conv",
+  "query": "DCDC电压转换功能",
+  "expected": [
+   "F-DCDC-CONV",
+   "F-DCDC"
+  ]
+ },
+ {
+  "case_id": "g5_platform",
+  "query": "G5平台是什么",
+  "expected": [
+   "M-G5"
+  ]
+ },
+ {
+  "case_id": "mi_project",
+  "query": "曼岛项目",
+  "expected": [
+   "M-MI"
+  ]
+ },
+ {
+  "case_id": "lesson_learned",
+  "query": "有哪些经验教训",
+  "expected": [
+   "Q-LESSON"
+  ]
+ },
+ {
+  "case_id": "failure_analysis",
+  "query": "失效原因分析",
+  "expected": [
+   "Q-PROBLEM-FAILURE",
+   "Q-FAILURE"
+  ]
+ },
+ {
+  "case_id": "customer_complaint",
+  "query": "客诉问题处理",
+  "expected": [
+   "Q-PROBLEM-CUSTOMER"
+  ]
+ },
+ {
+  "case_id": "power_ctrl_logic",
+  "query": "功率控制环路逻辑",
+  "expected": [
+   "L-PWRCTRL"
+  ]
+ },
+ {
+  "case_id": "precharge_strategy",
+  "query": "启动预充策略",
+  "expected": [
+   "L-STRATEGY-PRECHARGE"
+  ]
+ },
+ {
+  "case_id": "peak_power",
+  "query": "峰值功率策略",
+  "expected": [
+   "L-STRATEGY-PEAK"
+  ]
+ },
+ {
+  "case_id": "emc_req",
+  "query": "EMC要求",
+  "expected": [
+   "R-EMC"
+  ]
+ },
+ {
+  "case_id": "env_req",
+  "query": "环境可靠性要求",
+  "expected": [
+   "R-ENV",
+   "R-REL"
+  ]
  }
 ]
