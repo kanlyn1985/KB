@@ -137,6 +137,26 @@ def _detect_intent(query: str) -> tuple[str, float]:
     return "general_search", 0.45
 
 
+_SHORT_WORD_DF_CACHE: dict[tuple[str, str], int] = {}
+
+
+def _short_word_df(word: str, domain_pack) -> int:
+    """短英文词在术语表中的文档频率（出现在几个节点）。"""
+    cache_key = (word, getattr(domain_pack, "domain_id", ""))
+    if cache_key in _SHORT_WORD_DF_CACHE:
+        return _SHORT_WORD_DF_CACHE[cache_key]
+    df = 0
+    for nid, term in domain_pack.terminology.items():
+        aliases = term if isinstance(term, list) else term.get("aliases", [])
+        for alias in aliases:
+            for part in re.split(r"[,，/、]", str(alias or "")):
+                if part.strip().lower() == word.lower():
+                    df += 1
+                    break
+    _SHORT_WORD_DF_CACHE[cache_key] = df
+    return df
+
+
 def _link_target_objects(query: str, domain_pack: DomainPack | None) -> list[TargetObject]:
     if not domain_pack:
         return []
@@ -157,18 +177,25 @@ def _link_target_objects(query: str, domain_pack: DomainPack | None) -> list[Tar
                     expanded.append(part)
         best_match = ""
         for text in expanded:
+            # 短纯英文词（≤3 字符）且属于 ≥2 个节点（OBC/CAN/RTE/CC）：
+            # 是"提及"词而非"定义"词 → 降权（排在长匹配后），不剔除
             if text.lower() in lowered:
                 if len(text) > len(best_match):
                     best_match = text
         if not best_match:
             continue
+        # 短英文词 DF≥2 降权（0.5），长匹配/专有词保持高置信
+        is_short_en = bool(re.fullmatch(r"[A-Za-z]{1,3}", best_match))
+        conf = _match_confidence(best_match, canonical_id)
+        if is_short_en and _short_word_df(best_match, domain_pack) >= 2:
+            conf = 0.5
         matches.append(
             TargetObject(
                 object_id=canonical_id,
                 object_type=_infer_object_type(canonical_id, domain_pack),
                 canonical_name=_canonical_display_name(canonical_id, aliases),
                 matched_text=best_match,
-                confidence=_match_confidence(best_match, canonical_id),
+                confidence=conf,
             )
         )
     matches.sort(key=lambda item: (item.confidence, len(item.matched_text)), reverse=True)
@@ -286,7 +313,9 @@ def _preferred_fact_types(intent: str, contract: AnswerContractSpec | None) -> l
 
 
 def _must_terms(query: str, targets: list[TargetObject]) -> list[str]:
-    terms = [target.object_id for target in targets]
+    # 低置信目标（短英文泛词匹配，conf=0.5）不进 must_terms，
+    # 避免其 terms 在检索时被强加成（误匹配排前）
+    terms = [target.object_id for target in targets if target.confidence >= 0.6]
     for anchor in re.findall(r"(?:GB/T|GBT|GB|ISO|IEC|QC/T|QC)\s*[A-Z]?\s*[\d.]+(?:[—-]\d{2,4})?|[A-Z]{2,8}\d*", query, flags=re.I):
         cleaned = re.sub(r"\s+", "", anchor)
         if cleaned and cleaned not in terms:

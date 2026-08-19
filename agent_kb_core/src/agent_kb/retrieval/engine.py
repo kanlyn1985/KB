@@ -105,15 +105,18 @@ def _normalize_requested_channels(channels: list[str]) -> list[str]:
 
 
 def _query_terms(frame: QueryFrame) -> list[str]:
+    # 低置信目标（短英文泛词匹配，conf<0.6）的 object_id/别名不进检索词，
+    # 避免误匹配节点在检索时被强加成
+    high_conf_targets = [t for t in frame.target_objects if t.confidence >= 0.6]
     values = [
         frame.normalized_query,
         frame.target_topic,
         *frame.must_terms,
         *frame.aliases,
         *frame.should_terms,
-        *(target.object_id for target in frame.target_objects),
-        *(target.canonical_name for target in frame.target_objects),
-        *(target.matched_text for target in frame.target_objects),
+        *(target.object_id for target in high_conf_targets),
+        *(target.canonical_name for target in high_conf_targets),
+        *(target.matched_text for target in high_conf_targets),
     ]
     terms: list[str] = []
     for value in values:
@@ -129,13 +132,16 @@ def _query_terms(frame: QueryFrame) -> list[str]:
 
 def _search_cards(frame: QueryFrame, cards: list[RetrievalCard], terms: list[str]) -> list[RetrievalCandidate]:
     target_ids = {item.object_id for item in frame.target_objects}
+    target_conf = {item.object_id: item.confidence for item in frame.target_objects}
     candidates: list[RetrievalCandidate] = []
     for card in cards:
         blob = " ".join([card.object_id or "", card.title, card.search_text, *card.aliases, *card.answer_shapes])
         score, matched = _text_score(blob, terms)
         reasons: list[str] = []
         if card.object_id in target_ids:
-            score += 4.0
+            # 低置信目标（短英文泛词匹配，conf=0.5）加成减半，避免误匹配排前
+            boost = 2.0 if target_conf.get(card.object_id, 1.0) < 0.6 else 4.0
+            score += boost
             reasons.append("exact_target_object")
         if frame.intent in card.answer_shapes:
             score += 1.5

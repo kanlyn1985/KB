@@ -68,18 +68,17 @@ def main() -> int:
     terms: dict[str, dict] = {}
     for n in nodes:
         aliases = extract_aliases(n["name"])
-        # 加父节点名（一层）
-        parent = n.get("parent")
-        if parent and parent in node_map:
-            parent_alias = re.sub(r"[（(].*?[）)]", "", node_map[parent]["name"]).strip()
-            if parent_alias and parent_alias not in aliases:
-                aliases.append(parent_alias)
+        # 注意：不加父节点名——父节点名是层级标签（"应用层 ASW"/"R 需求树"），
+        # 加入子节点别名会导致跨节点高频泛词污染匹配（OBC 误匹配问题根源）
         terms[n["id"]] = {"aliases": aliases}
 
-    # 保留原有 6 个参数术语（不覆盖）
+    # 保留原有 6 个参数术语（不覆盖）；骨架节点术语以新生成为准
     existing = json.loads(TERMINOLOGY.read_text(encoding="utf-8"))
     existing_terms = existing.get("terms", {})
-    merged = {**terms, **existing_terms}  # 节点术语优先，保留原参数
+    # 参数对象（无骨架对应）保留，其余以新生成覆盖
+    node_ids = {n["id"] for n in nodes}
+    kept_params = {k: v for k, v in existing_terms.items() if k not in node_ids}
+    merged = {**kept_params, **terms}  # 新生成优先
     existing["terms"] = merged
     TERMINOLOGY.write_text(json.dumps(existing, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"✅ 术语表更新: {len(merged)} 条 (骨架 {len(terms)} + 原参数 {len(existing_terms)})")
