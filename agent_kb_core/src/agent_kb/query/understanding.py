@@ -141,20 +141,48 @@ _SHORT_WORD_DF_CACHE: dict[tuple[str, str], int] = {}
 
 
 def _short_word_df(word: str, domain_pack) -> int:
-    """短英文词在术语表中的文档频率（出现在几个节点）。"""
+    """词在术语表中的文档频率（出现在几个节点）——子串统计：别名拆分词包含该词即计数。
+
+    "控制" 出现在 控制板/功率控制/电路拓扑…控制 等多个节点 → DF≥2 降权；
+    "环路" 只出现在 L-PWRCTRL → DF=1 保持高置信。
+    """
     cache_key = (word, getattr(domain_pack, "domain_id", ""))
     if cache_key in _SHORT_WORD_DF_CACHE:
         return _SHORT_WORD_DF_CACHE[cache_key]
     df = 0
     for nid, term in domain_pack.terminology.items():
         aliases = term if isinstance(term, list) else term.get("aliases", [])
+        hit = False
         for alias in aliases:
-            for part in re.split(r"[,，/、]", str(alias or "")):
-                if part.strip().lower() == word.lower():
-                    df += 1
+            for part in _expand_alias_parts(alias):
+                if word.lower() in part.lower():
+                    hit = True
                     break
+            if hit:
+                break
+        if hit:
+            df += 1
     _SHORT_WORD_DF_CACHE[cache_key] = df
     return df
+
+
+def _expand_alias_parts(text: str) -> list[str]:
+    """把别名拆成候选词：括号内外都按 /、空白 拆分。
+
+    "失效分析（失效/断裂/开裂/破损）" → 失效分析, 失效, 断裂, 开裂, 破损
+    """
+    out: list[str] = []
+    text = str(text or "").strip()
+    if not text:
+        return out
+    inner = re.findall(r"[（(]([^（）()]*)[）)]", text)
+    outer = re.sub(r"[（(][^（）()]*[）)]", " ", text)
+    for part in [outer, *inner]:
+        for seg in re.split(r"[,，/、\s]+", part):
+            seg = seg.strip()
+            if len(seg) >= 2 and seg not in out:
+                out.append(seg)
+    return out
 
 
 def _link_target_objects(query: str, domain_pack: DomainPack | None) -> list[TargetObject]:
@@ -162,32 +190,46 @@ def _link_target_objects(query: str, domain_pack: DomainPack | None) -> list[Tar
         return []
     lowered = query.lower()
     matches: list[TargetObject] = []
+    # 查询中 2~4 字中文子串（滑动窗口，反向匹配用：查询词出现在别名中，
+    # 如"环境" in "环境需求"；窗口保证"环境可靠性要求" 也覆盖 "环境"/"可靠性"）
+    cjk_run = re.sub(r"[^\u4e00-\u9fff]", "", query)
+    query_cjk = sorted(
+        {cjk_run[i : i + n] for n in range(2, 5) for i in range(len(cjk_run) - n + 1)},
+        key=len,
+        reverse=True,
+    )
     for canonical_id, aliases in domain_pack.terminology.items():
-        candidates = [canonical_id, *aliases]
-        # 别名中的斜杠/顿号分隔词也作为候选（如"电压转换/低压输出"→"电压转换"）
         expanded: list[str] = []
-        for candidate in candidates:
-            text = str(candidate or "").strip()
-            if not text:
-                continue
-            expanded.append(text)
-            for part in re.split(r"[,，/、]", text):
-                part = part.strip()
-                if len(part) >= 2 and part not in expanded:
-                    expanded.append(part)
-        best_match = ""
+        for candidate in [canonical_id, *aliases]:
+            expanded.extend(_expand_alias_parts(candidate))
+        # 正向：别名词出现在查询中（最长优先）
+        best_fwd = ""
         for text in expanded:
-            # 短纯英文词（≤3 字符）且属于 ≥2 个节点（OBC/CAN/RTE/CC）：
-            # 是"提及"词而非"定义"词 → 降权（排在长匹配后），不剔除
-            if text.lower() in lowered:
-                if len(text) > len(best_match):
-                    best_match = text
+            if text.lower() in lowered and len(text) > len(best_fwd):
+                best_fwd = text
+        # 反向：查询子串是别名拆分词的"前缀或全词"（最长优先）。
+        # 仅正向未命中时使用；且一律低置信（子串命中可能是泛词，
+        # 如"分析" in "公差分析方法"）。前缀约束排除查询尾缀功能词
+        # （"要求" in "功能安全要求"、"标准" in "标准条款"）的误匹配。
+        best_bwd = ""
+        if not best_fwd:
+            for sub in query_cjk:
+                if any(text.startswith(sub) for text in expanded) and len(sub) > len(best_bwd):
+                    best_bwd = sub
+        best_match = best_fwd or best_bwd
         if not best_match:
             continue
-        # 短英文词 DF≥2 降权（0.5），长匹配/专有词保持高置信
+        is_bwd = bool(best_bwd) and not best_fwd
+        # 短英文词（≤3）DF≥2 或 2~4 字中文词 DF≥3（OBC/CAN/控制/逻辑/失效）：
+        # 是"提及"词而非"定义"词 → 降权（排在长匹配后），不剔除。
+        # 中文阈值高于英文：领域词（效率/灌封胶/环路，DF≤2）应保持高置信
         is_short_en = bool(re.fullmatch(r"[A-Za-z]{1,3}", best_match))
+        is_short_cjk = bool(re.fullmatch(r"[\u4e00-\u9fff]{2,4}", best_match))
         conf = _match_confidence(best_match, canonical_id)
-        if is_short_en and _short_word_df(best_match, domain_pack) >= 2:
+        df = _short_word_df(best_match, domain_pack)
+        if (is_short_en and df >= 2) or (is_short_cjk and df >= 3):
+            conf = 0.5
+        elif is_bwd:
             conf = 0.5
         matches.append(
             TargetObject(
@@ -199,7 +241,7 @@ def _link_target_objects(query: str, domain_pack: DomainPack | None) -> list[Tar
             )
         )
     matches.sort(key=lambda item: (item.confidence, len(item.matched_text)), reverse=True)
-    return matches[:5]
+    return matches[:8]
 
 
 def _infer_object_type(canonical_id: str, domain_pack: DomainPack) -> str:
@@ -225,7 +267,11 @@ def _aliases_for_targets(targets: list[TargetObject], domain_pack: DomainPack | 
     if not domain_pack:
         return []
     result: list[str] = []
+    # 只取高置信目标的别名：低置信（0.5）是"提及词"命中（如"要求"/"标准"），
+    # 展开其别名会把无关词（如 R-FSC 的 ISO 26262/HSR/TSR）塞进检索词造成霸榜
     for target in targets:
+        if target.confidence < 0.6:
+            continue
         for alias in domain_pack.terminology.get(target.object_id, []):
             if alias not in result:
                 result.append(alias)
@@ -316,7 +362,12 @@ def _must_terms(query: str, targets: list[TargetObject]) -> list[str]:
     # 低置信目标（短英文泛词匹配，conf=0.5）不进 must_terms，
     # 避免其 terms 在检索时被强加成（误匹配排前）
     terms = [target.object_id for target in targets if target.confidence >= 0.6]
-    for anchor in re.findall(r"(?:GB/T|GBT|GB|ISO|IEC|QC/T|QC)\s*[A-Z]?\s*[\d.]+(?:[—-]\d{2,4})?|[A-Z]{2,8}\d*", query, flags=re.I):
+    # 标准号锚点：必须含数字（GB/T 40432、ISO14229），避免 OBC/EMC/CAN 纯字母词被强加成
+    for anchor in re.findall(
+        r"(?:GB/T|GBT|GB|ISO|IEC|QC/T|QC)\s*[A-Z]?\s*[\d.]+(?:[—-]\d{2,4})?|[A-Z]{2,8}\d+",
+        query,
+        flags=re.I,
+    ):
         cleaned = re.sub(r"\s+", "", anchor)
         if cleaned and cleaned not in terms:
             terms.append(cleaned)
@@ -325,7 +376,11 @@ def _must_terms(query: str, targets: list[TargetObject]) -> list[str]:
 
 def _should_terms(query: str, aliases: list[str], targets: list[TargetObject]) -> list[str]:
     terms: list[str] = []
-    for value in [query, *aliases, *(target.canonical_name for target in targets)]:
+    # 只取高置信目标的名字：低置信目标（0.5 泛词命中）的 canonical_name 往往
+    # 是长描述（如 R-FSC "功能安全需求（ISO 26262…HSR/SSR）"），拆词后会
+    # 让无关大节点卡（内容含这些词）在检索时霸榜
+    high_conf_names = [t.canonical_name for t in targets if t.confidence >= 0.6]
+    for value in [query, *aliases, *high_conf_names]:
         text = str(value or "").strip()
         if text and text not in terms:
             terms.append(text)

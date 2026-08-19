@@ -144,16 +144,16 @@ def main() -> int:
         frame = understand_query(case["query"], domain_pack=domain_pack)
         result = retrieve(frame, index, top_k=top_k)
         expected = case["expected"]
-        # 期望节点对应的 card_id
-        expected_ids = {node2card.get(e) for e in expected if e in node2card}
+        # 期望节点对应的 card_id（子卡 #n 归一到父节点）
+        expected_ids = {node2card.get(e.split("#")[0]) for e in expected if e.split("#")[0] in node2card}
         expected_ids.discard(None)
-        # 命中判定：候选里出现期望 card
-        cand_ids = {c.source_id for c in result.candidates}
+        # 命中判定：候选里出现期望 card（子卡 #n 归一为父卡）
+        cand_ids = {c.source_id.split("#")[0] for c in result.candidates}
         hit_ids = expected_ids & cand_ids
         hit = bool(hit_ids)
         first_rank = None
         for rank, c in enumerate(result.candidates, 1):
-            if c.source_id in expected_ids:
+            if c.source_id.split("#")[0] in expected_ids:
                 first_rank = rank
                 break
         mrr = 1.0 / first_rank if first_rank else 0.0

@@ -65,13 +65,16 @@ def main() -> int:
                 doc_set[nid].add(r.get("doc", ""))
                 total += 1
 
-    # 生成节点卡
+    # 生成节点卡：大节点分块成子卡（父卡 + N 张子卡）
+    CHUNK_CHARS = 4000
+    SPLIT_UNIT_THRESHOLD = 300  # 单元数超过此值才分块
+    MAX_CHUNKS_PER_NODE = 60  # 单节点最大子卡数（防索引膨胀）
     with OUT.open("w", encoding="utf-8") as fo:
         for nid, n in node_map.items():
             texts = agg.get(nid, [])
             if not texts:
                 continue
-            # 去重 + 截断
+            # 去重
             seen = set()
             unique: list[str] = []
             for t in texts:
@@ -81,20 +84,49 @@ def main() -> int:
                 seen.add(key)
                 unique.append(t)
             content = "\n".join(unique)
-            if len(content) > MAX_CONTENT_CHARS:
-                content = content[:MAX_CONTENT_CHARS] + "\n…(截断)"
-            card = {
+            base = {
                 "node_id": nid,
                 "node_name": n["name"],
                 "layer": n["layer"],
                 "type": n.get("type", ""),
                 "parent": n.get("parent"),
                 "aliases": extract_aliases(n["name"]),
-                "content": content,
                 "unit_count": len(texts),
                 "doc_count": len(doc_set[nid]),
             }
-            fo.write(json.dumps(card, ensure_ascii=False) + "\n")
+            need_split = len(texts) >= SPLIT_UNIT_THRESHOLD and len(content) > CHUNK_CHARS
+            if not need_split:
+                fo.write(json.dumps({**base, "content": content[:MAX_CONTENT_CHARS]}, ensure_ascii=False) + "\n")
+                continue
+            # 分块：按字符数切，尽量在换行处断开；超 MAX_CHUNKS 截断
+            chunks: list[str] = []
+            current = ""
+            for line in unique:
+                if len(current) + len(line) + 1 > CHUNK_CHARS and current:
+                    chunks.append(current)
+                    current = line
+                else:
+                    current = (current + "\n" + line) if current else line
+            if current:
+                chunks.append(current)
+            if len(chunks) > MAX_CHUNKS_PER_NODE:
+                chunks = chunks[:MAX_CHUNKS_PER_NODE]
+            # 父卡：前 2000 字符 + 子卡引用
+            fo.write(json.dumps({
+                **base,
+                "content": chunks[0],
+                "chunk_of": None,
+                "child_chunks": [f"{nid}#{i + 1}" for i in range(1, len(chunks))],
+            }, ensure_ascii=False) + "\n")
+            # 子卡
+            for i, chunk in enumerate(chunks[1:], start=1):
+                fo.write(json.dumps({
+                    **base,
+                    "node_id": f"{nid}#{i}",
+                    "content": chunk,
+                    "chunk_of": nid,
+                    "child_chunks": [],
+                }, ensure_ascii=False) + "\n")
 
     n_cards = sum(1 for _ in OUT.open(encoding="utf-8"))
     print(f"✅ 节点卡生成: {n_cards} 张（含内容的节点 {len(agg)} / 骨架 {len(node_map)}）")

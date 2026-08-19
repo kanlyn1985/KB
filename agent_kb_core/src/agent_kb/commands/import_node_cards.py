@@ -68,22 +68,25 @@ def build_node_index(
             continue
         c = json.loads(line)
         nid = c["node_id"]
-        projections.append(
-            ObjectProjection(
-                object_id=nid,
-                domain=domain_pack.domain_id,
-                object_type=c["layer"],
-                canonical_name=c["node_name"],
-                description=c.get("content", "")[:500],
-                aliases=list(c.get("aliases", [])),
-                properties={"source": "skeleton_v0.4", "layer": c["layer"],
-                            "unit_count": c.get("unit_count", 0),
-                            "doc_count": c.get("doc_count", 0)},
-                evidence_refs=[],
-                confidence=1.0,
-                status="active",
+        chunk_of = c.get("chunk_of")
+        # 子卡不生成对象投影（父节点已有），只生成卡片 + evidence
+        if not chunk_of:
+            projections.append(
+                ObjectProjection(
+                    object_id=nid,
+                    domain=domain_pack.domain_id,
+                    object_type=c["layer"],
+                    canonical_name=c["node_name"],
+                    description=c.get("content", "")[:500],
+                    aliases=list(c.get("aliases", [])),
+                    properties={"source": "skeleton_v0.4", "layer": c["layer"],
+                                "unit_count": c.get("unit_count", 0),
+                                "doc_count": c.get("doc_count", 0)},
+                    evidence_refs=[],
+                    confidence=1.0,
+                    status="active",
+                )
             )
-        )
 
         # 节点 evidence：把聚合内容拆成单元级证据（按行/段落）
         content = c.get("content", "")
@@ -107,19 +110,20 @@ def build_node_index(
             if len(ev_ids) >= 24:  # 每节点最多 24 条证据（控制索引体积）
                 break
 
-        # 节点 fact：term_definition，subject=节点 ID，绑定 evidence
-        fact_id = f"fact:node:{nid}"
-        facts.append(ContextFact(
-            fact_id=fact_id,
-            fact_type="term_definition",
-            subject=nid,
-            predicate="defines",
-            object_value=c["node_name"],
-            qualifiers={"aliases": c.get("aliases", []),
-                        "unit_count": c.get("unit_count", 0)},
-            evidence_ids=ev_ids,
-            confidence=0.9,
-        ))
+        # 节点 fact：term_definition，subject=节点 ID，绑定 evidence（仅父节点）
+        if not chunk_of:
+            fact_id = f"fact:node:{nid}"
+            facts.append(ContextFact(
+                fact_id=fact_id,
+                fact_type="term_definition",
+                subject=nid,
+                predicate="defines",
+                object_value=c["node_name"],
+                qualifiers={"aliases": c.get("aliases", []),
+                            "unit_count": c.get("unit_count", 0)},
+                evidence_ids=ev_ids,
+                confidence=0.9,
+            ))
 
         cards.append(
             RetrievalCard(
@@ -127,17 +131,18 @@ def build_node_index(
                 domain=domain_pack.domain_id,
                 object_id=nid,
                 card_type=c["layer"],
-                title=c["node_name"],
+                title=c["node_name"] + (f" #{nid.split('#')[-1]}" if chunk_of else ""),
                 search_text=" ".join([
-                    c["node_name"], c.get("content", "")[:2000],
+                    c["node_name"], c.get("content", "")[:4000],
                     *c.get("aliases", []),
                 ]),
                 aliases=list(c.get("aliases", [])),
-                related_object_ids=[],
+                related_object_ids=[chunk_of] if chunk_of else [],
                 evidence_ids=ev_ids,
                 answer_shapes=["definition", "general_search"],
                 structured_payload={"node": nid,
-                                    "unit_count": c.get("unit_count", 0)},
+                                    "unit_count": c.get("unit_count", 0),
+                                    "chunk_of": chunk_of},
                 confidence=1.0,
             )
         )
