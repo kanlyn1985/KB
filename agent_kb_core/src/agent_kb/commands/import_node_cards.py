@@ -20,6 +20,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+from agent_kb.context.context_pack import ContextEvidence, ContextFact  # noqa: E402
 from agent_kb.core.documents import DocumentRecord  # noqa: E402
 from agent_kb.core.compiler import KnowledgeCompilation  # noqa: E402
 from agent_kb.core.evidence import EvidenceBlock  # noqa: E402
@@ -48,6 +49,8 @@ def build_node_index(
     """
     projections: list[ObjectProjection] = build_terminology_projections(domain_pack)
     cards: list[RetrievalCard] = build_retrieval_cards(projections)
+    evidence: list[ContextEvidence] = []
+    facts: list[ContextFact] = []
 
     # 节点卡覆盖同 ID 的术语投影（节点卡含聚合内容，检索面更完整）
     node_ids_in_cards: set[str] = set()
@@ -55,8 +58,7 @@ def build_node_index(
         if not line.strip():
             continue
         c = json.loads(line)
-        nid = c["node_id"]
-        node_ids_in_cards.add(nid)
+        node_ids_in_cards.add(c["node_id"])
 
     projections = [p for p in projections if p.object_id not in node_ids_in_cards]
     cards = [c for c in cards if c.object_id not in node_ids_in_cards]
@@ -82,6 +84,43 @@ def build_node_index(
                 status="active",
             )
         )
+
+        # 节点 evidence：把聚合内容拆成单元级证据（按行/段落）
+        content = c.get("content", "")
+        ev_ids: list[str] = []
+        doc_id = f"doc:node:{nid}"
+        seen_snippets: set[str] = set()
+        for raw_line in content.splitlines():
+            snippet = raw_line.strip()
+            if not snippet or len(snippet) < 8 or snippet in seen_snippets:
+                continue
+            seen_snippets.add(snippet)
+            ev_id = f"evd:node:{nid}:{len(ev_ids)}"
+            evidence.append(ContextEvidence(
+                evidence_id=ev_id,
+                document_id=doc_id,
+                page_no=None,
+                snippet=snippet[:2000],
+                confidence=0.9,
+            ))
+            ev_ids.append(ev_id)
+            if len(ev_ids) >= 24:  # 每节点最多 24 条证据（控制索引体积）
+                break
+
+        # 节点 fact：term_definition，subject=节点 ID，绑定 evidence
+        fact_id = f"fact:node:{nid}"
+        facts.append(ContextFact(
+            fact_id=fact_id,
+            fact_type="term_definition",
+            subject=nid,
+            predicate="defines",
+            object_value=c["node_name"],
+            qualifiers={"aliases": c.get("aliases", []),
+                        "unit_count": c.get("unit_count", 0)},
+            evidence_ids=ev_ids,
+            confidence=0.9,
+        ))
+
         cards.append(
             RetrievalCard(
                 card_id=f"card:{domain_pack.domain_id}:{nid}",
@@ -95,7 +134,7 @@ def build_node_index(
                 ]),
                 aliases=list(c.get("aliases", [])),
                 related_object_ids=[],
-                evidence_ids=[],
+                evidence_ids=ev_ids,
                 answer_shapes=["definition", "general_search"],
                 structured_payload={"node": nid,
                                     "unit_count": c.get("unit_count", 0)},
@@ -120,8 +159,8 @@ def build_node_index(
     )
     return CompiledKnowledgeIndex(
         compilation=compilation,
-        context_facts=[],
-        context_evidence=[],
+        context_facts=facts,
+        context_evidence=evidence,
         object_projections=projections,
         retrieval_cards=cards,
     )
@@ -140,6 +179,8 @@ def run(
     summary = {
         "objects": len(index.object_projections),
         "cards": len(index.retrieval_cards),
+        "facts": len(index.context_facts),
+        "evidence": len(index.context_evidence),
     }
     with SQLiteKnowledgeStore(db) as store:
         migrator = SchemaMigrator(store.connection)

@@ -30,9 +30,20 @@ python -m agent_kb.cli query-production \
 
 ## 验证结果
 
-- 导入：216 对象（210 节点 + 6 参数）/ 216 卡片 / 432 向量
-- 正式管线 golden-case 评测（15 个跨领域查询）：**Hit@10 = 100%**，全部命中正确节点
+- 导入：216 对象（210 节点 + 6 参数）/ 216 卡片 / 209 facts / 4,829 evidence / 5,470 向量
+- 正式管线 golden-case 评测（15 个跨领域查询）：**Hit@10 = 100%**
+- 证据判定：**sufficient 8/15**（知识/原理/安全类查询；参数/方法类为 partial，属正常保守）
 - 33 个单元测试全绿
+
+## 证据链（v2，2026-08-18 补充）
+
+节点卡导入时为每个节点生成：
+- **evidence**：聚合内容拆成单元级证据（每节点最多 24 条，snippet=落位单元文本）
+- **fact**：每节点 1 条 `term_definition`（subject=节点 ID，绑定 evidence）
+- **卡片 evidence_ids**：指向该节点 evidence
+
+效果：查询"OBC 工作原理"从 `insufficient(0.10)/ask_clarification_or_abstain`
+提升到 `sufficient(0.88)/answer_with_evidence`——系统现在能基于证据作答。
 
 ## 关键注意事项
 

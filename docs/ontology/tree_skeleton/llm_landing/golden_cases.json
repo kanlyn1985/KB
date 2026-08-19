@@ -41,7 +41,9 @@
   "case_id": "autosar_comm",
   "query": "AUTOSAR通信怎么配置",
   "expected": [
-   "G-METHOD-AUTOSAR-COMM"
+   "G-METHOD-AUTOSAR-COMM",
+   "R-SW",
+   "P-IF"
   ]
  },
  {
