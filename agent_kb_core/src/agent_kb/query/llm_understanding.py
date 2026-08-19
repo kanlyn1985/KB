@@ -74,21 +74,62 @@ def _build_catalog(domain_pack) -> str:
 
 
 # LLM 结果缓存：同查询命中缓存 → 确定性结果 + 零延迟
-_LLM_CACHE: dict[tuple[str, str], list[dict]] = {}
-_LLM_CACHE_MAX = 512
+# A: 内存真 LRU（OrderedDict + move_to_end）
+# B: 磁盘持久化（跨进程/重启保留）
+# 上限可配置（环境变量 AGENT_KB_LLM_CACHE_MAX，默认 10000）
+import os as _os
+from collections import OrderedDict as _OrderedDict
+
+_LLM_CACHE: "_OrderedDict[tuple[str, str], list[dict]]" = _OrderedDict()
+_LLM_CACHE_MAX = int(_os.environ.get("AGENT_KB_LLM_CACHE_MAX", "10000"))
+_CACHE_FILE = ROOT / "data" / "llm_understanding_cache.json"
+_CACHE_FILE_MAX_BYTES = 64 * 1024 * 1024  # 持久化文件上限 64MB
 
 
 def _cache_get(query: str, domain_id: str) -> list[dict] | None:
-    return _LLM_CACHE.get((query, domain_id))
+    key = (query, domain_id)
+    value = _LLM_CACHE.get(key)
+    if value is not None:
+        _LLM_CACHE.move_to_end(key)  # LRU：命中即标记最近使用
+    return value
 
 
 def _cache_put(query: str, domain_id: str, targets: list[dict]) -> None:
-    if len(_LLM_CACHE) >= _LLM_CACHE_MAX:
-        # 简单淘汰：清空最旧的一半（dict 保持插入序）
-        keys = list(_LLM_CACHE.keys())
-        for k in keys[: len(keys) // 2]:
-            _LLM_CACHE.pop(k, None)
-    _LLM_CACHE[(query, domain_id)] = targets
+    key = (query, domain_id)
+    _LLM_CACHE[key] = targets
+    _LLM_CACHE.move_to_end(key)
+    while len(_LLM_CACHE) > _LLM_CACHE_MAX:
+        _LLM_CACHE.popitem(last=False)  # 淘汰最久未用
+    _cache_save()
+
+
+def _cache_load() -> None:
+    """启动时从磁盘加载缓存（进程内首次调用前）。"""
+    if _LLM_CACHE or not _CACHE_FILE.exists():
+        return
+    try:
+        data = json.loads(_CACHE_FILE.read_text(encoding="utf-8"))
+        for key_str, targets in data.items():
+            q, _, d = key_str.partition("\x00")
+            if q and d:
+                _LLM_CACHE[(q, d)] = targets
+    except Exception:  # noqa: BLE001  损坏/权限 → 忽略，从空缓存开始
+        pass
+
+
+def _cache_save() -> None:
+    """把缓存写盘（原子替换，限 64MB 防膨胀）。"""
+    try:
+        _CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
+        payload = {f"{q}\x00{d}": targets for (q, d), targets in _LLM_CACHE.items()}
+        text = json.dumps(payload, ensure_ascii=False)
+        if len(text.encode("utf-8")) > _CACHE_FILE_MAX_BYTES:
+            return  # 超限不写，内存缓存仍可用
+        tmp = _CACHE_FILE.with_suffix(".tmp")
+        tmp.write_text(text, encoding="utf-8")
+        tmp.replace(_CACHE_FILE)
+    except Exception:  # noqa: BLE001  写盘失败不影响查询
+        pass
 
 
 def llm_link_targets(query: str, domain_pack) -> list[TargetObject]:
@@ -99,6 +140,7 @@ def llm_link_targets(query: str, domain_pack) -> list[TargetObject]:
     """
     if not _LLM_AVAILABLE or chat is None or extract_json is None:
         return []
+    _cache_load()  # 首次调用时加载持久化缓存
     domain_id = getattr(domain_pack, "domain_id", "")
     cached = _cache_get(query, domain_id)
     if cached is not None:

@@ -19,10 +19,14 @@ PACK = load_domain_pack(ROOT / "domains" / "obc_dcdc")
 
 @pytest.fixture(autouse=True)
 def _clear_llm_cache():
-    """每个测试前清空 LLM 结果缓存，避免跨测试污染。"""
+    """每个测试前清空 LLM 缓存（内存 + 磁盘），避免跨测试污染。"""
     lu._LLM_CACHE.clear()
+    if lu._CACHE_FILE.exists():
+        lu._CACHE_FILE.unlink()
     yield
     lu._LLM_CACHE.clear()
+    if lu._CACHE_FILE.exists():
+        lu._CACHE_FILE.unlink()
 
 
 def _fake_llm(targets: list[tuple[str, float, str]]):
@@ -119,3 +123,33 @@ def test_understand_query_llm_fallback_keeps_rule_result() -> None:
     assert frame.used_llm is False
     # 规则结果保留（含 L-STATE 等，行为与默认一致）
     assert any(o.object_id == "P-HW-MECH" for o in frame.target_objects)
+
+
+def test_cache_persists_across_process_boundary() -> None:
+    """缓存写盘后，清空内存可从磁盘恢复（模拟进程重启）。"""
+    lu._cache_put("持久化测试", "obc_dcdc", [{"object_id": "P-HW-MECH", "conf": 0.9}])
+    assert lu._CACHE_FILE.exists()
+    # 模拟重启：清内存，重新加载
+    lu._LLM_CACHE.clear()
+    lu._cache_load()
+    assert lu._cache_get("持久化测试", "obc_dcdc") == [{"object_id": "P-HW-MECH", "conf": 0.9}]
+
+
+def test_cache_lru_evicts_oldest() -> None:
+    """超过上限时淘汰最久未用的条目（真 LRU）。"""
+    old_max = lu._LLM_CACHE_MAX
+    lu._LLM_CACHE_MAX = 3
+    try:
+        lu._cache_put("q1", "d", [{"object_id": "A", "conf": 0.9}])
+        lu._cache_put("q2", "d", [{"object_id": "B", "conf": 0.9}])
+        lu._cache_put("q3", "d", [{"object_id": "C", "conf": 0.9}])
+        # 访问 q1（标记最近使用）
+        assert lu._cache_get("q1", "d") is not None
+        # 写入 q4 → 应淘汰 q2（最久未用）
+        lu._cache_put("q4", "d", [{"object_id": "D", "conf": 0.9}])
+        assert lu._cache_get("q2", "d") is None  # 已淘汰
+        assert lu._cache_get("q1", "d") is not None  # 保留
+        assert lu._cache_get("q3", "d") is not None
+        assert lu._cache_get("q4", "d") is not None
+    finally:
+        lu._LLM_CACHE_MAX = old_max
