@@ -73,13 +73,36 @@ def _build_catalog(domain_pack) -> str:
     return "\n".join(lines)
 
 
+# LLM 结果缓存：同查询命中缓存 → 确定性结果 + 零延迟
+_LLM_CACHE: dict[tuple[str, str], list[dict]] = {}
+_LLM_CACHE_MAX = 512
+
+
+def _cache_get(query: str, domain_id: str) -> list[dict] | None:
+    return _LLM_CACHE.get((query, domain_id))
+
+
+def _cache_put(query: str, domain_id: str, targets: list[dict]) -> None:
+    if len(_LLM_CACHE) >= _LLM_CACHE_MAX:
+        # 简单淘汰：清空最旧的一半（dict 保持插入序）
+        keys = list(_LLM_CACHE.keys())
+        for k in keys[: len(keys) // 2]:
+            _LLM_CACHE.pop(k, None)
+    _LLM_CACHE[(query, domain_id)] = targets
+
+
 def llm_link_targets(query: str, domain_pack) -> list[TargetObject]:
     """LLM 把查询映射到骨架节点，返回 TargetObject 列表。
 
     LLM 不可用（网关故障/超时/解析失败）时返回 []，调用方回退到规则结果。
+    结果按 (query, domain) 缓存：同查询二次调用零延迟且结果确定。
     """
     if not _LLM_AVAILABLE or chat is None or extract_json is None:
         return []
+    domain_id = getattr(domain_pack, "domain_id", "")
+    cached = _cache_get(query, domain_id)
+    if cached is not None:
+        return _targets_from_payload(cached, domain_pack, query)
     catalog = _build_catalog(domain_pack)
     user = f"查询: {query}\n\n节点目录:\n{catalog}"
     try:
@@ -91,10 +114,15 @@ def llm_link_targets(query: str, domain_pack) -> list[TargetObject]:
     parsed = extract_json(raw)
     if not isinstance(parsed, dict) or "targets" not in parsed:
         return []
+    payload = [t for t in parsed["targets"] if isinstance(t, dict)]
+    _cache_put(query, domain_id, payload)
+    return _targets_from_payload(payload, domain_pack, query)
+
+
+def _targets_from_payload(payload: list[dict], domain_pack, query: str) -> list[TargetObject]:
+    """把 LLM 原始 payload 转成 TargetObject（白名单 + 置信度过滤）。"""
     result: list[TargetObject] = []
-    for t in parsed["targets"]:
-        if not isinstance(t, dict):
-            continue
+    for t in payload:
         nid = str(t.get("object_id") or "")
         if nid not in domain_pack.terminology:
             continue  # 白名单校验

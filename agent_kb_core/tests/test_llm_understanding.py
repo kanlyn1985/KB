@@ -17,6 +17,14 @@ from agent_kb.query.understanding import UnderstandingOptions, understand_query 
 PACK = load_domain_pack(ROOT / "domains" / "obc_dcdc")
 
 
+@pytest.fixture(autouse=True)
+def _clear_llm_cache():
+    """每个测试前清空 LLM 结果缓存，避免跨测试污染。"""
+    lu._LLM_CACHE.clear()
+    yield
+    lu._LLM_CACHE.clear()
+
+
 def _fake_llm(targets: list[tuple[str, float, str]]):
     """构造 mock chat/extract_json，返回固定 LLM 结果。"""
     payload = {"targets": [

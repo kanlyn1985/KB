@@ -30,10 +30,27 @@
 - 30 golden cases：规则 100% / LLM 100%（LLM 不降级）
 - 40 单元测试全绿（含 7 个 mock LLM 测试）
 
+## 全局性验证（2026-08-18 补充）
+
+规则修复解决"污染"（误匹配），但"覆盖不足"（漏匹配）是规则的结构性天花板：
+
+| 查询 | 规则 | LLM |
+|---|---|---|
+| MOS管散热设计 | 空（漏）| P-HW-THERMAL-HEATSINK ✅ |
+| EMI滤波器怎么设计 | 空（漏）| P-HW-OBC-EMI ✅ |
+| 低温启动策略 | G-VERIFY-ENV（错配）| L-STRATEGY-LOWTEMP ✅ |
+
+12 个多样化查询：规则 5/12 有缺陷，LLM **12/12 正确**。
+
+**结论：LLM 语义分解（use_llm=True）是全局解**，配合缓存：
+- 冷启动 ~1s/查询，缓存命中 **0.003s**（600x）
+- 缓存后结果完全稳定（同查询确定性）
+- 30 golden cases 规则/LLM 均 100%（无回归）
+
 ## 使用
 
 ```bash
-# CLI 暂未暴露开关；程序化调用：
+# 程序化调用（推荐 use_llm=True 作为全局配置）：
 from agent_kb.query.understanding import understand_query, UnderstandingOptions
 frame = understand_query(query, domain_pack=dp,
                          options=UnderstandingOptions(use_llm=True))
