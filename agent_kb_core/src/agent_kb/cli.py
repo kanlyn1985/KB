@@ -108,6 +108,18 @@ def build_parser() -> argparse.ArgumentParser:
     index_production.add_argument("--tenant-id", default="default")
     index_production.add_argument("--summary-only", action="store_true")
 
+    import_node_cards = subparsers.add_parser(
+        "import-node-cards",
+        help="Import skeleton node cards into the production index "
+             "(node-level retrieval surfaces from landed units).",
+    )
+    import_node_cards.add_argument("--db", type=Path, required=True)
+    import_node_cards.add_argument("--node-cards", type=Path, required=True,
+                                   help="node_cards.jsonl path")
+    import_node_cards.add_argument("--domain-dir", type=Path)
+    import_node_cards.add_argument("--no-vector", action="store_true",
+                                   help="Skip vector indexing (lexical + persistent only)")
+
     query_production = subparsers.add_parser(
         "query-production",
         help="Query lexical, vector, and graph adapters and build an audited Context Pack.",
@@ -326,6 +338,16 @@ def main() -> None:
             max_evidence_chars=args.max_evidence_chars,
         )
         _print(result.summary if args.summary_only else result.to_dict())
+        return
+
+    if args.command == "import-node-cards":
+        from agent_kb.commands.import_node_cards import run as _import_run
+        _print(_import_run(
+            db=args.db,
+            node_cards=args.node_cards,
+            domain_dir=args.domain_dir,
+            no_vector=args.no_vector,
+        ))
         return
 
     if args.command == "query-production":
