@@ -18,6 +18,7 @@ class UnderstandingOptions:
 
     require_project_for_constraints: bool = True
     require_condition_for_constraints: bool = True
+    use_llm: bool = False  # 规则匹配不确定时用 LLM 语义分解（方案 D）
 
 
 _INTENT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
@@ -68,6 +69,18 @@ def understand_query(
     normalized = _normalize(original)
     intent, intent_confidence = _detect_intent(original)
     target_objects = _link_target_objects(original, domain_pack)
+    used_llm = False
+    if opts.use_llm and domain_pack is not None:
+        from agent_kb.query.llm_understanding import llm_link_targets, rule_match_is_uncertain
+        if rule_match_is_uncertain(original, target_objects):
+            llm_targets = llm_link_targets(original, domain_pack)
+            if llm_targets:
+                # LLM 结果优先（规则结果作为兜底补充）
+                target_objects = llm_targets + [
+                    t for t in target_objects
+                    if t.object_id not in {x.object_id for x in llm_targets}
+                ][:3]
+                used_llm = True
     target_topic = target_objects[0].canonical_name if target_objects else normalized
     aliases = _aliases_for_targets(target_objects, domain_pack)
     contract = _select_answer_contract(intent, domain_pack, target_objects)
@@ -96,7 +109,7 @@ def understand_query(
         ambiguity=ambiguity,
         answer_contract=contract.name if contract else None,
         answer_strategy=answer_strategy,
-        used_llm=False,
+        used_llm=used_llm,
         quality_flags=_quality_flags(original, target_objects, missing_slots, ambiguity),
     )
 
