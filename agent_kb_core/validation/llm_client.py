@@ -67,6 +67,9 @@ def chat(
 
     url = BASE_URL + "/v1/messages"
     last_err: Exception | None = None
+    # 直连网关：内网 IP 不走系统代理（HTTP_PROXY/ALL_PROXY 会经本地代理
+    # 转发，代理不稳定时导致调用失败——实测直连 200 正常）
+    _direct_opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
     for attempt in range(retries):
         req = urllib.request.Request(
             url,
@@ -79,7 +82,7 @@ def chat(
             },
         )
         try:
-            with urllib.request.urlopen(req, timeout=timeout) as r:
+            with _direct_opener.open(req, timeout=timeout) as r:
                 resp = json.loads(r.read())
             usage["calls"] += 1
             u = resp.get("usage") or {}

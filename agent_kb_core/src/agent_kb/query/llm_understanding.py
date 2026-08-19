@@ -20,7 +20,7 @@ import re
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]  # agent_kb_core/
+ROOT = Path(__file__).resolve().parents[3]  # agent_kb_core/
 sys.path.insert(0, str(ROOT / "src"))
 
 from agent_kb.domains.loader import load_domain_pack  # noqa: E402
@@ -30,7 +30,7 @@ from agent_kb.query.query_frame import TargetObject  # noqa: E402
 _LLM_AVAILABLE = False
 try:
     import importlib.util
-    _client_path = ROOT.parent / "validation" / "llm_client.py"
+    _client_path = ROOT / "validation" / "llm_client.py"
     if _client_path.exists():
         _spec = importlib.util.spec_from_file_location("kb_llm_client", _client_path)
         _mod = importlib.util.module_from_spec(_spec)
