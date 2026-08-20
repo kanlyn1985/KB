@@ -107,6 +107,9 @@ def build_parser() -> argparse.ArgumentParser:
     index_production.add_argument("--logical-document-id")
     index_production.add_argument("--tenant-id", default="default")
     index_production.add_argument("--summary-only", action="store_true")
+    index_production.add_argument("--remote-embedding", action="store_true",
+                                  help="Use remote semantic embeddings from environment "
+                                       "(AGENT_KB_EMBEDDING_URL/MODEL/DIMENSIONS)")
 
     import_node_cards = subparsers.add_parser(
         "import-node-cards",
@@ -119,12 +122,18 @@ def build_parser() -> argparse.ArgumentParser:
     import_node_cards.add_argument("--domain-dir", type=Path)
     import_node_cards.add_argument("--no-vector", action="store_true",
                                    help="Skip vector indexing (lexical + persistent only)")
+    import_node_cards.add_argument("--remote-embedding", action="store_true",
+                                   help="Use remote semantic embeddings from environment "
+                                        "(AGENT_KB_EMBEDDING_URL/MODEL/DIMENSIONS)")
 
     query_production = subparsers.add_parser(
         "query-production",
         help="Query lexical, vector, and graph adapters and build an audited Context Pack.",
     )
     _add_query_arguments(query_production)
+    query_production.add_argument("--remote-embedding", action="store_true",
+                                  help="Use remote semantic embeddings from environment "
+                                       "(AGENT_KB_EMBEDDING_URL/MODEL/DIMENSIONS)")
 
     answer_query = subparsers.add_parser(
         "answer-query",
@@ -343,6 +352,7 @@ def main() -> None:
         return
 
     if args.command == "index-production":
+        provider = _optional_remote_embedding(args)
         result = compile_text_to_production_store(
             args.text_file.read_text(encoding="utf-8"),
             title=args.title or args.text_file.stem,
@@ -353,6 +363,7 @@ def main() -> None:
             logical_document_id=args.logical_document_id,
             tenant_id=args.tenant_id,
             max_evidence_chars=args.max_evidence_chars,
+            embedding_provider=provider,
         )
         _print(result.summary if args.summary_only else result.to_dict())
         return
@@ -364,6 +375,7 @@ def main() -> None:
             node_cards=args.node_cards,
             domain_dir=args.domain_dir,
             no_vector=args.no_vector,
+            embedding_provider=_optional_remote_embedding(args),
         ))
         return
 
@@ -376,6 +388,7 @@ def main() -> None:
             domain_pack=_load_optional_domain(args.domain_dir),
             understanding_options=opts,
             retrieval_top_k=max(1, args.retrieval_top_k),
+            embedding_provider=_optional_remote_embedding(args),
         )
         _print(result.summary if args.summary_only else result.to_dict())
         return
@@ -620,6 +633,14 @@ def _serve(server, host: str, port: int, *, authenticated: bool, tls: bool) -> N
 
 def _load_optional_domain(path: Path | None):
     return load_domain_pack(path) if path else None
+
+
+def _optional_remote_embedding(args) -> object | None:
+    """构造远程语义嵌入 provider（--remote-embedding 时读环境变量），否则 None（回退 Hash）。"""
+    if not getattr(args, "remote_embedding", False):
+        return None
+    from agent_kb.embeddings import RemoteJSONEmbeddingProvider
+    return RemoteJSONEmbeddingProvider.from_environment()
 
 
 def _print(payload) -> None:

@@ -177,6 +177,7 @@ def run(
     node_cards: Path,
     domain_dir: Path | None = None,
     no_vector: bool = False,
+    embedding_provider=None,
 ) -> dict:
     """Execute the node-card import and return a summary dict."""
     domain_pack = load_domain_pack(domain_dir) if domain_dir else None
@@ -193,7 +194,7 @@ def run(
         upsert = store.upsert_index(index)
         summary["upsert"] = upsert
         if not no_vector:
-            provider = HashEmbeddingProvider()
+            provider = embedding_provider or HashEmbeddingProvider()
             vector = SQLiteVectorIndex(store.connection, provider=provider)
             vsum = vector.index_view(index)
             summary["vector"] = getattr(vsum, "to_dict", lambda: dict(vsum))()
@@ -209,6 +210,7 @@ def main(argv: list[str] | None = None) -> int:
         node_cards=args.node_cards,
         domain_dir=args.domain_dir,
         no_vector=args.no_vector,
+        embedding_provider=args.embedding_provider,
     )
     print(json.dumps(summary, ensure_ascii=False, indent=1))
     return 0
@@ -223,7 +225,16 @@ def _parse(argv: list[str]):
     parser.add_argument("--domain-dir", type=Path, default=None)
     parser.add_argument("--no-vector", action="store_true",
                         help="跳过向量索引（仅词法+持久化）")
-    return parser.parse_args(argv)
+    parser.add_argument("--remote-embedding", action="store_true",
+                        help="使用远程语义嵌入（AGENT_KB_EMBEDDING_URL 等环境变量），"
+                             "未配置时回退 HashEmbeddingProvider")
+    args = parser.parse_args(argv)
+    if args.remote_embedding:
+        from agent_kb.embeddings import RemoteJSONEmbeddingProvider
+        args.embedding_provider = RemoteJSONEmbeddingProvider.from_environment()
+    else:
+        args.embedding_provider = None
+    return args
 
 
 if __name__ == "__main__":
