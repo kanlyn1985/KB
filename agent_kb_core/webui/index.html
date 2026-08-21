@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KB1 知识库 · OBC/DCDC</title>
+<style>
+  :root {
+    --bg: #0f1420; --panel: #161d2e; --panel2: #1c2540;
+    --line: #2a3550; --text: #dbe4f5; --muted: #8b98b5;
+    --accent: #4da3ff; --ok: #34c98c; --warn: #f0b429; --bad: #f0616d;
+    --mono: "Cascadia Code", Consolas, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    min-height: 100vh;
+  }
+  header {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 22px; border-bottom: 1px solid var(--line);
+    background: var(--panel);
+  }
+  header .logo { font-size: 18px; font-weight: 700; color: var(--accent); }
+  header .sub { color: var(--muted); font-size: 12px; }
+  header .health { margin-left: auto; font-size: 12px; color: var(--muted); }
+  header .health b.ok { color: var(--ok); }
+  header .health b.err { color: var(--bad); }
+
+  .searchbar {
+    display: flex; gap: 10px; padding: 18px 22px;
+    border-bottom: 1px solid var(--line); background: var(--panel);
+  }
+  .searchbar input {
+    flex: 1; padding: 12px 16px; font-size: 15px;
+    background: var(--bg); color: var(--text);
+    border: 1px solid var(--line); border-radius: 8px; outline: none;
+  }
+  .searchbar input:focus { border-color: var(--accent); }
+  .searchbar button {
+    padding: 12px 26px; font-size: 15px; font-weight: 600;
+    background: var(--accent); color: #06121f;
+    border: none; border-radius: 8px; cursor: pointer;
+  }
+  .searchbar button:disabled { opacity: .5; cursor: wait; }
+  .searchbar .opts { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 12px; }
+  .searchbar .opts input { width: auto; margin: 0; }
+
+  main { display: flex; gap: 0; padding: 18px 22px; max-width: 1500px; margin: 0 auto; }
+  .col-main { flex: 1; min-width: 0; }
+  .col-side { width: 340px; margin-left: 18px; }
+
+  .card {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 10px; padding: 16px 18px; margin-bottom: 14px;
+  }
+  .card h3 {
+    font-size: 13px; color: var(--muted); text-transform: uppercase;
+    letter-spacing: .06em; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card h3 .tag { margin-left: auto; font-size: 11px; padding: 2px 8px; border-radius: 20px; }
+  .tag.ok   { background: #123b2b; color: var(--ok); }
+  .tag.warn { background: #3d3112; color: var(--warn); }
+  .tag.bad  { background: #41202a; color: var(--bad); }
+  .tag.info { background: #12293f; color: var(--accent); }
+
+  .score-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .score-ring {
+    width: 54px; height: 54px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px; flex-shrink: 0;
+  }
+  .kv { display: grid; grid-template-columns: 90px 1fr; gap: 4px 10px; font-size: 13px; }
+  .kv dt { color: var(--muted); }
+  .kv dd { color: var(--text); word-break: break-all; }
+  .kv dd .chip {
+    display: inline-block; background: var(--panel2); border: 1px solid var(--line);
+    border-radius: 12px; padding: 1px 8px; margin: 1px 3px 1px 0; font-size: 12px;
+  }
+  .reasons { margin-top: 8px; font-size: 12px; color: var(--muted); }
+
+  .answer-box {
+    background: #0d1a14; border: 1px solid #1d3a2e; border-radius: 10px;
+    padding: 16px 18px; margin-bottom: 14px; white-space: pre-wrap;
+    line-height: 1.7; font-size: 14px;
+  }
+  .answer-box .hint { color: var(--muted); font-size: 12px; margin-top: 8px; }
+  .answer-box button {
+    margin-top: 10px; padding: 7px 16px; font-size: 13px;
+    background: transparent; color: var(--accent);
+    border: 1px solid var(--accent); border-radius: 6px; cursor: pointer;
+  }
+
+  .cand {
+    border: 1px solid var(--line); border-radius: 8px;
+    padding: 10px 12px; margin-bottom: 8px; background: var(--panel2);
+  }
+  .cand .row1 { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+  .cand .rank {
+    width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+    background: var(--panel); border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center; font-size: 11px;
+  }
+  .cand .name { font-weight: 600; font-family: var(--mono); font-size: 12.5px; }
+  .cand .type { font-size: 10px; color: var(--muted); background: var(--panel); border-radius: 10px; padding: 1px 7px; }
+  .cand .score { margin-left: auto; font-family: var(--mono); color: var(--accent); }
+  .cand .meta { margin-top: 5px; font-size: 11.5px; color: var(--muted); font-family: var(--mono); word-break: break-all; }
+  .cand .content {
+    margin-top: 6px; font-size: 12.5px; color: #b8c4da;
+    max-height: 96px; overflow-y: auto; line-height: 1.55;
+    border-top: 1px dashed var(--line); padding-top: 6px;
+  }
+
+  .ev {
+    border-left: 3px solid var(--line); padding: 6px 10px; margin-bottom: 6px;
+    font-size: 12.5px; color: #b8c4da; line-height: 1.55;
+  }
+  .ev .src { color: var(--muted); font-size: 11px; font-family: var(--mono); }
+  .empty { color: var(--muted); font-size: 13px; padding: 10px 0; }
+  .feedback { display: flex; gap: 8px; margin-top: 10px; align-items: center; }
+  .feedback button {
+    padding: 5px 14px; border-radius: 6px; cursor: pointer;
+    background: transparent; border: 1px solid var(--line); color: var(--text); font-size: 13px;
+  }
+  .feedback button.up:hover { border-color: var(--ok); color: var(--ok); }
+  .feedback button.down:hover { border-color: var(--bad); color: var(--bad); }
+  .feedback input {
+    flex: 1; padding: 5px 10px; background: var(--bg); color: var(--text);
+    border: 1px solid var(--line); border-radius: 6px; font-size: 12px; outline: none;
+  }
+  .fb-ok { color: var(--ok); font-size: 12px; }
+  details { margin-top: 6px; }
+  details summary { cursor: pointer; color: var(--muted); font-size: 12px; }
+  .doc-item { padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: 12px; color: #b8c4da; }
+  .doc-item .id { font-family: var(--mono); color: var(--accent); font-size: 11px; }
+  .hint-text { color: var(--muted); font-size: 12px; margin-top: 8px; }
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">KB1 知识库</span>
+  <span class="sub">OBC / DCDC 本体 · 证据约束检索</span>
+  <span class="health" id="health">连接中…</span>
+</header>
+
+<div class="searchbar">
+  <input id="q" placeholder="输入问题，例如：输出纹波要求是多少 / OBC水道设计怎么做 / 热仿真怎么做" autofocus>
+  <div class="opts">
+    <input type="checkbox" id="opt-llm" title="使用 LLM 语义分解（更准但更慢）"><label for="opt-llm">LLM 理解</label>
+  </div>
+  <button id="btn-search">查询</button>
+</div>
+
+<main>
+  <div class="col-main">
+    <div class="card" id="frame-card" style="display:none">
+      <h3>查询理解 <span class="tag info" id="intent-tag"></span></h3>
+      <div class="kv" id="frame-kv"></div>
+      <div class="reasons" id="frame-warn"></div>
+    </div>
+
+    <div class="answer-box" id="answer-box" style="display:none">
+      <div id="answer-text"></div>
+      <button id="btn-answer">生成 LLM 答案</button>
+      <div class="hint" id="answer-hint"></div>
+    </div>
+
+    <div class="card" id="judge-card" style="display:none">
+      <h3>证据判定 <span class="tag" id="judge-tag"></span></h3>
+      <div class="score-row">
+        <div class="score-ring" id="judge-score">—</div>
+        <div class="kv" style="flex:1" id="judge-kv"></div>
+      </div>
+      <div class="reasons" id="judge-reasons"></div>
+    </div>
+
+    <div class="card" id="cands-card" style="display:none">
+      <h3>检索候选 <span class="tag info" id="cand-count"></span></h3>
+      <div id="cands"></div>
+    </div>
+
+    <div class="card" id="ctx-card" style="display:none">
+      <h3>上下文包（Context Pack）</h3>
+      <details>
+        <summary>节点卡（retrieval_cards）</summary>
+        <div id="ctx-cards"></div>
+      </details>
+      <details>
+        <summary>事实（facts）</summary>
+        <div id="ctx-facts"></div>
+      </details>
+      <details>
+        <summary>证据片段（evidence）</summary>
+        <div id="ctx-evidence"></div>
+      </details>
+      <div class="feedback">
+        <button class="up" id="fb-up">👍 有用</button>
+        <button class="down" id="fb-down">👎 没用</button>
+        <input id="fb-comment" placeholder="反馈备注（可选）">
+        <span class="fb-ok" id="fb-ok"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-side">
+    <div class="card">
+      <h3>知识库概览</h3>
+      <div class="kv" id="kb-stats"></div>
+    </div>
+    <div class="card">
+      <h3>文档</h3>
+      <div id="doc-list" class="empty">加载中…</div>
+    </div>
+  </div>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+let lastRunId = null;
+
+async function api(path, body) {
+  const r = await fetch(path, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body || {}),
+  });
+  const data = await r.json();
+  if (!r.ok) throw new Error(data.detail || data.error || r.status);
+  return data;
+}
+
+function esc(s) {
+  return String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+function chips(items, max = 12) {
+  return (items || []).slice(0, max).map(i => `<span class="chip">${esc(i)}</span>`).join("");
+}
+function fmtScore(v) { return (typeof v === "number") ? v.toFixed(3) : "—"; }
+
+/* ---------- 健康与概览 ---------- */
+async function loadHealth() {
+  try {
+    const r = await fetch("/v1/health");
+    const h = await r.json();
+    const ok = h.status === "ok" || h.schema_version;
+    $("health").innerHTML = ok
+      ? `服务正常 · schema v${h.schema_version ?? "?"} · 向量 ${h.vector_count ?? "?"}`
+      : `状态: ${h.status || "?"}`;
+    $("health").innerHTML = `<b class="ok">● 服务正常</b> schema v${h.schema_version ?? "?"} · 卡 ${h.retrieval_cards ?? "?"} · 向量 ${h.vector_count ?? "?"}`;
+  } catch (e) {
+    $("health").innerHTML = `<b class="err">● 服务不可用: ${esc(e.message)}</b>`;
+  }
+}
+
+async function loadDocs() {
+  try {
+    const r = await fetch("/v1/documents");
+    const d = await r.json();
+    const docs = d.documents || [];
+    if (!docs.length) { $("doc-list").innerHTML = `<div class="empty">节点卡索引（无独立逻辑文档）</div>`; return; }
+    $("doc-list").innerHTML = docs.slice(0, 12).map(x => `
+      <div class="doc-item">
+        <div class="id">${esc(x.logical_document_id || x.document_id || "")}</div>
+        <div>${esc(x.title || "")} · v${esc(x.version_label || x.version || "?")}</div>
+      </div>`).join("");
+  } catch (e) {
+    $("doc-list").innerHTML = `<div class="empty">加载失败: ${esc(e.message)}</div>`;
+  }
+}
+
+/* ---------- 渲染查询结果 ---------- */
+function renderFrame(frame) {
+  if (!frame) { $("frame-card").style.display = "none"; return; }
+  $("frame-card").style.display = "";
+  $("intent-tag").textContent = frame.intent || "general_search";
+  const targets = (frame.target_objects || []).map(t =>
+    `<span class="chip">${esc(t.object_id)}<span style="color:var(--muted)"> · ${t.confidence}</span></span>`).join("");
+  $("frame-kv").innerHTML = `
+    <dt>意图</dt><dd>${esc(frame.intent || "")}</dd>
+    <dt>目标对象</dt><dd>${targets || '<span class="empty" style="padding:0">无</span>'}</dd>
+    <dt>must 词</dt><dd>${chips(frame.must_terms)}</dd>
+    <dt>should 词</dt><dd>${chips(frame.should_terms)}</dd>
+    <dt>缺失槽位</dt><dd>${chips(frame.missing_slots) || "—"}</dd>
+    <dt>LLM 理解</dt><dd>${frame.used_llm ? "是" : "否"}</dd>`;
+  $("frame-warn").innerHTML = (frame.ambiguity && frame.ambiguity.length
+    ? `⚠️ 歧义: ${esc(frame.ambiguity[0].term || "")}`
+    : "");
+}
+
+function renderJudge(judge) {
+  if (!judge) { $("judge-card").style.display = "none"; return; }
+  $("judge-card").style.display = "";
+  const status = judge.status || "unknown";
+  const cls = status === "sufficient" ? "ok" : status === "partial" ? "warn" : "bad";
+  $("judge-tag").textContent = status;
+  $("judge-tag").className = "tag " + cls;
+  const score = judge.score || 0;
+  const ring = $("judge-score");
+  ring.textContent = score.toFixed(2);
+  ring.style.background = `conic-gradient(${status==="sufficient"?"var(--ok)":status==="partial"?"var(--warn)":"var(--bad)"} ${score*360}deg, var(--panel2) 0deg)`;
+  ring.style.color = status === "sufficient" ? "var(--ok)" : status === "partial" ? "var(--warn)" : "var(--bad)";
+  $("judge-kv").innerHTML = `
+    <dt>分数</dt><dd>${score.toFixed(3)}</dd>
+    <dt>证据数</dt><dd>${judge.evidence_count ?? "—"}</dd>
+    <dt>覆盖 shape</dt><dd>${chips(judge.covered_shapes)}</dd>
+    <dt>缺失 shape</dt><dd>${chips(judge.missing_shapes) || "—"}</dd>`;
+  $("judge-reasons").textContent = (judge.reasons || []).join("；");
+}
+
+function renderCands(cands) {
+  if (!cands || !cands.length) { $("cands-card").style.display = "none"; return; }
+  $("cands-card").style.display = "";
+  $("cand-count").textContent = cands.length + " 条";
+  $("cands").innerHTML = cands.map((c, i) => `
+    <div class="cand">
+      <div class="row1">
+        <span class="rank">${i + 1}</span>
+        <span class="name">${esc(c.source_id || "")}</span>
+        <span class="type">${esc(c.source_type || "")}</span>
+        <span class="score">${fmtScore(c.score)}</span>
+      </div>
+      <div class="meta">通道: ${esc((c.reasons || []).join(", "))}</div>
+      ${c.snippet ? `<div class="content">${esc(c.snippet)}</div>` : ""}
+    </div>`).join("");
+}
+
+function renderContext(cp) {
+  if (!cp) { $("ctx-card").style.display = "none"; return; }
+  $("ctx-card").style.display = "";
+  const cards = cp.retrieval_cards || [];
+  $("ctx-cards").innerHTML = cards.length ? cards.map(c => `
+    <div class="ev">
+      <div class="src">${esc(c.card_id || c.object_id || "")} · ${esc(c.title || "")} · ${(c.search_text||"").length} 字符</div>
+      <div>${esc((c.search_text || "").slice(0, 500))}</div>
+    </div>`).join("") : '<div class="empty">无</div>';
+  const facts = cp.facts || [];
+  $("ctx-facts").innerHTML = facts.length ? facts.map(f => `
+    <div class="ev">
+      <div class="src">${esc(f.fact_type || "")} · ${esc(f.subject || "")}</div>
+      <div>${esc(String(f.object_value || ""))}</div>
+    </div>`).join("") : '<div class="empty">无</div>';
+  const ev = cp.evidence || [];
+  $("ctx-evidence").innerHTML = ev.length ? ev.map(e => `
+    <div class="ev">
+      <div class="src">${esc(e.evidence_id || "")}</div>
+      <div>${esc((e.snippet || "").slice(0, 300))}</div>
+    </div>`).join("") : '<div class="empty">无</div>';
+}
+
+async function search() {
+  const q = $("q").value.trim();
+  if (!q) return;
+  $("btn-search").disabled = true;
+  $("btn-search").textContent = "查询中…";
+  $("answer-box").style.display = "none";
+  try {
+    const data = await api("/v1/query", {query: q, top_k: 12});
+    lastRunId = data.run_id;
+    renderFrame(data.query_frame);
+    renderJudge(data.evidence_judgement);
+    renderCands(data.retrieval_result?.candidates);
+    renderContext(data.context_pack);
+  } catch (e) {
+    alert("查询失败: " + e.message);
+  } finally {
+    $("btn-search").disabled = false;
+    $("btn-search").textContent = "查询";
+  }
+}
+
+async function generateAnswer() {
+  const q = $("q").value.trim();
+  if (!q) return;
+  const btn = $("btn-answer");
+  btn.disabled = true; btn.textContent = "生成中…";
+  try {
+    const data = await api("/v1/answer", {query: q, llm_understanding: $("opt-llm").checked});
+    $("answer-box").style.display = "";
+    if (data.answer) {
+      $("answer-text").textContent = data.answer;
+      $("answer-hint").textContent = `证据判定: ${data.evidence_status} (${(data.evidence_score||0).toFixed(2)})` +
+        (data.abstain_reason ? ` · ${data.abstain_reason}` : "");
+    } else {
+      $("answer-text").textContent = "（未生成答案）" + (data.abstain_reason ? `\n原因: ${data.abstain_reason}` : "");
+      $("answer-hint").textContent = "";
+    }
+  } catch (e) {
+    alert("答案生成失败: " + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = "生成 LLM 答案";
+  }
+}
+
+async function sendFeedback(rating) {
+  if (!lastRunId) { alert("请先查询"); return; }
+  const comment = $("fb-comment").value.trim();
+  try {
+    const r = await api("/v1/feedback", {run_id: lastRunId, rating, comment});
+    $("fb-ok").textContent = "已记录 " + (r.feedback_id || "");
+    setTimeout(() => { $("fb-ok").textContent = ""; }, 3000);
+  } catch (e) {
+    alert("反馈失败: " + e.message);
+  }
+}
+
+/* ---------- 事件 ---------- */
+$("btn-search").addEventListener("click", search);
+$("q").addEventListener("keydown", e => { if (e.key === "Enter") search(); });
+$("btn-answer").addEventListener("click", generateAnswer);
+$("fb-up").addEventListener("click", () => sendFeedback(1));
+$("fb-down").addEventListener("click", () => sendFeedback(-1));
+
+loadHealth();
+loadDocs();
+</script>
+</body>
+</html>

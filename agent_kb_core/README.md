@@ -339,3 +339,16 @@ Redis coordination and queue adapters
   + SLO dashboards and alerts
   + staging recovery drills
 ```
+
+## Web UI
+
+```bash
+python webui/server.py --db node-index.sqlite3 --domain-dir domains/obc_dcdc --port 8080
+```
+
+浏览器打开 http://127.0.0.1:8080：
+
+- 搜索框查询知识库（`/v1/query`：查询理解、证据判定、检索候选、Context Pack）
+- 生成 LLM 答案（`/v1/answer`：检索 → 证据约束回答，证据不足时 abstain）
+- 有用/没用反馈（`/v1/feedback`，关联 run_id）
+- 右侧面板显示服务健康与文档列表
