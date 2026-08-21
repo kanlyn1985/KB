@@ -68,16 +68,73 @@ ANSWER_SYSTEM_PROMPT = """你是汽车电子（OBC/DCDC）领域的资深工程�
 - 结尾用"**出处**"小节列出引用的节点 ID（每个一行）；若无知识库引用则写"（无）"。"""
 
 
-def _build_answer_prompt(query: str, context_pack, judgement_status: str) -> str:
+SUMMARIZE_SYSTEM_PROMPT = """你是知识库内容压缩器。把每张节点卡的长内容压缩成紧凑摘要，供下游回答使用。
+
+要求：
+1. 逐张处理输入卡片，保留与工程相关的全部信息，特别是：
+   - 所有具体数值、参数、单位（如 2.8mm、≤100 mV、95%）
+   - 标准编号、规格号、客户要求（如 ISO 26262、GB/T 40432）
+   - 关键设计决策、约束条件、因果逻辑
+2. 丢弃：重复表述、表格装饰、清单罗列噪声、与工程无关的叙述。
+3. 输出格式（必须严格遵循，每张卡一段，节点 ID 原样）：
+   【节点 节点ID】摘要内容
+4. 摘要用中文，技术术语保留原文；总长度控制在每卡 400~700 字。"""
+
+
+def _summarize_long_cards(long_cards: list[tuple[str, str]]) -> dict[str, str]:
+    """用 LLM 把超长卡内容压缩成摘要（保留数值/标准，不截断丢弃）。
+
+    long_cards: [(node_id, content), ...] 仅含超过阈值的卡。
+    返回 {node_id: summary}；LLM 失败时回退原截断（保底可用）。
+    """
+    if not long_cards or not _LLM_AVAILABLE:
+        return {}
+    block = "\n\n".join(f"【节点 {nid}】\n{content}" for nid, content in long_cards)
+    user = f"请压缩以下节点卡内容：\n\n{block}"
+    try:
+        raw = chat(user, system=SUMMARIZE_SYSTEM_PROMPT, max_tokens=2048, timeout=120, retries=2)
+    except Exception:  # noqa: BLE001  网关故障 → 回退截断
+        return {}
+    if not raw:
+        return {}
+    summaries: dict[str, str] = {}
+    current = ""
+    current_id = ""
+    for line in raw.splitlines():
+        if line.startswith("【节点 "):
+            if current_id:
+                summaries[current_id] = current.strip()
+            rest = line[len("【节点 "):]
+            current_id = rest.split("】", 1)[0].strip()
+            current = rest.split("】", 1)[1].strip() if "】" in rest else ""
+        else:
+            current += "\n" + line
+    if current_id:
+        summaries[current_id] = current.strip()
+    return summaries
+
+
+def _build_answer_prompt(
+    query: str,
+    context_pack,
+    judgement_status: str,
+    card_summaries: dict[str, str] | None = None,
+) -> str:
     """把 Context Pack 组装成答案生成的 prompt。
 
     上下文按"节点卡（主内容）→ 证据片段（原文）→ 事实（结构）"组织，
     每段标注来源节点，让 LLM 能直接引用。
+    超长卡内容由调用方预先 LLM 总结（card_summaries），避免硬截断丢关键数值。
     """
+    card_summaries = card_summaries or {}
     card_texts = []
     for card in context_pack.retrieval_cards:
         content = getattr(card, "search_text", "") or ""
-        card_texts.append(f"【节点 {card.object_id}】{card.title}\n{content[:1800]}")
+        nid = card.object_id
+        if nid in card_summaries:
+            card_texts.append(f"【节点 {nid}】{card.title}（压缩摘要）\n{card_summaries[nid]}")
+        else:
+            card_texts.append(f"【节点 {nid}】{card.title}\n{content[:1400]}")
     evidence_texts = []
     for e in context_pack.evidence[:10]:
         src = getattr(e, "document_id", "") or ""
@@ -127,9 +184,15 @@ def answer_query(
     if not _LLM_AVAILABLE:
         abstain_reason = "LLM 网关不可用"
     else:
-        # 所有判定都生成答案：sufficient/partial 以知识库为主，
-        # insufficient（知识库缺失）由 LLM 用通用知识补充（提示词强制标注来源边界）
-        prompt = _build_answer_prompt(query, result.context_pack, status)
+        # 超长卡内容先 LLM 总结压缩（保留数值/标准，不硬截断），再组装最终 prompt
+        LONG_CARD_THRESHOLD = 1400
+        long_cards = [
+            (card.object_id, getattr(card, "search_text", "") or "")
+            for card in result.context_pack.retrieval_cards
+            if len(getattr(card, "search_text", "") or "") > LONG_CARD_THRESHOLD
+        ]
+        summaries = _summarize_long_cards(long_cards)
+        prompt = _build_answer_prompt(query, result.context_pack, status, summaries)
         try:
             answer = chat(
                 prompt,
