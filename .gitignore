@@ -34,6 +34,10 @@ corpus/
 # Archived legacy KB1 pipeline data (large, reference only, not tracked)
 archive/legacy-kb1/
 
+# Runtime LLM query-understanding cache (regenerated on demand)
+agent_kb_core/data/llm_understanding_cache.json
+agent_kb_core/src/data/llm_understanding_cache.json
+
 # Runtime temporary directories
 tmp/
 output/
