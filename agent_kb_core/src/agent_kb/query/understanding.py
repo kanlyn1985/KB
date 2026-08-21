@@ -71,7 +71,7 @@ def understand_query(
     target_objects = _link_target_objects(original, domain_pack)
     used_llm = False
     if opts.use_llm and domain_pack is not None:
-        from agent_kb.query.llm_understanding import llm_link_targets, rule_match_is_uncertain
+        from agent_kb.query.llm_understanding import llm_judged_no_target, llm_link_targets, rule_match_is_uncertain
         if rule_match_is_uncertain(original, target_objects):
             llm_targets = llm_link_targets(original, domain_pack)
             if llm_targets:
@@ -80,6 +80,11 @@ def understand_query(
                     t for t in target_objects
                     if t.object_id not in {x.object_id for x in llm_targets}
                 ][:3]
+                used_llm = True
+            elif llm_judged_no_target(original, domain_pack):
+                # LLM 明确判定无目标（如"股票投资策略"）→ 清空规则结果，
+                # 避免泛词匹配（策略/ISO/CAN）在检索时被误加成
+                target_objects = []
                 used_llm = True
     target_topic = target_objects[0].canonical_name if target_objects else normalized
     aliases = _aliases_for_targets(target_objects, domain_pack)

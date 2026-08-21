@@ -137,6 +137,11 @@ def llm_link_targets(query: str, domain_pack) -> list[TargetObject]:
 
     LLM 不可用（网关故障/超时/解析失败）时返回 []，调用方回退到规则结果。
     结果按 (query, domain) 缓存：同查询二次调用零延迟且结果确定。
+
+    返回值语义：
+      - 非空列表：LLM 判定有目标
+      - 空列表 + llm_judged_no_target() 为 True：LLM 明确判定无目标（拒绝）
+      - 空列表 + llm_judged_no_target() 为 False：调用失败，需回退规则
     """
     if not _LLM_AVAILABLE or chat is None or extract_json is None:
         return []
@@ -144,6 +149,7 @@ def llm_link_targets(query: str, domain_pack) -> list[TargetObject]:
     domain_id = getattr(domain_pack, "domain_id", "")
     cached = _cache_get(query, domain_id)
     if cached is not None:
+        _judged_keys.add((query, domain_id))
         return _targets_from_payload(cached, domain_pack, query)
     catalog = _build_catalog(domain_pack)
     user = f"查询: {query}\n\n节点目录:\n{catalog}"
@@ -157,8 +163,24 @@ def llm_link_targets(query: str, domain_pack) -> list[TargetObject]:
     if not isinstance(parsed, dict) or "targets" not in parsed:
         return []
     payload = [t for t in parsed["targets"] if isinstance(t, dict)]
+    _judged_keys.add((query, domain_id))
     _cache_put(query, domain_id, payload)
     return _targets_from_payload(payload, domain_pack, query)
+
+
+_judged_keys: set[tuple[str, str]] = set()
+
+
+def llm_judged_no_target(query: str, domain_pack) -> bool:
+    """该查询是否已由 LLM 判定为无目标（明确拒绝，非调用失败）。
+
+    用于区分"LLM 返回空列表 = 拒绝"与"网关故障 = 需回退规则"。
+    """
+    domain_id = getattr(domain_pack, "domain_id", "")
+    if (query, domain_id) not in _judged_keys:
+        return False
+    cached = _cache_get(query, domain_id)
+    return cached == []
 
 
 def _targets_from_payload(payload: list[dict], domain_pack, query: str) -> list[TargetObject]:

@@ -1,0 +1,22 @@
+[
+  {"case_id": "weather_unrelated", "query": "今天天气怎么样",
+   "kind": "off_topic", "note": "完全无关：不应链接任何节点"},
+  {"case_id": "recipe_unrelated", "query": "怎么做红烧肉",
+   "kind": "off_topic", "note": "完全无关"},
+  {"case_id": "stock_unrelated", "query": "股票投资策略",
+   "kind": "off_topic", "exclude": ["L-STRATEGY"], "note": "策略泛词不应命中控制策略"},
+  {"case_id": "engine_oil", "query": "发动机机油怎么选",
+   "kind": "off_topic", "note": "非 OBC/DCDC 领域"},
+  {"case_id": "can_help_english", "query": "can you help me",
+   "kind": "false_friend", "exclude": ["F-OBC-COMM", "L-COMM", "R-IF"],
+   "note": "英文 can 不应匹配 CAN 通信"},
+  {"case_id": "iso_camera", "query": "ISO 相机参数怎么调",
+   "kind": "false_friend", "exclude": ["R-FSC"],
+   "note": "相机 ISO 不应匹配 ISO 26262 功能安全"},
+  {"case_id": "obc_battery", "query": "OBC 电池是什么",
+   "kind": "domain_adjacent", "exclude": ["L-STRATEGY-FREQ", "L-STATE"],
+   "note": "电池问题可关联 P-HW-OBC，但不应命中抖频/状态策略"},
+  {"case_id": "mcu_other", "query": "MCU 是什么芯片",
+   "kind": "ambiguous", "exclude": [],
+   "note": "MCU 是领域内词，允许命中 P-HW-CTRL-MCU"}
+]

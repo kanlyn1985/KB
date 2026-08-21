@@ -125,6 +125,45 @@ def test_understand_query_llm_fallback_keeps_rule_result() -> None:
     assert any(o.object_id == "P-HW-MECH" for o in frame.target_objects)
 
 
+def test_understand_query_llm_rejection_clears_rule_targets() -> None:
+    """LLM 明确判定无目标（返回空 targets）→ 清空规则泛词目标，避免误召回。
+
+    覆盖负面评测场景："股票投资策略" 规则层会泛词命中 L-STRATEGY，
+    LLM 正确拒绝后不应保留该目标。
+    """
+    chat, extract_json = _fake_llm([])  # LLM 明确返回空列表（拒绝）
+    lu.chat = chat  # type: ignore[assignment]
+    lu.extract_json = extract_json  # type: ignore[assignment]
+    frame = understand_query(
+        "股票投资策略",
+        domain_pack=PACK,
+        options=UnderstandingOptions(use_llm=True),
+    )
+    assert frame.used_llm is True
+    # LLM 拒绝 → 规则泛词目标被清空
+    assert frame.target_objects == []
+    # LLM 明确判定为"无目标"
+    assert lu.llm_judged_no_target("股票投资策略", PACK) is True
+
+
+def test_understand_query_llm_failure_not_treated_as_rejection() -> None:
+    """LLM 调用失败（非明确拒绝）→ 不应清空规则结果（回退保留）。"""
+
+    def _boom(*args, **kwargs):  # noqa: ANN001, ANN002, ANN003
+        raise RuntimeError("gateway down")
+
+    lu.chat = _boom  # type: ignore[assignment]
+    frame = understand_query(
+        "股票投资策略",
+        domain_pack=PACK,
+        options=UnderstandingOptions(use_llm=True),
+    )
+    assert frame.used_llm is False
+    # 失败 ≠ 拒绝：规则结果保留
+    assert lu.llm_judged_no_target("股票投资策略", PACK) is False
+    assert len(frame.target_objects) > 0
+
+
 def test_cache_persists_across_process_boundary() -> None:
     """缓存写盘后，清空内存可从磁盘恢复（模拟进程重启）。"""
     lu._cache_put("持久化测试", "obc_dcdc", [{"object_id": "P-HW-MECH", "conf": 0.9}])
