@@ -124,6 +124,12 @@ def build_node_index(
                 evidence_ids=ev_ids,
                 confidence=0.9,
             ))
+            # 补充 shape fact：按层级/内容给约束、流程、表格类查询提供证据 shape
+            # （否则 constraint_lookup/procedure 意图永远缺 shape → 判定 partial）
+            layer = c.get("layer", "")
+            content = c.get("content", "")
+            shape_facts = _shape_facts_for_node(nid, layer, content, c.get("node_name", ""), ev_ids)
+            facts.extend(shape_facts)
 
         cards.append(
             RetrievalCard(
@@ -169,6 +175,53 @@ def build_node_index(
         object_projections=projections,
         retrieval_cards=cards,
     )
+
+
+def _shape_facts_for_node(
+    nid: str,
+    layer: str,
+    content: str,
+    node_name: str,
+    ev_ids: list[str],
+) -> list[ContextFact]:
+    """按层级/内容补充证据 shape fact。
+
+    - R 层（需求/标准）→ requirement_constraint
+    - G 层（过程/方法/验证）→ procedure / test_method
+    - L 层（逻辑/策略）→ procedure
+    - 内容含表格特征（|、制表符、多列）→ table_row
+    让 constraint_lookup / procedure 意图在节点卡上也能覆盖 shape，
+    否则判定恒为 partial（缺 parameter_constraint/table_row/procedure shape）。
+    """
+    out: list[ContextFact] = []
+    shape_meta = [
+        (("R",), "requirement_constraint", "constrains"),
+        (("G",), "procedure", "describes_process"),
+    ]
+    for layers, shape, predicate in shape_meta:
+        if layer in layers:
+            out.append(ContextFact(
+                fact_id=f"fact:node:{nid}:{shape}",
+                fact_type=shape,
+                subject=nid,
+                predicate=predicate,
+                object_value=node_name,
+                qualifiers={"layer": layer, "unit_count": 0},
+                evidence_ids=ev_ids,
+                confidence=0.7,
+            ))
+    if "|" in content or "\t" in content:
+        out.append(ContextFact(
+            fact_id=f"fact:node:{nid}:table_row",
+            fact_type="table_row",
+            subject=nid,
+            predicate="contains_structured_row",
+            object_value=node_name,
+            qualifiers={"layer": layer, "unit_count": 0},
+            evidence_ids=ev_ids,
+            confidence=0.6,
+        ))
+    return out
 
 
 def run(
