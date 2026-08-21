@@ -169,6 +169,7 @@ def _search_cards(frame: QueryFrame, cards: list[RetrievalCard], terms: list[str
 
 def _search_facts(frame: QueryFrame, facts: list[ContextFact], terms: list[str]) -> list[RetrievalCandidate]:
     target_ids = {item.object_id for item in frame.target_objects}
+    target_conf = {item.object_id: item.confidence for item in frame.target_objects}
     preferred = set(frame.preferred_fact_types)
     candidates: list[RetrievalCandidate] = []
     for fact in facts:
@@ -184,7 +185,10 @@ def _search_facts(frame: QueryFrame, facts: list[ContextFact], terms: list[str])
         score, matched = _text_score(blob, terms)
         reasons: list[str] = []
         if fact.subject in target_ids:
-            score += 3.5
+            # 与 _search_cards 一致：低置信目标（短英文泛词，conf<0.6）加成减半，
+            # 否则影子 fact（term_definition）会霸榜压过真正含内容的节点卡
+            boost = 1.75 if target_conf.get(fact.subject, 1.0) < 0.6 else 3.5
+            score += boost
             reasons.append("fact_subject_matches_target")
         if fact.fact_type in preferred:
             score += 2.0

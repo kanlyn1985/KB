@@ -300,11 +300,17 @@ def _context_from_retrieval(
     card_ids = set(retrieval_result.selected_card_ids)
     fact_ids = set(retrieval_result.selected_fact_ids)
     evidence_ids = set(retrieval_result.selected_evidence_ids)
+    # 兜底：fact 命中的节点（影子 term_definition fact）对应的卡也要进上下文，
+    # 否则 fact 候选占优时真正含内容的节点卡会被挤出 context pack（LLM 无内容可答）
+    cards = [
+        item for item in index.retrieval_cards
+        if item.card_id in card_ids or item.object_id in object_ids
+    ]
     return build_context_pack(
         query_frame=frame,
         domain_pack=domain_pack,
         objects=[item for item in index.object_projections if item.object_id in object_ids],
-        retrieval_cards=[item for item in index.retrieval_cards if item.card_id in card_ids],
+        retrieval_cards=cards,
         facts=[item for item in index.context_facts if item.fact_id in fact_ids],
         evidence=[item for item in index.context_evidence if item.evidence_id in evidence_ids],
     )
