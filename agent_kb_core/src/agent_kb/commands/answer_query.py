@@ -38,39 +38,57 @@ try:
 except Exception:  # noqa: BLE001
     chat = None  # type: ignore[assignment]
 
-ANSWER_SYSTEM_PROMPT = """你是汽车电子（OBC/DCDC）知识库助手。基于提供的检索上下文回答用户问题。
+ANSWER_SYSTEM_PROMPT = """你是汽车电子（OBC/DCDC）领域的资深工程师，基于知识库检索上下文回答用户问题。
 
-规则：
-1. 只依据提供的检索内容作答，禁止编造事实、数字、标准。
-2. 证据不足时明确说"知识库中未找到相关信息"，不要猜测。
-3. 用中文回答，结构清晰（分点/小节），技术术语保留原文。
-4. 若检索内容包含具体数值/标准（如壁厚、压降、标准编号），原样引用并注明出处节点。
-5. 若判定为 insufficient（证据不足），直接回复无法回答并说明原因。"""
+【回答格式】
+1. 直接给出结论，禁止以"根据知识库中的检索结果"这类话开头，不要复述检索过程。
+2. 先给核心答案（1-3 句结论），再用要点分条展开细节，最后统一列出引用出处。
+3. 回答中出现的每个具体数值/标准/参数，必须标注来源节点，格式：【节点 节点ID】。
+4. 用中文回答，技术术语与英文缩写保留原文（如 ripple、Flotherm、ISO 26262）。
+
+【证据使用规则】
+5. 只依据提供的检索内容作答，禁止编造事实、数字、标准、节点。
+6. 检索内容中有具体数值/标准时，**必须原样给出并注明出处**，即使证据判定是 partial——
+   有数值就给数值，同时指出其上下文限制（如"该值出现在性能指标汇总中，未注明测试条件"），
+   不得因为 partial 就说"未找到"。
+7. 只有当检索内容中确实没有相关内容时，才明确回答"知识库中未找到该信息"，并简述知识库中与之最接近的内容是什么。
+8. 不要反问用户补充信息、不要索要更多输入、不要以提问结尾。
+
+【结构建议】
+- 需要多要点时用 Markdown 分节（## / - / 1.），单点问题直接一两段回答。
+- 结尾用"**出处**"小节列出引用的节点 ID（每个一行）。"""
 
 
 def _build_answer_prompt(query: str, context_pack, judgement_status: str) -> str:
-    """把 Context Pack 组装成答案生成的 prompt。"""
+    """把 Context Pack 组装成答案生成的 prompt。
+
+    上下文按"节点卡（主内容）→ 证据片段（原文）→ 事实（结构）"组织，
+    每段标注来源节点，让 LLM 能直接引用。
+    """
     card_texts = []
     for card in context_pack.retrieval_cards:
         content = getattr(card, "search_text", "") or ""
-        card_texts.append(f"【节点 {card.object_id}】{card.title}\n{content[:1500]}")
-    evidence_texts = [e.snippet[:300] for e in context_pack.evidence[:8]]
+        card_texts.append(f"【节点 {card.object_id}】{card.title}\n{content[:1800]}")
+    evidence_texts = []
+    for e in context_pack.evidence[:10]:
+        src = getattr(e, "document_id", "") or ""
+        evidence_texts.append(f"[证据] {src}\n{e.snippet[:400]}")
     facts_texts = []
     for fact in context_pack.facts:
-        facts_texts.append(f"- {fact.subject}: {str(fact.object_value)[:200]}")
+        facts_texts.append(f"- [{fact.fact_type}] {fact.subject}: {str(fact.object_value)[:250]}")
 
     sections = [
         f"用户问题: {query}",
         f"证据判定: {judgement_status}",
         "",
-        "检索到的节点内容:",
+        "===== 节点内容（主要依据） =====",
         "\n".join(card_texts) if card_texts else "（无检索卡）",
         "",
-        "事实:",
-        "\n".join(facts_texts) if facts_texts else "（无事实）",
-        "",
-        "证据片段:",
+        "===== 证据片段（原文摘录） =====",
         "\n".join(evidence_texts) if evidence_texts else "（无证据）",
+        "",
+        "===== 事实 =====",
+        "\n".join(facts_texts) if facts_texts else "（无事实）",
     ]
     return "\n".join(sections)
 
