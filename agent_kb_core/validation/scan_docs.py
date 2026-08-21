@@ -1,8 +1,8 @@
 """全量文档扫描：建立知识库文档清单（落位工程输入）。
 
 扫描两个知识源：
-1. knowledge_base/raw/Athena-main/Athena-main/raw/  （团队知识库 ~1477 文件）
-2. knowledge_base/raw/                                （外部文档：标准/需求/计划）
+1. corpus/Athena-main/Athena-main/raw/  （团队知识库 ~1477 文件）
+2. corpus/                                （外部文档：标准/需求/计划）
 
 输出 docs/ontology/tree_skeleton/doc_manifest.json：
   [{path, name, ext, size, source(Athena|external), category(Athena分类|外部类型),
@@ -16,8 +16,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-ATHENA_RAW = ROOT / "knowledge_base" / "raw" / "Athena-main" / "Athena-main" / "raw"
-EXTERNAL_RAW = ROOT / "knowledge_base" / "raw"
+ATHENA_RAW = ROOT / "corpus" / "Athena-main" / "Athena-main" / "raw"
+EXTERNAL_RAW = ROOT / "corpus"
 
 # 外部文档类型映射（文件名 → 类型）
 EXTERNAL_TYPES = {

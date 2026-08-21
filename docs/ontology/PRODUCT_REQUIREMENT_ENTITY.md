@@ -1,11 +1,11 @@
-# 产品需求类实体展开定义（讨论稿）
+﻿# 产品需求类实体展开定义（讨论稿）
 
 > 状态：讨论稿 v0.1（2026-08-04）
 > ✅ 颗粒度已认可：需求条目挂载机制（需求文本 → 节点+槽位+值）可落地
 > ❓ 未定稿：实体清单/槽位全集/解析规则的最终定义
 > 参考文档：
-> - `knowledge_base/raw/曼岛项目系统需求分析说明书.xlsx`（客户系统需求，924 行）
-> - `knowledge_base/raw/Ruan Jian Xu Qiu Fen Xi Shuo Ming Shu.docx`（SWRD 平台软件需求，富特 EVT_SW4.0）
+> - `corpus/曼岛项目系统需求分析说明书.xlsx`（客户系统需求，924 行）
+> - `corpus/Ruan Jian Xu Qiu Fen Xi Shuo Ming Shu.docx`（SWRD 平台软件需求，富特 EVT_SW4.0）
 
 ---
 
