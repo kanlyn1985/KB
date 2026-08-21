@@ -85,6 +85,10 @@ docs/ontology/tree_skeleton/llm_landing/reland/*.log
 docs/ontology/tree_skeleton/llm_landing/reland_sw/*.log
 docs/ontology/tree_skeleton/llm_landing/reland/*.flag
 docs/ontology/tree_skeleton/llm_landing/reland_sw/*.flag
+docs/ontology/tree_skeleton/llm_landing/merged_full_records*.jsonl
+docs/ontology/tree_skeleton/llm_landing/review.jsonl
+docs/ontology/tree_skeleton/llm_landing/records.jsonl
+docs/ontology/tree_skeleton/llm_landing/state.json
 docs/ontology/tree_skeleton/review_queue.json
 docs/ontology/tree_skeleton/units_sample.json
 docs/ontology/tree_skeleton/landing_sample.json
