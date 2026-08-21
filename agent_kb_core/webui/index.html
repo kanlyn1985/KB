@@ -86,12 +86,25 @@
     padding: 16px 18px; margin-bottom: 14px; white-space: pre-wrap;
     line-height: 1.7; font-size: 14px;
   }
-  .answer-box .hint { color: var(--muted); font-size: 12px; margin-top: 8px; }
-  .answer-box button {
-    margin-top: 10px; padding: 7px 16px; font-size: 13px;
-    background: transparent; color: var(--accent);
-    border: 1px solid var(--accent); border-radius: 6px; cursor: pointer;
+  .answer-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .answer-title {
+    font-size: 15px; font-weight: 700; color: var(--ok);
+    letter-spacing: .04em;
   }
+  .answer-head button {
+    margin-left: auto; padding: 5px 14px; font-size: 12px;
+    background: transparent; color: var(--muted);
+    border: 1px solid var(--line); border-radius: 6px; cursor: pointer;
+  }
+  .answer-head button:hover { color: var(--accent); border-color: var(--accent); }
+  .answer-loading { color: var(--muted); font-size: 13px; }
+  .answer-loading::after {
+    content: ""; display: inline-block; width: 12px; height: 12px;
+    margin-left: 8px; border: 2px solid var(--muted); border-top-color: var(--accent);
+    border-radius: 50%; animation: spin .8s linear infinite; vertical-align: -2px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .answer-box .hint { color: var(--muted); font-size: 12px; margin-top: 8px; }
 
   .cand {
     border: 1px solid var(--line); border-radius: 8px;
@@ -155,16 +168,20 @@
 
 <main>
   <div class="col-main">
+    <div class="answer-box" id="answer-box" style="display:none">
+      <div class="answer-head">
+        <span class="answer-title">最终答案</span>
+        <span class="tag" id="answer-tag"></span>
+        <button id="btn-answer" title="重新生成">↻ 重新生成</button>
+      </div>
+      <div id="answer-text"></div>
+      <div class="hint" id="answer-hint"></div>
+    </div>
+
     <div class="card" id="frame-card" style="display:none">
       <h3>查询理解 <span class="tag info" id="intent-tag"></span></h3>
       <div class="kv" id="frame-kv"></div>
       <div class="reasons" id="frame-warn"></div>
-    </div>
-
-    <div class="answer-box" id="answer-box" style="display:none">
-      <div id="answer-text"></div>
-      <button id="btn-answer">生成 LLM 答案</button>
-      <div class="hint" id="answer-hint"></div>
     </div>
 
     <div class="card" id="judge-card" style="display:none">
@@ -362,6 +379,8 @@ async function search() {
     renderJudge(data.evidence_judgement);
     renderCands(data.retrieval_result?.candidates);
     renderContext(data.context_pack);
+    // 查询后自动生成最终答案（顶部展示）
+    await generateAnswer(q);
   } catch (e) {
     alert("查询失败: " + e.message);
   } finally {
@@ -370,26 +389,34 @@ async function search() {
   }
 }
 
-async function generateAnswer() {
-  const q = $("q").value.trim();
+async function generateAnswer(queryText) {
+  const q = queryText || $("q").value.trim();
   if (!q) return;
+  $("answer-box").style.display = "";
+  $("answer-tag").textContent = "";
+  $("answer-tag").className = "tag info";
+  $("answer-text").innerHTML = '<div class="answer-loading">正在生成答案（检索 → 证据 → 回答）</div>';
+  $("answer-hint").textContent = "";
   const btn = $("btn-answer");
-  btn.disabled = true; btn.textContent = "生成中…";
+  btn.disabled = true;
   try {
     const data = await api("/v1/answer", {query: q, llm_understanding: $("opt-llm").checked});
-    $("answer-box").style.display = "";
     if (data.answer) {
       $("answer-text").textContent = data.answer;
-      $("answer-hint").textContent = `证据判定: ${data.evidence_status} (${(data.evidence_score||0).toFixed(2)})` +
+      const st = data.evidence_status || "";
+      $("answer-tag").textContent = st;
+      $("answer-tag").className = "tag " + (st === "sufficient" ? "ok" : st === "partial" ? "warn" : "bad");
+      $("answer-hint").textContent = `证据判定: ${st} (${(data.evidence_score||0).toFixed(2)})` +
         (data.abstain_reason ? ` · ${data.abstain_reason}` : "");
     } else {
       $("answer-text").textContent = "（未生成答案）" + (data.abstain_reason ? `\n原因: ${data.abstain_reason}` : "");
       $("answer-hint").textContent = "";
     }
   } catch (e) {
-    alert("答案生成失败: " + e.message);
+    $("answer-text").textContent = "答案生成失败: " + e.message;
+    $("answer-hint").textContent = "可点击「重新生成」重试，或检查 LLM 网关是否可用";
   } finally {
-    btn.disabled = false; btn.textContent = "生成 LLM 答案";
+    btn.disabled = false;
   }
 }
 
@@ -408,7 +435,7 @@ async function sendFeedback(rating) {
 /* ---------- 事件 ---------- */
 $("btn-search").addEventListener("click", search);
 $("q").addEventListener("keydown", e => { if (e.key === "Enter") search(); });
-$("btn-answer").addEventListener("click", generateAnswer);
+$("btn-answer").addEventListener("click", () => generateAnswer());
 $("fb-up").addEventListener("click", () => sendFeedback(1));
 $("fb-down").addEventListener("click", () => sendFeedback(-1));
 
