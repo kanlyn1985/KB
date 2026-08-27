@@ -74,3 +74,7 @@ docs/ontology/tree_skeleton/landing_sample.json
 docs/ontology/tree_skeleton/doc_manifest.json
 docs/ontology/tree_skeleton/noise_collected.json
 docs/ontology/tree_skeleton/llm_landing/__pycache__/
+
+# local artifacts
+agent_kb_core/validation/node-index.sqlite3.bak
+.agents/
