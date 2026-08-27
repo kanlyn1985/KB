@@ -145,6 +145,8 @@ def build_parser() -> argparse.ArgumentParser:
     answer_query.add_argument("--domain-dir", type=Path)
     answer_query.add_argument("--llm-understanding", action="store_true")
     answer_query.add_argument("--max-answer-chars", type=int, default=2000)
+    answer_query.add_argument("--remote-embedding", action="store_true",
+                              help="使用远程语义嵌入（AGENT_KB_EMBEDDING_URL 等环境变量）")
 
     migrate_db = subparsers.add_parser("migrate-db", help="Apply monotonic production schema migrations.")
     migrate_db.add_argument("--db", type=Path, required=True)
@@ -401,6 +403,7 @@ def main() -> None:
             domain_dir=args.domain_dir,
             use_llm_understanding=args.llm_understanding,
             max_answer_chars=args.max_answer_chars,
+            embedding_provider=_optional_remote_embedding(args),
         ))
         return
 

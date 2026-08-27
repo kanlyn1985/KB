@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 from agent_kb.context.builder import build_context_pack
@@ -32,6 +32,9 @@ class CompiledKnowledgeIndex:
     context_evidence: list[ContextEvidence]
     object_projections: list[ObjectProjection]
     retrieval_cards: list[RetrievalCard]
+    # 本体关系面：节点卡导入/编译管线可携带骨架级 relations（证据映射边），
+    # 由存储层写入 graph_edges，供持久图通道（BFS）使用。默认空保持向后兼容。
+    object_relations: list = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -51,6 +54,7 @@ class CompiledKnowledgeIndex:
                 "context_evidence": len(self.context_evidence),
                 "object_projections": len(self.object_projections),
                 "retrieval_cards": len(self.retrieval_cards),
+                "object_relations": len(self.object_relations),
             }
         )
         return payload

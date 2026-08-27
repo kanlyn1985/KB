@@ -4,7 +4,11 @@ from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any
 
-from agent_kb.context.builder import build_context_pack
+from agent_kb.context.builder import (
+    build_context_pack,
+    fill_missing_shapes,
+    select_retrieval_cards,
+)
 from agent_kb.context.context_pack import AgentContextPack
 from agent_kb.context.evidence_judge import EvidenceJudgement, judge_context_pack
 from agent_kb.core.compiler import compile_text_document
@@ -166,11 +170,15 @@ def _context_from_retrieval(
     evidence_ids = set(retrieval_result.selected_evidence_ids)
 
     objects = [item for item in index.object_projections if item.object_id in object_ids]
-    cards = [item for item in index.retrieval_cards if item.card_id in card_ids]
+    cards = select_retrieval_cards(
+        selected_card_ids=card_ids,
+        selected_object_ids=object_ids,
+        all_cards=list(index.retrieval_cards),
+    )
     facts = [item for item in index.context_facts if item.fact_id in fact_ids]
     evidence = [item for item in index.context_evidence if item.evidence_id in evidence_ids]
 
-    return build_context_pack(
+    pack = build_context_pack(
         query_frame=frame,
         domain_pack=domain_pack,
         objects=objects,
@@ -178,6 +186,27 @@ def _context_from_retrieval(
         facts=facts,
         evidence=evidence,
     )
+
+    fill = fill_missing_shapes(
+        frame,
+        list(index.context_facts),
+        list(index.context_evidence),
+        selected_fact_ids={item.fact_id for item in pack.facts},
+        selected_evidence_ids={item.evidence_id for item in pack.evidence},
+    )
+    if fill.fact_ids or fill.evidence_ids:
+        have_facts = {item.fact_id for item in pack.facts}
+        have_evidence = {item.evidence_id for item in pack.evidence}
+        fact_map = {item.fact_id: item for item in index.context_facts}
+        evidence_map = {item.evidence_id: item for item in index.context_evidence}
+        extra_facts = [fact_map[fid] for fid in fill.fact_ids if fid in fact_map and fid not in have_facts]
+        extra_evidence = [evidence_map[eid] for eid in fill.evidence_ids if eid in evidence_map and eid not in have_evidence]
+        pack = replace(
+            pack,
+            facts=[*pack.facts, *extra_facts],
+            evidence=[*pack.evidence, *extra_evidence],
+        )
+    return pack
 
 
 def _apply_judgement(

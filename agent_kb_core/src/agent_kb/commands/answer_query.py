@@ -177,6 +177,7 @@ def answer_query(
     domain_dir: Path | None = None,
     use_llm_understanding: bool = False,
     max_answer_chars: int = 2000,
+    embedding_provider=None,
 ) -> dict:
     """端到端问答：检索 → 打包 → 生成答案。"""
     domain_pack = load_domain_pack(domain_dir) if domain_dir else None
@@ -186,6 +187,7 @@ def answer_query(
         domain_pack=domain_pack,
         understanding_options=UnderstandingOptions(use_llm=use_llm_understanding),
         retrieval_top_k=10,
+        embedding_provider=embedding_provider,
     )
     judgement = result.evidence_judgement
     status = judgement.status

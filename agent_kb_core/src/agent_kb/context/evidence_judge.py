@@ -34,6 +34,14 @@ _REQUIRED_GROUPS: dict[str, list[set[str]]] = {
 }
 
 
+def required_shape_groups(intent: str) -> list[set[str]]:
+    """公开给选择层使用：某意图要求的证据形态组（组内任一满足即覆盖）。
+
+    充分性判定与形态补槽必须共用这张映射，否则"补的"和"判的"对不上。
+    """
+    return _REQUIRED_GROUPS.get(str(intent or ""), [])
+
+
 def judge_context_pack(
     context_pack: AgentContextPack,
     *,
@@ -54,7 +62,7 @@ def judge_context_pack(
         if any(evidence_id in evidence_ids for evidence_id in fact.evidence_ids)
     )
 
-    groups = _REQUIRED_GROUPS.get(frame.intent, [])
+    groups = required_shape_groups(frame.intent)
     required_shapes = sorted({shape for group in groups for shape in group})
     covered_shapes = sorted(fact_types & set(required_shapes))
     missing_groups = [group for group in groups if not (group & fact_types)]

@@ -6,6 +6,11 @@ from typing import Protocol
 from agent_kb.query.query_frame import QueryFrame
 from agent_kb.retrieval.models import RetrievalCandidate
 
+# 自归一模式下各通道 Top1 映射到的统一分值上限。选择依据：保持融合 Top1
+# 落在充分性判定的相关性阈值(1.5)之上，同时抹平词法(可达 3~4)对
+# 余弦(<=0.95)/图衰减(<=1)的尺度压制。
+_SELF_MAX_CEIL = 2.0
+
 
 class CandidateProvider(Protocol):
     def search(self, query_frame: QueryFrame, *, limit: int = 32) -> list[RetrievalCandidate]: ...
@@ -20,7 +25,15 @@ class ProductionCandidateProvider:
         lexical: CandidateProvider | None = None,
         vector: CandidateProvider | None = None,
         graph: CandidateProvider | None = None,
+        normalize: str | None = None,
     ) -> None:
+        """normalize=None 保持历史行为（原始分数直接合并）；
+
+        normalize="self_max" 时每个通道先除以本查询内自身 Top1 分数再乘以
+        _SELF_MAX_CEIL——跨适配器可比性来自排名结构而非原始量纲，
+        消融实验（43 样本分层）表明原始分数合并使三通道全开劣于单通道词法。
+        """
+        self.normalize_mode = normalize
         self.providers: list[tuple[str, CandidateProvider, float]] = []
         if lexical is not None:
             self.providers.append(("lexical", lexical, 1.0))
@@ -33,7 +46,15 @@ class ProductionCandidateProvider:
         pool_limit = max(1, limit)
         merged: dict[str, RetrievalCandidate] = {}
         for provider_name, provider, weight in self.providers:
-            for candidate in provider.search(query_frame, limit=pool_limit):
+            candidates = list(provider.search(query_frame, limit=pool_limit))
+            if self.normalize_mode == "self_max" and candidates:
+                top = max(float(item.score) for item in candidates)
+                if top > 0:
+                    candidates = [
+                        replace(item, score=float(item.score) / top * _SELF_MAX_CEIL)
+                        for item in candidates
+                    ]
+            for candidate in candidates:
                 key = f"{candidate.source_type}:{candidate.source_id}"
                 weighted = replace(candidate, score=float(candidate.score) * weight)
                 existing = merged.get(key)

@@ -182,6 +182,11 @@ def _expand_alias_parts(text: str) -> list[str]:
         return out
     inner = re.findall(r"[（(]([^（）()]*)[）)]", text)
     outer = re.sub(r"[（(][^（）()]*[）)]", " ", text)
+    # 保留完整短语（去括号、保留空格）：多词别名如 "DCDC 保护功能" 应可整词匹配，
+    # 而不是只拆成 "DCDC"/"保护功能" 两个泛词
+    full = re.sub(r"[（(][^（）()]*[）)]", "", text).strip()
+    if full and full not in out:
+        out.append(full)
     for part in [outer, *inner]:
         for seg in re.split(r"[,，/、\s]+", part):
             seg = seg.strip()

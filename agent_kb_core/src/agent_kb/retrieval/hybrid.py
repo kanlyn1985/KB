@@ -33,11 +33,18 @@ def hybrid_retrieve(
         else []
     )
     merged = _merge_candidates(baseline.candidates, persistent)
-    ranked = (reranker or DeterministicReranker()).rerank(
+    # 先让重排器给出全池排序（不截断），再施加对象级多样性封顶，
+    # 最后取前 K。持久池合并在内存 fuse 的 MAX_PER_OBJECT 之后，
+    # 同节点的多条影子事实曾借此占满尾部名额。
+    ranked_full = (reranker or DeterministicReranker()).rerank(
         query_frame,
         merged,
-        top_k=max(1, top_k),
+        top_k=max(1, len(merged)),
     )
+    ranked = _enforce_diversity(ranked_full, max_per_object=_MAX_PER_OBJECT)[: max(1, top_k)]
+    ranked = [
+        replace(item, rank=rank) for rank, item in enumerate(ranked, start=1)
+    ]
     object_ids, card_ids, fact_ids, evidence_ids = _selected_ids(query_frame, ranked)
 
     executed = list(baseline.diagnostics.executed_channels)
@@ -68,6 +75,59 @@ def hybrid_retrieve(
         selected_evidence_ids=evidence_ids,
         diagnostics=diagnostics,
     )
+
+
+_MAX_PER_OBJECT = 2
+
+
+def _base_object_id(value: str) -> str:
+    """父对象 ID：去掉分块后缀（X#n -> X），与内存 fuse 的归一口径一致。"""
+    return str(value or "").split("#")[0]
+
+
+def _candidate_base_key(candidate: RetrievalCandidate) -> str | None:
+    payload = candidate.payload or {}
+    for field_name in ("object_id", "subject"):
+        value = str(payload.get(field_name) or "").strip()
+        if value:
+            return _base_object_id(value)
+    if candidate.source_type == "object":
+        return _base_object_id(candidate.source_id)
+    return None
+
+
+def _enforce_diversity(
+    candidates: list[RetrievalCandidate],
+    *,
+    max_per_object: int,
+) -> list[RetrievalCandidate]:
+    """同一父对象的候选最多占 max_per_object 席，超出让位给后续候选。
+
+    重排分不减、不改顺序语义，只做席位再分配；无法归属到对象的证据原文类
+    候选不受影响。
+    """
+    kept: list[RetrievalCandidate] = []
+    counts: dict[str, int] = {}
+    overflow: list[RetrievalCandidate] = []
+    for candidate in candidates:
+        key = _candidate_base_key(candidate)
+        if key is None:
+            kept.append(candidate)
+            continue
+        if counts.get(key, 0) >= max_per_object:
+            overflow.append(candidate)
+            continue
+        counts[key] = counts.get(key, 0) + 1
+        kept.append(candidate)
+    if len(kept) < len(candidates):
+        for candidate in overflow:
+            key = _candidate_base_key(candidate)
+            if key is not None and counts.get(key, 0) >= max_per_object:
+                continue
+            if key is not None:
+                counts[key] = counts.get(key, 0) + 1
+            kept.append(candidate)
+    return kept
 
 
 def _merge_candidates(

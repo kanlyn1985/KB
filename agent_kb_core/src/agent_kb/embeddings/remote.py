@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+import http.client
 import json
 import os
 from dataclasses import dataclass
 from typing import Sequence
-from urllib import error, request
+from urllib.parse import urlsplit
 
 from .providers import normalize_vector
 
@@ -28,6 +29,7 @@ class RemoteJSONEmbeddingProvider:
     api_key: str = ""
     provider_id: str = "remote-json-embedding-v1"
     timeout_seconds: float = 30.0
+    batch_size: int = 32
 
     def __post_init__(self) -> None:
         if not self.endpoint.startswith(("http://", "https://")):
@@ -36,6 +38,8 @@ class RemoteJSONEmbeddingProvider:
             raise ValueError("embedding model is required")
         if self.dimensions < 1:
             raise ValueError("embedding dimensions must be positive")
+        if self.batch_size < 1:
+            raise ValueError("embedding batch_size must be positive")
 
     @classmethod
     def from_environment(
@@ -46,12 +50,14 @@ class RemoteJSONEmbeddingProvider:
         dimensions_var: str = "AGENT_KB_EMBEDDING_DIMENSIONS",
         api_key_var: str = "AGENT_KB_EMBEDDING_API_KEY",
         timeout_var: str = "AGENT_KB_EMBEDDING_TIMEOUT",
+        batch_size_var: str = "AGENT_KB_EMBEDDING_BATCH_SIZE",
     ) -> RemoteJSONEmbeddingProvider:
         endpoint = os.environ.get(endpoint_var, "").strip()
         model = os.environ.get(model_var, "").strip()
         dimensions = int(os.environ.get(dimensions_var, "0") or 0)
         api_key = os.environ.get(api_key_var, "")
         timeout = float(os.environ.get(timeout_var, "30") or 30)
+        batch_size = int(os.environ.get(batch_size_var, "32") or 32)
         provider_id = f"remote-json:{model}:{dimensions}"
         return cls(
             endpoint=endpoint,
@@ -60,21 +66,50 @@ class RemoteJSONEmbeddingProvider:
             api_key=api_key,
             provider_id=provider_id,
             timeout_seconds=timeout,
+            batch_size=batch_size,
         )
+
+    def _endpoint_parts(self) -> tuple[str, int, str, bool]:
+        parts = urlsplit(self.endpoint)
+        use_tls = parts.scheme == "https"
+        host = parts.hostname or ""
+        port = parts.port or (443 if use_tls else 80)
+        path = parts.path or "/"
+        if parts.query:
+            path += "?" + parts.query
+        return host, port, path, use_tls
 
     def embed(self, texts: Sequence[str]) -> list[list[float]]:
         values = [str(text) for text in texts]
         if not values:
             return []
+        # 批量分片：真实模型服务无法一次吃下数万条，按 batch_size 分批请求后拼接。
+        # 关键：复用一条持久 HTTP 连接（keep-alive），避免每请求重新建连（SSH 隧道/DERP 下建连开销巨大）。
+        host, port, path, use_tls = self._endpoint_parts()
+        conn_cls = http.client.HTTPSConnection if use_tls else http.client.HTTPConnection
+        vectors: list[list[float]] = []
+        conn = conn_cls(host, port, timeout=self.timeout_seconds)
+        try:
+            for start in range(0, len(values), self.batch_size):
+                vectors.extend(self._embed_batch(conn, path, values[start : start + self.batch_size]))
+        finally:
+            conn.close()
+        return vectors
+
+    def _embed_batch(self, conn, path: str, values: list[str]) -> list[list[float]]:
         body = json.dumps({"model": self.model, "input": values}).encode("utf-8")
         headers = {"Content-Type": "application/json", "Accept": "application/json"}
         if self.api_key:
             headers["Authorization"] = f"Bearer {self.api_key}"
-        outbound = request.Request(self.endpoint, data=body, headers=headers, method="POST")
         try:
-            with request.urlopen(outbound, timeout=self.timeout_seconds) as response:
-                payload = json.loads(response.read().decode("utf-8"))
-        except (error.URLError, TimeoutError, json.JSONDecodeError) as exc:
+            conn.request("POST", path, body=body, headers=headers)
+            response = conn.getresponse()
+            if response.status != 200:
+                raise EmbeddingProviderError(f"remote embedding HTTP {response.status}")
+            payload = json.loads(response.read().decode("utf-8"))
+        except EmbeddingProviderError:
+            raise
+        except (OSError, http.client.HTTPException, TimeoutError, json.JSONDecodeError) as exc:
             raise EmbeddingProviderError(f"remote embedding request failed: {type(exc).__name__}") from exc
         vectors = _parse_vectors(payload)
         if len(vectors) != len(values):

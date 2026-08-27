@@ -159,6 +159,8 @@ class SQLiteKnowledgeStore:
             CREATE INDEX IF NOT EXISTS idx_feedback_run_id ON feedback(run_id);
             """
         )
+        # 旧 unicode61 分词器不切分中文，迁移到 trigram（支持中文子串匹配）
+        self._migrate_fts_tokenizer()
         try:
             self.connection.execute(
                 """
@@ -168,7 +170,7 @@ class SQLiteKnowledgeStore:
                     object_id UNINDEXED,
                     text,
                     payload_json UNINDEXED,
-                    tokenize='unicode61'
+                    tokenize='trigram'
                 )
                 """
             )
@@ -355,26 +357,68 @@ class SQLiteKnowledgeStore:
         terms = self._query_terms(query_frame)
         if not terms:
             return []
-        rows: list[sqlite3.Row]
         if self._fts_enabled:
             try:
-                expression = " OR ".join(f'"{term.replace(chr(34), chr(34) * 2)}"' for term in terms[:12])
-                rows = list(
-                    self.connection.execute(
-                        """
-                        SELECT source_type, source_id, object_id, text, payload_json, bm25(search_fts) AS rank_score
-                        FROM search_fts
-                        WHERE search_fts MATCH ?
-                        ORDER BY rank_score
-                        LIMIT ?
-                        """,
-                        (expression, max(1, limit)),
-                    )
-                )
-                return [self._candidate_from_search_row(row, query_frame, channel="sqlite_fts") for row in rows]
+                return self._search_trigram(query_frame, terms, limit=max(1, limit))
             except sqlite3.OperationalError:
                 pass
         return self._search_like(query_frame, terms, limit=max(1, limit))
+
+    def _search_trigram(self, frame: QueryFrame, terms: list[str], *, limit: int) -> list[RetrievalCandidate]:
+        """trigram FTS5 只对 >=3 字符做子串匹配；<3 字符短词回退 LIKE 兜底。"""
+        fts_terms = [term for term in terms if len(term) >= 3][:12]
+        short_terms = [term for term in terms if len(term) < 3][:12]
+        candidates: list[RetrievalCandidate] = []
+        if fts_terms:
+            expression = " OR ".join(f'"{term.replace(chr(34), chr(34) * 2)}"' for term in fts_terms)
+            rows = list(
+                self.connection.execute(
+                    """
+                    SELECT source_type, source_id, object_id, text, payload_json, bm25(search_fts) AS rank_score
+                    FROM search_fts
+                    WHERE search_fts MATCH ?
+                    ORDER BY rank_score
+                    LIMIT ?
+                    """,
+                    (expression, limit),
+                )
+            )
+            candidates = [self._candidate_from_search_row(row, frame, channel="sqlite_fts") for row in rows]
+        if short_terms:
+            candidates.extend(self._search_like(frame, short_terms, limit=limit))
+        merged: dict[str, RetrievalCandidate] = {}
+        for candidate in candidates:
+            key = f"{candidate.source_type}:{candidate.source_id}"
+            existing = merged.get(key)
+            if existing is None or candidate.score > existing.score:
+                merged[key] = candidate
+        return sorted(merged.values(), key=lambda item: (item.score, item.source_id), reverse=True)[:limit]
+
+    def rebuild_fts(self) -> int:
+        """从 search_documents 一次性重建 search_fts（避免逐条 DELETE+INSERT）。"""
+        if not self._fts_enabled:
+            return 0
+        with self.connection:
+            self.connection.execute("DELETE FROM search_fts")
+            self.connection.execute(
+                """
+                INSERT INTO search_fts(source_type, source_id, object_id, text, payload_json)
+                SELECT source_type, source_id, object_id, text, payload_json FROM search_documents
+                """
+            )
+        return int(self.connection.execute("SELECT COUNT(*) FROM search_fts").fetchone()[0])
+
+    def _migrate_fts_tokenizer(self) -> None:
+        """旧 unicode61 分词器不支持中文，drop 旧 search_fts（权威数据在 search_documents，
+        重建后由 rebuild_fts() / upsert_index() 重新填充）。"""
+        try:
+            row = self.connection.execute(
+                "SELECT sql FROM sqlite_master WHERE type='table' AND name='search_fts'"
+            ).fetchone()
+        except sqlite3.OperationalError:
+            return
+        if row and row["sql"] and "trigram" not in str(row["sql"]):
+            self.connection.execute("DROP TABLE search_fts")
 
     def record_retrieval(
         self,

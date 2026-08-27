@@ -29,7 +29,12 @@ from agent_kb.core.facts import Fact  # noqa: E402
 from agent_kb.domains.loader import load_domain_pack  # noqa: E402
 from agent_kb.embeddings.providers import HashEmbeddingProvider  # noqa: E402
 from agent_kb.pipeline.document_context import CompiledKnowledgeIndex  # noqa: E402
-from agent_kb.projection.models import ObjectProjection  # noqa: E402
+from agent_kb.graph.store import SQLiteGraphStore  # noqa: E402
+from agent_kb.projection.models import (
+    EvidenceRef,  # noqa: E402
+    ObjectProjection,  # noqa: E402
+    ObjectRelation,  # noqa: E402
+)
 from agent_kb.projection.projector import build_terminology_projections  # noqa: E402
 from agent_kb.retrieval.cards import RetrievalCard  # noqa: E402
 from agent_kb.retrieval.card_builder import build_retrieval_cards  # noqa: E402
@@ -41,6 +46,8 @@ from agent_kb.retrieval.vector import SQLiteVectorIndex  # noqa: E402
 def build_node_index(
     node_cards_path: Path,
     domain_pack,
+    skeleton_relations=None,
+    skeleton_nodes=None,
 ) -> CompiledKnowledgeIndex:
     """从 node_cards.jsonl 构建 CompiledKnowledgeIndex。
 
@@ -168,12 +175,67 @@ def build_node_index(
         source_units=[],
         facts=[],
     )
+    # 骨架本体关系：skeleton_v0.x.json 的 relations（R→F→L→P 主链等）转成
+    # 证据映射边（ObjectRelation），随索引持久化进 graph_edges，使查询管线
+    # 的图通道（BFS, 生产权重 0.85）真正参与召回。
+    relations: list[ObjectRelation] = []
+    for rel in skeleton_relations or []:
+        src_id = str(rel.get("source") or "").strip()
+        dst_id = str(rel.get("target") or "").strip()
+        rtype = str(rel.get("type") or "").strip() or "related_to"
+        if not src_id or not dst_id or src_id == dst_id:
+            continue
+        refs = [EvidenceRef(evidence_id=str(r))
+                for r in (rel.get("evidence_refs") or []) if str(r).strip()]
+        conf = 0.75 if not refs else min(0.95, 0.75 + 0.05 * len(refs))
+        relations.append(ObjectRelation(
+            relation_id=f"rel:{domain_pack.domain_id}:{rtype}:{src_id}:{dst_id}",
+            domain=domain_pack.domain_id,
+            relation_type=rtype,
+            source_object_id=src_id,
+            target_object_id=dst_id,
+            properties={"category": rel.get("category"),
+                        "inverse": rel.get("inverse"),
+                        "project_scope": rel.get("project_scope"),
+                        "origin": "skeleton"},
+            evidence_refs=refs,
+            confidence=conf,
+            status="materialized",
+        ))
+
+    # 结构树包含边（parent -> child）：跨层关系边只覆盖 R/F/L/P 主链，
+    # 查询起点常落在无边节点（G 过程层、P-KNOW 知识节点等）。补上结构
+    # 树后任何链接节点都有邻域可走（叶子->父->兄弟），图通道才有召回。
+    seen_pairs = {(r.source_object_id, r.target_object_id) for r in relations}
+    for node in skeleton_nodes or []:
+        child = str(node.get("id") or "").strip()
+        parent = str(node.get("parent") or "").strip()
+        if not child or not parent or parent == child:
+            continue
+        # 已有同名边则跳过；反向（child->parent 的 instance-of 等）保留，
+        # 因为遍历是有向双向的，不重复加只影响 edge_id 唯一性。
+        if (parent, child) in seen_pairs:
+            continue
+        seen_pairs.add((parent, child))
+        relations.append(ObjectRelation(
+            relation_id=f"rel:{domain_pack.domain_id}:contains:{parent}:{child}",
+            domain=domain_pack.domain_id,
+            relation_type="contains",
+            source_object_id=parent,
+            target_object_id=child,
+            properties={"category": "structural", "origin": "skeleton_tree"},
+            evidence_refs=[],
+            confidence=0.9,
+            status="materialized",
+        ))
+
     return CompiledKnowledgeIndex(
         compilation=compilation,
         context_facts=facts,
         context_evidence=evidence,
         object_projections=projections,
         retrieval_cards=cards,
+        object_relations=relations,
     )
 
 
@@ -231,21 +293,44 @@ def run(
     domain_dir: Path | None = None,
     no_vector: bool = False,
     embedding_provider=None,
+    skeleton: Path | None = None,
 ) -> dict:
     """Execute the node-card import and return a summary dict."""
     domain_pack = load_domain_pack(domain_dir) if domain_dir else None
-    index = build_node_index(node_cards, domain_pack)
+    if skeleton is None:
+        # 默认自动发现仓库内骨架文件（含本体 relations）
+        default_skeleton = (Path(__file__).resolve().parents[3]
+                            / "docs" / "ontology" / "tree_skeleton" / "skeleton_v0.6.json")
+        if default_skeleton.exists():
+            skeleton = default_skeleton
+    skeleton_relations = None
+    skeleton_nodes = None
+    if skeleton is not None:
+        skel_data = json.loads(skeleton.read_text(encoding="utf-8"))
+        skeleton_relations = skel_data.get("relations", [])
+        skeleton_nodes = skel_data.get("nodes", [])
+    index = build_node_index(node_cards, domain_pack,
+                             skeleton_relations=skeleton_relations,
+                             skeleton_nodes=skeleton_nodes)
     summary = {
         "objects": len(index.object_projections),
         "cards": len(index.retrieval_cards),
         "facts": len(index.context_facts),
         "evidence": len(index.context_evidence),
+        "relations": len(index.object_relations),
     }
     with SQLiteKnowledgeStore(db) as store:
         migrator = SchemaMigrator(store.connection)
         migrator.migrate()
+        # 关闭逐条 FTS 写入，upsert 后一次性批量重建 trigram 索引（快一个量级）
+        store._fts_enabled = False
         upsert = store.upsert_index(index)
         summary["upsert"] = upsert
+        store._fts_enabled = True
+        summary["fts"] = store.rebuild_fts()
+        if index.object_relations:
+            graph = SQLiteGraphStore(store.connection)
+            summary["graph_edges"] = graph.upsert_relations(index.object_relations)
         if not no_vector:
             provider = embedding_provider or HashEmbeddingProvider()
             vector = SQLiteVectorIndex(store.connection, provider=provider)
@@ -264,6 +349,7 @@ def main(argv: list[str] | None = None) -> int:
         domain_dir=args.domain_dir,
         no_vector=args.no_vector,
         embedding_provider=args.embedding_provider,
+        skeleton=args.skeleton,
     )
     print(json.dumps(summary, ensure_ascii=False, indent=1))
     return 0
@@ -278,6 +364,9 @@ def _parse(argv: list[str]):
     parser.add_argument("--domain-dir", type=Path, default=None)
     parser.add_argument("--no-vector", action="store_true",
                         help="跳过向量索引（仅词法+持久化）")
+    parser.add_argument("--skeleton", type=Path, default=None,
+                        help="骨架 JSON（含 relations）。默认自动使用 "
+                             "docs/ontology/tree_skeleton/skeleton_v0.6.json")
     parser.add_argument("--remote-embedding", action="store_true",
                         help="使用远程语义嵌入（AGENT_KB_EMBEDDING_URL 等环境变量），"
                              "未配置时回退 HashEmbeddingProvider")

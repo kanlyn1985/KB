@@ -7,7 +7,11 @@ from pathlib import Path
 from typing import Any
 from uuid import uuid4
 
-from agent_kb.context.builder import build_context_pack
+from agent_kb.context.builder import (
+    build_context_pack,
+    fill_missing_shapes,
+    select_retrieval_cards,
+)
 from agent_kb.context.context_pack import AgentContextPack
 from agent_kb.context.evidence_judge import EvidenceJudgement, judge_context_pack
 from agent_kb.core.compiler import compile_text_document
@@ -158,13 +162,18 @@ def compile_text_to_production_store(
             external_vector_count = external_vector_backend.upsert(build_vector_records(index, provider))
         graph = SQLiteGraphStore(store.connection)
         extracted_edges = extractor.extract(index)
-        graph_edge_count = graph.upsert_relations(extracted_edges)
+        # 编译索引自带的本体关系面（如节点卡导入携带的骨架 relations）一并入图；
+        # 与抽取器产生的候选边分开记账，保持质量元数据准确。
+        skeleton_edges = list(getattr(index, "object_relations", []) or [])
+        extracted_accepted = graph.upsert_relations(extracted_edges)
+        skeleton_accepted = graph.upsert_relations(skeleton_edges) if skeleton_edges else 0
+        graph_edge_count = extracted_accepted + skeleton_accepted
         _record_graph_extraction(
             store.connection,
             tenant_id=tenant_id,
             extractor_id=extractor.extractor_id,
             candidate_count=len(extracted_edges),
-            accepted_count=graph_edge_count,
+            accepted_count=extracted_accepted,
         )
         schema_version = migrator.current_version()
     return ProductionIndexResult(
@@ -189,6 +198,7 @@ def query_production_store(
     understanding_options: UnderstandingOptions | None = None,
     reranker: Reranker | None = None,
     retrieval_top_k: int = 12,
+    channel_normalize: str | None = None,
 ) -> ProductionQueryResult:
     frame = understand_query(query, domain_pack=domain_pack, options=understanding_options)
     provider = embedding_provider or HashEmbeddingProvider()
@@ -203,7 +213,10 @@ def query_production_store(
             else local_vector
         )
         graph = SQLiteGraphStore(store.connection)
-        candidate_provider = ProductionCandidateProvider(lexical=store, vector=vector_provider, graph=graph)
+        candidate_provider = ProductionCandidateProvider(
+            lexical=store, vector=vector_provider, graph=graph,
+            normalize=channel_normalize,
+        )
         retrieval_result = hybrid_retrieve(
             frame,
             index,
@@ -300,13 +313,16 @@ def _context_from_retrieval(
     card_ids = set(retrieval_result.selected_card_ids)
     fact_ids = set(retrieval_result.selected_fact_ids)
     evidence_ids = set(retrieval_result.selected_evidence_ids)
-    # 兜底：fact 命中的节点（影子 term_definition fact）对应的卡也要进上下文，
-    # 否则 fact 候选占优时真正含内容的节点卡会被挤出 context pack（LLM 无内容可答）
-    cards = [
-        item for item in index.retrieval_cards
-        if item.card_id in card_ids or item.object_id in object_ids
-    ]
-    return build_context_pack(
+
+    # 卡选择：排名序选取 + 对象兜底 + 同一父对象封顶。
+    # 兜底保证 fact/影子事实命中的节点带出内容卡（LLM 无内容可答的问题）；
+    # 封顶修复持久池候选绕过内存 fuse 多样性约束、同节点分块卡刷屏的问题。
+    cards = select_retrieval_cards(
+        selected_card_ids=card_ids,
+        selected_object_ids=object_ids,
+        all_cards=list(index.retrieval_cards),
+    )
+    pack = build_context_pack(
         query_frame=frame,
         domain_pack=domain_pack,
         objects=[item for item in index.object_projections if item.object_id in object_ids],
@@ -314,6 +330,29 @@ def _context_from_retrieval(
         facts=[item for item in index.context_facts if item.fact_id in fact_ids],
         evidence=[item for item in index.context_evidence if item.evidence_id in evidence_ids],
     )
+
+    # 形态补槽：意图要求的证据形态缺失时，从全量事实面按类型补捞并绑定证据，
+    # 避免"库里有表格行/流程步骤却没进前 K -> 判定 partial -> 走降级回答"。
+    fill = fill_missing_shapes(
+        frame,
+        list(index.context_facts),
+        list(index.context_evidence),
+        selected_fact_ids={item.fact_id for item in pack.facts},
+        selected_evidence_ids={item.evidence_id for item in pack.evidence},
+    )
+    if fill.fact_ids or fill.evidence_ids:
+        have_facts = {item.fact_id for item in pack.facts}
+        have_evidence = {item.evidence_id for item in pack.evidence}
+        fact_map = {item.fact_id: item for item in index.context_facts}
+        evidence_map = {item.evidence_id: item for item in index.context_evidence}
+        extra_facts = [fact_map[fid] for fid in fill.fact_ids if fid in fact_map and fid not in have_facts]
+        extra_evidence = [evidence_map[eid] for eid in fill.evidence_ids if eid in evidence_map and eid not in have_evidence]
+        pack = replace(
+            pack,
+            facts=[*pack.facts, *extra_facts],
+            evidence=[*pack.evidence, *extra_evidence],
+        )
+    return pack
 
 
 def _apply_judgement(context_pack: AgentContextPack, judgement: EvidenceJudgement) -> AgentContextPack:

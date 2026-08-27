@@ -362,7 +362,18 @@ def _fuse(frame: QueryFrame, channels: dict[str, list[RetrievalCandidate]]) -> l
             )
         )
     fused.sort(key=lambda item: (item.score, item.source_type, item.source_id), reverse=True)
-    return [replace(item, rank=rank) for rank, item in enumerate(fused, start=1)]
+    # 结果多样性封顶：同一父对象的卡（含 #n 分块卡，按 base id 归一）最多占 MAX_PER_OBJECT 席，
+    # 防止单一大节点的分块卡刷屏挤出其他相关节点。
+    MAX_PER_OBJECT = 2
+    diversified: list = []
+    per_object: dict[str, int] = {}
+    for item in fused:
+        base = item.source_id.split("#")[0]
+        if per_object.get(base, 0) >= MAX_PER_OBJECT:
+            continue
+        per_object[base] = per_object.get(base, 0) + 1
+        diversified.append(item)
+    return [replace(item, rank=rank) for rank, item in enumerate(diversified, start=1)]
 
 
 def _selected_ids(frame: QueryFrame, candidates: list[RetrievalCandidate]) -> tuple[list[str], list[str], list[str], list[str]]:
@@ -391,7 +402,8 @@ def _text_score(text: str, terms: list[str]) -> tuple[float, list[str]]:
     matched: list[str] = []
     score = 0.0
     for term in terms:
-        normalized = _normalize_text(term)
+        # terms 已由 _query_terms 归一化（小写 + 空白折叠），无需逐 term 重复 re.sub
+        normalized = term
         if len(normalized) < 2 or normalized not in blob:
             continue
         if normalized not in matched:
@@ -404,7 +416,9 @@ def _text_score(text: str, terms: list[str]) -> tuple[float, list[str]]:
 
 
 def _normalize_text(value: str) -> str:
-    return re.sub(r"\s+", " ", value.strip().lower())
+    # 等价于 re.sub(r"\s+", " ", value.strip().lower())，但避免逐调用正则编译：
+    # 先把全角/不换行空格归一为普通空格，再用 str.split 折叠（纯 C，快一个量级）
+    return " ".join(value.replace("\u3000", " ").replace("\xa0", " ").split()).lower()
 
 
 def _append_unique(items: list[str], value: str) -> None:
