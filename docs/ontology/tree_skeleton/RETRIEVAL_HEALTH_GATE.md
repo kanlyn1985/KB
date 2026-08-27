@@ -116,8 +116,11 @@ ContextPack 卡槽选择统一走 `select_retrieval_cards()`（排名序 + 对�
 健康门禁 PASS 无回归。真实管线验证：HARA/OBC 原理/热仿真保持 sufficient，
 标定/AuxPower 保持诚实 partial。
 
-> 已知既有限制（本次未动）：`required slots` 未解析的查询被判定器硬性封顶 0.74 →
-> 「输出纹波要求是多少」恒为 partial(0.74)，属槽位机制的既有行为。
+> 槽位封顶为**刻意设计**（复查理解层/判定器/测试后确认）：constraint_lookup 缺项目/工况时，
+> partial(≤0.74) 的语义是「谨慎回答 + 披露缺口」（answer_with_caution_and_disclose_gaps），
+> 并非拒答——包内的一般性答案（如额定负载下的规格）仍会产出，仅明示需按项目/工况确认；
+> 查询携带条件词（负载/温度/vin/iout 等）时槽位自动消除，恢复正常判定。
+> 对应测试：test_constraint_query_surfaces_missing_project_and_condition_slots。
 ## 9. P3 通道消融与分数尺度实验（2026-08-27）
 
 **动机**：跨适配器直接合并原始分数，词法（可达 3~4 分）系统性压制余弦(≤0.95)/图(≤1)，
