@@ -123,6 +123,21 @@ def main() -> int:
     cards, node2card = load_cards()
     print(f"节点卡: {len(cards)} 张 | 领域: {domain_pack.domain_id}")
 
+    # 骨架父映射（层级命中：打到子节点算命中父概念）
+    skel = json.loads((TREE / "skeleton_v0.6.json").read_text(encoding="utf-8"))
+    parents = {n["id"]: n.get("parent") for n in skel["nodes"]}
+
+    def is_hit(cand_id, exp_id):
+        cand_id = cand_id.split("#")[0]
+        if cand_id == exp_id:
+            return True
+        cur = parents.get(cand_id)
+        while cur:
+            if cur == exp_id:
+                return True
+            cur = parents.get(cur)
+        return False
+
     cases = DEFAULT_CASES
     if CASES.exists():
         cases = json.loads(CASES.read_text(encoding="utf-8"))
@@ -144,16 +159,13 @@ def main() -> int:
         frame = understand_query(case["query"], domain_pack=domain_pack)
         result = retrieve(frame, index, top_k=top_k)
         expected = case["expected"]
-        # 期望节点对应的 card_id（子卡 #n 归一到父节点）
-        expected_ids = {node2card.get(e.split("#")[0]) for e in expected if e.split("#")[0] in node2card}
-        expected_ids.discard(None)
-        # 命中判定：候选里出现期望 card（子卡 #n 归一为父卡）
-        cand_ids = {c.source_id.split("#")[0] for c in result.candidates}
-        hit_ids = expected_ids & cand_ids
-        hit = bool(hit_ids)
+        exp_ids = {e.split("#")[0] for e in expected}
+        cand_ids = [c.source_id.split("#")[0].replace("card:obc_dcdc:", "") for c in result.candidates]
+        # 层级命中：候选命中期望节点，或候选是期望节点的后代（子块命中父概念）
+        hit = any(any(is_hit(x, y) for x in cand_ids) for y in exp_ids)
         first_rank = None
-        for rank, c in enumerate(result.candidates, 1):
-            if c.source_id.split("#")[0] in expected_ids:
+        for rank, x in enumerate(cand_ids, 1):
+            if any(is_hit(x, y) for y in exp_ids):
                 first_rank = rank
                 break
         mrr = 1.0 / first_rank if first_rank else 0.0

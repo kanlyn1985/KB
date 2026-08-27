@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """落位数据 → 节点检索卡：按骨架节点聚合落位内容，生成节点级检索表面。
 
-输入：merged_full_records_v04.jsonl（303,981 条落位记录）
+输入：merged_full_records_v05.jsonl（303,981 条落位记录）
 输出：llm_landing/node_cards.jsonl（每骨架节点一卡）
   card: {node_id, node_name, layer, type, parent, alias[], content(聚合文本), unit_count, doc_count}
 
@@ -18,8 +18,8 @@ from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-SKELETON = ROOT / "docs" / "ontology" / "tree_skeleton" / "skeleton_v0.4.json"
-MERGED = ROOT / "docs" / "ontology" / "tree_skeleton" / "llm_landing" / "merged_full_records_v04.jsonl"
+SKELETON = ROOT / "docs" / "ontology" / "tree_skeleton" / "skeleton_v0.6.json"
+MERGED = ROOT / "docs" / "ontology" / "tree_skeleton" / "llm_landing" / "merged_full_records_v05.jsonl"
 OUT = ROOT / "docs" / "ontology" / "tree_skeleton" / "llm_landing" / "node_cards.jsonl"
 
 MAX_CONTENT_CHARS = 8000  # 每节点聚合文本上限（防超长卡）
@@ -93,6 +93,7 @@ def main() -> int:
                 "aliases": extract_aliases(n["name"]),
                 "unit_count": len(texts),
                 "doc_count": len(doc_set[nid]),
+                "docs": sorted(doc_set[nid]),
             }
             need_split = len(texts) >= SPLIT_UNIT_THRESHOLD and len(content) > CHUNK_CHARS
             if not need_split:
