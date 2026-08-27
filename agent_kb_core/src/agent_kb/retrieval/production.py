@@ -11,6 +11,12 @@ from agent_kb.retrieval.models import RetrievalCandidate
 # 余弦(<=0.95)/图衰减(<=1)的尺度压制。
 _SELF_MAX_CEIL = 2.0
 
+# 图通道门控阈值：词法 Top1 与向量 Top1 同时低于阈值才视为"双弱"并启用图 BFS。
+# 依据 expAB 消融（43 分层样本）：域内查询 0 次触发，指标与双通道持平；
+# 图通道价值域恰是双弱（冷门/表述外）查询。
+_GATE_LEXICAL_TOP = 1.5
+_GATE_VECTOR_TOP = 0.5
+
 
 class CandidateProvider(Protocol):
     def search(self, query_frame: QueryFrame, *, limit: int = 32) -> list[RetrievalCandidate]: ...
@@ -26,6 +32,7 @@ class ProductionCandidateProvider:
         vector: CandidateProvider | None = None,
         graph: CandidateProvider | None = None,
         normalize: str | None = None,
+        graph_gate: bool = True,
     ) -> None:
         """normalize=None 保持历史行为（原始分数直接合并）；
 
@@ -34,6 +41,7 @@ class ProductionCandidateProvider:
         消融实验（43 样本分层）表明原始分数合并使三通道全开劣于单通道词法。
         """
         self.normalize_mode = normalize
+        self.graph_gate = graph_gate and graph is not None
         self.providers: list[tuple[str, CandidateProvider, float]] = []
         if lexical is not None:
             self.providers.append(("lexical", lexical, 1.0))
@@ -45,8 +53,36 @@ class ProductionCandidateProvider:
     def search(self, query_frame: QueryFrame, *, limit: int = 32) -> list[RetrievalCandidate]:
         pool_limit = max(1, limit)
         merged: dict[str, RetrievalCandidate] = {}
-        for provider_name, provider, weight in self.providers:
-            candidates = list(provider.search(query_frame, limit=pool_limit))
+
+        # 图通道置信门控（graph_gate 默认开）：词法+向量先行，双弱才放行图 BFS。
+        # 探测与正式取候选合并为一次 provider.search（结果复用，不重复查询）。
+        active = self.providers
+        reused: dict[str, list[RetrievalCandidate]] = {}
+        if self.graph_gate:
+            strong = [(n, p, w) for n, p, w in self.providers if n != "graph"]
+            gate_scores: dict[str, float] = {}
+            for name, provider, _ in strong:
+                try:
+                    got = list(provider.search(query_frame, limit=pool_limit))
+                except Exception:
+                    got = []
+                reused[name] = got
+                gate_scores[name] = max((float(item.score) for item in got), default=0.0)
+            gate_open = not strong or (
+                gate_scores.get("lexical", 0.0) < _GATE_LEXICAL_TOP
+                and gate_scores.get("vector", 0.0) < _GATE_VECTOR_TOP
+            )
+            active = (
+                [*strong, *[(n, p, w) for n, p, w in self.providers if n == "graph"]]
+                if gate_open
+                else strong
+            )
+
+        for provider_name, provider, weight in active:
+            if provider_name in reused:
+                candidates = reused.pop(provider_name)
+            else:
+                candidates = list(provider.search(query_frame, limit=pool_limit))
             if self.normalize_mode == "self_max" and candidates:
                 top = max(float(item.score) for item in candidates)
                 if top > 0:

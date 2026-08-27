@@ -188,3 +188,32 @@ ContextPack 卡槽选择统一走 `select_retrieval_cards()`（排名序 + 对�
    的置信门控列为后续候选实验。
 5. 向量通道查询文本为「query+topic+aliases」拼接汤，vector_only_real 成绩尚可说明
    可用；「只嵌原始查询」对照实验列为后续优化候选。
+## 10. 实验 A/B：图门控落地 + 向量查询文本消融（2026-08-27）
+
+### 实验 B：向量通道查询文本（soup vs 原始查询）
+
+| 变体 | Hit@5 | MRR |
+|---|---|---|
+| lexical+soup（现状融合） | **83.7%** | **0.4058** |
+| lexical+raw_query | 79.1% | 0.3756 |
+| vector_only soup（现状） | 60.5% | 0.3729 |
+| **vector_only raw_query** | **81.4%** | **0.4426** |
+| lexical+soup∪raw | 79.1% | 0.3756 |
+
+**发现**：单飞时原始查询嵌入碾压拼接汤（+20.9pp Hit@5、MRR 0.443 全场最高）——
+别名汤确实稀释查询语义。但融合态下 soup 反而更优：raw 向量与词法强相关
+（同一信号两次计分），印证加分放大共同错误；soup 的噪声恰好提供互补覆盖。
+**生产决策：融合管线保留 soup**；"按查询意图动态选文本"列为远期候选。
+
+### 实验 A：图通道置信门控（已落地生产）
+
+门控规则：词法 Top1 < 1.5 且向量 Top1 < 0.5（双弱）才放行图 BFS；
+探测与取候选合并为一次调用。43 样本上域内查询 **0 次开启**，指标与双通道完全一致
+（83.7%/0.4058），干净消除图通道中游候选的融合污染（三通道裸跑 MRR 0.3853）。
+
+生产实现：`ProductionCandidateProvider(graph_gate=True, 默认)`；
+阈值常量 `_GATE_LEXICAL_TOP=1.5` / `_GATE_VECTOR_TOP=0.5`；
+行为契约由 `test_graph_gate_opens_only_on_weak_strong_channels` 钉死。
+图通道价值域：冷门/表述外查询（双弱场景），域内查询零开销。
+
+明细：`validation/channel_ablation_expAB.json`（6 变体逐 case）。

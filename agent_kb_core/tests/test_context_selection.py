@@ -183,3 +183,52 @@ def test_fill_cjk_query_matches_chinese_content() -> None:
     ]
     fill = fill_missing_shapes(frame, facts, [], selected_fact_ids={"def1"})
     assert fill.fact_ids == ("c1",)
+def test_graph_gate_opens_only_on_weak_strong_channels() -> None:
+    """图通道门控：词法/向量双强时图不执行；双弱时放行（expAB 依据）。"""
+    from agent_kb.retrieval.production import ProductionCandidateProvider
+
+    class FakeProvider:
+        def __init__(self, top_score: float, tag: str):
+            self.top_score = top_score
+            self.tag = tag
+            self.calls = 0
+
+        def search(self, query_frame, *, limit: int = 32):
+            self.calls += 1
+            return [
+                RetrievalCandidate(
+                    candidate_id=f"{self.tag}:hit", source_type="object",
+                    source_id=f"{self.tag}_HIT", channel=self.tag,
+                    score=self.top_score, matched_terms=[], reasons=[],
+                    payload={"object_id": f"{self.tag}_HIT"},
+                )
+            ]
+
+    frame = QueryFrame(
+        original_query="q", domain="obc_dcdc", intent="general_search",
+        intent_confidence=0.9, normalized_query="q", target_topic="",
+        target_objects=[TargetObject(object_id="T", object_type="P",
+                                     canonical_name="T", matched_text="t", confidence=0.9)],
+    )
+
+    # 双强：词法 2.5 / 向量 0.8 -> 门关，图不执行
+    lex, vec, graph = FakeProvider(2.5, "lex"), FakeProvider(0.8, "vec"), FakeProvider(1.0, "graph")
+    provider = ProductionCandidateProvider(lexical=lex, vector=vec, graph=graph)
+    out = provider.search(frame, limit=5)
+    assert graph.calls == 0
+    ids = {c.source_id for c in out}
+    assert "lex_HIT" in ids and "graph_HIT" not in ids
+
+    # 双弱：词法 0.9 / 向量 0.3 -> 门开，图参与
+    lex2, vec2, graph2 = FakeProvider(0.9, "lex"), FakeProvider(0.3, "vec"), FakeProvider(1.0, "graph")
+    provider2 = ProductionCandidateProvider(lexical=lex2, vector=vec2, graph=graph2)
+    out2 = provider2.search(frame, limit=5)
+    assert graph2.calls == 1
+    ids2 = {c.source_id for c in out2}
+    assert "graph_HIT" in ids2
+
+    # graph_gate=False 恢复裸三通道
+    lex3, vec3, graph3 = FakeProvider(2.5, "lex"), FakeProvider(0.8, "vec"), FakeProvider(1.0, "graph")
+    provider3 = ProductionCandidateProvider(lexical=lex3, vector=vec3, graph=graph3, graph_gate=False)
+    provider3.search(frame, limit=5)
+    assert graph3.calls == 1
