@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -24,6 +25,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from agent_kb.commands.answer_query import answer_query  # noqa: E402
+from agent_kb.embeddings import RemoteJSONEmbeddingProvider  # noqa: E402
 from agent_kb.domains.loader import load_domain_pack  # noqa: E402
 from agent_kb.service.api import AgentKBService  # noqa: E402
 
@@ -36,9 +38,19 @@ def create_webui_server(
     domain_dir: Path | None,
     host: str,
     port: int,
+    use_embedding: bool = True,
 ) -> ThreadingHTTPServer:
     domain_pack = load_domain_pack(domain_dir) if domain_dir else None
-    service = AgentKBService(db_path=db_path, domain_pack=domain_pack)
+    embedding_provider = None
+    if use_embedding:
+        try:
+            embedding_provider = RemoteJSONEmbeddingProvider.from_environment()
+            print(f"[webui] 语义通道已启用: {embedding_provider.provider_id}")
+        except (ValueError, KeyError) as exc:
+            print(f"[webui] 语义通道不可用（{exc}），回退 hash 向量通道")
+            embedding_provider = None
+    service = AgentKBService(db_path=db_path, domain_pack=domain_pack,
+                             embedding_provider=embedding_provider)
 
     class Handler(BaseHTTPRequestHandler):
         server_version = "AgentKBWebUI/0.1"
@@ -150,15 +162,25 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--db", type=Path, required=True)
     parser.add_argument("--domain-dir", type=Path)
-    parser.add_argument("--host", default="127.0.0.1")
+    parser.add_argument("--host", default="0.0.0.0")
     parser.add_argument("--port", type=int, default=8080)
+    parser.add_argument("--no-embedding", action="store_true",
+                        help="禁用语义通道（走 hash 向量）")
     args = parser.parse_args()
+
+    # 语义通道：缺省指向本机嵌入服务（tools/local_embed_server.py）。
+    # 环境变量已设则以环境变量为准；--no-embedding 显式关闭（hash 通道）。
+    if not args.no_embedding:
+        os.environ.setdefault("AGENT_KB_EMBEDDING_URL", "http://127.0.0.1:11500/v1/embeddings")
+        os.environ.setdefault("AGENT_KB_EMBEDDING_MODEL", "qllama/bge-small-zh-v1.5")
+        os.environ.setdefault("AGENT_KB_EMBEDDING_DIMENSIONS", "512")
 
     server = create_webui_server(
         db_path=args.db,
         domain_dir=args.domain_dir,
         host=args.host,
         port=args.port,
+        use_embedding=not args.no_embedding,
     )
     print(f"KB1 Web UI: http://{args.host}:{args.port}  (db={args.db})")
     try:
