@@ -265,3 +265,39 @@ python -m agent_kb.cli query-production --db agent_kb_core/validation/node-index
 
 - 内存基线 retrieve ~1s（29528 evidence 纯 Python 扫描）可用倒排/预分片再压；
 - 远期：按意图动态选向量查询文本（见第 10 节实验 B）。
+## 12. 生产通道体检门（run_production_health.py）v1.0 —— 2026-08-28
+
+补上"生产通道无持续门禁"的缺口（第 9-10 节消融的固化）。
+
+### 覆盖范围（与检索门互补）
+
+| 门 | 被测路径 |
+|---|---|
+| run_retrieval_health.py | node_cards 内存检索面 + 规则理解（纯词法，离线） |
+| **run_production_health.py（本门）** | **SQLite 生产库 + 词法 FTS + 语义向量 + 图门控（融合管线）** |
+
+四类断言：①5 变体通道消融回归（对照 `production_health_baseline.json`，Hit@5 ±2.5pp / MRR ±0.05）；
+②5 查询判定契约（sufficient/partial）；③图门控行为记录（域内应 0 开启）；④向量 provider 行数自检。
+退出码 0/1。向量预计算走 numpy；查询向量缓存 `production_health_query_vectors.json`，
+增量预热（新增 case 才走嵌入）。
+
+### 首跑揪出的隐藏事实：嵌入后端不可互比
+
+首跑 FAIL 3 项后解剖发现——**本地 fastembed(ONNX) 与远程 Ollama 对同一汤文本的嵌入向量
+余弦仅 0.63~0.91**（同模型不同推理栈：算子/精度/tokenizer 细节差异），top5 检索结果明显不同：
+
+| 变体 | 隧道 Ollama 嵌入（08-27 基线） | 本地 fastembed 嵌入（门跑） |
+|---|---|---|
+| vector_only | 60.5% / 0.3729 | **72.1% / 0.4357** |
+| lexical+vector | **83.7% / 0.4058** | 74.4% / 0.3709 |
+
+结论修正：**通道价值排序是嵌入后端相关的**——隧道 Ollama 版"词法+向量"最优（83.7%），
+本地 fastembed 版向量单通道即接近词法（72.1% vs 74.4%）但融合无增益。基线已按后端
+分家重锚（`baseline_version=2026-08-28-local-fastembed`），复跑 PASS 5/5 一致。
+
+> 工程教训：换嵌入后端（哪怕同模型名）必须重锚基线并复跑消融，不能跨后端比数字。
+
+### 判定契约（5/5）
+
+HARA/OBC原理/热仿真 → sufficient；输出纹波（槽位设计）/灌封胶（语料空洞）→ partial。
+明细：`production_health_last_run.json`；逐 case 行存 `rows`（运行期）。

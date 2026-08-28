@@ -145,8 +145,11 @@ class SQLiteVectorIndex:
                 )
         return self.summary()
 
-    def search(self, query_frame: QueryFrame, *, limit: int = 32) -> list[RetrievalCandidate]:
-        query_text = " ".join(
+    @staticmethod
+    def _query_text_for_frame(query_frame: QueryFrame) -> str:
+        """向量通道查询文本：与库内向量的索引文本构造保持一致（勿随意改动，
+        改动会使新查询向量与已索引向量空间漂移）。"""
+        return " ".join(
             value
             for value in [
                 query_frame.normalized_query,
@@ -157,6 +160,9 @@ class SQLiteVectorIndex:
             ]
             if value
         )
+
+    def search(self, query_frame: QueryFrame, *, limit: int = 32) -> list[RetrievalCandidate]:
+        query_text = self._query_text_for_frame(query_frame)
         query_vector = self.provider.embed([query_text])[0]
         fast = self._matrix_cache_get()
         if fast is not None:
