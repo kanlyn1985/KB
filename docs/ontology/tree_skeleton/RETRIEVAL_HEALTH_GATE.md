@@ -217,3 +217,51 @@ ContextPack 卡槽选择统一走 `select_retrieval_cards()`（排名序 + 对�
 图通道价值域：冷门/表述外查询（双弱场景），域内查询零开销。
 
 明细：`validation/channel_ablation_expAB.json`（6 变体逐 case）。
+## 11. 本机嵌入服务 + 向量检索 numpy 快速路径（2026-08-28）
+
+### 动机与结果
+
+查询链路的远程依赖彻底移除：`bge-small-zh-v1.5` 以 ONNX CPU 形式落地本机
+（fastembed，模型经 hf-mirror 断点续传 90.4MB 拉取，缓存于 `~/.fastembed_cache`）。
+`agent_kb_core/tools/local_embed_server.py` 提供 OpenAI 兼容 `/v1/embeddings`
+（stdlib ThreadingHTTPServer，无 flask 依赖），`RemoteJSONEmbeddingProvider` 零改动接入。
+
+实测：模型加载 1.7s，嵌入稳态 **24ms/条**（服务端 17ms）；
+语义对齐 sanity：查询与库内向量的余弦 max 0.639 vs mean 0.450，正常。
+
+### 附带修复：向量检索 30s → 毫秒
+
+剖析发现纯 Python 路径每查询 json.loads 31557x512 (~2.8GB) + 逐行余弦需 ~19.6s，
+此前一直被隧道延迟掩盖。修复：
+
+- `SQLiteVectorIndex` 增加 **类级 numpy 矩阵缓存**
+  （键 = db路径+provider_id+dimensions+行数；`PRAGMA database_list` 取 db 路径）；
+- 首查询建矩阵（13.4s），热查询矩阵乘 ~毫秒；
+- 写路径（index_view/delete_source）按 (db, provider, dim) 前缀失效；
+- numpy 不可用或 `AGENT_KB_VECTOR_NO_NUMPY=1` 时自动回退纯 Python 路径。
+
+端到端（本地嵌入 + 生产管线全通道）：
+首轮 13.4s（建缓存）→ **热查询均值 2.1s**（嵌入 17ms + 索引加载 0.9s + 内存基线 ~1s + 融合）。
+判定契约 5/5 保持（HARA/OBC原理/热仿真 sufficient，纹波/灌封胶按设计 partial）。
+
+### 用法
+
+```bash
+# 终端 1：本机嵌入服务（常驻）
+python agent_kb_core/tools/local_embed_server.py --port 11500
+
+# 终端 2：查询（无远程依赖）
+set AGENT_KB_EMBEDDING_URL=http://127.0.0.1:11500/v1/embeddings
+set AGENT_KB_EMBEDDING_MODEL=qllama/bge-small-zh-v1.5
+set AGENT_KB_EMBEDDING_DIMENSIONS=512
+python -m agent_kb.cli query-production --db agent_kb_core/validation/node-index.sqlite3 ^
+    --query "..." --domain-dir agent_kb_core/domains/obc_dcdc --remote-embedding
+```
+
+> MODEL 名保持 `qllama/bge-small-zh-v1.5` 以对齐库内 provider_id
+> `remote-json:qllama/bge-small-zh-v1.5:512`（模型本体与 BAAI/bge-small-zh-v1.5 相同）。
+
+### 后续候选
+
+- 内存基线 retrieve ~1s（29528 evidence 纯 Python 扫描）可用倒排/预分片再压；
+- 远期：按意图动态选向量查询文本（见第 10 节实验 B）。

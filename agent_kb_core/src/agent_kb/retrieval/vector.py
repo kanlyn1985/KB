@@ -48,6 +48,9 @@ class SQLiteVectorIndex:
         self.connection.row_factory = sqlite3.Row
         self.provider = provider or HashEmbeddingProvider()
         SchemaMigrator(connection).migrate()
+        # (provider_id, row_count) -> 归一化矩阵+元数据 的进程级缓存：
+        # 纯 Python 逐行 json.loads + 余弦在 31557x512 下需 ~30s/查询，
+        # numpy 矩阵乘法后降到毫秒级。写操作后置 _invalidate_cache()。
 
     def index_view(self, index: Any) -> VectorIndexSummary:
         records: list[tuple[str, str, str | None, str, dict[str, Any]]] = []
@@ -155,6 +158,9 @@ class SQLiteVectorIndex:
             if value
         )
         query_vector = self.provider.embed([query_text])[0]
+        fast = self._matrix_cache_get()
+        if fast is not None:
+            return self._search_numpy(query_vector, limit, *fast)
         candidates: list[RetrievalCandidate] = []
         rows = self.connection.execute(
             "SELECT * FROM embedding_vectors WHERE provider_id = ? AND dimensions = ?",
@@ -183,12 +189,113 @@ class SQLiteVectorIndex:
         candidates.sort(key=lambda item: (item.score, item.source_id), reverse=True)
         return candidates[: max(1, limit)]
 
+    # ---- numpy 快速路径（无可选依赖时自动回退上面的纯 Python 路径） ----
+
+    _NUMPY_MISSING = False
+    _CLASS_MATRIX_CACHE: dict[tuple[str, str, int, int], tuple] = {}
+
+    def _matrix_cache_get(self):
+        """返回 (meta, matrix_norm) 或 None（numpy 不可用/未初始化/库已变更）。"""
+        import os
+        if os.environ.get("AGENT_KB_VECTOR_NO_NUMPY"):
+            return None
+        if self._NUMPY_MISSING:
+            return None
+        key = (self.provider.provider_id, self.provider.dimensions)
+        row = self.connection.execute(
+            "SELECT COUNT(*) FROM embedding_vectors WHERE provider_id = ? AND dimensions = ?",
+            key,
+        ).fetchone()
+        db_path = ""
+        try:
+            for db_row in self.connection.execute("PRAGMA database_list"):
+                if db_row[1] == "main":
+                    db_path = str(db_row[2] or ":memory:")
+                    break
+        except Exception:
+            pass
+        cache_key = (db_path, key[0], key[1], int(row[0] if row else 0))
+        cached = type(self)._CLASS_MATRIX_CACHE.get(cache_key)
+        if cached is not None:
+            return cached
+        try:
+            import numpy as np
+        except Exception:
+            type(self)._NUMPY_MISSING = True
+            return None
+        rows = self.connection.execute(
+            "SELECT source_type, source_id, object_id, payload_json, vector_json "
+            "FROM embedding_vectors WHERE provider_id = ? AND dimensions = ?",
+            (key[0], key[1]),
+        ).fetchall()
+        if not rows:
+            return None
+        meta = []
+        vectors = []
+        for r in rows:
+            meta.append((
+                r["source_type"], r["source_id"], r["object_id"],
+                json.loads(r["payload_json"] or "{}"),
+            ))
+            vectors.append(json.loads(r["vector_json"]))
+        mat = np.asarray(vectors, dtype=np.float32)
+        mat = mat / np.maximum(np.linalg.norm(mat, axis=1, keepdims=True), 1e-12)
+        type(self)._CLASS_MATRIX_CACHE[cache_key] = (meta, mat)
+        return (meta, mat)
+
+    def _search_numpy(self, query_vector, limit: int, meta, mat):
+        import numpy as np
+        q = np.asarray(query_vector, dtype=np.float32)
+        norm = float(np.linalg.norm(q))
+        if norm <= 0:
+            return []
+        q = q / norm
+        sims = mat @ q
+        take = int(min(max(1, limit) * 4, len(meta)))
+        idx = np.argsort(-sims)[:take]
+        candidates: list[RetrievalCandidate] = []
+        for i in idx:
+            score = float(sims[i])
+            if score <= 0.0:
+                break
+            st, sid, oid, payload = meta[i]
+            p = dict(payload)
+            if oid and "object_id" not in p and "subject" not in p:
+                p["object_id"] = oid
+            candidates.append(
+                RetrievalCandidate(
+                    candidate_id=f"{st}:{sid}",
+                    source_type=st,
+                    source_id=sid,
+                    channel="vector",
+                    score=score,
+                    matched_terms=[],
+                    reasons=["vector_similarity"],
+                    payload=p,
+                )
+            )
+        return candidates[: max(1, limit)]
+
+    def _invalidate_cache(self) -> None:
+        try:
+            db_path = ""
+            for db_row in self.connection.execute("PRAGMA database_list"):
+                if db_row[1] == "main":
+                    db_path = str(db_row[2] or ":memory:")
+                    break
+            prefix = (db_path, self.provider.provider_id, self.provider.dimensions)
+            for k in [k for k in type(self)._CLASS_MATRIX_CACHE if k[:3] == prefix]:
+                type(self)._CLASS_MATRIX_CACHE.pop(k, None)
+        except Exception:
+            type(self)._CLASS_MATRIX_CACHE.clear()
+
     def delete_source(self, source_type: str, source_id: str) -> int:
         with self.connection:
             cursor = self.connection.execute(
                 "DELETE FROM embedding_vectors WHERE source_type = ? AND source_id = ? AND provider_id = ?",
                 (source_type, source_id, self.provider.provider_id),
             )
+        self._invalidate_cache()
         return int(cursor.rowcount)
 
     def summary(self) -> VectorIndexSummary:
