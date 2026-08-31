@@ -18,6 +18,12 @@ from agent_kb.pipeline.production_context import query_production_store  # noqa:
 DB = ROOT / "validation" / "node-index.sqlite3"
 DOMAIN = ROOT / "domains" / "obc_dcdc"
 
+# 生产库（318MB）不入 git，CI 沙箱没有 —— 无库则整组跳过（本地必跑）。
+pytestmark = pytest.mark.skipif(
+    not DB.exists(),
+    reason="production node-index.sqlite3 not available (not in git)",
+)
+
 GOLDEN_ANCHORS = [
     ("DCDC保护功能有哪些", "sufficient", ["过压", "过温", "短路"], 2),
     ("输出纹波要求是多少", "partial", ["mV", "纹波"], 1),

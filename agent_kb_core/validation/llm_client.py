@@ -17,12 +17,21 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def load_env() -> dict[str, str]:
+    """读仓库根 .env；文件不存在（CI 沙箱/新 clone）时返回空 dict，
+    让模块仍可导入（BASE_URL 用默认值，API_KEY 为空——真调用时才失败，
+    mock 测试不受影响）。"""
     env: dict[str, str] = {}
-    for line in (ROOT / ".env").read_text(encoding="utf-8").splitlines():
-        line = line.strip()
-        if line and not line.startswith("#") and "=" in line:
-            k, v = line.split("=", 1)
-            env[k.strip()] = v.strip()
+    env_file = ROOT / ".env"
+    if not env_file.exists():
+        return env
+    try:
+        for line in env_file.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if line and not line.startswith("#") and "=" in line:
+                k, v = line.split("=", 1)
+                env[k.strip()] = v.strip()
+    except OSError:
+        pass
     return env
 
 
