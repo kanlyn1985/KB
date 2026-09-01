@@ -2,10 +2,14 @@
 
 本目录保存 Agentic Knowledge Base 的系统需求规格说明书（SRS）基线。
 
-## 文档
+## 需求文档
 
 - [`Agentic_Knowledge_Base_SRS_V1.0.html`](./Agentic_Knowledge_Base_SRS_V1.0.html) — 初始系统需求基线，定义系统目标、核心原则、四层架构、Canonical Objects、核心需求与 V 模型验证框架。
 - [`Agentic_Knowledge_Base_SRS_V1.1_Engineering_Baseline.html`](./Agentic_Knowledge_Base_SRS_V1.1_Engineering_Baseline.html) — 当前工程基线草案，在 V1.0 基础上增加需求分解、数据字典、Assertion 状态机、接口行为契约、故障/恢复、质量门、RTM 与禁止行为等工程要求。
+
+## 配套工程基线
+
+- [`../../architecture/data-model/Agentic_Knowledge_Base_Data_Model_V1.0.md`](../../architecture/data-model/Agentic_Knowledge_Base_Data_Model_V1.0.md) — Canonical Data Model V1.0，定义 Source、Document、Evidence、SemanticUnit、KnowledgeAssertion、Entity、Relation、Event、State、Ontology、Rule、ReasoningTrace、Memory、Context、Goal、Decision、Action、Observation 等对象、生命周期、Provenance、Projection 和数据完整性规则。
 
 ## 当前状态
 
