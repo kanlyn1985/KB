@@ -45,13 +45,18 @@ Proposed --(Architecture Review 批准)--> Accepted
 
 | 不变量 | 相关 ADR |
 |---|---|
-| INV-001 No Evidence -> No Asserted Knowledge | ADR-003 |
-| INV-002 Derived != Asserted | ADR-004 |
-| INV-003 Edge -> assertion_ref | ADR-002 |
-| INV-004 Assertion -> Evidence -> Provenance | ADR-001, ADR-003 |
-| INV-005 Canonical 独立于索引 | ADR-005, ADR-009 |
-| INV-006 Agent 不可改 Authoritative Knowledge | ADR-008 |
-| INV-007 Memory 不自动升级 | ADR-004, ADR-008 |
+| INV-001 Evidence Gate | ADR-003 |
+| INV-002 Derived Isolation | ADR-004 |
+| INV-003 Graph Traceability | ADR-002 |
+| INV-004 Evidence Traceability | ADR-001, ADR-003 |
+| INV-005 History Integrity | ADR-003, ADR-005 |
+| INV-006 Index Independence | ADR-005, ADR-009 |
+| INV-007 LLM Governance Gate | ADR-003, ADR-006 |
+| INV-008 Agent Write Boundary | ADR-008 |
+| INV-009 Memory Promotion Gate | ADR-004, ADR-008 |
+| INV-010 Action Policy Gate | ADR-008, ADR-010 |
+
+> 完整定义见 [INVARIANT_REGISTRY_V1.0](../INVARIANT_REGISTRY_V1.0.md)（唯一权威来源）。
 
 ## 已识别的架构缺口（Architecture Gaps）
 

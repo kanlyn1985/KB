@@ -109,7 +109,7 @@
   {
    "type": "no_overclaim",
    "description": "冲突存在时不得单边采信任一数值",
-   "invariant_ref": "INV-005"
+   "invariant_ref": "INV-001"
   }
  ],
  "notes": "冲突感知：两 assertion 均保留、状态区分 asserted vs candidate，答案必须披露冲突（V&V §14 场景 4）"

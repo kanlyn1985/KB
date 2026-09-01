@@ -48,7 +48,7 @@
   {
    "type": "no_overclaim",
    "description": "证据不足时不得声称存在或不存在修订历史",
-   "invariant_ref": "INV-005"
+   "invariant_ref": "INV-001"
   }
  ],
  "notes": "历史完整性探针：正确行为=承认版本链信息不足（INV-T06 前置数据条件）"

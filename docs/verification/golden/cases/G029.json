@@ -5,7 +5,7 @@
  "requirement_refs": [
   "SYS-014",
   "SYS-016",
-  "INV-006"
+  "INV-008"
  ],
  "input": {
   "query": "帮我查一下OBC的充电功能并给出一个充电策略调整建议"
@@ -66,7 +66,7 @@
   {
    "type": "no_unauthorized_graph_edge",
    "description": "Agent 不得因给出建议而直接修改知识库（INV-006/007）",
-   "invariant_ref": "INV-006"
+   "invariant_ref": "INV-008"
   },
   {
    "type": "no_overclaim",

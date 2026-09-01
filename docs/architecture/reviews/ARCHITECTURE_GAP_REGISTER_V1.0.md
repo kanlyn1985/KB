@@ -14,8 +14,8 @@
 | AG-004 | P1 | G4 | 断言状态迁移无审计记录（actor/timestamp/reason/policy_version） | 每次 transition 记录审计行（DM-005 §9.4） | ADR-003/004 / DM-005 §9.4 | assertion_transitions 审计表随 AG-002 一起设计 | V0.1 |
 | AG-005 | P2 | G5 | agent 平面无 import 边界静态检查（当前代码未发现 SDK 直连，但无防回归机制） | CI lint 禁止 agent 模块 import neo4j/qdrant SDK/LLM SDK | ADR-008 | 增加 import-lint 测试（可纯 stdlib AST 实现） | V0.1+ |
 | AG-006 | P2 | G5 | GitHub CI 仅跑单测矩阵；golden/production 门禁依赖本机环境（嵌入服务/318MB DB）未入 CI | 三门禁中可离线部分（骨架门/检索门/validator）入 CI | V&V §25 / LOCAL_AI_VMODEL_WORKFLOW | validator+golden 测试已在 CI（test_golden_dataset.py 11 项已入 pytest）；补检索门离线化或 CI artifact 传 DB | V0.2 |
-| AG-007 | P1 | G1 | 需求编号双轨：SRS 用 SYS-EVD/SYS-AST/… 族式编号，RTM 用 SYS-001..020 顺序号，无映射表 | RTM 增加 SRS 族号 ↔ SYS-NNN 映射列 | SRS V1.1 §5 / RTM V1.0 §3 | RTM 增补映射表（文档级修订，架构负责人批准） | V0.1 前 |
-| AG-008 | P1 | G1 | 不变量编号错位：SRS 列 9 条 INV（含历史完整性/Index 不丢失/LLM 不绕 Gate），任务书与 ADR 只引用 7 条且序号语义不一致（SRS INV-006=Index，ADR 引用的 INV-006=Agent 写权限=SRS INV-008） | 统一不变量注册表：INV-001..009，各文档引用同号 | SRS V1.1 §6 / ADR-001..010 / Golden schema | 建立不变量索引表，Golden/ADR/RTM 统一引用（文档级修订） | V0.1 前 |
+| AG-007 | ~~P1~~ **Resolved (2026-09-01)** | G1 | ~~同左~~ | RTM §2a 映射表已建立（SRS 10/10 族全覆盖，RTM 20 条核对通过） | SRS V1.1 §5 / RTM V1.0 §2a | 已完成：test_baseline_consistency.py::test_srs_rtm_mapping_complete 钉死 | ✅ 关闭 |
+| AG-008 | ~~P1~~ **Resolved (2026-09-01)** | G1 | ~~同左~~（实测 SRS 为 **10 条** INV-001..010，非 9 条） | INVARIANT_REGISTRY_V1.0.md 已建立（SRS 原义 10 条）；ADR-001/002/004/006/008、decisions/README、golden 8 处引用全部修正；全仓扫描零未知编号 | SRS V1.1 §6 / docs/architecture/INVARIANT_REGISTRY_V1.0.md | 已完成：test_invariant_registry_consistency 4 项测试钉死 | ✅ 关闭 |
 | AG-009 | P2 | G1 | RTM 的 SYS-001/009/018/019/020 五条需求无 Golden case 覆盖（golden 覆盖 15/20 条 SYS） | 每条 P0/P1 需求至少映射一个验证工件（RTM §2 规则 1） | RTM V1.0 / V&V §24 | SYS-001(Source)/SYS-009(Ontology)/SYS-018(Golden 回归)/SYS-019(Schema)/SYS-020(Provider) 补验证用例或明确人工验证记录 | V0.2 |
 | AG-010 | P2 | G3 | ICD 14 个接口仅 RetrievalEngine/AssertionStore 等少数有行为契约细节；多数接口缺 precondition/error/idempotency/timeout/transaction 字段 | 每接口补齐 12 项契约字段（任务书 AR-004 清单） | ICD V1.0 §5 | ICD V1.1 增补（架构负责人主导） | V0.2 |
 | AG-011 | P2 | G6 | webui/API 服务无鉴权暴露（0.0.0.0+Tailscale）；Agent 写路径治理（INV-006/007）仅有文档无运行时强制 | 短期：网络边界文档化声明；长期：auth 中间件 + Agent 写路径 policy hook | ADR-008 / security 模块（已备未接线） | 依定位（B 团队工具）暂可接受，转入 V0.2 security gate | V0.2 |
@@ -28,10 +28,10 @@
 | Severity | 数量 | IDs |
 |---|---|---|
 | P0（阻断批准） | 0 | — |
-| P1 | 6 | AG-001, AG-002, AG-003, AG-004, AG-007, AG-008 |
+| P1 | ~~6~~ **4（AG-007/008 已 Resolved）** | AG-001, AG-002, AG-003, AG-004 |
 | P2 | 5 | AG-005, AG-006, AG-009, AG-010, AG-011 |
 | P3 | 3 | AG-012, AG-013, AG-014 |
 
-> 合计 14 项：P1 6 项 + P2 5 项 + P3 3 项。
+> 合计 14 项：P1 6 项（其中 2 项已 Resolved：AG-007/008，见上表标注）+ P2 5 项 + P3 3 项。
 > 无 P0——所有已知缺口均为"设计已定、实现未至"的预期 Implementation Gap，或文档级一致性问题，
 > 不存在设计自相矛盾或不可恢复的架构缺陷。

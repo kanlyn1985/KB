@@ -14,13 +14,13 @@ AKB agent loop (Goal, Context, Retrieve, Reason, Decision, Action, Policy, Obser
 
 ## Problem
 
-If Agent Runtime code imports Neo4j drivers, Qdrant clients, Semantica graph classes or a concrete LLM SDK directly: (a) storage swaps break the agent; (b) policy/audit boundaries become unenforceable (an agent holding a graph driver can bypass read-only knowledge guarantees - INV-006); (c) testing the E2E loop requires the entire infrastructure instead of interface fakes.
+If Agent Runtime code imports Neo4j drivers, Qdrant clients, Semantica graph classes or a concrete LLM SDK directly: (a) storage swaps break the agent; (b) policy/audit boundaries become unenforceable (an agent holding a graph driver can bypass read-only knowledge guarantees - INV-008); (c) testing the E2E loop requires the entire infrastructure instead of interface fakes.
 
 ## Decision
 
 1. Agent Runtime is NOT Semantic Runtime. The agent plane talks only to stable ICD interfaces: Knowledge (AssertionStore read paths), Retrieval, Reasoning, Context, Memory, State, Decision.
 2. Forbidden direct dependencies from agent-plane code: Neo4j or any graph driver, Qdrant or any vector client, Semantica classes, concrete LLM SDKs (LLM access is behind the Reasoning/gateway interface).
-3. Agent writes are confined to: Memory (working/episodic), Action proposals, Observation records. Authoritative Knowledge is read-only for agents (INV-006); memory-to-knowledge promotion goes through the governed pipeline (INV-007).
+3. Agent writes are confined to: Memory (working/episodic), Action proposals, Observation records. Authoritative Knowledge is read-only for agents (INV-008); memory-to-knowledge promotion goes through the governed pipeline (INV-009).
 4. Decision objects must be replayable: goal/context/options/selected/trace/refs/confidence (DM-016) - enabling why-did-the-agent-choose-this audits.
 
 ## Alternatives Considered
@@ -31,7 +31,7 @@ If Agent Runtime code imports Neo4j drivers, Qdrant clients, Semantica graph cla
 
 ## Rationale
 
-Interface decoupling is the only mechanism making INV-006/007 technically enforced rather than aspirational, and it matches the existing ICD structure where AgentRuntime is defined solely by its ICD dependencies. It also enables the E2E golden case G029 to run against interface fakes in CI (offline, no LLM) - consistent with the local-AI workflow.
+Interface decoupling is the only mechanism making INV-008/009 technically enforced rather than aspirational, and it matches the existing ICD structure where AgentRuntime is defined solely by its ICD dependencies. It also enables the E2E golden case G029 to run against interface fakes in CI (offline, no LLM) - consistent with the local-AI workflow.
 
 ## Consequences
 
@@ -45,7 +45,7 @@ See Alternatives Considered.
 
 ## Verification Impact
 
-V&V 19 E2E golden (G029): all object references legal, no unauthorized knowledge mutation - testable with fakes. V&V 17: illegal memory-to-knowledge promotion must fail (INV-007). Static check (V0.1+): agent-plane modules must not import graph/vector/LLM SDK packages (lint-level guard).
+V&V 19 E2E golden (G029): all object references legal, no unauthorized knowledge mutation - testable with fakes. V&V 17: illegal memory-to-knowledge promotion must fail (INV-009). Static check (V0.1+): agent-plane modules must not import graph/vector/LLM SDK packages (lint-level guard).
 
 ## Change Impact
 

@@ -18,6 +18,31 @@
 4. 任何验证失败必须能够追溯到对应需求。
 5. 任何进入 Release Gate 的代码变更必须能回指需求、设计或经批准的缺陷修复。
 
+## 2a. SRS ↔ RTM Requirement ID Mapping (AKB-P0-BASELINE-CLEANUP-001)
+
+SRS V1.1 采用族式编号（SYS-XXX-nnn），RTM 采用顺序编号（SYS-nnn）。两套编号并存，
+**映射关系以本表为唯一权威**（依据 SRS §5 需求原文与 RTM §3 逐条语义对照，非猜测）：
+
+| SRS ID | RTM ID(s) | 语义说明 |
+|---|---|---|
+| SYS-EVD-001 | SYS-001, SYS-002, SYS-003 | Evidence 定位/完整性/版本 → Source 注册 + Document 版本 + Evidence 定位 |
+| SYS-AST-001 | SYS-004 | KnowledgeAssertion 为 Canonical Unit |
+| SYS-AST-002 | SYS-005, SYS-006 | Evidence Reference 必备 + epistemic status |
+| SYS-SEM-001 | SYS-007 | Entity/Relation/Event/State 语义模型 |
+| SYS-GRAPH-001 | SYS-008 | Graph 为 Assertion 可追踪 Projection |
+| SYS-REASON-001 | SYS-010 | Derived Assertion + proof trace |
+| SYS-RET-001 | SYS-012 | 多通道检索 |
+| SYS-CTX-001 | SYS-013, SYS-014 | AgentContext 承载 + sufficiency/abstain |
+| SYS-AGENT-001 | SYS-016, SYS-017 | Action policy gate + Observation→State update |
+| SYS-OBS-001 | SYS-017 | Observation 关联 Action/Episode/State |
+
+RTM 独有需求（SRS 未单列的平台/运营层需求，无 SRS 映射）：SYS-009（Ontology versioning）、
+SYS-011（Provenance）、SYS-015（Knowledge/State/Memory separation）、SYS-018（Golden regression）、
+SYS-019（Schema/migration）、SYS-020（Provider neutrality）。
+这些需求保留 RTM 编号继续有效；未来 SRS 修订时可选择补录族号。
+
+覆盖核对：SRS 10/10 条全部映射到 RTM；RTM 20 条中 14 条有 SRS 来源、6 条 RTM 独有。
+
 ## 3. System Requirement Matrix
 
 | Requirement | Priority | Architecture | Data Model | Interface | Verification | Acceptance |

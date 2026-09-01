@@ -46,7 +46,7 @@
   {
    "type": "no_hidden_gap",
    "description": "组装时不得丢弃 knowledge gap（V&V §16）",
-   "invariant_ref": "INV-005"
+   "invariant_ref": "INV-001"
   }
  ],
  "notes": "Context 契约：goal/knowledge/assertions/evidence/constraints 槽位（V&V §16）"

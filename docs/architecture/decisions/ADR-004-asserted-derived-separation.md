@@ -21,7 +21,7 @@ If derived assertions share the same table/status space as asserted ones without
 1. Asserted and Derived are distinct epistemic classes, enforced by assertion_type (DM-005 9.3) AND status (9.4) - two independent axes, both must agree.
 2. Every derived assertion MUST carry a non-null derivation block: rule_ref, rule_version, parent_assertions, reasoner_id, reasoner_version, reasoning_trace (Golden schema already requires rule_ref/parent_assertions/reasoner_id; version fields added at runtime).
 3. Derived assertions cannot auto-promote to asserted. Promotion requires an explicit governed transition (human review or an approved promotion policy), recorded per DM-005 9.4 (actor/timestamp/reason/policy_version/previous_status).
-4. The MemoryStore-to-Knowledge path is equally gated: memory objects are never authoritative without the promotion pipeline (INV-007, see ADR-008).
+4. The MemoryStore-to-Knowledge path is equally gated: memory objects are never authoritative without the promotion pipeline (INV-009 Memory Promotion Gate, see ADR-008).
 
 ## Alternatives Considered
 

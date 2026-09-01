@@ -222,7 +222,7 @@ Categories covered: 30/30
 | 严重度 | 数量 | Gap IDs |
 |---|---|---|
 | P0（阻断批准） | **0** | — |
-| P1（V0.1 前必须） | **6** | AG-001 assertion_ref, AG-002 Assertion 实现, AG-003 ReasoningTrace 实现, AG-004 迁移审计, AG-007 需求编号映射, AG-008 不变量编号统一 |
+| P1（V0.1 前必须） | **6 → 剩余 4** | AG-001 assertion_ref, AG-002 Assertion 实现, AG-003 ReasoningTrace 实现, AG-004 迁移审计（AG-007/008 已于 2026-09-01 Resolved，见 Gap Register） |
 | P2（V0.2+） | **5** | AG-005 import lint, AG-006 CI 门禁化, AG-009 五需求验证覆盖, AG-010 ICD 契约增补, AG-011 安全接线 |
 | P3（优化） | **3** | AG-012 性能分位数, AG-013 Plan 对象裁决, AG-014 derivation 版本字段 |
 
@@ -249,8 +249,8 @@ P1（V0.1 动工前必须完成，Owner=架构负责人，除注明外）：
 
 | # | Action | 对应 Gap | 目标增量 |
 |---|---|---|---|
-| A1 | 建立统一不变量注册表（INV-001..009），修正 ADR/Golden/RTM 引用编号 | AG-008 | V0.1 动工前 |
-| A2 | RTM 增加 SRS 族号 ↔ SYS-NNN 映射列 | AG-007 | V0.1 动工前 |
+| A1 | ~~建立统一不变量注册表，修正 ADR/Golden/RTM 引用编号~~ | ~~AG-008~~ | ✅ 已完成（2026-09-01）：INVARIANT_REGISTRY_V1.0.md（实测 SRS 10 条 INV-001..010）+ 全仓引用修正 + 4 项一致性测试 |
+| A2 | ~~RTM 增加 SRS 族号 ↔ SYS-NNN 映射列~~ | ~~AG-007~~ | ✅ 已完成（2026-09-01）：RTM §2a 映射表（SRS 10/10 覆盖，test_srs_rtm_mapping_complete 钉死） |
 | A3 | V0.1 Evidence Core Detailed Design 输入确认：assertions 表 + assertion_transitions 审计 + graph_edges.assertion_ref 迁移设计（ADDITIVE） | AG-001/002/004 | V0.1 设计 |
 | A4 | ReasoningEngine 最小实现范围确认（RULE 传递闭包级，对照 Golden R001..R006） | AG-003 | V0.1 |
 | A5 | （架构负责人）批准/驳回本评审的 Gate Decision；批准后逐条将 ADR 状态 Proposed→Accepted | 全部 ADR | 批准即生效 |
@@ -267,7 +267,7 @@ Gate Decision: APPROVED WITH ACTIONS
 1. 七类基线间**无设计自相矛盾**：ADR 决策互不冲突且全部可回指 SRS/DM/ICD 条目；Golden 期望与 Data Model 语义一致；RTM 链路结构完整；
 2. 全部 14 项 Gap 中 **0 项 P0**——没有任何问题阻断架构批准；6 项 P1 中 4 项为预期实现进度（设计已定），2 项为文档统一（V0.1 动工前可完成）；
 3. Review-time 实测全部通过（validator PASS / 80 pytest PASS / 零 SDK 直连 / CI pytest 矩阵 PASS）；
-4. **条件**：A1/A2（不变量与需求编号统一）必须在 V0.1 Evidence Core 动工前完成，否则测试命名冲突将把 AG-008 放大为实现事故。
+4. **条件（已满足）**：A1/A2 已于 2026-09-01 完成（BASELINE-CLEANUP-001），AG-007/008 关闭；剩余 P1 全部为预期 Implementation Gap（AG-001/002/003/004），随 V0.1 Evidence Core 落地。
 
 **权限声明**：本评审按 AKB-DEV-001 由 Local AI 起草。Local AI **不将任何 ADR 标记为 Accepted**——批准行为（含逐条 ADR 状态流转、SRS/RTM 文档修订）属架构负责人职权，需在 GitHub 上以评审批注或基线修订提交完成。
 

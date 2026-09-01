@@ -29,7 +29,7 @@
   {
    "type": "no_hidden_gap",
    "description": "不得隐藏证据缺口直接作答",
-   "invariant_ref": "INV-005"
+   "invariant_ref": "INV-001"
   }
  ],
  "notes": "证据不足→abstain（V&V §14 场景 3）"

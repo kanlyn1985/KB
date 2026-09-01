@@ -54,7 +54,7 @@
   {
    "type": "no_deterministic_answer",
    "description": "决策支持不得替代工程判断给出唯一结论，必须列依据+缺口",
-   "invariant_ref": "INV-005"
+   "invariant_ref": "INV-001"
   }
  ],
  "notes": "Decision 契约：options/evidence/constraints/confidence 呈现（DM-016 精神），不越权拍板"

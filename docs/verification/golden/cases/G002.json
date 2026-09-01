@@ -55,7 +55,7 @@
   {
    "type": "no_overclaim",
    "description": "未指明工况时不得输出确定性限值结论（缺工况槽位）",
-   "invariant_ref": "INV-005"
+   "invariant_ref": "INV-001"
   }
  ],
  "notes": "参数限值随工况变化；partial 判定必须披露工况缺口（对齐 SYS-013 abstain 语义）"

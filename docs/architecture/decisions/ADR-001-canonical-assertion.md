@@ -37,7 +37,7 @@ Without a frozen canonical knowledge unit, each subsystem invents its own knowle
 
 ## Rationale
 
-DM-005 is the only candidate satisfying all seven system invariants simultaneously (INV-001..007): evidence gate, derived isolation, graph traceability, provenance completeness. Golden Dataset 30 cases already encode assertion-shaped expectations with derivation blocks - ADR-001 makes the data baseline and the future runtime speak the same language.
+DM-005 is the only candidate satisfying all ten system invariants simultaneously (INV-001..010, per INVARIANT_REGISTRY_V1.0): evidence gate, derived isolation, graph traceability, provenance completeness. Golden Dataset 30 cases already encode assertion-shaped expectations with derivation blocks - ADR-001 makes the data baseline and the future runtime speak the same language.
 
 ## Consequences
 

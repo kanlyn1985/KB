@@ -38,7 +38,7 @@ The 467 skeleton-imported edges already carry origin/confidence metadata and Gol
 
 - graph_edges requires an additive assertion_ref column (nullable during migration, NOT NULL after backfill).
 - Import paths (skeleton relations, card aggregation, future extraction) must create an assertion row first, then project the edge.
-- Direct graph writes from agents are forbidden (aligns with INV-006).
+- Direct graph writes from agents are forbidden (aligns with INV-008 Agent Write Boundary).
 
 ## Rejected Alternatives
 

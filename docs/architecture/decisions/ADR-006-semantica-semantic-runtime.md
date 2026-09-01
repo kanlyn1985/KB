@@ -14,7 +14,7 @@ The Agentic KB needs semantic runtime capabilities: entity resolution, graph sto
 
 ## Problem
 
-Two failure modes: (a) rebuild everything and burn calendar time re-proving solved problems; (b) adopt Semantica wholesale and inherit its knowledge model as canonical - losing evidence governance, assertion lifecycle and the frozen invariants (INV-001..007) the whole V&V plan depends on.
+Two failure modes: (a) rebuild everything and burn calendar time re-proving solved problems; (b) adopt Semantica wholesale and inherit its knowledge model as canonical - losing evidence governance, assertion lifecycle and the frozen invariants (INV-001..010, per INVARIANT_REGISTRY_V1.0) the whole V&V plan depends on.
 
 ## Decision
 
