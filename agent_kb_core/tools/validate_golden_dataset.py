@@ -162,19 +162,35 @@ def validate() -> tuple[list[str], dict]:
                 if not n.get("description"):
                     fail(errors, f"{cid}: negative expectation missing description")
 
+    n_neg_expectations = sum(
+        len(case.get("negative_expectations", [])) for case in raw_cases.values()
+    )
+
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     m_ids = manifest.get("case_ids", [])
     if sorted(m_ids) != sorted(raw_cases.keys()):
         fail(errors, "manifest case_ids do not match case files")
-    if manifest.get("case_count") != len(raw_cases):
-        fail(errors, f"manifest case_count {manifest.get('case_count')} != {len(raw_cases)}")
     if len(raw_cases) != EXPECTED_CASE_COUNT:
         fail(errors, f"case count {len(raw_cases)} != expected {EXPECTED_CASE_COUNT}")
+
+    checks = [
+        ("case_count", len(raw_cases)),
+        ("negative_case_count", n_negative),
+        ("negative_expectation_count", n_neg_expectations),
+        ("reasoning_case_count", n_reasoning),
+    ]
+    for field, actual in checks:
+        declared = manifest.get(field)
+        if declared is None:
+            fail(errors, f"manifest missing {field} (must be auto-computed value {actual})")
+        elif declared != actual:
+            fail(errors, f"manifest {field}={declared} != actual {actual}")
 
     stats.update({
         "cases": len(raw_cases),
         "reasoning_cases": n_reasoning,
         "negative_cases": n_negative,
+        "negative_expectations": n_neg_expectations,
         "categories_covered": len(used_cats),
         "jsonschema_used": use_jsonschema,
     })
@@ -194,6 +210,7 @@ def main() -> int:
         print(f"Duplicate IDs: {sum(1 for e in errors if 'duplicate case_id' in e)}")
         print(f"Reasoning cases: {stats.get('reasoning_cases', 0)} (require >=5)")
         print(f"Negative cases: {stats.get('negative_cases', 0)} (require >=3)")
+        print(f"Negative expectations: {stats.get('negative_expectations', 0)}")
         print(f"Categories covered: {stats.get('categories_covered', 0)}/30")
         if errors:
             print("-" * 60)

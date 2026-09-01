@@ -53,7 +53,8 @@
 
 ## 7. Negative case coverage
 
-**11 个 case 携带 negative_expectations，共 13 条负向期望**（要求 ≥3）：
+**12 个 case 携带 negative_expectations，共 16 条负向期望**（要求 ≥3）——数字由验证器自动计算
+（`negative_case_count` / `negative_expectation_count` 为两个独立口径，见 manifest `count_policy`）：
 G030 集中任务书 §9 三条 NEG（no_evidence_no_assertion / derived_not_asserted / no_deterministic_answer），
 其余分布在 G002/G007/G009/G015/G016/G018/G019/G025/G028/G029（no_overclaim / no_hidden_gap /
 no_memory_as_knowledge / no_unauthorized_graph_edge 等），全部挂 INV 引用。
@@ -74,12 +75,14 @@ Cases: 30
 Invalid: 0
 Duplicate IDs: 0
 Reasoning cases: 6 (require >=5)
-Negative cases: 12 case 携带（条目 13，require >=3）
+Negative cases: 12 (require >=3)
+Negative expectations: 16
 Categories covered: 30/30
 ```
 
-（注：门禁统计"Negative cases: 12"按携带负向期望的 case 数计，manifest coverage 记 11——
-以门禁输出为准，13 条负向期望分布在 12 个 case。）
+统计口径（AKB-P0-ADR-001 修正）：`negative_case_count`（携带负向期望的 case 数）与
+`negative_expectation_count`（负向期望条目总数）是两个独立字段，全部由验证器从
+cases/*.json 自动计算并与 manifest 逐项对照（test_golden_manifest.py 钉死）。
 
 ## 10. Full test command
 

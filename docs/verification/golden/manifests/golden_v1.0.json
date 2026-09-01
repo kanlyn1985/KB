@@ -81,41 +81,13 @@
   "production_index": "agent_kb_core/validation/node-index.sqlite3 (evidence source: evd:node:* ids)"
  },
  "freeze_rule": "Expected results are frozen once approved; changes require a version bump and architecture review (V&V Plan section 24).",
- "coverage": {
-  "reasoning_cases": [
-   "G007",
-   "G008",
-   "G016",
-   "G019",
-   "G020",
-   "G021"
-  ],
-  "reasoning_types": {
-   "graph_multi_hop": "G007",
-   "temporal": "G008",
-   "conflict_aware": "G016",
-   "simple_rule": "G019",
-   "transitive_rule": "G020",
-   "multi_step_cross_layer": "G021"
-  },
-  "negative_cases": [
-   "G002",
-   "G007",
-   "G009",
-   "G015",
-   "G016",
-   "G018",
-   "G019",
-   "G025",
-   "G028",
-   "G029",
-   "G030"
-  ],
-  "negative_count": 11
- },
  "validation": {
   "command": "python agent_kb_core/tools/validate_golden_dataset.py",
   "llm_required": false,
   "offline": true
- }
+ },
+ "negative_case_count": 12,
+ "negative_expectation_count": 16,
+ "reasoning_case_count": 6,
+ "count_policy": "All counts are auto-computed from cases/*.json by agent_kb_core/tools/validate_golden_dataset.py and cross-checked against this manifest. Do not hand-edit numbers."
 }
