@@ -1,0 +1,44 @@
+{
+ "case_id": "G024",
+ "category": "G24-lexical-semantic-hybrid",
+ "difficulty": "medium",
+ "requirement_refs": [
+  "SYS-012"
+ ],
+ "input": {
+  "query": "三合一产品的低压双向功能怎么实现"
+ },
+ "expected": {
+  "entities": [
+   {
+    "entity_id": "P-HW-DCDC-CONV",
+    "entity_type": "component",
+    "description": "变换电路"
+   },
+   {
+    "entity_id": "F-DCDC-REVERSE",
+    "entity_type": "component",
+    "description": "反供电/预充放电"
+   }
+  ],
+  "evidence": [
+   {
+    "evidence_id": "evd:node:F-DCDC-REVERSE:0",
+    "document_id": "doc:node:F-DCDC-REVERSE"
+   },
+   {
+    "evidence_id": "evd:node:P-HW-DCDC-CONV:0",
+    "document_id": "doc:node:P-HW-DCDC-CONV"
+   }
+  ],
+  "support_level": "sufficient",
+  "answer_contract": {
+   "must_include": [
+    "双向"
+   ],
+   "max_chars": 900
+  }
+ },
+ "negative_expectations": [],
+ "notes": "词法（三合一/低压 双向）+语义（反供电概念）混合：消融证明此组合 +9.3pp（Ollama 后端）"
+}

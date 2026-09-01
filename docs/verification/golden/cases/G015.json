@@ -1,0 +1,36 @@
+{
+ "case_id": "G015",
+ "category": "G15-insufficient-evidence",
+ "difficulty": "medium",
+ "requirement_refs": [
+  "SYS-013",
+  "INV-001"
+ ],
+ "input": {
+  "query": "下一代OBC的规划功率是多少"
+ },
+ "expected": {
+  "support_level": "insufficient",
+  "answer_contract": {
+   "disclose_gaps": true,
+   "must_not_include": [
+    "11kW",
+    "22kW"
+   ],
+   "max_chars": 500
+  }
+ },
+ "negative_expectations": [
+  {
+   "type": "no_deterministic_answer",
+   "description": "库内无下一代规划信息，不得用现有 11kW/22kW 数据作答",
+   "invariant_ref": "INV-001"
+  },
+  {
+   "type": "no_hidden_gap",
+   "description": "不得隐藏证据缺口直接作答",
+   "invariant_ref": "INV-005"
+  }
+ ],
+ "notes": "证据不足→abstain（V&V §14 场景 3）"
+}

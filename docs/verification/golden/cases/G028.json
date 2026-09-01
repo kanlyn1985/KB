@@ -1,0 +1,61 @@
+{
+ "case_id": "G028",
+ "category": "G28-decision-support",
+ "difficulty": "hard",
+ "requirement_refs": [
+  "SYS-016",
+  "SYS-013"
+ ],
+ "input": {
+  "query": "灌封和三防漆选哪个做三合一产品的防护"
+ },
+ "expected": {
+  "entities": [
+   {
+    "entity_id": "P-HW-THERMAL-POT",
+    "entity_type": "component",
+    "description": "灌封与涂覆（灌封胶/三防漆/粘接剂）"
+   }
+  ],
+  "assertions": [
+   {
+    "assertion_id": "ast_g028_1",
+    "subject_ref": "entity:potting_vs_conformal",
+    "predicate_ref": "relation:decision_requires",
+    "object": {
+     "kind": "literal",
+     "value": "需要按产品结构/热需求/工艺成本对比——库内有两类工艺证据但无选型决策记录",
+     "datatype": "xsd:string"
+    },
+    "assertion_type": "asserted",
+    "status": "candidate",
+    "evidence_refs": [
+     "evd:node:P-HW-THERMAL-POT:0"
+    ],
+    "confidence": 0.6
+   }
+  ],
+  "evidence": [
+   {
+    "evidence_id": "evd:node:P-HW-THERMAL-POT:0",
+    "document_id": "doc:node:P-HW-THERMAL-POT"
+   }
+  ],
+  "support_level": "partial",
+  "answer_contract": {
+   "must_include": [
+    "依据"
+   ],
+   "disclose_gaps": true,
+   "max_chars": 1000
+  }
+ },
+ "negative_expectations": [
+  {
+   "type": "no_deterministic_answer",
+   "description": "决策支持不得替代工程判断给出唯一结论，必须列依据+缺口",
+   "invariant_ref": "INV-005"
+  }
+ ],
+ "notes": "Decision 契约：options/evidence/constraints/confidence 呈现（DM-016 精神），不越权拍板"
+}

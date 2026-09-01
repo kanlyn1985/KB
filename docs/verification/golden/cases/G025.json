@@ -1,0 +1,53 @@
+{
+ "case_id": "G025",
+ "category": "G25-context-assembly",
+ "difficulty": "medium",
+ "requirement_refs": [
+  "SYS-014"
+ ],
+ "input": {
+  "query": "组装回答'OBC充电功能介绍'所需的上下文包应包含什么"
+ },
+ "expected": {
+  "entities": [
+   {
+    "entity_id": "F-OBC-CHARGE",
+    "entity_type": "component",
+    "description": "充电功能"
+   }
+  ],
+  "assertions": [
+   {
+    "assertion_id": "ast_g025_1",
+    "subject_ref": "entity:context_pack_obc_charge",
+    "predicate_ref": "relation:requires_slots",
+    "object": {
+     "kind": "literal",
+     "value": "objects(cards) + facts(term_definition) + evidence(绑定) 三槽位齐备",
+     "datatype": "xsd:string"
+    },
+    "assertion_type": "asserted",
+    "status": "validated",
+    "evidence_refs": [
+     "evd:node:F-OBC-CHARGE:0"
+    ],
+    "confidence": 0.85
+   }
+  ],
+  "evidence": [
+   {
+    "evidence_id": "evd:node:F-OBC-CHARGE:0",
+    "document_id": "doc:node:F-OBC-CHARGE"
+   }
+  ],
+  "support_level": "sufficient"
+ },
+ "negative_expectations": [
+  {
+   "type": "no_hidden_gap",
+   "description": "组装时不得丢弃 knowledge gap（V&V §16）",
+   "invariant_ref": "INV-005"
+  }
+ ],
+ "notes": "Context 契约：goal/knowledge/assertions/evidence/constraints 槽位（V&V §16）"
+}

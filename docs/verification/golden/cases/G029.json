@@ -1,0 +1,78 @@
+{
+ "case_id": "G029",
+ "category": "G29-agent-e2e",
+ "difficulty": "hard",
+ "requirement_refs": [
+  "SYS-014",
+  "SYS-016",
+  "INV-006"
+ ],
+ "input": {
+  "query": "帮我查一下OBC的充电功能并给出一个充电策略调整建议"
+ },
+ "expected": {
+  "entities": [
+   {
+    "entity_id": "F-OBC-CHARGE",
+    "entity_type": "component",
+    "description": "充电功能"
+   },
+   {
+    "entity_id": "L-PWRCTRL",
+    "entity_type": "component",
+    "description": "功率控制逻辑域"
+   }
+  ],
+  "assertions": [
+   {
+    "assertion_id": "ast_g029_1",
+    "subject_ref": "entity:agent_e2e_flow",
+    "predicate_ref": "relation:must_complete_chain",
+    "object": {
+     "kind": "literal",
+     "value": "retrieve→reason→decision(proposal)→policy_check；建议只能以 proposal 形式输出且引用证据",
+     "datatype": "xsd:string"
+    },
+    "assertion_type": "asserted",
+    "status": "candidate",
+    "evidence_refs": [
+     "evd:node:F-OBC-CHARGE:0",
+     "evd:node:L-PWRCTRL:0"
+    ],
+    "confidence": 0.8
+   }
+  ],
+  "evidence": [
+   {
+    "evidence_id": "evd:node:F-OBC-CHARGE:0",
+    "document_id": "doc:node:F-OBC-CHARGE"
+   },
+   {
+    "evidence_id": "evd:node:L-PWRCTRL:0",
+    "document_id": "doc:node:L-PWRCTRL"
+   }
+  ],
+  "support_level": "partial",
+  "answer_contract": {
+   "must_cite_evidence": true,
+   "must_include": [
+    "建议"
+   ],
+   "disclose_gaps": true,
+   "max_chars": 1200
+  }
+ },
+ "negative_expectations": [
+  {
+   "type": "no_unauthorized_graph_edge",
+   "description": "Agent 不得因给出建议而直接修改知识库（INV-006/007）",
+   "invariant_ref": "INV-006"
+  },
+  {
+   "type": "no_overclaim",
+   "description": "建议必须标注为 proposal + 置信度，不得写成既成事实",
+   "invariant_ref": "INV-002"
+  }
+ ],
+ "notes": "E2E 闭环：检索→推理→建议（proposal）→ 策略检查；知识只读（SYS-016 Decision 契约）"
+}

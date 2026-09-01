@@ -1,0 +1,54 @@
+{
+ "case_id": "G003",
+ "category": "G03-definition",
+ "difficulty": "easy",
+ "requirement_refs": [
+  "SYS-004"
+ ],
+ "input": {
+  "query": "什么是V2L"
+ },
+ "expected": {
+  "entities": [
+   {
+    "entity_id": "F-OBC-DISCHARGE",
+    "entity_type": "function",
+    "description": "放电功能（V2L/V2G/V2H 逆变）"
+   }
+  ],
+  "assertions": [
+   {
+    "assertion_id": "ast_g003_1",
+    "subject_ref": "entity:v2l",
+    "predicate_ref": "relation:defined_as",
+    "object": {
+     "kind": "literal",
+     "value": "Vehicle to Load：OBC 反向逆变对外放电，向外部负载提供交流电",
+     "datatype": "xsd:string"
+    },
+    "assertion_type": "asserted",
+    "status": "validated",
+    "evidence_refs": [
+     "evd:node:F-OBC-DISCHARGE:0"
+    ],
+    "confidence": 0.9
+   }
+  ],
+  "evidence": [
+   {
+    "evidence_id": "evd:node:F-OBC-DISCHARGE:0",
+    "document_id": "doc:node:F-OBC-DISCHARGE"
+   }
+  ],
+  "support_level": "sufficient",
+  "answer_contract": {
+   "must_cite_evidence": true,
+   "must_include": [
+    "放电"
+   ],
+   "max_chars": 600
+  }
+ },
+ "negative_expectations": [],
+ "notes": "定义型：term_definition 形态事实"
+}

@@ -1,0 +1,95 @@
+{
+ "case_id": "G020",
+ "category": "G20-simple-rule-reasoning",
+ "difficulty": "easy",
+ "requirement_refs": [
+  "SYS-010"
+ ],
+ "input": {
+  "query": "规则：A→B，B→C。已知PFC属于OBC功率链（A→B），OBC功率链属于OBC硬件（B→C），PFC属于什么"
+ },
+ "expected": {
+  "assertions": [
+   {
+    "assertion_id": "ast_g020_1",
+    "subject_ref": "entity:pfc",
+    "predicate_ref": "relation:belongs_to",
+    "object": {
+     "kind": "literal",
+     "value": {
+      "kind": "entity_ref",
+      "entity_id": "entity:obc_hardware"
+     }
+    },
+    "assertion_type": "inferred",
+    "status": "candidate",
+    "evidence_refs": [],
+    "confidence": 0.9,
+    "derivation": {
+     "rule_ref": "RULE-TRANSITIVE-A2C",
+     "parent_assertions": [
+      "input:a2b",
+      "input:b2c"
+     ],
+     "reasoner_id": "rule_engine_v1"
+    }
+   }
+  ],
+  "reasoning": [
+   {
+    "reasoning_id": "R003",
+    "input_assertions": [
+     "input:a2b",
+     "input:b2c"
+    ],
+    "rule_refs": [
+     "RULE-TRANSITIVE-A2C"
+    ],
+    "expected_derived_assertions": [
+     {
+      "assertion_id": "ast_g020_d1",
+      "subject_ref": "entity:pfc",
+      "predicate_ref": "relation:belongs_to",
+      "object": {
+       "kind": "literal",
+       "value": {
+        "kind": "entity_ref",
+        "entity_id": "entity:obc_hardware"
+       }
+      },
+      "assertion_type": "inferred",
+      "status": "candidate",
+      "evidence_refs": [],
+      "confidence": 0.9,
+      "derivation": {
+       "rule_ref": "RULE-TRANSITIVE-A2C",
+       "parent_assertions": [
+        "input:a2b",
+        "input:b2c"
+       ],
+       "reasoner_id": "rule_engine_v1"
+      }
+     }
+    ],
+    "expected_trace": [
+     {
+      "step": 1,
+      "description": "A→B（PFC∈功率链）"
+     },
+     {
+      "step": 2,
+      "description": "B→C（功率链∈硬件）"
+     },
+     {
+      "step": 3,
+      "description": "传递闭包 A→C（PFC∈硬件）",
+      "rule_ref": "RULE-TRANSITIVE-A2C"
+     }
+    ]
+   }
+  ],
+  "support_level": "sufficient"
+ },
+ "negative_expectations": [],
+ "notes": "任务书 §8 RULE-001/002 直译：A→B→C 传递推理"
+}

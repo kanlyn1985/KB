@@ -1,0 +1,96 @@
+{
+ "case_id": "G019",
+ "category": "G19-derived-knowledge",
+ "difficulty": "hard",
+ "requirement_refs": [
+  "SYS-010",
+  "INV-002"
+ ],
+ "input": {
+  "query": "根据规则'凡是allocate到P-SW-ASW-TEMP的逻辑域都需要温度采样电路'，L-STRATEGY-NTC需要什么"
+ },
+ "expected": {
+  "assertions": [
+   {
+    "assertion_id": "ast_g019_1",
+    "subject_ref": "entity:l_strategy_ntc",
+    "predicate_ref": "relation:requires",
+    "object": {
+     "kind": "literal",
+     "value": {
+      "kind": "entity_ref",
+      "entity_id": "entity:p_hw_ctrl_sense"
+     }
+    },
+    "assertion_type": "inferred",
+    "status": "candidate",
+    "evidence_refs": [],
+    "confidence": 0.75,
+    "derivation": {
+     "rule_ref": "RULE-TEMP-ALLOC-SAMPLE",
+     "parent_assertions": [
+      "rel:obc_dcdc:allocate:L-STRATEGY-NTC:P-SW-ASW-TEMP"
+     ],
+     "reasoner_id": "rule_engine_v1"
+    }
+   }
+  ],
+  "reasoning": [
+   {
+    "reasoning_id": "R002",
+    "input_assertions": [
+     "rel:obc_dcdc:allocate:L-STRATEGY-NTC:P-SW-ASW-TEMP"
+    ],
+    "rule_refs": [
+     "RULE-TEMP-ALLOC-SAMPLE"
+    ],
+    "expected_derived_assertions": [
+     {
+      "assertion_id": "ast_g019_d1",
+      "subject_ref": "entity:l_strategy_ntc",
+      "predicate_ref": "relation:requires",
+      "object": {
+       "kind": "literal",
+       "value": {
+        "kind": "entity_ref",
+        "entity_id": "entity:p_hw_ctrl_sense"
+       }
+      },
+      "assertion_type": "inferred",
+      "status": "candidate",
+      "evidence_refs": [],
+      "confidence": 0.9,
+      "derivation": {
+       "rule_ref": "RULE-TEMP-ALLOC-SAMPLE",
+       "parent_assertions": [
+        "rel:obc_dcdc:allocate:L-STRATEGY-NTC:P-SW-ASW-TEMP"
+       ],
+       "reasoner_id": "rule_engine_v1"
+      }
+     }
+    ],
+    "expected_trace": [
+     {
+      "step": 1,
+      "description": "L-STRATEGY-NTC allocate→ P-SW-ASW-TEMP（已有边）",
+      "rule_ref": "RULE-TEMP-ALLOC-SAMPLE"
+     },
+     {
+      "step": 2,
+      "description": "套用规则：需要温度采样电路",
+      "rule_ref": "RULE-TEMP-ALLOC-SAMPLE"
+     }
+    ]
+   }
+  ],
+  "support_level": "sufficient"
+ },
+ "negative_expectations": [
+  {
+   "type": "derived_not_asserted",
+   "description": "推导结论是 inferred+candidate，不得伪装成 asserted",
+   "invariant_ref": "INV-002"
+  }
+ ],
+ "notes": "单规则推导：结论=derived，必须带 derivation 块（rule/parent/reasoner）"
+}

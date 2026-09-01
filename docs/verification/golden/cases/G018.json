@@ -1,0 +1,45 @@
+{
+ "case_id": "G018",
+ "category": "G18-candidate-knowledge",
+ "difficulty": "medium",
+ "requirement_refs": [
+  "SYS-006",
+  "INV-002"
+ ],
+ "input": {
+  "query": "库里有哪些尚未确认的候选知识"
+ },
+ "expected": {
+  "assertions": [
+   {
+    "assertion_id": "ast_g018_1",
+    "subject_ref": "entity:candidate_pool",
+    "predicate_ref": "relation:contains",
+    "object": {
+     "kind": "literal",
+     "value": "shape facts（term/Procedure/table_row 影子事实）与 LLM 抽取候选均属 candidate 级",
+     "datatype": "xsd:string"
+    },
+    "assertion_type": "asserted",
+    "status": "candidate",
+    "evidence_refs": [
+     "evd:node:P-ROOT:0"
+    ],
+    "confidence": 0.7
+   }
+  ],
+  "support_level": "partial",
+  "answer_contract": {
+   "disclose_gaps": true,
+   "max_chars": 800
+  }
+ },
+ "negative_expectations": [
+  {
+   "type": "no_memory_as_knowledge",
+   "description": "candidate 不得在答案中表述为确定知识",
+   "invariant_ref": "INV-002"
+  }
+ ],
+ "notes": "candidate 语义：影子事实/抽取候选永远带 status=candidate"
+}

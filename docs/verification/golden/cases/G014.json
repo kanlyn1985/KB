@@ -1,0 +1,49 @@
+{
+ "case_id": "G014",
+ "category": "G14-provenance-query",
+ "difficulty": "hard",
+ "requirement_refs": [
+  "SYS-011",
+  "INV-004"
+ ],
+ "input": {
+  "query": "骨架上R-PERF到P-HW-OBC-PFC这条链路的边是谁在什么时候建立的"
+ },
+ "expected": {
+  "assertions": [
+   {
+    "assertion_id": "ast_g014_1",
+    "subject_ref": "entity:skeleton_edge_chain",
+    "predicate_ref": "relation:provenance_origin",
+    "object": {
+     "kind": "literal",
+     "value": "origin=skeleton（skeleton_v0.6.json relations，edge conf=0.75，导入批次 2026-08-27）",
+     "datatype": "xsd:string"
+    },
+    "assertion_type": "asserted",
+    "status": "candidate",
+    "evidence_refs": [
+     "evd:gold:g014_import"
+    ],
+    "confidence": 0.7
+   }
+  ],
+  "evidence": [
+   {
+    "evidence_id": "evd:gold:g014_import",
+    "excerpt": "graph_edges.properties_json 含 origin=skeleton / skeleton_tree",
+    "document_id": "node-index.sqlite3"
+   }
+  ],
+  "support_level": "partial",
+  "answer_contract": {
+   "must_include": [
+    "skeleton"
+   ],
+   "disclose_gaps": true,
+   "max_chars": 800
+  }
+ },
+ "negative_expectations": [],
+ "notes": "Provenance：图边 properties 带 origin 标记（V&V §12 最小 provenance 集）"
+}

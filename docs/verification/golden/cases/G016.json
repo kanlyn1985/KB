@@ -1,0 +1,116 @@
+{
+ "case_id": "G016",
+ "category": "G16-conflicting-knowledge",
+ "difficulty": "hard",
+ "requirement_refs": [
+  "SYS-006",
+  "INV-005"
+ ],
+ "input": {
+  "query": "如果一份新文档说OBC效率是95%，而现有库内说最高效率97%，系统该怎么处理"
+ },
+ "expected": {
+  "assertions": [
+   {
+    "assertion_id": "ast_g016_1",
+    "subject_ref": "entity:obc_efficiency",
+    "predicate_ref": "relation:has_max_value",
+    "object": {
+     "kind": "literal",
+     "value": "97%（现有库内记录）"
+    },
+    "assertion_type": "asserted",
+    "status": "asserted",
+    "evidence_refs": [
+     "evd:node:P-HW-OBC:1"
+    ],
+    "confidence": 0.9
+   },
+   {
+    "assertion_id": "ast_g016_2",
+    "subject_ref": "entity:obc_efficiency",
+    "predicate_ref": "relation:has_max_value",
+    "object": {
+     "kind": "literal",
+     "value": "95%（新文档候选，与现有记录冲突）"
+    },
+    "assertion_type": "extracted",
+    "status": "candidate",
+    "evidence_refs": [
+     "evd:gold:g016_hypothetical"
+    ],
+    "confidence": 0.5
+   }
+  ],
+  "support_level": "partial",
+  "answer_contract": {
+   "must_include": [
+    "冲突"
+   ],
+   "disclose_gaps": true,
+   "max_chars": 900
+  },
+  "reasoning": [
+   {
+    "reasoning_id": "R006",
+    "input_assertions": [
+     "ast_g016_1",
+     "ast_g016_2"
+    ],
+    "rule_refs": [
+     "RULE-CONFLICT-DISCLOSE"
+    ],
+    "expected_derived_assertions": [
+     {
+      "assertion_id": "ast_g016_d1",
+      "subject_ref": "entity:obc_efficiency",
+      "predicate_ref": "relation:has_conflict",
+      "object": {
+       "kind": "literal",
+       "value": "asserted(97%) vs candidate(95%) — 需人工裁决",
+       "datatype": "xsd:string"
+      },
+      "assertion_type": "inferred",
+      "status": "candidate",
+      "evidence_refs": [
+       "evd:gold:g016_hypothetical"
+      ],
+      "confidence": 0.9,
+      "derivation": {
+       "rule_ref": "RULE-CONFLICT-DISCLOSE",
+       "parent_assertions": [
+        "ast_g016_1",
+        "ast_g016_2"
+       ],
+       "reasoner_id": "conflict_resolver_v1"
+      }
+     }
+    ],
+    "expected_trace": [
+     {
+      "step": 1,
+      "description": "同 subject+predicate 检出两个不同 object → 冲突",
+      "rule_ref": "RULE-CONFLICT-DISCLOSE"
+     },
+     {
+      "step": 2,
+      "description": "asserted 优先级高于 candidate，但不得静默丢弃 candidate"
+     },
+     {
+      "step": 3,
+      "description": "输出冲突披露 assertion（dispute 候选），等待人工裁决",
+      "rule_ref": "RULE-CONFLICT-DISCLOSE"
+     }
+    ]
+   }
+  ]
+ },
+ "negative_expectations": [
+  {
+   "type": "no_overclaim",
+   "description": "冲突存在时不得单边采信任一数值",
+   "invariant_ref": "INV-005"
+  }
+ ],
+ "notes": "冲突感知：两 assertion 均保留、状态区分 asserted vs candidate，答案必须披露冲突（V&V §14 场景 4）"
+}

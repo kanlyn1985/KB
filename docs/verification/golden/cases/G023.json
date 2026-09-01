@@ -1,0 +1,57 @@
+{
+ "case_id": "G023",
+ "category": "G23-graph-vector-hybrid",
+ "difficulty": "hard",
+ "requirement_refs": [
+  "SYS-012",
+  "SYS-008"
+ ],
+ "input": {
+  "query": "跟灌封工艺相关的需求有哪些"
+ },
+ "expected": {
+  "entities": [
+   {
+    "entity_id": "G-PROD-POTTING",
+    "entity_type": "component",
+    "description": "灌封工艺"
+   },
+   {
+    "entity_id": "R-STD",
+    "entity_type": "component",
+    "description": "标准条款"
+   }
+  ],
+  "assertions": [
+   {
+    "assertion_id": "ast_g023_1",
+    "subject_ref": "entity:g_prod_potting",
+    "predicate_ref": "relation:relates_to_requirements",
+    "object": {
+     "kind": "literal",
+     "value": "通过图邻域+语义相似融合召回 R-STD/R-PERF 相关子集",
+     "datatype": "xsd:string"
+    },
+    "assertion_type": "asserted",
+    "status": "candidate",
+    "evidence_refs": [
+     "evd:node:G-PROD-POTTING:0"
+    ],
+    "confidence": 0.7
+   }
+  ],
+  "evidence": [
+   {
+    "evidence_id": "evd:node:G-PROD-POTTING:0",
+    "document_id": "doc:node:G-PROD-POTTING"
+   }
+  ],
+  "support_level": "partial",
+  "answer_contract": {
+   "disclose_gaps": true,
+   "max_chars": 900
+  }
+ },
+ "negative_expectations": [],
+ "notes": "混合检索：图邻域（produce 边）+ 向量语义（灌封胶相似内容）双通道印证（生产权重 1.0/0.95/0.85）"
+}
