@@ -291,9 +291,219 @@ PHASE9_MIGRATIONS: tuple[Migration, ...] = (
 )
 
 
-CORE_MIGRATIONS: tuple[Migration, ...] = PHASE6_MIGRATIONS + PHASE7_MIGRATIONS + PHASE8_MIGRATIONS
-PLATFORM_MIGRATIONS: tuple[Migration, ...] = CORE_MIGRATIONS + PHASE9_MIGRATIONS
-ALL_MIGRATIONS: tuple[Migration, ...] = CORE_MIGRATIONS
+CORE_MIGRATIONS: tuple[Migration, ...] = (
+    PHASE6_MIGRATIONS + PHASE7_MIGRATIONS + PHASE8_MIGRATIONS + PHASE9_MIGRATIONS
+)
+# v9 已并入 CORE_MIGRATIONS（2026-09-01 V0.1 实现期修正：v9 定义存在但此前未纳入 CORE，
+# 且 PLATFORM 重复组合会导致 version 重复应用）
+PLATFORM_MIGRATIONS: tuple[Migration, ...] = CORE_MIGRATIONS
+V01_EVIDENCE_CORE_MIGRATION: Migration = Migration(
+    version=10,
+    name="v01_evidence_core",
+    statements=(
+        """
+        CREATE TABLE IF NOT EXISTS akb_sources (
+            source_id       TEXT PRIMARY KEY,
+            source_type     TEXT NOT NULL CHECK (source_type IN
+                              ('document','database','api','sensor','human','agent','system')),
+            name            TEXT NOT NULL CHECK (length(name) > 0),
+            authority_score REAL CHECK (authority_score BETWEEN 0 AND 1),
+            owner           TEXT,
+            access_policy_ref TEXT,
+            metadata_json   TEXT NOT NULL DEFAULT '{}',
+            created_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
+            updated_at      TEXT
+        )
+        """,
+        "CREATE UNIQUE INDEX IF NOT EXISTS ux_akb_sources_name_type ON akb_sources(source_type, name)",
+        """
+        CREATE TABLE IF NOT EXISTS akb_documents (
+            document_id   TEXT PRIMARY KEY,
+            source_id     TEXT NOT NULL REFERENCES akb_sources(source_id),
+            version       TEXT NOT NULL,
+            content_hash  TEXT NOT NULL,
+            mime_type     TEXT,
+            title         TEXT,
+            effective_at  TEXT,
+            ingested_at   TEXT NOT NULL,
+            metadata_json TEXT NOT NULL DEFAULT '{}',
+            created_at    TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
+            UNIQUE (source_id, content_hash)
+        )
+        """,
+        "CREATE INDEX IF NOT EXISTS ix_akb_documents_source ON akb_documents(source_id)",
+        """
+        CREATE TABLE IF NOT EXISTS akb_evidence (
+            evidence_id      TEXT PRIMARY KEY,
+            document_id      TEXT NOT NULL REFERENCES akb_documents(document_id),
+            location_page    INTEGER,
+            location_section TEXT,
+            location_start   INTEGER,
+            location_end     INTEGER,
+            content          TEXT NOT NULL,
+            evidence_type    TEXT NOT NULL DEFAULT 'text'
+                       CHECK (evidence_type IN ('text','table','image','observation','system_record')),
+            observed_at      TEXT,
+            extraction_method TEXT NOT NULL,
+            confidence       REAL CHECK (confidence BETWEEN 0 AND 1),
+            metadata_json    TEXT NOT NULL DEFAULT '{}',
+            content_hash     TEXT NOT NULL,
+            created_at       TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
+            UNIQUE (document_id, content_hash, location_start, location_end)
+        )
+        """,
+        "CREATE INDEX IF NOT EXISTS ix_akb_evidence_document ON akb_evidence(document_id)",
+        """
+        CREATE TABLE IF NOT EXISTS akb_semantic_units (
+            unit_id        TEXT PRIMARY KEY,
+            evidence_id    TEXT NOT NULL REFERENCES akb_evidence(evidence_id),
+            unit_type      TEXT NOT NULL,
+            normalized_text TEXT NOT NULL,
+            entity_candidates_json TEXT NOT NULL DEFAULT '[]',
+            relation_candidates_json TEXT NOT NULL DEFAULT '[]',
+            temporal_parse_json    TEXT,
+            ontology_mapping_json  TEXT,
+            extraction_method TEXT NOT NULL,
+            extraction_version TEXT NOT NULL,
+            created_at     TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
+        )
+        """,
+        "CREATE INDEX IF NOT EXISTS ix_akb_su_evidence ON akb_semantic_units(evidence_id)",
+        """
+        CREATE TABLE IF NOT EXISTS akb_provenance (
+            provenance_id  TEXT PRIMARY KEY,
+            actor_id       TEXT NOT NULL,
+            actor_kind     TEXT NOT NULL CHECK (actor_kind IN ('human','system','agent','llm')),
+            activity       TEXT NOT NULL,
+            policy_version TEXT NOT NULL,
+            occurred_at    TEXT NOT NULL,
+            inputs_json    TEXT NOT NULL DEFAULT '[]',
+            metadata_json  TEXT NOT NULL DEFAULT '{}',
+            created_at     TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
+        )
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS akb_assertions (
+            assertion_id   TEXT PRIMARY KEY,
+            subject_ref    TEXT NOT NULL,
+            predicate_ref  TEXT NOT NULL,
+            object_kind    TEXT NOT NULL CHECK (object_kind IN ('literal','entity_ref')),
+            object_value   TEXT,
+            object_datatype TEXT,
+            object_unit    TEXT,
+            object_entity_ref TEXT,
+            assertion_type TEXT NOT NULL CHECK (assertion_type IN
+                             ('extracted','observed','asserted','inferred','hypothesized')),
+            status         TEXT NOT NULL CHECK (status IN
+                             ('candidate','validated','asserted','disputed','rejected','deprecated')),
+            confidence     REAL CHECK (confidence BETWEEN 0 AND 1),
+            evidence_refs_json TEXT NOT NULL DEFAULT '[]',
+            source_unit_refs_json TEXT NOT NULL DEFAULT '[]',
+            provenance_ref TEXT REFERENCES akb_provenance(provenance_id),
+            temporal_scope_json TEXT,
+            ontology_scope TEXT NOT NULL,
+            derivation_json TEXT,
+            canonical_json TEXT NOT NULL,
+            created_at     TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
+            updated_at     TEXT,
+            CHECK (object_kind = 'literal'  OR object_entity_ref IS NOT NULL),
+            CHECK (object_kind != 'literal' OR object_value IS NOT NULL),
+            CHECK (status NOT IN ('validated','asserted','disputed') OR
+                   json_array_length(evidence_refs_json) >= 1),
+            CHECK (assertion_type != 'inferred' OR derivation_json IS NOT NULL)
+        )
+        """,
+        "CREATE INDEX IF NOT EXISTS ix_akb_assertions_subject ON akb_assertions(subject_ref)",
+        "CREATE INDEX IF NOT EXISTS ix_akb_assertions_status  ON akb_assertions(status)",
+        "CREATE INDEX IF NOT EXISTS ix_akb_assertions_spo    ON akb_assertions(subject_ref, predicate_ref, object_value)",
+        """
+        CREATE TABLE IF NOT EXISTS akb_assertion_transitions (
+            transition_id   TEXT PRIMARY KEY,
+            assertion_id    TEXT NOT NULL REFERENCES akb_assertions(assertion_id),
+            previous_status TEXT NOT NULL,
+            new_status      TEXT NOT NULL CHECK (new_status IN
+                              ('candidate','validated','asserted','disputed','rejected','deprecated')),
+            actor_id        TEXT NOT NULL,
+            reason          TEXT NOT NULL CHECK (length(reason) > 0),
+            policy_version  TEXT NOT NULL,
+            provenance_ref  TEXT REFERENCES akb_provenance(provenance_id),
+            created_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
+        )
+        """,
+        "CREATE INDEX IF NOT EXISTS ix_akb_astt_assertion ON akb_assertion_transitions(assertion_id)",
+        # append-only 触发器（INV-005）
+        """
+        CREATE TRIGGER IF NOT EXISTS trg_akb_evidence_no_update
+        BEFORE UPDATE ON akb_evidence
+        BEGIN
+          SELECT RAISE(ABORT, 'INV-005: akb_evidence is append-only');
+        END
+        """,
+        """
+        CREATE TRIGGER IF NOT EXISTS trg_akb_evidence_no_delete
+        BEFORE DELETE ON akb_evidence
+        BEGIN
+          SELECT RAISE(ABORT, 'INV-005: akb_evidence is append-only');
+        END
+        """,
+        """
+        CREATE TRIGGER IF NOT EXISTS trg_akb_astt_no_update
+        BEFORE UPDATE ON akb_assertion_transitions
+        BEGIN
+          SELECT RAISE(ABORT, 'INV-005: assertion transitions are append-only');
+        END
+        """,
+        """
+        CREATE TRIGGER IF NOT EXISTS trg_akb_astt_no_delete
+        BEFORE DELETE ON akb_assertion_transitions
+        BEGIN
+          SELECT RAISE(ABORT, 'INV-005: assertion transitions are append-only');
+        END
+        """,
+        # akb_assertions 受控更新：不可变列守卫 + status 变更须有同事务 transitions 行
+        """
+        CREATE TRIGGER IF NOT EXISTS trg_akb_assertions_immutable
+        BEFORE UPDATE ON akb_assertions
+        FOR EACH ROW
+        WHEN NEW.subject_ref != OLD.subject_ref
+          OR NEW.predicate_ref != OLD.predicate_ref
+          OR NEW.object_kind != OLD.object_kind
+          OR NEW.object_value IS NOT OLD.object_value
+          OR NEW.object_entity_ref IS NOT OLD.object_entity_ref
+          OR NEW.object_datatype IS NOT OLD.object_datatype
+          OR NEW.object_unit IS NOT OLD.object_unit
+          OR NEW.assertion_type != OLD.assertion_type
+          OR NEW.canonical_json != OLD.canonical_json
+          OR NEW.created_at != OLD.created_at
+          OR NEW.evidence_refs_json != OLD.evidence_refs_json
+        BEGIN
+          SELECT RAISE(ABORT, 'INV-005: immutable assertion columns changed');
+        END
+        """,
+        """
+        CREATE TRIGGER IF NOT EXISTS trg_akb_assertions_controlled_status
+        BEFORE UPDATE OF status ON akb_assertions
+        FOR EACH ROW
+        WHEN NEW.status != OLD.status
+          AND (SELECT COUNT(*) FROM akb_assertion_transitions t
+               WHERE t.assertion_id = NEW.assertion_id
+                 AND t.new_status = NEW.status
+                 AND t.previous_status = OLD.status
+                 AND t.rowid = (SELECT MAX(t2.rowid) FROM akb_assertion_transitions t2
+                                WHERE t2.assertion_id = NEW.assertion_id)) = 0
+        BEGIN
+          SELECT RAISE(ABORT,
+            'INV-005: status change requires matching latest assertion_transitions row');
+        END
+        """,
+        # graph_edges 加列（AG-001 / PATH A&B 共用列）
+        "ALTER TABLE graph_edges ADD COLUMN assertion_ref TEXT REFERENCES akb_assertions(assertion_id)",
+        "CREATE INDEX IF NOT EXISTS ix_graph_edges_ast ON graph_edges(assertion_ref)",
+    ),
+)
+
+ALL_MIGRATIONS: tuple[Migration, ...] = CORE_MIGRATIONS + (V01_EVIDENCE_CORE_MIGRATION,)
+
 
 
 class SchemaMigrator:
