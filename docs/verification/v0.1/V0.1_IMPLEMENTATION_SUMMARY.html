@@ -17,7 +17,7 @@ code{background:#161d2e;padding:1px 6px;border-radius:4px;font-family:Consolas,m
 </head>
 <body>
 <h1>V0.1 Evidence Core — Implementation Summary</h1>
-<p class="meta">Task: AKB-V01-IMPL-001 · Date: 2026-09-01 · Base: d9cd66f · Branch: rebuild/agent-kb-core · <span class="pass">READY FOR RELEASE (design baseline)</span></p>
+<p class="meta">Task: AKB-V01-IMPL-001 · Date: 2026-09-01 · Base: d9cd66f · Branch: rebuild/agent-kb-core · <span class="pass">ACCEPTED / RELEASE BASELINE</span></p>
 
 <h2>1. Architecture</h2>
 <div class="card">Canonical Knowledge Unit = <b>KnowledgeAssertion</b>（DM-005）。治理链冻结：<br>
@@ -111,5 +111,39 @@ Golden evd:node:* 引用经 legacy resolver 影子映射可解析。</div>
 生产 DB 状态：CHANGED（additive schema only，既有数据/行为零改动——见报告 §11 如实记录）。</div>
 
 <p class="meta">详细证据：V0.1_IMPLEMENTATION_VERIFICATION_REPORT.md · Gap Register · INVARIANT_REGISTRY</p>
+
+<h2>16. Release Hardening（AKB-V01-HARDENING-001 · 2026-09-02）</h2>
+<div class="card">生产库隔离 + Governance 硬化 + CI Evidence 三项收尾。</div>
+
+<h2>17. Production DB Isolation</h2>
+<table><tr><th>项</th><th>内容</th></tr>
+<tr><td>原问题</td><td>answer contract 测试经 query_production_store 触发生产库 migrate（v9/v10 被应用）</td></tr>
+<tr><td>修复</td><td>session 级 isolated_db fixture：生产库复制到 pytest tmp，断言全部跑副本</td></tr>
+<tr><td>证据</td><td>test_production_db_isolation.py：会话 SHA-256 首尾一致；副本测试后生产库 migrations 行数不变</td></tr>
+<tr><td>before/after</td><td class="ok">same file / same hash / same schema / same data</td></tr></table>
+
+<h2>18. Adversarial Governance Tests</h2>
+<table><tr><th>攻击路径</th><th>结果</th></tr>
+<tr><td>直 SQL 伪造完整链（provenance+transitions+UPDATE）</td><td>语义裁决：DB 层强制状态对/type 边界/provenance 一致性/append-only；actor 授权属应用层；伪造成功但完整留痕（append-only 可追责）；API 重放幂等 no-op</td></tr>
+<tr><td>假 provenance / 非法状态对 / provenance_ref 操纵</td><td class="ok">migration 11 触发器（11.1/11.2/11.3/11.4）全部 ABORT</td></tr>
+<tr><td>inferred→asserted / hypothesized→validated（SQL 层）</td><td class="ok">11.1b type-boundary ABORT</td></tr>
+<tr><td>伪造 actor（system/llm 冒充 promote）</td><td class="ok">API 权限矩阵 E-ACTOR-NOT-AUTHORIZED</td></tr></table>
+<p>新增 migration 11（v01_governance_hardening，4 触发器，ADDITIVE）；未删触发器、未退回纯 Python。</p>
+
+<h2>19. CI Evidence</h2>
+<table><tr><th>Verification</th><th>Local (Windows/3.14)</th><th>GitHub CI (ubuntu/3.11-3.13)</th></tr>
+<tr><td>Golden validator</td><td class="ok">PASS</td><td class="ok">PASS</td></tr>
+<tr><td>V0.1 专项</td><td class="ok">51 passed</td><td class="ok">PASS ×3 versions</td></tr>
+<tr><td>agent_kb_core 全量</td><td class="ok">135 passed</td><td class="ok">PASS ×3 versions</td></tr>
+<tr><td>仓库全量</td><td class="ok">135 passed</td><td class="ok">PASS ×3 versions</td></tr>
+<tr><td>Run ID</td><td>—</td><td>33645020731 (push) / 33645029559 (PR)，均 success</td></tr></table>
+
+<h2>20. Final Release Readiness</h2>
+<div class="card"><span class="pass">V0.1 EVIDENCE CORE = ACCEPTED / RELEASE BASELINE</span><br>
+§32 checklist 全满足；INV-009/010 NOT IN SCOPE 如实标注；Production DB Isolation PASS；
+Adversarial 9 项 PASS；GitHub CI 独立验证 success（非本地转述）。<br>
+<span class="warn">Outstanding</span>：生产库 graph_edges 467 条回填待批准（工具就绪）；
+answer-contract 隔离副本含 318MB 拷贝成本（可改 EBS/硬链接优化，非阻断）。</div>
+
 </body>
 </html>
