@@ -1,12 +1,13 @@
 # ADR-007: KB1 as Epistemic / Evidence Governance Reference
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-09-01
 - Decision Owners: Architecture Owner (Human Reviewer)
 - Related Requirements: SYS-003, SYS-005, SYS-011, SYS-013, SYS-018
 - Related Data Model: DM-003 Evidence, DM-004 SemanticUnit, DM-005 governance semantics; Domain Pack as source of domain constraints
 - Related ICD: EvidenceStore (5.3), AssertionValidator (5.4), RetrievalEngine (5.7) evaluation semantics
 - Related V&V: V&V Plan section 6 (test data strategy: Golden/Representative/Adversarial), 13.3 (ablation vs frozen baseline), 14 (sufficiency/abstain)
+- Acceptance Reference: docs/architecture/reviews/ARCHITECTURE_ACCEPTANCE_V1.0.md (AR-V1.0 Gate: APPROVED, 2026-09-01)
 
 ## Context
 

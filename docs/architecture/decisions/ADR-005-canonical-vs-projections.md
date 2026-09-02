@@ -1,12 +1,13 @@
 # ADR-005: Canonical Store vs Projections - Projections are Rebuildable
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-09-01
 - Decision Owners: Architecture Owner (Human Reviewer)
 - Related Requirements: SYS-019, SYS-012, SYS-002
 - Related Data Model: Canonical: DM-001/002/003/005/010/011/016/018; Projections: graph, vector, lexical index, cache, derived context
 - Related ICD: AssertionStore (5.5) as canonical owner; RetrievalEngine (5.7) consumes projections
 - Related V&V: V&V Plan section 7 INV-T05 (index rebuild), section 21 (failure/recovery); RTM T-MIG-001
+- Acceptance Reference: docs/architecture/reviews/ARCHITECTURE_ACCEPTANCE_V1.0.md (AR-V1.0 Gate: APPROVED, 2026-09-01)
 
 ## Context
 

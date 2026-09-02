@@ -1,12 +1,13 @@
 # ADR-004: Asserted and Derived Knowledge are Distinct Epistemic Classes
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-09-01
 - Decision Owners: Architecture Owner (Human Reviewer)
 - Related Requirements: SYS-006, SYS-010
 - Related Data Model: DM-005 9.3 (assertion_type), DM-011 Rule, DM-012 ReasoningTrace
 - Related ICD: ReasoningEngine (5.8), AssertionStore (5.5), AssertionValidator (5.4)
 - Related V&V: V&V Plan section 7 INV-T02; section 15.1 Golden Rule Tests; Golden G007/G019/G020/G021 reasoning cases
+- Acceptance Reference: docs/architecture/reviews/ARCHITECTURE_ACCEPTANCE_V1.0.md (AR-V1.0 Gate: APPROVED, 2026-09-01)
 
 ## Context
 

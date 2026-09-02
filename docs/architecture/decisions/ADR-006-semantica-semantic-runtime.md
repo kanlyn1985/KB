@@ -1,12 +1,13 @@
 # ADR-006: Semantica as Semantic Runtime Foundation (Implementation Candidate)
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-09-01
 - Decision Owners: Architecture Owner (Human Reviewer)
 - Related Requirements: SYS-007, SYS-009, SYS-010, SYS-020
 - Related Data Model: DM-006/007/008/009/010 mapping targets; NOT a replacement for DM-005
 - Related ICD: SemanticGraph (5.6), ReasoningEngine (5.8) - implementation candidates behind interfaces
 - Related V&V: V&V Plan section 22 (provider-neutral performance), section 20 (security review of third-party runtime)
+- Acceptance Reference: docs/architecture/reviews/ARCHITECTURE_ACCEPTANCE_V1.0.md (AR-V1.0 Gate: APPROVED, 2026-09-01)
 
 ## Context
 

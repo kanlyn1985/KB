@@ -1,12 +1,13 @@
 # ADR-008: Agent Runtime is Decoupled from Semantic Runtime
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-09-01
 - Decision Owners: Architecture Owner (Human Reviewer)
 - Related Requirements: SYS-014, SYS-015, SYS-016, SYS-017
 - Related Data Model: DM-013 Memory, DM-014 Context, DM-015 Goal, DM-016 Decision, DM-017 Action, DM-018 Observation (Agent-plane objects)
 - Related ICD: AgentRuntime (5.14) depends only on ContextEngine (5.11), MemoryStore (5.9), StateStore (5.10), DecisionEngine (5.12), ObservationStore (5.13) - and via them, Retrieval/Reasoning
 - Related V&V: V&V Plan section 17 (memory verification: promotion pipeline), 19 (agent E2E), 16 (context must not hide gaps); Golden G029/G030
+- Acceptance Reference: docs/architecture/reviews/ARCHITECTURE_ACCEPTANCE_V1.0.md (AR-V1.0 Gate: APPROVED, 2026-09-01)
 
 ## Context
 

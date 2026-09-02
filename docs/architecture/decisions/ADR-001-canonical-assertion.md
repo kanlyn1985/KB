@@ -1,12 +1,13 @@
 # ADR-001: KnowledgeAssertion is the Canonical Knowledge Unit
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-09-01
 - Decision Owners: Architecture Owner (Human Reviewer)
 - Related Requirements: SYS-004, SYS-005, SYS-006
 - Related Data Model: DM-005 KnowledgeAssertion (primary); DM-003 Evidence; DM-004 SemanticUnit; DM-012 ReasoningTrace
 - Related ICD: AssertionStore (5.5), AssertionValidator (5.4)
 - Related V&V: V&V Plan section 9 (Assertion Tests), section 7 INV-T01/T02; RTM T-AST-001..006
+- Acceptance Reference: docs/architecture/reviews/ARCHITECTURE_ACCEPTANCE_V1.0.md (AR-V1.0 Gate: APPROVED, 2026-09-01)
 
 ## Context
 

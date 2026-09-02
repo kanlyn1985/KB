@@ -1,12 +1,13 @@
 # ADR-009: Provider Neutrality for Parsers, Embeddings, Graph, Vector, Search, Reasoner, Connector
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-09-01
 - Decision Owners: Architecture Owner (Human Reviewer)
 - Related Requirements: SYS-020, SYS-019, SYS-012
 - Related Data Model: All Canonical objects (DM-001..018) must remain provider-agnostic; projections (ADR-005) are the provider-coupled layer
 - Related ICD: SourceProvider (5.1), KnowledgeCompiler (5.2), SemanticGraph (5.6), RetrievalEngine (5.7), ReasoningEngine (5.8) - all behind interfaces
 - Related V&V: V&V Plan section 22 (performance per provider recorded), 13.3 (ablation on channel/provider changes); RTM V-SUB-001
+- Acceptance Reference: docs/architecture/reviews/ARCHITECTURE_ACCEPTANCE_V1.0.md (AR-V1.0 Gate: APPROVED, 2026-09-01)
 
 ## Context
 

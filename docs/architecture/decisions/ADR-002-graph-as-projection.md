@@ -1,12 +1,13 @@
 # ADR-002: Graph is a Projection of Canonical Assertions
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-09-01
 - Decision Owners: Architecture Owner (Human Reviewer)
 - Related Requirements: SYS-008
 - Related Data Model: DM-005 (source), DM-006/007 (projected Entity/Relation); DM-005 9.2 assertion_id
 - Related ICD: SemanticGraph (5.6) consumes AssertionStore (5.5)
 - Related V&V: V&V Plan section 7 INV-T03 (graph projection integrity), INV-T05 (index rebuild); RTM T-GRAPH-001
+- Acceptance Reference: docs/architecture/reviews/ARCHITECTURE_ACCEPTANCE_V1.0.md (AR-V1.0 Gate: APPROVED, 2026-09-01)
 
 ## Context
 

@@ -1,12 +1,13 @@
 # ADR-010: V-Model + Local-AI Development Workflow with GitHub as Coordination Layer
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-09-01
 - Decision Owners: Architecture Owner (Human Reviewer)
 - Related Requirements: SYS-018, SYS-019
 - Related Data Model: Process decision - no direct DM mapping; touches all DM objects via change control
 - Related ICD: Process decision - all ICD interfaces are governed by this workflow change classification
 - Related V&V: V&V Plan section 2.1 (dual V-model), 23 (regression strategy), 25 (release gates); RTM section 2 (traceability rules); AKB-DEV-001 workflow doc
+- Acceptance Reference: docs/architecture/reviews/ARCHITECTURE_ACCEPTANCE_V1.0.md (AR-V1.0 Gate: APPROVED, 2026-09-01)
 
 ## Context
 

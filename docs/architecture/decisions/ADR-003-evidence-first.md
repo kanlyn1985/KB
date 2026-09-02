@@ -1,12 +1,13 @@
 # ADR-003: Evidence First - No Evidence, No Asserted Knowledge
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-09-01
 - Decision Owners: Architecture Owner (Human Reviewer)
 - Related Requirements: SYS-005, SYS-003, SYS-011, SYS-013
 - Related Data Model: DM-003 Evidence; DM-005 9.3/9.4 assertion types and lifecycle
 - Related ICD: AssertionValidator (5.4); EvidenceStore (5.3)
 - Related V&V: V&V Plan section 7 INV-T01; section 8 EVD-001..006; section 14 (sufficiency/abstain); Golden G015/G027/G030
+- Acceptance Reference: docs/architecture/reviews/ARCHITECTURE_ACCEPTANCE_V1.0.md (AR-V1.0 Gate: APPROVED, 2026-09-01)
 
 ## Context
 

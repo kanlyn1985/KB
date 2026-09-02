@@ -2,23 +2,24 @@
 
 > 本目录是 Agentic Knowledge Base 的架构决策记录（ADR）唯一存放处。
 > 基线：SRS V1.1 / Data Model V1.0 / ICD V1.0 / V&V Plan V1.0 / RTM V1.0 / Golden Dataset V1.0。
-> 状态约定：Proposed（待架构评审）-> Accepted（架构负责人批准）-> Superseded（被新 ADR 取代）。
-> **未经 Architecture Review 批准，任何 ADR 不得标记 Accepted。**
+> 状态约定：Proposed -> Accepted -> Superseded。
+> **2026-09-01：Architecture Baseline Acceptance（AR-V1.0 APPROVED）通过，ADR-001..010 全部 Accepted。**
+> 批准记录：[ARCHITECTURE_ACCEPTANCE_V1.0.md](../reviews/ARCHITECTURE_ACCEPTANCE_V1.0.md)。
 
 ## ADR Index
 
 | ADR | 标题 | Status | 一句话决策 |
 |---|---|---|---|
-| ADR-001 | KnowledgeAssertion is the Canonical Knowledge Unit | Proposed | KnowledgeAssertion（DM-005）是唯一 Canonical 知识单元；Fact/Graph Edge/Embedding/Chunk 都不是 |
-| ADR-002 | Graph is a Projection of Canonical Assertions | Proposed | Graph 是断言的投影，可重建可删除；边必须带 assertion_ref（INV-003） |
-| ADR-003 | Evidence First | Proposed | 无证据则无 asserted 知识；但 candidate/observed/hypothesized/inferred 合法存在（epistemic boundary） |
-| ADR-004 | Asserted vs Derived Separation | Proposed | 断言类型+状态双轴强制分离；derived 必带 derivation 块，禁止自动晋升 |
-| ADR-005 | Canonical Store vs Projections | Proposed | Canonical 8 类对象 vs 5 类投影；恢复顺序 Canonical -> Projection -> Cache |
-| ADR-006 | Semantica as Semantic Runtime Foundation | Proposed | Semantica 是实现候选（机制层复用），其 KnowledgeGraph 不得直接当 Canonical Model |
-| ADR-007 | KB1 as Epistemic Governance Reference | Proposed | 采纳 KB1 的治理语义（不复制代码/目录）；Graph/Storage 收敛到 AKB 接口 |
-| ADR-008 | Agent Runtime Decoupling | Proposed | Agent 只依赖 ICD 接口；禁止直连 Neo4j/Qdrant/Semantica/LLM SDK |
-| ADR-009 | Provider Neutrality | Proposed | 七类 provider 全接口隔离；Canonical 禁止 provider 字段作核心语义 |
-| ADR-010 | V-Model + Local-AI Workflow | Proposed | 冻结 Design -> GitHub -> Local AI -> Implementation -> Tests -> Review 开发方式 |
+| ADR-001 | KnowledgeAssertion is the Canonical Knowledge Unit | Accepted | KnowledgeAssertion（DM-005）是唯一 Canonical 知识单元；Fact/Graph Edge/Embedding/Chunk 都不是 |
+| ADR-002 | Graph is a Projection of Canonical Assertions | Accepted | Graph 是断言的投影，可重建可删除；边必须带 assertion_ref（INV-003） |
+| ADR-003 | Evidence First | Accepted | 无证据则无 asserted 知识；但 candidate/observed/hypothesized/inferred 合法存在（epistemic boundary） |
+| ADR-004 | Asserted vs Derived Separation | Accepted | 断言类型+状态双轴强制分离；derived 必带 derivation 块，禁止自动晋升 |
+| ADR-005 | Canonical Store vs Projections | Accepted | Canonical 8 类对象 vs 5 类投影；恢复顺序 Canonical -> Projection -> Cache |
+| ADR-006 | Semantica as Semantic Runtime Foundation | Accepted | Semantica 是实现候选（机制层复用），其 KnowledgeGraph 不得直接当 Canonical Model |
+| ADR-007 | KB1 as Epistemic Governance Reference | Accepted | 采纳 KB1 的治理语义（不复制代码/目录）；Graph/Storage 收敛到 AKB 接口 |
+| ADR-008 | Agent Runtime Decoupling | Accepted | Agent 只依赖 ICD 接口；禁止直连 Neo4j/Qdrant/Semantica/LLM SDK |
+| ADR-009 | Provider Neutrality | Accepted | 七类 provider 全接口隔离；Canonical 禁止 provider 字段作核心语义 |
+| ADR-010 | V-Model + Local-AI Workflow | Accepted | 冻结 Design -> GitHub -> Local AI -> Implementation -> Tests -> Review 开发方式 |
 
 （表格内文件链接：ADR-001.md 同目录命名 ADR-001-canonical-assertion.md，依此类推，见下"文件清单"）
 
