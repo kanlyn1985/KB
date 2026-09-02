@@ -237,3 +237,42 @@ jobs:
           path: agent_kb_core/operations-output
           if-no-files-found: error
           retention-days: 14
+
+  v01-evidence-core:
+    name: V0.1 Evidence Core verification
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    defaults:
+      run:
+        working-directory: agent_kb_core
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: agent_kb_core/pyproject.toml
+
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Golden dataset validation (V0.1-REG-001)
+        run: python tools/validate_golden_dataset.py
+
+      - name: V0.1 evidence core suite (invariants INV-001..008)
+        run: python -m pytest tests/v01_evidence_core -q
+
+      - name: Full agent_kb_core suite
+        run: python -m pytest tests -q
+
+      - name: Repository-wide suite
+        run: python -m pytest -q
+        working-directory: .

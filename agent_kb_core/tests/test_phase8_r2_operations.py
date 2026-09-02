@@ -10,6 +10,8 @@ from agent_kb.storage import SQLiteBackupManager, SQLiteKnowledgeStore, run_reco
 
 
 ROOT = Path(__file__).resolve().parents[1]
+LATEST_SCHEMA_VERSION = max(m.version for m in __import__(
+    'agent_kb.storage.migrations', fromlist=['ALL_MIGRATIONS']).ALL_MIGRATIONS)
 
 
 def test_release_readiness_and_isolated_recovery_drill(tmp_path: Path) -> None:
@@ -33,14 +35,14 @@ def test_release_readiness_and_isolated_recovery_drill(tmp_path: Path) -> None:
         now=datetime(2026, 7, 18, 8, 0, tzinfo=UTC),
     )
     assert readiness.ready
-    assert readiness.schema_version == 10  # 迁移集演进：1..10
+    assert readiness.schema_version == LATEST_SCHEMA_VERSION  # 迁移集演进：1..10
     assert readiness.counts["documents"] == 1
     assert all(check.passed for check in readiness.checks if check.severity == "error")
 
     drill = run_recovery_drill(backup.path)
     assert drill.status == "passed"
     assert drill.integrity_ok
-    assert drill.schema_version == 10  # 迁移集演进：1..10
+    assert drill.schema_version == LATEST_SCHEMA_VERSION  # 迁移集演进：1..10
     assert drill.cleanup_performed
     assert not Path(drill.restored_path).exists()
 

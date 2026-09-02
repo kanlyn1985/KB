@@ -33,6 +33,8 @@ from agent_kb.testing import ChaosInjector, ChaosPolicy, run_load_test, run_secu
 
 
 ROOT = Path(__file__).resolve().parents[1]
+LATEST_SCHEMA_VERSION = max(m.version for m in __import__(
+    'agent_kb.storage.migrations', fromlist=['ALL_MIGRATIONS']).ALL_MIGRATIONS)
 KEY_A = "phase8-key-a-000000000000000000"
 KEY_B = "phase8-key-b-000000000000000000"
 
@@ -176,7 +178,7 @@ def test_retention_legal_hold_backup_replication_recovery_and_mcp(tmp_path: Path
     recovery = run_recovery_drill(backup.path)
     assert recovery.status == "passed"
     assert recovery.integrity_ok
-    assert recovery.schema_version == 10  # v9(平台) + v10(V0.1 evidence core) 已入 CORE
+    assert recovery.schema_version == LATEST_SCHEMA_VERSION  # v9(平台) + v10(V0.1 evidence core) 已入 CORE
     assert recovery.cleanup_performed
 
     service = AgentKBService(db_path=db, domain_pack=pack)

@@ -17,6 +17,8 @@ from agent_kb.storage import DocumentLifecycleStore, SchemaMigrator, SQLiteKnowl
 
 
 ROOT = Path(__file__).resolve().parents[1]
+LATEST_SCHEMA_VERSION = max(m.version for m in __import__(
+    'agent_kb.storage.migrations', fromlist=['ALL_MIGRATIONS']).ALL_MIGRATIONS)
 
 
 def test_hash_embedding_provider_is_deterministic() -> None:
@@ -41,12 +43,12 @@ def test_phase6_migrations_lifecycle_vector_and_graph(tmp_path: Path) -> None:
         version_label="v1",
     )
 
-    assert result.schema_version == 10  # 迁移集演进 1..10
+    assert result.schema_version == LATEST_SCHEMA_VERSION  # 迁移集演进 1..10
     assert result.vector_summary.vector_count > 0
     assert result.document_version.logical_document_id == "ldoc_ripple"
 
     with SQLiteKnowledgeStore(db) as store:
-        assert SchemaMigrator(store.connection).current_version() == 10  # 迁移集演进 1..10
+        assert SchemaMigrator(store.connection).current_version() == LATEST_SCHEMA_VERSION  # 迁移集最后版本
         assert SQLiteVectorIndex(store.connection).summary().vector_count > 0
         graph = SQLiteGraphStore(store.connection)
         graph.upsert_relations(
@@ -108,7 +110,7 @@ def test_production_pipeline_versions_query_feedback_and_service(tmp_path: Path)
     )
     assert query.retrieval_result.candidates
     assert query.context_pack.evidence
-    assert query.schema_version == 10  # 迁移集演进 1..10
+    assert query.schema_version == LATEST_SCHEMA_VERSION  # 迁移集演进 1..10
 
     add_persistent_feedback(
         db_path=db,
@@ -124,6 +126,6 @@ def test_production_pipeline_versions_query_feedback_and_service(tmp_path: Path)
     service = AgentKBService(db_path=db, domain_pack=pack)
     health = service.health()
     assert health.status == "ok"
-    assert health.schema_version == 10  # 迁移集演进 1..10
+    assert health.schema_version == LATEST_SCHEMA_VERSION  # 迁移集演进 1..10
     response = service.query({"query": "LV ripple limit?", "top_k": 5})
     assert response["retrieval_result"]["candidates"]

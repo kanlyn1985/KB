@@ -16,6 +16,8 @@ from agent_kb.storage import SQLiteBackupManager, SQLiteKnowledgeStore
 
 
 ROOT = Path(__file__).resolve().parents[1]
+LATEST_SCHEMA_VERSION = max(m.version for m in __import__(
+    'agent_kb.storage.migrations', fromlist=['ALL_MIGRATIONS']).ALL_MIGRATIONS)
 ADMIN_KEY = "admin-key-00000000000000000000"
 READER_KEY = "reader-key-0000000000000000000"
 
@@ -123,7 +125,7 @@ def test_jobs_backup_purge_hardened_service_and_tenant_isolation(tmp_path: Path)
             "version_label": "v1",
         },
     )
-    assert indexed["schema_version"] == 10  # 迁移集演进 1..10
+    assert indexed["schema_version"] == LATEST_SCHEMA_VERSION  # 迁移集演进 1..10
     assert len(hardened.documents(admin)["documents"]) == 1
     assert hardened.documents(reader)["documents"] == []
 
@@ -193,4 +195,4 @@ def test_job_queue_graph_evaluation_openapi_and_mcp(tmp_path: Path) -> None:
     adapter = AgentKBMCPAdapter(service)
     names = {tool["name"] for tool in adapter.list_tools()}
     assert "agent_kb_query" in names
-    assert adapter.call_tool("agent_kb_health", {})["schema_version"] == 10  # 迁移集演进 1..10
+    assert adapter.call_tool("agent_kb_health", {})["schema_version"] == LATEST_SCHEMA_VERSION  # 迁移集演进 1..10
