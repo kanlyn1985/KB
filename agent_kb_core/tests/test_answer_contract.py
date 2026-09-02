@@ -19,10 +19,23 @@ DB = ROOT / "validation" / "node-index.sqlite3"
 DOMAIN = ROOT / "domains" / "obc_dcdc"
 
 # 生产库（318MB）不入 git，CI 沙箱没有 —— 无库则整组跳过（本地必跑）。
+# 测试隔离（AKB-V01-HARDENING-001）：query_production_store 打开库时会执行
+# SchemaMigrator.migrate()（生产 CLI 的正确防御行为）——因此测试**禁止直接打开生产库**，
+# 一律先复制到临时副本，migration 只作用于副本；原库 hash 测试前后不变
+# （test_production_db_isolation.py 钉死）。
 pytestmark = pytest.mark.skipif(
     not DB.exists(),
     reason="production node-index.sqlite3 not available (not in git)",
 )
+
+
+@pytest.fixture(scope="session")
+def isolated_db(tmp_path_factory):
+    """生产库会话级副本：migration 副作用只落在副本上。"""
+    import shutil
+    copy_path = tmp_path_factory.mktemp("isolated") / "node-index-isolated.sqlite3"
+    shutil.copy2(DB, copy_path)
+    return copy_path
 
 GOLDEN_ANCHORS = [
     ("DCDC保护功能有哪些", "sufficient", ["过压", "过温", "短路"], 2),
@@ -33,17 +46,17 @@ GOLDEN_ANCHORS = [
 ]
 
 
-def _production_pack(query: str):
+def _production_pack(query: str, db_path):
     domain_pack = load_domain_pack(DOMAIN)
     return query_production_store(
-        query, db_path=DB, domain_pack=domain_pack,
+        query, db_path=db_path, domain_pack=domain_pack,
         embedding_provider=HashEmbeddingProvider(),
     )
 
 
 @pytest.mark.parametrize("query,want_status,anchors,min_hits", GOLDEN_ANCHORS)
-def test_answer_contract_and_fact_anchors(query, want_status, anchors, min_hits):
-    result = _production_pack(query)
+def test_answer_contract_and_fact_anchors(query, want_status, anchors, min_hits, isolated_db):
+    result = _production_pack(query, isolated_db)
     pack = result.context_pack
     judgement = result.evidence_judgement
 
@@ -69,15 +82,15 @@ def test_answer_contract_and_fact_anchors(query, want_status, anchors, min_hits)
         f"{query}: 事实锚点 {hits}/{min_hits} 未达标，需要 {anchors}")
 
 
-def test_sufficient_never_abstains():
-    result = _production_pack("HARA分析怎么做")
+def test_sufficient_never_abstains(isolated_db):
+    result = _production_pack("HARA分析怎么做", isolated_db)
     strategy = result.context_pack.recommended_answer_strategy
     assert strategy not in {"ask_clarification_or_abstain",
                             "ask_clarification_with_candidate_interpretations"}, (
         f"sufficient 但策略为弃答类: {strategy}")
 
 
-def test_partial_discloses_gaps():
-    result = _production_pack("输出纹波要求是多少")
+def test_partial_discloses_gaps(isolated_db):
+    result = _production_pack("输出纹波要求是多少", isolated_db)
     pack = result.context_pack
     assert pack.warnings or pack.knowledge_gaps, "partial 但无任何披露信息"
