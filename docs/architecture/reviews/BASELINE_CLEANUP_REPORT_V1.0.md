@@ -52,17 +52,21 @@ review-time 全仓扫描（docs/** + tests/**，md/json/py/html）发现 24 处�
 
 ## Tests
 
-新增 `agent_kb_core/tests/test_baseline_consistency.py`（7 项，全过）：
+按任务书 §10 指定文件名组织（7 项断言）：
 
-1. test_srs_requirement_ids_unique — SRS 需求表内 ID 唯一
-2. test_rtm_requirement_ids_unique — RTM §3 矩阵 20 条唯一 + §2a 映射引用不造新号
-3. test_srs_rtm_mapping_complete — §2a 存在且 SRS 每族全覆盖
-4. test_invariant_registry_complete_and_unique — Registry 恰含 INV-001..010 且规则非空
-5. test_all_repo_inv_references_known — 全仓 INV 引用 ∈ Registry（未知编号即 FAIL）
-6. test_golden_invariant_refs_consistent — golden invariant_ref ∈ Registry + Agent 写类必为 INV-008
-7. test_adr_invariant_refs_consistent — ADR 引用 ∈ Registry + ADR-008 写边界 = INV-008
+- `agent_kb_core/tests/test_requirement_id_consistency.py`：
+  1. test_srs_requirement_ids_unique — SRS 需求表内 ID 唯一
+  2. test_rtm_requirement_ids_unique — RTM §3 矩阵 20 条唯一 + §2a 映射引用不造新号
+  3. test_srs_rtm_mapping_complete — §2a 存在且 SRS 每族全覆盖
+- `agent_kb_core/tests/test_invariant_registry_consistency.py`：
+  4. test_invariant_registry_complete_and_unique — Registry 恰含 INV-001..010 且规则非空
+  5. test_all_repo_inv_references_known — 全仓 INV 引用 ∈ Registry（未知编号即 FAIL）
+  6. test_golden_invariant_refs_consistent — golden invariant_ref ∈ Registry + Agent 写类必为 INV-008
+  7. test_adr_invariant_refs_consistent — ADR 引用 ∈ Registry + ADR-008 写边界 = INV-008
+- `agent_kb_core/tests/test_baseline_consistency.py`：兼容层（1 项 smoke：拆分文件存在性），
+  不重复收集断言（避免同一断言双计入统计）。
 
-回归（review-time 实测）：
+回归（本任务收尾实测，三入口）：
 
 ```text
 python agent_kb_core/tools/validate_golden_dataset.py
@@ -70,11 +74,11 @@ Golden Dataset validation: PASS
 Cases: 30 | Invalid: 0 | Duplicate IDs: 0 | Reasoning 6 | Negative 12/16 | Categories 30/30
 
 python -m pytest agent_kb_core/tests -q
-87 passed（80 + 新增 7）
-```
+88 passed
 
-（仓库根无独立 pytest 入口：agent_kb_core/pyproject.toml 即唯一包配置，agent_kb_core/tests 即全部测试面；
-`python -m pytest -q` 等价于上述命令。）
+python -m pytest -q   （仓库根入口，PYTHONPATH 含 agent_kb_core/src 与 tests）
+88 passed（与 agent_kb_core 入口同一测试面，无重复收集）
+```
 
 ## Golden validation
 
