@@ -176,7 +176,7 @@ def test_retention_legal_hold_backup_replication_recovery_and_mcp(tmp_path: Path
     recovery = run_recovery_drill(backup.path)
     assert recovery.status == "passed"
     assert recovery.integrity_ok
-    assert recovery.schema_version == 8
+    assert recovery.schema_version == 10  # v9(平台) + v10(V0.1 evidence core) 已入 CORE
     assert recovery.cleanup_performed
 
     service = AgentKBService(db_path=db, domain_pack=pack)
