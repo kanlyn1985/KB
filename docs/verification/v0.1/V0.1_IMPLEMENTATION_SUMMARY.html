@@ -17,7 +17,7 @@ code{background:#161d2e;padding:1px 6px;border-radius:4px;font-family:Consolas,m
 </head>
 <body>
 <h1>V0.1 Evidence Core — Implementation Summary</h1>
-<p class="meta">Task: AKB-V01-IMPL-001 · Date: 2026-09-01 · Base: d9cd66f · Branch: rebuild/agent-kb-core · <span class="pass">ACCEPTED / RELEASE BASELINE</span></p>
+<p class="meta">Task: AKB-V01-IMPL-001 · Date: 2026-09-01 · Base: d9cd66f · Branch: rebuild/agent-kb-core · <span class="warn">RELEASE CANDIDATE</span>（ awaiting legacy CI repair run evidence）</p>
 
 <h2>1. Architecture</h2>
 <div class="card">Canonical Knowledge Unit = <b>KnowledgeAssertion</b>（DM-005）。治理链冻结：<br>
@@ -119,7 +119,8 @@ Golden evd:node:* 引用经 legacy resolver 影子映射可解析。</div>
 <table><tr><th>项</th><th>内容</th></tr>
 <tr><td>原问题</td><td>answer contract 测试经 query_production_store 触发生产库 migrate（v9/v10 被应用）</td></tr>
 <tr><td>修复</td><td>session 级 isolated_db fixture：生产库复制到 pytest tmp，断言全部跑副本</td></tr>
-<tr><td>证据</td><td>test_production_db_isolation.py：会话 SHA-256 首尾一致；副本测试后生产库 migrations 行数不变</td></tr>
+<tr><td>证据</td><td>session-level hooks（pytest_sessionstart/finish 指纹对比，diff 即 FAIL）+ negative proof（副本 migrate→生产指纹逐字段不变）+ answer contract 静态审计（0 直连）</td></tr>
+<tr><td>skip 语义</td><td>CI 无生产库 → NOT EXECUTED（skipped），不冒充 PASS</td></tr>
 <tr><td>before/after</td><td class="ok">same file / same hash / same schema / same data</td></tr></table>
 
 <h2>18. Adversarial Governance Tests</h2>
@@ -136,10 +137,13 @@ Golden evd:node:* 引用经 legacy resolver 影子映射可解析。</div>
 <tr><td>V0.1 专项</td><td class="ok">51 passed</td><td class="ok">PASS ×3 versions</td></tr>
 <tr><td>agent_kb_core 全量</td><td class="ok">135 passed</td><td class="ok">PASS ×3 versions</td></tr>
 <tr><td>仓库全量</td><td class="ok">135 passed</td><td class="ok">PASS ×3 versions</td></tr>
-<tr><td>Run ID</td><td>—</td><td>33645020731 (push) / 33645029559 (PR)，均 success</td></tr></table>
+<tr><td>Run ID</td><td>—</td><td>33645020731 (push) / 33645029559 (PR)，均 success</td></tr>
+<tr><td>legacy Tests workflow</td><td>—</td><td class="warn">FAIL（baseline：根目录无 pyproject，2026-07 起即坏；修复 commit 242b706 后待 run 实证）</td></tr></table>
+<p class="meta">CI 矩阵重定义（AKB-V01-ACCEPTANCE-001 §8）：V0.1 dedicated CI = PASS；
+overall GitHub CI 不得声称全绿，直至 legacy repair run success。</p>
 
 <h2>20. Final Release Readiness</h2>
-<div class="card"><span class="pass">V0.1 EVIDENCE CORE = ACCEPTED / RELEASE BASELINE</span><br>
+<div class="card"><span class="warn">V0.1 EVIDENCE CORE = RELEASE CANDIDATE</span><br>
 §32 checklist 全满足；INV-009/010 NOT IN SCOPE 如实标注；Production DB Isolation PASS；
 Adversarial 9 项 PASS；GitHub CI 独立验证 success（非本地转述）。<br>
 <span class="warn">Outstanding</span>：生产库 graph_edges 467 条回填待批准（工具就绪）；
