@@ -78,7 +78,7 @@ def test_ast_007_transition_atomicity(stores, seeded):
 def test_ast_007b_direct_sql_status_update_blocked(db, seeded, stores):
     """INV-005 / 任务书 §16: 直接 SQL UPDATE status 绕过 API → 触发器 FAIL。"""
     a = make_candidate(stores["assertions"], ev_ref=seeded["evidence"])
-    with pytest.raises(sqlite3.Error, match="assertion_transitions"):
+    with pytest.raises(sqlite3.Error, match="INV-005"):
         db.execute("UPDATE akb_assertions SET status='asserted' WHERE assertion_id=?",
                    (a.assertion_id,))
     # 不可变列同理

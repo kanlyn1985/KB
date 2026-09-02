@@ -297,6 +297,99 @@ CORE_MIGRATIONS: tuple[Migration, ...] = (
 # v9 已并入 CORE_MIGRATIONS（2026-09-01 V0.1 实现期修正：v9 定义存在但此前未纳入 CORE，
 # 且 PLATFORM 重复组合会导致 version 重复应用）
 PLATFORM_MIGRATIONS: tuple[Migration, ...] = CORE_MIGRATIONS
+V01_HARDENING_MIGRATION: Migration = Migration(
+    version=11,
+    name="v01_governance_hardening",
+    statements=(
+        # 11.1 transitions INSERT 白名单：DB 层状态机（伪造 new_status/previous 组合直接 ABORT）
+        """
+        CREATE TRIGGER IF NOT EXISTS trg_akb_astt_legal_pair
+        BEFORE INSERT ON akb_assertion_transitions
+        FOR EACH ROW
+        WHEN NOT EXISTS (
+            SELECT 1 FROM (
+                SELECT 'candidate' AS p, 'validated' AS n UNION ALL
+                SELECT 'candidate', 'rejected' UNION ALL
+                SELECT 'validated', 'asserted' UNION ALL
+                SELECT 'validated', 'disputed' UNION ALL
+                SELECT 'validated', 'deprecated' UNION ALL
+                SELECT 'asserted', 'disputed' UNION ALL
+                SELECT 'asserted', 'deprecated' UNION ALL
+                SELECT 'disputed', 'asserted' UNION ALL
+                SELECT 'disputed', 'deprecated' UNION ALL
+                SELECT 'disputed', 'rejected'
+            ) legal
+            WHERE legal.p = NEW.previous_status AND legal.n = NEW.new_status
+        )
+        BEGIN
+          SELECT RAISE(ABORT, 'INV-005: illegal status pair in assertion_transitions');
+        END
+        """,
+        # 11.1b type 联动：inferred 断言禁止出现 →asserted 的迁移行；hypothesized 禁止 →validated/asserted
+        """
+        CREATE TRIGGER IF NOT EXISTS trg_akb_astt_type_boundary
+        BEFORE INSERT ON akb_assertion_transitions
+        FOR EACH ROW
+        WHEN EXISTS (
+            SELECT 1 FROM akb_assertions a
+            WHERE a.assertion_id = NEW.assertion_id
+              AND ((a.assertion_type = 'inferred' AND NEW.new_status = 'asserted')
+                OR (a.assertion_type = 'hypothesized'
+                    AND NEW.new_status IN ('validated','asserted')))
+        )
+        BEGIN
+          SELECT RAISE(ABORT, 'INV-002: type-boundary transition forbidden');
+        END
+        """,
+        # 11.2 transitions INSERT 的 provenance 联动：必须指向存在的 provenance 行
+        """
+        CREATE TRIGGER IF NOT EXISTS trg_akb_astt_provenance_exists
+        BEFORE INSERT ON akb_assertion_transitions
+        FOR EACH ROW
+        WHEN NEW.provenance_ref IS NULL OR NOT EXISTS (
+            SELECT 1 FROM akb_provenance p WHERE p.provenance_id = NEW.provenance_ref
+        )
+        BEGIN
+          SELECT RAISE(ABORT, 'INV-005: transition requires existing provenance record');
+        END
+        """,
+        # 11.3 controlled UPDATE 的 provenance_ref 必须等于该 latest transitions 行的 provenance_ref
+        #      （伪造 provenance_ref 直接 ABORT——攻击路径 3 修复）
+        """
+        CREATE TRIGGER IF NOT EXISTS trg_akb_assertions_status_provenance_pair
+        BEFORE UPDATE OF status ON akb_assertions
+        FOR EACH ROW
+        WHEN NEW.status != OLD.status
+          AND (SELECT provenance_ref FROM akb_assertion_transitions t
+               WHERE t.assertion_id = NEW.assertion_id
+                 AND t.new_status = NEW.status
+                 AND t.previous_status = OLD.status
+                 AND t.rowid = (SELECT MAX(t2.rowid) FROM akb_assertion_transitions t2
+                                WHERE t2.assertion_id = NEW.assertion_id
+                                  AND t2.new_status = NEW.status
+                                  AND t2.previous_status = OLD.status))
+              IS NOT NEW.provenance_ref
+        BEGIN
+          SELECT RAISE(ABORT, 'INV-005: status provenance_ref must match transition record');
+        END
+        """,
+        # 11.4 provenance_ref 无审计改写守卫：status 不变时改 provenance_ref 必须有
+        #      对应 transitions 行（防止绕过迁移历史）
+        """
+        CREATE TRIGGER IF NOT EXISTS trg_akb_assertions_prov_ref_guard
+        BEFORE UPDATE OF provenance_ref ON akb_assertions
+        FOR EACH ROW
+        WHEN NEW.provenance_ref IS NOT OLD.provenance_ref
+          AND (SELECT COUNT(*) FROM akb_assertion_transitions t
+               WHERE t.assertion_id = NEW.assertion_id
+                 AND t.provenance_ref = NEW.provenance_ref) = 0
+        BEGIN
+          SELECT RAISE(ABORT, 'INV-005: provenance_ref change requires transition record');
+        END
+        """,
+    ),
+)
+
 V01_EVIDENCE_CORE_MIGRATION: Migration = Migration(
     version=10,
     name="v01_evidence_core",
@@ -502,7 +595,9 @@ V01_EVIDENCE_CORE_MIGRATION: Migration = Migration(
     ),
 )
 
-ALL_MIGRATIONS: tuple[Migration, ...] = CORE_MIGRATIONS + (V01_EVIDENCE_CORE_MIGRATION,)
+ALL_MIGRATIONS: tuple[Migration, ...] = (
+    CORE_MIGRATIONS + (V01_EVIDENCE_CORE_MIGRATION, V01_HARDENING_MIGRATION)
+)
 
 
 
