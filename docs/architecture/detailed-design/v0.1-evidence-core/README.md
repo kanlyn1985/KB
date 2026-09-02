@@ -9,7 +9,7 @@
 | 文件 | 内容 | 任务书条款 |
 |---|---|---|
 | [V0.1_EVIDENCE_CORE_DETAILED_DESIGN.md](V0.1_EVIDENCE_CORE_DETAILED_DESIGN.md) | 范围边界/架构位置/治理链/不变量落实/实现顺序 | §B1 |
-| [V0.1_DATABASE_DESIGN.md](V0.1_DATABASE_DESIGN.md) | 7 张 akb_ 前缀新表 + graph_edges 加列，DDL 级（列/类型/约束/CHECK/索引/append-only 触发器） | §B2/B3 |
+| [V0.1_DATABASE_DESIGN.md](V0.1_DATABASE_DESIGN.md) | 7 new AKB canonical storage tables + 1 existing projection table altered (assertion_ref), DDL 级（列/类型/约束/CHECK/索引/append-only 触发器） | §B2/B3 |
 | [V0.1_STATE_MACHINE.md](V0.1_STATE_MACHINE.md) | type×status 合法矩阵/Evidence Gate/非法迁移表/权限矩阵/幂等/投影联动 | §B4/B5/B6 |
 | [V0.1_INTERFACE_BEHAVIOR.md](V0.1_INTERFACE_BEHAVIOR.md) | 9 方法级契约（10 字段/方法）+ Semantica Adapter 边界 + 错误码 | §B11/B12 |
 | [V0.1_VERIFICATION_SPEC.md](V0.1_VERIFICATION_SPEC.md) | V0.1-EVD/AST/PROV/GRAPH/MIG/REG 15 条用例 + Golden 映射 + Exit Criteria | §B13/B14/B15 |
@@ -31,4 +31,4 @@
 3. **append-only 三表**：akb_evidence / akb_assertions(核心列) / akb_assertion_transitions
    由触发器强制（INV-005 物质基础）；
 4. **INV-001/002 双层强制**：API 层 Validator + DB 层 CHECK 约束（绕过 API 亦无法违规）；
-5. **V0.1 无 Semantica import**（ADR-006/011 边界），lint 清单预留。
+5. **V0.1 无 Semantica import**（ADR-006 边界 + ADR-008 解耦边界），lint 清单预留。
