@@ -54,26 +54,28 @@ def _write_report(report: dict, verdict: str) -> Path:
 
 if PROD_AVAILABLE:
 
-    @pytest.hookimpl(hookwrapper=True)
+    @pytest.hookimpl(tryfirst=True)
     def pytest_sessionstart(session):
-        global _before
-        _before = _fingerprint()
-        report_path = _write_report({"phase": "sessionstart", "before": _before}, "PENDING")
+        before = _fingerprint()
+        setattr(session, "prod_isolation_before", before)
+        report_path = _write_report({"phase": "sessionstart", "before": before}, "PENDING")
         print(f"\n[prod-isolation] BEFORE fingerprint recorded -> {report_path.name} "
-              f"(sha256={_before['sha256'][:16]}..., schema_version={_before['schema_version']})")
-        yield
+              f"(sha256={before['sha256'][:16]}..., schema_version={before['schema_version']})")
 
     @pytest.hookimpl(trylast=True)
     def pytest_sessionfinish(session, exitstatus):
+        before = getattr(session, "prod_isolation_before", None)
+        if before is None:  # sessionstart 未跑（异常收集等）——现场补拍
+            before = _fingerprint()
         after = _fingerprint()
         diff = {}
-        for key in _before:
-            if _before[key] != after[key]:
-                diff[key] = {"before": _before[key], "after": after[key]}
+        for key in before:
+            if before[key] != after[key]:
+                diff[key] = {"before": before[key], "after": after[key]}
         exempt = ROOT / "validation" / ".prod_db_isolation_exemptions.json"
         verdict = "PASS" if not diff else ("EXEMPTED" if exempt.exists() else "FAIL")
         report_path = _write_report({"phase": "sessionfinish",
-                                     "before": _before, "after": after, "diff": diff}, verdict)
+                                     "before": before, "after": after, "diff": diff}, verdict)
         print(f"\n[prod-isolation] AFTER fingerprint compared -> {report_path.name}")
         if diff:
             print(f"[prod-isolation] DIFF: {json.dumps(diff, indent=1, default=str)}")
@@ -84,9 +86,13 @@ if PROD_AVAILABLE:
                 f"PRODUCTION DB MODIFIED DURING PYTEST SESSION: {diff}")
 
     @pytest.fixture(scope="session")
-    def prod_isolation_evidence():
+    def prod_isolation_evidence(request):
         """供测试读取会话首查指纹（negative proof 对比用）。"""
-        return _before
+        before = getattr(request.session, "prod_isolation_before", None)
+        if before is None:  # fixture 首用时 sessionstart 已必跑；兜底现场补拍
+            before = _fingerprint()
+            setattr(request.session, "prod_isolation_before", before)
+        return before
 
     @pytest.fixture(scope="session")
     def prod_db_path():
