@@ -18,7 +18,7 @@ code{background:#182238;padding:1px 6px;border-radius:4px;font-family:Consolas,m
 <body>
 <h1>V0.2 Semantic Compilation Core — Implementation Summary</h1>
 <p class="meta">Task: AKB-V02-IMPL-001 · Date: 2026-09-03 · Design Base: 6189a8f · Branch: rebuild/agent-kb-core ·
-<span class="pass">ACCEPTED</span></p>
+<span class="warn">ACCEPTED (pending owner confirmation)</span></p>
 
 <h2>Architecture</h2>
 <div class="card">V0.1 治理链之上新增编译面：<code>Evidence → Preprocessor → Normalizer → Extractor →
@@ -88,5 +88,22 @@ provider 崩溃 → run failed 零跨界写；provider actor 无治理跃迁路�
 详细证据：V0.2_IMPLEMENTATION_VERIFICATION_REPORT.md。</div>
 
 <p class="meta">GitHub Actions：push 后 run 状态见 CI Evidence（本页不转述未验证状态）。</p>
+
+<h2>Implementation Hardening（AKB-V02-IMPL-002 · 2026-09-03）</h2>
+<table><tr><th>Defect</th><th>修复</th><th>测试</th></tr>
+<tr><td>A — Temporal anchor 断连（document_effective_time=None 硬编码）</td><td>evidence 查询 JOIN akb_documents.effective_at 作为锚；零当前时钟参与</td><td class="ok">T-A1/A2/A3 PASS</td></tr>
+<tr><td>B — fingerprint 锚语义隐式</td><td>五条锚语义成文（compiler 注释 + DETERMINISM_SPEC + MIGRATION_PLAN）；幂等返回经 compiler_run_ref 解析完整 run 产物</td><td class="ok">CMP-020 PASS</td></tr>
+<tr><td>C — 单证据契约仅签名级验证</td><td>入口 str 类型守卫（列表/多值字符串 → E-COMPILER-INVALID-EVIDENCE）；持久层伪造多元素 run 行被基数校验拒绝</td><td class="ok">CMP-021 PASS</td></tr>
+<tr><td>run 基数完整性 / provenance 四级 trace</td><td>库级 json_array_length/json_extract 全查；多 segment 场景父级正确解析+确定性</td><td class="ok">CMP-022/023 PASS</td></tr></table>
+
+<h2>Hardening Regression</h2>
+<table><tr><th>入口</th><th>结果</th></tr>
+<tr><td>V0.2 tests</td><td class="ok">28 passed（21 + CMP-020..023 + T-A1..A3）</td></tr>
+<tr><td>Golden 40</td><td class="ok">PASS 40/40</td></tr>
+<tr><td>Golden 30（V0.1）</td><td class="ok">PASS</td></tr>
+<tr><td>agent_kb_core / repository</td><td class="ok">171 passed / 171 passed</td></tr>
+<tr><td>Production DB</td><td class="ok">UNCHANGED（零生产写入，无新 migration）</td></tr></table>
+<p class="meta">Commit: fix(v0.2): harden semantic compilation temporal and run invariants。</p>
+
 </body>
 </html>
