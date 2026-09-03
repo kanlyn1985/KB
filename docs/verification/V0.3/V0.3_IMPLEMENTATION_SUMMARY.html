@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>V0.3 Multi-Evidence Synthesis — Implementation Summary</title>
+<style>
+body{font-family:"Microsoft YaHei",system-ui,sans-serif;background:#101828;color:#dde5f2;margin:0;padding:24px;line-height:1.6}
+h1{color:#5fb3f0;font-size:22px}h2{color:#5fb3f0;font-size:17px;border-bottom:1px solid #2a3a5c;padding-bottom:6px;margin-top:28px}
+table{border-collapse:collapse;width:100%;font-size:13px;margin:10px 0}
+th,td{border:1px solid #2a3a5c;padding:6px 10px;text-align:left}th{background:#1c2a48;color:#93a5c4}
+.pass{display:inline-block;background:#123b2b;color:#3ddc97;border-radius:12px;padding:2px 10px;font-weight:700}
+.risk{display:inline-block;background:#3d3112;color:#f0b429;border-radius:12px;padding:2px 10px;font-weight:700}
+.fail{display:inline-block;background:#3d1212;color:#f26d6d;border-radius:12px;padding:2px 10px;font-weight:700}
+code{background:#182238;padding:1px 6px;border-radius:4px;font-family:Consolas,monospace;font-size:12px}
+.card{background:#182238;border:1px solid #2a3a5c;border-radius:8px;padding:14px 18px;margin:12px 0}
+.meta{color:#93a5c4;font-size:12px}
+</style>
+</head>
+<body>
+<h1>V0.3 Multi-Evidence Semantic Synthesis — Implementation Summary</h1>
+<p class="meta">AKB-V03-IMPL-001 · 2026-09-03 · Design Base f4a5705 · <span class="pass">ACCEPTED — IMPLEMENTATION BASELINE</span></p>
+
+<h2>Architecture & Implementation Scope</h2>
+<div class="card">V0.2 单证据编译之上新增多证据合成：
+<code>Evidence[] → EvidenceSet（指纹锚）→ Membership → Unit Retrieval →
+Entity/Relation/Event/State Alignment → Temporal 六态 → Conflict 7 类（capped）→
+Compatibility 五级 → SourceWeight → Candidate Synthesis → create_candidate()（唯一边界）→
+V0.1 Governance</code>。位置 <code>agent_kb/evidence_core/synthesis/</code>（8 模块）。</div>
+
+<h2>Migration</h2>
+<table><tr><th>对象</th><th>类型</th></tr>
+<tr><td>akb_evidence_sets（+UNIQUE set_fingerprint）</td><td>新表（migration 13）</td></tr>
+<tr><td>akb_synthesis_runs（16 列 + fingerprint UNIQUE + capped 状态）</td><td>新表</td></tr>
+<tr><td>V0.1/V0.2 既有表</td><td class="pass">零改动</td></tr>
+<tr><td>生产库</td><td class="pass">未触碰（工具就绪，执行待批准）</td></tr></table>
+
+<h2>Verification Matrix（CMP-001..025）</h2>
+<table><tr><th>组</th><th>结果</th></tr>
+<tr><td>CMP-001..005（Set 身份/顺序/变更/重复/实体对齐）</td><td class="pass">PASSED</td></tr>
+<tr><td>CMP-006..010（关系/事件/状态/时间/兼容）</td><td class="pass">PASSED</td></tr>
+<tr><td>CMP-011..015（value/temporal/source/ontology 冲突 + 合成）</td><td class="pass">PASSED</td></tr>
+<tr><td>CMP-016..020（candidate-only/provenance/确定性/幂等/隔离）</td><td class="pass">PASSED</td></tr>
+<tr><td>CMP-021..025（provider/基数/向后兼容/无权威写/trace 确定性）</td><td class="pass">PASSED</td></tr>
+<tr><td>对抗面（capped/crash/原子/逆序/直写拦截/V0.2 不变）</td><td class="pass">PASSED</td></tr>
+<tr><td>V0.3 dedicated</td><td class="pass">31 passed</td></tr></table>
+
+<h2>Golden Counts</h2>
+<table><tr><th>数据集</th><th>结果</th></tr>
+<tr><td>V0.3 synthesis（20P+15N+5D+5C+5B+5Pr）</td><td class="pass">55/55</td></tr>
+<tr><td>V0.2 compilation 40</td><td class="pass">40/40</td></tr>
+<tr><td>V0.1 Golden 30</td><td class="pass">30/30</td></tr></table>
+
+<h2>Regression & Repository</h2>
+<table><tr><th>入口</th><th>结果</th></tr>
+<tr><td>V0.1 全套 / V0.2 28 项 / V0.3 31 项</td><td class="pass">全 PASS</td></tr>
+<tr><td>agent_kb_core 全量</td><td class="pass">202 passed</td></tr>
+<tr><td>repository 全量</td><td class="pass">202 passed</td></tr></table>
+
+<h2>CI Status</h2>
+<table><tr><th>Workflow</th><th>结果</th></tr>
+<tr><td>Agent KB Core CI（8 jobs @ HEAD）</td><td class="pass">SUCCESS</td></tr>
+<tr><td>Tests workflow</td><td class="pass">SUCCESS</td></tr></table>
+
+<h2>Defects</h2>
+<table><tr><th>级别</th><th>计数</th></tr>
+<tr><td>P0</td><td class="pass">0</td></tr>
+<tr><td>P1</td><td class="pass">0</td></tr>
+<tr><td>P2（non-blocking，实现期修复 4 项内部缺陷后余留设计注记）</td><td class="risk">5</td></tr></table>
+
+<h2>Provenance & Production Safety</h2>
+<div class="card">五级链 Assertion→Run→Set→Evidence[]→Document[] 全可溯（CMP-017/025）；
+weight≠adjudication；candidate 恒不自动晋升；生产库零写入（isolation 机制保持）。</div>
+
+<h2>Final Decision</h2>
+<div class="card"><span class="pass">ACCEPTED — IMPLEMENTATION BASELINE</span><br>
+Commits: f633ef1 / f718b9d / fd8b216 / docs(终态) · 详版：
+<code>docs/verification/V0.3/V0.3_IMPLEMENTATION_VERIFICATION_REPORT.md</code></div>
+
+<p class="meta">风险以 <span class="risk">RISK</span> 标注（召回率量化/默认参数/冲突值简化选取/
+provider 通道预留/生产迁移窗口）。无 FAILED 项。</p>
+</body>
+</html>
