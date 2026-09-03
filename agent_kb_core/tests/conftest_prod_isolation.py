@@ -100,6 +100,16 @@ if PROD_AVAILABLE:
 
 else:
 
+    @pytest.hookimpl(tryfirst=True)
+    def pytest_sessionstart(session):
+        print("\n[prod-isolation] production DB not available — isolation NOT EXECUTED (skipped)")
+
+    @pytest.hookimpl(trylast=True)
+    def pytest_sessionfinish(session, exitstatus):
+        report_path = _write_report({"phase": "sessionfinish",
+                                     "note": "production DB unavailable"}, "NOT_EXECUTED")
+        print(f"\n[prod-isolation] VERDICT = NOT_EXECUTED -> {report_path.name}")
+
     @pytest.fixture(scope="session")
     def prod_isolation_evidence():
         pytest.skip("production node-index.sqlite3 not available — isolation NOT EXECUTED")
