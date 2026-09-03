@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import sqlite3
 from dataclasses import asdict
 from datetime import UTC, datetime
@@ -186,17 +187,22 @@ class SemanticCompiler:
         hit = self.connection.execute(
             "SELECT unit_id FROM akb_semantic_units WHERE content_fingerprint = ?", (fp,)).fetchone()
         if hit:
-            units = self.connection.execute(
-                "SELECT * FROM akb_semantic_units WHERE content_fingerprint = ?", (fp,)).fetchall()
+            anchor = self.connection.execute(
+                "SELECT * FROM akb_semantic_units WHERE content_fingerprint = ?", (fp,)).fetchone()
             run_row = self.connection.execute(
                 "SELECT * FROM akb_compilation_runs WHERE run_id = ?",
-                (units[0]["compiler_run_ref"],)).fetchone() if units[0]["compiler_run_ref"] else None
+                (anchor["compiler_run_ref"],)).fetchone() if anchor["compiler_run_ref"] else None
+            # 幂等返回该次 compilation 的全部产物（同 run 全部 units——fingerprint 锚在 unit0）
+            units = self.connection.execute(
+                "SELECT * FROM akb_semantic_units WHERE compiler_run_ref = ?"
+                " ORDER BY unit_id", (anchor["compiler_run_ref"],)).fetchall()
             assertions = self._assertions_for_units([u["unit_id"] for u in units])
+            warnings = json.loads(run_row["warnings_json"]) if run_row else []
             return CompilationResult(
                 run=CompilationRunRecord(**_run_kwargs(run_row)) if run_row else None,
                 units=[self._unit_from_row(u) for u in units],
                 assertions=assertions,
-                warnings=[], fingerprint=fp, idempotent_hit=True)
+                warnings=warnings, fingerprint=fp, idempotent_hit=True)
 
         prov = self.provenance.record(actor_id=actor_id,
                                       actor_kind=_kind_of(actor_id), activity="compile",

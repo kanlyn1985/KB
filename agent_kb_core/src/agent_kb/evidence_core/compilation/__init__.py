@@ -9,6 +9,7 @@ from agent_kb.evidence_core.compilation.compiler import (
 )
 from agent_kb.evidence_core.compilation.errors import (
     E_CANDIDATE_BUILD_FAILED,
+    E_COMPILER_INVALID_EVIDENCE,
     E_COMPILATION_DUPLICATE,
     E_COMPILATION_PROVENANCE_MISSING,
     E_NORMALIZATION_FAILED,
@@ -19,11 +20,15 @@ from agent_kb.evidence_core.compilation.errors import (
 )
 from agent_kb.evidence_core.compilation.models import (
     CompilationResult,
+    CompilationRunRecord,
     EntityCandidate,
+    NormalizedSegment,
     OntologyMapping,
+    RawExtraction,
     RelationCandidate,
     SemanticUnitRecord,
     TemporalParse,
+    TextSegment,
     canonical_json,
 )
 from agent_kb.evidence_core.compilation.normalizer import Preprocessor, SemanticNormalizer
@@ -39,9 +44,9 @@ __all__ = [
     "compilation_fingerprint", "configuration_hash", "canonical_json",
     "SemanticCompilerProvider", "BuiltinRuleExtractor", "FakeSemanticCompilerProvider",
     "validate_provider_output", "Preprocessor", "SemanticNormalizer",
-    "CompilationResult", "EntityCandidate", "RelationCandidate", "TemporalParse",
+    "CompilationResult", "CompilationRunRecord", "EntityCandidate", "RelationCandidate", "TemporalParse", "RawExtraction", "NormalizedSegment", "TextSegment",
     "OntologyMapping", "SemanticUnitRecord",
     "CompilationError", "IdempotentHit",
-    "E_CANDIDATE_BUILD_FAILED", "E_COMPILATION_DUPLICATE", "E_COMPILATION_PROVENANCE_MISSING",
+    "E_CANDIDATE_BUILD_FAILED", "E_COMPILER_INVALID_EVIDENCE", "E_COMPILATION_DUPLICATE", "E_COMPILATION_PROVENANCE_MISSING",
     "E_NORMALIZATION_FAILED", "E_ONTOLOGY_MAPPING_FAILED", "E_SEMANTIC_EXTRACTION_FAILED",
 ]
