@@ -626,9 +626,54 @@ V02_SEMANTIC_COMPILATION_MIGRATION: Migration = Migration(
     ),
 )
 
+V03_MULTI_EVIDENCE_SYNTHESIS_MIGRATION: Migration = Migration(
+    version=13,
+    name="v03_multi_evidence_synthesis",
+    statements=(
+        # EvidenceSet：成员清单+Set 指纹锚（幂等载体；成员 canonical 字典序）
+        """
+        CREATE TABLE IF NOT EXISTS akb_evidence_sets (
+            set_id             TEXT PRIMARY KEY,
+            members_json       TEXT NOT NULL,
+            set_fingerprint    TEXT NOT NULL,
+            synthesis_version  TEXT NOT NULL,
+            configuration_hash TEXT NOT NULL,
+            actor_id           TEXT NOT NULL,
+            created_at         TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
+        )
+        """,
+        "CREATE UNIQUE INDEX IF NOT EXISTS ux_akb_sets_fingerprint ON akb_evidence_sets(set_fingerprint)",
+        # SynthesisRun：run 聚合审计（对齐/冲突/权重随 run JSON 快照；fingerprint 锚）
+        """
+        CREATE TABLE IF NOT EXISTS akb_synthesis_runs (
+            run_id             TEXT PRIMARY KEY,
+            set_id             TEXT NOT NULL REFERENCES akb_evidence_sets(set_id),
+            members_json       TEXT NOT NULL,
+            synthesis_version  TEXT NOT NULL,
+            configuration_hash TEXT NOT NULL,
+            provider_id        TEXT NOT NULL,
+            actor_id           TEXT NOT NULL,
+            policy_version     TEXT NOT NULL,
+            status             TEXT NOT NULL CHECK (status IN
+                                ('running','completed','failed','partial','capped')),
+            alignment_json     TEXT,
+            conflicts_json     TEXT,
+            weights_json       TEXT,
+            fingerprint        TEXT,
+            warnings_json      TEXT NOT NULL DEFAULT '[]',
+            created_at         TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
+            finished_at        TEXT
+        )
+        """,
+        "CREATE INDEX IF NOT EXISTS ix_akb_synruns_status ON akb_synthesis_runs(status)",
+        "CREATE UNIQUE INDEX IF NOT EXISTS ux_akb_synruns_fingerprint ON akb_synthesis_runs(fingerprint)",
+    ),
+)
+
 ALL_MIGRATIONS: tuple[Migration, ...] = (
     CORE_MIGRATIONS
-    + (V01_EVIDENCE_CORE_MIGRATION, V01_HARDENING_MIGRATION, V02_SEMANTIC_COMPILATION_MIGRATION)
+    + (V01_EVIDENCE_CORE_MIGRATION, V01_HARDENING_MIGRATION,
+       V02_SEMANTIC_COMPILATION_MIGRATION, V03_MULTI_EVIDENCE_SYNTHESIS_MIGRATION)
 )
 
 
