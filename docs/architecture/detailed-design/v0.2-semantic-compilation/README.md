@@ -19,9 +19,9 @@
 | V0.2_DETERMINISM_SPEC.md | 两级确定性 + 幂等 fingerprint |
 | V0.2_ERROR_MODEL.md | 错误码族 + 失败不越界 |
 | V0.2_INTERFACE_BEHAVIOR.md | 9 接口契约 + provider 边界 |
-| V0.2_VERIFICATION_SPEC.md | CMP-001..015 + Golden 40 案例计划 |
+| V0.2_VERIFICATION_SPEC.md | CMP-001..019（19 verification cases）+ Golden 40 案例计划 |
 | V0.2_MIGRATION_PLAN.md | migration 12 设计（只设计不执行） |
-| V0.2_DESIGN_CONSISTENCY_MATRIX.md | 12 主题一致性 |
+| V0.2_DESIGN_CONSISTENCY_MATRIX.md | 16 主题一致性矩阵（含 Repair A/B/C 四新行） |
 | V0.2_SEMANTIC_COMPILATION_REVIEW_V1.0.md → reviews/ | 架构评审记录 |
 
 ## 设计关键决定
