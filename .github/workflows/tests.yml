@@ -59,4 +59,6 @@ jobs:
       - name: Run integration tests
         env:
           PYTHONPATH: agent_kb_core/src;agent_kb_core/tests
-        run: python -m pytest -q --tb=short -m "integration" || python -c "print('no integration-marked tests in current baseline; deselected OK')" && exit 0
+        run: |
+          python -c "import subprocess, sys; r = subprocess.run([sys.executable, '-m', 'pytest', '-q', '--tb=short', '-m', 'integration']); sys.exit(0) if r.returncode in (0, 5) else sys.exit(r.returncode)""
+
