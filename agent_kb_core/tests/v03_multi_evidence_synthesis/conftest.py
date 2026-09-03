@@ -9,7 +9,6 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "agent_kb_core" / "src"))
-sys.path.insert(0, str(ROOT / "agent_kb_core" / "tests"))
 
 import sqlite3  # noqa: E402
 

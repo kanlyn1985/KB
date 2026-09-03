@@ -170,6 +170,7 @@ class SynthesisEngine:
             alignment_dict = {"entity_clusters": [asdict_(c) for c in alignment.entity_clusters],
                               "relation_clusters": [asdict_(c) for c in alignment.relation_clusters],
                               "event_clusters": alignment.event_clusters,
+                              "state_clusters": alignment.state_clusters,
                               "temporal_alignment": alignment.temporal_alignment,
                               "rule_audit": alignment.rule_audit}
             candidates = self._synthesize_candidates(
@@ -199,6 +200,7 @@ class SynthesisEngine:
 
     def _retrieve_units(self, members: list[str]) -> list[dict]:
         units = []
+        meta = {m["evidence_id"]: m for m in self._member_meta(members)}
         for eid in members:                      # canonical 序（确定性）
             rows = self.connection.execute(
                 "SELECT * FROM akb_semantic_units WHERE evidence_id = ?", (eid,)).fetchall()
@@ -206,6 +208,8 @@ class SynthesisEngine:
                 raise SynthesisError(E_ALIGN_UNIT_MISSING, eid)
             for r in rows:
                 units.append(dict(r) | {
+                    "source_type": meta[eid]["source_type"],
+                    "source_id": meta[eid]["source_id"],
                     "entity_candidates": json.loads(r["entity_candidates_json"] or "[]"),
                     "relation_candidates": json.loads(r["relation_candidates_json"] or "[]"),
                     "temporal_parse": json.loads(r["temporal_parse_json"])
@@ -234,6 +238,10 @@ class SynthesisEngine:
         produced = []
         for rc in sorted(alignment.relation_clusters, key=lambda c: c.cluster_id):
             member_eids = sorted({m["evidence_id"] for m in rc.members})
+            if len(member_eids) < 2:
+                # 单证据 relation 非合成产物（V0.2 compile 已覆盖）——跳过
+                run.warnings.append(f"{rc.cluster_id}: single-evidence relation excluded")
+                continue
             if any(per_member.get(e) in ("INCOMPARABLE", "INVALID") for e in member_eids):
                 run.warnings.append(f"{rc.cluster_id}: incomparable member excluded")
                 continue

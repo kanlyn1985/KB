@@ -55,9 +55,6 @@ class EvidenceAlignmentEngine:
         all_groups = sorted(groups.items(), key=lambda kv: min(
             (m["evidence_id"], m.get("candidate_id") or "") for m in kv[1]))
         for i, (key, members) in enumerate(all_groups, 1):
-            cross_evidence = len({m["evidence_id"] for m in members}) >= 2
-            if not cross_evidence:
-                continue  # 单证据内簇无合成价值（保留在快照外）
             rep = sorted(members, key=lambda m: (m["evidence_id"], m.get("candidate_id") or ""))[0]
             result.entity_clusters.append(EntityAlignmentCluster(
                 cluster_id=f"cl_{i:04d}",
@@ -66,39 +63,41 @@ class EvidenceAlignmentEngine:
                           "ontology_ref": m.get("ontology_ref")} for m in
                          sorted(members, key=lambda m: (m["evidence_id"], m.get("candidate_id") or ""))],
                 representative=rep.get("normalized_form") or ""))
-        ec_index = {m["candidate_id"]: cl for cl in result.entity_clusters for m in cl.members}
+        # 索引：全部簇（含单证据簇）——relation 的 object 端可引用单证据实体簇
+        # 全部簇编号（含单证据簇）——键 (unit_id, candidate_id)（candidate_id 仅 run 内唯一）
+        ec_index = {(m.get("unit_id"), m.get("candidate_id")): f"cl_{i:04d}"
+                    for i, (key, members) in enumerate(all_groups, 1)
+                    for m in members}
 
         # ---- 关系对齐 ----
         rels: list[dict] = []
-        ent_value_by_cand = {e.get("candidate_id"): (e.get("normalized_form")
-                                                     or e.get("surface_form"))
+        ent_value_by_cand = {(e.get("unit_id"), e.get("candidate_id")):
+                             (e.get("normalized_form") or e.get("surface_form"))
                              for e in ents}
         for u in units:
             for rc in (u.get("relation_candidates") or []):
                 rels.append({"evidence_id": u["evidence_id"], "unit_id": u["unit_id"], **rc} | {
-                    "object_value": ent_value_by_cand.get(rc.get("object_candidate_id"))})
+                    "object_value": ent_value_by_cand.get((u["unit_id"], rc.get("object_candidate_id")))})
         rgroups: dict[tuple, list[dict]] = {}
         for r in rels:
-            s_cl = ec_index.get(r.get("subject_candidate_id"))
-            o_cl = ec_index.get(r.get("object_candidate_id"))
+            s_cl = ec_index.get((u["unit_id"], r.get("subject_candidate_id")))
+            o_cl = ec_index.get((u["unit_id"], r.get("object_candidate_id")))
             if s_cl is None or o_cl is None:
                 result.warnings.append(
                     f"relation {r.get('relation_candidate_id')}: entity cluster missing (single-evidence entity)")
                 continue
-            key = (s_cl.cluster_id, _norm(r.get("predicate_candidate") or ""), o_cl.cluster_id)
-            rgroups.setdefault(key, []).append(r)
+            # 关系身份 = (subject_cluster, predicate)；object 差异进 members（VALUE_CONFLICT 源）
+            key = (s_cl, _norm(r.get("predicate_candidate") or ""))
+            rgroups.setdefault(key, []).append(r | {"object_cluster": o_cl})
         for i, (key, members) in enumerate(sorted(rgroups.items()), 1):
-            cross = len({m["evidence_id"] for m in members}) >= 2
-            if not cross:
-                continue
             result.relation_clusters.append(RelationAlignmentCluster(
                 cluster_id=f"rc_{i:04d}", subject_cluster=key[0], predicate=key[1],
-                object_cluster=key[2],
+                object_cluster=members[0]["object_cluster"],
                 members=[{"evidence_id": m["evidence_id"], "unit_id": m["unit_id"],
                           "confidence": round(float(m.get("confidence", 0.0)), 4),
-                          "object_value": m.get("object_value") or
-                          (m.get("object_surface") if "object_surface" in m else None)}
-                         for m in sorted(members, key=lambda m: m["evidence_id"])]))
+                          "object_cluster": m["object_cluster"],
+                          "object_value": m.get("object_value")}
+                         for m in sorted(members, key=lambda m: (m["evidence_id"], m.get("object_value") or ""))]))
 
         # ---- temporal 对齐（六态）+ event/state 簇 ----
         result.temporal_alignment = self._temporal_alignment(units)

@@ -56,8 +56,11 @@ def test_v03_cmp_005_entity_alignment(db, compiled_evidence):
     eng = compiled_evidence["engine"]
     r = eng.synthesize(compiled_evidence["evidence_ids"], actor_id="system:synth")
     clusters = r["run"].alignment["entity_clusters"]
-    assert clusters, "expected cross-evidence entity cluster (OBC)"
-    cl = clusters[0]
+    assert clusters, "expected entity clusters"
+    cross = [c for c in clusters if len({m["evidence_id"] for m in c["members"]}) >= 2]
+    assert cross, "expected at least one cross-evidence entity cluster (OBC)"
+    cl = cross[0]
     member_eids = {m["evidence_id"] for m in cl["members"]}
     assert len(member_eids) >= 2  # 跨证据
+    # 簇 ID 稳定：跨证据簇按最小 (evidence_id, candidate_id) 编号（cl_0001 恒为首个簇）
     assert cl["cluster_id"] == "cl_0001"
