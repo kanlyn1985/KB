@@ -21,3 +21,5 @@
 | V02-REQ-013 | SYS-AGENT-001 | malformed provider 输出拒绝（schema validation） | INTERFACE §1 | provider 边界 | CMP-013 |
 | V02-REQ-014 | SYS-SEM-001 | unknown ontology → quarantine（不静默丢弃） | ONTOLOGY O-04 | OntologyMapper | CMP-014 |
 | V02-REQ-015 | SYS-018（RTM） | Golden semantic compilation regression（40 案例集） | VERIFICATION §golden | SemanticCompiler | CMP-015 |
+| V02-REQ-016 | SYS-OBS-001 | 单证据编译契约（一次 invocation 恰一 Evidence；run 卡片单元素；batch=V0.3+） | INTERFACE §7 | SemanticCompiler | CMP-016, CMP-019 |
+| V02-REQ-017 | INV-004 | Fingerprint CanonicalJSON 串行化正式定义（fingerprint_spec=v1，字节级比较） | DETERMINISM §fingerprint | SemanticCompiler | CMP-017, CMP-018 |
