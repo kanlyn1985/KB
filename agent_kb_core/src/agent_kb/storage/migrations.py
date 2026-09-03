@@ -595,8 +595,40 @@ V01_EVIDENCE_CORE_MIGRATION: Migration = Migration(
     ),
 )
 
+V02_SEMANTIC_COMPILATION_MIGRATION: Migration = Migration(
+    version=12,
+    name="v02_semantic_compilation",
+    statements=(
+        # akb_semantic_units 扩展列（V0.2_MIGRATION_PLAN：provenance 链 + 幂等锚点）
+        "ALTER TABLE akb_semantic_units ADD COLUMN provenance_ref TEXT",
+        "ALTER TABLE akb_semantic_units ADD COLUMN compiler_run_ref TEXT",
+        "ALTER TABLE akb_semantic_units ADD COLUMN configuration_hash TEXT NOT NULL DEFAULT ''",
+        "ALTER TABLE akb_semantic_units ADD COLUMN content_fingerprint TEXT",
+        "CREATE UNIQUE INDEX IF NOT EXISTS ux_akb_su_fingerprint ON akb_semantic_units(content_fingerprint)",
+        # run 级聚合审计实体（provenance 八问的最小充分结构）
+        """
+        CREATE TABLE IF NOT EXISTS akb_compilation_runs (
+            run_id             TEXT PRIMARY KEY,
+            evidence_ids_json  TEXT NOT NULL DEFAULT '[]',
+            compiler_version   TEXT NOT NULL,
+            configuration_hash TEXT NOT NULL,
+            ontology_version   TEXT,
+            provider_id        TEXT NOT NULL,
+            actor_id           TEXT NOT NULL,
+            policy_version     TEXT NOT NULL,
+            status             TEXT NOT NULL CHECK (status IN ('running','completed','failed','partial')),
+            warnings_json      TEXT NOT NULL DEFAULT '[]',
+            created_at         TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
+            finished_at        TEXT
+        )
+        """,
+        "CREATE INDEX IF NOT EXISTS ix_akb_runs_status ON akb_compilation_runs(status)",
+    ),
+)
+
 ALL_MIGRATIONS: tuple[Migration, ...] = (
-    CORE_MIGRATIONS + (V01_EVIDENCE_CORE_MIGRATION, V01_HARDENING_MIGRATION)
+    CORE_MIGRATIONS
+    + (V01_EVIDENCE_CORE_MIGRATION, V01_HARDENING_MIGRATION, V02_SEMANTIC_COMPILATION_MIGRATION)
 )
 
 
