@@ -17,7 +17,7 @@ code{background:#161d2e;padding:1px 6px;border-radius:4px;font-family:Consolas,m
 </head>
 <body>
 <h1>V0.1 Evidence Core — Implementation Summary</h1>
-<p class="meta">Task: AKB-V01-IMPL-001 · Date: 2026-09-01 · Base: d9cd66f · Branch: rebuild/agent-kb-core · <span class="warn">RELEASE CANDIDATE</span>（ awaiting legacy CI repair run evidence）</p>
+<p class="meta">Task: AKB-V01-IMPL-001 · Date: 2026-09-01 · Base: d9cd66f · Branch: rebuild/agent-kb-core · <span class="pass">ACCEPTED / RELEASE BASELINE</span></p>
 
 <h2>1. Architecture</h2>
 <div class="card">Canonical Knowledge Unit = <b>KnowledgeAssertion</b>（DM-005）。治理链冻结：<br>
@@ -138,16 +138,24 @@ Golden evd:node:* 引用经 legacy resolver 影子映射可解析。</div>
 <tr><td>agent_kb_core 全量</td><td class="ok">135 passed</td><td class="ok">PASS ×3 versions</td></tr>
 <tr><td>仓库全量</td><td class="ok">135 passed</td><td class="ok">PASS ×3 versions</td></tr>
 <tr><td>Run ID</td><td>—</td><td>33645020731 (push) / 33645029559 (PR)，均 success</td></tr>
-<tr><td>legacy Tests workflow</td><td>—</td><td class="warn">FAIL（baseline：根目录无 pyproject，2026-07 起即坏；修复 commit 242b706 后待 run 实证）</td></tr></table>
-<p class="meta">CI 矩阵重定义（AKB-V01-ACCEPTANCE-001 §8）：V0.1 dedicated CI = PASS；
-overall GitHub CI 不得声称全绿，直至 legacy repair run success。</p>
+<tr><td>legacy Tests workflow</td><td>—</td><td class="ok">PASS（baseline 修复后实证：run 33707156860 success；root cause=根目录无 pyproject，2026-07 起，非 V0.1 引入）</td></tr></table>
+<p class="meta">CI 矩阵终态（AKB-V01-ACCEPTANCE-001 §8）：V0.1 dedicated CI = PASS；
+legacy Tests = PASS（修复后实证）；overall GitHub CI = SUCCESS @ 9862cce（全部 required checks）。</p>
 
 <h2>20. Final Release Readiness</h2>
-<div class="card"><span class="warn">V0.1 EVIDENCE CORE = RELEASE CANDIDATE</span><br>
+<div class="card"><span class="pass">V0.1 EVIDENCE CORE = ACCEPTED / RELEASE BASELINE</span><br>
 §32 checklist 全满足；INV-009/010 NOT IN SCOPE 如实标注；Production DB Isolation PASS；
 Adversarial 9 项 PASS；GitHub CI 独立验证 success（非本地转述）。<br>
 <span class="warn">Outstanding</span>：生产库 graph_edges 467 条回填待批准（工具就绪）；
 answer-contract 隔离副本含 318MB 拷贝成本（可改 EBS/硬链接优化，非阻断）。</div>
 
+
+<h2>21. Acceptance Evidence Repair（AKB-V01-ACCEPTANCE-001 · 2026-09-03）</h2>
+<table><tr><th>项</th><th>终态</th></tr>
+<tr><td>session-level isolation</td><td class="ok">PASS（sessionstart/finish 指纹对比，本地 diff={}；CI 无库 = NOT_EXECUTED 如实标注）</td></tr>
+<tr><td>negative proof</td><td class="ok">副本 migrate → 生产库指纹逐字段不变（test_pii_002）</td></tr>
+<tr><td>answer contract 直连审计</td><td class="ok">0 直连（test_pii_003 静态锁定）</td></tr>
+<tr><td>legacy Tests workflow</td><td class="ok">PASS（run 33707156860；root cause=baseline 债务已最小修复）</td></tr>
+<tr><td>overall GitHub CI</td><td class="ok">SUCCESS @ 9862cce（AgentCore 33707156858 + Tests 33707156860，全部 jobs）</td></tr></table>
 </body>
 </html>
