@@ -11,6 +11,7 @@ from datetime import UTC, datetime
 from agent_kb.evidence_core.assertions import AssertionStore, POLICY_VERSION, Provenance
 from agent_kb.evidence_core.compilation.errors import (
     E_CANDIDATE_BUILD_FAILED,
+    E_COMPILER_INVALID_EVIDENCE,
     E_COMPILATION_DUPLICATE,
     E_COMPILATION_PROVENANCE_MISSING,
     CompilationError,
@@ -176,8 +177,14 @@ class SemanticCompiler:
                     "ontology": getattr(self.domain_pack, "version", None)})
         cfg_hash = configuration_hash(cfg)
 
+        if not isinstance(evidence_id, str) or not evidence_id.strip():
+            # 单证据契约（CMP-021）：非 str（如 list）→ V0.2 拒绝，绝不进入持久层
+            raise CompilationError(E_COMPILER_INVALID_EVIDENCE,
+                                   "single-evidence contract: evidence_id must be one string")
         ev_row = self.connection.execute(
-            "SELECT * FROM akb_evidence WHERE evidence_id = ?", (evidence_id,)).fetchone()
+            "SELECT e.*, d.effective_at AS _document_effective_time"
+            " FROM akb_evidence e LEFT JOIN akb_documents d ON d.document_id = e.document_id"
+            " WHERE e.evidence_id = ?", (evidence_id,)).fetchone()
         if ev_row is None:
             raise CompilationError("E-COMPILER-INVALID-EVIDENCE", f"evidence not found: {evidence_id}")
 
@@ -242,10 +249,13 @@ class SemanticCompiler:
                     relations = self.relation_resolver.resolve(raw, entities)
                     if len(relations) < len(raw.relations_raw):
                         warnings.append(f"segment {seg.segment_id}: orphan relation refs dropped")
+                    # T-02：相对时间锚 = akb_documents.effective_at（Defect A 修复；
+                    # 严禁 datetime.now/time.time 进入语义时间计算）
                     tparse = self.temporal_parser.parse(
                         raw.temporal_expressions,
                         observation_time=ev_row["observed_at"],
-                        document_effective_time=None, ingestion_time=ev_row["created_at"])
+                        document_effective_time=ev_row["_document_effective_time"],
+                        ingestion_time=ev_row["created_at"])
                     mappings = OntologyMapper(self.domain_pack).map(entities, relations)
                     quarantined = any(m.mapping_status == "quarantined" for m in mappings)
                     quarantined_any = quarantined_any or quarantined
@@ -260,8 +270,14 @@ class SemanticCompiler:
                         extraction_method=f"compiler:{self.provider.provider_id()}",
                         extraction_version=BUILTIN_EXTRACTOR_VERSION,
                         provenance_ref=prov.provenance_id, compiler_run_ref=run.run_id,
-                        configuration_hash=cfg_hash, content_fingerprint=fp
-                        if seg is segments[0] else None)
+                        configuration_hash=cfg_hash,
+                        # V0.2 fingerprint 锚语义（AKB-V02-IMPL-002 Defect B 显式化）：
+                        # - CompilationFingerprint 标识一次 compilation invocation；
+                        # - 首个 SemanticUnit 持 fingerprint 为持久化锚；
+                        # - 本次 invocation 的全部 unit 共享 compiler_run_ref；
+                        # - 非锚 unit 的 content_fingerprint 允许为 NULL；
+                        # - fingerprint 查询必须经 compiler_run_ref 解析完整 run 的全部产物。
+                        content_fingerprint=fp if seg is segments[0] else None)
                     d = unit.to_row()
                     d["provenance_ref"] = prov.provenance_id
                     self.connection.execute(
