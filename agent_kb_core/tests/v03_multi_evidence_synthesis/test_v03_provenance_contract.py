@@ -142,12 +142,24 @@ def test_p_005_source_conflict_provenance():
 
 
 def test_p_006_temporal_conflict_provenance():
+    """新契约：contradiction_members 驱动精确 scope（V03-IMPL-004）。"""
     al = _al_with_entities()
-    al.temporal_alignment = dict(al.temporal_alignment, overall="contradictory")
+    al.temporal_alignment = dict(al.temporal_alignment,
+        overall="contradictory",
+        contradiction_members=[
+            {"evidence_id": "EV-1", "unit_id": "UNIT-1",
+             "valid_from": "2026-01-01", "valid_until": "2026-06-01"},
+            {"evidence_id": "EV-2", "unit_id": "UNIT-2",
+             "valid_from": "2027-01-01", "valid_until": "2027-06-01"}])
     cs, by = _detect(al)
     tc = by["TEMPORAL_CONFLICT"][0]
     assert set(tc.source_evidence_ids) == {"EV-1", "EV-2"}
     assert set(tc.unit_ids) == {"UNIT-1", "UNIT-2"}
+    # §12：sides 可定位 evidence_id/unit_id/valid_from/valid_until
+    for s in tc.sides:
+        assert s["evidence_id"] in ("EV-1", "EV-2")
+        assert s["unit_id"] in ("UNIT-1", "UNIT-2")
+        assert s["valid_from"] and s["valid_until"]
 
 
 def test_p_007_relation_conflict_provenance():

@@ -173,8 +173,15 @@ def test_h_006_temporal_interval_states(db):
                                       u("E2", "2026-01-01", "2027-01-01")])["overall"] == "same"
     assert eng_e._temporal_alignment([u("E1", "2026-01-01", "2026-06-01"),
                                       u("E2", "2026-06-01", "2026-12-01")])["overall"] == "overlapping"
-    assert eng_e._temporal_alignment([u("E1", "2025-01-01", "2025-06-01"),
-                                      u("E2", "2027-01-01", "2027-06-01")])["overall"] == "sequential"
+    # AKB-V03-IMPL-004 语义升级：恰两证据全隔互斥窗 = contradictory（TEMPORAL_CONFLICT
+    # 候选，P-012 契约）；三证据顺时链仍为 sequential
+    ta2 = eng_e._temporal_alignment([u("E1", "2025-01-01", "2025-06-01"),
+                                     u("E2", "2027-01-01", "2027-06-01")])
+    assert ta2["overall"] == "contradictory" and ta2["contradiction_members"]
+    ta3 = eng_e._temporal_alignment([u("E1", "2025-01-01", "2025-06-01"),
+                                     u("E2", "2026-01-01", "2026-06-01"),
+                                     u("E3", "2027-01-01", "2027-06-01")])
+    assert ta3["overall"] == "sequential"
     assert eng_e._temporal_alignment([u("E1", None, None)])["overall"] == "missing"
     assert eng_e._temporal_alignment([u("E1", None, None, status="unresolved"),
                                       u("E2", "2026-01-01", "2027-01-01")])["overall"] == "unresolved"
