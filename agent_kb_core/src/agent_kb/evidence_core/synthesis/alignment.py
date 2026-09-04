@@ -244,33 +244,32 @@ class EvidenceAlignmentEngine:
                                for i in range(len(ordered) - 1))
                 overlaps = all(ordered[i][1][1] >= ordered[i + 1][1][0]
                                for i in range(len(ordered) - 1))
+                # 互斥相邻对记录（contradiction_members）：同 subject 语境下区间互斥 =
+                # TEMPORAL_CONFLICT 候选（P-012 契约：members=真实矛盾双方，非全部 units）。
+                # overall 判定分离：全隔=sequential（时序事实）；部分互斥=contradictory。
+                for i in range(len(ordered) - 1):
+                    if ordered[i][1][1] < ordered[i + 1][1][0]:
+                        contradiction_members.append(
+                            {"evidence_id": ordered[i][0],
+                             "unit_id": next(u["unit_id"] for u in units
+                                             if u["evidence_id"] == ordered[i][0]),
+                             "valid_from": ordered[i][1][0],
+                             "valid_until": ordered[i][1][1]})
+                        contradiction_members.append(
+                            {"evidence_id": ordered[i + 1][0],
+                             "unit_id": next(u["unit_id"] for u in units
+                                             if u["evidence_id"] == ordered[i + 1][0]),
+                             "valid_from": ordered[i + 1][1][0],
+                             "valid_until": ordered[i + 1][1][1]})
                 if disjoint:
-                    overall = "sequential"
+                    # 恰两证据全隔互斥 = 同事实窗冲突（P-012 场景 → contradictory）；
+                    # 3+ 方顺时链 = 时序事实（sequential；互斥对仍记录于 contradiction_members
+                    # 供 STATE/TEMPORAL 检测上下文）
+                    overall = "contradictory" if len(ordered) == 2 else "sequential"
                 elif overlaps:
                     overall = "overlapping"
                 else:
-                    overall = "overlapping"
-                    # 精确 contradictory 对：区间互斥的两方（mixed 重叠/互斥并存时）
-                    for i in range(len(ordered) - 1):
-                        if ordered[i][1][1] < ordered[i + 1][1][0]:
-                            for e_a, e_b in ((ordered[i], ordered[i + 1]),):
-                                if e_a[0] not in {m["evidence_id"]
-                                                  for m in contradiction_members}:
-                                    pass
-                            contradiction_members.append(
-                                {"evidence_id": ordered[i][0],
-                                 "unit_id": next(u["unit_id"] for u in units
-                                                 if u["evidence_id"] == ordered[i][0]),
-                                 "valid_from": ordered[i][1][0],
-                                 "valid_until": ordered[i][1][1]})
-                            contradiction_members.append(
-                                {"evidence_id": ordered[i + 1][0],
-                                 "unit_id": next(u["unit_id"] for u in units
-                                                 if u["evidence_id"] == ordered[i + 1][0]),
-                                 "valid_from": ordered[i + 1][1][0],
-                                 "valid_until": ordered[i + 1][1][1]})
-                    if contradiction_members:
-                        overall = "contradictory"
+                    overall = "contradictory"       # mixed 重叠/互斥并存
             elif len(set(anchors.values())) > 1:
                 overall = "overlapping"
         return {"per_evidence": per, "overall": overall,
