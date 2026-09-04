@@ -336,7 +336,14 @@ class EvidenceAlignmentEngine:
                         "state_predicate": key[1],
                         "source_evidence_ids": sorted({m["evidence_id"]
                                                        for p in pairs for m in p}),
+                        "members": [{"evidence_id": m["evidence_id"],
+                                     "unit_id": m["unit_id"],
+                                     "valid_from": m["valid_from"],
+                                     "valid_until": m["valid_until"],
+                                     "object_value": m["object_value"]}
+                                    for p in pairs for m in p],
                         "sides": [{"evidence_id": m["evidence_id"],
+                                   "unit_id": m["unit_id"],
                                    "valid_from": m["valid_from"],
                                    "valid_until": m["valid_until"],
                                    "object_value": m["object_value"]}
