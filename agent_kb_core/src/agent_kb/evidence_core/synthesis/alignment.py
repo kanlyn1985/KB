@@ -195,9 +195,18 @@ class EvidenceAlignmentEngine:
 
     # ---- temporal 六态（Defect H 修复）----
     def _temporal_alignment(self, units: list[dict]) -> dict:
+        """六态判定 + contradiction_members（精确矛盾双方——V03-IMPL-004 Defect 修复）。
+
+        contradictory 判定（V0.3 TEMPORAL_SYNTHESIS_SPEC T 系语义）：同 subject 语境下
+        两证据 valid_time 区间互斥且不重叠（end_a < start_b 严格）——不同 event_time
+        本身不构成 conflict（可能是时序/并存事件）。
+        contradiction_members 只含真实参与矛盾的 evidence/unit——供 ConflictDetector
+        精确 provenance（scope=actual conflict members，非全部 units）。
+        """
         per: dict[str, str] = {}
         anchors: dict[str, str] = {}
         intervals: dict[str, tuple] = {}
+        contradiction_members: list[dict] = []
         for u in units:
             eid = u["evidence_id"]
             tp = u.get("temporal_parse")
@@ -220,17 +229,17 @@ class EvidenceAlignmentEngine:
             else:
                 per[eid] = "missing"
         anchored = [e for e in per if per[e] == "anchored"]
-        if not anchored and not any(per[e] == "unresolved" for e in per):
-            overall = "missing"
-        elif any(per[e] == "unresolved" for e in per):
+        overall = "missing"
+        if any(per[e] == "unresolved" for e in per):
             overall = "unresolved"
         elif len(anchors) == len(units) and len(set(anchors.values())) == 1:
             overall = "same"
-        else:
-            # 区间关系判定（全部锚定时）
-            ivs = [(e, intervals[e]) for e in anchored]
-            if len(ivs) >= 2 and all(iv[1][0] and iv[1][1] for _, iv in ivs):
-                ordered = sorted(ivs, key=lambda x: x[1][0])
+        elif anchored:
+            # 区间关系判定（全锚定时精确）
+            full = [(e, intervals[e]) for e in anchored
+                    if intervals[e][0] and intervals[e][1]]
+            if len(full) >= 2:
+                ordered = sorted(full, key=lambda x: x[1][0])
                 disjoint = all(ordered[i][1][1] < ordered[i + 1][1][0]
                                for i in range(len(ordered) - 1))
                 overlaps = all(ordered[i][1][1] >= ordered[i + 1][1][0]
@@ -240,13 +249,33 @@ class EvidenceAlignmentEngine:
                 elif overlaps:
                     overall = "overlapping"
                 else:
-                    overall = "overlapping"   # 混合锚定 → 保守 overlapping（有锚可合成）
+                    overall = "overlapping"
+                    # 精确 contradictory 对：区间互斥的两方（mixed 重叠/互斥并存时）
+                    for i in range(len(ordered) - 1):
+                        if ordered[i][1][1] < ordered[i + 1][1][0]:
+                            for e_a, e_b in ((ordered[i], ordered[i + 1]),):
+                                if e_a[0] not in {m["evidence_id"]
+                                                  for m in contradiction_members}:
+                                    pass
+                            contradiction_members.append(
+                                {"evidence_id": ordered[i][0],
+                                 "unit_id": next(u["unit_id"] for u in units
+                                                 if u["evidence_id"] == ordered[i][0]),
+                                 "valid_from": ordered[i][1][0],
+                                 "valid_until": ordered[i][1][1]})
+                            contradiction_members.append(
+                                {"evidence_id": ordered[i + 1][0],
+                                 "unit_id": next(u["unit_id"] for u in units
+                                                 if u["evidence_id"] == ordered[i + 1][0]),
+                                 "valid_from": ordered[i + 1][1][0],
+                                 "valid_until": ordered[i + 1][1][1]})
+                    if contradiction_members:
+                        overall = "contradictory"
             elif len(set(anchors.values())) > 1:
-                overall = "overlapping"       # 不同 event_time 有锚 → 非同刻（可时序/并存）
-            else:
-                overall = "same"
+                overall = "overlapping"
         return {"per_evidence": per, "overall": overall,
-                "anchors": {e: anchors[e] for e in sorted(anchors)}}
+                "anchors": {e: anchors[e] for e in sorted(anchors)},
+                "contradiction_members": contradiction_members}
 
     # ---- event 簇（Defect I：participant overlap 强制）----
     def _event_clusters(self, units: list[dict], ec_index: dict) -> list[dict]:

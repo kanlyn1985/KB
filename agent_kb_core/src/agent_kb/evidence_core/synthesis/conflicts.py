@@ -73,34 +73,44 @@ class ConflictDetector:
                     provider_id=self.provider_id,
                     sides=[{"ontology_ref": r, "members": ms} for r, ms in sorted(refs.items())],
                     audit_timestamp=audit_ts))
-        # 3) TEMPORAL_CONFLICT（CONF-003）
+        # 3) TEMPORAL_CONFLICT（CONF-003）——scope = 真实矛盾双方（V03-IMPL-004 修复：
+        #    原 scope=全部 units 夹带无关成员）。sides 保留 evidence_id/unit_id/valid_from/
+        #    valid_until（§12：不只 aggregate）。
         ta = alignment.temporal_alignment or {}
-        if ta.get("overall") == "contradictory":
-            members = [m for u in units
-                       for m in ([{"evidence_id": u["evidence_id"],
-                                   "unit_id": u["unit_id"]}])]
-            ev_ids, u_ids = _provenance_from_members(members)
+        c_members = ta.get("contradiction_members") or []
+        if c_members:
+            ev_ids, u_ids = _provenance_from_members(c_members)
+            sides = []
+            for m in c_members:
+                key = (m["evidence_id"], m.get("unit_id"))
+                if key not in {(s["evidence_id"], s.get("unit_id")) for s in sides}:
+                    sides.append({"evidence_id": m["evidence_id"],
+                                  "unit_id": m.get("unit_id"),
+                                  "valid_from": m.get("valid_from"),
+                                  "valid_until": m.get("valid_until")})
             cs.conflicts.append(ConflictRecord(
                 conflict_type="TEMPORAL_CONFLICT",
                 source_evidence_ids=ev_ids, unit_ids=u_ids,
                 conflicting_fields=["valid_time"], detection_method="CONF-003",
                 confidence=0.8, provider_id=self.provider_id,
-                audit_timestamp=audit_ts))
+                sides=sides, audit_timestamp=audit_ts))
         # 4) SOURCE_CONFLICT（CONF-004）：同事实簇内多 source_type 互斥
+        cluster_members = [m for rcl in alignment.relation_clusters for m in rcl.members]
         stypes = {}
-        for u in units:
-            stypes.setdefault(u.get("source_type") or "unknown", []).append(u["evidence_id"])
-        if len(stypes) > 1 and any(alignment.relation_clusters for _ in [0]):
-            all_members = [{"evidence_id": eid, "unit_id": uid}
-                           for eid in sorted(units_of) for uid in sorted(units_of[eid])]
+        stype_of = {u["evidence_id"]: (u.get("source_type") or "unknown") for u in units}
+        for m in cluster_members:
+            stypes.setdefault(stype_of.get(m["evidence_id"], "unknown"), []).append(m)
+        if len(stypes) > 1:
+            all_members = [m for ms in stypes.values() for m in ms]
             ev_ids, u_ids = _provenance_from_members(all_members)
             cs.conflicts.append(ConflictRecord(
                 conflict_type="SOURCE_CONFLICT",
                 source_evidence_ids=ev_ids, unit_ids=u_ids,
                 conflicting_fields=["source_type"], detection_method="CONF-004",
                 confidence=0.7, provider_id=self.provider_id,
-                sides=[{"source_type": st, "evidence_ids": eids}
-                       for st, eids in sorted(stypes.items())],
+                sides=[{"source_type": st,
+                        "members": sorted(ms, key=lambda m: m["evidence_id"])}
+                       for st, ms in sorted(stypes.items())],
                 audit_timestamp=audit_ts))
         # 5) IDENTITY_CONFLICT（CONF-005）：同簇内 entity_type 分歧（confidence>0.7）
         for ec in alignment.entity_clusters:
