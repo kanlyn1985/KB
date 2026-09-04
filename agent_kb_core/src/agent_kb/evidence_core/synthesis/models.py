@@ -69,6 +69,7 @@ class AlignmentResult:
     temporal_alignment: dict | None = None
     compatibility: dict = field(default_factory=dict)   # evidence_id → 五级
     rule_audit: list = field(default_factory=list)      # [{rule_id, inputs, result}]
+    state_contradictions: list = field(default_factory=list)  # Defect F：STATE_CONFLICT 源
     warnings: list = field(default_factory=list)
 
 

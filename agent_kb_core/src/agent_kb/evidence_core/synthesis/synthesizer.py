@@ -42,25 +42,31 @@ def synthesis_fingerprint(set_fingerprint: str, synthesis_version: str,
 
 
 def _compatibility(alignment, conflicts: ConflictSet) -> dict:
-    """五级规则表（按序首中；全记录）。"""
+    """五级规则表——显式优先级（Defect G）：INVALID > CONFLICTING > PARTIALLY_COMPATIBLE
+    > COMPATIBLE > INCOMPARABLE（按序首中；rule_id/inputs/result 全记录）。"""
     per_member: dict[str, str] = {}
     conflict_members = {eid for c in conflicts.conflicts for eid in c.source_evidence_ids}
     cluster_members = {m["evidence_id"] for cl in alignment.entity_clusters
                        for m in cl.members}
-    for eid in sorted({m["evidence_id"] for cl in alignment.entity_clusters
-                       for m in cl.members} | set(alignment.temporal_alignment.get(
-                           "per_evidence", {})) if alignment.temporal_alignment else set()):
-        if alignment.temporal_alignment.get("per_evidence", {}).get(eid) in (None, "missing") \
-                and eid not in cluster_members:
-            per_member[eid] = "INVALID"
+    ta = alignment.temporal_alignment or {}
+    all_ids = sorted({m["evidence_id"] for cl in alignment.entity_clusters
+                      for m in cl.members} | set(ta.get("per_evidence", {})))
+    for eid in all_ids:
+        if not cluster_members:
+            per_member[eid] = "INVALID"                      # R1：无有效语义产物
         elif eid in conflict_members:
-            per_member[eid] = "CONFLICTING"
-        elif eid in cluster_members:
-            per_member[eid] = "COMPATIBLE"
+            per_member[eid] = "CONFLICTING"                  # R2：真实冲突存在（优先级高于 compatible）
+        elif ta.get("per_evidence", {}).get(eid) in (None, "missing") \
+                and len(cluster_members) >= 2:
+            per_member[eid] = "PARTIALLY_COMPATIBLE"         # R3：部分成员缺时间锚
+        elif len(cluster_members) >= 2 and ta.get("overall") in (
+                "same", "overlapping", "sequential"):
+            per_member[eid] = "COMPATIBLE"                   # R4：全簇对齐+时间兼容
         else:
-            per_member[eid] = "INCOMPARABLE"
-    alignment.rule_audit.append({"rule_id": "COMPAT-001",
-                                 "inputs": {"conflicts": len(conflicts.conflicts)},
+            per_member[eid] = "INCOMPARABLE"                 # R5：无跨证据对齐价值
+    alignment.rule_audit.append({"rule_id": "COMPAT-002",
+                                 "inputs": {"conflicts": len(conflicts.conflicts),
+                                            "members": len(all_ids)},
                                  "result": per_member})
     return per_member
 

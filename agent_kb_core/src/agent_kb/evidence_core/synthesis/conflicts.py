@@ -90,7 +90,20 @@ class ConflictDetector:
                     confidence=0.75, provider_id=self.provider_id,
                     sides=[{"entity_type": t, "members": ms} for t, ms in sorted(types.items())],
                     audit_timestamp=audit_ts))
-        # 6) RELATION_CONFLICT / 7) STATE_CONFLICT：谓词互斥对（内置最小规则——同 subj/obj 簇
+        # 6) STATE_CONFLICT：state 对齐 contradictory 窗（Defect F 集成；双方保留）
+        for st in getattr(alignment, "state_contradictions", []) or []:
+            cs.conflicts.append(ConflictRecord(
+                conflict_type="STATE_CONFLICT",
+                source_evidence_ids=st["source_evidence_ids"],
+                unit_ids=sorted({s.get("unit_id", "") for rc in alignment.relation_clusters
+                                 for m in rc.members
+                                 for s in st["sides"]
+                                 if s.get("evidence_id") == m["evidence_id"]}) or [],
+                conflicting_fields=["valid_time", "object_value"],
+                detection_method="CONF-006-STATE",
+                confidence=0.85, provider_id=self.provider_id,
+                sides=st["sides"], audit_timestamp=audit_ts))
+        # 7) RELATION_CONFLICT：谓词互斥对（内置最小规则——同 subj/obj 簇
         #    出现 has_parameter 与 constrained_by 并存）
         rel_pairs: dict[tuple, set] = {}
         for rc in alignment.relation_clusters:
