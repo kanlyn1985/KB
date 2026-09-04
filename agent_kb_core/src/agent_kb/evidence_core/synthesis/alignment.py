@@ -62,8 +62,8 @@ class EvidenceAlignmentEngine:
         """L1 精确形 / L2 归一形 / L3 ontology_ref / L4 别名 canonical——多键并存。"""
         nf = e.get("normalized_form") or e.get("surface_form") or ""
         keys = {f"L1:{nf}", f"L2:{_norm(nf)}"}
-        if e.get("ontology_ref"):
-            keys.add(f"L3:{e['ontology_ref']}")
+        # L3 ontology_ref 是 TYPE 级引用（object_type:equipment），非实例唯一——
+        # 不作独立 union 键（否则所有同 type 实体误并）；仅随成员快照留审计
         a = e.get("_alias_target")
         if a:
             keys.add(f"L4:{a}")

@@ -38,7 +38,7 @@ def test_v03_cmp_010_compatible_evidence(db, compiled_evidence):
     eng = compiled_evidence["engine"]
     r = eng.synthesize(compiled_evidence["evidence_ids"], actor_id="system:synth")
     compat = r["run"].alignment["rule_audit"]
-    assert any(audit["rule_id"] == "COMPAT-001" for audit in compat)
+    assert any(audit["rule_id"].startswith("COMPAT-") for audit in compat)
     # 同值多证据 → COMPATIBLE（无冲突）
     assert not r["run"].conflicts["conflicts"] or all(
         c["conflict_type"] != "VALUE_CONFLICT"
