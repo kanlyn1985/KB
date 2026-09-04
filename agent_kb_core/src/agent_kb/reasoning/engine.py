@@ -29,6 +29,12 @@ class ReasoningEngine:
         self.store = assertion_store or AssertionStore(connection)
         self.provenance = provenance or Provenance(connection)
         self._inferred_status_guard = "candidate"   # R-01：恒 candidate
+        # run 持久化（migration 14 就绪时启用；缺表 → 内存模式，V0.4 skeleton 兼容）
+        from agent_kb.reasoning.repository import ReasoningRunRepository
+        has_table = self.connection.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name='akb_reasoning_runs'"
+        ).fetchone() is not None
+        self.runs = ReasoningRunRepository(connection) if has_table else None
 
     # ---- parent selection（DC-01/02）----
 
@@ -102,9 +108,31 @@ class ReasoningEngine:
         if errors:
             return {"ok": False, "errors": errors, "assertions": [],
                     "warnings": [], "fingerprint": None, "run_id": None}
+        import uuid
         fingerprint = reasoning_fingerprint(
             [p.assertion_id for p in parents], self.provider.reasoner_id(),
             self.provider.rule_version(), context.configuration_hash())
+        run_id = None
+        if self.runs is not None:
+            hit = self.runs.find_by_fingerprint(fingerprint)
+            if hit is not None:
+                # 锚幂等（V0.3 锚模式）：复用既有 run，零新候选
+                prior = [
+                    self._row_to_assertion(row) for row in self.connection.execute(
+                        "SELECT * FROM akb_assertions WHERE assertion_type='inferred'"
+                        " AND derivation_json LIKE ?",
+                        (f'%{hit["run_id"]}%',))]
+                return {"ok": True, "errors": [], "assertions": prior,
+                        "warnings": [], "fingerprint": fingerprint,
+                        "run_id": hit["run_id"], "idempotent_hit": True,
+                        "parent_count": len(parents)}
+            run_id = f"rrn_{uuid.uuid4().hex[:16]}"
+            from agent_kb.evidence_core.assertions import POLICY_VERSION
+            self.runs.create_running(
+                parent_ids=parent_ids, reasoner_id=self.provider.reasoner_id(),
+                rule_version=self.provider.rule_version(),
+                configuration_hash=context.configuration_hash(), actor_id=actor_id,
+                policy_version=POLICY_VERSION, fingerprint=fingerprint, run_id=run_id)
         # provenance（activity=infer）
         if self.provenance is not None:
             from agent_kb.evidence_core.state_machine import actor_kind_of
@@ -114,7 +142,12 @@ class ReasoningEngine:
                 metadata={"fingerprint": fingerprint,
                           "reasoner_id": self.provider.reasoner_id(),
                           "rule_version": self.provider.rule_version()})
-        proposals = self.provider.infer(parents, context) or []
+        try:
+            proposals = self.provider.infer(parents, context) or []
+        except Exception as exc:                     # provider crash → run failed（留审计）
+            if self.runs is not None and run_id:
+                self.runs.fail(run_id, [f"E-V04-PROVIDER-FAILED: {exc}"])
+            raise
         created, warnings = [], []
         for p in proposals:
             violations = p.validate()
@@ -138,6 +171,8 @@ class ReasoningEngine:
                 "confidence_basis": p.confidence_basis,
                 "depth": parent_depth + 1,
             }
+            if run_id:
+                derivation["reasoning_run_id"] = run_id
             a = self.store.create_candidate(
                 subject_ref=p.subject_ref, predicate_ref=p.predicate_ref,
                 object=p.object, assertion_type="inferred",
@@ -147,8 +182,19 @@ class ReasoningEngine:
                                       for e in self._parent_evidence(pid)}),
                 derivation=derivation)
             created.append(a)
+        if self.runs is not None and run_id:
+            self.runs.complete(
+                run_id, proposals=[{"proposal_id": p.proposal_id,
+                                    "subject_ref": p.subject_ref,
+                                    "predicate_ref": p.predicate_ref,
+                                    "rule_ref": p.rule_ref,
+                                    "parent_assertions": list(p.parent_assertions)}
+                                   for p in proposals],
+                warnings=warnings,
+                status="completed" if created and not warnings else
+                       ("partial" if created else "failed"))
         return {"ok": True, "errors": [], "assertions": created, "warnings": warnings,
-                "fingerprint": fingerprint, "run_id": None,
+                "fingerprint": fingerprint, "run_id": run_id,
                 "parent_count": len(parents)}
 
     def _cycle_in_parents(self, proposal: InferredProposal) -> bool:

@@ -670,10 +670,42 @@ V03_MULTI_EVIDENCE_SYNTHESIS_MIGRATION: Migration = Migration(
     ),
 )
 
+# V0.4: reasoning run aggregate audit (AKB-V04-IMPL-002; design docs/V0.4/ASSERTION_MODEL_V1.md S3 -
+# pure additive reversible; V0.1/V0.2/V0.3 tables untouched; production execution pending approval)
+V04_REASONING_RUNS_MIGRATION: Migration = Migration(
+    version=14,
+    name="v04_reasoning_runs",
+    statements=(
+        """
+        CREATE TABLE IF NOT EXISTS akb_reasoning_runs (
+            run_id             TEXT PRIMARY KEY,
+            parent_ids_json    TEXT NOT NULL,
+            reasoner_id        TEXT NOT NULL,
+            rule_version       TEXT NOT NULL,
+            configuration_hash TEXT NOT NULL,
+            actor_id           TEXT NOT NULL,
+            policy_version     TEXT NOT NULL,
+            status             TEXT NOT NULL CHECK (status IN
+                                 ('running','completed','failed','partial')),
+            proposals_json     TEXT,
+            fingerprint        TEXT,
+            warnings_json      TEXT NOT NULL DEFAULT '[]',
+            created_at         TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
+            finished_at        TEXT
+        )
+        """,
+        "CREATE UNIQUE INDEX IF NOT EXISTS ux_akb_reasonruns_fingerprint"
+        " ON akb_reasoning_runs(fingerprint)",
+        "CREATE INDEX IF NOT EXISTS ix_akb_reasonruns_status ON akb_reasoning_runs(status)",
+    ),
+)
+
 ALL_MIGRATIONS: tuple[Migration, ...] = (
+
     CORE_MIGRATIONS
     + (V01_EVIDENCE_CORE_MIGRATION, V01_HARDENING_MIGRATION,
-       V02_SEMANTIC_COMPILATION_MIGRATION, V03_MULTI_EVIDENCE_SYNTHESIS_MIGRATION)
+       V02_SEMANTIC_COMPILATION_MIGRATION, V03_MULTI_EVIDENCE_SYNTHESIS_MIGRATION,
+       V04_REASONING_RUNS_MIGRATION)
 )
 
 
