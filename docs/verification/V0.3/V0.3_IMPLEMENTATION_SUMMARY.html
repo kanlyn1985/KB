@@ -103,6 +103,20 @@ CI 双 workflow SUCCESS @ HEAD。</div>
 unit_ids←unit_id · candidate_id 仅 sides 细粒度 · detection_method 稳定编号 ·
 audit_timestamp=调用参数。详证：<code>V0.3_PROVENANCE_INTEGRITY_REPORT.md</code>。</div>
 
+
+<h2>Temporal Semantic Closure（AKB-V03-IMPL-005）</h2>
+<table><tr><th>项</th><th>结果</th></tr>
+<tr><td>Semantic Context Rule（互斥对需同实体簇上下文重叠才成冲突）</td><td class="pass">PASSED（T-004 跨实体禁止）</td></tr>
+<tr><td>pairwise 互斥检测（修复 E1/E3 重叠夹隔漏检）</td><td class="pass">PASSED</td></tr>
+<tr><td>canonical member dedup（unique_by evidence_id+unit_id）</td><td class="pass">PASSED（T-009）</td></tr>
+<tr><td>Temporal provenance exact scope（E3/E4 零渗漏）</td><td class="pass">PASSED（P-012/T-008/adversarial）</td></tr>
+<tr><td>T-001..T-012</td><td class="pass">PASS</td></tr>
+<tr><td>V0.3 suite / 全量 / Golden 55/40/30</td><td class="pass">80+1 skip / 251+1 / 全 PASS</td></tr></table>
+<div class="card">Temporal Semantic Model 定案（design wins）：contradictory = 恰两证据 +
+同实体簇上下文重叠 + 区间互斥（冲突显式化交治理）；3+ 方顺时链 = sequential（TS-02）；
+跨实体互斥 = sequential（禁止跨实体制造冲突）。详证：
+<code>V0.3_TEMPORAL_SEMANTIC_CLOSURE_REPORT.md</code>。</div>
+
 <p class="meta">风险以 <span class="risk">RISK</span> 标注（召回率量化/默认参数/冲突值简化选取/
 provider 通道预留/生产迁移窗口）。无 FAILED 项。</p>
 </body>
