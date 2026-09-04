@@ -91,6 +91,18 @@ Commits: f633ef1 / f718b9d / fd8b216 / docs(终态) · 详版：
 V0.3 专项 31→48 passed。回归：219 passed（repository 全量）；Golden 55/40/30 全 PASS；
 CI 双 workflow SUCCESS @ HEAD。</div>
 
+
+<h2>Provenance Integrity Repair（AKB-V03-IMPL-003）</h2>
+<table><tr><th>项</th><th>结果</th></tr>
+<tr><td>P1 缺陷（ONTOLOGY/IDENTITY unit_ids ← candidate_id）</td><td class="pass">PASSED — 修复（_provenance_from_members 统一契约）</td></tr>
+<tr><td>STATE_CONFLICT 间接反推（架构质量）</td><td class="pass">PASSED — sides 自带 unit_id 直接建 Record</td></tr>
+<tr><td>规则编号定案</td><td class="pass">CONF-006-STATE / CONF-007-RELATION（兼容确认）</td></tr>
+<tr><td>Provenance contract tests（P-001..011）</td><td class="pass">11 passed</td></tr>
+<tr><td>V0.3 suite / 全量 / Golden 55/40/30</td><td class="pass">59 / 230 / 全 PASS</td></tr></table>
+<div class="card">Conflict Provenance Contract 定案：source_evidence_ids←evidence_id ·
+unit_ids←unit_id · candidate_id 仅 sides 细粒度 · detection_method 稳定编号 ·
+audit_timestamp=调用参数。详证：<code>V0.3_PROVENANCE_INTEGRITY_REPORT.md</code>。</div>
+
 <p class="meta">风险以 <span class="risk">RISK</span> 标注（召回率量化/默认参数/冲突值简化选取/
 provider 通道预留/生产迁移窗口）。无 FAILED 项。</p>
 </body>
