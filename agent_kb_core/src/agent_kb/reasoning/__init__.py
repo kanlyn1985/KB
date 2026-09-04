@@ -18,6 +18,7 @@ from agent_kb.reasoning.models import (
 from agent_kb.reasoning.provider import ReasonerProvider
 from agent_kb.reasoning.builtin_rules import BuiltinRuleReasoner, RULE_SET_VERSION
 from agent_kb.reasoning.engine import ReasoningEngine
+from agent_kb.reasoning.governance import InferenceGovernanceService
 from agent_kb.reasoning.repository import (
     InferenceTraceService,
     ReasoningRunRepository,
@@ -27,4 +28,5 @@ __all__ = [
     "InferredProposal", "ReasoningContext", "reasoning_fingerprint",
     "ReasonerProvider", "BuiltinRuleReasoner", "RULE_SET_VERSION",
     "ReasoningEngine", "ReasoningRunRepository", "InferenceTraceService",
+    "InferenceGovernanceService",
 ]
