@@ -175,7 +175,14 @@ class EvidenceAlignmentEngine:
                                   "result": {"clusters": len(result.relation_clusters)}})
 
         # ---- temporal 六态（Defect H）----
-        result.temporal_alignment = self._temporal_alignment(units)
+        # Temporal Comparison Context（V03-IMPL-005 §5）：evidence_id → 实体簇集合
+        # （evidence 可能含多 unit——簇集合并集；与 contradiction_members 的
+        # evidence_id 查询键一致）
+        unit_owner = {u["unit_id"]: u["evidence_id"] for u in units}
+        entity_context: dict[str, set] = {}
+        for (uid, _cand), cid in ec_index.items():
+            entity_context.setdefault(unit_owner.get(uid, uid), set()).add(cid)
+        result.temporal_alignment = self._temporal_alignment(units, entity_context)
 
         # ---- event 簇（Defect I：同时间 AND 参与实体簇重叠 ≥1）----
         result.event_clusters = self._event_clusters(units, ec_index)
@@ -194,14 +201,16 @@ class EvidenceAlignmentEngine:
         return result
 
     # ---- temporal 六态（Defect H 修复）----
-    def _temporal_alignment(self, units: list[dict]) -> dict:
-        """六态判定 + contradiction_members（精确矛盾双方——V03-IMPL-004 Defect 修复）。
+    def _temporal_alignment(self, units: list[dict],
+                            entity_context: dict | None = None) -> dict:
+        """六态判定 + contradiction_members（精确矛盾双方）。
 
-        contradictory 判定（V0.3 TEMPORAL_SYNTHESIS_SPEC T 系语义）：同 subject 语境下
-        两证据 valid_time 区间互斥且不重叠（end_a < start_b 严格）——不同 event_time
-        本身不构成 conflict（可能是时序/并存事件）。
-        contradiction_members 只含真实参与矛盾的 evidence/unit——供 ConflictDetector
-        精确 provenance（scope=actual conflict members，非全部 units）。
+        Semantic Context Rule（AKB-V03-IMPL-005，design wins）：
+        TEMPORAL_SPEC 六态表 contradictory = "同实体同属性区间互斥"——时间区间互斥
+        **必须叠加语义上下文**（两 unit 的实体簇重叠 ≥1）才构成 contradictory；
+        无共同实体上下文的互斥窗是正常时序/并存（sequential），禁止跨实体制造
+        TEMPORAL_CONFLICT。entity_context: {unit_id: set(cluster_id)}（由 align() 主流程
+        在实体簇化后传入——Temporal Comparison Context）。
         """
         per: dict[str, str] = {}
         anchors: dict[str, str] = {}
@@ -244,37 +253,73 @@ class EvidenceAlignmentEngine:
                                for i in range(len(ordered) - 1))
                 overlaps = all(ordered[i][1][1] >= ordered[i + 1][1][0]
                                for i in range(len(ordered) - 1))
-                # 互斥相邻对记录（contradiction_members）：同 subject 语境下区间互斥 =
-                # TEMPORAL_CONFLICT 候选（P-012 契约：members=真实矛盾双方，非全部 units）。
-                # overall 判定分离：全隔=sequential（时序事实）；部分互斥=contradictory。
-                for i in range(len(ordered) - 1):
-                    if ordered[i][1][1] < ordered[i + 1][1][0]:
-                        contradiction_members.append(
-                            {"evidence_id": ordered[i][0],
-                             "unit_id": next(u["unit_id"] for u in units
-                                             if u["evidence_id"] == ordered[i][0]),
-                             "valid_from": ordered[i][1][0],
-                             "valid_until": ordered[i][1][1]})
-                        contradiction_members.append(
-                            {"evidence_id": ordered[i + 1][0],
-                             "unit_id": next(u["unit_id"] for u in units
-                                             if u["evidence_id"] == ordered[i + 1][0]),
-                             "valid_from": ordered[i + 1][1][0],
-                             "valid_until": ordered[i + 1][1][1]})
-                if disjoint:
-                    # 恰两证据全隔互斥 = 同事实窗冲突（P-012 场景 → contradictory）；
-                    # 3+ 方顺时链 = 时序事实（sequential；互斥对仍记录于 contradiction_members
-                    # 供 STATE/TEMPORAL 检测上下文）
-                    overall = "contradictory" if len(ordered) == 2 else "sequential"
+                # 互斥相邻对记录（contradiction_members）——Semantic Context Rule：
+                # 仅当两 unit 实体簇重叠 ≥1（同一语义事实/主体上下文）时，区间互斥才具
+                # "冲突"意义（TEMPORAL_SPEC 六态表：contradictory = 同实体同属性区间互斥）；
+                # 无共同实体上下文的互斥窗 = 正常时序/并存（sequential），禁止跨实体制造
+                # TEMPORAL_CONFLICT。canonical member semantics：unique_by
+                # (evidence_id, unit_id)，deterministic sorting。
+                # 两两互斥检测（非仅相邻——E1/E3 重叠夹隔 E1/E2 互斥的场景）+
+                # Semantic Context Rule：仅同实体簇上下文重叠的互斥对才入 contradiction_members
+                seen_members = set()
+                has_ctx_contradiction = False
+                for a in range(len(ordered)):
+                    for b in range(a + 1, len(ordered)):
+                        if ordered[a][1][1] < ordered[b][1][0]:   # 严格互斥
+                            pair_units = [ordered[a][0], ordered[b][0]]
+                            if not self._context_overlap(pair_units, entity_context):
+                                continue    # 无语义上下文 → 正常时序/并存，不制造冲突
+                            has_ctx_contradiction = True
+                            for e_id, vf, vu in ((ordered[a][0], ordered[a][1][0],
+                                                  ordered[a][1][1]),
+                                                 (ordered[b][0], ordered[b][1][0],
+                                                  ordered[b][1][1])):
+                                u_id = next(u["unit_id"] for u in units
+                                            if u["evidence_id"] == e_id)
+                                mk = (e_id, u_id)
+                                if mk in seen_members:
+                                    continue  # canonical unique_by (evidence_id, unit_id)
+                                seen_members.add(mk)
+                                contradiction_members.append(
+                                    {"evidence_id": e_id, "unit_id": u_id,
+                                     "valid_from": vf, "valid_until": vu})
+                contradiction_members.sort(key=lambda m: (m["evidence_id"], m["unit_id"]))
+                # 设计裁决（V03-IMPL-005，design wins + 冲突显式化原则）：
+                # - 恰两证据全隔互斥 + 同实体上下文 = contradictory（同事实窗断言冲突，
+                #   TEMPORAL_SPEC 六态表"同实体同属性区间互斥"最小满足；冲突显式化交治理）；
+                # - 3+ 方顺时链 = sequential（TS-02 时序候选；互斥对仍记录于
+                #   contradiction_members 供 STATE/TEMPORAL 检测与治理上下文）；
+                # - mixed（部分重叠部分互斥）= contradictory（无法用时序解释）。
+                # 裁决（V03-IMPL-005 定案）：恰两证据全隔互斥+同实体上下文 = contradictory
+                #（同事实窗断言冲突，冲突显式化交治理——TEMPORAL_SPEC 六态表最小满足）；
+                # 3+ 方顺时链 = sequential（TS-02 时序候选）；互斥对在两种情况下都记录于
+                # contradiction_members（供 ConflictDetector/治理上下文）。
+                if has_ctx_contradiction:
+                    overall = ("contradictory" if len(ordered) == 2
+                               else "sequential")
                 elif overlaps:
                     overall = "overlapping"
                 else:
-                    overall = "contradictory"       # mixed 重叠/互斥并存
+                    overall = "sequential"
             elif len(set(anchors.values())) > 1:
                 overall = "overlapping"
         return {"per_evidence": per, "overall": overall,
                 "anchors": {e: anchors[e] for e in sorted(anchors)},
                 "contradiction_members": contradiction_members}
+
+    @staticmethod
+    def _context_overlap(evidence_ids: list[str], entity_context: dict | None) -> bool:
+        """两 evidence 的实体簇上下文是否重叠 ≥1（entity_context: unit_id→clusters）。
+
+        entity_context 为 None（无实体信息）时按保守策略：不制造冲突（False）——
+        避免 bare-units 误判（V03-IMPL-005 §5/§6）。
+        """
+        if not entity_context:
+            return False
+        sets = [set(entity_context.get(eid, ())) for eid in evidence_ids]
+        if any(not s for s in sets):
+            return False
+        return bool(sets[0] & sets[1])
 
     # ---- event 簇（Defect I：participant overlap 强制）----
     def _event_clusters(self, units: list[dict], ec_index: dict) -> list[dict]:

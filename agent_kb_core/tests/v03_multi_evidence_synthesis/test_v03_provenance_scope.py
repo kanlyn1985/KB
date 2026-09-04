@@ -36,8 +36,23 @@ def test_p_012_temporal_conflict_provenance_scope(db):
         {"evidence_id": "E3", "unit_id": "UNIT-3", "temporal_parse": None},
         {"evidence_id": "E4", "unit_id": "UNIT-4", "temporal_parse": None},
     ]
-    ta = eng_e._temporal_alignment(units)
-    al = AlignmentResult(temporal_alignment=ta)
+    # Semantic Context：E1/E2 同实体簇（真实冲突语境）；E3/E4 无实体（无关记录）
+    al = eng_e.align([
+        {"evidence_id": "E1", "unit_id": "UNIT-1",
+         "entity_candidates": [{"candidate_id": "cd1", "normalized_form": "OBC",
+                                "entity_type": "equipment"}],
+         "temporal_parse": units[0]["temporal_parse"]},
+        {"evidence_id": "E2", "unit_id": "UNIT-2",
+         "entity_candidates": [{"candidate_id": "cd2", "normalized_form": "OBC",
+                                "entity_type": "equipment"}],
+         "temporal_parse": units[1]["temporal_parse"]},
+        {"evidence_id": "E3", "unit_id": "UNIT-3",
+         "entity_candidates": [{"candidate_id": "cd3", "normalized_form": " unrelated X",
+                                "entity_type": "equipment"}], "temporal_parse": None},
+        {"evidence_id": "E4", "unit_id": "UNIT-4",
+         "entity_candidates": [{"candidate_id": "cd4", "normalized_form": " unrelated Y",
+                                "entity_type": "equipment"}], "temporal_parse": None}])
+    ta = al.temporal_alignment
     assert ta["overall"] == "contradictory"
     assert ta["contradiction_members"], "exact contradictory members required"
     cs = ConflictDetector().detect(al, units, audit_ts="T")

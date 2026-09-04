@@ -175,12 +175,20 @@ def test_h_006_temporal_interval_states(db):
                                       u("E2", "2026-06-01", "2026-12-01")])["overall"] == "overlapping"
     # AKB-V03-IMPL-004 语义升级：恰两证据全隔互斥窗 = contradictory（TEMPORAL_CONFLICT
     # 候选，P-012 契约）；三证据顺时链仍为 sequential
+    # Semantic Context Rule（V03-IMPL-005）：同实体簇上下文 + 区间互斥 → contradictory
+    ctx = {"E1": {"cl_0001"}, "E2": {"cl_0001"}}   # 同实体（OBC）
     ta2 = eng_e._temporal_alignment([u("E1", "2025-01-01", "2025-06-01"),
-                                     u("E2", "2027-01-01", "2027-06-01")])
+                                     u("E2", "2027-01-01", "2027-06-01")], ctx)
     assert ta2["overall"] == "contradictory" and ta2["contradiction_members"]
+    # 跨实体互斥（Pump-A vs Valve-B 语义）→ sequential（禁止跨实体制造 TEMPORAL_CONFLICT）
+    ctx_x = {"E1": {"cl_0001"}, "E2": {"cl_0002"}}
+    ta_x = eng_e._temporal_alignment([u("E1", "2025-01-01", "2025-06-01"),
+                                      u("E2", "2027-01-01", "2027-06-01")], ctx_x)
+    assert ta_x["overall"] == "sequential" and not ta_x["contradiction_members"]
+    # 三证据顺时链（同实体）→ sequential
     ta3 = eng_e._temporal_alignment([u("E1", "2025-01-01", "2025-06-01"),
                                      u("E2", "2026-01-01", "2026-06-01"),
-                                     u("E3", "2027-01-01", "2027-06-01")])
+                                     u("E3", "2027-01-01", "2027-06-01")], ctx)
     assert ta3["overall"] == "sequential"
     assert eng_e._temporal_alignment([u("E1", None, None)])["overall"] == "missing"
     assert eng_e._temporal_alignment([u("E1", None, None, status="unresolved"),
