@@ -1,0 +1,12 @@
+{
+ "case_id": "RG-013",
+ "category": "negative",
+ "description": "malformed proposal（缺 rule_ref/snapshot）→ 提案级隔离",
+ "seed_assertions": {
+  "malformed": true
+ },
+ "expectation": {
+  "candidates": 0,
+  "warnings_min": 1
+ }
+}

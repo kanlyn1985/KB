@@ -1,0 +1,11 @@
+{
+ "case_id": "RG-015",
+ "category": "negative",
+ "description": "幂等重放：锚命中零新候选零新 run",
+ "seed_assertions": {
+  "rerun": true
+ },
+ "expectation": {
+  "idempotent_hit": true
+ }
+}

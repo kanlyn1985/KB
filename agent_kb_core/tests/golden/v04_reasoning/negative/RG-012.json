@@ -1,0 +1,12 @@
+{
+ "case_id": "RG-012",
+ "category": "negative",
+ "description": "provider crash → run failed 零候选（既有产物零破坏）",
+ "seed_assertions": {
+  "crash": true
+ },
+ "expectation": {
+  "run_status": "failed",
+  "candidates": 0
+ }
+}

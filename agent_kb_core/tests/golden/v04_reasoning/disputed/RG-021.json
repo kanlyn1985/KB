@@ -1,0 +1,27 @@
+{
+ "case_id": "RG-021",
+ "category": "disputed",
+ "description": "inferred 治理后 parent disputed → 子女不自动失效（INV-005）",
+ "seed_assertions": [
+  {
+   "key": "sat",
+   "subject_ref": "Pump-A",
+   "predicate_ref": "satisfies_rule",
+   "value": "RuleX",
+   "confidence": 0.9
+  },
+  {
+   "key": "req",
+   "subject_ref": "",
+   "predicate_ref": "rule_requires",
+   "value": "Inspect",
+   "confidence": 0.9
+  },
+  {
+   "parent_dispute": true
+  }
+ ],
+ "expectation": {
+  "child_not_invalidated": true
+ }
+}

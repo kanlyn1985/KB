@@ -1,0 +1,31 @@
+{
+ "case_id": "RG-022",
+ "category": "disputed",
+ "description": "audit trail 时序完整（validate/transition/transition-rejected 全记录）",
+ "seed_assertions": [
+  {
+   "key": "ab",
+   "subject_ref": "A",
+   "predicate_ref": "before",
+   "value": "B",
+   "confidence": 0.9
+  },
+  {
+   "key": "bc",
+   "subject_ref": "B",
+   "predicate_ref": "before",
+   "value": "C",
+   "confidence": 0.9
+  },
+  {
+   "illegal_attempt": true
+  }
+ ],
+ "expectation": {
+  "audit_actions": [
+   "validate",
+   "transition",
+   "transition-rejected"
+  ]
+ }
+}
