@@ -76,6 +76,21 @@ weight≠adjudication；candidate 恒不自动晋升；生产库零写入（isol
 Commits: f633ef1 / f718b9d / fd8b216 / docs(终态) · 详版：
 <code>docs/verification/V0.3/V0.3_IMPLEMENTATION_VERIFICATION_REPORT.md</code></div>
 
+
+<h2>Implementation Hardening（AKB-V03-IMPL-002）</h2>
+<table><tr><th>Defect</th><th>修复</th><th>行为实证</th></tr>
+<tr><td>A/E — relation 端点 ambient unit 依赖</td><td>显式 relation.unit_id 所有权（零外层变量）</td><td class="pass">PASSED（H-001/H-002/H-015）</td></tr>
+<tr><td>B — State Alignment 未实现（占位空表）</td><td>(subject cluster + state predicate family + valid_time) 真实对齐</td><td class="pass">PASSED（H-003/H-004）</td></tr>
+<tr><td>C — 实体对齐单键 + L3 type 键误并</td><td>多键 union-find（L1/L2b/L4）；L3 降权审计；type 分歧转 IDENTITY_CONFLICT 源</td><td class="pass">PASSED（H-008）</td></tr>
+<tr><td>D — relation object 语义完整性</td><td>(subject,predicate) 键 + object 差异进 members（VALUE_CONFLICT 源）</td><td class="pass">PASSED（H-009）</td></tr>
+<tr><td>F — STATE_CONFLICT 未接入</td><td>ConflictDetector 消费 state_contradictions（CONF-006-STATE，双方保留）</td><td class="pass">PASSED（H-005）</td></tr>
+<tr><td>G — compatibility 优先级隐式</td><td>显式五级序（INVALID>CONFLICTING>PARTIAL>COMPATIBLE>INCOMPARABLE）+ rule_audit</td><td class="pass">PASSED（H-014）</td></tr>
+<tr><td>H — temporal "全锚→same" 过粗</td><td>六态真实判定（same/overlapping/sequential/contradictory/missing/unresolved）</td><td class="pass">PASSED（H-006）</td></tr>
+<tr><td>I — event 簇缺 participant overlap</td><td>同刻 AND 实体簇重叠 ≥1（无重叠独立事件）</td><td class="pass">PASSED（H-007）</td></tr></table>
+<div class="card"><b>新增对抗测试：</b>test_v03_hardening.py（H-001..H-015 + 014b/c，17 项）；
+V0.3 专项 31→48 passed。回归：219 passed（repository 全量）；Golden 55/40/30 全 PASS；
+CI 双 workflow SUCCESS @ HEAD。</div>
+
 <p class="meta">风险以 <span class="risk">RISK</span> 标注（召回率量化/默认参数/冲突值简化选取/
 provider 通道预留/生产迁移窗口）。无 FAILED 项。</p>
 </body>
