@@ -1,0 +1,41 @@
+{
+ "case_id": "G017",
+ "category": "G17-assertion-status",
+ "difficulty": "medium",
+ "requirement_refs": [
+  "SYS-006"
+ ],
+ "input": {
+  "query": "骨架导入的467条图边处于什么治理状态"
+ },
+ "expected": {
+  "assertions": [
+   {
+    "assertion_id": "ast_g017_1",
+    "subject_ref": "entity:skeleton_edges",
+    "predicate_ref": "relation:governance_status",
+    "object": {
+     "kind": "literal",
+     "value": "materialized（骨架导入，status=materialized，conf=0.75/0.9）",
+     "datatype": "xsd:string"
+    },
+    "assertion_type": "asserted",
+    "status": "candidate",
+    "evidence_refs": [
+     "evd:gold:g017_import"
+    ],
+    "confidence": 0.9
+   }
+  ],
+  "evidence": [
+   {
+    "evidence_id": "evd:gold:g017_import",
+    "excerpt": "graph_edges.status 列 = materialized",
+    "document_id": "node-index.sqlite3"
+   }
+  ],
+  "support_level": "sufficient"
+ },
+ "negative_expectations": [],
+ "notes": "Assertion 生命周期状态查询（DM-005 §9.4 lifecycle 的图投影表达）"
+}

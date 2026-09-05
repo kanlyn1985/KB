@@ -1,0 +1,32 @@
+[
+ {
+  "case_id": "neg_cooking",
+  "query": "红烧肉怎么做才好吃",
+  "kind": "off_topic"
+ },
+ {
+  "case_id": "neg_finance",
+  "query": "今天A股大盘涨了多少",
+  "kind": "off_topic"
+ },
+ {
+  "case_id": "neg_travel",
+  "query": "北京到上海的高铁时刻表",
+  "kind": "off_topic"
+ },
+ {
+  "case_id": "neg_medical",
+  "query": "感冒了吃什么药好得快",
+  "kind": "off_topic"
+ },
+ {
+  "case_id": "neg_sports",
+  "query": "2026世界杯冠军是谁",
+  "kind": "off_topic"
+ },
+ {
+  "case_id": "neg_weather",
+  "query": "明天杭州天气怎么样",
+  "kind": "off_topic"
+ }
+]

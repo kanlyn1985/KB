@@ -1,0 +1,25 @@
+{
+  "hidden_context_rules": [
+    {
+      "rule_id": "dcdc_output_ripple_context",
+      "trigger": {
+        "object_id": "DCDC_OUTPUT_RIPPLE"
+      },
+      "inject": [
+        "输出纹波通常必须结合输入电压、输出负载、环境温度、测试点和示波器带宽限制判断。",
+        "mV、mVpp、ripple voltage、LV ripple 等表达需要归一到同一参数对象。",
+        "如果用户没有提供项目、客户或测试工况，应提示补充，而不是给出唯一限值。"
+      ]
+    },
+    {
+      "rule_id": "dcdc_efficiency_context",
+      "trigger": {
+        "object_id": "DCDC_EFFICIENCY"
+      },
+      "inject": [
+        "效率通常与输入电压、输出电流、温度和工作模式强相关。",
+        "不同负载点的效率不能直接互相比对，必须保留工况。"
+      ]
+    }
+  ]
+}

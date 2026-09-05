@@ -1,0 +1,6 @@
+{
+  "domain_id": "obc_dcdc",
+  "name": "OBC / DCDC Engineering Knowledge",
+  "version": "0.1.0",
+  "description": "First validation domain pack for power electronics engineering documents."
+}

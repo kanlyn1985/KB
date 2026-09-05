@@ -1,0 +1,59 @@
+{
+ "case_id": "G011",
+ "category": "G11-event-query",
+ "difficulty": "medium",
+ "requirement_refs": [
+  "SYS-007",
+  "SYS-017"
+ ],
+ "input": {
+  "query": "GBT24347标准落地到DCDC保护功能是什么时候发生的事件"
+ },
+ "expected": {
+  "events": [
+   {
+    "event_id": "evt_g011_1",
+    "event_time": "2026-08-25",
+    "targets": [
+     "F-DCDC-PROTECT"
+    ],
+    "description": "GBT 24347-2021 保护功能条款落地（16单元/6文档）"
+   }
+  ],
+  "assertions": [
+   {
+    "assertion_id": "ast_g011_1",
+    "subject_ref": "entity:gbt24347_protect_landing",
+    "predicate_ref": "relation:occurred_at",
+    "object": {
+     "kind": "literal",
+     "value": "2026-08-25（检索门文档记录的落地批次）",
+     "datatype": "xsd:date"
+    },
+    "assertion_type": "observed",
+    "status": "validated",
+    "evidence_refs": [
+     "evd:gold:g011_gate_doc"
+    ],
+    "confidence": 0.7
+   }
+  ],
+  "evidence": [
+   {
+    "evidence_id": "evd:gold:g011_gate_doc",
+    "excerpt": "RETRIEVAL_HEALTH_GATE.md §5 F-DCDC-PROTECT 残余清零记录",
+    "document_id": "RETRIEVAL_HEALTH_GATE.md",
+    "location": {
+     "section": "5"
+    }
+   }
+  ],
+  "support_level": "partial",
+  "answer_contract": {
+   "disclose_gaps": true,
+   "max_chars": 700
+  }
+ },
+ "negative_expectations": [],
+ "notes": "事件：以工程记录为源（observed），时间粒度=批次日期"
+}

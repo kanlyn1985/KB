@@ -1,0 +1,30 @@
+{
+ "case_id": "RG-020",
+ "category": "disputed",
+ "description": "disputed candidate 治理：validated→disputed 迁移合法",
+ "seed_assertions": [
+  {
+   "key": "ab",
+   "subject_ref": "A",
+   "predicate_ref": "before",
+   "value": "B",
+   "confidence": 0.9
+  },
+  {
+   "key": "bc",
+   "subject_ref": "B",
+   "predicate_ref": "before",
+   "value": "C",
+   "confidence": 0.9
+  },
+  {
+   "dispute_after_validate": true
+  }
+ ],
+ "expectation": {
+  "audit_actions": [
+   "validate",
+   "transition"
+  ]
+ }
+}

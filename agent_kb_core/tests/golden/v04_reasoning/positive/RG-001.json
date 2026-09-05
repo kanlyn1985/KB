@@ -1,0 +1,32 @@
+{
+ "case_id": "RG-001",
+ "category": "positive",
+ "description": "RR-01 deduction: A satisfies RuleX + RuleX requires B → A requires B",
+ "seed_assertions": [
+  {
+   "key": "sat",
+   "subject_ref": "Pump-A",
+   "predicate_ref": "satisfies_rule",
+   "value": "RuleX",
+   "confidence": 0.9
+  },
+  {
+   "key": "req",
+   "subject_ref": "",
+   "predicate_ref": "rule_requires",
+   "value": "Inspection",
+   "confidence": 0.9
+  }
+ ],
+ "expectation": {
+  "candidates_min": 1,
+  "rule_refs": [
+   "RR-01"
+  ],
+  "expect_triple": [
+   "Pump-A",
+   "requires",
+   "Inspection"
+  ]
+ }
+}

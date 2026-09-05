@@ -1,0 +1,687 @@
+{
+  "mapping_version": "0.9",
+  "scope": "产品设计与验证知识",
+  "total": 85,
+  "mappings": [
+    {
+      "dim": "REQ",
+      "wbs_id": "REQ-ANALYSIS",
+      "wbs_name": "产品需求分析（七大功能组）",
+      "node": "R-ROOT",
+      "coverage": "full",
+      "note": "R层12个需求域=需求分析产出"
+    },
+    {
+      "dim": "REQ",
+      "wbs_id": "REQ-FUSA",
+      "wbs_name": "功能安全需求（SG/FSR/TSR/ASIL）",
+      "node": "R-FSC",
+      "coverage": "full",
+      "note": "功能安全需求（SG→FSR→TSR→HSR/SSR）"
+    },
+    {
+      "dim": "REQ",
+      "wbs_id": "REQ-IF",
+      "wbs_name": "接口需求（CAN矩阵/连接器）",
+      "node": "R-IF",
+      "coverage": "full",
+      "note": "接口与通信需求 + P-IF 接口树"
+    },
+    {
+      "dim": "REQ",
+      "wbs_id": "REQ-STD",
+      "wbs_name": "客户标准解读（TS/SOR/SOW）",
+      "node": "R-STD",
+      "coverage": "full",
+      "note": "标准条款（GB/T 40432 全量）"
+    },
+    {
+      "dim": "REQ",
+      "wbs_id": "REQ-TRACE",
+      "wbs_name": "需求追溯矩阵",
+      "node": "G-PROC-STD",
+      "coverage": "partial",
+      "note": "ASPICE流程内含追溯，无独立节点"
+    },
+    {
+      "dim": "EE",
+      "wbs_id": "EE-LAYOUT",
+      "wbs_name": "电子布局图",
+      "node": "P-HW",
+      "coverage": "partial",
+      "note": "布局图是 P-HW 电路设计工件（文档落地）"
+    },
+    {
+      "dim": "EE",
+      "wbs_id": "EE-LOSS",
+      "wbs_name": "热损耗图",
+      "node": "P-HW-THERMAL",
+      "coverage": "partial",
+      "note": "有散热/导热，无器件损耗清单节点"
+    },
+    {
+      "dim": "EE",
+      "wbs_id": "EE-SAFETY",
+      "wbs_name": "安规设计表",
+      "node": "R-SAFETY",
+      "coverage": "full",
+      "note": "电气安全需求（绝缘/耐压/接触电流）"
+    },
+    {
+      "dim": "EE",
+      "wbs_id": "EE-TOPOLOGY",
+      "wbs_name": "主功率拓扑（PFC/LLC/输出/辅助）",
+      "node": "P-HW-OBC;P-HW-DCDC",
+      "coverage": "full",
+      "note": "PFC/LLC/辅助/EMI/变换/输出 已分解"
+    },
+    {
+      "dim": "EE",
+      "wbs_id": "EE-SCHEMATIC",
+      "wbs_name": "原理图设计",
+      "node": "P-HW",
+      "coverage": "partial",
+      "note": "原理图是 P-HW 电路设计工件（文档落地）"
+    },
+    {
+      "dim": "EE",
+      "wbs_id": "EE-PCB",
+      "wbs_name": "PCBA Layout",
+      "node": "G-PROD",
+      "coverage": "partial",
+      "note": "生产过程树含PCBA，无Layout设计节点"
+    },
+    {
+      "dim": "EE",
+      "wbs_id": "EE-DERATING",
+      "wbs_name": "器件选型与降额",
+      "node": "P-CAL;R-PERF",
+      "coverage": "full",
+      "note": "标定数据树(降额曲线)+性能需求(降额)"
+    },
+    {
+      "dim": "EE",
+      "wbs_id": "EE-SIM",
+      "wbs_name": "电路/磁仿真",
+      "node": "G-METHOD-CAE",
+      "coverage": "partial",
+      "note": "有热/结构/流阻仿真，无电路(SPICE)/磁仿真"
+    },
+    {
+      "dim": "EE",
+      "wbs_id": "EE-MAG",
+      "wbs_name": "磁性元件设计",
+      "node": "P-HW-MAG",
+      "coverage": "full",
+      "note": "磁件学科（变压器/电感）"
+    },
+    {
+      "dim": "EE",
+      "wbs_id": "EE-WCCA",
+      "wbs_name": "最坏情况电路分析",
+      "node": "G-METHOD-WCCA",
+      "coverage": "full",
+      "note": "最坏情况电路分析方法"
+    },
+    {
+      "dim": "SW",
+      "wbs_id": "SW-SYS1",
+      "wbs_name": "SYS.1 需求获取",
+      "node": "G-PROC-STD",
+      "coverage": "partial",
+      "note": "ASPICE流程节点(SYS)，未分解到SYS.1"
+    },
+    {
+      "dim": "SW",
+      "wbs_id": "SW-SYS2",
+      "wbs_name": "SYS.2 系统需求分析",
+      "node": "G-PROC-STD",
+      "coverage": "partial",
+      "note": "同上"
+    },
+    {
+      "dim": "SW",
+      "wbs_id": "SW-SYS3",
+      "wbs_name": "SYS.3 系统架构设计",
+      "node": "G-PROC-STD",
+      "coverage": "partial",
+      "note": "同上"
+    },
+    {
+      "dim": "SW",
+      "wbs_id": "SW-SYS4",
+      "wbs_name": "SYS.4 系统集成测试",
+      "node": "G-PROC-STD",
+      "coverage": "partial",
+      "note": "同上"
+    },
+    {
+      "dim": "SW",
+      "wbs_id": "SW-SYS5",
+      "wbs_name": "SYS.5 系统合格性测试",
+      "node": "G-PROC-STD",
+      "coverage": "partial",
+      "note": "同上"
+    },
+    {
+      "dim": "SW",
+      "wbs_id": "SW-SWE1",
+      "wbs_name": "SWE.1 软件需求分析 SRS",
+      "node": "R-SW",
+      "coverage": "full",
+      "note": "软件需求（SWRD）"
+    },
+    {
+      "dim": "SW",
+      "wbs_id": "SW-SWE2",
+      "wbs_name": "SWE.2 软件架构 SWAD",
+      "node": "P-SW-ASW;P-SW-BSW",
+      "coverage": "partial",
+      "note": "软件组件划分，无SWAD工件节点"
+    },
+    {
+      "dim": "SW",
+      "wbs_id": "SW-SWE3",
+      "wbs_name": "SWE.3 详细设计 DDS",
+      "node": "L-ROOT",
+      "coverage": "partial",
+      "note": "逻辑组件树(白盒)，无DDS工件节点"
+    },
+    {
+      "dim": "SW",
+      "wbs_id": "SW-SWE4",
+      "wbs_name": "SWE.4 单元验证",
+      "node": "G-PROC-STD",
+      "coverage": "partial",
+      "note": "ASPICE内，无软件单元测试节点"
+    },
+    {
+      "dim": "SW",
+      "wbs_id": "SW-SWE5",
+      "wbs_name": "SWE.5 集成验证",
+      "node": "G-PROC-STD",
+      "coverage": "partial",
+      "note": "同上"
+    },
+    {
+      "dim": "SW",
+      "wbs_id": "SW-SWE6",
+      "wbs_name": "SWE.6 合格性测试 MiL/SiL/HiL",
+      "node": "G-PROC-STD",
+      "coverage": "partial",
+      "note": "无MiL/SiL/HiL节点"
+    },
+    {
+      "dim": "SW",
+      "wbs_id": "SW-SUP",
+      "wbs_name": "SUP 支持过程",
+      "node": "G-PROC-STD;G-METHOD-TOOL",
+      "coverage": "partial",
+      "note": "ASPICE SUP + 工具方法(gitlab/Polarion)"
+    },
+    {
+      "dim": "ME",
+      "wbs_id": "ME-DESIGN",
+      "wbs_name": "结构设计方案（3D数模/BOM）",
+      "node": "P-HW-MECH;P-MECH",
+      "coverage": "full",
+      "note": "结构件 + 结构学科零件分解"
+    },
+    {
+      "dim": "ME",
+      "wbs_id": "ME-LIMIT",
+      "wbs_name": "结构限制图",
+      "node": "P-HW-MECH",
+      "coverage": "partial",
+      "note": "结构限制图是结构件设计工件（文档落地）"
+    },
+    {
+      "dim": "ME",
+      "wbs_id": "ME-THERMAL-SIM",
+      "wbs_name": "热仿真报告（功耗+水道压降）",
+      "node": "G-VERIFY-CAE-THERMAL;G-METHOD-CAE-THERMAL",
+      "coverage": "full",
+      "note": "热仿真验证+方法"
+    },
+    {
+      "dim": "ME",
+      "wbs_id": "ME-MECH-SIM",
+      "wbs_name": "力学仿真报告（静+动）",
+      "node": "G-VERIFY-CAE-STRUCT;G-METHOD-CAE-STRUCT",
+      "coverage": "full",
+      "note": "结构仿真验证+方法"
+    },
+    {
+      "dim": "ME",
+      "wbs_id": "ME-AIR-SIM",
+      "wbs_name": "困气仿真",
+      "node": "G-VERIFY-CAE-FLUID",
+      "coverage": "partial",
+      "note": "流阻流体仿真，无独立困气节点"
+    },
+    {
+      "dim": "ME",
+      "wbs_id": "ME-TOL",
+      "wbs_name": "公差分析",
+      "node": "G-METHOD-TOL",
+      "coverage": "full",
+      "note": "公差分析方法（尺寸链/GD&T）"
+    },
+    {
+      "dim": "ME",
+      "wbs_id": "ME-SAFETY-CHECK",
+      "wbs_name": "安规检查表",
+      "node": "R-SAFETY",
+      "coverage": "full",
+      "note": "电气安全需求"
+    },
+    {
+      "dim": "ME",
+      "wbs_id": "ME-MATERIAL",
+      "wbs_name": "结构七大物料",
+      "node": "P-HW-MATERIAL;P-HW-MECH",
+      "coverage": "full",
+      "note": "材料库 + 结构件"
+    },
+    {
+      "dim": "ME",
+      "wbs_id": "ME-DFMEA",
+      "wbs_name": "结构 DFMEA",
+      "node": "Q-FAILURE",
+      "coverage": "full",
+      "note": "失效模式（FMEA相关）"
+    },
+    {
+      "dim": "ME",
+      "wbs_id": "ME-CONDENSE",
+      "wbs_name": "凝露分析",
+      "node": "G-METHOD-CONDENSE",
+      "coverage": "full",
+      "note": "凝露分析方法"
+    },
+    {
+      "dim": "ME",
+      "wbs_id": "ME-AIRTIGHT",
+      "wbs_name": "气密测试",
+      "node": "G-VERIFY-AIRTIGHT",
+      "coverage": "full",
+      "note": "气密与泄漏测试"
+    },
+    {
+      "dim": "ME",
+      "wbs_id": "ME-ASSEMBLY",
+      "wbs_name": "组装工艺",
+      "node": "G-PROD-ASSEMBLY",
+      "coverage": "full",
+      "note": "装配工艺"
+    },
+    {
+      "dim": "ME",
+      "wbs_id": "ME-PACK",
+      "wbs_name": "包装/POP",
+      "node": "G-PROD-PACK",
+      "coverage": "full",
+      "note": "包装工艺"
+    },
+    {
+      "dim": "ME",
+      "wbs_id": "ME-SPECIAL",
+      "wbs_name": "特殊特性清单",
+      "node": "G-DEV-PPAP",
+      "coverage": "partial",
+      "note": "PPAP内含特殊特性，无独立节点"
+    },
+    {
+      "dim": "TH",
+      "wbs_id": "TH-SIM",
+      "wbs_name": "热仿真（功耗+水道）",
+      "node": "G-VERIFY-CAE-THERMAL;G-METHOD-CAE-THERMAL",
+      "coverage": "full",
+      "note": "热仿真验证+方法"
+    },
+    {
+      "dim": "TH",
+      "wbs_id": "TH-DESIGN",
+      "wbs_name": "散热设计（散热器/水道/风冷）",
+      "node": "P-HW-THERMAL",
+      "coverage": "full",
+      "note": "散热器/导热/风冷"
+    },
+    {
+      "dim": "TH",
+      "wbs_id": "TH-TEST",
+      "wbs_name": "热测试",
+      "node": "G-VERIFY-THERMAL",
+      "coverage": "full",
+      "note": "热测试（温升/热循环/热冲击）"
+    },
+    {
+      "dim": "EMC",
+      "wbs_id": "EMC-DESIGN",
+      "wbs_name": "EMC设计（滤波/屏蔽/接地）",
+      "node": "R-EMC;P-HW-OBC-EMI;P-HW-MECH-SHIELD",
+      "coverage": "full",
+      "note": "EMC需求+EMI滤波+屏蔽防护"
+    },
+    {
+      "dim": "EMC",
+      "wbs_id": "EMC-TEST",
+      "wbs_name": "EMC测试（传导/辐射/抗扰）",
+      "node": "G-VERIFY-EMC",
+      "coverage": "full",
+      "note": "EMC测试（传导/辐射/抗扰）"
+    },
+    {
+      "dim": "EMC",
+      "wbs_id": "EMC-SAFETY",
+      "wbs_name": "安规检查（间隙/爬电/耐压）",
+      "node": "R-SAFETY",
+      "coverage": "full",
+      "note": "电气安全需求"
+    },
+    {
+      "dim": "FUSA",
+      "wbs_id": "FUSA-ITEM",
+      "wbs_name": "相关项定义 item definition",
+      "node": "G-FUSA-ITEM",
+      "coverage": "full",
+      "note": "功能安全过程（ISO 26262/GB/T 34590）条款级细分：相关项定义 item definition"
+    },
+    {
+      "dim": "FUSA",
+      "wbs_id": "FUSA-HARA",
+      "wbs_name": "危害分析与风险评估 HARA",
+      "node": "G-FUSA-HARA",
+      "coverage": "full",
+      "note": "功能安全过程（ISO 26262/GB/T 34590）条款级细分：危害分析与风险评估 HARA"
+    },
+    {
+      "dim": "FUSA",
+      "wbs_id": "FUSA-FSC",
+      "wbs_name": "功能安全概念 FSC",
+      "node": "G-FUSA-FSC",
+      "coverage": "full",
+      "note": "功能安全过程（ISO 26262/GB/T 34590）条款级细分：功能安全概念 FSC"
+    },
+    {
+      "dim": "FUSA",
+      "wbs_id": "FUSA-TSC",
+      "wbs_name": "技术安全概念 TSC",
+      "node": "G-FUSA-TSC",
+      "coverage": "full",
+      "note": "功能安全过程（ISO 26262/GB/T 34590）条款级细分：技术安全概念 TSC"
+    },
+    {
+      "dim": "FUSA",
+      "wbs_id": "FUSA-HW-METRIC",
+      "wbs_name": "硬件安全指标（PMHF/SPFM/LFM）",
+      "node": "G-FUSA-HWMETRIC",
+      "coverage": "full",
+      "note": "功能安全过程（ISO 26262/GB/T 34590）条款级细分：硬件安全指标（PMHF/SPFM/LFM）"
+    },
+    {
+      "dim": "FUSA",
+      "wbs_id": "FUSA-VAL",
+      "wbs_name": "安全验证与确认",
+      "node": "G-FUSA-VAL",
+      "coverage": "full",
+      "note": "功能安全过程（ISO 26262/GB/T 34590）条款级细分：安全验证与确认"
+    },
+    {
+      "dim": "FUSA",
+      "wbs_id": "FUSA-CASE",
+      "wbs_name": "安全案例 safety case",
+      "node": "G-FUSA-CASE",
+      "coverage": "full",
+      "note": "功能安全过程（ISO 26262/GB/T 34590）条款级细分：安全案例 safety case"
+    },
+    {
+      "dim": "REL",
+      "wbs_id": "REL-TARGET",
+      "wbs_name": "可靠性目标与分配",
+      "node": "R-REL",
+      "coverage": "full",
+      "note": "可靠性需求（耐久/寿命/噪声）"
+    },
+    {
+      "dim": "REL",
+      "wbs_id": "REL-PREDICT",
+      "wbs_name": "可靠性预计",
+      "node": "G-METHOD-RELPREDICT",
+      "coverage": "full",
+      "note": "可靠性预计（SN 29500）"
+    },
+    {
+      "dim": "REL",
+      "wbs_id": "REL-ALT",
+      "wbs_name": "加速寿命试验 ALT",
+      "node": "G-VERIFY-REL",
+      "coverage": "partial",
+      "note": "可靠性试验含耐久/老化，无独立ALT"
+    },
+    {
+      "dim": "REL",
+      "wbs_id": "REL-FA",
+      "wbs_name": "失效分析 FA",
+      "node": "Q-PROBLEM-FAILURE",
+      "coverage": "full",
+      "note": "失效分析（失效/断裂/开裂/破损）"
+    },
+    {
+      "dim": "REL",
+      "wbs_id": "REL-DERATE",
+      "wbs_name": "降额设计",
+      "node": "P-CAL;R-PERF",
+      "coverage": "full",
+      "note": "降额曲线 + 性能需求(降额)"
+    },
+    {
+      "dim": "IE",
+      "wbs_id": "IE-DFA",
+      "wbs_name": "工艺 DFA",
+      "node": "G-METHOD-DFM",
+      "coverage": "full",
+      "note": "DFM/DFA设计方法"
+    },
+    {
+      "dim": "IE",
+      "wbs_id": "IE-DFM",
+      "wbs_name": "DFM",
+      "node": "G-METHOD-DFM",
+      "coverage": "full",
+      "note": "同上"
+    },
+    {
+      "dim": "IE",
+      "wbs_id": "IE-PCBA",
+      "wbs_name": "PCBA 组装工艺",
+      "node": "G-PROD",
+      "coverage": "partial",
+      "note": "生产过程树含PCBA，无独立节点"
+    },
+    {
+      "dim": "IE",
+      "wbs_id": "IE-ASSEMBLY",
+      "wbs_name": "产品组装工艺",
+      "node": "G-PROD-ASSEMBLY",
+      "coverage": "full",
+      "note": "装配工艺"
+    },
+    {
+      "dim": "IE",
+      "wbs_id": "IE-PFD",
+      "wbs_name": "产品过程流程图 PFD",
+      "node": "G-PROD",
+      "coverage": "partial",
+      "note": "生产过程树，无独立PFD节点"
+    },
+    {
+      "dim": "IE",
+      "wbs_id": "IE-CONTROL",
+      "wbs_name": "控制计划 Control Plan",
+      "node": "G-DEV-PPAP",
+      "coverage": "partial",
+      "note": "PPAP内含控制计划"
+    },
+    {
+      "dim": "IE",
+      "wbs_id": "IE-PFMEA",
+      "wbs_name": "PFMEA",
+      "node": "Q-FAILURE",
+      "coverage": "partial",
+      "note": "FMEA通用节点，无独立PFMEA"
+    },
+    {
+      "dim": "TE",
+      "wbs_id": "TE-PLAN",
+      "wbs_name": "DV/PV 测试计划",
+      "node": "G-DEV",
+      "coverage": "partial",
+      "note": "开发阶段(EVT/PT/PPAP)，无独立测试计划节点"
+    },
+    {
+      "dim": "TE",
+      "wbs_id": "TE-SAMPLE",
+      "wbs_name": "样机验证",
+      "node": "G-DEV-EVT1;G-DEV-EVT2",
+      "coverage": "partial",
+      "note": "EVT1/EVT2阶段"
+    },
+    {
+      "dim": "TE",
+      "wbs_id": "TE-FACTORY",
+      "wbs_name": "出厂测试",
+      "node": "G-PROD",
+      "coverage": "partial",
+      "note": "生产过程树含生产测试"
+    },
+    {
+      "dim": "TE",
+      "wbs_id": "TE-AIRTIGHT",
+      "wbs_name": "气密测试",
+      "node": "G-VERIFY-AIRTIGHT",
+      "coverage": "full",
+      "note": "气密与泄漏测试"
+    },
+    {
+      "dim": "TE",
+      "wbs_id": "TE-MECH",
+      "wbs_name": "力学试验（冲击/振动/扫频）",
+      "node": "G-VERIFY-VIBRATION",
+      "coverage": "full",
+      "note": "振动与冲击测试"
+    },
+    {
+      "dim": "TE",
+      "wbs_id": "TE-ENV",
+      "wbs_name": "环境测试（高低温/湿热/盐雾）",
+      "node": "G-VERIFY-ENV",
+      "coverage": "full",
+      "note": "环境测试"
+    },
+    {
+      "dim": "TE",
+      "wbs_id": "TE-ELEC",
+      "wbs_name": "电气性能测试（效率/纹波/限流/过冲）",
+      "node": "G-VERIFY-PERF",
+      "coverage": "full",
+      "note": "电气性能测试（效率/纹波/限流/过冲）"
+    },
+    {
+      "dim": "QA",
+      "wbs_id": "QA-DQA",
+      "wbs_name": "DQA 设计质量保证",
+      "node": "Q-DQA",
+      "coverage": "full",
+      "note": "设计质量保证"
+    },
+    {
+      "dim": "QA",
+      "wbs_id": "QA-AQE",
+      "wbs_name": "AQE 先期质量",
+      "node": "Q-AQE",
+      "coverage": "full",
+      "note": "先期质量"
+    },
+    {
+      "dim": "QA",
+      "wbs_id": "QA-DFMEA",
+      "wbs_name": "DFMEA/PFMEA",
+      "node": "Q-FAILURE",
+      "coverage": "full",
+      "note": "失效模式（FMEA相关）"
+    },
+    {
+      "dim": "QA",
+      "wbs_id": "QA-8D",
+      "wbs_name": "8D 问题解决",
+      "node": "Q-8D",
+      "coverage": "full",
+      "note": "8D 问题解决"
+    },
+    {
+      "dim": "QA",
+      "wbs_id": "QA-ISSUE",
+      "wbs_name": "Issuelog/质量问题清单",
+      "node": "Q-PROBLEM",
+      "coverage": "full",
+      "note": "问题记录（问题排查/踩坑记录）"
+    },
+    {
+      "dim": "QA",
+      "wbs_id": "QA-PPAP",
+      "wbs_name": "PPAP 生产件批准",
+      "node": "G-DEV-PPAP",
+      "coverage": "full",
+      "note": "PPAP（量产批准）"
+    },
+    {
+      "dim": "QA",
+      "wbs_id": "QA-SPC",
+      "wbs_name": "SPC 统计过程控制",
+      "node": "Q-SPC",
+      "coverage": "full",
+      "note": "统计过程控制"
+    },
+    {
+      "dim": "QA",
+      "wbs_id": "QA-MSA",
+      "wbs_name": "MSA 测量系统分析",
+      "node": "Q-MSA",
+      "coverage": "full",
+      "note": "测量系统分析"
+    },
+    {
+      "dim": "TE",
+      "wbs_id": "TE-SW",
+      "wbs_name": "软件测试（单元/集成/HiL）",
+      "node": "G-VERIFY-SW",
+      "coverage": "full",
+      "note": "软件测试（单元/集成/HiL）"
+    },
+    {
+      "dim": "TE",
+      "wbs_id": "TE-IF",
+      "wbs_name": "接口与通信测试（CAN矩阵/状态机）",
+      "node": "G-VERIFY-IF",
+      "coverage": "full",
+      "note": "接口与通信测试（CAN矩阵/状态机）"
+    },
+    {
+      "dim": "TE",
+      "wbs_id": "TE-STD",
+      "wbs_name": "标准符合性/型式试验",
+      "node": "G-VERIFY-STD",
+      "coverage": "full",
+      "note": "标准符合性/型式试验"
+    },
+    {
+      "dim": "SYS",
+      "wbs_id": "SYS-DCDC",
+      "wbs_name": "DCDC 功能（均流/电压转换/保护）",
+      "node": "F-DCDC",
+      "coverage": "full",
+      "note": "系统部知识库 Feature 体系（DCDC 功能）"
+    }
+  ]
+}

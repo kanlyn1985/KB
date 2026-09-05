@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "akb://golden/semantic_compilation_case.schema.json",
+  "title": "AKB V0.2 Semantic Compilation Golden Case",
+  "type": "object",
+  "required": ["case_id", "category", "evidence_text", "expectation"],
+  "properties": {
+    "case_id": {"type": "string", "pattern": "^SC-[0-9]{3}$"},
+    "category": {"type": "string",
+      "enum": ["positive", "negative", "determinism", "provider_boundary"]},
+    "description": {"type": "string"},
+    "evidence_text": {"type": "string", "minLength": 1},
+    "domain_pack": {"type": ["string", "null"]},
+    "provider": {"type": "string", "default": "builtin-rules"},
+    "expectation": {
+      "type": "object",
+      "required": ["units_min", "assertions_allowed"],
+      "properties": {
+        "units_min": {"type": "integer", "minimum": 0},
+        "assertions_allowed": {"type": "boolean"},
+        "expected_relations": {"type": "array",
+          "items": {"type": "object",
+            "required": ["predicate"],
+            "properties": {
+              "predicate": {"type": "string"},
+              "subject_type": {"type": "string"},
+              "object_kind": {"type": "string"}}}},
+        "expected_error": {"type": ["string", "null"]},
+        "temporal_expected": {"type": ["string", "null"],
+          "enum": [null, "resolved", "unresolved", null]},
+        "quarantine_expected": {"type": "boolean"},
+        "determinism_check": {"type": "boolean"},
+        "same_fingerprint_after_rerun": {"type": "boolean"}
+      }
+    },
+    "derivation": {"type": ["object", "null"]},
+    "notes": {"type": "string"}
+  }
+}

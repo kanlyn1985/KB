@@ -1,0 +1,25 @@
+{
+ "case_id": "RG-005",
+ "category": "positive",
+ "description": "逆序 parent 输入 → 同 fingerprint（确定性锚）",
+ "seed_assertions": [
+  {
+   "key": "ab",
+   "subject_ref": "A",
+   "predicate_ref": "before",
+   "value": "B",
+   "confidence": 0.9
+  },
+  {
+   "key": "bc",
+   "subject_ref": "B",
+   "predicate_ref": "before",
+   "value": "C",
+   "confidence": 0.9
+  }
+ ],
+ "expectation": {
+  "candidates_min": 1,
+  "reorder_invariant": true
+ }
+}

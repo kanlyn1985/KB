@@ -1,0 +1,1747 @@
+{
+ "terms": {
+  "DCDC_OUTPUT_RIPPLE": {
+   "aliases": [
+    "输出纹波",
+    "低压输出纹波",
+    "纹波电压",
+    "LV ripple",
+    "output ripple",
+    "ripple voltage",
+    "12V rail ripple"
+   ]
+  },
+  "DCDC_OUTPUT_VOLTAGE": {
+   "aliases": [
+    "输出电压",
+    "低压输出电压",
+    "LV output voltage",
+    "12V output voltage",
+    "Vout"
+   ]
+  },
+  "DCDC_OUTPUT_CURRENT": {
+   "aliases": [
+    "输出电流",
+    "低压输出电流",
+    "LV output current",
+    "Iout"
+   ]
+  },
+  "DCDC_EFFICIENCY": {
+   "aliases": [
+    "效率",
+    "转换效率",
+    "conversion efficiency",
+    "efficiency"
+   ]
+  },
+  "DCDC_STANDBY_CURRENT": {
+   "aliases": [
+    "待机电流",
+    "静态电流",
+    "sleep current",
+    "standby current",
+    "quiescent current"
+   ]
+  },
+  "DCDC_OVP_THRESHOLD": {
+   "aliases": [
+    "过压保护阈值",
+    "输出过压",
+    "OVP",
+    "over voltage protection"
+   ]
+  },
+  "P-ROOT": {
+   "aliases": [
+    "P 物理分解树（主骨架）",
+    "主骨架",
+    "物理分解树"
+   ]
+  },
+  "P-HW": {
+   "aliases": [
+    "电子学科（电路拓扑分解：EMI/PFC/LLC/控制/辅助）",
+    "电路拓扑分解：EMI",
+    "PFC",
+    "LLC",
+    "电子学科",
+    "PCB布局",
+    "布局图",
+    "原理图",
+    "电路设计"
+   ]
+  },
+  "P-HW-OBC": {
+   "aliases": [
+    "OBC 模块"
+   ]
+  },
+  "P-HW-OBC-PFC": {
+   "aliases": [
+    "PFC 电路",
+    "FC 电路",
+    "PFC拓扑",
+    "功率因数校正拓扑"
+   ]
+  },
+  "P-HW-OBC-DCDC": {
+   "aliases": [
+    "隔离变换级（LLC）",
+    "LLC",
+    "隔离变换级"
+   ]
+  },
+  "P-HW-OBC-AUX": {
+   "aliases": [
+    "辅助电源"
+   ]
+  },
+  "P-HW-OBC-EMI": {
+   "aliases": [
+    "EMI 滤波"
+   ]
+  },
+  "P-HW-OBC-ACRELAY": {
+   "aliases": [
+    "AC 继电器"
+   ]
+  },
+  "P-HW-DCDC": {
+   "aliases": [
+    "DCDC 模块"
+   ]
+  },
+  "P-HW-DCDC-CONV": {
+   "aliases": [
+    "变换电路"
+   ]
+  },
+  "P-HW-DCDC-OUT": {
+   "aliases": [
+    "输出电路"
+   ]
+  },
+  "P-HW-CTRL": {
+   "aliases": [
+    "控制板"
+   ]
+  },
+  "P-HW-CTRL-MCU": {
+   "aliases": [
+    "MCU/DSP",
+    "CU/DSP"
+   ]
+  },
+  "P-HW-CTRL-DRV": {
+   "aliases": [
+    "驱动电路"
+   ]
+  },
+  "P-HW-CTRL-SENSE": {
+   "aliases": [
+    "采样电路"
+   ]
+  },
+  "P-HW-CTRL-PROTECT": {
+   "aliases": [
+    "保护电路"
+   ]
+  },
+  "P-HW-MAG": {
+   "aliases": [
+    "磁件学科（变压器/电感）",
+    "变压器",
+    "磁件学科"
+   ]
+  },
+  "P-HW-MECH": {
+   "aliases": [
+    "结构件（壳体/水道/密封/连接器/铜排/屏蔽）",
+    "连接器",
+    "结构件"
+   ]
+  },
+  "P-SW": {
+   "aliases": [
+    "软件树",
+    "SWAD",
+    "软件架构文档"
+   ]
+  },
+  "P-SW-ASW": {
+   "aliases": [
+    "应用层 ASW"
+   ]
+  },
+  "P-SW-ASW-CC": {
+   "aliases": [
+    "CC（控制导引）",
+    "控制导引",
+    "CC"
+   ]
+  },
+  "P-SW-ASW-CP": {
+   "aliases": [
+    "CP"
+   ]
+  },
+  "P-SW-ASW-ACRELAY": {
+   "aliases": [
+    "ACRelayCtrl"
+   ]
+  },
+  "P-SW-ASW-AUXPWR": {
+   "aliases": [
+    "AuxPower"
+   ]
+  },
+  "P-SW-ASW-CANREPORT": {
+   "aliases": [
+    "CANReport"
+   ]
+  },
+  "P-SW-ASW-CANRCV": {
+   "aliases": [
+    "CAN_Receive"
+   ]
+  },
+  "P-SW-ASW-CAL": {
+   "aliases": [
+    "Calibration（标定）",
+    "Calibration"
+   ]
+  },
+  "P-SW-ASW-DCDCFAULTDET": {
+   "aliases": [
+    "DCDCFaultDetect"
+   ]
+  },
+  "P-SW-ASW-ADC": {
+   "aliases": [
+    "ADCSignal（采样）",
+    "ADCSignal"
+   ]
+  },
+  "P-SW-ASW-CPOUT": {
+   "aliases": [
+    "CPOUT"
+   ]
+  },
+  "P-SW-ASW-OBCPWRCTRL": {
+   "aliases": [
+    "OBCPowerCtrl（OBC功率控制）",
+    "OBC功率控制",
+    "OBCPowerCtrl"
+   ]
+  },
+  "P-SW-RTE": {
+   "aliases": [
+    "RTE",
+    "TE"
+   ]
+  },
+  "P-SW-BSW": {
+   "aliases": [
+    "BSW（服务/ECU抽象/MCAL）",
+    "ECU抽象",
+    "MCAL",
+    "BSW"
+   ]
+  },
+  "P-CAL": {
+   "aliases": [
+    "标定数据树（降额曲线/阈值/增益）",
+    "降额曲线",
+    "标定数据树"
+   ]
+  },
+  "P-IF": {
+   "aliases": [
+    "接口树（电气/通信/机械/热）",
+    "接口树"
+   ]
+  },
+  "P-KNOW": {
+   "aliases": [
+    "产品知识节点（原理/简介，挂产品节点下）",
+    "挂产品节点下",
+    "产品知识节点"
+   ]
+  },
+  "P-KNOW-OBC": {
+   "aliases": [
+    "OBC 知识（简介/拓扑原理/工作原理）",
+    "拓扑原理",
+    "工作原理",
+    "OBC 知识"
+   ]
+  },
+  "P-KNOW-DCDC": {
+   "aliases": [
+    "DCDC 知识（简介/工作原理）",
+    "工作原理",
+    "DCDC 知识"
+   ]
+  },
+  "F-ROOT": {
+   "aliases": [
+    "F 功能分解树（黑盒能力）",
+    "黑盒能力",
+    "功能分解树"
+   ]
+  },
+  "F-OBC": {
+   "aliases": [
+    "OBC 功能"
+   ]
+  },
+  "F-OBC-CHARGE": {
+   "aliases": [
+    "充电功能（AC-DC 变换/电压调节/电流限制/模式管理）",
+    "AC-DC 变换",
+    "电压调节",
+    "电流限制",
+    "模式管理",
+    "充电功能"
+   ]
+  },
+  "F-OBC-DISCHARGE": {
+   "aliases": [
+    "放电功能（V2L/V2G/V2H 逆变）",
+    "V2L",
+    "V2G",
+    "V2H 逆变",
+    "放电功能"
+   ]
+  },
+  "F-OBC-CP": {
+   "aliases": [
+    "控制导引（CP/CC/锁止）",
+    "控制导引"
+   ]
+  },
+  "F-OBC-PROTECT": {
+   "aliases": [
+    "保护功能（过压/欠压/过流/短路/过温/绝缘监测）",
+    "绝缘监测",
+    "保护功能"
+   ]
+  },
+  "F-OBC-COMM": {
+   "aliases": [
+    "通信功能（CAN/ISO15118/UDS）",
+    "CAN",
+    "ISO15118",
+    "UDS",
+    "通信功能"
+   ]
+  },
+  "F-OBC-DIAG": {
+   "aliases": [
+    "诊断功能"
+   ]
+  },
+  "F-OBC-WAKE": {
+   "aliases": [
+    "待机唤醒"
+   ]
+  },
+  "F-DCDC": {
+   "aliases": [
+    "DCDC 功能"
+   ]
+  },
+  "F-DCDC-CONV": {
+   "aliases": [
+    "电压转换/低压输出"
+   ]
+  },
+  "F-DCDC-REVERSE": {
+   "aliases": [
+    "反供电/预充放电"
+   ]
+  },
+  "F-DCDC-PROTECT": {
+   "aliases": [
+    "DCDC 保护功能（过压/欠压/过流/短路/过温）",
+    "过压",
+    "欠压",
+    "过流",
+    "短路",
+    "过温",
+    "DCDC 保护功能"
+   ]
+  },
+  "F-SYS": {
+   "aliases": [
+    "系统级功能（OBC+DCDC 协同/故障管理）",
+    "OBC+DCDC 协同",
+    "故障管理",
+    "系统级功能"
+   ]
+  },
+  "L-ROOT": {
+   "aliases": [
+    "L 逻辑组件树（白盒组件）",
+    "白盒组件",
+    "逻辑组件树",
+    "DDS",
+    "详细设计"
+   ]
+  },
+  "L-PWRCTRL": {
+   "aliases": [
+    "功率控制逻辑域（环路/调制/功率级控制逻辑）",
+    "功率级控制逻辑",
+    "功率控制逻辑域"
+   ]
+  },
+  "L-STATE": {
+   "aliases": [
+    "状态管理（OBC/DCDC/休眠唤醒/AC Relay 状态机）",
+    "OBC",
+    "DCDC",
+    "休眠唤醒",
+    "AC Relay 状态机",
+    "状态管理"
+   ]
+  },
+  "L-FAULT": {
+   "aliases": [
+    "故障判定逻辑域（检测/判定/恢复逻辑）",
+    "恢复逻辑",
+    "故障判定逻辑域",
+    "诊断",
+    "故障诊断",
+    "诊断逻辑",
+    "故障判定"
+   ]
+  },
+  "L-COMM": {
+   "aliases": [
+    "通信协议逻辑域（CAN/诊断/ISO15118 协议逻辑）",
+    "CAN",
+    "ISO15118 协议逻辑",
+    "通信协议逻辑域",
+    "通信协议",
+    "通信配置"
+   ]
+  },
+  "L-CAL": {
+   "aliases": [
+    "标定逻辑域（标定参数管理逻辑）",
+    "标定参数管理逻辑",
+    "标定逻辑域"
+   ]
+  },
+  "L-SENSE": {
+   "aliases": [
+    "采样监测逻辑域（绝缘/温度/采样逻辑）",
+    "采样逻辑",
+    "采样监测逻辑域"
+   ]
+  },
+  "L-SYS": {
+   "aliases": [
+    "系统管理逻辑域（电源/唤醒/自检逻辑）",
+    "自检逻辑",
+    "系统管理逻辑域"
+   ]
+  },
+  "L-STRATEGY": {
+   "aliases": [
+    "控制策略点（G5 策略族）",
+    "G5 策略族",
+    "控制策略点"
+   ]
+  },
+  "L-STRATEGY-FREQ": {
+   "aliases": [
+    "抖频策略（DCDC/OBC）",
+    "DCDC",
+    "OBC",
+    "抖频策略"
+   ]
+  },
+  "L-STRATEGY-CBC": {
+   "aliases": [
+    "CBC 策略"
+   ]
+  },
+  "L-STRATEGY-PEAK": {
+   "aliases": [
+    "峰值功率策略"
+   ]
+  },
+  "L-STRATEGY-PRECHARGE": {
+   "aliases": [
+    "启动预充策略"
+   ]
+  },
+  "L-STRATEGY-NTC": {
+   "aliases": [
+    "NTC 查表策略"
+   ]
+  },
+  "L-STRATEGY-LOWTEMP": {
+   "aliases": [
+    "低温启机策略"
+   ]
+  },
+  "L-STRATEGY-V2L": {
+   "aliases": [
+    "V2L Inside 策略"
+   ]
+  },
+  "L-STRATEGY-OPTO": {
+   "aliases": [
+    "光耦黏连检测策略"
+   ]
+  },
+  "L-STRATEGY-GPIO": {
+   "aliases": [
+    "GPIO PWM 回读策略",
+    "PIO PWM 回读策略"
+   ]
+  },
+  "L-STRATEGY-SENSE": {
+   "aliases": [
+    "采样容差策略"
+   ]
+  },
+  "R-ROOT": {
+   "aliases": [
+    "R 需求树（追踪层，贯穿各层）",
+    "追踪层",
+    "贯穿各层",
+    "需求树"
+   ]
+  },
+  "R-FSC": {
+   "aliases": [
+    "功能安全需求（ISO 26262：SG→FSR→TSR→HSR/SSR）",
+    "ISO 26262：SG→FSR→TSR→HSR",
+    "SSR",
+    "功能安全需求",
+    "功能安全",
+    "功能安全要求"
+   ]
+  },
+  "R-PERF": {
+   "aliases": [
+    "性能需求（输入/输出特性/效率/降额）",
+    "输出特性",
+    "性能需求",
+    "OBC效率",
+    "效率要求"
+   ]
+  },
+  "R-PROTECT": {
+   "aliases": [
+    "保护需求（阈值/动作时间/恢复）",
+    "动作时间",
+    "保护需求"
+   ]
+  },
+  "R-SAFETY": {
+   "aliases": [
+    "电气安全需求（绝缘/耐压/接触电流）",
+    "接触电流",
+    "电气安全需求",
+    "安规检查表",
+    "安规要求"
+   ]
+  },
+  "R-EMC": {
+   "aliases": [
+    "EMC 需求",
+    "EMC",
+    "EMC要求",
+    "电磁兼容"
+   ]
+  },
+  "R-ENV": {
+   "aliases": [
+    "环境需求（温度/湿度/机械/化学）",
+    "环境需求"
+   ]
+  },
+  "R-REL": {
+   "aliases": [
+    "可靠性需求（耐久/寿命/噪声）",
+    "可靠性需求"
+   ]
+  },
+  "R-SW": {
+   "aliases": [
+    "软件需求（SWRD：功率转换/通信/诊断/刷写）",
+    "SWRD：功率转换",
+    "软件需求"
+   ]
+  },
+  "R-HW": {
+   "aliases": [
+    "硬件需求（元器件/材料/安规）",
+    "元器件",
+    "硬件需求"
+   ]
+  },
+  "R-IF": {
+   "aliases": [
+    "接口与通信需求（CAN 矩阵/状态机要求）",
+    "CAN 矩阵",
+    "状态机要求",
+    "接口与通信需求",
+    "报文定义",
+    "信号定义",
+    "接口需求"
+   ]
+  },
+  "R-STD": {
+   "aliases": [
+    "标准条款（GB/T 40432/24347/18487/ISO14229/企标…全量）",
+    "T 40432",
+    "24347",
+    "18487",
+    "ISO14229",
+    "企标…全量",
+    "标准条款",
+    "客户技术规范",
+    "TS",
+    "SOR",
+    "SOW",
+    "客户标准解读"
+   ]
+  },
+  "G-ROOT": {
+   "aliases": [
+    "G 过程维度（正交，作用于产品节点）",
+    "作用于产品节点",
+    "过程维度"
+   ]
+  },
+  "G-DEV": {
+   "aliases": [
+    "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+    "RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP",
+    "开发过程树",
+    "DV试验",
+    "PV试验",
+    "测试计划"
+   ]
+  },
+  "G-PROD": {
+   "aliases": [
+    "生产过程树（PCBA/组装/生产测试/试制）",
+    "PCBA",
+    "生产测试",
+    "生产过程树",
+    "出厂测试",
+    "EOL",
+    "下线测试"
+   ]
+  },
+  "G-PROC-STD": {
+   "aliases": [
+    "ASPICE 流程（SYS/SWE/SUP/MAN/ACQ）",
+    "SYS",
+    "SWE",
+    "SUP",
+    "MAN",
+    "ACQ",
+    "ASPICE 流程"
+   ]
+  },
+  "G-METHOD": {
+   "aliases": [
+    "开发方法域（建模/配置/工具使用）",
+    "工具使用",
+    "开发方法域"
+   ]
+  },
+  "G-METHOD-MBD": {
+   "aliases": [
+    "MBD 建模方法（Simulink/Stateflow/模型检查）",
+    "Simulink",
+    "Stateflow",
+    "模型检查",
+    "BD 建模方法"
+   ]
+  },
+  "G-METHOD-AUTOSAR": {
+   "aliases": [
+    "AUTOSAR 配置方法（Neusar/RTE/EB/代码生成）",
+    "Neusar",
+    "RTE",
+    "代码生成",
+    "AUTOSAR 配置方法"
+   ]
+  },
+  "G-METHOD-TOOL": {
+   "aliases": [
+    "工具使用方法（gitlab/Matlab/Polarion/测试工具）",
+    "gitlab",
+    "Matlab",
+    "Polarion",
+    "测试工具",
+    "工具使用方法"
+   ]
+  },
+  "G-ASSET": {
+   "aliases": [
+    "可复用资产（代码资产/文档模板/CBB设计标准）",
+    "代码资产",
+    "文档模板",
+    "CBB设计标准",
+    "可复用资产"
+   ]
+  },
+  "Q-ROOT": {
+   "aliases": [
+    "Q 质量/经验域（8 类实体：质量失效类）",
+    "8 类实体：质量失效类",
+    "质量/经验域"
+   ]
+  },
+  "Q-PROBLEM": {
+   "aliases": [
+    "问题记录（问题排查/踩坑记录）",
+    "问题排查",
+    "踩坑记录",
+    "问题记录"
+   ]
+  },
+  "Q-LESSON": {
+   "aliases": [
+    "经验教训（项目复盘/FAQ/最佳实践）",
+    "项目复盘",
+    "FAQ",
+    "最佳实践",
+    "经验教训"
+   ]
+  },
+  "Q-FAILURE": {
+   "aliases": [
+    "失效模式（FMEA 相关）",
+    "FMEA 相关",
+    "失效模式"
+   ]
+  },
+  "M-ROOT": {
+   "aliases": [
+    "M 实例层（型号 vs 实例）",
+    "型号 vs 实例",
+    "实例层"
+   ]
+  },
+  "M-CCU": {
+   "aliases": [
+    "CCU 型号（OBC+DCDC+逆变集成）",
+    "OBC+DCDC+逆变集成",
+    "CCU 型号"
+   ]
+  },
+  "M-MI": {
+   "aliases": [
+    "曼岛项目（instanceOf CCU）",
+    "instanceOf CCU",
+    "曼岛项目"
+   ]
+  },
+  "M-VAVE": {
+   "aliases": [
+    "VAVE 项目（instanceOf CCU）",
+    "instanceOf CCU",
+    "VAVE 项目"
+   ]
+  },
+  "M-G5": {
+   "aliases": [
+    "G5 平台（6.6kW/11kW，EVTECH）",
+    "6.6kW",
+    "11kW",
+    "EVTECH",
+    "5 平台",
+    "G5",
+    "G5平台"
+   ]
+  },
+  "M-SW40": {
+   "aliases": [
+    "SW4.0 软件平台（富特）",
+    "SW4.0 软件平台"
+   ]
+  },
+  "P-SW-ASW-OBCSTATE": {
+   "aliases": [
+    "OBCState（状态管理）",
+    "状态管理",
+    "OBCState"
+   ]
+  },
+  "P-SW-ASW-DCDCFAULTRPT": {
+   "aliases": [
+    "DCDCFaultReport"
+   ]
+  },
+  "P-SW-ASW-OBCFAULTDET": {
+   "aliases": [
+    "OBCFaultDetect"
+   ]
+  },
+  "P-SW-ASW-OBCFAULTRPT": {
+   "aliases": [
+    "OBCFaultReport"
+   ]
+  },
+  "P-SW-ASW-DCDCPWRCTRL": {
+   "aliases": [
+    "DCDCPowerCtrl（DCDC功率控制）",
+    "DCDC功率控制",
+    "DCDCPowerCtrl"
+   ]
+  },
+  "P-SW-ASW-DCDCSTATE": {
+   "aliases": [
+    "DCDCState"
+   ]
+  },
+  "P-SW-ASW-DEH": {
+   "aliases": [
+    "DEH"
+   ]
+  },
+  "P-SW-ASW-ELECLOCK": {
+   "aliases": [
+    "ELEclock"
+   ]
+  },
+  "P-SW-ASW-GUNMANAGE": {
+   "aliases": [
+    "GunManage",
+    "unManage"
+   ]
+  },
+  "P-SW-ASW-GUNTEMP": {
+   "aliases": [
+    "GunTemp",
+    "unTemp"
+   ]
+  },
+  "P-SW-ASW-HVDM": {
+   "aliases": [
+    "HVDM"
+   ]
+  },
+  "P-SW-ASW-INSDET": {
+   "aliases": [
+    "INSDET（绝缘检测）",
+    "绝缘检测",
+    "INSDET"
+   ]
+  },
+  "P-SW-ASW-INTERLOCK": {
+   "aliases": [
+    "Interlock（高压互锁）",
+    "高压互锁",
+    "Interlock"
+   ]
+  },
+  "P-SW-ASW-LED": {
+   "aliases": [
+    "LED",
+    "ED"
+   ]
+  },
+  "P-SW-ASW-NACS": {
+   "aliases": [
+    "NACS"
+   ]
+  },
+  "P-SW-ASW-ORINGOVP": {
+   "aliases": [
+    "ORingOVP"
+   ]
+  },
+  "P-SW-ASW-S2": {
+   "aliases": [
+    "S2"
+   ]
+  },
+  "P-SW-ASW-SLEEPWAKE": {
+   "aliases": [
+    "SleepWake（休眠唤醒）",
+    "休眠唤醒",
+    "SleepWake"
+   ]
+  },
+  "P-SW-ASW-TEMP": {
+   "aliases": [
+    "Temp（温度管理）",
+    "温度管理",
+    "Temp"
+   ]
+  },
+  "P-SW-ASW-UDMANAGE": {
+   "aliases": [
+    "UDManage"
+   ]
+  },
+  "G-DEV-RFQ": {
+   "aliases": [
+    "RFQ（报价/立项）",
+    "FQ"
+   ]
+  },
+  "G-DEV-EVT1": {
+   "aliases": [
+    "EVT1（工程验证1）",
+    "工程验证1",
+    "EVT1",
+    "样机验证",
+    "EVT阶段"
+   ]
+  },
+  "G-DEV-EVT2": {
+   "aliases": [
+    "EVT2（工程验证2）",
+    "工程验证2",
+    "EVT2",
+    "样机验证",
+    "EVT阶段"
+   ]
+  },
+  "G-DEV-ET": {
+   "aliases": [
+    "ET（设计验证）",
+    "设计验证",
+    "ET"
+   ]
+  },
+  "G-DEV-PT0": {
+   "aliases": [
+    "PT0（生产验证0）",
+    "生产验证0",
+    "T0"
+   ]
+  },
+  "G-DEV-PT1": {
+   "aliases": [
+    "PT1（生产验证1）",
+    "生产验证1",
+    "T1"
+   ]
+  },
+  "G-DEV-PPAP": {
+   "aliases": [
+    "PPAP（量产批准）",
+    "量产批准",
+    "PAP",
+    "特殊特性清单",
+    "控制计划",
+    "Control Plan",
+    "PPAP文件"
+   ]
+  },
+  "G-DEV-SOP": {
+   "aliases": [
+    "SOP（量产）",
+    "SOP"
+   ]
+  },
+  "M-G5D5": {
+   "aliases": [
+    "G5d5 平台（instanceOf CCU）",
+    "instanceOf CCU",
+    "5d5 平台"
+   ]
+  },
+  "M-G7": {
+   "aliases": [
+    "G7 平台（instanceOf CCU）",
+    "instanceOf CCU",
+    "7 平台"
+   ]
+  },
+  "M-D950": {
+   "aliases": [
+    "零跑 D950 项目（instanceOf CCU）",
+    "instanceOf CCU",
+    "零跑 D950 项目"
+   ]
+  },
+  "P-HW-MECH-HOUSING": {
+   "aliases": [
+    "壳体（压铸/钣金/机加工/注塑壳体）",
+    "机加工",
+    "注塑壳体",
+    "壳体"
+   ]
+  },
+  "P-HW-MECH-WATERWAY": {
+   "aliases": [
+    "水道系统（水道板/水嘴/进出水口/流道设计）",
+    "水道板",
+    "进出水口",
+    "流道设计",
+    "水道系统"
+   ]
+  },
+  "P-HW-MECH-SEAL": {
+   "aliases": [
+    "密封系统（O型圈/密封垫/密封胶/气密界面）",
+    "O型圈",
+    "密封垫",
+    "密封胶",
+    "气密界面",
+    "密封系统"
+   ]
+  },
+  "P-HW-MECH-FASTENER": {
+   "aliases": [
+    "紧固件（螺钉/螺栓/螺母/螺柱/卡扣）",
+    "紧固件"
+   ]
+  },
+  "P-HW-MECH-CONNECTOR": {
+   "aliases": [
+    "连接器与接插件（高压/低压/信号/防呆）",
+    "连接器与接插件"
+   ]
+  },
+  "P-HW-MECH-BUSBAR": {
+   "aliases": [
+    "铜排/母排（大电流连接/绝缘间隔）",
+    "大电流连接",
+    "绝缘间隔",
+    "铜排/母排"
+   ]
+  },
+  "P-HW-MECH-NAMEPLATE": {
+   "aliases": [
+    "铭牌/标签/标识（铭牌/高压标签/追溯码）",
+    "高压标签",
+    "追溯码",
+    "铭牌/标签/标识"
+   ]
+  },
+  "P-HW-MECH-SHIELD": {
+   "aliases": [
+    "屏蔽与防护（EMC屏蔽罩/防尘/防水透气）",
+    "EMC屏蔽罩",
+    "防水透气",
+    "屏蔽与防护"
+   ]
+  },
+  "P-HW-MECH-BRACKET": {
+   "aliases": [
+    "支架/托架/安装结构（安装板/法兰/减震支架）",
+    "安装板",
+    "减震支架",
+    "支架/托架/安装结构"
+   ]
+  },
+  "P-HW-THERMAL": {
+   "aliases": [
+    "热管理系统（散热/导热/风道）",
+    "热管理系统",
+    "MOSFET损耗",
+    "损耗清单",
+    "热损耗"
+   ]
+  },
+  "P-HW-THERMAL-HEATSINK": {
+   "aliases": [
+    "散热器（铝挤/压铸/翅片/铲齿）",
+    "散热器"
+   ]
+  },
+  "P-HW-THERMAL-TIM": {
+   "aliases": [
+    "导热界面材料（导热垫/硅脂/相变材料）",
+    "导热垫",
+    "相变材料",
+    "导热界面材料"
+   ]
+  },
+  "P-HW-THERMAL-FAN": {
+   "aliases": [
+    "风冷部件（风扇/风道/格栅）",
+    "风冷部件"
+   ]
+  },
+  "P-HW-THERMAL-POT": {
+   "aliases": [
+    "灌封与涂覆（灌封胶/三防漆/粘接剂）",
+    "灌封胶",
+    "三防漆",
+    "粘接剂",
+    "灌封与涂覆"
+   ]
+  },
+  "P-HW-MATERIAL": {
+   "aliases": [
+    "材料库（金属/塑料/橡胶/磁材）",
+    "材料库"
+   ]
+  },
+  "P-HW-MATERIAL-METAL": {
+   "aliases": [
+    "金属材料（铝ADC12/6061/铜/钢/钕铁硼）",
+    "铝ADC12",
+    "6061",
+    "钕铁硼",
+    "金属材料"
+   ]
+  },
+  "P-HW-MATERIAL-PLASTIC": {
+   "aliases": [
+    "工程塑料（PA/PPA/PBT/PC/玻纤增强）",
+    "PPA",
+    "PBT",
+    "玻纤增强",
+    "工程塑料"
+   ]
+  },
+  "P-HW-MATERIAL-RUBBER": {
+   "aliases": [
+    "橡胶/硅胶/弹性体（密封/减震/垫片）",
+    "橡胶/硅胶/弹性体"
+   ]
+  },
+  "P-HW-MATERIAL-SURFACE": {
+   "aliases": [
+    "表面处理（阳极氧化/电镀/喷粉/三价铬钝化）",
+    "阳极氧化",
+    "三价铬钝化",
+    "表面处理"
+   ]
+  },
+  "G-PROD-CASTING": {
+   "aliases": [
+    "压铸工艺（模具/压铸参数/浇道）",
+    "压铸参数",
+    "压铸工艺"
+   ]
+  },
+  "G-PROD-MACHINING": {
+   "aliases": [
+    "机加工（CNC/钻孔/攻丝/公差控制）",
+    "CNC",
+    "公差控制",
+    "机加工"
+   ]
+  },
+  "G-PROD-SHEET": {
+   "aliases": [
+    "钣金工艺（冲压/折弯/焊接/铆接）",
+    "钣金工艺"
+   ]
+  },
+  "G-PROD-INJECTION": {
+   "aliases": [
+    "注塑工艺（模具/注塑参数/脱模）",
+    "注塑参数",
+    "注塑工艺"
+   ]
+  },
+  "G-PROD-SURFACE": {
+   "aliases": [
+    "表面处理工艺（阳极/电镀/喷涂/钝化）",
+    "表面处理工艺"
+   ]
+  },
+  "G-PROD-POTTING": {
+   "aliases": [
+    "灌封涂覆工艺（灌胶/点胶/三防）",
+    "灌封涂覆工艺"
+   ]
+  },
+  "G-PROD-ASSEMBLY": {
+   "aliases": [
+    "装配工艺（压装/螺纹紧固/涂胶/组装）",
+    "螺纹紧固",
+    "装配工艺"
+   ]
+  },
+  "G-PROD-PACK": {
+   "aliases": [
+    "包装工艺（包装/防护/周转/防静电）",
+    "防静电",
+    "包装工艺"
+   ]
+  },
+  "G-VERIFY": {
+   "aliases": [
+    "验证活动树（测试/检测/试验）",
+    "验证活动树"
+   ]
+  },
+  "G-VERIFY-THERMAL": {
+   "aliases": [
+    "热测试（温升/热循环/热冲击/红外）",
+    "热循环",
+    "热冲击",
+    "热测试"
+   ]
+  },
+  "G-VERIFY-VIBRATION": {
+   "aliases": [
+    "振动与冲击测试（振动/跌落/扫频）",
+    "振动与冲击测试"
+   ]
+  },
+  "G-VERIFY-AIRTIGHT": {
+   "aliases": [
+    "气密与泄漏测试（气密/保压/氦检/水检）",
+    "气密与泄漏测试",
+    "密封测试",
+    "密封试验",
+    "气密测试",
+    "泄漏测试"
+   ]
+  },
+  "G-VERIFY-ENV": {
+   "aliases": [
+    "环境测试（高温/低温/湿热/盐雾/防尘）",
+    "环境测试"
+   ]
+  },
+  "G-VERIFY-DIM": {
+   "aliases": [
+    "尺寸检测（全尺寸/CPK/三坐标/检具）",
+    "全尺寸",
+    "CPK",
+    "三坐标",
+    "尺寸检测"
+   ]
+  },
+  "G-VERIFY-REL": {
+   "aliases": [
+    "可靠性试验（耐久/寿命/老化/温循）",
+    "可靠性试验"
+   ]
+  },
+  "G-VERIFY-CAE": {
+   "aliases": [
+    "CAE仿真验证（热仿真/模态/流阻/强度）",
+    "热仿真",
+    "CAE仿真验证"
+   ]
+  },
+  "G-VERIFY-ELECTRICAL": {
+   "aliases": [
+    "电气测试（耐压/绝缘/安规/接触电阻）",
+    "接触电阻",
+    "电气测试"
+   ]
+  },
+  "G-METHOD-CAE": {
+   "aliases": [
+    "CAE仿真方法（热/结构/流场/电磁）",
+    "CAE仿真方法",
+    "电路仿真",
+    "SPICE仿真"
+   ]
+  },
+  "G-METHOD-CAE-THERMAL": {
+   "aliases": [
+    "热仿真方法（Flotherm/热阻网络/CFD）",
+    "Flotherm",
+    "热阻网络",
+    "CFD",
+    "热仿真方法"
+   ]
+  },
+  "G-METHOD-CAE-STRUCT": {
+   "aliases": [
+    "结构仿真方法（模态/强度/疲劳）",
+    "结构仿真方法"
+   ]
+  },
+  "G-METHOD-CAE-FLUID": {
+   "aliases": [
+    "流阻仿真方法（水冷流道/风道）",
+    "水冷流道",
+    "流阻仿真方法"
+   ]
+  },
+  "G-METHOD-DFM": {
+   "aliases": [
+    "DFM/DFA设计方法（可制造性/可装配性）",
+    "可制造性",
+    "可装配性",
+    "DFM/DFA设计方法"
+   ]
+  },
+  "G-METHOD-TOL": {
+   "aliases": [
+    "公差分析方法（尺寸链/GD&T/公差带）",
+    "尺寸链",
+    "GD&T",
+    "公差带",
+    "公差分析方法"
+   ]
+  },
+  "P-MECH": {
+   "aliases": [
+    "结构学科（零件分解：壳体/水道/密封/热/材料）",
+    "零件分解：壳体",
+    "结构学科"
+   ]
+  },
+  "P-HW-MECH-HARNESS": {
+   "aliases": [
+    "线束（信号线束/温度传感器线/内部连线）",
+    "信号线束",
+    "温度传感器线",
+    "内部连线",
+    "线束"
+   ]
+  },
+  "G-METHOD-AUTOSAR-COMM": {
+   "aliases": [
+    "AUTOSAR 通信与诊断（COM/DCM/DEM/CAN/LIN/ETH）",
+    "COM",
+    "DCM",
+    "DEM",
+    "CAN",
+    "LIN",
+    "ETH",
+    "AUTOSAR 通信与诊断",
+    "通信配置",
+    "通信栈配置"
+   ]
+  },
+  "G-METHOD-AUTOSAR-OS": {
+   "aliases": [
+    "AUTOSAR OS/内存（OS/NVM/Flash/EEPROM）",
+    "NVM",
+    "Flash",
+    "EEPROM",
+    "AUTOSAR OS/内存"
+   ]
+  },
+  "G-METHOD-AUTOSAR-RTE": {
+   "aliases": [
+    "RTE 与接口（RTE/Port/接口映射）",
+    "RTE",
+    "Port",
+    "接口映射",
+    "TE 与接口"
+   ]
+  },
+  "G-METHOD-AUTOSAR-CFG": {
+   "aliases": [
+    "ECU 配置（Neusar/EB/配置工具）",
+    "Neusar",
+    "配置工具",
+    "ECU 配置"
+   ]
+  },
+  "G-METHOD-AUTOSAR-STD": {
+   "aliases": [
+    "AUTOSAR 规范条款（ARXML/标准文档）",
+    "ARXML",
+    "标准文档",
+    "AUTOSAR 规范条款"
+   ]
+  },
+  "G-METHOD-AUTOSAR-CODEGEN": {
+   "aliases": [
+    "代码生成（C-Code/生成规则）",
+    "C-Code",
+    "生成规则",
+    "代码生成"
+   ]
+  },
+  "G-PROD-ASSEMBLY-FASTEN": {
+   "aliases": [
+    "螺纹紧固（螺钉/螺栓/扭矩/预紧）",
+    "螺纹紧固"
+   ]
+  },
+  "G-PROD-ASSEMBLY-PRESS": {
+   "aliases": [
+    "压装压接（压装/压接/压入）",
+    "压装压接"
+   ]
+  },
+  "G-PROD-ASSEMBLY-BOND": {
+   "aliases": [
+    "涂胶密封（涂胶/密封/点胶）",
+    "涂胶密封"
+   ]
+  },
+  "G-PROD-ASSEMBLY-FIXTURE": {
+   "aliases": [
+    "工装治具（工装/治具/夹具）",
+    "工装治具"
+   ]
+  },
+  "G-PROD-ASSEMBLY-GEN": {
+   "aliases": [
+    "通用组装（组装/装配/安装/插接）",
+    "通用组装"
+   ]
+  },
+  "G-PROD-POTTING-POT": {
+   "aliases": [
+    "灌封（灌封/灌胶/灌封胶）",
+    "灌封胶",
+    "灌封"
+   ]
+  },
+  "G-PROD-POTTING-DISP": {
+   "aliases": [
+    "点胶涂覆（点胶/涂覆/三防）",
+    "点胶涂覆"
+   ]
+  },
+  "G-PROD-POTTING-THERMAL": {
+   "aliases": [
+    "导热材料（导热胶/导热泥/导热硅）",
+    "导热胶",
+    "导热泥",
+    "导热硅",
+    "导热材料"
+   ]
+  },
+  "G-PROD-POTTING-SEAL": {
+   "aliases": [
+    "密封胶（密封胶/FIPG/CIPG）",
+    "密封胶",
+    "FIPG",
+    "CIPG"
+   ]
+  },
+  "G-VERIFY-CAE-THERMAL": {
+   "aliases": [
+    "热仿真验证（热仿真/热阻/温升）",
+    "热仿真",
+    "热仿真验证"
+   ]
+  },
+  "G-VERIFY-CAE-STRUCT": {
+   "aliases": [
+    "结构仿真验证（应力/强度/静力学）",
+    "静力学",
+    "结构仿真验证"
+   ]
+  },
+  "G-VERIFY-CAE-VIBRATION": {
+   "aliases": [
+    "振动仿真验证（振动/模态）",
+    "振动仿真验证"
+   ]
+  },
+  "G-VERIFY-CAE-FLUID": {
+   "aliases": [
+    "流阻流体（流阻/CFD/流道）",
+    "CFD",
+    "流阻流体",
+    "困气仿真",
+    "困气分析"
+   ]
+  },
+  "Q-PROBLEM-FAILURE": {
+   "aliases": [
+    "失效分析（失效/断裂/开裂/破损）",
+    "失效分析"
+   ]
+  },
+  "Q-PROBLEM-CUSTOMER": {
+   "aliases": [
+    "客诉与问题（客诉/投诉/异常）",
+    "客诉与问题"
+   ]
+  },
+  "Q-PROBLEM-DEFECT": {
+   "aliases": [
+    "工艺缺陷（缺陷/气泡/溢胶/氧化）",
+    "工艺缺陷"
+   ]
+  },
+  "Q-PROBLEM-TEST": {
+   "aliases": [
+    "测试异常（不合格/超差/NG）",
+    "不合格",
+    "测试异常"
+   ]
+  },
+  "G-METHOD-CAE-STRUCT-STRENGTH": {
+   "aliases": [
+    "强度疲劳（强度/应力/疲劳/静力学）",
+    "静力学",
+    "强度疲劳"
+   ]
+  },
+  "G-METHOD-CAE-STRUCT-MODAL": {
+   "aliases": [
+    "模态分析（模态/固有频率）",
+    "固有频率",
+    "模态分析"
+   ]
+  },
+  "G-METHOD-CAE-STRUCT-TOOL": {
+   "aliases": [
+    "仿真工具方法（ANSYS/CAE/FLOEFD）",
+    "ANSYS",
+    "CAE",
+    "FLOEFD",
+    "仿真工具方法"
+   ]
+  },
+  "P-SW-BSW-COMM": {
+   "aliases": [
+    "BSW 通信栈（CAN/LIN/ETH/网络管理）",
+    "CAN",
+    "LIN",
+    "ETH",
+    "网络管理",
+    "BSW 通信栈"
+   ]
+  },
+  "P-SW-BSW-MCAL": {
+   "aliases": [
+    "MCAL 驱动（ADC/SPI/GPIO/PWM/WDG）",
+    "ADC",
+    "SPI",
+    "GPIO",
+    "PWM",
+    "WDG",
+    "CAL 驱动"
+   ]
+  },
+  "P-SW-BSW-DIAG": {
+   "aliases": [
+    "BSW 诊断（DCM/DEM/UDS/OBD）",
+    "DCM",
+    "DEM",
+    "UDS",
+    "OBD",
+    "BSW 诊断"
+   ]
+  },
+  "P-SW-BSW-MEM": {
+   "aliases": [
+    "BSW 存储（NVM/Flash/EEPROM）",
+    "NVM",
+    "Flash",
+    "EEPROM",
+    "BSW 存储"
+   ]
+  },
+  "G-VERIFY-VIBRATION-VIB": {
+   "aliases": [
+    "振动测试（振动/随机/正弦/扫频）",
+    "振动测试"
+   ]
+  },
+  "G-VERIFY-VIBRATION-SHOCK": {
+   "aliases": [
+    "冲击跌落（冲击/跌落/Shock）",
+    "Shock",
+    "冲击跌落"
+   ]
+  },
+  "G-VERIFY-VIBRATION-COND": {
+   "aliases": [
+    "试验条件（PSD/GRMS/加速度）",
+    "PSD",
+    "GRMS",
+    "加速度",
+    "试验条件"
+   ]
+  },
+  "G-METHOD-FIXTURE": {
+   "aliases": [
+    "工装治具设计方法（工装/治具/夹具）",
+    "工装",
+    "治具",
+    "夹具",
+    "工装治具设计方法"
+   ]
+  },
+  "G-FUSA": {
+   "aliases": [
+    "功能安全过程（ISO 26262）",
+    "ISO 26262",
+    "功能安全过程"
+   ]
+  },
+  "G-FUSA-ITEM": {
+   "aliases": [
+    "相关项定义（item definition）",
+    "item definition",
+    "相关项定义"
+   ]
+  },
+  "G-FUSA-HARA": {
+   "aliases": [
+    "危害分析与风险评估（HARA）",
+    "HARA",
+    "危害分析与风险评估",
+    "危害分析和风险评估"
+   ]
+  },
+  "G-FUSA-FSC": {
+   "aliases": [
+    "功能安全概念（FSC）",
+    "FSC",
+    "功能安全概念"
+   ]
+  },
+  "G-FUSA-TSC": {
+   "aliases": [
+    "技术安全概念（TSC）",
+    "TSC",
+    "技术安全概念"
+   ]
+  },
+  "G-FUSA-HWMETRIC": {
+   "aliases": [
+    "硬件安全指标（PMHF/SPFM/LFM）",
+    "PMHF",
+    "SPFM",
+    "LFM",
+    "硬件安全指标"
+   ]
+  },
+  "G-FUSA-VAL": {
+   "aliases": [
+    "安全验证与确认",
+    "安全确认",
+    "安全验证"
+   ]
+  },
+  "G-FUSA-CASE": {
+   "aliases": [
+    "安全案例（safety case）",
+    "safety case",
+    "安全案例"
+   ]
+  },
+  "G-VERIFY-PERF": {
+   "aliases": [
+    "电气性能测试（效率/纹波/限流/过冲/保护）",
+    "效率",
+    "纹波",
+    "限流",
+    "过冲",
+    "保护",
+    "电气性能测试"
+   ]
+  },
+  "G-VERIFY-SW": {
+   "aliases": [
+    "软件测试（单元/集成/HiL）",
+    "单元",
+    "集成",
+    "HiL",
+    "软件测试",
+    "软件单元验证",
+    "软件集成验证",
+    "HiL测试",
+    "MiL SiL HiL"
+   ]
+  },
+  "G-VERIFY-IF": {
+   "aliases": [
+    "接口与通信测试（CAN矩阵/状态机）",
+    "CAN矩阵",
+    "状态机",
+    "接口与通信测试",
+    "通信一致性测试",
+    "CAN矩阵一致性",
+    "协议一致性测试",
+    "矩阵测试",
+    "一致性验证"
+   ]
+  },
+  "G-VERIFY-STD": {
+   "aliases": [
+    "标准符合性/型式试验",
+    "型式试验",
+    "标准符合性试验"
+   ]
+  },
+  "G-VERIFY-EMC": {
+   "aliases": [
+    "EMC测试（传导/辐射/抗扰）",
+    "传导",
+    "辐射",
+    "抗扰",
+    "EMC测试"
+   ]
+  },
+  "G-METHOD-WCCA": {
+   "aliases": [
+    "最坏情况电路分析（WCCA）",
+    "WCCA",
+    "最坏情况电路分析"
+   ]
+  },
+  "G-METHOD-CONDENSE": {
+   "aliases": [
+    "凝露分析"
+   ]
+  },
+  "G-METHOD-RELPREDICT": {
+   "aliases": [
+    "可靠性预计（SN 29500）",
+    "SN 29500",
+    "可靠性预计"
+   ]
+  },
+  "Q-DQA": {
+   "aliases": [
+    "设计质量保证（DQA）",
+    "DQA",
+    "设计质量保证"
+   ]
+  },
+  "Q-AQE": {
+   "aliases": [
+    "先期质量（AQE）",
+    "AQE",
+    "先期质量"
+   ]
+  },
+  "Q-8D": {
+   "aliases": [
+    "8D 问题解决",
+    "8D报告",
+    "8D方法",
+    "八步法"
+   ]
+  },
+  "Q-SPC": {
+   "aliases": [
+    "统计过程控制（SPC）",
+    "SPC",
+    "统计过程控制",
+    "Cpk",
+    "控制图"
+   ]
+  },
+  "Q-MSA": {
+   "aliases": [
+    "测量系统分析（MSA）",
+    "MSA",
+    "测量系统分析",
+    "GR&R",
+    "GRR",
+    "测量系统误差"
+   ]
+  },
+  "P-HW-OBC-LLC": {
+   "aliases": [
+    "LLC拓扑",
+    "谐振拓扑"
+   ]
+  }
+ }
+}

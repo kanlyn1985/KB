@@ -1,0 +1,28 @@
+{
+ "case_id": "RG-003",
+ "category": "positive",
+ "description": "RR-03 corroboration: same (subj,pred) same value → merged candidate",
+ "seed_assertions": [
+  {
+   "key": "s1",
+   "subject_ref": "OBC",
+   "predicate_ref": "has_parameter",
+   "value": "265V",
+   "confidence": 0.9
+  },
+  {
+   "key": "s2",
+   "subject_ref": "OBC",
+   "predicate_ref": "has_parameter",
+   "value": "265V",
+   "confidence": 0.8
+  }
+ ],
+ "expectation": {
+  "candidates_min": 1,
+  "rule_refs": [
+   "RR-03"
+  ],
+  "expect_subject": "OBC"
+ }
+}

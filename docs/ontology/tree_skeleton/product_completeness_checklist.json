@@ -1,0 +1,824 @@
+{
+  "standard_version": "0.4",
+  "domain": "obc_dcdc",
+  "principle": "产品完备性判定标准（独立于骨架）：完整产品必须覆盖一套固定必备要素清单。来源=领域知识+行业标准+系统工程V模型。",
+  "dimensions": [
+    {
+      "id": "REQ",
+      "name": "需求层：先定义「要满足什么」",
+      "source": "V模型/GB/T 40432/ISO 26262",
+      "items": [
+        {
+          "id": "REQ-PERF",
+          "name": "性能需求（效率/纹波/功率因数/THD）",
+          "keywords": [
+            "效率",
+            "纹波",
+            "功率因数",
+            "THD"
+          ]
+        },
+        {
+          "id": "REQ-FUSA",
+          "name": "功能安全（安全目标/ASIL/FSR/TSR）",
+          "keywords": [
+            "功能安全",
+            "ISO 26262",
+            "ASIL",
+            "安全目标"
+          ]
+        },
+        {
+          "id": "REQ-ELEC",
+          "name": "电气安全（绝缘/耐压/爬电/接触电流）",
+          "keywords": [
+            "绝缘",
+            "耐压",
+            "爬电",
+            "接触电流"
+          ]
+        },
+        {
+          "id": "REQ-EMC",
+          "name": "电磁兼容（传导/辐射发射/抗扰度）",
+          "keywords": [
+            "EMC",
+            "电磁兼容",
+            "传导",
+            "辐射",
+            "抗扰"
+          ]
+        },
+        {
+          "id": "REQ-ENV",
+          "name": "环境适应性（温度/湿度/盐雾/IP/振动）",
+          "keywords": [
+            "环境",
+            "温度",
+            "湿度",
+            "盐雾",
+            "防护等级"
+          ]
+        },
+        {
+          "id": "REQ-REL",
+          "name": "可靠性（寿命/MTBF/耐久）",
+          "keywords": [
+            "可靠性",
+            "寿命",
+            "MTBF",
+            "耐久"
+          ]
+        },
+        {
+          "id": "REQ-IF",
+          "name": "接口与通信（CAN矩阵/连接定义）",
+          "keywords": [
+            "接口",
+            "CAN 矩阵",
+            "通信矩阵"
+          ]
+        },
+        {
+          "id": "REQ-STD",
+          "name": "标准符合性（GB/T 40432/18487/14229/15118）",
+          "keywords": [
+            "GB/T",
+            "40432",
+            "18487",
+            "14229",
+            "15118"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FUNC",
+      "name": "功能层：定义「能做什么」",
+      "source": "领域知识/黑盒功能分解",
+      "items": [
+        {
+          "id": "FUNC-CHARGE",
+          "name": "充电功能（AC-DC变换/电压调节/电流限制）",
+          "keywords": [
+            "充电",
+            "AC-DC",
+            "电压调节",
+            "电流限制"
+          ]
+        },
+        {
+          "id": "FUNC-DCDC",
+          "name": "DC-DC转换（低压输出）",
+          "keywords": [
+            "DCDC",
+            "电压转换",
+            "低压输出"
+          ]
+        },
+        {
+          "id": "FUNC-DISCHARGE",
+          "name": "放电功能（V2L/V2G/V2H逆变）",
+          "keywords": [
+            "放电",
+            "V2L",
+            "V2G",
+            "V2H",
+            "逆变"
+          ]
+        },
+        {
+          "id": "FUNC-CP",
+          "name": "控制导引（CP/CC/锁止）",
+          "keywords": [
+            "控制导引",
+            "CP",
+            "锁止"
+          ]
+        },
+        {
+          "id": "FUNC-PROTECT",
+          "name": "保护功能（过压/欠压/过流/短路/过温/绝缘监测）",
+          "keywords": [
+            "保护",
+            "过压",
+            "欠压",
+            "过流",
+            "短路",
+            "过温"
+          ]
+        },
+        {
+          "id": "FUNC-COMM",
+          "name": "通信功能（CAN/UDS/15118）",
+          "keywords": [
+            "通信",
+            "CAN",
+            "UDS",
+            "15118"
+          ]
+        },
+        {
+          "id": "FUNC-DIAG",
+          "name": "诊断功能（DTC/故障记录）",
+          "keywords": [
+            "诊断",
+            "DTC"
+          ]
+        },
+        {
+          "id": "FUNC-WAKE",
+          "name": "待机唤醒（休眠/唤醒/继电器控制）",
+          "keywords": [
+            "唤醒",
+            "休眠",
+            "待机"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "LOGIC",
+      "name": "逻辑/软件层：定义「怎么实现」",
+      "source": "AUTOSAR分层/领域知识",
+      "items": [
+        {
+          "id": "LOGIC-PWRCTRL",
+          "name": "功率控制逻辑（环路/调制/PWM）",
+          "keywords": [
+            "功率控制",
+            "环路",
+            "调制",
+            "PWM"
+          ]
+        },
+        {
+          "id": "LOGIC-STATE",
+          "name": "状态管理（充电/休眠状态机）",
+          "keywords": [
+            "状态机",
+            "状态管理"
+          ]
+        },
+        {
+          "id": "LOGIC-FAULT",
+          "name": "故障判定（检测/判定/恢复）",
+          "keywords": [
+            "故障",
+            "判定",
+            "检测"
+          ]
+        },
+        {
+          "id": "LOGIC-COMM",
+          "name": "通信协议（CAN/UDS/网络管理）",
+          "keywords": [
+            "通信协议",
+            "网络管理"
+          ]
+        },
+        {
+          "id": "LOGIC-CAL",
+          "name": "标定逻辑（参数/降额）",
+          "keywords": [
+            "标定",
+            "降额"
+          ]
+        },
+        {
+          "id": "LOGIC-SENSE",
+          "name": "采样监测（电压/电流/温度）",
+          "keywords": [
+            "采样",
+            "监测"
+          ]
+        },
+        {
+          "id": "LOGIC-STRATEGY",
+          "name": "控制策略（抖频/CBC/峰值/预充/NTC/低温/V2L）",
+          "keywords": [
+            "策略",
+            "抖频",
+            "CBC",
+            "预充",
+            "峰值"
+          ]
+        },
+        {
+          "id": "LOGIC-MCAL",
+          "name": "底层驱动MCAL（ADC/SPI/GPIO/PWM/WDG）",
+          "keywords": [
+            "MCAL",
+            "ADC",
+            "SPI",
+            "GPIO",
+            "WDG"
+          ]
+        },
+        {
+          "id": "LOGIC-BSW",
+          "name": "基础软件BSW（通信栈/诊断/NVM）",
+          "keywords": [
+            "BSW",
+            "通信栈",
+            "NVM"
+          ]
+        },
+        {
+          "id": "LOGIC-RTE",
+          "name": "运行时环境RTE",
+          "keywords": [
+            "RTE"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "HW",
+      "name": "物理硬件层：定义「由什么组成」",
+      "source": "爆炸图分解/领域知识",
+      "items": [
+        {
+          "id": "HW-EMI",
+          "name": "EMI滤波电路",
+          "keywords": [
+            "EMI",
+            "滤波"
+          ]
+        },
+        {
+          "id": "HW-PFC",
+          "name": "PFC电路",
+          "keywords": [
+            "PFC"
+          ]
+        },
+        {
+          "id": "HW-LLC",
+          "name": "隔离变换级（LLC/谐振）",
+          "keywords": [
+            "LLC",
+            "隔离",
+            "变换"
+          ]
+        },
+        {
+          "id": "HW-OUTPUT",
+          "name": "输出电路（整流/滤波）",
+          "keywords": [
+            "输出",
+            "整流"
+          ]
+        },
+        {
+          "id": "HW-AUX",
+          "name": "辅助电源",
+          "keywords": [
+            "辅助电源"
+          ]
+        },
+        {
+          "id": "HW-MCU",
+          "name": "主控（MCU/DSP）",
+          "keywords": [
+            "MCU",
+            "DSP"
+          ]
+        },
+        {
+          "id": "HW-DRIVER",
+          "name": "驱动电路",
+          "keywords": [
+            "驱动"
+          ]
+        },
+        {
+          "id": "HW-SENSE",
+          "name": "采样电路",
+          "keywords": [
+            "采样"
+          ]
+        },
+        {
+          "id": "HW-PROTECT",
+          "name": "保护电路",
+          "keywords": [
+            "保护电路"
+          ]
+        },
+        {
+          "id": "HW-MAG",
+          "name": "磁性元件（变压器/电感）",
+          "keywords": [
+            "变压器",
+            "电感",
+            "磁性"
+          ]
+        },
+        {
+          "id": "HW-RELAY",
+          "name": "继电器",
+          "keywords": [
+            "继电器"
+          ]
+        },
+        {
+          "id": "HW-HOUSING",
+          "name": "壳体",
+          "keywords": [
+            "壳体"
+          ]
+        },
+        {
+          "id": "HW-WATERWAY",
+          "name": "水道/水冷",
+          "keywords": [
+            "水道",
+            "水冷",
+            "流道"
+          ]
+        },
+        {
+          "id": "HW-SEAL",
+          "name": "密封系统（O型圈/密封垫/密封胶）",
+          "keywords": [
+            "密封",
+            "O型圈",
+            "密封垫"
+          ]
+        },
+        {
+          "id": "HW-FASTENER",
+          "name": "紧固件（螺钉/螺栓/螺母）",
+          "keywords": [
+            "紧固件",
+            "螺钉",
+            "螺栓"
+          ]
+        },
+        {
+          "id": "HW-CONNECTOR",
+          "name": "连接器/接插件",
+          "keywords": [
+            "连接器",
+            "接插件"
+          ]
+        },
+        {
+          "id": "HW-BUSBAR",
+          "name": "铜排/母排",
+          "keywords": [
+            "铜排",
+            "母排"
+          ]
+        },
+        {
+          "id": "HW-NAMEPLATE",
+          "name": "铭牌/标签/标识",
+          "keywords": [
+            "铭牌",
+            "标签"
+          ]
+        },
+        {
+          "id": "HW-SHIELD",
+          "name": "屏蔽与防护",
+          "keywords": [
+            "屏蔽",
+            "防护"
+          ]
+        },
+        {
+          "id": "HW-BRACKET",
+          "name": "支架/托架/安装结构",
+          "keywords": [
+            "支架",
+            "托架"
+          ]
+        },
+        {
+          "id": "HW-HARNESS",
+          "name": "线束",
+          "keywords": [
+            "线束"
+          ]
+        },
+        {
+          "id": "HW-HEATSINK",
+          "name": "散热器",
+          "keywords": [
+            "散热器",
+            "散热"
+          ]
+        },
+        {
+          "id": "HW-TIM",
+          "name": "导热界面材料（导热垫/硅脂）",
+          "keywords": [
+            "导热",
+            "TIM",
+            "硅脂"
+          ]
+        },
+        {
+          "id": "HW-FAN",
+          "name": "风冷部件（风扇/风道）",
+          "keywords": [
+            "风冷",
+            "风扇",
+            "风道"
+          ]
+        },
+        {
+          "id": "HW-POTTING",
+          "name": "灌封涂覆（灌封胶/三防漆）",
+          "keywords": [
+            "灌封",
+            "涂覆",
+            "三防"
+          ]
+        },
+        {
+          "id": "HW-METAL",
+          "name": "金属材料（铝/铜/钢/磁材）",
+          "keywords": [
+            "金属",
+            "铝",
+            "铜",
+            "ADC12"
+          ]
+        },
+        {
+          "id": "HW-PLASTIC",
+          "name": "工程塑料（PA/PPA/PBT/PC）",
+          "keywords": [
+            "塑料",
+            "PBT",
+            "PC"
+          ]
+        },
+        {
+          "id": "HW-RUBBER",
+          "name": "橡胶/硅胶/弹性体",
+          "keywords": [
+            "橡胶",
+            "硅胶",
+            "弹性体"
+          ]
+        },
+        {
+          "id": "HW-SURFACE",
+          "name": "表面处理（阳极氧化/电镀/喷涂）",
+          "keywords": [
+            "表面处理",
+            "阳极",
+            "电镀"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "MFG",
+      "name": "制造工艺层：定义「怎么做出来」",
+      "source": "制造工程/IPC",
+      "items": [
+        {
+          "id": "MFG-CASTING",
+          "name": "压铸工艺",
+          "keywords": [
+            "压铸"
+          ]
+        },
+        {
+          "id": "MFG-MACHINING",
+          "name": "机加工（CNC/钻孔/攻丝）",
+          "keywords": [
+            "机加工",
+            "CNC",
+            "攻丝"
+          ]
+        },
+        {
+          "id": "MFG-SHEET",
+          "name": "钣金（冲压/折弯）",
+          "keywords": [
+            "钣金",
+            "冲压",
+            "折弯"
+          ]
+        },
+        {
+          "id": "MFG-INJECTION",
+          "name": "注塑工艺",
+          "keywords": [
+            "注塑"
+          ]
+        },
+        {
+          "id": "MFG-SURFACE",
+          "name": "表面处理工艺（阳极/电镀/喷涂/钝化）",
+          "keywords": [
+            "喷涂",
+            "钝化"
+          ]
+        },
+        {
+          "id": "MFG-POTTING",
+          "name": "灌封涂覆工艺（灌胶/点胶）",
+          "keywords": [
+            "灌胶",
+            "点胶"
+          ]
+        },
+        {
+          "id": "MFG-ASSEMBLY",
+          "name": "装配工艺",
+          "keywords": [
+            "装配",
+            "组装"
+          ]
+        },
+        {
+          "id": "MFG-PACK",
+          "name": "包装工艺",
+          "keywords": [
+            "包装"
+          ]
+        },
+        {
+          "id": "MFG-FASTEN",
+          "name": "螺纹紧固（扭矩/预紧）",
+          "keywords": [
+            "螺纹紧固",
+            "扭矩",
+            "预紧"
+          ]
+        },
+        {
+          "id": "MFG-PRESS",
+          "name": "压装压接",
+          "keywords": [
+            "压装",
+            "压接"
+          ]
+        },
+        {
+          "id": "MFG-BOND",
+          "name": "涂胶密封",
+          "keywords": [
+            "涂胶",
+            "点胶密封"
+          ]
+        },
+        {
+          "id": "MFG-FIXTURE",
+          "name": "工装治具",
+          "keywords": [
+            "工装",
+            "治具",
+            "夹具"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "VERIFY",
+      "name": "验证测试层：定义「怎么证明做对了」",
+      "source": "V模型验证",
+      "items": [
+        {
+          "id": "VERIFY-THERMAL",
+          "name": "热测试（温升/热循环）",
+          "keywords": [
+            "热测试",
+            "温升",
+            "热循环"
+          ]
+        },
+        {
+          "id": "VERIFY-VIBRATION",
+          "name": "振动冲击测试（振动/跌落）",
+          "keywords": [
+            "振动",
+            "冲击",
+            "跌落"
+          ]
+        },
+        {
+          "id": "VERIFY-AIRTIGHT",
+          "name": "气密泄漏测试（气密/氦检）",
+          "keywords": [
+            "气密",
+            "泄漏",
+            "氦检"
+          ]
+        },
+        {
+          "id": "VERIFY-ENV",
+          "name": "环境测试（高温/低温/湿热/盐雾）",
+          "keywords": [
+            "环境测试",
+            "高温",
+            "低温",
+            "湿热"
+          ]
+        },
+        {
+          "id": "VERIFY-DIM",
+          "name": "尺寸检测（三坐标/CPK）",
+          "keywords": [
+            "尺寸检测",
+            "三坐标",
+            "CPK"
+          ]
+        },
+        {
+          "id": "VERIFY-REL",
+          "name": "可靠性试验（耐久/老化）",
+          "keywords": [
+            "可靠性试验",
+            "耐久",
+            "老化"
+          ]
+        },
+        {
+          "id": "VERIFY-ELECTRICAL",
+          "name": "电气测试（耐压/绝缘）",
+          "keywords": [
+            "电气测试",
+            "耐压",
+            "绝缘"
+          ]
+        },
+        {
+          "id": "VERIFY-CAE",
+          "name": "CAE仿真验证（热/结构/流阻）",
+          "keywords": [
+            "仿真验证",
+            "CAE",
+            "Flotherm"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "METHOD",
+      "name": "方法层：定义「用什么方法设计」",
+      "source": "ASPICE/工程方法",
+      "items": [
+        {
+          "id": "METHOD-MBD",
+          "name": "MBD建模（Simulink/Stateflow）",
+          "keywords": [
+            "MBD",
+            "Simulink",
+            "Stateflow"
+          ]
+        },
+        {
+          "id": "METHOD-AUTOSAR",
+          "name": "AUTOSAR配置（ARXML/代码生成）",
+          "keywords": [
+            "AUTOSAR",
+            "ARXML"
+          ]
+        },
+        {
+          "id": "METHOD-CAE",
+          "name": "CAE仿真方法（热/结构/流场）",
+          "keywords": [
+            "仿真方法",
+            "热仿真",
+            "结构仿真"
+          ]
+        },
+        {
+          "id": "METHOD-DFM",
+          "name": "DFM/DFA可制造性设计",
+          "keywords": [
+            "DFM",
+            "DFA",
+            "可制造"
+          ]
+        },
+        {
+          "id": "METHOD-TOL",
+          "name": "公差分析（尺寸链/GD&T）",
+          "keywords": [
+            "公差",
+            "GD&T",
+            "尺寸链"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "QUALITY",
+      "name": "质量经验层：沉淀「踩过的坑」",
+      "source": "经验管理/FMEA",
+      "items": [
+        {
+          "id": "QUALITY-PROBLEM",
+          "name": "问题记录（排查/踩坑）",
+          "keywords": [
+            "问题",
+            "排查",
+            "踩坑"
+          ]
+        },
+        {
+          "id": "QUALITY-LESSON",
+          "name": "经验教训（复盘/FAQ）",
+          "keywords": [
+            "经验",
+            "教训",
+            "复盘",
+            "FAQ"
+          ]
+        },
+        {
+          "id": "QUALITY-FAILURE",
+          "name": "失效模式（FMEA）",
+          "keywords": [
+            "失效",
+            "FMEA"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "INSTANCE",
+      "name": "实例层：落地到「具体产品」",
+      "source": "实例化/型号管理",
+      "items": [
+        {
+          "id": "INSTANCE-MODEL",
+          "name": "产品型号（如CCU）",
+          "keywords": [
+            "型号",
+            "CCU"
+          ]
+        },
+        {
+          "id": "INSTANCE-PROJECT",
+          "name": "项目实例（曼岛/零跑/VAVE）",
+          "keywords": [
+            "项目",
+            "曼岛",
+            "零跑",
+            "VAVE"
+          ]
+        },
+        {
+          "id": "INSTANCE-PLATFORM",
+          "name": "平台实例（G5/G7）",
+          "keywords": [
+            "平台",
+            "G5",
+            "G7"
+          ]
+        }
+      ]
+    }
+  ]
+}

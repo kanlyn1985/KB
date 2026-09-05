@@ -1,0 +1,55 @@
+{
+ "case_id": "G001",
+ "category": "G01-fact-precise",
+ "difficulty": "easy",
+ "requirement_refs": [
+  "SYS-004",
+  "SYS-005"
+ ],
+ "input": {
+  "query": "OBC的额定输入电压范围是多少"
+ },
+ "expected": {
+  "entities": [
+   {
+    "entity_id": "P-HW-OBC",
+    "entity_type": "component",
+    "description": "OBC 模块（车载充电机）"
+   }
+  ],
+  "assertions": [
+   {
+    "assertion_id": "ast_g001_1",
+    "subject_ref": "entity:obc",
+    "predicate_ref": "relation:rated_input_voltage_range",
+    "object": {
+     "kind": "literal",
+     "value": "三相 85VAC~265VAC（宽范围）",
+     "datatype": "xsd:string"
+    },
+    "assertion_type": "asserted",
+    "status": "validated",
+    "evidence_refs": [
+     "evd:node:P-HW-OBC:0"
+    ],
+    "confidence": 0.85
+   }
+  ],
+  "evidence": [
+   {
+    "evidence_id": "evd:node:P-HW-OBC:0",
+    "document_id": "doc:node:P-HW-OBC"
+   }
+  ],
+  "support_level": "sufficient",
+  "answer_contract": {
+   "must_cite_evidence": true,
+   "must_include": [
+    "输入电压"
+   ],
+   "max_chars": 800
+  }
+ },
+ "negative_expectations": [],
+ "notes": "事实锚定生产库 P-HW-OBC 节点卡 evidence；数值以 evidence excerpt 为准，答案必须引用"
+}

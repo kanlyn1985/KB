@@ -1,0 +1,25 @@
+{
+  "answer_contracts": {
+    "parameter_definition": {
+      "intent": "definition",
+      "required_sections": ["target_parameter", "definition", "supporting_evidence"],
+      "optional_sections": ["aliases", "related_parameters", "hidden_context"],
+      "preferred_object_types": ["Parameter", "StandardClause"],
+      "preferred_fact_types": ["term_definition", "parameter_definition"]
+    },
+    "parameter_constraint": {
+      "intent": "constraint_lookup",
+      "required_sections": ["target_parameter", "constraint", "condition", "supporting_evidence"],
+      "optional_sections": ["source_priority", "test_coverage", "warnings", "missing_slots"],
+      "preferred_object_types": ["Parameter", "ParameterConstraint", "StandardClause"],
+      "preferred_fact_types": ["parameter_constraint", "requirement_constraint", "table_row"]
+    },
+    "test_method": {
+      "intent": "test_method",
+      "required_sections": ["target_parameter", "test_method", "test_condition", "supporting_evidence"],
+      "optional_sections": ["instrument", "risk_notes", "missing_slots"],
+      "preferred_object_types": ["Parameter", "TestMethod", "StandardClause"],
+      "preferred_fact_types": ["test_method", "test_condition", "procedure"]
+    }
+  }
+}

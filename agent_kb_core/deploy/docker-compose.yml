@@ -1,0 +1,82 @@
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: agent-kb-core:0.5.0
+    command:
+      - agent-kb
+      - secure-serve
+      - --tenant-db-root
+      - /data/tenants
+      - --backup-root
+      - /data/backups
+      - --domain-dir
+      - /app/domains/obc_dcdc
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8080"
+      - --distributed-rate-limit
+    environment:
+      AGENT_KB_API_KEYS: >-
+        {"development-health-key-000000000000":{"principal_id":"compose-admin","tenant_id":"default","roles":["admin"]}}
+      AGENT_KB_HEALTH_API_KEY: development-health-key-000000000000
+      AGENT_KB_TENANT_ID: default
+    ports:
+      - "8080:8080"
+    volumes:
+      - agent-kb-data:/data
+    healthcheck:
+      test:
+        - CMD
+        - agent-kb-platform
+        - http-probe
+        - --url
+        - http://127.0.0.1:8080/v1/health
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 10s
+    restart: unless-stopped
+
+  worker:
+    image: agent-kb-core:0.5.0
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    command:
+      - agent-kb-worker
+      - --tenant-db-root
+      - /data/tenants
+      - --domain-dir
+      - /app/domains/obc_dcdc
+      - --worker-id
+      - compose-worker-1
+      - --poll-interval
+      - "1"
+      - --heartbeat-interval
+      - "10"
+      - --lease-seconds
+      - "45"
+      - --ready-file
+      - /tmp/agent-kb/worker.ready
+    volumes:
+      - agent-kb-data:/data
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+  qdrant:
+    image: qdrant/qdrant:v1.14.1
+    profiles: ["vector"]
+    volumes:
+      - qdrant-data:/qdrant/storage
+    ports:
+      - "6333:6333"
+    restart: unless-stopped
+
+volumes:
+  agent-kb-data:
+  qdrant-data:

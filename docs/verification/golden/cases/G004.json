@@ -1,0 +1,55 @@
+{
+ "case_id": "G004",
+ "category": "G04-entity-recognition",
+ "difficulty": "easy",
+ "requirement_refs": [
+  "SYS-007"
+ ],
+ "input": {
+  "query": "查询里提到的PFC是什么部件"
+ },
+ "expected": {
+  "entities": [
+   {
+    "entity_id": "P-HW-OBC-PFC",
+    "entity_type": "component",
+    "description": "PFC 电路（功率因数校正）"
+   }
+  ],
+  "assertions": [
+   {
+    "assertion_id": "ast_g004_1",
+    "subject_ref": "entity:pfc",
+    "predicate_ref": "relation:instance_of",
+    "object": {
+     "kind": "literal",
+     "value": "功率因数校正电路（OBC 输入级）",
+     "datatype": "xsd:string"
+    },
+    "assertion_type": "asserted",
+    "status": "validated",
+    "evidence_refs": [
+     "evd:node:P-HW-OBC-PFC:0"
+    ],
+    "confidence": 0.85
+   }
+  ],
+  "relations": [
+   {
+    "source_ref": "entity:pfc",
+    "predicate_ref": "relation:part_of",
+    "target_ref": "entity:obc",
+    "assertion_id": "ast_g004_1"
+   }
+  ],
+  "evidence": [
+   {
+    "evidence_id": "evd:node:P-HW-OBC-PFC:0",
+    "document_id": "doc:node:P-HW-OBC-PFC"
+   }
+  ],
+  "support_level": "sufficient"
+ },
+ "negative_expectations": [],
+ "notes": "实体识别 + part_of 归属（图边可回溯 assertion，INV-003）"
+}

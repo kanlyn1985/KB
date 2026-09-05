@@ -1,0 +1,62 @@
+{
+ "case_id": "G002",
+ "category": "G02-numeric-unit",
+ "difficulty": "medium",
+ "requirement_refs": [
+  "SYS-004",
+  "SYS-013"
+ ],
+ "input": {
+  "query": "DCDC输出纹波的限值是多少mV"
+ },
+ "expected": {
+  "entities": [
+   {
+    "entity_id": "DCDC_OUTPUT_RIPPLE",
+    "entity_type": "parameter",
+    "description": "DCDC 低压输出纹波"
+   }
+  ],
+  "assertions": [
+   {
+    "assertion_id": "ast_g002_1",
+    "subject_ref": "entity:dcdc_output_ripple",
+    "predicate_ref": "relation:limit",
+    "object": {
+     "kind": "literal",
+     "value": "不大于30mVpp（额定负载下）",
+     "datatype": "xsd:string",
+     "unit": "mVpp"
+    },
+    "assertion_type": "asserted",
+    "status": "validated",
+    "evidence_refs": [
+     "evd:node:P-HW-DCDC-OUT:0"
+    ],
+    "confidence": 0.9
+   }
+  ],
+  "evidence": [
+   {
+    "evidence_id": "evd:node:P-HW-DCDC-OUT:0",
+    "document_id": "doc:node:P-HW-DCDC-OUT"
+   }
+  ],
+  "support_level": "partial",
+  "answer_contract": {
+   "must_include": [
+    "mV"
+   ],
+   "disclose_gaps": true,
+   "max_chars": 900
+  }
+ },
+ "negative_expectations": [
+  {
+   "type": "no_overclaim",
+   "description": "未指明工况时不得输出确定性限值结论（缺工况槽位）",
+   "invariant_ref": "INV-001"
+  }
+ ],
+ "notes": "参数限值随工况变化；partial 判定必须披露工况缺口（对齐 SYS-013 abstain 语义）"
+}

@@ -1,0 +1,27 @@
+{
+  "rules_version": "1.0",
+  "scope": "检索层体检门 —— golden case 充分性 + 召回质量双尺",
+  "independence": "充分性尺的依据是 skeleton_coverage_map.json（oracle 要素），与骨架、与 case 集合本身独立；case 只是数据，尺子定义『什么必须测』。",
+  "sufficiency": {
+    "description": "每个 oracle 要素（wbs_id）至少有 1 个 golden case 打到其映射节点（含子卡归一）；要素无 case = 测试盲区",
+    "source_map": "skeleton_coverage_map.json",
+    "per_wbs_min_cases": 1,
+    "allow_shared_node": true
+  },
+  "negative_cases": {
+    "description": "负例 = 语料外查询，正确行为是 top-K 全部为低分；用于检测『什么都往回捞』的假召回",
+    "min_count": 5,
+    "max_top_score": 0.35,
+    "note": "top1 归一化分数超过此阈值视为假召回"
+  },
+  "quality": {
+    "hit_at_k": 5,
+    "min_hit_rate": 0.9,
+    "min_mrr": 0.6,
+    "note": "及格线：Hit@K>=90% 且 MRR>=0.60；低于任一线 = FAIL"
+  },
+  "layer_floor": {
+    "description": "分层地板：任何骨架层的 case 覆盖率不得低于此比例，防止只测热门层",
+    "min_layer_coverage_pct": 80
+  }
+}

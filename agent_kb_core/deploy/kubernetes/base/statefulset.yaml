@@ -1,0 +1,153 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: agent-kb-core
+  namespace: agent-kb
+  labels:
+    app.kubernetes.io/name: agent-kb-core
+spec:
+  serviceName: agent-kb-core
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: agent-kb-core
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: agent-kb-core
+    spec:
+      serviceAccountName: agent-kb-core
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 60
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: api
+          image: ghcr.io/kanlyn1985/agent-kb-core:0.5.0
+          imagePullPolicy: IfNotPresent
+          command: ["agent-kb"]
+          args:
+            - secure-serve
+            - --tenant-db-root
+            - $(AGENT_KB_TENANT_DB_ROOT)
+            - --backup-root
+            - $(AGENT_KB_BACKUP_ROOT)
+            - --domain-dir
+            - $(AGENT_KB_DOMAIN_DIR)
+            - --host
+            - 0.0.0.0
+            - --port
+            - "8080"
+            - --distributed-rate-limit
+          envFrom:
+            - configMapRef:
+                name: agent-kb-core-config
+            - secretRef:
+                name: agent-kb-core-secrets
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+                - agent-kb-platform
+                - http-probe
+                - --url
+                - http://127.0.0.1:8080/v1/health
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            exec:
+              command:
+                - agent-kb-platform
+                - http-probe
+                - --url
+                - http://127.0.0.1:8080/v1/health
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: tmp
+              mountPath: /tmp
+
+        - name: worker
+          image: ghcr.io/kanlyn1985/agent-kb-core:0.5.0
+          imagePullPolicy: IfNotPresent
+          command: ["agent-kb-worker"]
+          args:
+            - --tenant-db-root
+            - $(AGENT_KB_TENANT_DB_ROOT)
+            - --domain-dir
+            - $(AGENT_KB_DOMAIN_DIR)
+            - --worker-id
+            - $(POD_NAME)-worker
+            - --poll-interval
+            - $(AGENT_KB_WORKER_POLL_INTERVAL)
+            - --heartbeat-interval
+            - $(AGENT_KB_WORKER_HEARTBEAT_INTERVAL)
+            - --lease-seconds
+            - $(AGENT_KB_WORKER_LEASE_SECONDS)
+            - --ready-file
+            - /tmp/agent-kb/worker.ready
+          envFrom:
+            - configMapRef:
+                name: agent-kb-core-config
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          readinessProbe:
+            exec:
+              command: ["python", "-c", "from pathlib import Path; raise SystemExit(0 if Path('/tmp/agent-kb/worker.ready').exists() else 1)"]
+            initialDelaySeconds: 2
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: agent-kb-core-data
+        - name: tmp
+          emptyDir:
+            sizeLimit: 256Mi

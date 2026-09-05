@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+build/
+dist/
+*.egg-info/
+.git/
+.github/
+tests/
+docs/
+operations-output/
+.ci-runtime/
+*.sqlite3
+*.db
+backups/

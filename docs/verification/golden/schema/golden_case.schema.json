@@ -1,0 +1,285 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/kanlyn1985/KB/docs/verification/golden/schema/golden_case.schema.json",
+  "title": "AKB Golden Knowledge Case V1.0",
+  "description": "AKB-P0-GOLDEN-001: Golden Knowledge Dataset case schema. Aligns with Data Model V1.0 (DM-003 Evidence, DM-005 KnowledgeAssertion) and V&V Plan V1.0 section 24.",
+  "type": "object",
+  "required": ["case_id", "category", "difficulty", "input", "expected", "notes"],
+  "additionalProperties": false,
+  "properties": {
+    "case_id": {
+      "type": "string",
+      "pattern": "^G[0-9]{3}$",
+      "description": "G001..G030, globally unique across the dataset"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "G01-fact-precise", "G02-numeric-unit", "G03-definition", "G04-entity-recognition",
+        "G05-synonym-alias", "G06-single-hop-relation", "G07-multi-hop-relation", "G08-temporal-relation",
+        "G09-historical-version", "G10-current-state", "G11-event-query", "G12-state-query",
+        "G13-evidence-query", "G14-provenance-query", "G15-insufficient-evidence", "G16-conflicting-knowledge",
+        "G17-assertion-status", "G18-candidate-knowledge", "G19-derived-knowledge", "G20-simple-rule-reasoning",
+        "G21-multi-step-reasoning", "G22-reverse-graph-query", "G23-graph-vector-hybrid", "G24-lexical-semantic-hybrid",
+        "G25-context-assembly", "G26-answer-contract", "G27-knowledge-gap", "G28-decision-support",
+        "G29-agent-e2e", "G30-negative-forbidden"
+      ]
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": ["easy", "medium", "hard"]
+    },
+    "requirement_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "pattern": "^(SYS|INV)-[0-9]{3}$" },
+      "description": "RTM traceability: at least one SYS requirement or INV invariant per case"
+    },
+    "input": {
+      "type": "object",
+      "required": ["query"],
+      "additionalProperties": false,
+      "properties": {
+        "query": { "type": "string", "minLength": 1 },
+        "context": { "type": "object" }
+      }
+    },
+    "expected": {
+      "type": "object",
+      "required": ["support_level"],
+      "additionalProperties": false,
+      "properties": {
+        "entities": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/entity_ref" }
+        },
+        "assertions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/assertion" }
+        },
+        "relations": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/relation_ref" }
+        },
+        "events": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/event_ref" }
+        },
+        "states": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/state_ref" }
+        },
+        "evidence": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/evidence_ref" }
+        },
+        "reasoning": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/reasoning_expectation" }
+        },
+        "answer_contract": { "$ref": "#/$defs/answer_contract" },
+        "support_level": {
+          "type": "string",
+          "enum": ["sufficient", "partial", "insufficient"],
+          "description": "Evidence sufficiency judgement per V&V Plan section 14"
+        }
+      }
+    },
+    "negative_expectations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "description"],
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "no_evidence_no_assertion", "derived_not_asserted", "no_deterministic_answer",
+              "no_ungrounded_entity", "no_overclaim", "no_memory_as_knowledge",
+              "no_unauthorized_graph_edge", "no_hidden_gap"
+            ]
+          },
+          "description": { "type": "string", "minLength": 1 },
+          "invariant_ref": { "type": "string", "pattern": "^INV-[0-9]{3}$" }
+        }
+      }
+    },
+    "notes": { "type": "string", "minLength": 1 }
+  },
+  "$defs": {
+    "entity_ref": {
+      "type": "object",
+      "required": ["entity_id", "description"],
+      "additionalProperties": false,
+      "properties": {
+        "entity_id": { "type": "string", "minLength": 1 },
+        "entity_type": { "type": "string" },
+        "description": { "type": "string", "minLength": 1 }
+      }
+    },
+    "assertion": {
+      "type": "object",
+      "required": ["subject_ref", "predicate_ref", "object", "assertion_type", "status", "evidence_refs"],
+      "additionalProperties": false,
+      "properties": {
+        "assertion_id": { "type": "string", "pattern": "^ast_g[0-9]{3}(_[a-z0-9_]+)?$" },
+        "subject_ref": { "type": "string", "minLength": 1 },
+        "predicate_ref": { "type": "string", "minLength": 1 },
+        "object": {
+          "type": "object",
+          "required": ["kind"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": { "type": "string", "enum": ["literal", "entity_ref"] },
+            "value": {},
+            "datatype": { "type": "string" },
+            "unit": { "type": "string" },
+            "entity_id": { "type": "string" }
+          }
+        },
+        "assertion_type": {
+          "type": "string",
+          "enum": ["extracted", "observed", "asserted", "inferred", "hypothesized"],
+          "description": "Data Model V1.0 section 9.3"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["candidate", "validated", "asserted", "disputed", "deprecated", "rejected"],
+          "description": "Data Model V1.0 section 9.4 lifecycle"
+        },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "evidence_refs": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^evd:" },
+          "description": "Must reference evidence ids from the production index (evd:node:<node>:<n>) or golden-local evd:gold:<id>"
+        },
+        "temporal_scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "valid_from": { "type": ["string", "null"] },
+            "valid_until": { "type": ["string", "null"] },
+            "observed_at": { "type": ["string", "null"] }
+          }
+        },
+        "derivation": {
+          "type": ["object", "null"],
+          "description": "Required (non-null) when assertion_type=inferred",
+          "properties": {
+            "rule_ref": { "type": "string" },
+            "parent_assertions": { "type": "array", "items": { "type": "string" } },
+            "reasoner_id": { "type": "string" }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "assertion_type": { "const": "inferred" } } },
+          "then": { "properties": { "derivation": { "type": "object", "required": ["rule_ref", "parent_assertions", "reasoner_id"] } } }
+        },
+        {
+          "if": { "properties": { "status": { "enum": ["validated", "asserted"] } } },
+          "then": { "properties": { "evidence_refs": { "minItems": 1 } }, "description": "INV-001: no evidence, no asserted knowledge" }
+        }
+      ]
+    },
+    "relation_ref": {
+      "type": "object",
+      "required": ["source_ref", "predicate_ref", "target_ref"],
+      "additionalProperties": false,
+      "properties": {
+        "source_ref": { "type": "string", "minLength": 1 },
+        "predicate_ref": { "type": "string", "minLength": 1 },
+        "target_ref": { "type": "string", "minLength": 1 },
+        "assertion_id": { "type": "string", "description": "INV-003: graph edge must trace to an assertion" }
+      }
+    },
+    "event_ref": {
+      "type": "object",
+      "required": ["event_id", "event_time", "description"],
+      "additionalProperties": false,
+      "properties": {
+        "event_id": { "type": "string", "minLength": 1 },
+        "event_time": { "type": "string", "minLength": 1 },
+        "actor": { "type": "string" },
+        "targets": { "type": "array", "items": { "type": "string" } },
+        "description": { "type": "string", "minLength": 1 },
+        "evidence_refs": { "type": "array", "items": { "type": "string", "pattern": "^evd:" } }
+      }
+    },
+    "state_ref": {
+      "type": "object",
+      "required": ["subject_ref", "state_name", "observed_at"],
+      "additionalProperties": false,
+      "properties": {
+        "subject_ref": { "type": "string", "minLength": 1 },
+        "state_name": { "type": "string", "minLength": 1 },
+        "observed_at": { "type": "string", "minLength": 1 },
+        "evidence_refs": { "type": "array", "items": { "type": "string", "pattern": "^evd:" } }
+      }
+    },
+    "evidence_ref": {
+      "type": "object",
+      "required": ["evidence_id"],
+      "additionalProperties": false,
+      "properties": {
+        "evidence_id": {
+          "type": "string",
+          "pattern": "^(evd:node:[^\\s:]+:[0-9]+|evd:gold:[a-z0-9_]+)$",
+          "description": "Existing production evidence (evd:node:...) or golden-local curated evidence (evd:gold:...)"
+        },
+        "document_id": { "type": "string" },
+        "location": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "page": { "type": ["integer", "null"] },
+            "section": { "type": ["string", "null"] }
+          }
+        },
+        "excerpt": { "type": "string", "minLength": 1 }
+      }
+    },
+    "reasoning_expectation": {
+      "type": "object",
+      "required": ["reasoning_id", "input_assertions", "rule_refs", "expected_derived_assertions", "expected_trace"],
+      "additionalProperties": false,
+      "properties": {
+        "reasoning_id": { "type": "string", "pattern": "^R[0-9]{3}$" },
+        "input_assertions": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "rule_refs": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "expected_derived_assertions": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/assertion" }
+        },
+        "expected_trace": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["step", "description"],
+            "additionalProperties": false,
+            "properties": {
+              "step": { "type": "integer", "minimum": 1 },
+              "description": { "type": "string", "minLength": 1 },
+              "rule_ref": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "answer_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "must_include": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "must_not_include": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "must_cite_evidence": { "type": "boolean" },
+        "max_chars": { "type": "integer", "minimum": 50 },
+        "disclose_gaps": { "type": "boolean" }
+      }
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+ "case_id": "G013",
+ "category": "G13-evidence-query",
+ "difficulty": "easy",
+ "requirement_refs": [
+  "SYS-003",
+  "SYS-011"
+ ],
+ "input": {
+  "query": "OBC工作原理的说明出自哪些文档"
+ },
+ "expected": {
+  "evidence": [
+   {
+    "evidence_id": "evd:node:P-KNOW-OBC:0",
+    "document_id": "doc:node:P-KNOW-OBC"
+   },
+   {
+    "evidence_id": "evd:node:P-KNOW-OBC:1",
+    "document_id": "doc:node:P-KNOW-OBC"
+   }
+  ],
+  "assertions": [
+   {
+    "assertion_id": "ast_g013_1",
+    "subject_ref": "entity:obc_principle_content",
+    "predicate_ref": "relation:supported_by",
+    "object": {
+     "kind": "literal",
+     "value": {
+      "kind": "entity_ref",
+      "entity_id": "doc:node:P-KNOW-OBC"
+     }
+    },
+    "assertion_type": "asserted",
+    "status": "validated",
+    "evidence_refs": [
+     "evd:node:P-KNOW-OBC:0"
+    ],
+    "confidence": 0.9
+   }
+  ],
+  "support_level": "sufficient",
+  "answer_contract": {
+   "must_cite_evidence": true,
+   "max_chars": 900
+  }
+ },
+ "negative_expectations": [],
+ "notes": "证据溯源查询：答案即 evidence 清单（DM-003 可回溯性正面用例）"
+}
