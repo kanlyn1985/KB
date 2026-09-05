@@ -700,12 +700,89 @@ V04_REASONING_RUNS_MIGRATION: Migration = Migration(
     ),
 )
 
+# V0.5: knowledge graph persistence (AKB-V05-IMPL-003; design docs/V0.5/
+# KG_SPEC + GRAPH_PROVENANCE_SPEC - pure additive reversible; V0.1-V0.4 tables
+# untouched; graph is a rebuildable projection, NOT a source of truth)
+V05_GRAPH_PERSISTENCE_MIGRATION: Migration = Migration(
+    version=15,
+    name="v05_graph_persistence",
+    statements=(
+        """
+        CREATE TABLE IF NOT EXISTS kg_projection_runs (
+            projection_id      TEXT PRIMARY KEY,
+            graph_version      TEXT NOT NULL,
+            fingerprint        TEXT NOT NULL,
+            source_digest      TEXT NOT NULL,
+            node_count         INTEGER NOT NULL,
+            edge_count         INTEGER NOT NULL,
+            actor_id           TEXT NOT NULL,
+            status             TEXT NOT NULL CHECK (status IN
+                                 ('active','superseded')),
+            created_at         TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
+        )
+        """,
+        "CREATE UNIQUE INDEX IF NOT EXISTS ux_kg_proj_fingerprint"
+        " ON kg_projection_runs(fingerprint)",
+        "CREATE INDEX IF NOT EXISTS ix_kg_proj_status ON kg_projection_runs(status)",
+        """
+        CREATE TABLE IF NOT EXISTS kg_nodes (
+            node_id            TEXT PRIMARY KEY,
+            node_type          TEXT NOT NULL CHECK (node_type IN
+                                 ('entity','semantic_unit','assertion','evidence',
+                                  'document','inference')),
+            source_id          TEXT NOT NULL,
+            projection_id      TEXT NOT NULL REFERENCES kg_projection_runs(projection_id),
+            status             TEXT NOT NULL CHECK (status IN
+                                 ('valid','invalidated','flagged')),
+            payload_json       TEXT NOT NULL,
+            provenance_ref     TEXT NOT NULL
+        )
+        """,
+        "CREATE INDEX IF NOT EXISTS ix_kg_nodes_type ON kg_nodes(node_type)",
+        "CREATE INDEX IF NOT EXISTS ix_kg_nodes_source ON kg_nodes(node_type, source_id)",
+        "CREATE INDEX IF NOT EXISTS ix_kg_nodes_proj ON kg_nodes(projection_id)",
+        """
+        CREATE TABLE IF NOT EXISTS kg_edges (
+            edge_id            TEXT PRIMARY KEY,
+            edge_type          TEXT NOT NULL CHECK (edge_type IN
+                                 ('extracted_from','supports','contradicts',
+                                  'derived_from','validates','relates_to')),
+            source_node        TEXT NOT NULL REFERENCES kg_nodes(node_id),
+            target_node        TEXT NOT NULL REFERENCES kg_nodes(node_id),
+            projection_id      TEXT NOT NULL REFERENCES kg_projection_runs(projection_id),
+            status             TEXT NOT NULL CHECK (status IN
+                                 ('valid','invalidated','flagged')),
+            payload_json       TEXT NOT NULL,
+            provenance_ref     TEXT NOT NULL
+        )
+        """,
+        "CREATE INDEX IF NOT EXISTS ix_kg_edges_type ON kg_edges(edge_type)",
+        "CREATE INDEX IF NOT EXISTS ix_kg_edges_src ON kg_edges(source_node)",
+        "CREATE INDEX IF NOT EXISTS ix_kg_edges_tgt ON kg_edges(target_node)",
+        "CREATE INDEX IF NOT EXISTS ix_kg_edges_proj ON kg_edges(projection_id)",
+        """
+        CREATE TABLE IF NOT EXISTS kg_invalidation_log (
+            invalidation_id    TEXT PRIMARY KEY,
+            node_id            TEXT NOT NULL REFERENCES kg_nodes(node_id),
+            reason_status      TEXT NOT NULL CHECK (reason_status IN
+                                 ('rejected','deprecated','disputed')),
+            graph_status       TEXT NOT NULL CHECK (graph_status IN
+                                 ('invalidated','flagged')),
+            actor_id           TEXT NOT NULL,
+            created_at         TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
+        )
+        """,
+        "CREATE INDEX IF NOT EXISTS ix_kg_inval_node ON kg_invalidation_log(node_id)",
+    ),
+)
+
 ALL_MIGRATIONS: tuple[Migration, ...] = (
 
     CORE_MIGRATIONS
     + (V01_EVIDENCE_CORE_MIGRATION, V01_HARDENING_MIGRATION,
        V02_SEMANTIC_COMPILATION_MIGRATION, V03_MULTI_EVIDENCE_SYNTHESIS_MIGRATION,
-       V04_REASONING_RUNS_MIGRATION)
+       V04_REASONING_RUNS_MIGRATION,
+       V05_GRAPH_PERSISTENCE_MIGRATION)
 )
 
 

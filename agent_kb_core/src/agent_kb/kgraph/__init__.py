@@ -27,6 +27,11 @@ from agent_kb.kgraph.models import (
     edge_id,
     node_id,
 )
+from agent_kb.kgraph.persistence import (
+    GraphPersistenceError,
+    GraphPersistenceService,
+    GraphRepository,
+)
 from agent_kb.kgraph.projection import GraphProjectionService
 from agent_kb.kgraph.identity import (
     EntityGovernanceService,
@@ -39,5 +44,6 @@ __all__ = [
     "EvidenceNode", "ExtractedFromEdge", "GraphProjection", "InferenceNode",
     "RelatesToEdge", "SemanticUnitNode", "SupportsEdge", "ValidatesEdge",
     "edge_id", "node_id", "GraphProjectionService", "EntityIdentityResolver",
+    "GraphPersistenceService", "GraphRepository", "GraphPersistenceError",
     "EntityGovernanceService", "MergeCandidate",
 ]
