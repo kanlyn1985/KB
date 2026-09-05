@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta charset="utf-8"><title>V0.5 IMPL-004 Graph Query — Evidence Report</title>
+<style>body{font-family:Segoe UI,Microsoft YaHei,sans-serif;margin:32px;color:#1a1a2e}
+h1{border-bottom:3px solid #4361ee;padding-bottom:8px}h2{color:#3a0ca3;margin-top:28px}
+table{border-collapse:collapse;margin:12px 0}td,th{border:1px solid #b8b8d4;padding:6px 12px;font-size:14px}
+th{background:#eef0fb}.pass{color:#0a7a2f;font-weight:600}.fail{color:#c1121f;font-weight:600}
+code{background:#f1f3f9;padding:2px 5px;border-radius:3px}.meta{color:#555;font-size:13px}</style></head>
+<body>
+<h1>V0.5 IMPL-004 — Graph Query Implementation Evidence Report</h1>
+<p class="meta">Date: 2026-09-04 · Baseline: ae982a7 (IMPL-003) · Design baseline: f5e28dd (frozen)</p>
+
+<h2>1. Baseline & Architecture</h2>
+<table>
+<tr><th>Item</th><th>Value</th></tr>
+<tr><td>Design SHA</td><td>f5e28dd (frozen — semantics unchanged)</td></tr>
+<tr><td>IMPL-001</td><td>11bed68</td></tr>
+<tr><td>IMPL-002</td><td>28721cc</td></tr>
+<tr><td>IMPL-003</td><td>ae982a7</td></tr>
+<tr><td>Implementation</td><td>agent_kb/kgraph/query.py (GraphQueryService + GraphNodeView/GraphEdgeView/ProvenanceTrace)</td></tr>
+<tr><td>Architecture</td><td>Application → GraphQueryService → GraphRepository → kg_* tables (migration 15)</td></tr>
+</table>
+
+<h2>2. Q-01 ~ Q-06</h2>
+<table>
+<tr><th>Query</th><th>Contract (frozen design)</th><th>Test</th><th>Result</th></tr>
+<tr><td>Q-01 Provenance</td><td>五级链回溯 Node→Assertion→Unit/Evidence→Document</td><td>GQ-CMP-001/011/012/013</td><td class="pass">PASS</td></tr>
+<tr><td>Q-02 Entity Neighborhood</td><td>EntityNode k-hop（relates_to/supports；MAX_HOPS=4）</td><td>GQ-CMP-002/016</td><td class="pass">PASS</td></tr>
+<tr><td>Q-03 Assertion Trace</td><td>contradicts 邻居 → conflict_ref（不裁决）</td><td>GQ-CMP-003</td><td class="pass">PASS</td></tr>
+<tr><td>Q-04 Inference Chain</td><td>derived_from 祖先链（双粒度：run 节点 + 断言链；max_depth≤8）</td><td>GQ-CMP-004/014</td><td class="pass">PASS</td></tr>
+<tr><td>Q-05 Status-aware</td><td>默认排除 invalidated；disputed=flagged 保留；audit 模式显式包含</td><td>GQ-CMP-005/007/008/009/010</td><td class="pass">PASS</td></tr>
+<tr><td>Q-06 Determinism</td><td>canonical 排序（node_id/edge_id 显式 ORDER BY + tie-breaker）</td><td>GQ-CMP-006/017/018/019</td><td class="pass">PASS</td></tr>
+</table>
+
+<h2>3. Status Semantics</h2>
+<table>
+<tr><th>Source status</th><th>Graph status</th><th>Query behavior</th><th>Evidence</th></tr>
+<tr><td>candidate/validated/asserted</td><td>valid</td><td>默认查询面返回</td><td class="pass">GQ-CMP-007</td></tr>
+<tr><td>rejected</td><td>invalidated</td><td>默认排除；audit 模式显式返回</td><td class="pass">GQ-CMP-008</td></tr>
+<tr><td>deprecated</td><td>invalidated</td><td>同上</td><td class="pass">GQ-CMP-008</td></tr>
+<tr><td>disputed</td><td>flagged</td><td>默认面保留（不静默删除），provenance 可回溯</td><td class="pass">GQ-CMP-009</td></tr>
+<tr><td>hypothesized</td><td>不投影</td><td>零节点（kg_nodes 无记录）</td><td class="pass">GQ-CMP-010</td></tr>
+</table>
+
+<h2>4. Provenance（实测回溯链）</h2>
+<table>
+<tr><th>Trace</th><th>Test</th><th>Result</th></tr>
+<tr><td>kg_nodes.source_id → akb_assertions</td><td>GQ-CMP-011</td><td class="pass">PASS</td></tr>
+<tr><td>assertion.evidence_refs → akb_evidence</td><td>GQ-CMP-012</td><td class="pass">PASS</td></tr>
+<tr><td>akb_evidence.document_id → akb_documents</td><td>GQ-CMP-013</td><td class="pass">PASS</td></tr>
+<tr><td>kg_nodes(inference) → akb_reasoning_runs</td><td>GQ-CMP-014</td><td class="pass">PASS</td></tr>
+</table>
+<p>完整链（GQ-CMP-001 实测）：graph_node → assertion → evidence_ids(tuple) → document_id；
+ProvenanceTrace.chain 逐级 label:value 记录。fail-closed：源缺失 → E-V05-SOURCE-MISSING
+（不 fabricate provenance）——GQ-CMP-024。</p>
+
+<h2>5. Determinism & Read-only</h2>
+<table>
+<tr><th>Check</th><th>Method</th><th>Result</th></tr>
+<tr><td>Ordering</td><td>node_id/edge_id 显式 ORDER BY（SQL 单一定义点）</td><td class="pass">GQ-CMP-017 PASS</td></tr>
+<tr><td>Duplicate elimination</td><td>edge/node 集合去重（seen sets）</td><td class="pass">GQ-CMP-015/016 PASS</td></tr>
+<tr><td>Same DB state</td><td>canonical_view 两次调用全等</td><td class="pass">GQ-CMP-018 PASS</td></tr>
+<tr><td>Cross-instance</td><td>双 QueryService 实例等价</td><td class="pass">GQ-CMP-019 PASS</td></tr>
+<tr><td>Read-only</td><td>五表（kg_nodes/kg_edges/kg_projection_runs/kg_invalidation_log/akb_provenance）快照前后一致</td><td class="pass">GQ-CMP-020 PASS</td></tr>
+<tr><td>Rebuild stability</td><td>re-persist（fingerprint 幂等）后 canonical_view 不变</td><td class="pass">GQ-CMP-022 PASS</td></tr>
+<tr><td>Empty graph</td><td>no nodes/edges → 确定性空结果；不存在节点 → 显式 NOT-FOUND</td><td class="pass">GQ-CMP-023 PASS</td></tr>
+<tr><td>Invalid parameters</td><td>type/status/limit/hops/depth 全部显式拒绝</td><td class="pass">GQ-CMP-025 PASS</td></tr>
+</table>
+
+<h2>6. Legacy Isolation</h2>
+<p><code>agent_kb.graph</code>：API 面互斥（GraphQueryService 等符号不在 legacy；legacy 符号
+不在 kgraph）+ <code>graph_edges</code> 表查询前后零变化 → <span class="pass">GQ-CMP-021 PASS</span>。</p>
+
+<h2>7. Test Results（实测）</h2>
+<table>
+<tr><th>Suite</th><th>Result</th></tr>
+<tr><td>GQ-CMP-001..025</td><td class="pass">25/25 PASS</td></tr>
+<tr><td>V0.5 graph 全套（GS 7 + ER 16 + GP 25 + GQ 25）</td><td class="pass">73 PASS</td></tr>
+<tr><td>V0.1 Golden</td><td class="pass">30/30 PASS</td></tr>
+<tr><td>V0.2 Golden</td><td class="pass">40/40 PASS</td></tr>
+<tr><td>V0.3 Golden</td><td class="pass">55/55 PASS</td></tr>
+<tr><td>V0.4 reasoning</td><td class="pass">21/21 PASS</td></tr>
+<tr><td>agent_kb_core</td><td class="pass">346 passed + 1 skipped（0 failures/errors）</td></tr>
+<tr><td>Full repository</td><td class="pass">320 passed + 1 skipped（exit 0）</td></tr>
+</table>
+<p class="meta">1 skipped = V0.3 capped 数据场景设计性跳过（历史记录，非本阶段引入）。</p>
+
+<h2>8. Database Safety</h2>
+<p>Production DB: <b>untouched</b>（prod-isolation fingerprint PASS；全部验证内存库；
+零 migration 变更——IMPL-004 零新 migration，直接消费 migration 15 schema）。</p>
+
+<h2>9. Severity</h2>
+<table>
+<tr><th>Level</th><th>Count</th><th>Items</th></tr>
+<tr><td>P0</td><td>0</td><td>—</td></tr>
+<tr><td>P1</td><td>0</td><td>—</td></tr>
+<tr><td>P2</td><td>3</td><td>①Q-04 链深度上限 8（设计 DC-06 对齐，更长链需迭代任务）；
+②entity_neighborhood 双向邻接仅 relates_to + supports 单向出边（设计 §7 Q-02 字面范围）；
+③query limit 上限 1000（防失控，分页未在 frozen spec 定义故未加）</td></tr>
+</table>
+
+<h2>10. Commit</h2>
+<p>commit message: <code>feat(v0.5): implement graph query</code> ·
+SHA: 见 git log（实现后填入）· push: rebuild/agent-kb-core · working tree: clean</p>
+</body></html>
