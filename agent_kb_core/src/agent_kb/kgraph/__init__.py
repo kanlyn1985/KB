@@ -32,6 +32,12 @@ from agent_kb.kgraph.persistence import (
     GraphPersistenceService,
     GraphRepository,
 )
+from agent_kb.kgraph.context import (
+    GraphContextBuilder,
+    GraphContextError,
+    GraphReasoningContext,
+    ProvenanceRecord,
+)
 from agent_kb.kgraph.query import (
     GraphEdgeView,
     GraphNodeView,
@@ -53,6 +59,8 @@ __all__ = [
     "edge_id", "node_id", "GraphProjectionService", "EntityIdentityResolver",
     "GraphPersistenceService", "GraphRepository", "GraphPersistenceError",
     "GraphQueryService", "GraphQueryError", "GraphNodeView", "GraphEdgeView",
+    "GraphContextBuilder", "GraphContextError", "GraphReasoningContext",
+    "ProvenanceRecord",
     "ProvenanceTrace",
     "EntityGovernanceService", "MergeCandidate",
 ]
