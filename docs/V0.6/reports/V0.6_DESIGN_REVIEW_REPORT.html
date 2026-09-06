@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8"><title>V0.6 Design Review Report</title>
+<style>body{font-family:Segoe UI,Microsoft YaHei,sans-serif;margin:32px;color:#1a1a2e}
+h1{border-bottom:3px solid #7b2d8b;padding-bottom:8px}h2{color:#5a189a;margin-top:26px}
+table{border-collapse:collapse;margin:10px 0}td,th{border:1px solid #c4b5d4;padding:5px 11px;font-size:13.5px}
+th{background:#f3eaf7}.pass{color:#0a7a2f;font-weight:600}.meta{color:#555;font-size:13px}</style></head><body>
+<h1>AKB V0.6 Design Review Report — Graph-aware Deterministic Reasoning Layer</h1>
+<p class="meta">Date: 2026-09-04 · Baseline: e7a286e（V0.5 FINAL/FROZEN）· DESIGN ONLY · Decision: <b>DESIGN COMPLETE</b></p>
+
+<h2>1. Executive Summary</h2>
+<p>V0.6 primary capability 经五候选逐项裁定选择 <b>Graph-aware deterministic reasoning
+orchestration</b>：复用 V0.4 ReasoningEngine（单一引擎，零重建）+ 只读消费 V0.5 kg_* 图，
+新增 Context Builder + Orchestrator 前置层。全部 contract（Context/Rule/Candidate/Run/
+Result）、五级 provenance、确定性/幂等、状态矩阵、深度环控制、governance/LLM/
+DomainPack 边界、NO-MIGRATION 判断均已定义。V0.5 frozen 零触碰（代码面零改动实测）。</p>
+
+<h2>2. Baseline（§2 forensic 实测）</h2>
+<table><tr><th>Item</th><th>SHA/State</th></tr>
+<tr><td>V0.5 release</td><td>e7a286e（HEAD，clean）</td></tr>
+<tr><td>V0.5 design</td><td>f5e28dd</td></tr>
+<tr><td>IMPL-001..004</td><td>11bed68 / 28721cc / ae982a7 / aca64cf</td></tr>
+<tr><td>Evidence baseline</td><td>7c19186</td></tr>
+<tr><td>全部 SHA cat-file</td><td>commit ✓（7/7 实存）</td></tr></table>
+
+<h2>3. V0.5 Forensic Audit</h2>
+<p>实际代码核验：kgraph 五模块（models/identity/projection/persistence/query）+
+V0.4 engine.py/builtin_rules.py 输入面（reason(parent_ids)——显式 parents，
+无图上下文选择）+ migration 15 + v05 测试 73 项 + release marker。确认：
+V0.4 已承担 candidate 生命周期/幂等/governance 边界；V0.5 零推理职责。</p>
+
+<h2>4. V0.5 Frozen Boundary</h2>
+<table><tr><th>Area</th><th>V0.5</th><th>V0.6</th></tr>
+<tr><td>Evidence/Assertion semantics</td><td>frozen</td><td>consume only</td></tr>
+<tr><td>Graph nodes/edges（6+6）</td><td>frozen</td><td>consume（边参与裁定见 §11）</td></tr>
+<tr><td>Identity</td><td>frozen</td><td>reuse（零第二套 identity）</td></tr>
+<tr><td>Query Q-01..06</td><td>frozen</td><td>consume only</td></tr>
+<tr><td>Reasoning RR-01..04</td><td>frozen</td><td>extend（provider/rule_version 通道）</td></tr>
+<tr><td>Governance</td><td>existing</td><td>interface only（human）</td></tr>
+<tr><td>Persistence kg_*</td><td>frozen</td><td>new design only（NO MIGRATION）</td></tr>
+</table>
+
+<h2>5-6. Capability Candidates & Selection</h2>
+<table><tr><th>Candidate</th><th>Decision</th><th>Reason</th></tr>
+<tr><td>A Graph Reasoning</td><td class="pass">SELECTED</td><td>Query 只答 retrieval；
+  图上下文→candidate 需要 interpretation+inference 编排；V0.4 缺输入组装层</td></tr>
+<tr><td>B Evidence Synthesis</td><td>REJECTED</td><td>V0.3 已实现并冻结</td></tr>
+<tr><td>C Conflict Resolution</td><td>REJECTED</td><td>V0.3 resolution + V0.4 RR-04
+  旗标已覆盖；裁决属 governance</td></tr>
+<tr><td>D Hypothesis Generation</td><td>DEFERRED V0.7+</td><td>需独立生命周期</td></tr>
+<tr><td>E Planning/Decision</td><td>REJECTED for V0.6</td><td>agent runtime + 副作用边界</td></tr>
+</table>
+
+<h2>7-8. Layer Model & Architecture</h2>
+<pre>
+V0.4 ReasoningEngine（candidate 生命周期/幂等/governance——复用不重建）
+        ↑
+V0.6 Context Builder + Orchestrator（kg_* 只读 → parent 组装 → engine.reason）
+        ↑
+V0.5 Validated Graph（kg_* / Q-01..06 只读）
+</pre>
+<p>单一 ReasoningEngine 原则；architecture 图见 V0.6_DESIGN §16。</p>
+
+<h2>9-11. Reasoning Context / Rule / Inference Contract</h2>
+<p>ReasoningContext（context_id 确定性派生；graph_fingerprint 锚复用 V0.5）/
+ReasoningRule（versioned；语义单一归属）/ InferenceCandidate（candidate ≠ 事实；
+candidate_id 确定性；inferred_candidate 状态）。字段级定义见
+V0.6_REASONING_ARCHITECTURE_AND_CONTRACT.md。</p>
+
+<h2>12-15. Provenance / Determinism / Status / Temporal</h2>
+<p>五级 provenance 链（candidate→run→context→assertions→evidence→documents——
+零不可追溯输出）；deterministic first（禁 DB 行序/随机/时钟/LLM）；状态矩阵
+（inferred≠validated；inferred→asserted 永久禁止延续；hypothesis≠inference；
+hypothesized 零进入）；temporal_context 只读引用 V0.3（A(T1)≠B(T2) 不自动构成
+contradiction；temporal ambiguity fail-closed）。</p>
+
+<h2>16-18. Governance / LLM / DomainPack Boundary</h2>
+<p>Governance：Reasoning 只产 candidate，不 validate/approve/promote/merge；
+LLM：非正确性必需，未来仅 proposal 通道（同 governance 边界，非 truth/authority）；
+DomainPack：只实例化参数（词汇/约束只收紧），规则语义单一归属 Reasoner。</p>
+
+<h2>19-20. Migration Impact / Future Scope</h2>
+<p><b>NO MIGRATION</b>（derivation_json 内扩展 context_id/graph_fingerprint——
+零新表）；V0.7+ hypothesis/planning/agent/LLM autonomous/分布式/向量全部 out of
+scope，provider 通道与 canonical JSON 字段为预留接口。</p>
+
+<h2>21. Acceptance Matrix（V06-DES-001..020 实测自检）</h2>
+<table><tr><th>Item</th><th>Result</th></tr>
+<tr><td>DES-001..020（baseline/frozen 隔离/capability/layer/context/rule/inference/
+provenance/determinism/idempotency/status/temporal/cycle-depth/governance/LLM/
+DomainPack/migration/future/roadmap/completeness）</td>
+<td class="pass">20/20 PASS（首轮 17/20——3 项为检查脚本自身 bug，修正逻辑后全 PASS）</td></tr></table>
+
+<h2>22. P0/P1/P2</h2>
+<table><tr><th>Level</th><th>Count</th><th>Items</th></tr>
+<tr><td>P0</td><td>0</td><td>—</td></tr>
+<tr><td>P1</td><td>0</td><td>—</td></tr>
+<tr><td>P2</td><td>3</td><td>①reasoning depth=4 为设计初值（实现期可依 64-seed 实测调参，
+调参需 rule_version 记录）②derivation_json JSON 扩展 vs 专表的取舍留实现期决策点
+③candidate explosion 上限（1024/run）为设计初值</td></tr></table>
+
+<h2>23. STOP Conditions</h2>
+<p>§29 全 11 项：未触发（baseline 一致/V0.5 零触碰需求/provenance 可全溯/候选不可静默
+晋升/identity 与 V0.5 一致/temporal 继承 V0.3/V0.4-V0.6 职责可分离/零 LLM 依赖/
+零外部服务依赖）。</p>
+
+<h2>24. Final Decision</h2>
+<p><b>DESIGN COMPLETE — READY_FOR_IMPLEMENTATION</b>（实现需独立任务书，以本设计
+contract 为验收基线；V0.5 frozen 全程零触碰）。</p>
+</body></html>
