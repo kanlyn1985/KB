@@ -32,6 +32,12 @@ from agent_kb.kgraph.orchestrator import (
     GraphReasoningOrchestrator,
     OrchestrationTrace,
 )
+from agent_kb.kgraph.provenance import (
+    CandidateProvenance,
+    ProvenanceClosureError,
+    ReasoningProvenanceService,
+    ReasoningProvenanceTrace,
+)
 from agent_kb.kgraph.persistence import (
     GraphPersistenceError,
     GraphPersistenceService,
@@ -65,6 +71,8 @@ __all__ = [
     "GraphPersistenceService", "GraphRepository", "GraphPersistenceError",
     "GraphQueryService", "GraphQueryError", "GraphNodeView", "GraphEdgeView",
     "GraphReasoningOrchestrator", "GraphOrchestrationError", "OrchestrationTrace",
+    "ReasoningProvenanceService", "ProvenanceClosureError", "CandidateProvenance",
+    "ReasoningProvenanceTrace",
     "GraphContextBuilder", "GraphContextError", "GraphReasoningContext",
     "ProvenanceRecord",
     "ProvenanceTrace",
