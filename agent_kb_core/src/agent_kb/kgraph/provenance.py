@@ -154,8 +154,13 @@ class ReasoningProvenanceService:
                 f"E-V06-PROVENANCE-MISSING: {assertion_id} resolves to no evidence")
         doc_ids = self._evidence_documents(evidence_ids)
         rule_ref = str(d.get("rule_ref") or "")
-        rule_version = str(d.get("rule_version") or
-                           (run_rows[0].get("rule_version") if run_rows else "") or "")
+        # V0.4 rule_ref 形如 "RR-02@v04-rules-v1"——version 从 ref 提取（单一事实源）
+        if "@" in rule_ref:
+            rule_ref, rule_version = rule_ref.split("@", 1)
+        else:
+            rule_version = str(d.get("rule_version") or
+                               (run_rows[0].get("rule_version")
+                                if run_rows else "") or "")
         obj_repr = a["object_entity_ref"] or a["object_value"] or ""
         return CandidateProvenance(
             candidate_assertion_id=assertion_id,
