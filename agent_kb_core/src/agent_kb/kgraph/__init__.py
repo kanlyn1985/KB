@@ -27,6 +27,11 @@ from agent_kb.kgraph.models import (
     edge_id,
     node_id,
 )
+from agent_kb.kgraph.orchestrator import (
+    GraphOrchestrationError,
+    GraphReasoningOrchestrator,
+    OrchestrationTrace,
+)
 from agent_kb.kgraph.persistence import (
     GraphPersistenceError,
     GraphPersistenceService,
@@ -59,6 +64,7 @@ __all__ = [
     "edge_id", "node_id", "GraphProjectionService", "EntityIdentityResolver",
     "GraphPersistenceService", "GraphRepository", "GraphPersistenceError",
     "GraphQueryService", "GraphQueryError", "GraphNodeView", "GraphEdgeView",
+    "GraphReasoningOrchestrator", "GraphOrchestrationError", "OrchestrationTrace",
     "GraphContextBuilder", "GraphContextError", "GraphReasoningContext",
     "ProvenanceRecord",
     "ProvenanceTrace",
