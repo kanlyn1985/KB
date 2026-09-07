@@ -21,8 +21,15 @@ from agent_kb.hypothesis.verdict import (  # noqa: E402
     verdict_identity,
 )
 
+from agent_kb.hypothesis.evolution import (  # noqa: E402
+    EvolutionView,
+    EvolutionViewError,
+    EvolutionViewRuntime,
+)
+
 __all__ = ["Hypothesis", "HypothesisError", "HypothesisService",
            "hypothesis_identity", "VerificationTask",
            "VerificationTaskError", "VerificationTaskRuntime",
            "verification_task_identity", "Verdict", "VerdictError",
-           "VerdictRuntime", "verdict_identity"]
+           "VerdictRuntime", "verdict_identity", "EvolutionView",
+           "EvolutionViewError", "EvolutionViewRuntime"]
