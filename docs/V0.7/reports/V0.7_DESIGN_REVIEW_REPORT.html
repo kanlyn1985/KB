@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8"><title>V0.7 Design Review Report</title>
+<style>body{font-family:Segoe UI,Microsoft YaHei,sans-serif;margin:32px;color:#1a1a2e}
+h1{border-bottom:3px solid #d62828;padding-bottom:8px}h2{color:#6a040f;margin-top:26px}
+table{border-collapse:collapse;margin:10px 0}td,th{border:1px solid #d4c5b8;padding:5px 11px;font-size:13.5px}
+th{background:#faf0e6}.pass{color:#0a7a2f;font-weight:600}.meta{color:#555;font-size:13px}</style></head><body>
+<h1>AKB V0.7 Design Review Report — DomainPack Runtime & Multi-domain Reasoning Governance</h1>
+<p class="meta">Date: 2026-09-04 · Baseline: b317c6e（V0.6 FROZEN）· DESIGN ONLY · Decision: <b>DESIGN COMPLETE</b></p>
+
+<h2>1. Executive Summary</h2>
+<p>V0.7 primary capability 经八候选裁定选择 <b>DomainPack Runtime + Rule/Knowledge
+Package 管理 + Multi-domain reasoning isolation</b>（三合一领域化推理运行时），
+配套 Reasoning policy evolution（policy 即版本化数据）。核心设计原则：复用 frozen
+DomainPack schema（实测字段锚定）与 V0.6 provider 注入点，四权分立（DomainPack 词汇/
+Reasoner 执行/Graph 事实/Governance 裁决），namespace 隔离 + CrossDomainGuard
+fail-closed。NO MIGRATION。V0.5/V0.6 frozen 零触碰（实测）。</p>
+
+<h2>2. Baseline</h2>
+<table><tr><th>Item</th><th>SHA/State</th></tr>
+<tr><td>V0.5 frozen</td><td>e7a286e</td></tr>
+<tr><td>V0.6 design</td><td>3610c99</td></tr>
+<tr><td>V0.6 frozen</td><td>b317c6e（HEAD，clean）</td></tr>
+<tr><td>SHA verification</td><td>全部 cat-file = commit ✓</td></tr></table>
+
+<h2>3. V0.6 Forensic Audit（能力边界）</h2>
+<p>V0.6 frozen 实测八模块：已具备 Context Builder/编排/provenance 闭环/deterministic
+contract（50 测试锚）。缺口：provider 硬编码单一 builtin、DomainPack 无 runtime
+（V0.5 设计未实装）、无 policy 层（预算/启停硬编码）、无多域隔离。</p>
+
+<h2>4-6. Capability Candidates & Selection</h2>
+<table><tr><th>Candidate</th><th>Decision</th><th>Reason</th></tr>
+<tr><td>DomainPack Runtime</td><td class="pass">SELECTED（核心）</td><td>激活 V0.5 已设计未实装扩展面</td></tr>
+<tr><td>Rule/Knowledge Package 管理</td><td class="pass">SELECTED（核心）</td><td>规则版本化/分发治理底座</td></tr>
+<tr><td>Multi-domain isolation</td><td class="pass">SELECTED（核心）</td><td>namespace 隔离 + 跨域 fail-closed</td></tr>
+<tr><td>Reasoning policy evolution</td><td class="pass">SELECTED（配套）</td><td>policy 即版本化数据</td></tr>
+<tr><td>Hypothesis lifecycle</td><td>DEFERRED V0.8</td><td>需独立生命周期设计</td></tr>
+<tr><td>LLM / vector / distributed</td><td>REJECTED（红线）</td><td>与 deterministic 审计目标冲突</td></tr>
+</table>
+
+<h2>7-8. Layer Model & Architecture</h2>
+<pre>
+V0.4 ReasoningEngine（frozen）← provider = V0.7 RulePackage 实例
+V0.6 编排三件（frozen）← policy 驱动约束
+V0.5 Graph（frozen）← 只读
+V0.7 DomainPackRuntime + RulePackage + Policy + CrossDomainGuard（新增）
+</pre>
+<p>架构图见 V0.7_ARCHITECTURE_AND_CONTRACT §1；四权分立见 §2。</p>
+
+<h2>9-13. Contracts（四件）</h2>
+<p>DomainPackRuntime（load→LoadedPack，pack_ref 确定性，E-V07-PACK-INVALID/
+NAMESPACE-CONFLICT）· RulePackage（register→provider 实例，package_ref，
+E-V07-RULE-INVALID/VERSION-CONFLICT）· ReasoningPolicy（activate→policy_ref，
+E-V07-POLICY-INVALID）· CrossDomainGuard（pass/E-V07-CROSS-DOMAIN-BLOCKED）。
+全部 input/output/identity/provenance/determinism/failure/version 字段级定义。</p>
+
+<h2>14. Provenance Impact</h2>
+<p>新增活动命名空间：graph:reason-policy（policy 快照）/graph:pack-load/
+graph:cross-domain-allow；CandidateProvenance JSON 扩展 policy/pack 维度——
+五问扩七问（+Policy/Pack）。零第二套 provenance。</p>
+
+<h2>15. Determinism</h2>
+<p>同（graph state + rule_version + policy_version + pack_versions + context）→
+同候选集；pack_ref/package_ref/policy_ref 全 canonical JSON 确定性派生。</p>
+
+<h2>16-17. Governance / Migration</h2>
+<p>Governance：policy/pack 变更 = 治理动作（human 审计）；候选晋升边界零变化。
+Migration：<b>NO MIGRATION</b>——声明式文件 + provenance 审计事实（JSON 字段扩展，
+延续 V0.6 路径）。</p>
+
+<h2>18. Frozen Isolation Check</h2>
+<p>V0.5/V0.6 frozen 代码/测试/migration 零变化（git diff b317c6e..HEAD 实测仅
+docs/V0.7/）；DomainPack frozen schema 类（schema.py）零修改——loader 走新文件。</p>
+
+<h2>19-20. Acceptance Matrix / P0-P2</h2>
+<table><tr><th>Checklist</th><th>Result</th></tr>
+<tr><td>V07-DES-001..018（baseline/frozen 隔离/decision matrix/architecture/
+ownership/provenance/determinism/governance/migration/V0.6 隔离/schema 锚定/
+隔离守卫/contracts/红线/change-control/roadmap/risk/docs）</td>
+<td class="pass">18/18 PASS（首轮 17/18——DES-017 补 P0/P1/P2 分级段后 PASS）</td></tr></table>
+<table><tr><th>Level</th><th>Count</th><th>Items</th></tr>
+<tr><td>P0（触发即 STOP）</td><td>0 现存</td><td>3 条触发条件已定义（frozen 修改/隔离
+  不可 fail-closed/provenance 不可携带 policy）</td></tr>
+<tr><td>P1（设计已含解法）</td><td>2</td><td>无前缀谓词兼容策略（legacy 域声明）/
+  多 pack 同 namespace 治理入口——均已入设计，实现期落地</td></tr>
+<tr><td>P2（accepted）</td><td>3</td><td>budget 调参/load_order 性能/terminology 重复消费</td></tr></table>
+
+<h2>21-22. Docs / Final Decision</h2>
+<p>docs：V0.7_DESIGN.md / V0.7_ARCHITECTURE_AND_CONTRACT.md /
+V0.7_CHANGE_CONTROL_AND_ROADMAP.md / 本报告。</p>
+<p><b>DESIGN COMPLETE — READY_FOR_IMPLEMENTATION</b>（实现需独立任务书；P1 两项
+为实现期前置；V0.5/V0.6 frozen 全程零触碰）。</p>
+</body></html>
