@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8"><title>V0.8 Final Acceptance Report</title>
+<style>body{font-family:Segoe UI,Microsoft YaHei,sans-serif;margin:32px;color:#1a1a2e}
+h1{border-bottom:3px solid #e76f51;padding-bottom:8px}h2{color:#9d0208;margin-top:26px}
+table{border-collapse:collapse;margin:10px 0}td,th{border:1px solid #d4b8b8;padding:5px 11px;font-size:13.5px}
+th{background:#faf0e6}.pass{color:#0a7a2f;font-weight:600}.meta{color:#555;font-size:13px}</style></head><body>
+<h1>AKB V0.8 Final Acceptance Report — Hypothesis Lifecycle & Knowledge Evolution</h1>
+<p class="meta">Date: 2026-09-04 · Final baseline: 411ab57 · Decision: <b>ACCEPTED / FROZEN</b></p>
+
+<h2>§1 Baseline</h2>
+<table><tr><th>Stage</th><th>SHA</th></tr>
+<tr><td>V0.8 Design</td><td>9ae6b92</td></tr>
+<tr><td>IMPL-001 Hypothesis Runtime</td><td>9842449</td></tr>
+<tr><td>IMPL-002 VerificationTask Runtime</td><td>cb0fc26</td></tr>
+<tr><td>IMPL-003 Verdict Runtime</td><td>d6ccc4c</td></tr>
+<tr><td>IMPL-004 EvolutionView Runtime</td><td>411ab57</td></tr>
+<tr><td>V0.7/V0.6/V0.5 Frozen</td><td>3df1811 / b317c6e / e7a286e</td></tr></table>
+<p>Forensic：五 SHA 全部 cat-file = commit ✓，history 连续，working tree clean。</p>
+
+<h2>§2 Design Compliance</h2>
+<table><tr><th>Runtime</th><th>Contract</th><th>Test</th><th>Evidence</th></tr>
+<tr><td>HypothesisRuntime</td><td>create/identity/lifecycle/withdraw/provenance</td><td class="pass">HY-CMP-001..010</td><td class="pass">graph:hypothesis-* 审计</td></tr>
+<tr><td>VerificationTaskRuntime</td><td>create/transition/binding/provenance</td><td class="pass">VT-CMP-001..010</td><td class="pass">graph:verification-task-* 审计</td></tr>
+<tr><td>VerdictRuntime</td><td>task validation/result validation/transition/provenance</td><td class="pass">VD-CMP-001..010</td><td class="pass">graph:hypothesis-verdict 审计</td></tr>
+<tr><td>EvolutionViewRuntime</td><td>timeline/aggregation/fingerprint/readonly</td><td class="pass">EV-CMP-001..010</td><td class="pass">evw fingerprint</td></tr>
+</table>
+
+<h2>§3-§6 四 Runtime Verification（FINAL 独立重执行）</h2>
+<p><b>§3 Hypothesis</b>：deterministic hyp_id + open→supported/refuted/withdrawn
+生命周期 + closed 无出边 + 断言域禁入（HY-CMP-004/005 FINAL 重执行 PASS）。</p>
+<p><b>§4 VerificationTask</b>：created→running→completed/failed/cancelled +
+绑定校验（E-V08-HYPOTHESIS-NOT-FOUND）+ 三非法迁移全拒（VT-CMP-004/005/006
+FINAL 重执行 PASS）。</p>
+<p><b>§5 Verdict</b>：六道 fail-closed 门 + open→supported/refuted 迁移驱动 +
+inconclusive 记史 + supported 零直通（VD-CMP-004/005/006 FINAL 重执行 PASS）。</p>
+<p><b>§6 EvolutionView</b>：timeline seq 序全生命周期 + 聚合零遗漏 + evw
+fingerprint + 只读（EV-CMP-003/005/008/009 FINAL 重执行 PASS）。</p>
+
+<h2>§7 Provenance Audit</h2>
+<p>graph:hypothesis-create/status/withdraw + graph:verification-task-create/
+start/complete/failed/cancel + graph:hypothesis-verdict 全部进入 akb_provenance
+（metadata seq 单调锚 + 各 ref/快照）；可追溯、可重放、零第二套审计系统。</p>
+
+<h2>§8 Determinism（四项独立复算）</h2>
+<table><tr><th>Identity</th><th>Same input</th><th>Diff input</th></tr>
+<tr><td>hypothesis_id</td><td class="pass">PASS</td><td class="pass">PASS</td></tr>
+<tr><td>verification_task_id</td><td class="pass">PASS</td><td class="pass">PASS</td></tr>
+<tr><td>verdict_id</td><td class="pass">PASS</td><td class="pass">PASS</td></tr>
+<tr><td>evolution_view fingerprint</td><td class="pass">PASS</td><td class="pass">PASS</td></tr>
+</table>
+<p>canonical JSON 派生；零 timestamp/零 random/零 runtime ordering 依赖。</p>
+
+<h2>§9 Governance</h2>
+<p>hypothesis 不进入 akb_assertions/kg_*（四套件泄漏测试 FINAL 重执行 PASS）；
+inferred/validated/asserted 对 hypothesis 禁入；supported 零直通（assertion/
+validated/kg projection 三路全禁）；EvolutionView 只读；human-only 边界延续。</p>
+
+<h2>§10 Frozen Isolation</h2>
+<p>V0.5（kg_nodes/kg_edges/projection/query/migration）/ V0.6（reasoning/
+orchestrator/context）/ V0.7（domain/rule/policy/guard）零修改——git diff
+3df1811..HEAD 实测 frozen 实质面零变化（V0.8 仅新增 hypothesis 包 + v08 测试 +
+docs）；六 frozen 模块源码审计零 hypothesis 感知（单向依赖）；production DB
+untouched（prod-isolation PASS）；零 migration/零新表。</p>
+
+<h2>§11 Regression（FINAL 实测重取）</h2>
+<table><tr><th>Suite</th><th>Result</th></tr>
+<tr><td>V0.1 Golden</td><td class="pass">30/30</td></tr>
+<tr><td>V0.2 Golden</td><td class="pass">40/40</td></tr>
+<tr><td>V0.3 Golden</td><td class="pass">55/55</td></tr>
+<tr><td>V0.4 reasoning</td><td class="pass">21/21</td></tr>
+<tr><td>V0.5 graph（含 V0.6 单元 30）</td><td class="pass">103/103</td></tr>
+<tr><td>V0.6 contract</td><td class="pass">20/20</td></tr>
+<tr><td>V0.7 DP/RP/POLICY</td><td class="pass">40/40</td></tr>
+<tr><td>V0.8 HY/VT/VD/EV</td><td class="pass">10+10+10+10 = 40/40</td></tr>
+<tr><td>agent_kb_core</td><td class="pass">476 tests / 0 failures / 0 errors / 1 skipped</td></tr>
+<tr><td>Full repository</td><td class="pass">475 passed + 1 skipped（exit 0）</td></tr></table>
+<p class="meta">1 skipped = V0.3 capped 数据场景设计性跳过（历史记录，非 V0.8 引入）。</p>
+
+<h2>§12 CI</h2>
+<p>Agent KB Core CI run <b>34105260801 SUCCESS</b>（8 jobs 全 success）+ Tests run
+<b>34105260707 SUCCESS</b> @ 411ab57（release commit 为 docs-only）。</p>
+
+<h2>§13 P0/P1/P2</h2>
+<table><tr><th>Level</th><th>Count</th><th>Items</th></tr>
+<tr><td>P0</td><td>0</td><td>—</td></tr>
+<tr><td>P1</td><td>2</td><td>provenance-only query scalability（全表扫描；
+  缓解=方案 b 显式批准或 V0.9 索引）· evidence validation depth=存在性
+  （五级链回溯可叠加）</td></tr>
+<tr><td>P2</td><td>4</td><td>batch evolution view optimization / pagination/index /
+  evolution analytics / registry 内存态（延续 V0.7）</td></tr></table>
+
+<h2>§14 Final Decision</h2>
+<p><b>AKB V0.8 = ACCEPTED / FROZEN</b>（release marker: docs/V0.8/V0.8_RELEASE.md；
+design 9ae6b92 frozen 后语义变更需 V0.9+ change-control）。Freeze baseline =
+release commit（docs(v0.8): finalize release baseline）；证据链 =
+9ae6b92→9842449→cb0fc26→d6ccc4c→411ab57。</p>
+</body></html>
