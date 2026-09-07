@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8"><title>V0.7 Final Acceptance Report</title>
+<style>body{font-family:Segoe UI,Microsoft YaHei,sans-serif;margin:32px;color:#1a1a2e}
+h1{border-bottom:3px solid #d62828;padding-bottom:8px}h2{color:#6a040f;margin-top:26px}
+table{border-collapse:collapse;margin:10px 0}td,th{border:1px solid #d4c5b8;padding:5px 11px;font-size:13.5px}
+th{background:#faf0e6}.pass{color:#0a7a2f;font-weight:600}.meta{color:#555;font-size:13px}</style></head><body>
+<h1>AKB V0.7 Final Acceptance Report — DomainPack Runtime & Multi-domain Reasoning Governance</h1>
+<p class="meta">Date: 2026-09-04 · Final baseline: db8422f · Decision: <b>ACCEPTED / FROZEN</b></p>
+
+<h2>1. Executive Summary</h2>
+<p>V0.7 四阶段（IMPL-001..004）全部完成且证据闭环：DomainPack Runtime（frozen schema
+复用 + 确定性 pack_ref）、RulePackage Runtime（版本化注册 + provider 注入）、
+ReasoningPolicy（policy 即数据 + 只能收紧）、CrossDomainGuard（fail-closed 跨域隔离）。
+四层边界四权分立，确定性 identity 五项独立复算全 PASS，provenance 五活动全进
+akb_provenance。P0=0、P1=0、P2=5（accepted）。<b>V0.7 = ACCEPTED / FROZEN。</b></p>
+
+<h2>2. Baseline</h2>
+<table><tr><th>Stage</th><th>SHA</th></tr>
+<tr><td>V0.7 Design</td><td>14a6ea0</td></tr>
+<tr><td>IMPL-001 DomainPack Runtime</td><td>8c54447</td></tr>
+<tr><td>IMPL-002 RulePackage Runtime</td><td>50be33e</td></tr>
+<tr><td>IMPL-003 ReasoningPolicy</td><td>72ab736</td></tr>
+<tr><td>IMPL-004 CrossDomainGuard</td><td>db8422f</td></tr>
+<tr><td>V0.6/V0.5 Frozen</td><td>b317c6e / e7a286e</td></tr></table>
+
+<h2>3-4. Design Compliance Matrix（逐 contract 实测）</h2>
+<table><tr><th>Runtime</th><th>Design Contract</th><th>Test</th><th>Evidence</th></tr>
+<tr><td>DomainPackRuntime</td><td>load→LoadedPack；pack_ref 确定性；E-V07-PACK-INVALID/NAMESPACE-CONFLICT</td><td class="pass">DP-CMP-001..010</td><td class="pass">graph:pack-load 审计</td></tr>
+<tr><td>RulePackageRuntime</td><td>register→provider；package_ref；E-V07-RULE-INVALID/DOMAIN-NOT-LOADED</td><td class="pass">RP-CMP-001..010</td><td class="pass">graph:rule-load 审计</td></tr>
+<tr><td>ReasoningPolicyRuntime</td><td>activate→policy_ref；只能收紧；E-V07-POLICY-INVALID/BUDGET-EXCEEDED</td><td class="pass">POLICY-CMP-001..010</td><td class="pass">graph:reason-policy 快照</td></tr>
+<tr><td>CrossDomainGuard</td><td>guard_context→decision；E-V07-CROSS-DOMAIN-BLOCKED/NAMESPACE-CONFLICT</td><td class="pass">CD-CMP-001..010</td><td class="pass">cross-domain-allow/block 审计</td></tr>
+</table>
+
+<h2>5-6. Architecture / Boundaries</h2>
+<p>DomainPack → RulePackage → Policy → Guard → V0.6 Orchestrator 四权分立实测：
+ReasoningEngine 单一复用（provider 注入）；guard 零 candidate（akb_assertions
+零新增实测）；policy 不绕过 governance（status_filter 白名单 + 晋升路径零变化）；
+pack 不产生事实（canonical_view 跨 pack 加载不变实测）；V0.6 orchestrator/context
+零感知（源码审计——单向依赖：rules/policy/guard → frozen，frozen 不感知）。</p>
+
+<h2>7. Determinism（五项独立复算）</h2>
+<table><tr><th>Identity</th><th>Same input → same output</th><th>Diff input → diff output</th></tr>
+<tr><td>pack_id</td><td class="pass">PASS</td><td class="pass">PASS</td></tr>
+<tr><td>rule_package_id</td><td class="pass">PASS</td><td class="pass">PASS</td></tr>
+<tr><td>policy_id</td><td class="pass">PASS</td><td class="pass">PASS</td></tr>
+<tr><td>guard decision fingerprint</td><td class="pass">PASS</td><td class="pass">PASS</td></tr>
+<tr><td>reasoning configuration hash</td><td class="pass">PASS</td><td class="pass">PASS</td></tr>
+</table>
+
+<h2>8-9. Provenance / Governance</h2>
+<p>五活动全进 akb_provenance（graph:pack-load / graph:rule-load /
+graph:reason-policy（before/after 快照）/ graph:cross-domain-allow /
+graph:cross-domain-block）；零第二套审计系统。Governance：candidate 生命周期不变；
+inferred→asserted 永禁；human-only promotion 保持（V0.6 contract 套件 FINAL 重执行）。</p>
+
+<h2>10-11. Isolation / Migration</h2>
+<p>V0.5/V0.6 graph schema / migrations / kgraph / orchestrator / reasoning 零修改
+（git diff b317c6e..HEAD 实测：frozen 实质面零变化；唯一非 V0.7 新产物修改 =
+domains/__init__.py +7 行导出追加——V0.7 阶段文件零语义变更）。
+V0.7 零 migration（零新表）；production DB untouched（prod-isolation PASS）。</p>
+
+<h2>12. Regression（FINAL 实测重取）</h2>
+<table><tr><th>Suite</th><th>Result</th></tr>
+<tr><td>V0.1 Golden</td><td class="pass">30/30</td></tr>
+<tr><td>V0.2 Golden</td><td class="pass">40/40</td></tr>
+<tr><td>V0.3 Golden</td><td class="pass">55/55</td></tr>
+<tr><td>V0.4 reasoning</td><td class="pass">21/21</td></tr>
+<tr><td>V0.5 graph（含 V0.6 单元 30）</td><td class="pass">103/103</td></tr>
+<tr><td>V0.6 contract</td><td class="pass">20/20</td></tr>
+<tr><td>V0.7 DP/RP/POLICY/CD</td><td class="pass">10+10+10+10 = 40/40</td></tr>
+<tr><td>agent_kb_core</td><td class="pass">436 passed + 1 skipped</td></tr>
+<tr><td>Full repository</td><td class="pass">435 passed + 1 skipped（exit 0）</td></tr></table>
+<p class="meta">1 skipped = V0.3 capped 数据场景设计性跳过（历史记录，非 V0.7 引入）。</p>
+
+<h2>13. CI</h2>
+<p>Agent KB Core CI run <b>34086815142 SUCCESS</b>（8 jobs 全 success）+ Tests run
+<b>34086815143 SUCCESS</b> @ db8422f（release commit 为 docs-only）。</p>
+
+<h2>14-16. Production DB Safety / Scope Audit / P0-P2</h2>
+<p>Production DB = <b>untouched</b>（prod-isolation fingerprint PASS；全部验证内存库）。
+Scope：三新模块 grep 零 LLM/Neo4j/向量/分布式（唯一命中 = 注释"零 LLM/vector 依赖"声明）。
+</p>
+<table><tr><th>Level</th><th>Count</th><th>Items</th></tr>
+<tr><td>P0</td><td>0</td><td>—</td></tr>
+<tr><td>P1</td><td>0</td><td>—</td></tr>
+<tr><td>P2</td><td>5</td><td>registry 内存态 / 展开上限 64 初值 / load_order 批量注入
+  后续 / 域归属推导调用方职责 / legacy 域默认不启用</td></tr></table>
+
+<h2>17-19. Known Limitations / Release Decision / Freeze Baseline</h2>
+<p>Known limitations 详见 V0.7_RELEASE.md（P2×5 + V0.5 P1 开放项延续）。
+<b>Release Decision: AKB V0.7 = ACCEPTED / FROZEN</b>（release marker:
+docs/V0.7/V0.7_RELEASE.md；design 14a6ea0 frozen 后语义变更需 V0.8+ change-control）。
+Freeze baseline = release commit（docs(v0.7): finalize release baseline）；
+证据链 = 14a6ea0→8c54447→50be33e→72ab736→db8422f。</p>
+</body></html>
