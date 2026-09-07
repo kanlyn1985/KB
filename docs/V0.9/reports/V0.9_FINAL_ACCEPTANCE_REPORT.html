@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8"><title>V0.9 Final Acceptance Report</title>
+<style>body{font-family:Segoe UI,Microsoft YaHei,sans-serif;margin:32px;color:#1a1a2e}
+h1{border-bottom:3px solid #bc4749;padding-bottom:8px}h2{color:#780000;margin-top:26px}
+table{border-collapse:collapse;margin:10px 0}td,th{border:1px solid #d4c0bb;padding:5px 11px;font-size:13.5px}
+th{background:#faf0e6}.pass{color:#0a7a2f;font-weight:600}.meta{color:#555;font-size:13px}</style></head><body>
+<h1>AKB V0.9 Final Acceptance Report — Causal Knowledge Layer & Knowledge Health Governance</h1>
+<p class="meta">Date: 2026-09-04 · Final baseline: d17d2ea · Decision: <b>ACCEPTED / FROZEN</b></p>
+
+<h2>§1 Baseline</h2>
+<table><tr><th>Stage</th><th>SHA</th></tr>
+<tr><td>V0.9 Design</td><td>dc15ec5</td></tr>
+<tr><td>IMPL-001 CausalProjection Runtime</td><td>9977c13</td></tr>
+<tr><td>IMPL-002 KnowledgeHealth Runtime</td><td>382aa33</td></tr>
+<tr><td>IMPL-003 ConflictRuntime v2</td><td>d17d2ea</td></tr>
+<tr><td>V0.8/V0.7/V0.6/V0.5 Frozen</td><td>0e49c3d / 3df1811 / b317c6e / e7a286e</td></tr></table>
+<p>Forensic：全部 SHA cat-file = commit ✓，history 连续，working tree clean，
+design/IMPL commits immutable（零 rewrite）。</p>
+
+<h2>§2 Design Compliance</h2>
+<table><tr><th>Runtime</th><th>Contract</th><th>Test</th><th>Evidence</th></tr>
+<tr><td>CausalProjection</td><td>independent projection/immutable/deterministic
+  identity/no graph mutation</td><td class="pass">CP-CMP-001..010</td><td class="pass">graph:causal-projection-create</td></tr>
+<tr><td>KnowledgeHealth</td><td>read-only observation/no truth mutation/no
+  automatic maintenance</td><td class="pass">KH-CMP-001..010</td><td class="pass">graph:knowledge-health-create</td></tr>
+<tr><td>ConflictRuntime v2</td><td>detection only/no resolution/no mutation/
+  deterministic conflict identity</td><td class="pass">CF-CMP-001..010</td><td class="pass">graph:conflict-detect</td></tr>
+</table>
+
+<h2>§3 Architecture（六层边界——单向依赖）</h2>
+<pre>
+Fact Layer（V0.5 kg_* frozen）
+  ↓
+Reasoning Layer（V0.6/V0.7 frozen）
+  ↓
+Evolution Layer（V0.8 frozen）
+  ↓
+Causal Projection（V0.9）
+  ↓
+Knowledge Health（V0.9）
+  ↓
+Conflict Detection（V0.9）
+</pre>
+<p>单向依赖实测：V0.5..V0.8 十二 frozen 模块源码审计零 V0.9 感知；
+V0.9 IMPL-001/002 模块零语义 import conflict。</p>
+
+<h2>§4-§6 三 Runtime Verification（FINAL 独立重执行）</h2>
+<p><b>§4 Causal</b>：causal≠assertion（akb_assertions unchanged 实测）+
+projection≠graph mutation（kg_* unchanged 实测）+ rebuildable（同快照同
+projection_id）+ 白名单 fail-close（CP-CMP-006/007/005 重执行 PASS）。</p>
+<p><b>§5 Health</b>：四信号只读（stability/verification/conflict/causal_coverage）
++ health≠mutation（五表 unchanged 实测）+ 阈值三态（KH-CMP-004/005/006/007
+重执行 PASS）。</p>
+<p><b>§6 Conflict</b>：三型白名单检测 + conflict≠mutation（五表 unchanged）+
+幂等审计 + status 零 resolution（CF-CMP-004/005/007/009 重执行 PASS）。</p>
+
+<h2>§7 Provenance Audit</h2>
+<p>graph:causal-projection-create / graph:knowledge-health-create /
+graph:conflict-detect（+ V0.8 九活动）全进 akb_provenance；seq 单调锚；
+零第二套审计系统。</p>
+
+<h2>§8 Determinism（FINAL 独立复算）</h2>
+<table><tr><th>Identity</th><th>Same input</th><th>Diff input</th></tr>
+<tr><td>causal_id</td><td class="pass">PASS</td><td class="pass">PASS</td></tr>
+<tr><td>snapshot_identity</td><td class="pass">PASS</td><td class="pass">PASS</td></tr>
+<tr><td>health hash</td><td class="pass">PASS</td><td class="pass">PASS</td></tr>
+<tr><td>conflict_id</td><td class="pass">PASS</td><td class="pass">PASS</td></tr>
+</table>
+<p>canonical JSON；零 timestamp/零 random/零 runtime ordering。</p>
+
+<h2>§9 Governance Red Lines（五条直通禁令）</h2>
+<p>CausalProjection≠Assertion≠Graph mutation ✓ · Health≠Truth≠Mutation ✓ ·
+Conflict≠Resolution≠Truth selection≠Knowledge modification ✓ ·
+Hypothesis→Assertion 禁令 ✓ · CausalProjection→kg_* 直写禁令（新增）✓——
+redline-recheck 五测试 FINAL 独立重执行全 PASS。</p>
+
+<h2>§10 Frozen Isolation / §11 Regression</h2>
+<p>Isolation：git diff 0e49c3d..HEAD 实测 frozen 实质面零变化（V0.5 kg_*/projection/
+migration、V0.6 reasoning/orchestrator/context、V0.7 domain/rule/policy/guard、
+V0.8 hypothesis/verification/verdict/evolution——全部零修改）；V0.9 仅新增
+causal/health/conflict 三包 + v09 三测试目录 + docs。</p>
+<table><tr><th>Suite</th><th>Result</th></tr>
+<tr><td>V0.1 Golden</td><td class="pass">30/30</td></tr>
+<tr><td>V0.2 Golden</td><td class="pass">40/40</td></tr>
+<tr><td>V0.3 Golden</td><td class="pass">55/55</td></tr>
+<tr><td>V0.4 reasoning</td><td class="pass">21/21</td></tr>
+<tr><td>V0.5 graph</td><td class="pass">103/103</td></tr>
+<tr><td>V0.6 contract</td><td class="pass">20/20</td></tr>
+<tr><td>V0.7 runtime</td><td class="pass">40/40</td></tr>
+<tr><td>V0.8 evolution</td><td class="pass">40/40</td></tr>
+<tr><td>V0.9 Causal/Health/Conflict</td><td class="pass">10/10 + 10/10 + 10/10</td></tr>
+<tr><td>agent_kb_core</td><td class="pass">506 tests / 0 failures / 0 errors / 1 skipped</td></tr></table>
+<p class="meta">1 skipped = V0.3 capped 数据场景设计性跳过（历史记录，非 V0.9 引入）。</p>
+
+<h2>§12 CI</h2>
+<p>Agent KB Core CI run 34137775002 SUCCESS（8 jobs 全 success）+ Tests run
+34137775016 SUCCESS @ d17d2ea（release commit 为 docs-only）。</p>
+
+<h2>§13 Limitations / Migration</h2>
+<p><b>Migration：NO MIGRATION 维持</b>——migration chain [1..15] 零扩展；
+akb_causal_edges/akb_health_signals/akb_conflicts 三表实测不存在；快照/provenance
+模型足够。未来触发：历史趋势查询/大规模索引/跨进程分析。</p>
+<p>P1：causal edge scalability（内存投影基数）· health historical trend（需历史
+消费方）· conflict precision（条件集合互斥，文本比对 DEFERRED）。
+P2：causal indexing · health trend analytics · conflict history view。</p>
+
+<h2>§14 Final Decision</h2>
+<p><b>AKB V0.9 = ACCEPTED / FROZEN</b>（release marker: docs/V0.9/V0.9_RELEASE.md；
+design dc15ec5 frozen 后语义变更需 V0.10+ change-control）。Freeze baseline =
+release commit（docs(v0.9): finalize release baseline）；证据链 =
+dc15ec5→9977c13→382aa33→d17d2ea。</p>
+</body></html>
