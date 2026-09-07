@@ -7,5 +7,14 @@ from agent_kb.hypothesis.runtime import (
     hypothesis_identity,
 )
 
+from agent_kb.hypothesis.verification import (  # noqa: E402
+    VerificationTask,
+    VerificationTaskError,
+    VerificationTaskRuntime,
+    verification_task_identity,
+)
+
 __all__ = ["Hypothesis", "HypothesisError", "HypothesisService",
-           "hypothesis_identity"]
+           "hypothesis_identity", "VerificationTask",
+           "VerificationTaskError", "VerificationTaskRuntime",
+           "verification_task_identity"]
