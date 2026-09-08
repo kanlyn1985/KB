@@ -70,8 +70,9 @@ def verification_task_identity(*, hypothesis_id: str, task_type: str,
 class VerificationTaskRuntime:
     """验证任务运行时（provenance-only 存储与重放；零 hypothesis 状态修改）。"""
 
+    # V0.11 设计授权枚举扩展（+maintenance_review）——生命周期/identity/审计零修改
     VALID_TASK_TYPES = ("evidence_review", "experiment", "expert_review",
-                        "literature_check")
+                        "literature_check", "maintenance_review")
 
     def __init__(self, connection, hypothesis_service=None,
                  actor_id: str = "system:verification"):
