@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8"><title>V0.10 Design Review Report</title>
+<style>body{font-family:Segoe UI,Microsoft YaHei,sans-serif;margin:32px;color:#1a1a2e}
+h1{border-bottom:3px solid #457b9d;padding-bottom:8px}h2{color:#1d3557;margin-top:26px}
+table{border-collapse:collapse;margin:10px 0}td,th{border:1px solid #b8c4d4;padding:5px 11px;font-size:13.5px}
+th{background:#eaf2f8}.pass{color:#0a7a2f;font-weight:600}.meta{color:#555;font-size:13px}</style></head><body>
+<h1>AKB V0.10 Design Review Report — Performance &amp; Scale Engineering + Causal Reasoning Boundary</h1>
+<p class="meta">Date: 2026-09-04 · Baseline: 88ea3bd（V0.9 FROZEN）· DESIGN ONLY · Decision: <b>DESIGN COMPLETE</b></p>
+
+<h2>1. Executive Summary</h2>
+<p>核心判断：**部分合并**——V0.10 = Performance &amp; Scale Engineering 为主体
+（migration 16 三新表 + 三 runtime 持久化接入 API 零破坏 + 索引分页 + registry
+快照序列化），因果推理只输出边界契约（counterfactual=hypothesis 专属入口 +
+机制比对分级 level-1/2/3）供 V0.11+ 消费。理由：V0.9 P1/P2 全部是既存能力的
+规模瓶颈（价值独立明确），而高级因果推理依赖未冻结的机制语义比对难题——
+scale 未解决前不做推理扩张。V0.9 三 runtime API 零破坏为行为锚（30 项测试
+零修改通过）。</p>
+
+<h2>2. Baseline</h2>
+<table><tr><th>Item</th><th>SHA/State</th></tr>
+<tr><td>V0.9 frozen</td><td>88ea3bd（HEAD，clean）</td></tr>
+<tr><td>V0.8/V0.7/V0.6/V0.5 frozen</td><td>0e49c3d / 3df1811 / b317c6e / e7a286e</td></tr>
+<tr><td>SHA verification</td><td>全部 cat-file = commit ✓</td></tr></table>
+
+<h2>3-4. Seven-Gap Analysis &amp; Merge Judgment</h2>
+<table><tr><th>#</th><th>Gap</th><th>Nature</th><th>Decision</th></tr>
+<tr><td>1</td><td>causal edge scalability</td><td>工程优化 P1</td><td class="pass">SELECTED（migration 16 持久化）</td></tr>
+<tr><td>2</td><td>health historical trend</td><td>工程优化 P1</td><td class="pass">SELECTED（akb_health_signals + 时序查询）</td></tr>
+<tr><td>3</td><td>conflict detection precision</td><td>能力（语义比对）</td><td>DEFERRED→V0.11（分级策略：level-1 已实现/level-2 包含重叠/level-3 需 ontology 冻结）</td></tr>
+<tr><td>4</td><td>provenance-only 全表扫描</td><td>工程优化 P1</td><td class="pass">SELECTED（索引+分页，不迁历史数据）</td></tr>
+<tr><td>5</td><td>registry memory state</td><td>工程优化 P2</td><td class="pass">SELECTED（轻量：provenance-only 快照序列化）</td></tr>
+<tr><td>6</td><td>causal reasoning / counterfactual</td><td>能力（高级因果）</td><td>DEFERRED→V0.11（本阶段只冻结边界契约）</td></tr>
+<tr><td>7</td><td>knowledge analytics / maintenance</td><td>能力</td><td>DEFERRED→V0.11（依赖 health history 就绪）</td></tr>
+</table>
+
+<h2>5. Migration 16 Decision（触发条件全部满足）</h2>
+<p>V0.9 FINAL 记录的三触发条件全部成立：①历史趋势查询（P1-02 缓解路径）②大规模
+索引（P1-01）③跨进程分析。<b>migration 16（append-only，三新表）</b>：
+akb_causal_edges（+effect/cause/fingerprint 索引）· akb_health_signals
+（+target/type/snapshot 索引）· akb_conflict_records（+type/status 索引）。
+边界：零修改既有表；rollback = drop 零数据损失（可全量重建）；降级路径保留。</p>
+
+<h2>6-9. Architecture / Contracts</h2>
+<p>Persistence Adapter（三 runtime 共用模式：persist_* 同 fingerprint 幂等 +
+INSERT OR IGNORE + 零新 provenance 活动——介质变更非知识事件）· 三分页查询
+contract（canonical ORDER BY + LIMIT≤500 guard + E-V10-PAGE-INVALID）·
+Registry Snapshot（provenance-only 序列化 + 跨进程重放重建）。V0.11+ 边界契约：
+counterfactual 只读推导（CausalProjection.counterfactual_check）+ 机制比对
+分级 + MaintenanceTask 执行层前置。</p>
+
+<h2>10. Frozen Isolation Verification</h2>
+<p>V0.5..V0.9 frozen 零变化（git diff 88ea3bd..HEAD 实测仅 docs/V0.10/；零代码/
+零测试/零 migration 实施）。</p>
+
+<h2>11-12. Acceptance Matrix / Risks</h2>
+<table><tr><th>Checklist</th><th>Result</th></tr>
+<tr><td>V10-DES-001..012（merge judgment/七缺口/migration 16/API 零破坏锚/
+分页 contract/registry snapshot/counterfactual 边界/机制分级/V0.9 关系/
+风险分级/roadmap/frozen isolation）</td><td class="pass">12/12 PASS</td></tr></table>
+<table><tr><th>Level</th><th>Count</th><th>Items</th></tr>
+<tr><td>P0（触发即 STOP）</td><td>0 现存</td><td>4 条触发条件已定义（migration 16 触碰
+  既有表/persist 写 frozen 面/identity 算法变更/counterfactual 运行时提前实现）</td></tr>
+<tr><td>P1（实现期必须解决）</td><td>3</td><td>并发写锁语义 · total_estimate 精确性 ·
+  registry 多版本冲突（load_order 延续）</td></tr>
+<tr><td>P2（accepted）</td><td>3</td><td>cursor-based pagination · effect 反向物化视图 ·
+  health 信号降采样</td></tr></table>
+
+<h2>13-16. Decision Records / Docs / Final Decision</h2>
+<p>Decision records：①部分合并（优化主体+能力预留）②migration 16 三新表
+append-only ③API 零破坏行为锚（30 测试零修改）④counterfactual=V0.11（边界契约
+先行）⑤机制比对分级策略 ⑥registry provenance-only 序列化。
+docs：V0.10_DESIGN.md / V0.10_ARCHITECTURE_AND_CONTRACT.md /
+V0.10_CHANGE_CONTROL_AND_ROADMAP.md / 本报告。</p>
+<p><b>DESIGN COMPLETE — READY_FOR_IMPLEMENTATION</b>（实现需独立任务书；P1 三项
+为实现期决策点；V0.5..V0.9 frozen 全程零触碰）。</p>
+</body></html>
