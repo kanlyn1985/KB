@@ -14,6 +14,7 @@ from .migrations import (
     Migration,
     SchemaMigrator,
 )
+from .query import QueryCursor, QueryError, ScaleQueryRuntime
 from .recovery import DEFAULT_REQUIRED_TABLES, RecoveryDrillReport, run_recovery_drill
 from .replication import (
     BackupReplicator,
@@ -55,6 +56,9 @@ __all__ = [
     "PLATFORM_MIGRATIONS",
     "PersistentIndexView",
     "PurgeReport",
+    "QueryCursor",
+    "QueryError",
+    "ScaleQueryRuntime",
     "RecoveryDrillReport",
     "ReplicationResult",
     "RetentionManager",

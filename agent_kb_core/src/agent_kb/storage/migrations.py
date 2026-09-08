@@ -776,6 +776,20 @@ V05_GRAPH_PERSISTENCE_MIGRATION: Migration = Migration(
     ),
 )
 
+V10_QUERY_INDEX_MIGRATION = Migration(
+    version=17,
+    name="v10_query_indexes",
+    statements=(
+        # 查询面补齐（任务书索引审计缺口——零修改 migration 16/既有表）
+        "CREATE INDEX IF NOT EXISTS ix_akb_causal_edges_relation"
+        " ON akb_causal_edges(relation_type)",
+        "CREATE INDEX IF NOT EXISTS ix_akb_conflict_records_severity"
+        " ON akb_conflict_records(severity)",
+        "CREATE INDEX IF NOT EXISTS ix_akb_health_signals_fp_seq"
+        " ON akb_health_signals(fingerprint, signal_id)",
+    ),
+)
+
 V10_SCALE_PERSISTENCE_MIGRATION = Migration(
     version=16,
     name="v10_scale_persistence",
@@ -860,7 +874,8 @@ ALL_MIGRATIONS: tuple[Migration, ...] = (
        V02_SEMANTIC_COMPILATION_MIGRATION, V03_MULTI_EVIDENCE_SYNTHESIS_MIGRATION,
        V04_REASONING_RUNS_MIGRATION,
        V05_GRAPH_PERSISTENCE_MIGRATION,
-       V10_SCALE_PERSISTENCE_MIGRATION)
+       V10_SCALE_PERSISTENCE_MIGRATION,
+       V10_QUERY_INDEX_MIGRATION)
 )
 
 

@@ -65,7 +65,7 @@ def test_v10_persist_cmp_001_migration16(db):
     """V10-PERSIST-CMP-001：migration version=16 + name + 链完整。"""
     con, _ = db
     vers = [m.version for m in ALL_MIGRATIONS]
-    assert vers == list(range(1, 17))
+    assert vers == list(range(1, 18))
     m16 = [m for m in ALL_MIGRATIONS if m.version == 16][0]
     assert m16.name == "v10_scale_persistence"
 

@@ -393,7 +393,7 @@ def test_contract_cmp_015_migration_chain_untouched(db):
     版本唯一性 + 零修改既有表语义保持；上限断言随授权演进。）"""
     from agent_kb.storage.migrations import ALL_MIGRATIONS
     vers = [m.version for m in ALL_MIGRATIONS]
-    assert vers == sorted(set(vers)) and vers[-1] in (15, 16)
+    assert vers == sorted(set(vers)) and vers[-1] in (15, 16, 17)
     cols = [r[1] for r in db.execute("PRAGMA table_info(akb_reasoning_runs)")]
     assert "fingerprint" in cols and "parent_ids_json" in cols
     tables = {r[0] for r in db.execute("SELECT name FROM sqlite_master"
