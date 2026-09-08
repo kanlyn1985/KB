@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8"><title>V0.10 Final Acceptance Report</title>
+<style>body{font-family:Segoe UI,Microsoft YaHei,sans-serif;margin:32px;color:#1a1a2e}
+h1{border-bottom:3px solid #457b9d;padding-bottom:8px}h2{color:#1d3557;margin-top:26px}
+table{border-collapse:collapse;margin:10px 0}td,th{border:1px solid #b8c4d4;padding:5px 11px;font-size:13.5px}
+th{background:#eaf2f8}.pass{color:#0a7a2f;font-weight:600}.meta{color:#555;font-size:13px}</style></head><body>
+<h1>AKB V0.10 Final Acceptance Report — Performance &amp; Scale Engineering</h1>
+<p class="meta">Date: 2026-09-04 · Final baseline: f342ad2 · Decision: <b>ACCEPTED / FROZEN</b></p>
+
+<h2>§1 Baseline</h2>
+<table><tr><th>Stage</th><th>SHA</th></tr>
+<tr><td>V0.10 Design</td><td>6640ecf</td></tr>
+<tr><td>IMPL-001 Migration 16 &amp; Persistence Foundation</td><td>ae55fee</td></tr>
+<tr><td>IMPL-002 Persistence Query Layer</td><td>9a6d73e</td></tr>
+<tr><td>IMPL-003 Registry Snapshot Runtime</td><td>f342ad2</td></tr>
+<tr><td>V0.9/V0.8/V0.7/V0.6/V0.5 Frozen</td><td>88ea3bd / 0e49c3d / 3df1811 / b317c6e / e7a286e</td></tr></table>
+<p>Forensic：全部 SHA cat-file = commit ✓，history 连续，零 rewrite，working
+tree clean。</p>
+
+<h2>§2 Migration Verification</h2>
+<p>Chain 1..17 完整（versions 唯一）；migration 16 append-only 三表
+（akb_causal_edges/akb_health_signals/akb_conflict_records——CHECK/FK/索引全
+enforced）；migration 17 append-only 三索引（relation/severity/fp_seq）；
+migration 16 零修改锚（11 statements）；m15 statements 原状（零 ALTER frozen
+table）；rollback 可恢复（drop+清版本记录+re-migrate 全量重建实测）。</p>
+
+<h2>§3-§4 Persistence &amp; Query Contract（FINAL 独立重执行）</h2>
+<p><b>Persistence</b>：runtime identity == stored identity（表内
+causal_edge_id 与 runtime causal_id 全等实测）；deterministic replay（drop→
+重投影重持久化→同 id 同 fingerprint 同行）；幂等（重复 persist zero-repeat）；
+单事务 SAVEPOINT 回滚零残留。<b>Query</b>：cursor deterministic（同 cursor
+重放一致）+ invalid cursor fail-close（篡改/跨 query/垃圾串三分支）+ 零
+offset pagination + ordering stable（PK ASC / (fingerprint, signal_id) ASC）+
+limit cap 500。</p>
+
+<h2>§5 Registry Snapshot</h2>
+<p>immutable（frozen dataclass 赋值拒绝）+ deterministic（跨实例同
+snapshot_id）+ fingerprint stable（payload 篡改 fail-close）+ restore
+equivalent（双 restore 全等）+ provenance trace（graph:registry-snapshot-create
+进 akb_provenance 实测）。四类 registry 全兼容。</p>
+
+<h2>§6 Governance Red Lines</h2>
+<p>Persistence ↛ Truth mutation ✓（akb_assertions unchanged 实测）· Query ↛
+Knowledge mutation ✓（只读面全隔离）· Registry Snapshot ↛ Runtime behavior
+mutation ✓（registry 内容零变化）· kg_nodes/kg_edges unchanged ✓——redline
+五测试 FINAL 独立重执行全 PASS。</p>
+
+<h2>§7 Provenance Audit</h2>
+<p>新增 graph:registry-snapshot-create（唯一 V0.10 新活动——persist/query 为
+介质与读取面零知识事件）进 akb_provenance；全链 13+ 活动命名空间；seq 单调
+锚；零第二套审计系统。</p>
+
+<h2>§8 Determinism（六项独立复算）</h2>
+<table><tr><th>Identity</th><th>Same input</th><th>Diff input</th></tr>
+<tr><td>causal_id</td><td class="pass">PASS</td><td class="pass">PASS</td></tr>
+<tr><td>snapshot_identity</td><td class="pass">PASS</td><td class="pass">PASS</td></tr>
+<tr><td>health fingerprint</td><td class="pass">PASS</td><td class="pass">PASS</td></tr>
+<tr><td>conflict_id</td><td class="pass">PASS</td><td class="pass">PASS</td></tr>
+<tr><td>cursor fingerprint</td><td class="pass">PASS</td><td class="pass">PASS</td></tr>
+<tr><td>registry snapshot id</td><td class="pass">PASS</td><td class="pass">PASS</td></tr>
+</table>
+<p>canonical JSON；零 timestamp/零 random/零 runtime ordering。</p>
+
+<h2>§9 Migration Decision</h2>
+<p><b>Migration 18: NOT REQUIRED</b>——provenance metadata 满足当前消费面。
+触发条件记录：①snapshot payload 超 provenance metadata 实用限制（约 10^3
+条目）②需要结构化 snapshot diff 查询。</p>
+
+<h2>§10 Frozen Isolation</h2>
+<p>V0.5 graph/fact + V0.6 reasoning + V0.7 policy/domain/runtime + V0.8
+evolution + V0.9 causal/health/conflict 零修改（git diff 88ea3bd..HEAD 实测；
+唯一既有文件改动 = migrations.py append-only 追加 16/17【V0.10 设计授权】+
+v06 contract 015 版本上限适配【语义保持】）。</p>
+
+<h2>§11 Regression（FINAL 实测重取）</h2>
+<table><tr><th>Suite</th><th>Result</th></tr>
+<tr><td>V0.1 Golden</td><td class="pass">30/30</td></tr>
+<tr><td>V0.2 Golden</td><td class="pass">40/40</td></tr>
+<tr><td>V0.3 Golden</td><td class="pass">55/55</td></tr>
+<tr><td>V0.4 reasoning</td><td class="pass">21/21</td></tr>
+<tr><td>V0.5 graph</td><td class="pass">103/103</td></tr>
+<tr><td>V0.6 contract</td><td class="pass">20/20</td></tr>
+<tr><td>V0.7 runtime</td><td class="pass">40/40</td></tr>
+<tr><td>V0.8 evolution</td><td class="pass">40/40</td></tr>
+<tr><td>V0.9 causal/health/conflict</td><td class="pass">30/30</td></tr>
+<tr><td>V0.10 persist/query/registry</td><td class="pass">36/36</td></tr>
+<tr><td>agent_kb_core</td><td class="pass">542 tests / 0 failures / 0 errors / 1 skipped</td></tr></table>
+<p class="meta">精确匹配预期 542；1 skipped = V0.3 capped 设计性跳过（历史记录）。</p>
+
+<h2>§12 CI</h2>
+<p>Agent KB Core CI run 34187191040 SUCCESS（8 jobs 全 success）+ Tests run
+34187191042 SUCCESS @ f342ad2（release commit 为 docs-only）。</p>
+
+<h2>§13 P0/P1/P2 Finalization</h2>
+<table><tr><th>Level</th><th>Count</th><th>Items</th></tr>
+<tr><td>P0</td><td>0</td><td>—</td></tr>
+<tr><td>P1</td><td>4</td><td>persistence scale（跨进程写需显式串行化）· cursor
+  scale（深分页降采样）· snapshot payload growth（10^3 条目触发 migration 18）·
+  concurrent writer model（单写者约定）</td></tr>
+<tr><td>P2</td><td>3</td><td>query optimization（cursor 降采样/物化视图）·
+  snapshot diff · analytics</td></tr></table>
+
+<h2>§14 Final Decision</h2>
+<p><b>AKB V0.10 = ACCEPTED / FROZEN</b>（release marker: docs/V0.10/V0.10_RELEASE.md；
+design 6640ecf frozen 后语义变更需 V0.11+ change-control）。Freeze baseline =
+release commit（docs(v0.10): finalize release baseline）；证据链 =
+6640ecf→ae55fee→9a6d73e→f342ad2。</p>
+</body></html>
