@@ -8,8 +8,13 @@ from agent_kb.causal.projection import (
     causal_edge_identity,
 )
 
+from agent_kb.causal.persistence import (  # noqa: E402
+    PersistError,
+    ScalePersistenceRuntime,
+)
 from agent_kb.causal.projection import CAUSAL_RELATION_TYPES  # noqa: E402
 
 __all__ = ["CausalEdge", "CausalProjection", "CausalProjectionError",
            "CausalProjectionRuntime", "causal_edge_identity",
-           "CAUSAL_RELATION_TYPES"]
+           "CAUSAL_RELATION_TYPES", "PersistError",
+           "ScalePersistenceRuntime"]

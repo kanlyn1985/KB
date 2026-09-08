@@ -776,13 +776,91 @@ V05_GRAPH_PERSISTENCE_MIGRATION: Migration = Migration(
     ),
 )
 
+V10_SCALE_PERSISTENCE_MIGRATION = Migration(
+    version=16,
+    name="v10_scale_persistence",
+    statements=(
+        """
+        CREATE TABLE IF NOT EXISTS akb_causal_edges (
+            causal_edge_id  TEXT PRIMARY KEY,
+            cause_ref       TEXT NOT NULL,
+            effect_ref      TEXT NOT NULL,
+            relation_type   TEXT NOT NULL CHECK (relation_type IN
+                             ('causes','caused_by','enables','prevents')),
+            condition_refs_json TEXT NOT NULL DEFAULT '[]',
+            mechanism_ref   TEXT NOT NULL DEFAULT '',
+            assertion_id    TEXT NOT NULL REFERENCES akb_assertions(assertion_id),
+            status          TEXT NOT NULL CHECK (status IN
+                             ('valid','invalidated','flagged')),
+            confidence      REAL CHECK (confidence BETWEEN 0 AND 1),
+            provenance_ref  TEXT NOT NULL,
+            fingerprint     TEXT NOT NULL,
+            CHECK (cause_ref != effect_ref)
+        )
+        """,
+        "CREATE INDEX IF NOT EXISTS ix_akb_causal_edges_effect"
+        " ON akb_causal_edges(effect_ref)",
+        "CREATE INDEX IF NOT EXISTS ix_akb_causal_edges_cause"
+        " ON akb_causal_edges(cause_ref)",
+        "CREATE INDEX IF NOT EXISTS ix_akb_causal_edges_fingerprint"
+        " ON akb_causal_edges(fingerprint)",
+        """
+        CREATE TABLE IF NOT EXISTS akb_health_signals (
+            signal_id       TEXT PRIMARY KEY,
+            target_ref      TEXT NOT NULL,
+            target_type     TEXT NOT NULL CHECK (target_type IN
+                             ('assertion','entity','hypothesis')),
+            signal_type     TEXT NOT NULL CHECK (signal_type IN
+                             ('stability','verification','conflict',
+                              'causal_coverage')),
+            value           REAL NOT NULL CHECK (value >= 0),
+            detail          TEXT NOT NULL DEFAULT '',
+            health_id       TEXT NOT NULL,
+            provenance_ref  TEXT NOT NULL,
+            computed_snapshot TEXT NOT NULL,
+            fingerprint     TEXT NOT NULL
+        )
+        """,
+        "CREATE INDEX IF NOT EXISTS ix_akb_health_signals_target"
+        " ON akb_health_signals(target_ref)",
+        "CREATE INDEX IF NOT EXISTS ix_akb_health_signals_type"
+        " ON akb_health_signals(signal_type)",
+        "CREATE INDEX IF NOT EXISTS ix_akb_health_signals_health"
+        " ON akb_health_signals(health_id)",
+        """
+        CREATE TABLE IF NOT EXISTS akb_conflict_records (
+            conflict_id     TEXT PRIMARY KEY,
+            conflict_type   TEXT NOT NULL CHECK (conflict_type IN
+                             ('ASSERTION_VALUE_CONFLICT',
+                              'CAUSAL_MECHANISM_CONFLICT',
+                              'DOMAIN_SCOPE_CONFLICT')),
+            source_refs_json TEXT NOT NULL DEFAULT '[]',
+            target_refs_json TEXT NOT NULL DEFAULT '[]',
+            severity        TEXT NOT NULL CHECK (severity IN
+                             ('low','medium','high')),
+            status          TEXT NOT NULL CHECK (status IN
+                             ('open','reviewed','dismissed')),
+            evidence_refs_json TEXT NOT NULL DEFAULT '[]',
+            fingerprint     TEXT NOT NULL,
+            created_from_snapshot TEXT NOT NULL,
+            provenance_ref  TEXT NOT NULL
+        )
+        """,
+        "CREATE INDEX IF NOT EXISTS ix_akb_conflict_records_type"
+        " ON akb_conflict_records(conflict_type)",
+        "CREATE INDEX IF NOT EXISTS ix_akb_conflict_records_status"
+        " ON akb_conflict_records(status)",
+    ),
+)
+
 ALL_MIGRATIONS: tuple[Migration, ...] = (
 
     CORE_MIGRATIONS
     + (V01_EVIDENCE_CORE_MIGRATION, V01_HARDENING_MIGRATION,
        V02_SEMANTIC_COMPILATION_MIGRATION, V03_MULTI_EVIDENCE_SYNTHESIS_MIGRATION,
        V04_REASONING_RUNS_MIGRATION,
-       V05_GRAPH_PERSISTENCE_MIGRATION)
+       V05_GRAPH_PERSISTENCE_MIGRATION,
+       V10_SCALE_PERSISTENCE_MIGRATION)
 )
 
 
