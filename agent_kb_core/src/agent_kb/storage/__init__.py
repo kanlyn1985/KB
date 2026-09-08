@@ -15,6 +15,12 @@ from .migrations import (
     SchemaMigrator,
 )
 from .query import QueryCursor, QueryError, ScaleQueryRuntime
+from .registry_snapshot import (
+    RegistrySnapshot,
+    RegistrySnapshotError,
+    RegistrySnapshotRuntime,
+    registry_snapshot_identity,
+)
 from .recovery import DEFAULT_REQUIRED_TABLES, RecoveryDrillReport, run_recovery_drill
 from .replication import (
     BackupReplicator,
@@ -58,6 +64,9 @@ __all__ = [
     "PurgeReport",
     "QueryCursor",
     "QueryError",
+    "RegistrySnapshot",
+    "RegistrySnapshotError",
+    "RegistrySnapshotRuntime",
     "ScaleQueryRuntime",
     "RecoveryDrillReport",
     "ReplicationResult",
@@ -66,6 +75,7 @@ __all__ = [
     "RetentionPolicy",
     "RetentionRun",
     "SQLiteBackupManager",
+    "registry_snapshot_identity",
     "SQLiteKnowledgeStore",
     "SchemaMigrator",
     "run_recovery_drill",
