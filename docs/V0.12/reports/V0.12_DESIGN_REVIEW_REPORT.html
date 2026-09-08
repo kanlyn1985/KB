@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8"><title>V0.12 Design Review Report</title>
+<style>body{font-family:Segoe UI,Microsoft YaHei,sans-serif;margin:32px;color:#1a1a2e}
+h1{border-bottom:3px solid #6d597a;padding-bottom:8px}h2{color:#355070;margin-top:26px}
+table{border-collapse:collapse;margin:10px 0}td,th{border:1px solid #c5c3d4;padding:5px 11px;font-size:13.5px}
+th{background:#f0eef4}.pass{color:#0a7a2f;font-weight:600}.meta{color:#555;font-size:13px}</style></head><body>
+<h1>AKB V0.12 Design Review Report — Knowledge Analytics Layer</h1>
+<p class="meta">Date: 2026-09-04 · Baseline: cdec78e（V0.11 FROZEN）· DESIGN ONLY · Decision: <b>DESIGN COMPLETE</b></p>
+
+<h2>1. Executive Summary</h2>
+<p><b>主问题回答</b>：七层栈之后缺失的下一个语义抽象是<b>跨层语义聚合的
+"理解层"</b>——现有能力全部是单对象/单时点视角，缺失把七层产物聚合成知识库级
+演化理解的能力。<b>V0.12 主能力 = Knowledge Analytics Layer（Candidate C 单选，
+观察 only）</b>：五 metrics 白名单（knowledge_drift / governance_efficiency /
+proposal_resolution_rate / causal_coverage_trend / knowledge_growth），
+确定性聚合 + immutable report + fingerprint 锚。migration NOT REQUIRED
+（provenance metadata payload——V0.11 先例）。E Governance Feedback Layer
+<b>REJECTED（永久红线）</b>——human decisions 只能被审计记录，不得成为学习
+信号（宪法级禁令正式化）。三不变量：Observation≠Truth / Proposal≠Decision /
+Human=Final authority。</p>
+
+<h2>2. Baseline</h2>
+<table><tr><th>Item</th><th>SHA/State</th></tr>
+<tr><td>V0.11 frozen</td><td>cdec78e（HEAD，clean）</td></tr>
+<tr><td>V0.10/V0.9/V0.8 frozen</td><td>52ce55c / 88ea3bd / 0e49c3d</td></tr>
+<tr><td>SHA verification</td><td>全部 cat-file = commit ✓</td></tr></table>
+
+<h2>3. Capability Gap Analysis</h2>
+<p>①无跨时点视角（信号逐条查询无时序聚合）②治理质量不可度量（proposal→
+verdict 效率无面）③因果覆盖趋势缺失 ④前置数据全部就绪（零新数据生产）
+⑤A/B 前置（机制比对/ontology 冻结）仍未满足。</p>
+
+<h2>4-6. Candidate Matrix &amp; Selection</h2>
+<table><tr><th>Candidate</th><th>Decision</th><th>Reason</th></tr>
+<tr><td>A Counterfactual Reasoning</td><td>DEFERRED→V0.13+</td><td>机制比对 level-2+ 仍未满足</td></tr>
+<tr><td>B Mechanism Understanding</td><td>DEFERRED→V0.13+</td><td>ontology 冻结仍未发生</td></tr>
+<tr><td>C Knowledge Analytics</td><td class="pass">SELECTED（唯一主能力）</td><td>跨层理解；前置全就绪；观察 only 低风险</td></tr>
+<tr><td>D Ontology Evolution</td><td>DEFERRED→V0.13+</td><td>本体冻结前置未发生</td></tr>
+<tr><td>E Governance Feedback</td><td>REJECTED（永久红线）</td><td>learn-from-decisions 天然滑向自动规则学习/自修改——宪法级禁令</td></tr>
+</table>
+
+<h2>7-9. Architecture / 三不变量 / Data Flow</h2>
+<p>第八层 Knowledge Analytics Layer：CAN = 聚合/时序对比/趋势计算（确定性
+纯函数）+ 报告产出；MUST NEVER = 自动 correction / truth arbitration /
+修改 frozen 行为 / 度量变学习信号 / 改写历史审计。数据流：七层产物（只读）
+→ 确定性聚合 → KnowledgeMetricReport（immutable）→ human 阅读后自行决定
+是否走 V0.11 proposal 通道（零自动桥）。</p>
+
+<h2>10-12. Contracts</h2>
+<p>create_report（scope 白名单 fail-close + anr_ digest identity + 纯函数
+metrics round4 + canonical 排序）· KnowledgeMetricReport（frozen 五字段组）·
+get/list_reports（provenance 重放 + V0.10/0.11 keyset cursor 模式）·
+provenance = graph:analytics-report-create（唯一新活动）。metrics 白名单
+五项（扩展需新任务书）。</p>
+
+<h2>13-14. Migration / Change Control</h2>
+<p><b>Migration: NO</b>——报告即时聚合可重算 + provenance metadata payload
+（V0.11 registry snapshot 同模式先例）；migration 19 触发条件已记录（①跨快照
+结构化对比查询 ②metrics 时序独立索引面）。Change control：全 frozen 面零
+修改——V0.11 proposal 审计只读消费、报告↛proposal 无自动桥。</p>
+
+<h2>15. Frozen Isolation Verification</h2>
+<p>V0.5..V0.11 frozen 零变化（git diff cdec78e..HEAD 实测仅 docs/V0.12/；零
+代码/零测试/零 migration 实施）。</p>
+
+<h2>16-18. Acceptance Matrix / Risks / Decision Records</h2>
+<table><tr><th>Checklist</th><th>Result</th></tr>
+<tr><td>V12-DES-001..012（主问题/五候选/单主能力/矩阵列/红线拒绝理由/层名+
+can-never/三不变量/contract/metrics 白名单/migration/风险+roadmap/frozen
+isolation）</td><td class="pass">12/12 PASS</td></tr></table>
+<table><tr><th>Level</th><th>Count</th><th>Items</th></tr>
+<tr><td>P0（触发即 STOP）</td><td>0 现存</td><td>4 条触发条件已定义（写 frozen 面/
+  报告变自动触发器/identity 引入时间随机/human decisions 作学习信号）</td></tr>
+<tr><td>P1（实现期必须解决）</td><td>3</td><td>窗口语义定标（occurred_at 同秒
+  tie——seq 锚延续）· 浮点聚合确定性（round+canonical 锁定）· payload 尺寸
+  监控（migration 19 触发）</td></tr>
+<tr><td>P2（accepted）</td><td>5</td><td>cursor 降采样 · 报告 diff 视图 ·
+  metrics 白名单扩展 · 可视化导出 · analytics→proposal 建议界面（仍
+  human-first）</td></tr></table>
+<p>Decision records：①C 单选主能力 ②A/B/D DEFERRED（前置未满足）③E REJECTED
+（永久红线——宪法级禁令正式化）④migration 19 NOT REQUIRED ⑤metrics 白名单
+五项（扩展=新任务书）⑥报告↛proposal 零自动桥。</p>
+
+<h2>19-20. Docs / Final Decision</h2>
+<p>docs：V0.12_DESIGN.md / V0.12_ARCHITECTURE_AND_CONTRACT.md /
+V0.12_CHANGE_CONTROL_AND_ROADMAP.md / 本报告。</p>
+<p><b>DESIGN COMPLETE — READY_FOR_IMPLEMENTATION</b>（实现需独立任务书；P1 三项
+为实现期决策点；V0.5..V0.11 frozen 全程零触碰）。</p>
+</body></html>
