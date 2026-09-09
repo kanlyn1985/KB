@@ -1,0 +1,25 @@
+{
+ "case_id": "RG-017",
+ "category": "negative",
+ "description": "inferred validation 非 human actor 拒绝",
+ "seed_assertions": [
+  {
+   "key": "sat",
+   "subject_ref": "Pump-A",
+   "predicate_ref": "satisfies_rule",
+   "value": "RuleX",
+   "confidence": 0.9
+  },
+  {
+   "key": "req",
+   "subject_ref": "",
+   "predicate_ref": "rule_requires",
+   "value": "Inspect",
+   "confidence": 0.9
+  }
+ ],
+ "expectation": {
+  "error": "E-V04-GOVERNANCE-ACTOR",
+  "govern_non_human": true
+ }
+}

@@ -1,0 +1,24 @@
+{
+ "case_id": "RG-007",
+ "category": "positive",
+ "description": "RR-02 链末端无关对不产出（无传递不捏造）",
+ "seed_assertions": [
+  {
+   "key": "ab",
+   "subject_ref": "A",
+   "predicate_ref": "before",
+   "value": "B",
+   "confidence": 0.9
+  },
+  {
+   "key": "xy",
+   "subject_ref": "X",
+   "predicate_ref": "before",
+   "value": "Y",
+   "confidence": 0.9
+  }
+ ],
+ "expectation": {
+  "candidates_max": 0
+ }
+}

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>V0.2 Semantic Compilation Core — Implementation Summary</title>
+<style>
+body{font-family:"Microsoft YaHei",system-ui,sans-serif;background:#101828;color:#dde5f2;margin:0;padding:24px;line-height:1.6}
+h1{color:#5fb3f0;font-size:22px}h2{color:#5fb3f0;font-size:17px;border-bottom:1px solid #2a3a5c;padding-bottom:6px;margin-top:28px}
+table{border-collapse:collapse;width:100%;font-size:13px;margin:10px 0}
+th,td{border:1px solid #2a3a5c;padding:6px 10px;text-align:left}th{background:#1c2a48;color:#93a5c4}
+.ok{color:#3ddc97;font-weight:700}.warn{color:#f0b429}
+.pass{display:inline-block;background:#123b2b;color:#3ddc97;border-radius:12px;padding:2px 10px;font-weight:700}
+code{background:#182238;padding:1px 6px;border-radius:4px;font-family:Consolas,monospace;font-size:12px}
+.card{background:#182238;border:1px solid #2a3a5c;border-radius:8px;padding:14px 18px;margin:12px 0}
+.meta{color:#93a5c4;font-size:12px}
+</style>
+</head>
+<body>
+<h1>V0.2 Semantic Compilation Core — Implementation Summary</h1>
+<p class="meta">Task: AKB-V02-IMPL-001 · Date: 2026-09-03 · Design Base: 6189a8f · Branch: rebuild/agent-kb-core ·
+<span class="warn">ACCEPTED (pending owner confirmation)</span></p>
+
+<h2>Architecture</h2>
+<div class="card">V0.1 治理链之上新增编译面：<code>Evidence → Preprocessor → Normalizer → Extractor →
+Entity/Relation Resolvers → Temporal Parser → Ontology Mapper → SemanticUnit → CandidateAssertionBuilder →
+AssertionStore.create_candidate() → V0.1 Governance</code>。
+位置 <code>agent_kb/evidence_core/compilation/</code>（复用 V0.1 storage/治理设施，零第二套基建）。</div>
+
+<h2>Implementation Scope</h2>
+<table><tr><th>组件</th><th>文件</th><th>要点</th></tr>
+<tr><td>错误模型</td><td>errors.py</td><td>8 错误码；E-COMPILATION-DUPLICATE=幂等返回语义</td></tr>
+<tr><td>模型层</td><td>models.py</td><td>10 个 dataclass + canonical_json（V0.1 同款约定）</td></tr>
+<tr><td>L1/L2</td><td>normalizer.py</td><td>span 保留分段；N-01..N-08 顺序固定纯函数</td></tr>
+<tr><td>L3 Provider</td><td>providers.py</td><td>Protocol + BuiltinRuleExtractor（R-01..R-06 strict）+ Fake provider</td></tr>
+<tr><td>L4-L7</td><td>resolvers.py</td><td>稳定排序/无孤儿/五类时间分离（禁当前时钟）/quarantine</td></tr>
+<tr><td>L8+编排</td><td>compiler.py</td><td>唯一出口 create_candidate；CanonicalJSON fingerprint；SAVEPOINT 原子；provenance 三层留痕</td></tr></table>
+
+<h2>Database Changes (Migration 12)</h2>
+<table><tr><th>对象</th><th>类型</th></tr>
+<tr><td>akb_semantic_units +4 列（provenance_ref/compiler_run_ref/configuration_hash/content_fingerprint UNIQUE）</td><td>ADDITIVE</td></tr>
+<tr><td>akb_compilation_runs（12 列）+ ix_akb_runs_status</td><td>新表</td></tr>
+<tr><td>V0.1 authoritative 表</td><td class="ok">零改动</td></tr>
+<tr><td>生产库</td><td class="warn">未动（迁移待批准，DRY-RUN 工具模式沿用）</td></tr></table>
+
+<h2>CMP-001..019 Results</h2>
+<table><tr><th>用例</th><th>结果</th></tr>
+<tr><td>CMP-001..005（unit 产出/candidate/幂等/版本/immutable）</td><td class="ok">PASS</td></tr>
+<tr><td>CMP-006..010（candidate-only/inferred derivation/mapping 默认/provenance 八问/neutrality）</td><td class="ok">PASS</td></tr>
+<tr><td>CMP-011..015（determinism/failure isolation/malformed/quarantine/golden）</td><td class="ok">PASS</td></tr>
+<tr><td>CMP-016..019（single-evidence/canonical serialization/碰撞抗性 10^4/run 基数）</td><td class="ok">PASS</td></tr>
+<tr><td>总计</td><td class="ok">21 passed（19 用例全覆盖）</td></tr></table>
+
+<h2>Golden 40</h2>
+<div class="card">semantic_compilation_golden validator：<span class="pass">PASS 40/40</span>
+（positive 20 / negative 10 / determinism 5 / provider-boundary 5；semantic structure 对比非字节 diff）。
+V0.1 Golden 30 cases 零改动全兼容 PASS。</div>
+
+<h2>Determinism & Idempotency</h2>
+<div class="card">同输入双跑语义全等（排除 ID/审计字段）；候选 (span_start, normalized_form) 稳定序；
+fingerprint=SHA256(CanonicalJSON(四元组)) 字节级比较；UNIQUE 约束 + 幂等返回全产物（无第二 create_candidate）。</div>
+
+<h2>Provenance</h2>
+<div class="card">describe_run / trace_assertion_compilation 回答八问：Evidence/CompilationRun/
+SemanticUnit/Candidate Assertion 四级链；run 失败亦留 provenance 痕。</div>
+
+<h2>Provider Boundary</h2>
+<div class="card">Protocol 唯一出口 RawExtraction；malformed → E-SEMANTIC-EXTRACTION-FAILED 零半成品；
+provider 崩溃 → run failed 零跨界写；provider actor 无治理跃迁路径；canonical 零 provider 字段泄漏。</div>
+
+<h2>V0.1 Regression & Failure Isolation</h2>
+<table><tr><th>检查面</th><th>结果</th></tr>
+<tr><td>Golden 30 / agent_kb_core 164 / repository 164</td><td class="ok">全 PASS</td></tr>
+<tr><td>run_production_health / production DB isolation</td><td class="ok">PASS</td></tr>
+<tr><td>segment 级失败隔离 / run failed 零半成品</td><td class="ok">PASS</td></tr>
+<tr><td>Evidence immutable / agent write boundary / governance triggers</td><td class="ok">PASS</td></tr></table>
+
+<h2>Production DB Safety</h2>
+<div class="card">开发验证全部内存库/临时库；生产库零触碰；migration 12 fresh/存量/重复三场景验证完毕，
+生产执行待架构负责人批准（与 V0.1 graph_edges 467 条回填可同窗）。</div>
+
+<h2>Known Risks</h2>
+<div class="card">① R-01..R-06 全语料召回率未量化（Golden 40 为首锚）；② 单证据单事务，batch 化需分批事务；
+③ 幂等 assertions 反查为 LIKE 非索引最优；④ Semantica adapter 留 Protocol 位（ADR-006 不变）。</div>
+
+<h2>Final Decision</h2>
+<div class="card"><span class="pass">V0.2 SEMANTIC COMPILATION CORE = ACCEPTED</span><br>
+§31 Acceptance Gate 18 项全 YES。Commits: 1d24a13 / a002e09 / 6f20c9b / e812ce6 / docs(本次)。
+详细证据：V0.2_IMPLEMENTATION_VERIFICATION_REPORT.md。</div>
+
+<p class="meta">GitHub Actions：push 后 run 状态见 CI Evidence（本页不转述未验证状态）。</p>
+
+<h2>Implementation Hardening（AKB-V02-IMPL-002 · 2026-09-03）</h2>
+<table><tr><th>Defect</th><th>修复</th><th>测试</th></tr>
+<tr><td>A — Temporal anchor 断连（document_effective_time=None 硬编码）</td><td>evidence 查询 JOIN akb_documents.effective_at 作为锚；零当前时钟参与</td><td class="ok">T-A1/A2/A3 PASS</td></tr>
+<tr><td>B — fingerprint 锚语义隐式</td><td>五条锚语义成文（compiler 注释 + DETERMINISM_SPEC + MIGRATION_PLAN）；幂等返回经 compiler_run_ref 解析完整 run 产物</td><td class="ok">CMP-020 PASS</td></tr>
+<tr><td>C — 单证据契约仅签名级验证</td><td>入口 str 类型守卫（列表/多值字符串 → E-COMPILER-INVALID-EVIDENCE）；持久层伪造多元素 run 行被基数校验拒绝</td><td class="ok">CMP-021 PASS</td></tr>
+<tr><td>run 基数完整性 / provenance 四级 trace</td><td>库级 json_array_length/json_extract 全查；多 segment 场景父级正确解析+确定性</td><td class="ok">CMP-022/023 PASS</td></tr></table>
+
+<h2>Hardening Regression</h2>
+<table><tr><th>入口</th><th>结果</th></tr>
+<tr><td>V0.2 tests</td><td class="ok">28 passed（21 + CMP-020..023 + T-A1..A3）</td></tr>
+<tr><td>Golden 40</td><td class="ok">PASS 40/40</td></tr>
+<tr><td>Golden 30（V0.1）</td><td class="ok">PASS</td></tr>
+<tr><td>agent_kb_core / repository</td><td class="ok">171 passed / 171 passed</td></tr>
+<tr><td>Production DB</td><td class="ok">UNCHANGED（零生产写入，无新 migration）</td></tr></table>
+<p class="meta">Commit: fix(v0.2): harden semantic compilation temporal and run invariants。</p>
+
+</body>
+</html>

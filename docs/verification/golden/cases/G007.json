@@ -1,0 +1,112 @@
+{
+ "case_id": "G007",
+ "category": "G07-multi-hop-relation",
+ "difficulty": "hard",
+ "requirement_refs": [
+  "SYS-008",
+  "SYS-010"
+ ],
+ "input": {
+  "query": "从R-PERF需求出发，经过哪些功能最终落到OBC的硬件模块"
+ },
+ "expected": {
+  "entities": [
+   {
+    "entity_id": "R-PERF",
+    "entity_type": "requirement",
+    "description": "性能需求（输入/输出特性/效率/降额）"
+   },
+   {
+    "entity_id": "F-OBC-CHARGE",
+    "entity_type": "function",
+    "description": "充电功能（AC-DC 变换/电压调节/电流限制/模式管理）"
+   }
+  ],
+  "relations": [
+   {
+    "source_ref": "entity:r_perf",
+    "predicate_ref": "relation:satisfies",
+    "target_ref": "entity:f_obc_charge",
+    "assertion_id": "rel:obc_dcdc:satisfy:R-PERF:F-OBC-CHARGE"
+   },
+   {
+    "source_ref": "entity:f_obc_charge",
+    "predicate_ref": "relation:realized_by",
+    "target_ref": "entity:l_pwrctrl",
+    "assertion_id": "rel:obc_dcdc:realize:F-OBC-CHARGE:L-PWRCTRL"
+   },
+   {
+    "source_ref": "entity:l_pwrctrl",
+    "predicate_ref": "relation:allocated_to",
+    "target_ref": "entity:p_hw_obc_pfc",
+    "assertion_id": "rel:obc_dcdc:allocate:L-PWRCTRL:P-HW-OBC-PFC"
+   }
+  ],
+  "reasoning": [
+   {
+    "reasoning_id": "R001",
+    "input_assertions": [
+     "rel:obc_dcdc:satisfy:R-PERF:F-OBC-CHARGE",
+     "rel:obc_dcdc:realize:F-OBC-CHARGE:L-PWRCTRL",
+     "rel:obc_dcdc:allocate:L-PWRCTRL:P-HW-OBC-PFC"
+    ],
+    "rule_refs": [
+     "RULE-VCHAIN-R2F2L2P"
+    ],
+    "expected_derived_assertions": [
+     {
+      "assertion_id": "ast_g007_d1",
+      "subject_ref": "entity:r_perf",
+      "predicate_ref": "relation:traces_to_hardware",
+      "object": {
+       "kind": "literal",
+       "value": {
+        "kind": "entity_ref",
+        "entity_id": "entity:p_hw_obc_pfc"
+       }
+      },
+      "assertion_type": "inferred",
+      "status": "candidate",
+      "evidence_refs": [],
+      "confidence": 0.8,
+      "derivation": {
+       "rule_ref": "RULE-VCHAIN-R2F2L2P",
+       "parent_assertions": [
+        "rel:obc_dcdc:satisfy:R-PERF:F-OBC-CHARGE",
+        "rel:obc_dcdc:realize:F-OBC-CHARGE:L-PWRCTRL",
+        "rel:obc_dcdc:allocate:L-PWRCTRL:P-HW-OBC-PFC"
+       ],
+       "reasoner_id": "graph_walk_v1"
+      }
+     }
+    ],
+    "expected_trace": [
+     {
+      "step": 1,
+      "description": "R-PERF satisfy→ F-OBC-CHARGE",
+      "rule_ref": "RULE-VCHAIN-R2F2L2P"
+     },
+     {
+      "step": 2,
+      "description": "F-OBC-CHARGE realize→ L-PWRCTRL",
+      "rule_ref": "RULE-VCHAIN-R2F2L2P"
+     },
+     {
+      "step": 3,
+      "description": "L-PWRCTRL allocate→ P-HW-OBC-PFC",
+      "rule_ref": "RULE-VCHAIN-R2F2L2P"
+     }
+    ]
+   }
+  ],
+  "support_level": "sufficient"
+ },
+ "negative_expectations": [
+  {
+   "type": "derived_not_asserted",
+   "description": "多跳推导出的 traces_to_hardware 是 inferred/candidate，不得升为 asserted",
+   "invariant_ref": "INV-002"
+  }
+ ],
+ "notes": "V 链三跳：satisfy→realize→allocate（骨架主链边，各边有骨架级 evidence 语义）"
+}

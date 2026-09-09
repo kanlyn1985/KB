@@ -1,0 +1,953 @@
+{
+ "manifest_version": "V1.0",
+ "total": 55,
+ "cases": [
+  {
+   "case_id": "SC3-001",
+   "category": "positive",
+   "description": "双证据同参数",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "assertions_allowed": true,
+    "compatibility": "COMPATIBLE",
+    "conflicts": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-002",
+   "category": "positive",
+   "description": "三证据同参数",
+   "input_evidence_ids": [
+    "E1",
+    "E2",
+    "E3"
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "assertions_allowed": true,
+    "compatibility": "COMPATIBLE",
+    "conflicts": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-003",
+   "category": "positive",
+   "description": "双证据同约束",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "assertions_allowed": true,
+    "compatibility": "COMPATIBLE",
+    "conflicts": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-004",
+   "category": "positive",
+   "description": "三证据混合句式",
+   "input_evidence_ids": [
+    "E1",
+    "E2",
+    "E3"
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "assertions_allowed": true,
+    "compatibility": "COMPATIBLE",
+    "conflicts": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-005",
+   "category": "positive",
+   "description": "双证据定义",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "assertions_allowed": true,
+    "compatibility": "COMPATIBLE",
+    "conflicts": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-006",
+   "category": "positive",
+   "description": "双证据测试",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "assertions_allowed": true,
+    "compatibility": "COMPATIBLE",
+    "conflicts": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-007",
+   "category": "positive",
+   "description": "三证据观测",
+   "input_evidence_ids": [
+    "E1",
+    "E2",
+    "E3"
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "assertions_allowed": true,
+    "compatibility": "COMPATIBLE",
+    "conflicts": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-008",
+   "category": "positive",
+   "description": "双证据参数+约束",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "assertions_allowed": true,
+    "compatibility": "COMPATIBLE",
+    "conflicts": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-009",
+   "category": "positive",
+   "description": "逆序成员",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "assertions_allowed": true,
+    "compatibility": "COMPATIBLE",
+    "conflicts": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-010",
+   "category": "positive",
+   "description": "四证据同参数",
+   "input_evidence_ids": [
+    "E1",
+    "E2",
+    "E3",
+    "E4"
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "assertions_allowed": true,
+    "compatibility": "COMPATIBLE",
+    "conflicts": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-011",
+   "category": "positive",
+   "description": "别名对齐",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "assertions_allowed": true,
+    "compatibility": "COMPATIBLE",
+    "conflicts": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-012",
+   "category": "positive",
+   "description": "归一形对齐",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "assertions_allowed": true,
+    "compatibility": "COMPATIBLE",
+    "conflicts": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-013",
+   "category": "positive",
+   "description": "双证据不同谓词",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "assertions_allowed": true,
+    "compatibility": "COMPATIBLE",
+    "conflicts": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-014",
+   "category": "positive",
+   "description": "三证据两组参数",
+   "input_evidence_ids": [
+    "E1",
+    "E2",
+    "E3"
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "assertions_allowed": true,
+    "compatibility": "COMPATIBLE",
+    "conflicts": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-015",
+   "category": "positive",
+   "description": "双证据+单证据无关成员",
+   "input_evidence_ids": [
+    "E1",
+    "E2",
+    "E3"
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "assertions_allowed": true,
+    "compatibility": "COMPATIBLE",
+    "conflicts": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-016",
+   "category": "positive",
+   "description": "参数+观测混合",
+   "input_evidence_ids": [
+    "E1",
+    "E2",
+    "E3"
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "assertions_allowed": true,
+    "compatibility": "COMPATIBLE",
+    "conflicts": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-017",
+   "category": "positive",
+   "description": "约束+参数",
+   "input_evidence_ids": [
+    "E1",
+    "E2",
+    "E3"
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "assertions_allowed": true,
+    "compatibility": "COMPATIBLE",
+    "conflicts": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-018",
+   "category": "positive",
+   "description": "双证据低置信",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "assertions_allowed": true,
+    "compatibility": "COMPATIBLE",
+    "conflicts": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-019",
+   "category": "positive",
+   "description": "版本不同文档",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "assertions_allowed": true,
+    "compatibility": "COMPATIBLE",
+    "conflicts": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-020",
+   "category": "positive",
+   "description": "多文档同源",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "assertions_allowed": true,
+    "compatibility": "COMPATIBLE",
+    "conflicts": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-021",
+   "category": "negative",
+   "description": "空集合",
+   "input_evidence_ids": [],
+   "expectation": {
+    "candidates_min": 0,
+    "assertions_allowed": false,
+    "expected_error": "E-V03-SET-EMPTY",
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-022",
+   "category": "negative",
+   "description": "重复成员",
+   "input_evidence_ids": [
+    "E1",
+    "E1"
+   ],
+   "expectation": {
+    "candidates_min": 0,
+    "assertions_allowed": false,
+    "expected_error": "E-V03-SET-DUPLICATE",
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-023",
+   "category": "negative",
+   "description": "成员不存在",
+   "input_evidence_ids": [
+    "E1",
+    "GHOST"
+   ],
+   "expectation": {
+    "candidates_min": 0,
+    "assertions_allowed": false,
+    "expected_error": "E-V03-SET-MEMBER-NOT-FOUND",
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-024",
+   "category": "negative",
+   "description": "超上限",
+   "input_evidence_ids": [
+    "E1",
+    "E2",
+    "E3",
+    "E4",
+    "E5",
+    "E6",
+    "E7",
+    "E8",
+    "E9",
+    "E10",
+    "E11",
+    "E12",
+    "E13",
+    "E14",
+    "E15",
+    "E16",
+    "E17",
+    "E18",
+    "E19",
+    "E20",
+    "E21",
+    "E22",
+    "E23",
+    "E24",
+    "E25",
+    "E26",
+    "E27",
+    "E28",
+    "E29",
+    "E30",
+    "E31",
+    "E32",
+    "E33"
+   ],
+   "expectation": {
+    "candidates_min": 0,
+    "assertions_allowed": false,
+    "expected_error": "E-V03-SET-TOO-LARGE",
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-025",
+   "category": "negative",
+   "description": "缺 SemanticUnit",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "candidates_min": 0,
+    "assertions_allowed": false,
+    "expected_error": "E-V03-ALIGN-UNIT-MISSING",
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-026",
+   "category": "negative",
+   "description": "malformed provider",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "candidates_min": 0,
+    "assertions_allowed": false,
+    "expected_error": "E-V03-PROVIDER-FAILED",
+    "status": "failed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-027",
+   "category": "negative",
+   "description": "伪造多元素 run",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "candidates_min": 0,
+    "assertions_allowed": false,
+    "expected_error": "E-V03-NOT-FOUND",
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-028",
+   "category": "negative",
+   "description": "未知权重策略",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "candidates_min": 0,
+    "assertions_allowed": false,
+    "expected_error": "uniform-fallback",
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-029",
+   "category": "negative",
+   "description": "冲突爆炸 capped",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "candidates_min": 0,
+    "assertions_allowed": false,
+    "expected_error": "capped",
+    "status": "capped"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-030",
+   "category": "negative",
+   "description": "malformed unit",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "candidates_min": 0,
+    "assertions_allowed": false,
+    "expected_error": "E-V03-ALIGN-UNIT-MISSING",
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-031",
+   "category": "negative",
+   "description": "空文本成员",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "candidates_min": 0,
+    "assertions_allowed": false,
+    "expected_error": "E-V03-SET-MEMBER-NOT-FOUND",
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-032",
+   "category": "negative",
+   "description": "单成员集",
+   "input_evidence_ids": [
+    "E1"
+   ],
+   "expectation": {
+    "candidates_min": 0,
+    "assertions_allowed": true,
+    "expected_error": "completed",
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-033",
+   "category": "negative",
+   "description": "INCOMPARABLE 成员",
+   "input_evidence_ids": [
+    "E1",
+    "E2",
+    "E3"
+   ],
+   "expectation": {
+    "candidates_min": 0,
+    "assertions_allowed": true,
+    "expected_error": "completed-partial",
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-034",
+   "category": "negative",
+   "description": "provider crash",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "candidates_min": 0,
+    "assertions_allowed": false,
+    "expected_error": "failed-run",
+    "status": "failed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-035",
+   "category": "negative",
+   "description": "全部成员 INVALID",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "candidates_min": 0,
+    "assertions_allowed": false,
+    "expected_error": "no-candidates",
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-036",
+   "category": "determinism",
+   "description": "双跑全等",
+   "input_evidence_ids": [
+    "E1",
+    "E2",
+    "E3"
+   ],
+   "expectation": {
+    "determinism_check": true,
+    "same_fingerprint": true,
+    "candidates_min": 1,
+    "status": "completed"
+   },
+   "notes": "rerun-equal"
+  },
+  {
+   "case_id": "SC3-037",
+   "category": "determinism",
+   "description": "逆序不变",
+   "input_evidence_ids": [
+    "E1",
+    "E2",
+    "E3"
+   ],
+   "expectation": {
+    "determinism_check": true,
+    "same_fingerprint": true,
+    "candidates_min": 1,
+    "status": "completed"
+   },
+   "notes": "reorder-invariant"
+  },
+  {
+   "case_id": "SC3-038",
+   "category": "determinism",
+   "description": "簇序稳定",
+   "input_evidence_ids": [
+    "E1",
+    "E2",
+    "E3"
+   ],
+   "expectation": {
+    "determinism_check": true,
+    "same_fingerprint": true,
+    "candidates_min": 1,
+    "status": "completed"
+   },
+   "notes": "cluster-order"
+  },
+  {
+   "case_id": "SC3-039",
+   "category": "determinism",
+   "description": "舍入一致",
+   "input_evidence_ids": [
+    "E1",
+    "E2",
+    "E3"
+   ],
+   "expectation": {
+    "determinism_check": true,
+    "same_fingerprint": true,
+    "candidates_min": 1,
+    "status": "completed"
+   },
+   "notes": "rounding"
+  },
+  {
+   "case_id": "SC3-040",
+   "category": "determinism",
+   "description": "配置 hash 区分",
+   "input_evidence_ids": [
+    "E1",
+    "E2",
+    "E3"
+   ],
+   "expectation": {
+    "determinism_check": true,
+    "same_fingerprint": true,
+    "candidates_min": 1,
+    "status": "completed"
+   },
+   "notes": "config-distinct"
+  },
+  {
+   "case_id": "SC3-041",
+   "category": "conflict",
+   "description": "VALUE_CONFLICT 检测",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "expected_conflict": "VALUE_CONFLICT",
+    "sides_preserved": true,
+    "candidates_min": 0,
+    "assertions_allowed": true,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-042",
+   "category": "conflict",
+   "description": "TEMPORAL_CONFLICT 检测",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "expected_conflict": "TEMPORAL_CONFLICT",
+    "sides_preserved": true,
+    "candidates_min": 0,
+    "assertions_allowed": true,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-043",
+   "category": "conflict",
+   "description": "SOURCE_CONFLICT 检测",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "expected_conflict": "SOURCE_CONFLICT",
+    "sides_preserved": true,
+    "candidates_min": 0,
+    "assertions_allowed": true,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-044",
+   "category": "conflict",
+   "description": "ONTOLOGY_CONFLICT 检测",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "expected_conflict": "ONTOLOGY_CONFLICT",
+    "sides_preserved": true,
+    "candidates_min": 0,
+    "assertions_allowed": true,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-045",
+   "category": "conflict",
+   "description": "RELATION_CONFLICT 检测",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "expected_conflict": "RELATION_CONFLICT",
+    "sides_preserved": true,
+    "candidates_min": 0,
+    "assertions_allowed": true,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-046",
+   "category": "provider_boundary",
+   "description": "建议可用",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "provider_boundary": "hint-ok",
+    "candidates_min": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-047",
+   "category": "provider_boundary",
+   "description": "裁决拒绝",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "provider_boundary": "no-adjudication",
+    "candidates_min": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-048",
+   "category": "provider_boundary",
+   "description": "malformed 拒绝",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "provider_boundary": "malformed",
+    "candidates_min": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-049",
+   "category": "provider_boundary",
+   "description": "crash 隔离",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "provider_boundary": "crash-isolated",
+    "candidates_min": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-050",
+   "category": "provider_boundary",
+   "description": "actor 无特权",
+   "input_evidence_ids": [
+    "E1",
+    "E2"
+   ],
+   "expectation": {
+    "provider_boundary": "no-governance",
+    "candidates_min": 0,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-051",
+   "category": "provenance",
+   "description": "五级链完整",
+   "input_evidence_ids": [
+    "E1",
+    "E2",
+    "E3"
+   ],
+   "expectation": {
+    "provenance_check": "five-level",
+    "trace_levels": 5,
+    "candidates_min": 1,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-052",
+   "category": "provenance",
+   "description": "缺成员溯源 P0",
+   "input_evidence_ids": [
+    "E1",
+    "E2",
+    "E3"
+   ],
+   "expectation": {
+    "provenance_check": "missing-member-p0",
+    "trace_levels": 5,
+    "candidates_min": 1,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-053",
+   "category": "provenance",
+   "description": "trace 等价",
+   "input_evidence_ids": [
+    "E1",
+    "E2",
+    "E3"
+   ],
+   "expectation": {
+    "provenance_check": "trace-equal",
+    "trace_levels": 5,
+    "candidates_min": 1,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-054",
+   "category": "provenance",
+   "description": "多 segment 父级",
+   "input_evidence_ids": [
+    "E1",
+    "E2",
+    "E3"
+   ],
+   "expectation": {
+    "provenance_check": "multi-segment",
+    "trace_levels": 5,
+    "candidates_min": 1,
+    "status": "completed"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC3-055",
+   "category": "provenance",
+   "description": "审计自包含",
+   "input_evidence_ids": [
+    "E1",
+    "E2",
+    "E3"
+   ],
+   "expectation": {
+    "provenance_check": "snapshot-selfcontained",
+    "trace_levels": 5,
+    "candidates_min": 1,
+    "status": "completed"
+   },
+   "notes": ""
+  }
+ ]
+}

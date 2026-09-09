@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8"><title>V0.5 Final Acceptance Report</title>
+<style>body{font-family:Segoe UI,Microsoft YaHei,sans-serif;margin:32px;color:#1a1a2e}
+h1{border-bottom:3px solid #2a9d8f;padding-bottom:8px}h2{color:#264653;margin-top:26px}
+table{border-collapse:collapse;margin:10px 0}td,th{border:1px solid #b8c4d4;padding:5px 11px;font-size:13.5px}
+th{background:#e8f1f2}.pass{color:#0a7a2f;font-weight:600}.meta{color:#555;font-size:13px}
+.warn{color:#b06a00}</style></head><body>
+<h1>AKB V0.5 Final Acceptance Report — Knowledge Graph Layer</h1>
+<p class="meta">Date: 2026-09-04 · Final baseline: 7c19186 · Decision: <b>ACCEPTED / FROZEN</b></p>
+
+<h2>1. Executive Summary</h2>
+<p>V0.5 五阶段（DESIGN→IMPL-001..004）全部完成且证据闭环：六类 Node/六类 Edge 确定性
+投影、L1 entity identity + 治理红线（相似度永不自动合并）、事务原子幂等持久化
+（migration 15）、只读确定性查询（Q-01..Q-06）、五级 provenance 回溯、legacy 隔离。
+P0=0、P1=0、P2=5（全部 accepted/documented）。<b>V0.5 = ACCEPTED / FROZEN。</b></p>
+
+<h2>2. Baseline</h2>
+<table><tr><th>Stage</th><th>SHA</th></tr>
+<tr><td>Design</td><td>f5e28dd</td></tr><tr><td>IMPL-001</td><td>11bed68</td></tr>
+<tr><td>IMPL-002</td><td>28721cc</td></tr><tr><td>IMPL-003</td><td>ae982a7</td></tr>
+<tr><td>IMPL-004</td><td>aca64cf</td></tr><tr><td>Evidence backfill</td><td>7c19186</td></tr></table>
+
+<h2>3. Design Compliance Matrix（§4/§25 抽样实测）</h2>
+<table><tr><th>Area</th><th>Design</th><th>Implementation</th><th>Test</th><th>Evidence</th></tr>
+<tr><td>Graph nodes（6 类）</td><td class="pass">PASS</td><td class="pass">PASS</td><td class="pass">GS-CMP-001</td><td class="pass">GP-CMP-003</td></tr>
+<tr><td>Graph edges（6 类）</td><td class="pass">PASS</td><td class="pass">PASS</td><td class="pass">GS-CMP-002</td><td class="pass">GP-CMP-004</td></tr>
+<tr><td>Entity identity（L1 红线）</td><td class="pass">PASS</td><td class="pass">PASS</td><td class="pass">ER-CMP-002/003</td><td class="pass">FINAL 重执行 PASS</td></tr>
+<tr><td>Entity governance</td><td class="pass">PASS</td><td class="pass">PASS</td><td class="pass">ER-CMP-004..011</td><td class="pass">akb_provenance</td></tr>
+<tr><td>Projection</td><td class="pass">PASS</td><td class="pass">PASS</td><td class="pass">GS-CMP-004/005</td><td class="pass">fingerprint 锚</td></tr>
+<tr><td>Persistence</td><td class="pass">PASS</td><td class="pass">PASS</td><td class="pass">GP-CMP-003..005</td><td class="pass">kg_* 表实测</td></tr>
+<tr><td>Idempotency</td><td class="pass">PASS</td><td class="pass">PASS</td><td class="pass">GP-CMP-009/010</td><td class="pass">fingerprint UNIQUE</td></tr>
+<tr><td>Atomicity</td><td class="pass">PASS</td><td class="pass">PASS</td><td class="pass">GP-CMP-011..013</td><td class="pass">SAVEPOINT 回滚</td></tr>
+<tr><td>Invalidation</td><td class="pass">PASS</td><td class="pass">PASS</td><td class="pass">GP-CMP-014..017</td><td class="pass">kg_invalidation_log</td></tr>
+<tr><td>Provenance</td><td class="pass">PASS</td><td class="pass">PASS</td><td class="pass">GP-CMP-018..021/GQ-011..014</td><td class="pass">五级链实测</td></tr>
+<tr><td>Query Q-01..Q-06</td><td class="pass">PASS</td><td class="pass">PASS</td><td class="pass">GQ-CMP-001..006</td><td class="pass">25/25</td></tr>
+<tr><td>Status semantics</td><td class="pass">PASS</td><td class="pass">PASS</td><td class="pass">GQ-CMP-007..010</td><td class="pass">FINAL 矩阵</td></tr>
+<tr><td>Determinism</td><td class="pass">PASS</td><td class="pass">PASS</td><td class="pass">GQ-CMP-017..019</td><td class="pass">canonical view</td></tr>
+<tr><td>Read-only</td><td class="pass">PASS</td><td class="pass">PASS</td><td class="pass">GQ-CMP-020</td><td class="pass">FINAL 重执行 PASS</td></tr>
+<tr><td>Legacy isolation</td><td class="pass">PASS</td><td class="pass">PASS</td><td class="pass">GQ-CMP-021/GP-025</td><td class="pass">FINAL 重执行 PASS</td></tr>
+</table>
+
+<h2>4-6. Architecture / Graph Model / Entity Identity</h2>
+<p>架构闭环实测：<code>Source facts → GraphProjectionService → GraphProjection →
+GraphPersistenceService → kg_* → GraphQueryService → Node/EdgeView + ProvenanceTrace</code>。
+Identity 单一算法（models.node_id/edge_id SHA256 canonical）——query.py/persistence.py
+零重算（grep 实测 False）；persistence 中 uuid 仅用于运行期记录 id（projection_id/
+invalidation_id），不参与 graph identity。</p>
+<p>Entity identity：L1 exact 为自动边界；相似度仅产 MergeCandidate（ER-CMP-003 重执行
+PASS）；type 分歧 fail-closed（ER-CMP-002 重执行 PASS）；merge/split/alias 治理未被
+Query/Persistence 绕过（Query 零写、governance 走 akb_provenance）。</p>
+
+<h2>7-9. Projection / Persistence / Query</h2>
+<table><tr><th>Layer</th><th>职责</th><th>验证</th></tr>
+<tr><td>Projection</td><td>应该有什么（零 DB 写）</td><td class="pass">GS-CMP-007 零副作用</td></tr>
+<tr><td>Persistence</td><td>如何保存（SAVEPOINT 原子 + fingerprint 幂等）</td><td class="pass">GP-CMP-009..013</td></tr>
+<tr><td>Query</td><td>如何读取（SELECT-only + 确定性）</td><td class="pass">GQ-CMP-020</td></tr></table>
+<p>Migration 15 实测：version=15/v05_graph_persistence；四表 PK/FK/CHECK（node_type/
+status/edge_type 全 enforced）/UNIQUE(fingerprint)/11 索引；幂等重放 PASS；
+15 个 migrations 版本唯一（V02/V03 重复引用为历史 append-only 修复，FINAL 零重写）。</p>
+
+<h2>10-12. Provenance / Status / Determinism</h2>
+<p>五级链（GQ-CMP-001/011/012/013/014 重执行）：graph→assertion→evidence→document；
+inference→reasoning_run。Status 矩阵（GQ-CMP-007..010）：validated=valid included /
+rejected+deprecated=invalidated excluded+audit included / disputed=flagged included /
+hypothesized=not projected。Determinism：同库状态→同 IDs/同 fingerprint/同 canonical view；
+双实例等价；显式 ORDER BY+ID tie-breaker；零 set/dict 迭代序依赖。</p>
+
+<h2>13-16. Rebuild / Read-only / Legacy / Migration</h2>
+<p>Rebuild：重复投影+persist → fingerprint 幂等命中，零 duplicate graph state
+（GP-CMP-022..024）。Read-only FINAL 独立重执行：五表快照前后一致（GQ-CMP-020 PASS）。
+Legacy：agent_kb.graph 零触碰 + graph_edges 零变化 + test_phase6/7 PASS（FINAL 重执行）。
+Migration chain V0.1→V0.5 完整无断裂。</p>
+
+<h2>17-18. Regression / Full Repository</h2>
+<table><tr><th>Suite</th><th>Result</th></tr>
+<tr><td>V0.1 Golden</td><td class="pass">30/30</td></tr><tr><td>V0.2 Golden</td><td class="pass">40/40</td></tr>
+<tr><td>V0.3 Golden</td><td class="pass">55/55</td></tr><tr><td>V0.4 reasoning</td><td class="pass">21/21</td></tr>
+<tr><td>V0.5 GS/ER/GP/GQ</td><td class="pass">7/7 · 16/16 · 25/25 · 25/25</td></tr>
+<tr><td>agent_kb_core</td><td class="pass">346 passed + 1 skipped</td></tr>
+<tr><td>Full repository</td><td class="pass">345 passed + 1 skipped（exit 0）</td></tr></table>
+<p class="meta">1 skipped = V0.3 capped 数据场景设计性跳过（历史记录，非 V0.5 引入）。</p>
+
+<h2>19-20. CI / Production DB Safety</h2>
+<p>CI = Agent KB Core CI run <b>33975167058 SUCCESS</b>（8 jobs 全 success）+ Tests run
+<b>33975167073 SUCCESS</b> @ 7c19186（FINAL 前 baseline 实测；release commit 为 docs-only）。
+Production DB = <b>untouched</b>（prod-isolation fingerprint PASS；全部验证内存库；
+零 production migration）。</p>
+
+<h2>21. Scope Audit</h2>
+<p>kgraph 全模块 grep：无 LLM/Neo4j/HugeGraph/向量/embedding/分布式/缓存层/background
+worker（唯一 "llm" 命中 = governance 禁止 actor 清单字符串）。<b>零 scope creep。</b></p>
+
+<h2>22-23. P0/P1/P2 & Known Limitations</h2>
+<table><tr><th>Level</th><th>Count</th><th>Items</th></tr>
+<tr><td>P0</td><td>0</td><td>—</td></tr><tr><td>P1</td><td>0</td><td>—</td></tr>
+<tr><td>P2</td><td>5</td><td>①Q-04 depth=8（DC-06 对齐）②Q-02 边语义（frozen 字面）
+③limit 1000（spec 未定义分页）④同库状态确定性语义（mint_id 事件溯源属性）
+⑤治理队列表未持久化（IMPL-002 既定，V0.6+ 候选）</td></tr></table>
+<p>全部 P2 = accepted，进入 V0.5_RELEASE.md Known Limitations。</p>
+
+<h2>24-25. Release Decision & Freeze Baseline</h2>
+<p><b>AKB V0.5 = ACCEPTED / FROZEN</b>（release marker: docs/V0.5/V0.5_RELEASE.md；
+design frozen 五文档此后语义变更需 V0.6+ change-control）。Freeze baseline = release
+commit（docs(v0.5): finalize release baseline），实现证据链 = f5e28dd→11bed68→
+28721cc→ae982a7→aca64cf→7c19186。</p>
+</body></html>

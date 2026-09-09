@@ -1,0 +1,25 @@
+{
+ "case_id": "RG-018",
+ "category": "negative",
+ "description": "inferred validation 缺 reason 拒绝",
+ "seed_assertions": [
+  {
+   "key": "sat",
+   "subject_ref": "Pump-A",
+   "predicate_ref": "satisfies_rule",
+   "value": "RuleX",
+   "confidence": 0.9
+  },
+  {
+   "key": "req",
+   "subject_ref": "",
+   "predicate_ref": "rule_requires",
+   "value": "Inspect",
+   "confidence": 0.9
+  }
+ ],
+ "expectation": {
+  "error": "E-INVALID-REASON",
+  "govern_no_reason": true
+ }
+}

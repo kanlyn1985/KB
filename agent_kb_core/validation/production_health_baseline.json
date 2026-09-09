@@ -1,0 +1,41 @@
+{
+ "baseline_version": "2026-08-28-local-fastembed",
+ "source": "run_production_health.py 首跑（本地 fastembed ONNX 嵌入；远程 Ollama 版基线见 channel_ablation_real_vector.json，两者嵌入后端不同不可互比）",
+ "variants": {
+  "lexical_only": {
+   "n": 43,
+   "hit5_pct": 74.42,
+   "mrr": 0.3764,
+   "graph_exec_cases": 0
+  },
+  "vector_only": {
+   "n": 43,
+   "hit5_pct": 72.09,
+   "mrr": 0.4357,
+   "graph_exec_cases": 0
+  },
+  "graph_only": {
+   "n": 43,
+   "hit5_pct": 74.42,
+   "mrr": 0.3926,
+   "graph_exec_cases": 43
+  },
+  "lexical+vector": {
+   "n": 43,
+   "hit5_pct": 74.42,
+   "mrr": 0.3709,
+   "graph_exec_cases": 0
+  },
+  "production_full": {
+   "n": 43,
+   "hit5_pct": 74.42,
+   "mrr": 0.3709,
+   "graph_exec_cases": 0
+  }
+ },
+ "notes": {
+  "hit_tolerance_pp": 2.5,
+  "mrr_tolerance": 0.05,
+  "graph_note": "生产默认开图门控；graph_only 变体不受门控影响（单通道）"
+ }
+}

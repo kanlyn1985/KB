@@ -1,0 +1,1676 @@
+[
+ {
+  "case_id": "obc_principle",
+  "query": "帮我介绍一下OBC的工作原理",
+  "expected": [
+   "P-KNOW-OBC"
+  ]
+ },
+ {
+  "case_id": "dcdc_principle",
+  "query": "DCDC的工作原理是什么",
+  "expected": [
+   "P-KNOW-DCDC"
+  ]
+ },
+ {
+  "case_id": "ripple_req",
+  "query": "输出纹波要求是多少",
+  "expected": [
+   "R-PERF",
+   "DCDC_OUTPUT_RIPPLE"
+  ]
+ },
+ {
+  "case_id": "thermal_sim",
+  "query": "热仿真怎么做",
+  "expected": [
+   "G-VERIFY-CAE-THERMAL",
+   "G-METHOD-CAE-THERMAL"
+  ]
+ },
+ {
+  "case_id": "modal_analysis",
+  "query": "模态分析的方法",
+  "expected": [
+   "G-METHOD-CAE-STRUCT-MODAL",
+   "G-VERIFY-CAE-VIBRATION"
+  ]
+ },
+ {
+  "case_id": "autosar_comm",
+  "query": "AUTOSAR通信怎么配置",
+  "expected": [
+   "G-METHOD-AUTOSAR-COMM",
+   "R-SW",
+   "P-IF"
+  ]
+ },
+ {
+  "case_id": "mcu_safety",
+  "query": "MCU安全监控机制",
+  "expected": [
+   "P-HW-CTRL-MCU",
+   "R-FSC"
+  ]
+ },
+ {
+  "case_id": "potting",
+  "query": "灌封胶选型要求",
+  "expected": [
+   "G-PROD-POTTING-POT",
+   "G-PROD-POTTING-THERMAL"
+  ]
+ },
+ {
+  "case_id": "fault_diag",
+  "query": "故障诊断逻辑",
+  "expected": [
+   "L-FAULT",
+   "P-SW-ASW-DCDCFAULTDET"
+  ]
+ },
+ {
+  "case_id": "vibration_test",
+  "query": "振动测试标准",
+  "expected": [
+   "G-VERIFY-VIBRATION-VIB"
+  ]
+ },
+ {
+  "case_id": "can_comm",
+  "query": "CAN通信协议",
+  "expected": [
+   "L-COMM",
+   "G-METHOD-AUTOSAR-COMM"
+  ]
+ },
+ {
+  "case_id": "safety_req",
+  "query": "功能安全要求",
+  "expected": [
+   "R-FSC"
+  ]
+ },
+ {
+  "case_id": "efficiency",
+  "query": "OBC效率要求",
+  "expected": [
+   "R-PERF"
+  ]
+ },
+ {
+  "case_id": "assembl",
+  "query": "装配工艺要求",
+  "expected": [
+   "G-PROD-ASSEMBLY",
+   "G-PROD-ASSEMBLY-GEN"
+  ]
+ },
+ {
+  "case_id": "sealing",
+  "query": "密封测试方法",
+  "expected": [
+   "G-VERIFY-AIRTIGHT",
+   "G-PROD-POTTING-SEAL"
+  ]
+ },
+ {
+  "case_id": "charge_func",
+  "query": "OBC充电功能是什么",
+  "expected": [
+   "F-OBC-CHARGE",
+   "F-OBC"
+  ]
+ },
+ {
+  "case_id": "discharge_v2l",
+  "query": "V2L放电功能",
+  "expected": [
+   "F-OBC-DISCHARGE"
+  ]
+ },
+ {
+  "case_id": "cp_cc",
+  "query": "CP控制导引信号",
+  "expected": [
+   "F-OBC-CP"
+  ]
+ },
+ {
+  "case_id": "obc_protect",
+  "query": "OBC有哪些保护功能",
+  "expected": [
+   "F-OBC-PROTECT"
+  ]
+ },
+ {
+  "case_id": "dcdc_conv",
+  "query": "DCDC电压转换功能",
+  "expected": [
+   "F-DCDC-CONV",
+   "F-DCDC"
+  ]
+ },
+ {
+  "case_id": "g5_platform",
+  "query": "G5平台是什么",
+  "expected": [
+   "M-G5"
+  ]
+ },
+ {
+  "case_id": "mi_project",
+  "query": "曼岛项目",
+  "expected": [
+   "M-MI"
+  ]
+ },
+ {
+  "case_id": "lesson_learned",
+  "query": "有哪些经验教训",
+  "expected": [
+   "Q-LESSON"
+  ]
+ },
+ {
+  "case_id": "failure_analysis",
+  "query": "失效原因分析",
+  "expected": [
+   "Q-PROBLEM-FAILURE",
+   "Q-FAILURE"
+  ]
+ },
+ {
+  "case_id": "customer_complaint",
+  "query": "客诉问题处理",
+  "expected": [
+   "Q-PROBLEM-CUSTOMER"
+  ]
+ },
+ {
+  "case_id": "power_ctrl_logic",
+  "query": "功率控制环路逻辑",
+  "expected": [
+   "L-PWRCTRL"
+  ]
+ },
+ {
+  "case_id": "precharge_strategy",
+  "query": "启动预充策略",
+  "expected": [
+   "L-STRATEGY-PRECHARGE"
+  ]
+ },
+ {
+  "case_id": "peak_power",
+  "query": "峰值功率策略",
+  "expected": [
+   "L-STRATEGY-PEAK"
+  ]
+ },
+ {
+  "case_id": "emc_req",
+  "query": "EMC要求",
+  "expected": [
+   "R-EMC"
+  ]
+ },
+ {
+  "case_id": "env_req",
+  "query": "环境可靠性要求",
+  "expected": [
+   "R-ENV",
+   "R-REL"
+  ]
+ },
+ {
+  "case_id": "oracle_req_analysis",
+  "query": "整车厂给的需求怎么分解到产品功能",
+  "expected": [
+   "R-ROOT"
+  ]
+ },
+ {
+  "case_id": "oracle_req_if",
+  "query": "充电口 CP 信号的 CAN 报文定义在哪",
+  "expected": [
+   "R-IF"
+  ]
+ },
+ {
+  "case_id": "oracle_req_std",
+  "query": "客户技术规范 TS 里对低温启动的要求",
+  "expected": [
+   "R-STD"
+  ]
+ },
+ {
+  "case_id": "oracle_req_trace",
+  "query": "需求追溯到测试用例的矩阵在哪维护",
+  "expected": [
+   "G-PROC-STD",
+   "R-ROOT"
+  ]
+ },
+ {
+  "case_id": "oracle_ee_layout",
+  "query": "PCB 布局图里功率回路怎么走",
+  "expected": [
+   "P-HW"
+  ]
+ },
+ {
+  "case_id": "oracle_ee_loss",
+  "query": "MOSFET 损耗清单怎么算",
+  "expected": [
+   "P-HW-THERMAL"
+  ]
+ },
+ {
+  "case_id": "oracle_ee_safety",
+  "query": "爬电距离和电气间隙要求",
+  "expected": [
+   "R-SAFETY"
+  ]
+ },
+ {
+  "case_id": "oracle_ee_topology",
+  "query": "PFC LLC 主功率拓扑方案",
+  "expected": [
+   "P-HW-OBC",
+   "P-HW-DCDC"
+  ]
+ },
+ {
+  "case_id": "oracle_ee_schematic",
+  "query": "原理图里辅助电源怎么画",
+  "expected": [
+   "P-HW"
+  ]
+ },
+ {
+  "case_id": "oracle_ee_pcb",
+  "query": "PCBA 布局的爬电要求",
+  "expected": [
+   "G-PROD"
+  ]
+ },
+ {
+  "case_id": "oracle_ee_sim",
+  "query": "电路仿真用什么工具",
+  "expected": [
+   "G-METHOD-CAE",
+   "G-METHOD-CAE-STRUCT-TOOL"
+  ]
+ },
+ {
+  "case_id": "oracle_ee_mag",
+  "query": "变压器磁芯选型",
+  "expected": [
+   "P-HW-MAG"
+  ]
+ },
+ {
+  "case_id": "oracle_ee_wcca",
+  "query": "最坏情况电路分析 WCCA 怎么做",
+  "expected": [
+   "G-METHOD-WCCA"
+  ]
+ },
+ {
+  "case_id": "oracle_sw_sys1",
+  "query": "SYS.1 需求获取要哪些输入",
+  "expected": [
+   "G-PROC-STD"
+  ]
+ },
+ {
+  "case_id": "oracle_sw_sys2",
+  "query": "系统需求分析 SYS.2 的产出",
+  "expected": [
+   "G-PROC-STD"
+  ]
+ },
+ {
+  "case_id": "oracle_sw_sys3",
+  "query": "SYS.3 系统架构设计怎么做",
+  "expected": [
+   "G-PROC-STD"
+  ]
+ },
+ {
+  "case_id": "oracle_sw_sys4",
+  "query": "系统集成测试 SYS.4 测什么",
+  "expected": [
+   "G-PROC-STD",
+   "G-VERIFY-SW"
+  ]
+ },
+ {
+  "case_id": "oracle_sw_sys5",
+  "query": "系统合格性测试 SYS.5",
+  "expected": [
+   "G-PROC-STD"
+  ]
+ },
+ {
+  "case_id": "oracle_sw_swe2",
+  "query": "软件架构文档 SWAD",
+  "expected": [
+   "P-SW-ASW",
+   "P-SW-BSW",
+   "P-SW"
+  ]
+ },
+ {
+  "case_id": "oracle_sw_swe3",
+  "query": "软件详细设计 DDS",
+  "expected": [
+   "L-ROOT",
+   "L-PWRCTRL",
+   "L-FAULT"
+  ]
+ },
+ {
+  "case_id": "oracle_sw_swe4",
+  "query": "单元验证怎么做",
+  "expected": [
+   "G-PROC-STD",
+   "G-VERIFY-SW"
+  ]
+ },
+ {
+  "case_id": "oracle_sw_swe5",
+  "query": "软件集成测试",
+  "expected": [
+   "G-PROC-STD",
+   "G-VERIFY-SW"
+  ]
+ },
+ {
+  "case_id": "oracle_sw_swe6",
+  "query": "MiL SiL HiL 测试",
+  "expected": [
+   "G-PROC-STD",
+   "G-VERIFY-SW"
+  ]
+ },
+ {
+  "case_id": "oracle_sw_sup",
+  "query": "ASPICE 支持过程 SUP",
+  "expected": [
+   "G-PROC-STD",
+   "G-METHOD-TOOL"
+  ]
+ },
+ {
+  "case_id": "oracle_me_design",
+  "query": "结构设计方案和 3D 数模",
+  "expected": [
+   "P-HW-MECH",
+   "P-MECH"
+  ]
+ },
+ {
+  "case_id": "oracle_me_limit",
+  "query": "结构限制图给谁",
+  "expected": [
+   "P-HW-MECH"
+  ]
+ },
+ {
+  "case_id": "oracle_me_mech_sim",
+  "query": "静力学强度仿真",
+  "expected": [
+   "G-VERIFY-CAE-STRUCT",
+   "G-METHOD-CAE-STRUCT"
+  ]
+ },
+ {
+  "case_id": "oracle_me_air_sim",
+  "query": "困气仿真分析",
+  "expected": [
+   "G-VERIFY-CAE-FLUID"
+  ]
+ },
+ {
+  "case_id": "oracle_me_tol",
+  "query": "尺寸链公差分析",
+  "expected": [
+   "G-METHOD-TOL"
+  ]
+ },
+ {
+  "case_id": "oracle_me_safety_check",
+  "query": "结构件安规检查表",
+  "expected": [
+   "R-SAFETY"
+  ]
+ },
+ {
+  "case_id": "oracle_me_material",
+  "query": "结构件材料库",
+  "expected": [
+   "P-HW-MATERIAL",
+   "P-HW-MECH"
+  ]
+ },
+ {
+  "case_id": "oracle_me_condense",
+  "query": "凝露分析怎么做",
+  "expected": [
+   "G-METHOD-CONDENSE"
+  ]
+ },
+ {
+  "case_id": "oracle_me_pack",
+  "query": "包装 POP 设计",
+  "expected": [
+   "G-PROD-PACK"
+  ]
+ },
+ {
+  "case_id": "oracle_me_special",
+  "query": "特殊特性清单怎么管理",
+  "expected": [
+   "G-DEV-PPAP"
+  ]
+ },
+ {
+  "case_id": "oracle_th_design",
+  "query": "散热器设计水道设计",
+  "expected": [
+   "P-HW-THERMAL"
+  ]
+ },
+ {
+  "case_id": "oracle_th_test",
+  "query": "温升测试热循环试验",
+  "expected": [
+   "G-VERIFY-THERMAL"
+  ]
+ },
+ {
+  "case_id": "oracle_emc_test",
+  "query": "传导辐射抗扰度测试",
+  "expected": [
+   "G-VERIFY-EMC"
+  ]
+ },
+ {
+  "case_id": "oracle_emc_safety",
+  "query": "耐压绝缘安规测试",
+  "expected": [
+   "R-SAFETY"
+  ]
+ },
+ {
+  "case_id": "oracle_fusa_item",
+  "query": "相关项定义 item definition 包含什么",
+  "expected": [
+   "G-FUSA-ITEM"
+  ]
+ },
+ {
+  "case_id": "oracle_fusa_hara",
+  "query": "HARA 危害分析和风险评估怎么做",
+  "expected": [
+   "G-FUSA-HARA"
+  ]
+ },
+ {
+  "case_id": "oracle_fusa_fsc",
+  "query": "功能安全概念 FSC 怎么写",
+  "expected": [
+   "G-FUSA-FSC"
+  ]
+ },
+ {
+  "case_id": "oracle_fusa_tsc",
+  "query": "技术安全概念 TSC",
+  "expected": [
+   "G-FUSA-TSC"
+  ]
+ },
+ {
+  "case_id": "oracle_fusa_hw_metric",
+  "query": "PMHF SPFM LFM 硬件安全指标",
+  "expected": [
+   "G-FUSA-HWMETRIC"
+  ]
+ },
+ {
+  "case_id": "oracle_fusa_val",
+  "query": "安全验证与确认怎么做",
+  "expected": [
+   "G-FUSA-VAL"
+  ]
+ },
+ {
+  "case_id": "oracle_fusa_case",
+  "query": "安全案例 safety case 怎么组织",
+  "expected": [
+   "G-FUSA-CASE"
+  ]
+ },
+ {
+  "case_id": "oracle_rel_predict",
+  "query": "SN 29500 可靠性预计",
+  "expected": [
+   "G-METHOD-RELPREDICT"
+  ]
+ },
+ {
+  "case_id": "oracle_rel_alt",
+  "query": "加速寿命试验 ALT",
+  "expected": [
+   "G-VERIFY-REL"
+  ]
+ },
+ {
+  "case_id": "oracle_ie_dfa",
+  "query": "DFA 可装配性设计",
+  "expected": [
+   "G-METHOD-DFM"
+  ]
+ },
+ {
+  "case_id": "oracle_ie_dfm",
+  "query": "DFM 可制造性设计",
+  "expected": [
+   "G-METHOD-DFM"
+  ]
+ },
+ {
+  "case_id": "oracle_ie_pcba",
+  "query": "PCBA 组装工艺",
+  "expected": [
+   "G-PROD"
+  ]
+ },
+ {
+  "case_id": "oracle_ie_pfd",
+  "query": "过程流程图 PFD",
+  "expected": [
+   "G-PROD",
+   "G-PROC-STD"
+  ]
+ },
+ {
+  "case_id": "oracle_ie_control",
+  "query": "控制计划 Control Plan",
+  "expected": [
+   "G-DEV-PPAP"
+  ]
+ },
+ {
+  "case_id": "oracle_te_plan",
+  "query": "DV PV 测试计划",
+  "expected": [
+   "G-DEV",
+   "G-VERIFY",
+   "Q-PROBLEM-TEST"
+  ]
+ },
+ {
+  "case_id": "oracle_te_sample",
+  "query": "样机验证 EVT 阶段",
+  "expected": [
+   "G-DEV-EVT1",
+   "G-DEV-EVT2"
+  ]
+ },
+ {
+  "case_id": "oracle_te_factory",
+  "query": "出厂测试 EOL",
+  "expected": [
+   "G-PROD",
+   "G-VERIFY",
+   "Q-PROBLEM-TEST"
+  ]
+ },
+ {
+  "case_id": "oracle_te_mech",
+  "query": "振动冲击跌落试验",
+  "expected": [
+   "G-VERIFY-VIBRATION"
+  ]
+ },
+ {
+  "case_id": "oracle_te_env",
+  "query": "高低温湿热盐雾环境试验",
+  "expected": [
+   "G-VERIFY-ENV"
+  ]
+ },
+ {
+  "case_id": "oracle_te_elec",
+  "query": "效率纹波限流过冲电气性能测试",
+  "expected": [
+   "G-VERIFY-PERF"
+  ]
+ },
+ {
+  "case_id": "oracle_qa_dqa",
+  "query": "DQA 设计质量保证做什么",
+  "expected": [
+   "Q-DQA"
+  ]
+ },
+ {
+  "case_id": "oracle_qa_aqe",
+  "query": "AQE 先期质量工程师职责",
+  "expected": [
+   "Q-AQE"
+  ]
+ },
+ {
+  "case_id": "oracle_qa_8d",
+  "query": "8D 报告怎么写",
+  "expected": [
+   "Q-8D"
+  ]
+ },
+ {
+  "case_id": "oracle_qa_issue",
+  "query": "问题清单 issue log 管理",
+  "expected": [
+   "Q-PROBLEM"
+  ]
+ },
+ {
+  "case_id": "oracle_qa_ppap",
+  "query": "PPAP 提交等级要求",
+  "expected": [
+   "G-DEV-PPAP"
+  ]
+ },
+ {
+  "case_id": "oracle_qa_spc",
+  "query": "SPC 统计过程控制 Cpk",
+  "expected": [
+   "Q-SPC"
+  ]
+ },
+ {
+  "case_id": "oracle_qa_msa",
+  "query": "MSA 测量系统分析 GR R",
+  "expected": [
+   "Q-MSA"
+  ]
+ },
+ {
+  "case_id": "oracle_te_sw",
+  "query": "软件单元测试集成测试 HiL",
+  "expected": [
+   "G-VERIFY-SW"
+  ]
+ },
+ {
+  "case_id": "oracle_te_if",
+  "query": "CAN 矩阵一致性测试",
+  "expected": [
+   "G-VERIFY-IF"
+  ]
+ },
+ {
+  "case_id": "oracle_te_std",
+  "query": "型式试验标准符合性",
+  "expected": [
+   "G-VERIFY-STD"
+  ]
+ },
+ {
+  "case_id": "node_p_root",
+  "query": "主骨架相关的资料",
+  "expected": [
+   "P-ROOT"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_obc_pfc",
+  "query": "介绍一下电路",
+  "expected": [
+   "P-HW-OBC-PFC"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_obc_dcdc",
+  "query": "LLC相关的资料",
+  "expected": [
+   "P-HW-OBC-DCDC"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_obc_aux",
+  "query": "辅助电源的要求是什么",
+  "expected": [
+   "P-HW-OBC-AUX"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_obc_emi",
+  "query": "EMI 滤波是怎么实现的",
+  "expected": [
+   "P-HW-OBC-EMI"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_obc_acrelay",
+  "query": "AC 继电器是怎么实现的",
+  "expected": [
+   "P-HW-OBC-ACRELAY"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_dcdc_conv",
+  "query": "变换电路相关的资料",
+  "expected": [
+   "P-HW-DCDC-CONV"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_dcdc_out",
+  "query": "输出电路的要求是什么",
+  "expected": [
+   "P-HW-DCDC-OUT"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_ctrl",
+  "query": "控制板是怎么实现的",
+  "expected": [
+   "P-HW-CTRL"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_ctrl_drv",
+  "query": "驱动电路是怎么实现的",
+  "expected": [
+   "P-HW-CTRL-DRV"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_ctrl_sense",
+  "query": "介绍一下采样电路",
+  "expected": [
+   "P-HW-CTRL-SENSE"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_ctrl_protect",
+  "query": "保护电路相关的资料",
+  "expected": [
+   "P-HW-CTRL-PROTECT"
+  ]
+ },
+ {
+  "case_id": "node_p_sw",
+  "query": "软件树的要求是什么",
+  "expected": [
+   "P-SW"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_cc",
+  "query": "控制导引怎么做",
+  "expected": [
+   "P-SW-ASW-CC"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_cp",
+  "query": "CP的要求是什么",
+  "expected": [
+   "P-SW-ASW-CP"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_acrelay",
+  "query": "介绍一下ACRelayCtrl",
+  "expected": [
+   "P-SW-ASW-ACRELAY"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_auxpwr",
+  "query": "AuxPower怎么做",
+  "expected": [
+   "P-SW-ASW-AUXPWR"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_canreport",
+  "query": "介绍一下CANReport",
+  "expected": [
+   "P-SW-ASW-CANREPORT"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_canrcv",
+  "query": "CAN_Receive的要求是什么",
+  "expected": [
+   "P-SW-ASW-CANRCV"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_cal",
+  "query": "标定怎么做",
+  "expected": [
+   "P-SW-ASW-CAL"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_adc",
+  "query": "采样怎么做",
+  "expected": [
+   "P-SW-ASW-ADC"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_cpout",
+  "query": "介绍一下CPOUT",
+  "expected": [
+   "P-SW-ASW-CPOUT"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_obcpwrctrl",
+  "query": "OBC功率控制怎么做",
+  "expected": [
+   "P-SW-ASW-OBCPWRCTRL"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_rte",
+  "query": "RTE 接口适配层的作用",
+  "expected": [
+   "P-SW-RTE"
+  ]
+ },
+ {
+  "case_id": "node_p_cal",
+  "query": "介绍一下降额曲线",
+  "expected": [
+   "P-CAL"
+  ]
+ },
+ {
+  "case_id": "node_p_know",
+  "query": "原理怎么做",
+  "expected": [
+   "P-KNOW"
+  ]
+ },
+ {
+  "case_id": "node_f_root",
+  "query": "黑盒能力相关的资料",
+  "expected": [
+   "F-ROOT"
+  ]
+ },
+ {
+  "case_id": "node_f_obc_comm",
+  "query": "OBC 的 CAN 通信功能有哪些",
+  "expected": [
+   "F-OBC-COMM"
+  ]
+ },
+ {
+  "case_id": "node_f_obc_diag",
+  "query": "诊断功能是怎么实现的",
+  "expected": [
+   "F-OBC-DIAG"
+  ]
+ },
+ {
+  "case_id": "node_f_obc_wake",
+  "query": "待机唤醒怎么做",
+  "expected": [
+   "F-OBC-WAKE"
+  ]
+ },
+ {
+  "case_id": "node_f_dcdc_reverse",
+  "query": "反供电的要求是什么",
+  "expected": [
+   "F-DCDC-REVERSE"
+  ]
+ },
+ {
+  "case_id": "node_f_dcdc_protect",
+  "query": "介绍一下DCDC 保护功能",
+  "expected": [
+   "F-DCDC-PROTECT"
+  ]
+ },
+ {
+  "case_id": "node_f_sys",
+  "query": "OBC+DCDC 协同的要求是什么",
+  "expected": [
+   "F-SYS"
+  ]
+ },
+ {
+  "case_id": "node_l_state",
+  "query": "介绍一下OBC",
+  "expected": [
+   "L-STATE"
+  ]
+ },
+ {
+  "case_id": "node_l_cal",
+  "query": "标定参数管理逻辑是怎么实现的",
+  "expected": [
+   "L-CAL"
+  ]
+ },
+ {
+  "case_id": "node_l_sense",
+  "query": "绝缘是怎么实现的",
+  "expected": [
+   "L-SENSE"
+  ]
+ },
+ {
+  "case_id": "node_l_sys",
+  "query": "电源的要求是什么",
+  "expected": [
+   "L-SYS"
+  ]
+ },
+ {
+  "case_id": "node_l_strategy",
+  "query": "G5 策略族的要求是什么",
+  "expected": [
+   "L-STRATEGY"
+  ]
+ },
+ {
+  "case_id": "node_l_strategy_freq",
+  "query": "DCDC相关的资料",
+  "expected": [
+   "L-STRATEGY-FREQ"
+  ]
+ },
+ {
+  "case_id": "node_l_strategy_cbc",
+  "query": "CBC 策略相关的资料",
+  "expected": [
+   "L-STRATEGY-CBC"
+  ]
+ },
+ {
+  "case_id": "node_l_strategy_ntc",
+  "query": "NTC 查表策略怎么做",
+  "expected": [
+   "L-STRATEGY-NTC"
+  ]
+ },
+ {
+  "case_id": "node_l_strategy_lowtemp",
+  "query": "低温启机策略的要求是什么",
+  "expected": [
+   "L-STRATEGY-LOWTEMP"
+  ]
+ },
+ {
+  "case_id": "node_l_strategy_v2l",
+  "query": "V2L Inside 策略怎么做",
+  "expected": [
+   "L-STRATEGY-V2L"
+  ]
+ },
+ {
+  "case_id": "node_l_strategy_opto",
+  "query": "光耦黏连检测策略怎么做",
+  "expected": [
+   "L-STRATEGY-OPTO"
+  ]
+ },
+ {
+  "case_id": "node_l_strategy_gpio",
+  "query": "介绍一下PWM 回读策略",
+  "expected": [
+   "L-STRATEGY-GPIO"
+  ]
+ },
+ {
+  "case_id": "node_l_strategy_sense",
+  "query": "采样容差策略相关的资料",
+  "expected": [
+   "L-STRATEGY-SENSE"
+  ]
+ },
+ {
+  "case_id": "node_r_protect",
+  "query": "阈值的要求是什么",
+  "expected": [
+   "R-PROTECT"
+  ]
+ },
+ {
+  "case_id": "node_r_hw",
+  "query": "元器件是怎么实现的",
+  "expected": [
+   "R-HW"
+  ]
+ },
+ {
+  "case_id": "node_g_root",
+  "query": "正交，作用于产品节点怎么做",
+  "expected": [
+   "G-ROOT"
+  ]
+ },
+ {
+  "case_id": "node_g_method",
+  "query": "建模是怎么实现的",
+  "expected": [
+   "G-METHOD"
+  ]
+ },
+ {
+  "case_id": "node_g_method_mbd",
+  "query": "Simulink怎么做",
+  "expected": [
+   "G-METHOD-MBD"
+  ]
+ },
+ {
+  "case_id": "node_g_method_autosar",
+  "query": "Neusar是怎么实现的",
+  "expected": [
+   "G-METHOD-AUTOSAR"
+  ]
+ },
+ {
+  "case_id": "node_g_asset",
+  "query": "代码资产怎么做",
+  "expected": [
+   "G-ASSET"
+  ]
+ },
+ {
+  "case_id": "node_q_root",
+  "query": "8 类实体：质量失效类的要求是什么",
+  "expected": [
+   "Q-ROOT"
+  ]
+ },
+ {
+  "case_id": "node_m_root",
+  "query": "型号 vs 实例怎么做",
+  "expected": [
+   "M-ROOT"
+  ]
+ },
+ {
+  "case_id": "node_m_ccu",
+  "query": "介绍一下OBC+DCDC+逆变集成",
+  "expected": [
+   "M-CCU"
+  ]
+ },
+ {
+  "case_id": "node_m_vave",
+  "query": "instanceOf CCU怎么做",
+  "expected": [
+   "M-VAVE"
+  ]
+ },
+ {
+  "case_id": "node_m_sw40",
+  "query": "富特相关的资料",
+  "expected": [
+   "M-SW40"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_obcstate",
+  "query": "状态管理怎么做",
+  "expected": [
+   "P-SW-ASW-OBCSTATE"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_dcdcfaultrpt",
+  "query": "DCDCFaultReport的要求是什么",
+  "expected": [
+   "P-SW-ASW-DCDCFAULTRPT"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_obcfaultdet",
+  "query": "OBCFaultDetect是怎么实现的",
+  "expected": [
+   "P-SW-ASW-OBCFAULTDET"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_obcfaultrpt",
+  "query": "OBCFaultReport怎么做",
+  "expected": [
+   "P-SW-ASW-OBCFAULTRPT"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_dcdcpwrctrl",
+  "query": "介绍一下DCDC功率控制",
+  "expected": [
+   "P-SW-ASW-DCDCPWRCTRL"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_dcdcstate",
+  "query": "DCDCState怎么做",
+  "expected": [
+   "P-SW-ASW-DCDCSTATE"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_deh",
+  "query": "DEH怎么做",
+  "expected": [
+   "P-SW-ASW-DEH"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_eleclock",
+  "query": "ELEclock是怎么实现的",
+  "expected": [
+   "P-SW-ASW-ELECLOCK"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_gunmanage",
+  "query": "枪管理 GunManage 应用层软件组件",
+  "expected": [
+   "P-SW-ASW-GUNMANAGE"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_guntemp",
+  "query": "枪温检测 GunTemp 软件组件",
+  "expected": [
+   "P-SW-ASW-GUNTEMP"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_hvdm",
+  "query": "HVDM的要求是什么",
+  "expected": [
+   "P-SW-ASW-HVDM"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_insdet",
+  "query": "绝缘检测怎么做",
+  "expected": [
+   "P-SW-ASW-INSDET"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_interlock",
+  "query": "介绍一下高压互锁",
+  "expected": [
+   "P-SW-ASW-INTERLOCK"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_led",
+  "query": "LED 指示灯控制软件组件",
+  "expected": [
+   "P-SW-ASW-LED"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_nacs",
+  "query": "NACS是怎么实现的",
+  "expected": [
+   "P-SW-ASW-NACS"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_oringovp",
+  "query": "ORingOVP的要求是什么",
+  "expected": [
+   "P-SW-ASW-ORINGOVP"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_s2",
+  "query": "S2相关的资料",
+  "expected": [
+   "P-SW-ASW-S2"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_sleepwake",
+  "query": "休眠唤醒的要求是什么",
+  "expected": [
+   "P-SW-ASW-SLEEPWAKE"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_temp",
+  "query": "温度管理相关的资料",
+  "expected": [
+   "P-SW-ASW-TEMP"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_asw_udmanage",
+  "query": "UDManage相关的资料",
+  "expected": [
+   "P-SW-ASW-UDMANAGE"
+  ]
+ },
+ {
+  "case_id": "node_g_dev_rfq",
+  "query": "报价怎么做",
+  "expected": [
+   "G-DEV-RFQ"
+  ]
+ },
+ {
+  "case_id": "node_g_dev_et",
+  "query": "设计验证怎么做",
+  "expected": [
+   "G-DEV-ET"
+  ]
+ },
+ {
+  "case_id": "node_g_dev_pt0",
+  "query": "生产验证0的要求是什么",
+  "expected": [
+   "G-DEV-PT0"
+  ]
+ },
+ {
+  "case_id": "node_g_dev_pt1",
+  "query": "生产验证1相关的资料",
+  "expected": [
+   "G-DEV-PT1"
+  ]
+ },
+ {
+  "case_id": "node_g_dev_sop",
+  "query": "量产怎么做",
+  "expected": [
+   "G-DEV-SOP"
+  ]
+ },
+ {
+  "case_id": "node_m_g5d5",
+  "query": "instanceOf CCU怎么做",
+  "expected": [
+   "M-G5D5"
+  ]
+ },
+ {
+  "case_id": "node_m_g7",
+  "query": "instanceOf CCU相关的资料",
+  "expected": [
+   "M-G7"
+  ]
+ },
+ {
+  "case_id": "node_m_d950",
+  "query": "instanceOf CCU是怎么实现的",
+  "expected": [
+   "M-D950"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_mech_housing",
+  "query": "压铸相关的资料",
+  "expected": [
+   "P-HW-MECH-HOUSING"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_mech_waterway",
+  "query": "水道板的要求是什么",
+  "expected": [
+   "P-HW-MECH-WATERWAY"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_mech_seal",
+  "query": "介绍一下O型圈",
+  "expected": [
+   "P-HW-MECH-SEAL"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_mech_fastener",
+  "query": "螺钉怎么做",
+  "expected": [
+   "P-HW-MECH-FASTENER"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_mech_connector",
+  "query": "高压的要求是什么",
+  "expected": [
+   "P-HW-MECH-CONNECTOR"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_mech_busbar",
+  "query": "大电流连接的要求是什么",
+  "expected": [
+   "P-HW-MECH-BUSBAR"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_mech_nameplate",
+  "query": "铭牌是怎么实现的",
+  "expected": [
+   "P-HW-MECH-NAMEPLATE"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_mech_shield",
+  "query": "EMC屏蔽罩是怎么实现的",
+  "expected": [
+   "P-HW-MECH-SHIELD"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_mech_bracket",
+  "query": "安装板的要求是什么",
+  "expected": [
+   "P-HW-MECH-BRACKET"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_thermal_heatsink",
+  "query": "介绍一下铝挤",
+  "expected": [
+   "P-HW-THERMAL-HEATSINK"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_thermal_tim",
+  "query": "导热垫的要求是什么",
+  "expected": [
+   "P-HW-THERMAL-TIM"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_thermal_fan",
+  "query": "风扇是怎么实现的",
+  "expected": [
+   "P-HW-THERMAL-FAN"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_thermal_pot",
+  "query": "介绍一下灌封胶",
+  "expected": [
+   "P-HW-THERMAL-POT"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_material_metal",
+  "query": "铝ADC12怎么做",
+  "expected": [
+   "P-HW-MATERIAL-METAL"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_material_rubber",
+  "query": "密封怎么做",
+  "expected": [
+   "P-HW-MATERIAL-RUBBER"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_material_surface",
+  "query": "阳极氧化的要求是什么",
+  "expected": [
+   "P-HW-MATERIAL-SURFACE"
+  ]
+ },
+ {
+  "case_id": "node_g_prod_casting",
+  "query": "介绍一下模具",
+  "expected": [
+   "G-PROD-CASTING"
+  ]
+ },
+ {
+  "case_id": "node_g_prod_machining",
+  "query": "CNC的要求是什么",
+  "expected": [
+   "G-PROD-MACHINING"
+  ]
+ },
+ {
+  "case_id": "node_g_prod_sheet",
+  "query": "冲压是怎么实现的",
+  "expected": [
+   "G-PROD-SHEET"
+  ]
+ },
+ {
+  "case_id": "node_g_prod_injection",
+  "query": "模具的要求是什么",
+  "expected": [
+   "G-PROD-INJECTION"
+  ]
+ },
+ {
+  "case_id": "node_g_prod_surface",
+  "query": "介绍一下阳极",
+  "expected": [
+   "G-PROD-SURFACE"
+  ]
+ },
+ {
+  "case_id": "node_g_prod_potting",
+  "query": "灌胶相关的资料",
+  "expected": [
+   "G-PROD-POTTING"
+  ]
+ },
+ {
+  "case_id": "node_g_verify",
+  "query": "验证活动怎么做",
+  "expected": [
+   "G-VERIFY"
+  ]
+ },
+ {
+  "case_id": "node_g_verify_dim",
+  "query": "全尺寸是怎么实现的",
+  "expected": [
+   "G-VERIFY-DIM"
+  ]
+ },
+ {
+  "case_id": "node_g_verify_cae",
+  "query": "热仿真是怎么实现的",
+  "expected": [
+   "G-VERIFY-CAE"
+  ]
+ },
+ {
+  "case_id": "node_g_verify_electrical",
+  "query": "耐压怎么做",
+  "expected": [
+   "G-VERIFY-ELECTRICAL"
+  ]
+ },
+ {
+  "case_id": "node_g_method_cae_fluid",
+  "query": "水冷流道怎么做",
+  "expected": [
+   "G-METHOD-CAE-FLUID"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_mech_harness",
+  "query": "信号线束怎么做",
+  "expected": [
+   "P-HW-MECH-HARNESS"
+  ]
+ },
+ {
+  "case_id": "node_g_method_autosar_os",
+  "query": "OS是怎么实现的",
+  "expected": [
+   "G-METHOD-AUTOSAR-OS"
+  ]
+ },
+ {
+  "case_id": "node_g_method_autosar_rte",
+  "query": "RTE是怎么实现的",
+  "expected": [
+   "G-METHOD-AUTOSAR-RTE"
+  ]
+ },
+ {
+  "case_id": "node_g_method_autosar_cfg",
+  "query": "Neusar是怎么实现的",
+  "expected": [
+   "G-METHOD-AUTOSAR-CFG"
+  ]
+ },
+ {
+  "case_id": "node_g_method_autosar_std",
+  "query": "ARXML的要求是什么",
+  "expected": [
+   "G-METHOD-AUTOSAR-STD"
+  ]
+ },
+ {
+  "case_id": "node_g_method_autosar_codegen",
+  "query": "C-Code怎么做",
+  "expected": [
+   "G-METHOD-AUTOSAR-CODEGEN"
+  ]
+ },
+ {
+  "case_id": "node_g_prod_assembly_fasten",
+  "query": "螺钉相关的资料",
+  "expected": [
+   "G-PROD-ASSEMBLY-FASTEN"
+  ]
+ },
+ {
+  "case_id": "node_g_prod_assembly_press",
+  "query": "压装怎么做",
+  "expected": [
+   "G-PROD-ASSEMBLY-PRESS"
+  ]
+ },
+ {
+  "case_id": "node_g_prod_assembly_bond",
+  "query": "涂胶是怎么实现的",
+  "expected": [
+   "G-PROD-ASSEMBLY-BOND"
+  ]
+ },
+ {
+  "case_id": "node_g_method_fixture",
+  "query": "介绍一下工装",
+  "expected": [
+   "G-METHOD-FIXTURE"
+  ]
+ },
+ {
+  "case_id": "node_g_prod_potting_disp",
+  "query": "介绍一下点胶",
+  "expected": [
+   "G-PROD-POTTING-DISP"
+  ]
+ },
+ {
+  "case_id": "node_q_problem_defect",
+  "query": "缺陷怎么做",
+  "expected": [
+   "Q-PROBLEM-DEFECT"
+  ]
+ },
+ {
+  "case_id": "node_q_problem_test",
+  "query": "不合格相关的资料",
+  "expected": [
+   "Q-PROBLEM-TEST"
+  ]
+ },
+ {
+  "case_id": "node_g_method_cae_struct_strength",
+  "query": "强度是怎么实现的",
+  "expected": [
+   "G-METHOD-CAE-STRUCT-STRENGTH"
+  ]
+ },
+ {
+  "case_id": "node_g_method_cae_struct_tool",
+  "query": "ANSYS相关的资料",
+  "expected": [
+   "G-METHOD-CAE-STRUCT-TOOL"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_bsw_comm",
+  "query": "CAN怎么做",
+  "expected": [
+   "P-SW-BSW-COMM"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_bsw_mcal",
+  "query": "介绍一下ADC",
+  "expected": [
+   "P-SW-BSW-MCAL"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_bsw_diag",
+  "query": "DCM怎么做",
+  "expected": [
+   "P-SW-BSW-DIAG"
+  ]
+ },
+ {
+  "case_id": "node_p_sw_bsw_mem",
+  "query": "NVM怎么做",
+  "expected": [
+   "P-SW-BSW-MEM"
+  ]
+ },
+ {
+  "case_id": "node_g_verify_vibration_shock",
+  "query": "介绍一下冲击",
+  "expected": [
+   "G-VERIFY-VIBRATION-SHOCK"
+  ]
+ },
+ {
+  "case_id": "node_g_verify_vibration_cond",
+  "query": "介绍一下PSD",
+  "expected": [
+   "G-VERIFY-VIBRATION-COND"
+  ]
+ },
+ {
+  "case_id": "node_g_fusa",
+  "query": "ISO 26262的要求是什么",
+  "expected": [
+   "G-FUSA"
+  ]
+ },
+ {
+  "case_id": "node_p_hw_material_plastic",
+  "query": "工程塑料的选型要求",
+  "expected": [
+   "P-HW-MATERIAL-PLASTIC"
+  ]
+ }
+]

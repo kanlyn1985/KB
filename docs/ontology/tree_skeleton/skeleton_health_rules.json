@@ -1,0 +1,129 @@
+{
+  "version": "1.0",
+  "note": "骨架体检规则（参数化）。换产品/换本体改这里，不改检查器代码。独立性原则：本文件描述本体结构参数，skeleton_coverage_map.json 描述领域标准清单。",
+  "structure": {
+    "layers": [
+      "R",
+      "F",
+      "L",
+      "P",
+      "G",
+      "Q",
+      "M"
+    ],
+    "edge_types": [
+      "satisfy",
+      "realize",
+      "allocate",
+      "verify",
+      "produce",
+      "instance-of",
+      "issue-on"
+    ],
+    "leaf_connectivity": {
+      "exempt_prefix": [
+        "G-DEV",
+        "G-METHOD",
+        "G-PROC-STD",
+        "G-ASSET",
+        "G-FUSA",
+        "Q-LESSON",
+        "Q-DQA",
+        "Q-AQE",
+        "Q-8D",
+        "Q-SPC",
+        "Q-MSA",
+        "P-KNOW",
+        "P-IF",
+        "P-HW-MATERIAL",
+        "P-CAL"
+      ],
+      "buckets": [
+        {
+          "name": "SWC",
+          "prefix": [
+            "P-SW-ASW",
+            "P-SW-BSW",
+            "P-SW-RTE"
+          ]
+        },
+        {
+          "name": "工艺验证子节点",
+          "prefix": [
+            "G-PROD",
+            "G-VERIFY"
+          ]
+        }
+      ]
+    },
+    "chain_checks": [
+      {
+        "layer": "R",
+        "out_edge": "satisfy",
+        "label": "R→F satisfy 覆盖"
+      },
+      {
+        "layer": "F",
+        "in_edge": "satisfy",
+        "out_edge": "realize",
+        "label": "F→L realize 覆盖"
+      },
+      {
+        "layer": "L",
+        "in_edge": "realize",
+        "out_edge": "allocate",
+        "label": "L→P allocate 覆盖"
+      }
+    ],
+    "closure_checks": [
+      {
+        "layer": "R",
+        "in_edge": "verify",
+        "label": "验证闭环（R 被 verify）"
+      },
+      {
+        "layer": "M",
+        "out_edge": "instance-of",
+        "label": "M 实例覆盖（instance-of）"
+      }
+    ],
+    "produce_check": {
+      "layer": "P",
+      "in_edge": "produce",
+      "physical_prefix": [
+        "P-HW-MECH",
+        "P-HW-THERMAL",
+        "P-HW-MAG",
+        "P-HW-OBC",
+        "P-HW-DCDC",
+        "P-HW-CTRL"
+      ],
+      "label": "P 物理件 produce 覆盖"
+    }
+  },
+  "content": {
+    "unit_min": 10,
+    "doc_min": 5,
+    "canonical_unit_min": 30,
+    "authoritative_doc_markers": [
+      "手册",
+      "标准",
+      "规范",
+      "指南",
+      "IEC",
+      "GB",
+      "ISO",
+      "VDA",
+      "GJB",
+      "SAE",
+      "SN",
+      "QC/T",
+      "失效率",
+      "可靠性数据",
+      "第二版",
+      "第三版",
+      "第四版"
+    ],
+    "note": "filled = (unit>=unit_min 且 doc>=doc_min) 或 (unit>=canonical_unit_min 且 doc>=1 且文档名含权威标记)。后者=单本权威手册/标准也算 filled（如 RELPREDICT 只有 IEC62380/SN29500 两三本标准）。"
+  }
+}

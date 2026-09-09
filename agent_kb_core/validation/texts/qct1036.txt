@@ -1,0 +1,1599 @@
+ICS 43.040.10
+T 36
+
+# QC
+中华人民共和国汽车行业标准
+
+QC/T 1036—2016
+
+---
+
+# 汽车电源逆变器
+**Automotive DC—AC power inverter**
+
+---
+
+2016-04-05 发布
+2016-09-01 实施
+
+中华人民共和国工业和信息化部  发布
+
+# 中华人民共和国汽车行业标准
+
+QC/T 1036—2016
+
+汽车电源逆变器
+
+Automotive DC—AC power inverter
+
+<div style="text-align: center;"><img src="imgs/img_in_image_box_77_1363_278_1489.jpg" alt="Image" width="16%" /></div>
+
+
+2016-04-05 发布
+
+2016-09-01 实施
+
+中华人民共和国工业和信息化部 发布
+
+# 中华人民共和国工业和信息化部
+# 公    告
+
+2016 年  第 17 号
+
+工业和信息化部批准《不锈钢烧结网》等 587 项行业标准（标准编号、名称、主要内容及实施日期见附件 1），其中机械行业标准 156 项、汽车行业标准 35 项、船舶行业标准 33 项、制药装备行业标准 16 项、化工行业标准 45 项、冶金行业标准 35 项、有色金属行业标准 24 项、轻工行业标准 26 项、纺织行业标准 49 项、电子行业标准 72 项、通信行业标准 96 项；批准《铝合金 7A52 光谱单点标准样品》等 3 项有色金属行业标准样品（标准样品目录及成分含量表见附件 2），现予公布。行业标准样品自发布之日起实施。
+以上机械行业标准由机械工业出版社出版，汽车行业标准由科学技术文献出版社出版，船舶行业标准由中国船舶工业综合技术经济研究院组织出版，制药装备行业标准和有色金属行业工程建设标准由中国计划出版社出版，化工行业标准由化学工业出版社出版，冶金行业标准由冶金工业出版社出版，有色金属、纺织行业标准由中国标准出版社出版，轻工行业标准由中国轻工业出版社出版，电子行业标准由工业和信息化部电子工业标准化研究院组织出版，通信行业标准由人民邮电出版社出版。
+
+附件：35 项汽车行业标准编号、标准名称和起始实施日期
+
+中华人民共和国工业和信息化部
+二〇一六年四月五日
+
+# 中华人民共和国工业和信息化部 公告
+
+2016 年 第 17 号
+
+工业和信息化部批准《不锈钢烧结网》等587项行业标准（标准编号、名称、主要内容及实施日期见附件1），其中机械行业标准156项、汽车行业标准35项、船舶行业标准33项、制药装备行业标准16项、化工行业标准45项、冶金行业标准35项、有色金属行业标准24项、轻工行业标准26项、纺织行业标准49项、电子行业标准72项、通信行业标准96项；批准《铝合金7A52光谱单点标准样品》等3项有色金属行业标准样品（标准样品目录及成分含量表见附件2），现予公布。行业标准样品自发布之日起实施。
+
+以上机械行业标准由机械工业出版社出版，汽车行业标准由科学技术文献出版社出版，船舶行业标准由中国船舶工业综合技术经济研究院组织出版，制药装备行业标准和有色金属行业工程建设标准由中国计划出版社出版，化工行业标准由化学工业出版社出版，冶金行业标准由冶金工业出版社出版，有色金属、纺织行业标准由中国标准出版社出版，轻工行业标准由中国轻工业出版社出版，电子行业标准由工业和信息化部电子工业标准化研究院组织出版，通信行业标准由人民邮电出版社出版。
+
+附件:35项汽车行业标准编号、标准名称和起始实施日期
+
+中华人民共和国工业和信息化部
+
+二〇一六年四月五日
+
+附件：
+
+### 35 项汽车行业标准编号、标准名称和起始实施日期
+
+| 序号 | 标准编号 | 标准名称 | 被代替标准编号 | 起始实施日期 |
+| :--- | :--- | :--- | :--- | :--- |
+| 326 | QC/T 16—2016 | 汽车用点火线圈 | QC/T 16—1992 | 2016-09-01 |
+| 327 | QC/T 224—2016 | 摩托车和轻便摩托车发动机通用技术条件 | QC/T 224—2007 | 2016-09-01 |
+| 328 | QC/T 228—2016 | 摩托车和轻便摩托车操纵拉索 | QC/T 228.1—1997, <br>QC/T 228.2—1997, <br>QC/T 228.3—1997, <br>QC/T 228.4—1997, <br>QC/T 228.5—1997, <br>QC/T 228.6—1997, <br>QC/T 228.7—1997, <br>QC/T 228.8—1997, <br>QC/T 228.9—1997, <br>QC/T 228.10—1997 | 2016-09-01 |
+| 329 | QC/T 307—2016 | 汽车用真空助力器性能要求及台架试验方法 | QC/T 307—1999 | 2016-09-01 |
+| 330 | QC/T 414—2016 | 汽车电线(电缆)的颜色规定和型号编制方法 | QC/T 414—1999, <br>QC/T 730—2005 | 2016-09-01 |
+| 331 | QC/T 415—2016 | 汽车用点烟器及点烟器座式电源插座 | QC/T 415—1999 | 2016-09-01 |
+| 332 | QC/T 469—2016 | 汽车发动机气门技术条件 | QC/T 469—2002 | 2016-09-01 |
+| 333 | QC/T 681—2016 | 摩托车和轻便摩托车用起动继电器技术条件 | QC/T 681—2002 | 2016-09-01 |
+| 334 | QC/T 687—2016 | 摩托车和轻便摩托车发动机气缸体技术条件 | QC/T 687—2002 | 2016-09-01 |
+| 335 | QC/T 688—2016 | 摩托车和轻便摩托车通用技术条件 | QC/T 688—2007 | 2016-09-01 |
+| 336 | QC/T 724—2016 | 摩托车和轻便摩托车直流信号闪光器技术条件 | QC/T 724—2004 | 2016-09-01 |
+| 337 | QC/T 752—2016 | 摩托车和轻便摩托车催化转化器试验方法 | QC/T 752—2006, <br>QC/T 751—2006 | 2016-09-01 |
+
+## 附件：
+
+<div style="text-align: center;">35 项汽车行业标准编号、标准名称和起始实施日期</div>
+
+
+
+<table border=1 style='margin: auto; word-wrap: break-word;'><tr><td style='text-align: center; word-wrap: break-word;'>序号</td><td style='text-align: center; word-wrap: break-word;'>标准编号</td><td style='text-align: center; word-wrap: break-word;'>标准名称</td><td style='text-align: center; word-wrap: break-word;'>被代替标准编号</td><td style='text-align: center; word-wrap: break-word;'>起始实施日期</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>326</td><td style='text-align: center; word-wrap: break-word;'>QC/T 16—2016</td><td style='text-align: center; word-wrap: break-word;'>汽车用点火线圈</td><td style='text-align: center; word-wrap: break-word;'>QC/T 16—1992</td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>327</td><td style='text-align: center; word-wrap: break-word;'>QC/T 224—2016</td><td style='text-align: center; word-wrap: break-word;'>摩托车和轻便摩托车发动机通用技术条件</td><td style='text-align: center; word-wrap: break-word;'>QC/T 224—2007</td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>328</td><td style='text-align: center; word-wrap: break-word;'>QC/T 228—2016</td><td style='text-align: center; word-wrap: break-word;'>摩托车和轻便摩托车操纵拉索</td><td style='text-align: center; word-wrap: break-word;'>QC/T 228.1—1997,
+QC/T 228.2—1997,
+QC/T 228.3—1997,
+QC/T 228.4—1997,
+QC/T 228.5—1997,
+QC/T 228.6—1997,
+QC/T 228.7—1997,
+QC/T 228.8—1997,
+QC/T 228.9—1997,
+QC/T 228.10—1997</td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>329</td><td style='text-align: center; word-wrap: break-word;'>QC/T 307—2016</td><td style='text-align: center; word-wrap: break-word;'>汽车用真空助力器性能要求及台架试验方法</td><td style='text-align: center; word-wrap: break-word;'>QC/T 307—1999</td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>330</td><td style='text-align: center; word-wrap: break-word;'>QC/T 414—2016</td><td style='text-align: center; word-wrap: break-word;'>汽车电线(电缆)的颜色规定和型号编制方法</td><td style='text-align: center; word-wrap: break-word;'>QC/T 414—1999,
+QC/T 730—2005</td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>331</td><td style='text-align: center; word-wrap: break-word;'>QC/T 415—2016</td><td style='text-align: center; word-wrap: break-word;'>汽车用点烟器及点烟器座式电源插座</td><td style='text-align: center; word-wrap: break-word;'>QC/T 415—1999</td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>332</td><td style='text-align: center; word-wrap: break-word;'>QC/T 469—2016</td><td style='text-align: center; word-wrap: break-word;'>汽车发动机气门技术条件</td><td style='text-align: center; word-wrap: break-word;'>QC/T 469—2002</td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>333</td><td style='text-align: center; word-wrap: break-word;'>QC/T 681—2016</td><td style='text-align: center; word-wrap: break-word;'>摩托车和轻便摩托车用起动继电器技术条件</td><td style='text-align: center; word-wrap: break-word;'>QC/T 681—2002</td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>334</td><td style='text-align: center; word-wrap: break-word;'>QC/T 687—2016</td><td style='text-align: center; word-wrap: break-word;'>摩托车和轻便摩托车发动机气缸体技术条件</td><td style='text-align: center; word-wrap: break-word;'>QC/T 687—2002</td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>335</td><td style='text-align: center; word-wrap: break-word;'>QC/T 688—2016</td><td style='text-align: center; word-wrap: break-word;'>摩托车和轻便摩托车通用技术条件</td><td style='text-align: center; word-wrap: break-word;'>QC/T 688—2007</td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>336</td><td style='text-align: center; word-wrap: break-word;'>QC/T 724—2016</td><td style='text-align: center; word-wrap: break-word;'>摩托车和轻便摩托车直流信号闪光器技术条件</td><td style='text-align: center; word-wrap: break-word;'>QC/T 724—2004</td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>337</td><td style='text-align: center; word-wrap: break-word;'>QC/T 752—2016</td><td style='text-align: center; word-wrap: break-word;'>摩托车和轻便摩托车催化转化器试验方法</td><td style='text-align: center; word-wrap: break-word;'>QC/T 752—2006,
+QC/T 751—2006</td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr></table>
+
+| 序号 | 标准编号 | 标准名称 | 被代替标准编号 | 起始实施日期 |
+| :--- | :--- | :--- | :--- | :--- |
+| 338 | QC/T 753—2016 | 摩托车和轻便摩托车技术参数表格式 | QC/T 753—2006 | 2016-09-01 |
+| 339 | QC/T 1031—2016 | 摩托车和轻便摩托车车轮花键套 | | 2016-09-01 |
+| 340 | QC/T 1032—2016 | 摩托车和轻便摩托车发动机凸轮轴 | | 2016-09-01 |
+| 341 | QC/T 1033—2016 | 气压制动器 外置式间隙自动调节装置技术要求及台架试验方法 | | 2016-09-01 |
+| 342 | QC/T 1034—2016 | 汽车交流发电机用整流桥 | | 2016-09-01 |
+| 343 | QC/T 1035—2016 | 汽车发动机用电子节气门体 | | 2016-09-01 |
+| 344 | QC/T 1036—2016 | 汽车电源逆变器 | | 2016-09-01 |
+| 345 | QC/T 1037—2016 | 道路车辆用高压电缆 | | 2016-09-01 |
+| 346 | QC/T 1038—2016 | 汽车用发光二极管(LED)及模组 | | 2016-09-01 |
+| 347 | QC/T 1039—2016 | 汽车空调用阳光传感器 | | 2016-09-01 |
+| 348 | QC/T 1040—2016 | 摩托车和轻便摩托车电动燃油泵 | | 2016-09-01 |
+| 349 | QC/T 1041—2016 | 摩托车和轻便摩托车燃油蒸发污染物控制系统(装置)技术要求 | | 2016-09-01 |
+| 350 | QC/T 1042—2016 | 摩托车和轻便摩托车振动舒适性试验方法 | | 2016-09-01 |
+| 351 | QC/T 1043—2016 | 汽车燃油系统用尼龙管 | | 2016-09-01 |
+| 352 | QC/T 1044—2016 | 汽车用脚踏垫 | | 2016-09-01 |
+| 353 | QC/T 1045—2016 | 汽车管路保护用热收缩管 | | 2016-09-01 |
+| 354 | QC/T 1046—2016 | 商用车辆后置液力缓速器性能要求及台架试验方法 | | 2016-09-01 |
+| 355 | QC/T 1047—2016 | 城市客车塑料座椅 | | 2016-09-01 |
+| 356 | QC/T 1048—2016 | 客车应急锤 | | 2016-09-01 |
+| 357 | QC/T 1049—2016 | 汽车齿轮齿条式液压助力转向系统匹配技术要求和试验方法 | | 2016-09-01 |
+| 358 | QC/T 1050—2016 | 乘用车双质量飞轮技术要求及试验方法 | | 2016-09-01 |
+
+<table border=1 style='margin: auto; word-wrap: break-word;'><tr><td style='text-align: center; word-wrap: break-word;'>序号</td><td style='text-align: center; word-wrap: break-word;'>标准编号</td><td style='text-align: center; word-wrap: break-word;'>标准名称</td><td style='text-align: center; word-wrap: break-word;'>被代替标准编号</td><td style='text-align: center; word-wrap: break-word;'>起始实施日期</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>338</td><td style='text-align: center; word-wrap: break-word;'>QC/T 753—2016</td><td style='text-align: center; word-wrap: break-word;'>摩托车和轻便摩托车技术参数表格式</td><td style='text-align: center; word-wrap: break-word;'>QC/T 753—2006</td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>339</td><td style='text-align: center; word-wrap: break-word;'>QC/T 1031—2016</td><td style='text-align: center; word-wrap: break-word;'>摩托车和轻便摩托车车轮花键套</td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>340</td><td style='text-align: center; word-wrap: break-word;'>QC/T 1032—2016</td><td style='text-align: center; word-wrap: break-word;'>摩托车和轻便摩托车发动机凸轮轴</td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>341</td><td style='text-align: center; word-wrap: break-word;'>QC/T 1033—2016</td><td style='text-align: center; word-wrap: break-word;'>气压制动器 外置式间隙自动调节装置技术要求及台架试验方法</td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>342</td><td style='text-align: center; word-wrap: break-word;'>QC/T 1034—2016</td><td style='text-align: center; word-wrap: break-word;'>汽车交流发电机用整流桥</td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>343</td><td style='text-align: center; word-wrap: break-word;'>QC/T 1035—2016</td><td style='text-align: center; word-wrap: break-word;'>汽车发动机用电子节气门体</td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>344</td><td style='text-align: center; word-wrap: break-word;'>QC/T 1036—2016</td><td style='text-align: center; word-wrap: break-word;'>汽车电源逆变器</td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>345</td><td style='text-align: center; word-wrap: break-word;'>QC/T 1037—2016</td><td style='text-align: center; word-wrap: break-word;'>道路车辆用高压电缆</td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>346</td><td style='text-align: center; word-wrap: break-word;'>QC/T 1038—2016</td><td style='text-align: center; word-wrap: break-word;'>汽车用发光二极管(LED)及模组</td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>347</td><td style='text-align: center; word-wrap: break-word;'>QC/T 1039—2016</td><td style='text-align: center; word-wrap: break-word;'>汽车空调用阳光传感器</td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>348</td><td style='text-align: center; word-wrap: break-word;'>QC/T 1040—2016</td><td style='text-align: center; word-wrap: break-word;'>摩托车和轻便摩托车电动燃油泵</td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>349</td><td style='text-align: center; word-wrap: break-word;'>QC/T 1041—2016</td><td style='text-align: center; word-wrap: break-word;'>摩托车和轻便摩托车燃油蒸发污染物控制系统(装置)技术要求</td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>350</td><td style='text-align: center; word-wrap: break-word;'>QC/T 1042—2016</td><td style='text-align: center; word-wrap: break-word;'>摩托车和轻便摩托车振动舒适性试验方法</td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>351</td><td style='text-align: center; word-wrap: break-word;'>QC/T 1043—2016</td><td style='text-align: center; word-wrap: break-word;'>汽车燃油系统用尼龙管</td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>352</td><td style='text-align: center; word-wrap: break-word;'>QC/T 1044—2016</td><td style='text-align: center; word-wrap: break-word;'>汽车用脚踏垫</td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>353</td><td style='text-align: center; word-wrap: break-word;'>QC/T 1045—2016</td><td style='text-align: center; word-wrap: break-word;'>汽车管路保护用热收缩管</td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>354</td><td style='text-align: center; word-wrap: break-word;'>QC/T 1046—2016</td><td style='text-align: center; word-wrap: break-word;'>商用车辆后置液力缓速器性能要求及台架试验方法</td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>355</td><td style='text-align: center; word-wrap: break-word;'>QC/T 1047—2016</td><td style='text-align: center; word-wrap: break-word;'>城市客车塑料座椅</td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>356</td><td style='text-align: center; word-wrap: break-word;'>QC/T 1048—2016</td><td style='text-align: center; word-wrap: break-word;'>客车应急锤</td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>357</td><td style='text-align: center; word-wrap: break-word;'>QC/T 1049—2016</td><td style='text-align: center; word-wrap: break-word;'>汽车齿轮齿条式液压助力转向系统匹配技术要求和试验方法</td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>358</td><td style='text-align: center; word-wrap: break-word;'>QC/T 1050—2016</td><td style='text-align: center; word-wrap: break-word;'>乘用车双质量飞轮技术要求及试验方法</td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr></table>
+
+| 序号 | 标准编号 | 标准名称 | 被代替标准编号 | 起始实施日期 |
+| :--- | :--- | :--- | :--- | :--- |
+| 359 | QC/T 29078—2016 | 汽车用空气压缩机性能要求及台架试验方法 | QC/T 29078—1992 | 2016-09-01 |
+| 360 | QC/T 29089—2016 | 汽车用 PVC/ABS 真空吸塑仪表板表皮 | QC/T 29089—1992 | 2016-09-01 |
+
+<table border=1 style='margin: auto; word-wrap: break-word;'><tr><td style='text-align: center; word-wrap: break-word;'>序号</td><td style='text-align: center; word-wrap: break-word;'>标准编号</td><td style='text-align: center; word-wrap: break-word;'>标准名称</td><td style='text-align: center; word-wrap: break-word;'>被代替标准编号</td><td style='text-align: center; word-wrap: break-word;'>起始实施日期</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>359</td><td style='text-align: center; word-wrap: break-word;'>QC/T 29078—2016</td><td style='text-align: center; word-wrap: break-word;'>汽车用空气压缩机性能要求及台架试验方法</td><td style='text-align: center; word-wrap: break-word;'>QC/T 29078—1992</td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>360</td><td style='text-align: center; word-wrap: break-word;'>QC/T 29089—2016</td><td style='text-align: center; word-wrap: break-word;'>汽车用PVC/ABS真空吸塑仪表板表皮</td><td style='text-align: center; word-wrap: break-word;'>QC/T 29089—1992</td><td style='text-align: center; word-wrap: break-word;'>2016-09-01</td></tr></table>
+
+QC/T 1036—2016
+
+目    次
+
+前言 ········································································································· II
+1 范围 ······································································································ 1
+2 规范性引用文件 ·························································································· 1
+3 术语和定义 ······························································································· 2
+4 要求 ······································································································ 2
+5 试验方法 ·································································································· 8
+6 检验规则 ································································································· 14
+7 标志、包装、运输和贮存 ·············································································· 16
+
+I
+
+## 目 次
+
+前言 …… II  
+  
+1 范围 …… 1  
+  
+2 规范性引用文件 …… 1  
+  
+3 术语和定义 …… 2  
+  
+4 要求 …… 2  
+  
+5 试验方法 …… 8  
+  
+6 检验规则 …… 14  
+  
+7 标志、包装、运输和贮存 …… 16
+
+QC/T 1036—2016
+
+# 前      言
+
+本标准按照 GB/T 1. 1—2009《标准化工作导则 第 1 部分：标准的结构和编写》给出的规则起草。
+本标准的起草参考了国内外相关标准。
+本标准由全国汽车标准化技术委员会(SAC/TC 114)提出并归口。
+本标准起草单位：上海汽车集团股份有限公司技术中心、长沙汽车电器研究所、上海坤浦电子科技有限公司、深圳美固电子有限公司。
+本标准起草人：邓恒、胡梦蛟、李伟阳、周建浩、杨红娟、谢勇。
+
+II
+
+## 前言
+
+本标准按照 GB/T 1.1—2009《标准化工作导则 第1部分：标准的结构和编写》给出的规则起草。
+
+本标准的起草参考了国内外相关标准。
+
+本标准由全国汽车标准化技术委员会(SAC/TC 114)提出并归口。
+
+本标准起草单位：上海汽车集团股份有限公司技术中心、长沙汽车电器研究所、上海坤浦电子科技有限公司、深圳美固电子有限公司。
+
+本标准起草人：邓恒、胡梦蛟、李伟阳、周建浩、杨红娟、谢勇。
+
+QC/T 1036—2016
+
+# 汽车电源逆变器
+
+### 1 范围
+
+本标准规定了汽车电源逆变器的术语和定义、要求、试验方法、检验规则以及标志、包装、运输和贮存。
+本标准适用于汽车用电源逆变器(以下简称逆变器)。
+
+### 2 规范性引用文件
+
+下列文件对于本标准的应用是必不可少的。凡是注日期的引用文件,仅所注日期的版本适用于本标准。凡是不注日期的引用文件,其最新版本(包括所有的修改单)适用于本标准。
+GB 1002—2008 家用和类似用途单相插头插座型式、基本参数和尺寸
+GB 2099.1—2008 家用和类似用途插头插座 第 1 部分:通用要求
+GB/T 2828.1—2003 计数抽样检验程序 第 1 部分:按接收质量限(AQL)检索的逐批检验抽样计划
+GB 4343.1—2009 家用电器、电动工具和类似器具的电磁兼容要求 第 1 部分:发射
+GB 4343.2—2009 家用电器、电动工具和类似器具的电磁兼容要求 第 2 部分:抗扰度
+GB 8410—2006 汽车内饰材料的燃烧特性
+GB/T 16935.1—2008 低压系统内设备的绝缘配合 第 1 部分:原理、要求和试验
+GB/T 17626.4—2008 电磁兼容 试验和测量技术 电快速瞬变脉冲群抗扰度试验
+GB 18655—2010 用于保护车载接收机的无线电骚扰特性的限值和测量方法
+GB 19212.1—2008 电力变压器、电源、电抗器和类似产品的安全 第 1 部分:通用要求和试验
+GB 19212.18—2006 电力变压器、电源、电抗器和类似产品的安全 第 18 部分:开关型电源用变压器的特殊要求
+GB/T 19951—2005 道路车辆 静电放电的电磁骚扰试验方法
+GB/T 21437.2—2008 道路车辆 由传导和耦合引起的电磁骚扰 第 2 部分:沿电源线的电瞬态传导
+GB/T 21437.3—2012 道路车辆 由传导和耦合引起的电磁骚扰 第 3 部分:除电源线外的导线通过容性和感性耦合的电瞬态发射
+GB/T 25085 道路车辆 60 V 和 600 V 单芯电线
+GB/T 28046.1—2011 道路车辆 电气及电子设备的环境条件和试验 第 1 部分:一般规定
+GB/T 28046.2—2011 道路车辆 电气及电子设备的环境条件和试验 第 2 部分:电气负荷
+GB/T 28046.3—2011 道路车辆 电气及电子设备的环境条件和试验 第 3 部分:机械负荷
+GB/T 28046.4—2011 道路车辆 电气及电子设备的环境条件和试验 第 4 部分:气候负荷
+GB/T 28046.5—2011 道路车辆 电气及电子设备的环境条件和试验 第 5 部分:化学负荷
+
+1
+
+## 汽车电源逆变器
+
+## 1 范围
+
+本标准规定了汽车电源逆变器的术语和定义、要求、试验方法、检验规则以及标志、包装、运输和贮存。
+
+本标准适用于汽车用电源逆变器（以下简称逆变器）。
+
+## 2 规范性引用文件
+
+下列文件对于本标准的应用是必不可少的。凡是注日期的引用文件，仅所注日期的版本适用于本标准。凡是不注日期的引用文件，其最新版本（包括所有的修改单）适用于本标准。
+
+GB 1002—2008 家用和类似用途单相插头插座型式、基本参数和尺寸
+
+GB 2099.1—2008 家用和类似用途插头插座 第1部分：通用要求
+
+GB/T 2828.1—2003 计数抽样检验程序 第1部分：按接收质量限(AQL)检索的逐批检验抽样计划
+
+GB 4343.1—2009 家用电器、电动工具和类似器具的电磁兼容要求 第1部分：发射
+
+GB 4343.2—2009 家用电器、电动工具和类似器具的电磁兼容要求 第2部分：抗扰度
+
+GB 8410—2006 汽车内饰材料的燃烧特性
+
+GB/T 16935.1—2008 低压系统内设备的绝缘配合 第1部分：原理、要求和试验
+
+GB/T 17626.4—2008 电磁兼容试验和测量技术 电快速瞬变脉冲群抗扰度试验
+
+GB 18655—2010 用于保护车载接收机的无线电骚扰特性的限值和测量方法
+
+GB 19212.1—2008 电力变压器、电源、电抗器和类似产品的安全 第1部分：通用要求和试验
+
+GB 19212.18—2006 电力变压器、电源、电抗器和类似产品的安全 第18部分：开关型电源用变压器的特殊要求
+
+GB/T 19951—2005 道路车辆 静电放电的电骚扰试验方法
+
+GB/T 21437.2—2008 道路车辆由传导和耦合引起的电骚扰 第2部分：沿电源线的电瞬态传导
+
+GB/T 21437.3—2012 道路车辆由传导和耦合引起的电骚扰 第3部分：除电源线外的导线通过容性和感性耦合的电瞬态发射
+
+GB/T 25085 道路车辆 60 V 和 600 V 单芯电线
+
+GB/T 28046.1—2011 道路车辆 电气及电子设备的环境条件和试验 第1部分：一般规定
+
+GB/T 28046.2—2011 道路车辆 电气及电子设备的环境条件和试验 第2部分：电气负荷
+
+GB/T 28046.3—2011 道路车辆 电气及电子设备的环境条件和试验 第3部分：机械负荷
+
+GB/T 28046.4—2011 道路车辆 电气及电子设备的环境条件和试验 第4部分：气候负荷
+
+GB/T 28046.5—2011 道路车辆 电气及电子设备的环境条件和试验 第5部分：化学负荷
+
+QC/T 1036—2016
+
+GB/T 30038  道路车辆  电气电子设备防护等级(IP 代码)
+GB/T 33014.2—2016  道路车辆  电气/电子部件对窄带辐射电磁能的抗扰性试验方法  第 2 部分:电波暗室法
+GB/T 33014.4—2016  道路车辆  电气/电子部件对窄带辐射电磁能的抗扰性试验方法  第 4 部分:大电流注入(BCI)法
+JB/T 7064—1993  半导体逆变器通用技术条件
+QC/T 413  汽车电气设备基本技术条件
+SJ/T 11363  电子信息产品中有毒有害物质的限量要求
+
+### 3  术语和定义
+
+下列术语和定义适用于本标准。
+
+#### 3.1
+**汽车电源逆变器  automotive DC－AC Power Inverter**
+一种把汽车直流电(12 V 或 24 V)转化为较高电压交流电供用电器使用的变流器。
+
+#### 3.2
+**过载能力最大功率  maximum power before over load**
+逆变器在未触发过载保护功能时的最大持续输出(连续工作 20 min 以上)功率。
+
+#### 3.3
+**保护门  shutter**
+装在交流输出插座里，用于在插销拔出时能自动地将插孔遮蔽起来的活动部件。
+
+#### 3.4
+**激活信号  enable signal**
+只针对含有激活输出功能的逆变器，在激活信号产生后逆变器产生逆变功能。
+
+#### 3.5
+**电压滞回功能  voltage hysteresis**
+当逆变器进行欠压或过压自动保护关闭后，逆变器的逆变模块再次重启的条件与进行自动保护关闭的临界条件不同，分别高于(欠压)和低于(过压)规定的自动保护条件电压值。
+
+### 4  要求
+
+#### 4.1  一般要求
+#### 4.1.1  基本要求。
+逆变器应符合本标准的要求，并应按照经规定程序批准的图样及技术文件制造。
+#### 4.1.2  工作环境条件。
+逆变器根据安装位置，在如下温度范围内应正常工作：
+a)  固定安装在乘客仓内的逆变器工作温度范围($T_{min} \sim T_{max}$): $-20\ ^\circ\mathrm{C} \sim 70\ ^\circ\mathrm{C}$；
+b)  固定安装在行李仓内的逆变器工作温度范围($T_{min} \sim T_{max}$): $-40\ ^\circ\mathrm{C} \sim 75\ ^\circ\mathrm{C}$。
+
+2
+
+GB/T 30038 道路车辆 电气电子设备防护等级(IP代码)
+
+GB/T 33014.2—2016 道路车辆 电气/电子部件对窄带辐射电磁能的抗扰性试验方法 第2部分：电波暗室法
+
+GB/T 33014.4—2016 道路车辆 电气/电子部件对窄带辐射电磁能的抗扰性试验方法 第4部分：大电流注入(BCI)法
+
+JB/T 7064—1993 半导体逆变器通用技术条件
+
+QC/T 413 汽车电气设备基本技术条件
+
+SJ/T 11363 电子信息产品中有毒有害物质的限量要求
+
+## 3 术语和定义
+
+下列术语和定义适用于本标准。
+
+3.1
+
+汽车电源逆变器 automotive DC-AC Power Inverter
+
+一种把汽车直流电(12 V 或 24 V)转化为较高电压交流电供用电器使用的变流器。
+
+3.2
+
+过载能力最大功率 maximum power before over load
+
+逆变器在未触发过载保护功能时的最大持续输出(连续工作20 min以上)功率。
+
+### 3.3 
+
+保护门 shutter
+
+装在交流输出插座里，用于在插销拔出时能自动地将插孔遮蔽起来的活动部件。
+
+### 3.4 
+
+激活信号 enable signal
+
+只针对含有激活输出功能的逆变器，在激活信号产生后逆变器产生逆变功能。
+
+### 3.5 
+
+电压滞回功能 voltage hysteresis
+
+当逆变器进行欠压或过压自动保护关闭后，逆变器的逆变模块再次重启的条件与进行自动保护关闭的临界条件不同，分别高于（欠压）和低于（过压）规定的自动保护条件电压值。
+
+## 4 要求
+
+### 4.1 一般要求
+
+4.1.1 基本要求。
+
+逆变器应符合本标准的要求，并应按照经规定程序批准的图样及技术文件制造。
+
+4.1.2 工作环境条件。
+
+逆变器根据安装位置，在如下温度范围内应正常工作：
+
+a）固定安装在乘客仓内的逆变器工作温度范围 $ (T_{\min}\sim T_{\max}) $:  $ -20\;^{\circ}C\sim70\;^{\circ}C $;
+
+b) 固定安装在行李仓内的逆变器工作温度范围 $ (T_{\min}\sim T_{\max}) $:  $ -40\;^{\circ}C\sim75\;^{\circ}C $。
+
+QC/T 1036—2016
+
+**4.2 外观及安装尺寸**
+逆变器表面应完整，无氧化锈蚀、无变形、无破损、无裂纹、无明显分模线等缺陷。零件的涂镀层应均匀，无明显缺陷。
+安装尺寸应符合产品图样要求。
+
+**4.3 密封性**
+逆变器的外壳防护等级应符合 GB/T 30038 中的 IP5K0 的规定。
+
+**4.4 材料**
+逆变器所有的有害材料含量应不超过 SJ/T 11363 的限量要求。
+
+**4.5 输出特性**
+**4.5.1 概述。**
+逆变器的输出特性应符合表 1 的规定。
+
+<p align="center">**表 1 输出特性参数**</p>
+
+| 输出特性 | 参数 |
+| :--- | :--- |
+| 输出方式 | 正弦波<br>修正正弦波 |
+| 额定输出电压 | 单相 220 V |
+| 额定输出频率 | 50 Hz |
+| 额定输出功率 | 100 VA |
+| | 150 VA |
+| | 200 VA |
+| | 300 VA |
+| | 400 VA |
+| | 500 VA |
+
+**4.5.2 输出特性参数允差。**
+输入直流电路电压在正常（未触发输入欠压或过压保护功能）范围的情况下，应满足下述规定：
+a) 输出波形总谐波畸变率。在正弦波逆变器正常运行时，总谐波畸变率在纯阻性负载下应不超过 10%。在修正正弦波逆变器正常运行时，总谐波畸变率在纯阻性负载下应不超过 15%；
+b) 输出电压允差。逆变器在稳态条件（输出 1 s 以后）下运行时，输出电压允差应不超过额定输出电压的 ±5%；
+c) 输出频率允差。逆变器在稳态条件（输出 1 s 以后）下运行时，输出频率允差应不超过额定输出频率的 ±1 Hz。
+
+**4.5.3 额定输出效率。**
+当输入电压与负载电流（电阻性负载）为额定值时，逆变器效率应不小于 85%。
+
+**4.5.4 过载输出能力。**
+逆变器输出视在功率为额定值的 150%时，持续工作时间应不少于 5 s，5 s 内电压输出应满足
+
+<p align="right">3</p>
+
+### 4.2 外观及安装尺寸
+
+逆变器表面应完整，无氧化锈蚀、无变形、无破损、无裂纹、无明显分模线等缺陷。零件的涂镀层应均匀，无明显缺陷。
+
+安装尺寸应符合产品图样要求。
+
+### 4.3 密封性
+
+逆变器的外壳防护等级应符合 GB/T 30038 中的 IP5K0 的规定。
+
+### 4.4 材料
+
+逆变器所有的有害材料含量应不超过SJ/T 11363的限量要求。
+
+### 4.5 输出特性
+
+#### 4.5.1 概述。
+
+逆变器的输出特性应符合表1的规定。
+
+<div style="text-align: center;">表 1 输出特性参数</div>
+
+
+
+<table border=1 style='margin: auto; word-wrap: break-word;'><tr><td style='text-align: center; word-wrap: break-word;'>输出特性</td><td style='text-align: center; word-wrap: break-word;'>参数</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>输出方式</td><td style='text-align: center; word-wrap: break-word;'>正弦波修正正弦波</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>额定输出电压</td><td style='text-align: center; word-wrap: break-word;'>单相 220 V</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>额定输出频率</td><td style='text-align: center; word-wrap: break-word;'>50 Hz</td></tr><tr><td rowspan="6">额定输出功率</td><td style='text-align: center; word-wrap: break-word;'>100 VA</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>150 VA</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>200 VA</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>300 VA</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>400 VA</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>500 VA</td></tr></table>
+
+#### 4.5.2 输出特性参数允差。
+
+输入直流电路电压在正常（未触发输入欠压或过压保护功能）范围的情况下，应满足下述规定：
+
+a）输出波形总谐波畸变率。在正弦波逆变器正常运行时，总谐波畸变率在纯阻性负载下应不超过10%。在修正正弦波逆变器正常运行时，总谐波畸变率在纯阻性负载下应不超过15%；
+
+b）输出电压允差。逆变器在稳态条件（输出1 s以后）下运行时，输出电压允差应不超过额定输出电压的 $ \pm5\% $;
+
+c) 输出频率允差。逆变器在稳态条件(输出1 s以后)下运行时，输出频率允差应不超过额定输出频率的 $ \pm1 $ Hz。
+
+#### 4.5.3 额定输出效率。
+
+当输入电压与负载电流(电阻性负载)为额定值时，逆变器效率应不小于85%。
+
+#### 4.5.4 过载输出能力。
+
+逆变器输出视在功率为额定值的 150% 时，持续工作时间应不少于 5 s，5 s 内电压输出应满足
+
+QC/T 1036—2016
+
+4.5.1 和 4.5.2 的规定。
+逆变器输出视在功率为额定值的 120%时，持续工作时间应不少于 3 min,电压输出应满足 4.5.1 和 4.5.2 的规定。
+
+4.5.5 持续输出能力。
+逆变器在 $T_{\min} \sim T_{\max}$ 环境温度范围内持续输出能力应能达到表 2 的规定。
+
+**表 2 持续输出能力**
+
+| 温度/℃ | 输出能力/%(额定功率) |
+| :--- | :--- |
+| $T_{\min} \sim 50$ | 100 |
+| 50 | 100 |
+| 60 | 65 |
+| 70 | 35 |
+| $75^*$ | 15 |
+
+注：* 此温度不适用于乘客仓内 $T_{\max}$ 为 70 ℃的逆变器。
+
+4.5.6 无功电流。
+逆变器在输出端未接负载时，直流电流输入应不大于 400 mA。
+
+4.5.7 静态电流。
+逆变器在整车关机(锁车)的环境下，直流端电流消耗应不大于 0.5 mA。
+
+4.6 安全与保护
+4.6.1 标识。
+逆变器上必须有危险电压警示永久性标识$\triangle$，标识经水和汽油分别擦拭 15 s 后,应易于辨认,标识不易被揭掉，而且应不出现卷边。
+
+4.6.2 爬电距离、电气间隙和穿通绝缘距离。
+最小爬电距离、电气间隙、穿通绝缘距离应符合 GB 19212.1—2008 的第 26 章及 GB 19212.18—2006 的第 26 章的规定。
+
+4.6.3 电击防护。
+4.6.3.1 乘员电击保护。
+直流输入电路与交流输出电路之间发生绝缘失效以后,两部分电路之间回路电流不应超过 3.5 mA。电流超过此限值,逆变器应在 250 ms 内自动切断输出。
+
+4.6.3.2 防止触及危险的带电零部件的防护。
+逆变器的结构应当对防止人可能触及危险的带电零部件提供足够的防护，可触及的部件应采用绝缘措施以保证人与危险的带电零部件隔离(该绝缘措施不包括漆、釉、纸、棉织品、导电零部件上的氧化膜及密封胶)。
+
+4.6.3.3 危险性放电防护。
+逆变器输出插座插孔内的插簧在插销拔出 1 s 后,应不带电。
+
+4
+
+###### 4.5.1 和 4.5.2 的规定。
+
+逆变器输出视在功率为额定值的 120% 时，持续工作时间应不少于 3 min，电压输出应满足 4.5.1 和 4.5.2 的规定。
+
+#### 4.5.5 持续输出能力。
+
+逆变器在  $ T_{\min} \sim T_{\max} $ 环境温度范围内持续输出能力应能达到表 2 的规定。
+
+<div style="text-align: center;">表 2 持续输出能力</div>
+
+
+
+<table border=1 style='margin: auto; word-wrap: break-word;'><tr><td style='text-align: center; word-wrap: break-word;'>温度/ $ ^{\circ} $C</td><td style='text-align: center; word-wrap: break-word;'>输出能力/%(额定功率)</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>$ T_{\text{min}} \sim 50 $</td><td style='text-align: center; word-wrap: break-word;'>100</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>50</td><td style='text-align: center; word-wrap: break-word;'>100</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>60</td><td style='text-align: center; word-wrap: break-word;'>65</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>70</td><td style='text-align: center; word-wrap: break-word;'>35</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>75 $ ^{*} $</td><td style='text-align: center; word-wrap: break-word;'>15</td></tr></table>
+
+注：此温度不适用于乘客仓内 $ T_{max} $为70℃的逆变器。
+
+#### 4.5.6 无功电流。
+
+逆变器在输出端未接负载时，直流电流输入应不大于400 mA。
+
+#### 4.5.7 静态电流。
+
+逆变器在整车关机(锁车)的环境下，直流端电流消耗应不大于0.5 mA。
+
+### 4.6 安全与保护
+
+#### 4.6.1 标识。
+
+逆变器上必须有危险电压警示永久性标识 $ \triangle $，标识经水和汽油分别擦拭15 s后，应易于辨认，标识应不易被揭掉，而且应不出现卷边。
+
+#### 4.6.2 爬电距离、电气间隙和穿通绝缘距离。
+
+最小爬电距离、电气间隙、穿通绝缘距离应符合 GB 19212.1—2008 的第 26 章及 GB 19212.18—2006 的第 26 章的规定。
+
+#### 4.6.3 电击防护。
+
+##### 4.6.3.1 乘员电击保护。
+
+直流输入电路与交流输出电路之间发生绝缘失效以后，两部分电路之间回路电流不应超过3.5 mA。电流超过此限值，逆变器应在250 ms内自动切断输出。
+
+##### 4.6.3.2 防止触及危险的带电零部件的防护。
+
+逆变器的结构应当对防止人可能触及危险的带电零部件提供足够的防护，可触及的部件应采用绝缘措施以保证人与危险的带电零部件隔离（该绝缘措施不包括漆、釉、纸、棉织品、导电零部件上的氧化膜及密封胶）。
+
+##### 4.6.3.3 危险性放电防护。
+
+逆变器输出插座插孔内的插簧在插销拔出1 s后，应不带电。
+
+QC/T 1036—2016
+
+4.6.4 绝缘电阻与绝缘强度。
+4.6.4.1 绝缘电阻。
+在温度为(20±5)℃、相对湿度为 90% 的环境下，交流输出带电电路与地或外壳之间的绝缘电阻应不小于 1 MΩ。
+4.6.4.2 绝缘强度。
+输入电路对交流接地，输入电路对输出电路和输出电路对交流接地应承受 1 500 V 的 50 Hz 正弦交流电压 1 min。低压信号控制电路对交流接地应承受 500 V 的 50 Hz 正弦交流电压 1 min,不击穿、不飞弧，性能测试结果应符合 4.5 的规定。
+4.6.5 保护性能。
+4.6.5.1 过流保护。
+逆变器应设有过流保护功能，当输出视在功率为额定值的 200%时，持续工作 2 s 后逆变器应能自动保护。保护形式不应采用熔断保险丝的形式。
+4.6.5.2 输出短路保护。
+当发生输出短路时，其短路保护响应时间应小于或等于 1 s。
+4.6.5.3 输入欠压保护。
+当输入端电压低于 11 V(标称电压 12 V)、22 V(标称电压 24 V)超过 1 s 时，逆变器应有自动关断输出。
+4.6.5.4 输入过压保护。
+当输入端电压高于 16.5 V(标称电压 12 V)、33 V(标称电压 24 V)超过 1 s 时，逆变器应有自动关断输出。
+4.6.5.5 输入反接保护。
+当输入端正、负极按额定电压反接时，逆变器应有自动保护功能,无电流通过电路。
+4.6.5.6 保护重启时间。
+对于有保护重启功能的逆变器，当启动保护的条件被移除并且在收到激活信号后 1.5 s 内，逆变器应输出正常工作电压。
+4.6.6 温升。
+逆变器热平衡稳定后，其内部各部件温升应满足 GB 19212.1—2008 中表 1 的规定。
+4.7 逆变器输出插座与输出线缆
+4.7.1 逆变器输出插座。
+4.7.1.1 尺寸。
+逆变器输出插座尺寸应符合 GB 1002—2008 中 5.2 的规定。
+4.7.1.2 结构。
+逆变器输出插座中应带保护门，保护门应符合 GB 2099.1—2008 中 10.5 的规定。
+4.7.1.3 插销拔出力。
+逆变器输出插座最大拔出力和最小拔出力应满足如下规定：
+a) 单插销量规最小拔出力应不低于 1.5 N；
+b) 单插销量规最大拔出力应不高于 17 N;
+
+5
+
+#### 4.6.4 绝缘电阻与绝缘强度。
+
+##### 4.6.4.1 绝缘电阻。
+
+在温度为 $ 20\pm5 $℃、相对湿度为90%的环境下，交流输出带电电路与地或外壳之间的绝缘电阻应不小于1 MΩ。
+
+##### 4.6.4.2 绝缘强度。
+
+输入电路对交流接地，输入电路对输出电路和输出电路对交流接地应承受1500 V的50 Hz正弦交流电压1 min。低压信号控制电路对交流接地应承受500 V的50 Hz正弦交流电压1 min，不击穿、不飞弧，性能测试结果应符合4.5的规定。
+
+#### 4.6.5 保护性能。
+
+##### 4.6.5.1 过流保护。
+
+逆变器应设有过流保护功能，当输出视在功率为额定值的200%时，持续工作2 s后逆变器应能自动保护。保护形式不应采用熔断保险丝的形式。
+
+##### 4.6.5.2 输出短路保护。
+
+当发生输出短路时，其短路保护响应时间应小于或等于1 s。
+
+##### 4.6.5.3 输入欠压保护。
+
+当输入端电压低于 11 V（标称电压 12 V）、22 V（标称电压 24 V）超过 1 s 时，逆变器应有自动关断输出。
+
+##### 4.6.5.4 输入过压保护。
+
+当输入端电压高于 16.5 V（标称电压 12 V）、33 V（标称电压 24 V）超过 1 s 时，逆变器应有自动关断输出。
+
+##### 4.6.5.5 输入反接保护。
+
+当输入端正、负极按额定电压反接时，逆变器应有自动保护功能，无电流通过电路。
+
+##### 4.6.5.6 保护重启时间。
+
+对于有保护重启功能的逆变器，当启动保护的条件被移除并且在收到激活信号后1.5 s内，逆变器应输出正常工作电压。
+
+#### 4.6.6 温升。
+
+逆变器热平衡稳定后，其内部各部件温升应满足 GB 19212.1—2008 中表 1 的规定。
+
+### 4.7 逆变器输出插座与输出线缆
+
+#### 4.7.1 逆变器输出插座。
+
+##### 4.7.1.1 尺寸。
+
+逆变器输出插座尺寸应符合 GB 1002—2008 中 5.2 的规定。
+
+##### 4.7.1.2 结构。
+
+逆变器输出插座中应带保护门，保护门应符合 GB 2099.1—2008 中 10.5 的规定。
+
+##### 4.7.1.3 插销拔出力。
+
+逆变器输出插座最大拔出力和最小拔出力应满足如下规定：
+
+a）单插销量规最小拔出力应不低于1.5 N；
+
+b) 单插销量规最大拔出力应不高于 17 N;
+
+QC/T 1036—2016
+
+c) 2P 插销量规最大拔出力应不高于 40 N, 3P 插销量规最大拔出力应不高于 50 N。
+
+4.7.1.4 插座插拔耐久。
+逆变器输出插座,应满足 10 000 次全行程循环的正常插拔操作。耐久试验中,不应出现持续闪弧;试验完成后,不应出现影响使用的磨损、绝缘材料的劣化、影响插销正常工作的插孔损坏、电器或机械连接的松脱、密封胶渗漏。
+
+4.7.2 输出导线。
+针对含独立式输出插座并整体供货的逆变器(见图 1),连接输出插座与逆变器本体的高压线缆应符合 GB/T 25085 的规定。
+
+![图 1 含独立式输出插座并一起整体供货的逆变器](figure1.png)
+
+1——电源;2——逆变器;3——AC 高压线缆;4——输出插座;5——激活信号线(可选)
+
+图 1 含独立式输出插座并一起整体供货的逆变器
+
+4.8 耐辅助启动特性
+对 12 V 的逆变器,在 24 V 辅助启动状态下,逆变器功能状态应达到 GB/T 28046. 1—2011 中 6.1 的 C 级。
+
+4.9 耐叠加交流电压特性
+逆变器经叠加交流电压试验后,功能状态应符合 GB/T 28046. 1—2011 中 6.1 的 B 级。
+
+4.10 接线端受力抗拉特性
+逆变器应能经受 80 N 的模拟线束拉力,内部器件(含逆变器的接插件)应无拉脱、破损或其他可能影响部件可靠性的损坏现象。
+
+4.11 耐跌落特性
+逆变器按规定高度和姿态跌落,不应有隐性损坏,在不影响被测逆变器性能的情况下允许外壳有微小损坏,性能测试结果应符合 4.5 的规定。
+
+4.12 耐低温特性
+逆变器应经受低温试验,试验中需要对输出电压、输出频率、总谐波畸变率进行监测,每隔 4 h 进行一次记录,输出特性参数允差应符合 4.5.2 的规定;试验后,应无任何变形、破损或其他损坏,性能与安全测试结果应符合 4.5、4.6 的规定。
+
+4.13 耐高温特性
+逆变器应经受高温试验,试验中需要对输出电压、输出频率、总谐波畸变率进行监测,每隔 4 h 进行一次记录,输出特性参数允差应符合 4.5.2 的规定;试验后,应无任何变形、破损或其他损坏,性能与安全测试结果应符合 4.5、4.6 的规定。
+
+6
+
+c）2P 插销量规最大拔出力应不高于 40 N，3P 插销量规最大拔出力应不高于 50 N。
+
+##### 4.7.1.4 插座插拔耐久。
+
+逆变器输出插座，应满足10 000次全行程循环的正常插拔操作。耐久试验中，不应出现持续闪弧；试验完成后，不应出现影响使用的磨损、绝缘材料的劣化、影响插销正常工作的插孔损坏、电器或机械连接的松脱、密封胶渗漏。
+
+#### 4.7.2 输出导线。
+
+针对含独立式输出插座并整体供货的逆变器(见图1)，连接输出插座与逆变器本体的高压线缆应符合GB/T 25085的规定。
+
+<div style="text-align: center;"><img src="imgs/img_in_image_box_224_448_955_750.jpg" alt="Image" width="61%" /></div>
+
+
+<div style="text-align: center;">1——电源；2——逆变器；3——AC高压线缆；4——输出插座；5——激活信号线（可选）</div>
+
+
+<div style="text-align: center;">图 1 含独立输出插座并一起整体供货的逆变器</div>
+
+
+### 4.8 耐辅助起动特性
+
+对 12 V 的逆变器，在 24 V 辅助起动状态下，逆变器功能状态应达到 GB/T 28046.1—2011 中 6.1 的 C 级。
+
+### 4.9 耐叠加交流电压特性
+
+逆变器经叠加交流电压试验后，功能状态应符合 GB/T 28046.1—2011 中 6.1 的 B 级。
+
+### 4.10 接线端受力抗拉特性
+
+逆变器应能经受80 N的模拟线束拉力，内部器件（含逆变器的接插件）应无拉脱、破损或其他可能影响部件可靠性的损坏现象。
+
+### 4.11 耐跌落特性
+
+逆变器按规定高度和姿态跌落，不应有隐性损坏，在不影响被测逆变器性能的情况下允许外壳有微小损坏，性能测试结果应符合4.5的规定。
+
+### 4.12 耐低温特性
+
+逆变器应经受低温试验，试验中需要对输出电压、输出频率、总谐波畸变率进行监测，每隔4 h进行一次记录，输出特性参数允差应符合4.5.2的规定；试验后，应无任何变形、破损或其他损坏，性能与安全测试结果应符合4.5、4.6的规定。
+
+### 4.13 耐高温特性
+
+逆变器应经受高温试验，试验中需要对输出电压、输出频率、总谐波畸变率进行监测，每隔4 h进行一次记录，输出特性参数允差应符合4.5.2的规定；试验后，应无任何变形、破损或其他损坏，性能与安全测试结果应符合4.5、4.6的规定。
+
+QC/T 1036—2016
+
+### 4.14 高低温贮存特性
+逆变器应经受高低温贮存试验，试验后，应无任何变形、破损或其他损坏，性能与安全测试结果应符合 4.5、4.6 的规定。
+
+### 4.15 耐湿热循环特性
+逆变器应经受湿热循环试验，试验中按规定带负载的时间段需要对输出电压和输出频率进行监测，输出特性参数允差应符合 4.5.2 的规定；试验后，应无任何变形、破损或其他损坏，性能与安全测试结果应符合 4.5、4.6 的规定。
+
+### 4.16 耐稳态湿热特性
+逆变器应经受稳态湿热试验，试验中按规定带负载的时间段需要对输出电压和输出频率进行监测，输出特性参数允差应符合 4.5.2 的规定；试验后，应无任何变形、破损或其他损坏，性能与安全测试结果应符合 4.5、4.6 的规定。
+
+### 4.17 耐化学试剂特性
+逆变器外壳应能耐受咖啡、可乐、内部清洁剂、玻璃清洁剂、蓄电池液、工业酒精、汽油、机油等试剂的污染（逆变器按其安装位置来选用试剂），试验后，性能与安全测试结果应符合 4.5、4.6 的规定，标识应清晰完整。
+
+### 4.18 燃烧特性
+使用非金属外壳的逆变器外壳材料的燃烧速度应不大于 100 mm/min。
+
+### 4.19 电磁兼容性
+逆变器的电磁兼容性应满足如下规定：
+a) 骚扰试验应符合表 3 的规定。
+
+**表 3 电磁骚扰性**
+
+| 测试项目 | 性能要求 |
+| :--- | :--- |
+| 传导发射 | 电源线，等级 2，信号线，等级 5 |
+| 电压瞬态发射 | 电源线，等级 3，信号线，等级 3 |
+| 辐射骚扰 | ALSE 法 4 级 |
+
+b) 抗扰试验应符合表 4 的规定。
+
+**表 4 电磁抗扰性**
+
+| 测试项目 | 性能要求 |
+| :--- | :--- |
+| 瞬态抗扰性 | 见表 5 |
+| 非电源线瞬态抗扰性 | 试验脉冲等级 3，功能状态达 B 级 |
+| 电磁辐射抗扰度 | 功能状态达 A 级 |
+| 静电放电抗扰度 | 功能状态达 C 级 |
+| 交流输出端口电快速瞬变抗扰度 | 严酷度等级 1 |
+| 交流输出端口射频传导发射 | 见 5.19.9 |
+
+7
+
+### 4.14 高低温贮存特性
+
+逆变器应经受高低温贮存试验，试验后，应无任何变形、破损或其他损坏，性能与安全测试结果应符合4.5、4.6的规定。
+
+### 4.15 耐湿热循环特性
+
+逆变器应经受湿热循环试验，试验中按规定带负载的时间段需要对输出电压和输出频率进行监测，输出特性参数允差应符合4.5.2的规定；试验后，应无任何变形、破损或其他损坏，性能与安全测试结果应符合4.5、4.6的规定。
+
+### 4.16 耐稳态湿热特性
+
+逆变器应经受稳态湿热试验，试验中按规定带负载的时间段需要对输出电压和输出频率进行监测，输出特性参数允差应符合4.5.2的规定；试验后，应无任何变形、破损或其他损坏，性能与安全测试结果应符合4.5、4.6的规定。
+
+### 4.17 耐化学试剂特性
+
+逆变器外壳应能耐受咖啡、可乐、内部清洁剂、玻璃清洁剂、蓄电池液、工业酒精、汽油、机油等试剂的污染（逆变器按其安装位置来选用试剂），试验后，性能与安全测试结果应符合4.5、4.6的规定，标识应清晰完整。
+
+### 4.18 燃烧特性
+
+使用非金属外壳的逆变器外壳材料的燃烧速度应不大于  $ 100 \, mm/min $。
+
+### 4.19 电磁兼容性
+
+逆变器的电磁兼容性应满足如下规定：
+
+a）骚扰试验应符合表3的规定。
+
+<div style="text-align: center;">表 3 电磁骚扰性</div>
+
+
+
+<table border=1 style='margin: auto; word-wrap: break-word;'><tr><td style='text-align: center; word-wrap: break-word;'>测试项目</td><td style='text-align: center; word-wrap: break-word;'>性能要求</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>传导发射</td><td style='text-align: center; word-wrap: break-word;'>电源线，等级2，信号线，等级5</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>电压瞬态发射</td><td style='text-align: center; word-wrap: break-word;'>电源线，等级3，信号线，等级3</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>辐射骚扰</td><td style='text-align: center; word-wrap: break-word;'>ALSE法4级</td></tr></table>
+
+## b）抗扰试验应符合表4的规定。
+
+<div style="text-align: center;">表 4 电磁抗扰性</div>
+
+
+
+<table border=1 style='margin: auto; word-wrap: break-word;'><tr><td style='text-align: center; word-wrap: break-word;'>测试项目</td><td style='text-align: center; word-wrap: break-word;'>性能要求</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>瞬态抗扰性</td><td style='text-align: center; word-wrap: break-word;'>见表5</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>非电源线瞬态抗扰性</td><td style='text-align: center; word-wrap: break-word;'>试验脉冲等级3,功能状态达B级</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>电磁辐射抗扰度</td><td style='text-align: center; word-wrap: break-word;'>功能状态达A级</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>静电放电抗扰度</td><td style='text-align: center; word-wrap: break-word;'>功能状态达C级</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>交流输出端口电快速瞬变抗扰度</td><td style='text-align: center; word-wrap: break-word;'>严酷度等级1</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>交流输出端口射频传导发射</td><td style='text-align: center; word-wrap: break-word;'>见5.19.9</td></tr></table>
+
+QC/T 1036—2016
+
+4. 20 耐振动特性
+逆变器应能承受规定振动条件试验，试验后不应出现零部件松动或损坏，性能与安全测试结果应符合 4. 5、4. 6 的规定。
+4. 21 噪声
+逆变器在 40 dB(A)~45 dB(A)的环境中人耳距离逆变器 30 cm 应不能明显感觉到逆变器的运行声音。
+4. 22 耐久性
+逆变器应能承受 7 500 次的开启循环试验，试验后的逆变器应无部件松动损坏、变形变色，性能、安全与噪声测试结果应符合 4. 5、4. 6、4. 21 的规定。
+
+5 试验方法
+
+5. 1 试验条件
+5. 1. 1 试验环境。
+如无特别规定，试验条件规定如下：
+a) 空气温度：(23 ± 5)℃；
+b) 相对湿度：45%~75%；
+c) 大气压力：86 kPa~106 kPa；
+d) 试验电压：标称电压 12 V 时为 (13.5 ± 0.2) V，标称电压为 24 V 时为 (27 ± 0.4) V。
+5. 1. 2 测量设备与试验用电源。
+测量设备与试验用电源应满足以下规定：
+a) 试验电源采用足够容量的直流稳压电源，其波纹电压峰-峰值不大于 100 mV；
+b) 电压表精度不低于 0.5 级；
+c) 电流表精度不低于 0.5 级；
+d) 测量尺寸器具最小刻度值不应大于 0.05 mm。
+5. 2 外观与尺寸检查
+目测检查外观，必要时用 3 倍放大镜检查；用千分尺检查尺寸。
+5. 3 密封性试验
+密封性试验按照 GB/T 30038 的规定进行试验。
+5. 4 材料试验
+由供方提供质保书或第三方提供的材质报告。
+5. 5 输出特性试验
+5. 5. 1 输出基本特性。
+空载和满载状态下的输出基本特性：
+a) 空载。逆变器在输出空载下运行，测量输出电压，输出频率；
+b) 满载。在逆变器输出端连接 100%额定输出功率的阻性负载，在稳态条件下，测量输出电压和输出频率，并用失真度测量仪测量输出电压波形失真度(总谐波畸变率)；
+c) 空载对满载电压允差。按式(1)计算空载对满载的电压允差。
+
+8
+
+### 4.20 耐振动特性
+
+逆变器应能承受规定振动条件试验，试验后不应出现零部件松动或损坏，性能与安全测试结果应符合4.5、4.6的规定。
+
+### 4.21 噪声
+
+逆变器在 40 dB(A)～45 dB(A) 的环境中人耳距离逆变器 30 cm 应不能明显感觉到逆变器的运行声音。
+
+### 4.22 耐久性
+
+逆变器应能承受7500次的开启循环试验，试验后的逆变器应无部件松动损坏、变形变色，性能、安全与噪声测试结果应符合4.5、4.6、4.21的规定。
+
+## 5 试验方法
+
+### 5.1 试验条件
+
+#### 5.1.1 试验环境。
+
+如无特别规定，试验条件规定如下：
+
+a）空气温度： $ 23 \pm 5 $℃；
+
+b) 相对湿度：45%~75%；
+
+c) 大气压力：86 kPa～106 kPa；
+
+d）试验电压：标称电压12 V时为 $ 13.5\pm0.2 $ V，标称电压为24 V时为 $ 27\pm0.4 $ V。
+
+#### 5.1.2 测量设备与试验用电源。
+
+测量设备与试验用电源应满足以下规定：
+
+a）试验电源采用足够容量的直流稳压电源，其波纹电压峰－峰值不大于100 mV；
+
+b) 电压表精度不低于0.5级；
+
+c) 电流表精度不低于0.5级；
+
+d）测量尺寸器具最小刻度值不应大于0.05 mm。
+
+### 5.2 外观与尺寸检查
+
+目测检查外观，必要时用3倍放大镜检查；用千分尺检查尺寸。
+
+### 5.3 密封性试验
+
+密封性试验按照 GB/T 30038 的规定进行试验。
+
+### 5.4 材料试验
+
+由供方提供质保书或第三方提供的材质报告。
+
+5.5 输出特性试验
+
+5.5.1 输出基本特性。
+
+空载和满载状态下的输出基本特性：
+
+a）空载。逆变器在输出空载下运行，测量输出电压，输出频率；
+
+b) 满载。在逆变器输出端连接100%额定输出功率的阻性负载，在稳态条件下，测量输出电压和输出频率，并用失真度测量仪测量输出电压波形失真度（总谐波畸变率）；
+
+c） 空载对满载电压允差。按式(1)计算空载对满载的电压允差。
+
+QC/T 1036—2016
+
+$$\Delta U = \frac{U_{\text{max}} - U_{\text{min}}}{U_n} \times 100\% \cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots (1)$$
+
+式中：
+$\Delta U$ —— 电压允差，V；
+$U_{\text{max}}$ —— 最大电压基波分量的方均根值，V；
+$U_{\text{min}}$ —— 最小电压基波分量的方均根值，V；
+$U_n$ —— 电压额定值，V。
+5.5.2 输出效率试验。
+逆变器输出端连接 100%额定输出功率的阻性负载，分别测量直流输入功率和交流输出功率，按式(2)计算效率。
+$$\eta = (P_o/P_i) \times 100\% \cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots (2)$$
+
+式中：
+$\eta$ —— 效率；
+$P_o$ —— 输出功率；
+$P_i$ —— 输入功率。
+5.5.3 过载输出能力试验。
+在输入端施加试验电压，在逆变器输出端分别施加输出视在功率为额定值 120%和 150%的电阻性负载。
+5.5.4 持续输出能力试验。
+将逆变器按车中实际固定姿势安放在恒温箱中，在输入端施加试验电压，以 10 ℃温度梯度从 $T_{\text{min}}$ 升到 $T_{\text{max}}$，逆变器在每个温度点温度稳定后再保持 20 min。
+5.5.5 无功电流试验。
+在输入端施加试验电压，逆变器输出端不接任何负载，测量输入端直流电流消耗值。
+5.6 安全与保护
+5.6.1 标识检查。
+检查逆变器表面，在明显位置处须有危险电压警示标识。
+5.6.2 爬电距离、电气间隙和穿通绝缘距离试验。
+按 GB/T 16935.1—2008 中 6.2 的规定，确定待试验部件的材料组别、污染等级、绝缘强度。最小爬电距离、电气间隙、穿通绝缘距离值用千分尺或(和)量规或(和)塞规进行测量。
+5.6.3 电击防护。
+5.6.3.1 乘员电击保护试验。
+在输入端施加试验电压，按图 2 连接逆变器外壳金属部分与交流高压输出端(模拟输入与输出部分绝缘失效)。调节可调电阻使泄漏电流分别为 3.5 mA，逆变器在 250 ms 内能自动切断输出功能。
+5.6.3.2 防止触及危险的带电零部件的防护。
+使用按 GB 19212.1—2008 中图 2 与图 3 规定的试验指和试验销，通过开孔插入到试验指所能允许的任何深度，将试验指转动或改变角度方位。如果开孔不能使试验指进入，则沿试验指指向方
+
+                                                                        9
+
+$$ \Delta U=\frac{U_{\max}-U_{\min}}{U_{\mathrm{n}}}\times100\% $$ 
+
+式中：
+
+ $ \Delta U $——电压允差，V；
+
+ $ U_{max} $ ——最大电压基波分量的方均根值，V；
+
+ $ U_{min} $——最小电压基波分量的方均根值，V；
+
+ $ U_{n} $——电压额定值，V。
+
+5.5.2 输出效率试验。
+
+逆变器输出端连接100%额定输出功率的阻性负载，分别测量直流输入功率和交流输出功率，按式(2)计算效率。
+
+ $$ \eta=(P_{\circ}/P_{\mathrm{i}})\times100\% $$ 
+
+式中：
+
+ $ \eta $——效率；
+
+ $ P_{0} $——输出功率；
+
+ $ P_{i} $ —— 输入功率。
+
+5.5.3 过载输出能力试验。
+
+在输入端施加试验电压，在逆变器输出端分别施加输出视在功率为额定值120%和150%的电阻性负载。
+
+5.5.4 持续输出能力试验。
+
+将逆变器按车中实际固定姿势安放在恒温箱中，在输入端施加试验电压，以  $ 10^{\circ} $C 温度梯度从  $ T_{min} $ 升到  $ T_{max} $，逆变器在每个温度点温度稳定后再保持 20 min。
+
+5.5.5 无功电流试验。
+
+在输入端施加试验电压，逆变器输出端不接任何负载，测量输入端直流电流消耗值。
+
+5.6 安全与保护
+
+5.6.1 标识检查。
+
+检查逆变器表面，在明显位置处须有危险电压警示标识。
+
+5.6.2 爬电距离、电气间隙和穿通绝缘距离试验。
+
+按 GB/T 16935.1—2008 中 6.2 的规定，确定待试验部件的材料组别、污染等级、绝缘强度。最小爬电距离、电气间隙、穿通绝缘距离值用千分尺或（和）量规或（和）塞规进行测量。
+
+5.6.3 电击防护。
+
+5.6.3.1 乘员电击保护试验。
+
+在输入端施加试验电压，按图2连接逆变器外壳金属部分与交流高压输出端（模拟输入与输出部分绝缘失效）。调节可调电阻使泄漏电流分别为3.5 mA，逆变器在250 ms内能自动切断输出功能。
+
+5.6.3.2 防止触及危险的带电零部件的防护。
+
+使用按 GB 19212.1—2008 中图 2 与图 3 规定的试验指和试验销，通过开孔插入到试验指所能允许的任何深度，将试验指转动或改变角度方位。如果开孔不能使试验指进入，则沿试验指笔指方
+
+QC/T 1036—2016
+
+![](https://monica-static.guance.com/ai-tool-vision/2024-10-23/f3b89b4b-14d2-4354-94ee-78da372d8291.png)
+
+设备:1——DC 电源;2——逆变器 DUT;3——电流钳;4——示波器;5——150 W 阻性负载
+元件:S1 ——开关;S2 ——开关;S3 ——开关;F——20A 保险丝;RP ——可调电阻器
+导线:L+ ——直流正极线 2.5 mm²; AS ——激活信号线 0.5 mm²;
+GND——直流地线 2.5 mm²; AC1 ——AC 高压线 0.5 mm²; AC2 ——AC 高压线 0.5 mm²
+图 2 电击保护试验示意
+
+向施加的力要增加到 20 N。如果试验指此时进入孔内,则在将试验指改变角度方位的情况下重复进行试验。
+用试验指和试验销试验时,不可接触到裸露的危险的带电零部件。
+5.6.3.3 危险性放电防护试验。
+在输入端施加试验电压,在逆变器输出端分别施加额定功率 50%的电阻性负载。负载断开或插销拔出后 1 s,在逆变器输出端检测带电状态。
+5.6.4 绝缘电阻和绝缘强度试验。
+先进行湿热试循环试验,然后将逆变器放置于温度为(20 ± 5)℃、相对湿度为 90%的环境中 0.5 h后,测试绝缘电阻和绝缘强度。测量绝缘电阻的兆欧表应符合 JB/T 7064—1993 中 6.1 的规定。
+5.6.5 保护性能试验。
+5.6.5.1 过流保护试验。
+在输入端施加试验电压,在逆变器输出端分别施加输出视在功率为额定值 200%的电阻性负载。
+5.6.5.2 短路保护试验。
+在输入端施加试验电压,使逆变器输出端短路,所用数据分析仪的采集频率应大于 1 000 Hz。
+5.6.5.3 输入欠压保护试验。
+在输入端施加逆变器额定工作电压,以 1 V/min 速度降低试验电压,直至逆变器进行欠压保护。
+
+10
+
+<div style="text-align: center;"><img src="imgs/img_in_image_box_301_120_943_656.jpg" alt="Image" width="54%" /></div>
+
+
+<div style="text-align: center;">设备：1——DC电源；2——逆变器DUT；3——电流钳；4——示波器；5——150W阻性负载元件；S1——开关；S2——开关；S3——开关；F——20A保险丝；RP——可调电阻器导线；L+——直流正极线2.5mm²；AS——激活信号线0.5mm²；</div>
+
+
+GND——直流地线 2.5 mm²；AC1——AC 高压线 0.5 mm²；AC2——AC 高压线 0.5 mm²
+
+<div style="text-align: center;">图 2 电击保护试验示意</div>
+
+
+向施加的力要增加到  $ 20 \, N $。如果试验指此时进入孔内，则在将试验指改变角度方位的情况下重复进行试验。
+
+用试验指和试验销试验时，不可接触到裸露的危险的带电零部件。
+
+##### 5.6.3.3 危险性放电防护试验。
+
+在输入端施加试验电压，在逆变器输出端分别施加额定功率50%的电阻性负载。负载断开或插销拔出后1 s，在逆变器输出端检测带电状态。
+
+#### 5.6.4 绝缘电阻和绝缘强度试验。
+
+先进行湿热试循环试验，然后将逆变器放置于温度为 $ (20\pm5)^{\circ}\mathrm{C} $、相对湿度为90%的环境中0.5 h后，测试绝缘电阻和绝缘强度。测量绝缘电阻的兆欧表应符合JB/T7064—1993中6.1的规定。
+
+#### 5.6.5 保护性能试验。
+
+##### 5.6.5.1 过流保护试验。
+
+在输入端施加试验电压，在逆变器输出端分别施加输出视在功率为额定值200%的电阻性负载。
+
+##### 5.6.5.2 短路保护试验。
+
+在输入端施加试验电压，使逆变器输出端短路，所用数据分析仪的采集频率应大于 $ 1\ 000\ Hz $。
+
+##### 5.6.5.3 输入欠压保护试验。
+
+在输入端施加逆变器额定工作电压，以  $ 1 \, V/min $ 速度降低试验电压，直至逆变器进行欠压保护。
+
+QC/T 1036—2016
+
+5.6.5.4 输入过压保护试验。
+在输入端施加逆变器额定工作电压，以 1 V/min 速度升高试验电压，直至逆变器进行过压保护。
+5.6.5.5 输入反接保护试验。
+在输入端施加反向额定工作电压，持续反接 60 s。
+5.6.5.6 保护重启时间试验。
+按照 4.6.3.1 及 4.6.5 的进入保护条件使逆变器关闭，当关闭条件被移除并且逆变器收到激活信号后开始计时，直至逆变器电压与频率恢复正常停止计时。激活信号只针对含有激活输出功能的逆变器，无激活信号的逆变器按照关闭条件被移除时开始计时。
+5.6.6 温升试验。
+逆变器在最高输入电压、额定输出频率及额定输出功率下运行直至达到热平衡。施加产品标准规定的过载能力的最大功率，试验过程中过载保护功能不工作。
+使用涂有无光黑漆的胶合板，按车体里的实际距离和布置情况将逆变器安置其中。
+测试部件至少应包括半导体器件及其他电气元器件、连接低压电器的母线及连接处的母线、连接于电力半导体器件的母线及连接处的母线、与半导体器件相连接的塑料绝缘导线或橡皮绝缘导线、线圈绕组、逆变器外壳。
+试验期间要连续使用温度记录仪监测温升，温升值应符合 4.6.6 的规定。试验中保护功能不工作，并且密封剂或凝胶类物质不应变化或流出。
+5.7 输出插座与输出线缆试验
+5.7.1 逆变器输出插座。
+5.7.1.1 插座尺寸检查。
+使用游标卡尺或千分尺对插座尺寸进行测量。
+5.7.1.2 保护门试验。
+按照 GB 2099.1—2008 中 10.5 的方法，使用探针对保护门进行测试。
+5.7.1.3 拔出插销所需力试验。
+按照 GB 2099.1—2008 中 22.1 的方法，使用经硬化处理的试验专用插销对插座的最大与最小拔出插销所需力进行试验。
+5.7.1.4 插拔耐久试验。
+按照 GB 2099.1—2008 中第 21 章的方法，使用规定尺寸范围内最大尺寸的插销进行 10 000 次插拔耐久试验。试验用插销要分别在第 4 500 个和第 9 000 个循环后进行更换。
+5.7.2 输出线缆试验。
+按 GB/T 25085 的试验要求，对逆变器与输出插座间的连接高压线缆进行试验。
+5.8 抗辅助起动试验
+针对输入标称电压为 12 V 的逆变器，按照 GB/T 28046.2—2011 的 4.3.1.2 进行模拟汽车 24 V 辅助起动试验。
+5.9 抗叠加交流电压试验
+按 GB/T 28046.2—2011 中 4.4 的规定进行叠加交流电压试验，其中叠加正弦波交流电压严酷度为等级 2。
+
+11
+
+##### 5.6.5.4 输入过压保护试验。
+
+在输入端施加逆变器额定工作电压，以  $ 1 \, V/min $ 速度升高试验电压，直至逆变器进行过压保护。
+
+5.6.5.5 输入反接保护试验。
+
+在输入端施加反向额定工作电压，持续反接60 s。
+
+##### 5.6.5.6 保护重启时间试验。
+
+按照 4.6.3.1 及 4.6.5 的进入保护条件使逆变器关闭，当关闭条件被移除并且逆变器收到激活信号后开始计时，直至逆变器电压与频率恢复正常停止计时。激活信号只针对含有激活输出功能的逆变器，无激活信号的逆变器按照关闭条件被移除时开始计时。
+
+#### 5.6.6 温升试验。
+
+逆变器在最高输入电压、额定输出频率及额定输出功率下运行直至达到热平衡。施加产品标准规定的过载能力的最大功率，试验过程中过载保护功能不工作。
+
+使用涂有无光黑漆的胶合板，按车体里的实际距离和布置情况将逆变器安置其中。
+
+测试部件至少应包括半导体器件及其他电气元器件、连接低压电器的母线及连接处的母线、连接于电力半导体器件的母线及连接处的母线、与半导体器件相连接的塑料绝缘导线或橡皮绝缘导线、线圈绕组、逆变器外壳。
+
+试验期间要连续使用温度记录仪监测温升，温升值应符合4.6.6的规定。试验中保护功能不工作，并且密封剂或凝胶类物质不应变化或流出。
+
+### 5.7 输出插座与输出线缆试验
+
+5.7.1 逆变器输出插座。
+
+##### 5.7.1.1 插座尺寸检查。
+
+使用游标卡尺或千分尺对插座尺寸进行测量。
+
+##### 5.7.1.2 保护门试验。
+
+按照 GB 2099.1—2008 中 10.5 的方法，使用探针对保护门进行测试。
+
+##### 5.7.1.3 拔出插销所需力试验。
+
+按照 GB 2099.1—2008 中 22.1 的方法，使用经硬化处理的试验专用插销对插座的最大与最小拔出插销所需力进行试验。
+
+##### 5.7.1.4 插拔耐久试验。
+
+按照 GB 2099.1—2008 中第 21 章的方法，使用规定尺寸范围内最大尺寸的插销进行 10 000 次插拔耐久试验。试验用插销要分别在第 4 500 个和第 9 000 个循环后进行更换。
+
+#### 5.7.2 输出线缆试验。
+
+按 GB/T 25085 的试验要求，对逆变器与输出插座间的连接高压线缆进行试验。
+
+### 5.8 抗辅助起动试验
+
+针对输入标称电压为 12 V 的逆变器，按照 GB/T 28046.2—2011 的 4.3.1.2 进行模拟汽车 24 V 辅助起动试验。
+
+### 5.9 抗叠加交流电压试验
+
+按 GB/T 28046.2—2011 中 4.4 的规定进行叠加交流电压试验，其中叠加正弦波交流电压严酷度为等级 2。
+
+QC/T 1036—2016
+
+**5.10 接线端受力抗拉试验**
+平稳固定逆变器，连接相应的车身线束接插件，对车身线束施加 80 N 力拉逆变器。
+
+**5.11 抗跌落性试验**
+按 GB/T 28046.3—2011 的 4.3 进行试验。
+
+**5.12 低温试验**
+逆变器按照 GB/T 28046.4—2011 的 5.1.1.2 进行低温试验，试验中负载视为功率为额定输出功率的 1/3 的阻性负载。
+
+**5.13 高温试验**
+逆变器按照 GB/T 28046.4—2011 的 5.1.2.2 进行高温试验，试验中负载视为功率为额定输出功率的 1/3 的阻性负载。
+
+**5.14 高低温贮存试验**
+逆变器按照 GB/T 28046.4—2011 的 5.1.1.1 和 5.1.2.1 进行高低温贮存试验。
+
+**5.15 湿热循环试验**
+逆变器按照 GB/T 28046.4—2011 的 5.6 进行湿热循环试验，试验中按 GB/T 28046.4—2011 的 4.6.2.2 规定的时间段接通逆变器负载，负载视为功率为额定输出功率的 1/3 的阻性负载。
+
+**5.16 耐稳态湿热试验**
+逆变器按照 GB/T 28046.4—2011 的 5.7 进行湿热循环试验，试验中按 GB/T 28046.4—2011 的 5.7.2 规定的时间段接通逆变器负载，负载视为功率为额定输出功率的 1/3 的阻性负载。
+
+**5.17 耐化学试剂试验**
+逆变器按照 GB/T 28046.5—2011 的第 4 章规定的试验方法进行耐化学试剂试验。
+
+**5.18 燃烧试验**
+对于非金属外壳的逆变器按照 GB 8410—2006 中 4.4 规定的试验方法进行燃烧测试。
+
+**5.19 电磁兼容性试验**
+
+**5.19.1 传导发射试验。**
+按 GB 18655—2010 中 6.2 规定的试验方法的对逆变器的输入电源线 (12 V 或 24 V) 和信号线进行传导发射试验。
+注：汽车电源逆变器属于长时型用电器，按 GB 18655—2010 的规定，试验限值不能增加 6 dB。
+
+**5.19.2 电压瞬态发射试验。**
+按 GB/T 21437.2—2008 中 4.3 规定的试验方法对逆变器进行额定功率运行下（纯电阻负载）电压瞬态发射试验与空载状态电压瞬态发射试验（沿 12 V 或 24 V 电源线）。
+
+**5.19.3 辐射骚扰试验。**
+按 GB 18655—2010 中 6.4 规定的试验方法采用 ALSE 法对逆变器进行辐射骚扰试验。试验中宽带测试使用准峰值检波器。
+
+**5.19.4 瞬态抗扰性试验。**
+按 GB/T 21437.2—2008 中 4.4 规定的试验方法对逆变器（沿 12 V 或 24 V 电源线）进行电压瞬态抗扰性试验。试验波形参数规定见表 5。
+
+12
+
+### 5.10 接线端受力抗拉试验
+
+平稳固定逆变器，连接相应的车身线束接插件，对车身线束施加  $ 80 \, N $ 力拉逆变器。
+
+### 5.11 抗跌落性试验
+
+按 GB/T 28046.3—2011 的 4.3 进行试验。
+
+### 5.12 低温试验
+
+逆变器按照 GB/T 28046.4—2011 的 5.1.1.2 进行低温试验，试验中负载视在功率为额定输出功率的 1/3 的阻性负载。
+
+### 5.13 高温试验
+
+逆变器按照 GB/T 28046.4—2011 的 5.1.2.2 进行高温试验，试验中负载视在功率为额定输出功率的 1/3 的阻性负载。
+
+### 5.14 高低温贮存试验
+
+逆变器按照 GB/T 28046.4—2011 的 5.1.1.1 和 5.1.2.1 进行高低温贮存试验。
+
+### 5.15 湿热循环试验
+
+逆变器按照 GB/T 28046.4—2011 的 5.6 进行湿热循环试验，试验中按 GB/T 28046.4—2011 的 4.6.2.2 规定的时间段接通逆变器负载，负载视在功率为额定输出功率的 1/3 的阻性负载。
+
+### 5.16 耐稳态湿热试验
+
+逆变器按照 GB/T 28046.4—2011 的 5.7 进行湿热循环试验，试验中按 GB/T 28046.4—2011 的 5.7.2 规定的时间段接通逆变器负载，负载视在功率为额定输出功率的 1/3 的阻性负载。
+
+### 5.17 耐化学试剂试验
+
+逆变器按照 GB/T 28046.5—2011 的第 4 章规定的试验方法进行耐化学试剂试验。
+
+### 5.18 燃烧试验
+
+对于非金属外壳的逆变器按照 GB 8410—2006 中 4.4 规定的试验方法进行燃烧测试。
+
+### 5.19 电磁兼容性试验
+
+#### 5.19.1 传导发射试验。
+
+按 GB 18655—2010 中 6.2 规定的试验方法的对逆变器的输入电源线（12 V 或 24 V）和信号线进行传导发射试验。
+
+注：汽车电源逆变器属于长时型用电器，按 GB 18655—2010 的规定，试验限值不能增加 6 dB。
+
+#### 5.19.2 电压瞬态发射试验。
+
+按 GB/T 21437.2—2008 中 4.3 规定的试验方法对逆变器进行额定功率运行下（纯电阻负载）电压瞬态发射试验与空载状态电压瞬态发射试验（沿 12 V 或 24 V 电源线）。
+
+#### 5.19.3 辐射骚扰试验。
+
+按 GB 18655—2010 中 6.4 规定的试验方法采用 ALSO 法对逆变器进行辐射骚扰试验。试验中宽带测试使用准峰值检波器。
+
+#### 5.19.4 瞬态抗扰性试验。
+
+按 GB/T 21437.2—2008 中 4.4 规定的试验方法对逆变器（沿 12 V 或 24 V 电源线）进行电压瞬态抗扰性试验。试验波形参数规定见表 5。
+
+QC/T 1036—2016
+
+表 5  瞬态抗扰性试验
+| 测试脉冲 | 功能状态 | 参数 | 参数 | 最低测试要求 |
+| :--- | :--- | :--- | :--- | :--- |
+| | | 12 V 系统 | 24 V 系统 | |
+| 测试脉冲 1 | B, 经协商后可为 C | $U_s = -100\text{ V}$ | $U_s = -600\text{ V}$ | 不低于 5 000 脉冲 |
+| 测试脉冲 2a | B, 经协商后可为 C | $U_s = 50\text{ V}$ | $U_s = 50\text{ V}$ | 不低于 5 000 脉冲 |
+| 测试脉冲 2b | B, 经协商后可为 C | $U_s = 20\text{ V}$ | $U_s = 20\text{ V}$ | 不低于 10 脉冲 |
+| 测试脉冲 3a/3b | B, 经协商后可为 C | 3a; $U_s = -200\text{ V}$ <br> 3b; $U_s = 100\text{ V}$ | 3a; $U_s = -200\text{ V}$ <br> 3b; $U_s = 200\text{ V}$ | 不低于 1 h |
+| 测试脉冲 4 | B, 经协商后可为 C | $U_s = -6\text{ V}$ | $U_s = -12\text{ V}$ | 不低于 10 脉冲 |
+| 测试脉冲 5a | B | $U_s = 87\text{ V}$ | $U_s = 174\text{ V}$ | 10 脉冲，每个脉冲间隔 1 min |
+| 测试脉冲 5b$^a$ | B | \multicolumn{2}{c|}{协商选定} | 10 脉冲，每个脉冲间隔 1 min |
+
+注：$^a$ 测试脉冲 5b 仅用于具有整车发电机有抛负载抑制功能的应用。
+
+5. 19. 5  非电源线瞬态抗扰性试验。
+按 GB/T 21437. 3—2012 中 3. 4 规定的试验方法对逆变器的信号线进行耦合干扰试验。此项试验主要针对某些逆变器中的激活信号线、LIN 总线或 CAN 总线、PWM 状态线等信号线。
+5. 19. 6  电磁辐射抗扰度试验。
+按 GB/T 33014. 2—2016 的 8. 3(测试范围 400 MHz~3 GHz)和 GB/T 33014. 4—2016 的 8. 3(测试范围 1 MHz~400 MHz)对逆变器进行电磁辐射抗扰度试验。
+a)  针对半波暗室法(见表 6)。
+
+表 6  半波暗室法应用参数
+| 频率范围 | 应用场强 | 功能状态 |
+| :--- | :--- | :--- |
+| 200 MHz~3 GHz | 50 V/m | A |
+
+b)  针对大电流注入法(见表 7)。
+
+表 7  大电流注入法应用参数
+| 频率范围 | 电流 | 功能状态 |
+| :--- | :--- | :--- |
+| 1 MHz~400 MHz | 50 mA | A |
+
+5. 19. 7  静电放电抗扰度试验。
+逆变器按 GB/T 19951—2005 的 5. 2 完成不通电状态测试(8 kV), 功能状态应符合 GB/T 19951—2005 附录 B 规定的 C 级。
+5. 19. 8  交流输出端口电快速瞬变抗扰度试验。
+按 GB 4343. 2—2009 中 5. 2 规定的试验方法对交流输出端口进行电快速瞬变抗扰度试验, 试验严酷度等级应符合 GB/T 17626. 4—2008 中第 5 章规定的试验等级 1。
+5. 19. 9  交流输出端口射频传导发射试验。
+
+13
+
+<div style="text-align: center;">表 5 瞬态抗扰性试验</div>
+
+
+
+<table border=1 style='margin: auto; word-wrap: break-word;'><tr><td rowspan="2">测试脉冲</td><td rowspan="2">功能状态</td><td colspan="2">参数</td><td rowspan="2">最低测试要求</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>12 V系统</td><td style='text-align: center; word-wrap: break-word;'>24 V系统</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>测试脉冲1</td><td style='text-align: center; word-wrap: break-word;'>B,经协商后可为C</td><td style='text-align: center; word-wrap: break-word;'>Us= -100 V</td><td style='text-align: center; word-wrap: break-word;'>Us= -600 V</td><td style='text-align: center; word-wrap: break-word;'>不低于5 000 脉冲</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>测试脉冲2a</td><td style='text-align: center; word-wrap: break-word;'>B,经协商后可为C</td><td style='text-align: center; word-wrap: break-word;'>Us= 50 V</td><td style='text-align: center; word-wrap: break-word;'>Us= 50 V</td><td style='text-align: center; word-wrap: break-word;'>不低于5 000 脉冲</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>测试脉冲2b</td><td style='text-align: center; word-wrap: break-word;'>B,经协商后可为C</td><td style='text-align: center; word-wrap: break-word;'>Us= 20 V</td><td style='text-align: center; word-wrap: break-word;'>Us= 20 V</td><td style='text-align: center; word-wrap: break-word;'>不低于10 脉冲</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>测试脉冲3a/3b</td><td style='text-align: center; word-wrap: break-word;'>B,经协商后可为C</td><td style='text-align: center; word-wrap: break-word;'>3a:Us= -200 V 3b:Us= 100 V</td><td style='text-align: center; word-wrap: break-word;'>3a:Us= -200 V 3b:Us= 200 V</td><td style='text-align: center; word-wrap: break-word;'>不低于1 h</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>测试脉冲4</td><td style='text-align: center; word-wrap: break-word;'>B,经协商后可为C</td><td style='text-align: center; word-wrap: break-word;'>Us= -6 V</td><td style='text-align: center; word-wrap: break-word;'>Us= -12 V</td><td style='text-align: center; word-wrap: break-word;'>不低于10 脉冲</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>测试脉冲5a</td><td style='text-align: center; word-wrap: break-word;'>B</td><td style='text-align: center; word-wrap: break-word;'>Us= 87 V</td><td style='text-align: center; word-wrap: break-word;'>Us= 174 V</td><td style='text-align: center; word-wrap: break-word;'>10 脉冲,每个脉冲间隔1 min</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>测试脉冲5b*</td><td style='text-align: center; word-wrap: break-word;'>B</td><td colspan="2">协商选定</td><td style='text-align: center; word-wrap: break-word;'>10 脉冲,每个脉冲间隔1 min</td></tr></table>
+
+注： $ ^{*} $测试脉冲5b仅用于具有整车发电机有抛负载抑制功能的应用。
+
+5.19.5 非电源线瞬态抗扰性试验。
+
+按 GB/T 21437.3—2012 中 3.4 规定的试验方法对逆变器的信号线进行耦合抗干扰试验。此项试验主要针对某些逆变器中的激活信号线、LIN 总线或 CAN 总线、PWM 状态线等信号线。
+
+#### 5.19.6 电磁辐射抗扰度试验。
+
+按 GB/T 33014.2—2016 的 8.3（测试范围 400 MHz～3 GHz）和 GB/T 33014.4—2016 的 8.3（测试范围 1 MHz～400 MHz）对逆变器进行电磁辐射抗扰度试验。
+
+a）针对半波暗室法(见表6)。
+
+<div style="text-align: center;">表 6 半波暗室法应用参数</div>
+
+
+
+<table border=1 style='margin: auto; word-wrap: break-word;'><tr><td style='text-align: center; word-wrap: break-word;'>频率范围</td><td style='text-align: center; word-wrap: break-word;'>应用场强</td><td style='text-align: center; word-wrap: break-word;'>功能状态</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>200 MHz~3 GHz</td><td style='text-align: center; word-wrap: break-word;'>50 V/m</td><td style='text-align: center; word-wrap: break-word;'>A</td></tr></table>
+
+b) 针对大电流注入法(见表7)。
+
+<div style="text-align: center;">表 7 大电流注入法应用参数</div>
+
+
+
+<table border=1 style='margin: auto; word-wrap: break-word;'><tr><td style='text-align: center; word-wrap: break-word;'>频率范围</td><td style='text-align: center; word-wrap: break-word;'>电流</td><td style='text-align: center; word-wrap: break-word;'>功能状态</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>1 MHz～400 MHz</td><td style='text-align: center; word-wrap: break-word;'>50 mA</td><td style='text-align: center; word-wrap: break-word;'>A</td></tr></table>
+
+5.19.7 静电放电抗扰度试验。
+
+逆变器按 GB/T 19951—2005 的 5.2 完成不通电状态测试 (8 kV)，功能状态应符合 GB/T 19951—2005 附录 B 规定的 C 级。
+
+5.19.8 交流输出端口电快速瞬变抗扰度试验。
+
+按 GB 4343.2—2009 中 5.2 规定的试验方法对交流输出端口进行电快速瞬变抗扰度试验，试验严酷度等级应符合 GB/T 17626.4—2008 中第 5 章规定的试验等级 1。
+
+5.19.9 交流输出端口射频传导发射试验。
+
+QC/T 1036—2016
+
+按 GB 4343.1—2009 中第 5 章的试验方法对交流输出端口对 150 kHz~30 MHz 段进行射频传导发射试验。
+**5.20 耐振动试验**
+逆变器按照 GB/T 28046.3—2011 中 4.1 的规定进行耐振动试验。
+**5.21 噪声测试**
+逆变器要在 40 dB(A)~45 dB(A) 的环境中运行,人耳在离逆变器 30 cm 处,试验至少由 3 人参与,每人进行不少于 2 次分辨。
+**5.22 耐久性试验**
+试验需要在无空气污染或明显粉尘的室内进行,将逆变器安装在专用的试验设备上,连续完成 7 500 次试验,其中:
+a) (-40 ± 5) ℃, 500 次循环;
+b) (23 ± 5) ℃, 6 500 次循环;
+c) (70 ± 5) ℃, 500 次循环。
+其中每一次循环包括:
+a) 100 s 满载(按 4.5.1 规定的满载功率值);
+b) 20 s 移除激活信号,无激活信号功能的逆变器应保持逆变功能不开启。
+逆变器在试验过程中不应有外部辅助散热,不同温度之间切换间隔时间小于 10 min。
+
+**6 检验规则**
+
+**6.1 总则**
+每台逆变器须经制造商检验合格后方能出厂,并附有证明产品质量合格的文件。
+**6.2 出厂检验**
+**6.2.1 出厂检验项目。**
+出厂检验项目主要包括如下内容:
+a) 外观及安装尺寸;
+b) 输出电压允差;
+c) 输出频率允差;
+d) 总谐波畸变率;
+e) 无功电流。
+抽检方法:按 GB/T 2828.1—2003 中第 10 章规定的正常检查一次抽样方法进行抽样检查(检查水平 S-1)。
+**6.2.2 判定原则。**
+出厂检验项目必须全部合格,如有不合格,应返修或重新调整合格,无法修复则报废。
+**6.3 型式检验**
+**6.3.1 型式检验条件。**
+在以下情况下进行型式检验:
+a) 新产品试制定型鉴定时;
+
+14
+
+按 GB 4343.1—2009 中第 5 章的试验方法对交流输出端口对  $ 150 \, kHz \sim 30 \, MHz $ 段进行射频传导发射试验。
+
+### 5.20 耐振动试验
+
+逆变器按照 GB/T 28046.3—2011 中 4.1 的规定进行耐振动试验。
+
+### 5.21 噪声测试
+
+逆变器在  $ 40 \, \text{dB(A)} \sim 45 \, \text{dB(A)} $ 的环境中运行，人耳在离逆变器  $ 30 \, cm $ 处，试验至少由 3 人参与，每人进行不少于 2 次分辨。
+
+### 5.22 耐久性试验
+
+试验需要在无空气污染或明显粉尘的室内进行，将逆变器安装在专用的试验设备上，连续完成7 500次试验，其中：
+
+a） $ (-40\pm5)^{\circ}\mathrm{C} $，500次循环；
+
+b)  $ (23 \pm 5)^{\circ}\mathrm{C}, 6500 $ 次循环；
+
+c） $ 70 \pm 5 $℃，500次循环。
+
+其中每一次循环包括：
+
+a）100 s满载（按4.5.1规定的满载功率值）；
+
+b) 20 s 移除激活信号，无激活信号功能的逆变器应保持逆变功能不开启。
+
+逆变器在试验过程中不应有外部辅助散热，不同温度之间切换间隔时间小于10 min。
+
+## 6 检验规则
+
+### 6.1 总则
+
+每台逆变器须经制造商检验合格后方能出厂，并附有证明产品质量合格的文件。
+
+### 6.2 出厂检验
+
+6.2.1 出厂检验项目。
+
+出厂检验项目主要包括如下内容：
+
+a）外观及安装尺寸；
+
+b) 输出电压允差；
+
+c) 输出频率允差；
+
+d）总谐波畸变率；
+
+e）无功电流。
+
+抽检方法：按 GB/T 2828.1—2003 中第 10 章规定的正常检查一次抽样方法进行抽样检查（检查水平 S-1）。
+
+#### 6.2.2 判定原则。
+
+出厂检验项目必须全部合格，如有不合格，应返修或重新调整合格，无法修复则报废。
+
+### 6.3 型式检验
+
+6.3.1 型式检验条件。
+
+在以下情况下进行型式检验：
+
+a）新产品试制定型鉴定时；
+
+QC/T 1036—2016
+
+b) 产品在设计、工艺、结构或主要材料的改变足以影响产品性能时，则应进行有关的型式检验项目；
+c) 产品停产1年再恢复生产时；
+d) 正常批量生产时，每2年不少于1次；
+e) 国家质量监督机构提出要进行型式检验时；
+f) 出厂检验结果与上次型式检验结果有较大差异时。
+
+6.3.2 型式检验抽样方法
+从出厂检验合格的同一批产品中随机抽取样品，按表 8 进行试验。产品的型式检验必须全部符合规定要求，如有个别项目不合格，应重新加倍抽取，就不合格项目进行复查。如仍有不合格项目时，则认为该次型式检验不合格。耐久性项目不合格，则认为该次型式检验不合格，不得加倍抽取。
+
+表 8 试验项目
+
+| 试验项目 | 试验方法 | 分组/样品编号 | | | | | | | | | | | | | | | | | |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| | | 1 | | | 2 | | | 3 | | | 4 | | | 5 | | | 6 | | |
+| | | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 |
+| 外观及安装尺寸 | 5.2 | √ | √ | √ | √ | √ | √ | √ | √ | √ | √ | √ | √ | √ | √ | √ | √ | √ | √ |
+| 密封性 | 5.3 | — | — | — | — | √ | — | — | — | — | — | — | — | — | — | — | — | — | — |
+| 材料 | 5.4 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | √ | — |
+| 输出特性 | 5.5 | √ | √ | √ | √ | √ | √ | √ | √ | √ | √ | √ | √ | √ | √ | √ | √ | √ | √ |
+| 安全与保护 | 5.6 | √ | √ | √ | √ | √ | √ | √ | √ | — | — | — | — | — | — | — | — | — | — |
+| 输出插座与输出线缆 | 5.7 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | √ | — | — |
+| 抗辅助起动性能 | 5.8 | — | — | — | — | — | — | — | — | — | — | — | — | √ | — | — | — | — | — |
+| 抗叠加交流电压特性 | 5.9 | — | — | — | — | — | — | — | — | — | — | — | — | — | √ | — | — | — | — |
+| 接线端受力抗拉特性 | 5.10 | — | — | — | — | — | — | — | — | — | √ | — | — | — | — | — | — | — | — |
+| 抗跌落性 | 5.11 | — | — | — | — | — | — | — | — | — | — | √ | — | — | — | — | — | — | — |
+| 耐低温特性 | 5.12 | √ | √ | √ | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
+| 耐高温特性 | 5.13 | √ | √ | √ | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
+| 高低温贮存特性 | 5.14 | √ | √ | √ | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
+| 耐湿热循环特性 | 5.15 | — | — | — | √ | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
+| 耐稳态湿热特性 | 5.16 | — | — | — | — | √ | — | — | — | — | — | — | — | — | — | — | — | — | — |
+| 耐化学试剂特性 | 5.17 | — | — | — | — | — | — | √ | — | — | — | — | — | — | — | — | — | — | — |
+| 燃烧特性 | 5.18 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | √ |
+| 电磁兼容特性 | 5.19 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | √ | — | — | — |
+| 耐振动特性 | 5.20 | — | — | — | — | — | — | — | √ | — | — | — | — | — | — | — | — | — | — |
+| 噪声 | 5.21 | — | — | — | — | — | — | — | — | √ | — | — | √ | — | — | — | — | — | — |
+| 耐久性 | 5.22 | — | — | — | — | — | — | — | — | √ | — | — | — | — | — | — | — | — | — |
+
+15
+
+b) 产品在设计、工艺、结构或主要材料的改变足以影响产品性能时，则应进行有关的型式检验项目；
+
+c) 产品停产 1 年再恢复生产时；
+
+d) 正常批量生产时，每2年不少于1次；
+
+e） 国家质量监督机构提出要进行型式检验时；
+
+f) 出厂检验结果与上次型式检验结果有较大差异时。
+
+#### 6.3.2 型式检验抽样方法
+
+从出厂检验合格的同一批产品中随机抽取样品，按表8进行试验。产品的型式检验必须全部符合规定要求，如有个别项目不合格，应重新加倍抽取，就不合格项目进行复查。如仍有不合格项目时，则认为该次型式检验不合格。耐久性项目不合格，则认为该次型式检验不合格，不得加倍抽取。
+
+<div style="text-align: center;">表 8  试验项目</div>
+
+
+
+<table border=1 style='margin: auto; word-wrap: break-word;'><tr><td rowspan="3">试验项目</td><td rowspan="3">试验方法</td><td colspan="34">分组/样品编号</td></tr><tr><td colspan="3">1</td><td colspan="3">2</td><td colspan="3">3</td><td colspan="3">4</td><td colspan="3">5</td><td colspan="19">6</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>1</td><td style='text-align: center; word-wrap: break-word;'>2</td><td style='text-align: center; word-wrap: break-word;'>3</td><td style='text-align: center; word-wrap: break-word;'>4</td><td style='text-align: center; word-wrap: break-word;'>5</td><td style='text-align: center; word-wrap: break-word;'>6</td><td style='text-align: center; word-wrap: break-word;'>7</td><td style='text-align: center; word-wrap: break-word;'>8</td><td style='text-align: center; word-wrap: break-word;'>9</td><td style='text-align: center; word-wrap: break-word;'>10</td><td style='text-align: center; word-wrap: break-word;'>11</td><td style='text-align: center; word-wrap: break-word;'>12</td><td style='text-align: center; word-wrap: break-word;'>13</td><td style='text-align: center; word-wrap: break-word;'>14</td><td style='text-align: center; word-wrap: break-word;'>15</td><td style='text-align: center; word-wrap: break-word;'>16</td><td style='text-align: center; word-wrap: break-word;'>17</td><td style='text-align: center; word-wrap: break-word;'>18</td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'></td><td style='text-align: center; word-wrap: break-word;'></td></tr><tr><td style='text-align: center; word-wrap: break-word;'>外观及安装尺寸</td><td style='text-align: center; word-wrap: break-word;'>5.2</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td></tr><tr><td style='text-align: center; word-wrap: break-word;'>密封性</td><td style='text-align: center; word-wrap: break-word;'>5.3</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'></td></tr><tr><td style='text-align: center; word-wrap: break-word;'>材料</td><td style='text-align: center; word-wrap: break-word;'>5.4</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'></td></tr><tr><td style='text-align: center; word-wrap: break-word;'>输出特性</td><td style='text-align: center; word-wrap: break-word;'>5.5</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'></td></tr><tr><td style='text-align: center; word-wrap: break-word;'>安全与保护</td><td style='text-align: center; word-wrap: break-word;'>5.6</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'></td></tr><tr><td style='text-align: center; word-wrap: break-word;'>输出插座与输出线缆</td><td style='text-align: center; word-wrap: break-word;'>5.7</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'></td></tr><tr><td style='text-align: center; word-wrap: break-word;'>抗辅助起动性能</td><td style='text-align: center; word-wrap: break-word;'>5.8</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'></td></tr><tr><td style='text-align: center; word-wrap: break-word;'>抗叠加交流电压特性</td><td style='text-align: center; word-wrap: break-word;'>5.9</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'></td></tr><tr><td style='text-align: center; word-wrap: break-word;'>接线端受力抗拉特性</td><td style='text-align: center; word-wrap: break-word;'>5.10</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'></td></tr><tr><td style='text-align: center; word-wrap: break-word;'>抗跌落性</td><td style='text-align: center; word-wrap: break-word;'>5.11</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'></td></tr><tr><td style='text-align: center; word-wrap: break-word;'>耐低温特性</td><td style='text-align: center; word-wrap: break-word;'>5.12</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'></td></tr><tr><td style='text-align: center; word-wrap: break-word;'>耐高温特性</td><td style='text-align: center; word-wrap: break-word;'>5.13</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'></td></tr><tr><td style='text-align: center; word-wrap: break-word;'>高低温贮存特性</td><td style='text-align: center; word-wrap: break-word;'>5.14</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'></td></tr><tr><td style='text-align: center; word-wrap: break-word;'>耐湿热循环特性</td><td style='text-align: center; word-wrap: break-word;'>5.15</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'></td></tr><tr><td style='text-align: center; word-wrap: break-word;'>耐稳态湿热特性</td><td style='text-align: center; word-wrap: break-word;'>5.16</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'></td></tr><tr><td style='text-align: center; word-wrap: break-word;'>耐化学试剂特性</td><td style='text-align: center; word-wrap: break-word;'>5.17</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'></td></tr><tr><td style='text-align: center; word-wrap: break-word;'>燃烧特性</td><td style='text-align: center; word-wrap: break-word;'>5.18</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'></td></tr><tr><td style='text-align: center; word-wrap: break-word;'>电磁兼容特性</td><td style='text-align: center; word-wrap: break-word;'>5.19</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'></td></tr><tr><td style='text-align: center; word-wrap: break-word;'>耐振动特性</td><td style='text-align: center; word-wrap: break-word;'>5.20</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'></td></tr><tr><td style='text-align: center; word-wrap: break-word;'>噪声</td><td style='text-align: center; word-wrap: break-word;'>5.21</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'></td></tr><tr><td style='text-align: center; word-wrap: break-word;'>耐久性</td><td style='text-align: center; word-wrap: break-word;'>5.22</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>✓</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'>-</td><td style='text-align: center; word-wrap: break-word;'></td></tr></table>
+
+QC/T 1036—2016
+
+**7  标志、包装、运输和贮存**
+
+产品的标志、包装、运输和贮存应符合 QC/T 413 的有关规定，也可由供需双方协商确定。
+
+***
+
+16
+
+## 7 标志、包装、运输和贮存
+
+产品的标志、包装、运输和贮存应符合 QC/T 413 的有关规定，也可由供需双方协商确定。
+
+QC/T 1036—2016
+
+中华人民共和国汽车行业标准
+**汽车电源逆变器**
+QC/T 1036—2016
+
+科学技术文献出版社
+官方网址：www.stdp.com.cn
+地址：北京市复兴路15号 邮编：100038
+编务部：(010) 58882938, 58882087（传真）
+发行部：(010) 58882868, 58882874（传真）
+邮购部：(010) 58882873
+科学技术文献出版社发行 全国各地新华书店经销
+北京市宣武广内印刷厂
+
+---
+开本：880 mm×1230 mm 1/16 印张：1.5 字数：38 千
+版次：2016年8月第1版 2016年8月第1次印刷
+
+统一书号：155189 · 65
+定价：22.00 元
+
+(logo)
+版权所有 侵权必究
+购买本社图书，凡字迹不清、缺页、倒页、脱页者，本社发行部负责调换
+
+15518965
+
+中华人民共和国汽车行业标准
+
+汽车电源逆变器
+
+QC/T 1036—2016
+
+科学技术文献出版社
+
+官方网址：www.stdp.com.cn
+
+地址：北京市复兴路15号 邮编：100038
+
+编务部：（010）58882938，58882087（传真）
+
+发行部：（010）58882868，58882874（传真）
+
+邮购部：（010）58882873
+
+科学技术文献出版社发行 全国各地新华书店经销
+
+北京市宣武广内印刷厂
+
+开本：880 mm×1230 mm 1/16 印张：1.5 字数：38 千
+
+版次：2016年8月第1版 2016年8月第1次印刷
+
+统一书号：155189·65
+
+定价：22.00 元
+
+<div style="text-align: center;"><img src="imgs/img_in_image_box_574_1493_624_1550.jpg" alt="Image" width="4%" /></div>
+
+
+版权所有 侵权必究
+
+购买本社图书，凡字迹不清、缺页、倒页、脱页者，本社发行部负责调换

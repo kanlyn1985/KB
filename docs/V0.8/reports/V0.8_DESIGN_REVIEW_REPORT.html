@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8"><title>V0.8 Design Review Report</title>
+<style>body{font-family:Segoe UI,Microsoft YaHei,sans-serif;margin:32px;color:#1a1a2e}
+h1{border-bottom:3px solid #e76f51;padding-bottom:8px}h2{color:#9d0208;margin-top:26px}
+table{border-collapse:collapse;margin:10px 0}td,th{border:1px solid #d4b8b8;padding:5px 11px;font-size:13.5px}
+th{background:#faf0e6}.pass{color:#0a7a2f;font-weight:600}.meta{color:#555;font-size:13px}</style></head><body>
+<h1>AKB V0.8 Design Review Report — Hypothesis Lifecycle & Knowledge Evolution</h1>
+<p class="meta">Date: 2026-09-04 · Baseline: 3df1811（V0.7 FROZEN）· DESIGN ONLY · Decision: <b>DESIGN COMPLETE</b></p>
+
+<h2>1. Executive Summary</h2>
+<p>V0.8 primary capability 经七候选裁定选择 <b>Hypothesis lifecycle + Knowledge
+evolution</b>（含 Human feedback 裁决机制并入 + EvolutionView 只读审计视图）。
+核心红线：hypothesis ≠ inference ≠ assertion——独立生命周期通道，零进入
+akb_assertions/V0.5 图；promotion 只能经 Governance human 批准 + V0.4 既有
+candidate 通道（零直通）；NO MIGRATION（provenance 审计事实路径，方案 b 需显式批准）。
+V0.5/V0.6/V0.7 frozen 零触碰（实测）。</p>
+
+<h2>2. Baseline</h2>
+<table><tr><th>Item</th><th>SHA/State</th></tr>
+<tr><td>V0.7 frozen</td><td>3df1811（HEAD，clean）</td></tr>
+<tr><td>V0.6/V0.5 frozen</td><td>b317c6e / e7a286e</td></tr>
+<tr><td>SHA verification</td><td>全部 cat-file = commit ✓</td></tr></table>
+
+<h2>3. Capability Gap Analysis（V0.5/V0.6/V0.7 已具备）</h2>
+<p>V0.5 validated graph（投影/查询/provenance/状态语义）+ V0.6 编排闭环 + V0.7
+domain/rule/policy/guard。缺口：①知识演化缺闭环（Hypothesis 两次 defer——最高
+价值未实现项）②验证任务缺管理 ③演化缺审计视图 ④实验性知识无隔离通道。</p>
+
+<h2>4-6. Capability Decision Matrix & Selection</h2>
+<table><tr><th>Candidate</th><th>Decision</th><th>Reason</th></tr>
+<tr><td>A Knowledge evolution / hypothesis lifecycle</td><td class="pass">SELECTED（核心）</td><td>两次 defer 的最高价值项；独立通道不碰 frozen 状态机</td></tr>
+<tr><td>B Advanced reasoning planning</td><td>REJECTED for V0.8</td><td>decision 域（V0.6 已裁定）</td></tr>
+<tr><td>C Multi-step causal reasoning</td><td>DEFERRED→V0.9</td><td>需因果 ontology 先冻结</td></tr>
+<tr><td>D Human feedback loop</td><td class="pass">SELECTED（并入 A）</td><td>Verdict 机制即 feedback loop</td></tr>
+<tr><td>E Learning / adaptation</td><td>REJECTED（红线）</td><td>governance human-only；规则变更必须 human 换版本</td></tr>
+<tr><td>F Runtime optimization</td><td>DEFERRED→V0.9</td><td>P2 级非知识能力</td></tr>
+<tr><td>G Other：evolution audit view</td><td class="pass">SELECTED（并入 A）</td><td>EvolutionView 只读展示面</td></tr>
+</table>
+
+<h2>7-9. Architecture / Contracts</h2>
+<p>架构：V0.6/0.7 推理运行时（frozen）→ V0.8 HypothesisRuntime（新增：Hypothesis/
+VerificationTask/Verdict/PromotionCandidate）→ Governance（human）→ V0.4 既有
+candidate 通道 → validated；EvolutionView 只读。五权分立（+HypothesisRuntime）。</p>
+<p>六 contract 全字段级定义：create/verdict/withdraw/promote_request/
+VerificationTask/EvolutionView——各含 input/output/identity（hyp_id/vt_id 确定性
+派生）/provenance（graph:hypothesis-* 五活动）/determinism/failure/status。</p>
+
+<h2>10-13. Determinism / Provenance / Governance / Data Ownership</h2>
+<p>Deterministic first（id 全 canonical JSON 派生；verdict 裁决 human 确定语义）；
+provenance first（零第二套系统）；governance boundary（human-only verdict/
+promotion；inferred→asserted 禁令零触碰；hypothesis 转正必经新 assertion
+candidate 落地）；数据所有权五权分立（V0.5/V0.6/V0.7 frozen 零修改——hypothesis
+只读引用 policy_ref/pack_ref/context_ref）。</p>
+
+<h2>14-15. Migration Impact / Future Scope</h2>
+<p><b>Migration：实现期二选一</b>——a. NO MIGRATION（provenance 审计事实 +
+EvolutionView JOIN 推导，设计倾向）；b. migration 16 新表（仅 a 不可行时且需
+实现期任务书显式批准）。V0.9+：causal reasoning/optimization/自动实验设计；
+永久禁止：LLM as truth/vector/embedding/distributed/autonomous agent/hypothesis
+直通/learning 自动改规则。</p>
+
+<h2>16. V0.7 Frozen Isolation Check</h2>
+<p>V0.7 frozen 零变化（git diff 3df1811..HEAD 实测仅 docs/V0.8/；零代码/零测试/
+零 migration 修改）。</p>
+
+<h2>17-18. Acceptance Matrix / P0-P2</h2>
+<table><tr><th>Checklist</th><th>Result</th></tr>
+<tr><td>V08-DES-001..018（baseline/frozen 隔离/缺口分析/七候选矩阵/裁定/三原则/
+模型完备/所有权/migration/范围划分/红线/风险分级/roadmap）</td>
+<td class="pass">18/18 PASS（首轮 17/18——DES-010 补 hyp_id 别名术语统一后 PASS）</td></tr></table>
+<table><tr><th>Level</th><th>Count</th><th>Items</th></tr>
+<tr><td>P0（触发即 STOP）</td><td>0 现存</td><td>3 条触发条件已定义（frozen 修改/
+  hypothesis 入图或直通/provenance 路径不可行且 b 未批准）</td></tr>
+<tr><td>P1（设计已含解法）</td><td>2</td><td>provenance-only 查询面性能（不行则
+  方案 b）· verdict evidence 校验深度定标</td></tr>
+<tr><td>P2（accepted）</td><td>3</td><td>陈旧度提醒/任务队列视图/policy 联动过滤</td></tr></table>
+
+<h2>19-20. Docs / Final Decision</h2>
+<p>docs：V0.8_DESIGN.md / V0.8_ARCHITECTURE_AND_CONTRACT.md /
+V0.8_CHANGE_CONTROL_AND_ROADMAP.md / 本报告。</p>
+<p><b>DESIGN COMPLETE — READY_FOR_IMPLEMENTATION</b>（实现需独立任务书；P1 两项
+为实现期决策点；V0.5/V0.6/V0.7 frozen 全程零触碰）。</p>
+</body></html>

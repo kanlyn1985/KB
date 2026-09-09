@@ -1,0 +1,54 @@
+{
+ "case_id": "G005",
+ "category": "G05-synonym-alias",
+ "difficulty": "medium",
+ "requirement_refs": [
+  "SYS-007",
+  "SYS-012"
+ ],
+ "input": {
+  "query": "车载充电机和OBC是一回事吗"
+ },
+ "expected": {
+  "entities": [
+   {
+    "entity_id": "P-HW-OBC",
+    "entity_type": "component",
+    "description": "OBC（On-Board Charger，车载充电机）"
+   }
+  ],
+  "assertions": [
+   {
+    "assertion_id": "ast_g005_1",
+    "subject_ref": "entity:obc",
+    "predicate_ref": "relation:alias_of",
+    "object": {
+     "kind": "literal",
+     "value": "车载充电机 = OBC = On-Board Charger",
+     "datatype": "xsd:string"
+    },
+    "assertion_type": "asserted",
+    "status": "validated",
+    "evidence_refs": [
+     "evd:node:P-KNOW-OBC:0"
+    ],
+    "confidence": 0.95
+   }
+  ],
+  "evidence": [
+   {
+    "evidence_id": "evd:node:P-KNOW-OBC:0",
+    "document_id": "doc:node:P-KNOW-OBC"
+   }
+  ],
+  "support_level": "sufficient",
+  "answer_contract": {
+   "must_include": [
+    "同一"
+   ],
+   "max_chars": 500
+  }
+ },
+ "negative_expectations": [],
+ "notes": "别名归一：术语表 alias 体系（车载充电机/OBC/On-Board Charger 同指）"
+}

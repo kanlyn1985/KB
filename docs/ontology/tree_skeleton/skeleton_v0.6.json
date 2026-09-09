@@ -1,0 +1,3823 @@
+{
+ "schema_version": "1.0",
+ "tree_version": "0.6",
+ "domain": "obc_dcdc",
+ "description": "OBC/DCDC 本体树骨架 v0.3。修正：P 物理分解树为主骨架（爆炸图式）；F 能力树与 L 组件树分离（allocate 关联）；R 为贯穿追踪层；过程维度正交；实例层（型号 vs 实例）。经 raw/ 13 份外部文档 + Athena 1477 份团队文档落位验证。 v0.3：L层逻辑域与P层SW-C分离（allocate关联）；知识节点挂产品节点下；P-CAL挂标定组件下；隔离变换级改名。 v0.4：过载节点细分（33 子节点，8 节点拆分）",
+ "branches": [
+  "P",
+  "F",
+  "L",
+  "R",
+  "G",
+  "M"
+ ],
+ "nodes": [
+  {
+   "id": "P-ROOT",
+   "layer": "P",
+   "type": "物理分解树",
+   "name": "P 物理分解树（主骨架）",
+   "parent": null
+  },
+  {
+   "id": "P-HW",
+   "layer": "P",
+   "type": "学科域",
+   "name": "电子学科（电路拓扑分解：EMI/PFC/LLC/控制/辅助）",
+   "parent": "P-ROOT"
+  },
+  {
+   "id": "P-HW-OBC",
+   "layer": "P",
+   "type": "模块",
+   "name": "OBC 模块",
+   "parent": "P-HW"
+  },
+  {
+   "id": "P-HW-OBC-PFC",
+   "layer": "P",
+   "type": "电路",
+   "name": "PFC 电路",
+   "parent": "P-HW-OBC"
+  },
+  {
+   "id": "P-HW-OBC-DCDC",
+   "layer": "P",
+   "type": "电路",
+   "name": "隔离变换级（LLC）",
+   "parent": "P-HW-OBC"
+  },
+  {
+   "id": "P-HW-OBC-AUX",
+   "layer": "P",
+   "type": "电路",
+   "name": "辅助电源",
+   "parent": "P-HW-OBC"
+  },
+  {
+   "id": "P-HW-OBC-EMI",
+   "layer": "P",
+   "type": "电路",
+   "name": "EMI 滤波",
+   "parent": "P-HW-OBC"
+  },
+  {
+   "id": "P-HW-OBC-ACRELAY",
+   "layer": "P",
+   "type": "部件",
+   "name": "AC 继电器",
+   "parent": "P-HW-OBC"
+  },
+  {
+   "id": "P-HW-DCDC",
+   "layer": "P",
+   "type": "模块",
+   "name": "DCDC 模块",
+   "parent": "P-HW"
+  },
+  {
+   "id": "P-HW-DCDC-CONV",
+   "layer": "P",
+   "type": "电路",
+   "name": "变换电路",
+   "parent": "P-HW-DCDC"
+  },
+  {
+   "id": "P-HW-DCDC-OUT",
+   "layer": "P",
+   "type": "电路",
+   "name": "输出电路",
+   "parent": "P-HW-DCDC"
+  },
+  {
+   "id": "P-HW-CTRL",
+   "layer": "P",
+   "type": "模块",
+   "name": "控制板",
+   "parent": "P-HW"
+  },
+  {
+   "id": "P-HW-CTRL-MCU",
+   "layer": "P",
+   "type": "器件",
+   "name": "MCU/DSP",
+   "parent": "P-HW-CTRL"
+  },
+  {
+   "id": "P-HW-CTRL-DRV",
+   "layer": "P",
+   "type": "电路",
+   "name": "驱动电路",
+   "parent": "P-HW-CTRL"
+  },
+  {
+   "id": "P-HW-CTRL-SENSE",
+   "layer": "P",
+   "type": "电路",
+   "name": "采样电路",
+   "parent": "P-HW-CTRL"
+  },
+  {
+   "id": "P-HW-CTRL-PROTECT",
+   "layer": "P",
+   "type": "电路",
+   "name": "保护电路",
+   "parent": "P-HW-CTRL"
+  },
+  {
+   "id": "P-HW-MAG",
+   "layer": "P",
+   "type": "学科域",
+   "name": "磁件学科（变压器/电感）",
+   "parent": "P-ROOT"
+  },
+  {
+   "id": "P-HW-MECH",
+   "layer": "P",
+   "type": "部件",
+   "name": "结构件（壳体/水道/密封/连接器/铜排/屏蔽）",
+   "parent": "P-MECH"
+  },
+  {
+   "id": "P-SW",
+   "layer": "P",
+   "type": "软件域",
+   "name": "软件树",
+   "parent": "P-ROOT"
+  },
+  {
+   "id": "P-SW-ASW",
+   "layer": "P",
+   "type": "软件层",
+   "name": "应用层 ASW",
+   "parent": "P-SW"
+  },
+  {
+   "id": "P-SW-ASW-CC",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "CC（控制导引）",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-CP",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "CP",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-ACRELAY",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "ACRelayCtrl",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-AUXPWR",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "AuxPower",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-CANREPORT",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "CANReport",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-CANRCV",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "CAN_Receive",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-CAL",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "Calibration（标定）",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-DCDCFAULTDET",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "DCDCFaultDetect",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-ADC",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "ADCSignal（采样）",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-CPOUT",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "CPOUT",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-OBCPWRCTRL",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "OBCPowerCtrl（OBC功率控制）",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-RTE",
+   "layer": "P",
+   "type": "软件层",
+   "name": "RTE",
+   "parent": "P-SW"
+  },
+  {
+   "id": "P-SW-BSW",
+   "layer": "P",
+   "type": "软件层",
+   "name": "BSW（服务/ECU抽象/MCAL）",
+   "parent": "P-SW"
+  },
+  {
+   "id": "P-CAL",
+   "layer": "P",
+   "type": "数据域",
+   "name": "标定数据树（降额曲线/阈值/增益）",
+   "parent": "P-SW-ASW-CAL"
+  },
+  {
+   "id": "P-IF",
+   "layer": "P",
+   "type": "接口域",
+   "name": "接口树（电气/通信/机械/热）",
+   "parent": "P-ROOT"
+  },
+  {
+   "id": "P-KNOW",
+   "layer": "P",
+   "type": "知识域",
+   "name": "产品知识节点（原理/简介，挂产品节点下）",
+   "parent": "P-ROOT"
+  },
+  {
+   "id": "P-KNOW-OBC",
+   "layer": "P",
+   "type": "知识节点",
+   "name": "OBC 知识（简介/拓扑原理/工作原理）",
+   "parent": "P-HW-OBC"
+  },
+  {
+   "id": "P-KNOW-DCDC",
+   "layer": "P",
+   "type": "知识节点",
+   "name": "DCDC 知识（简介/工作原理）",
+   "parent": "P-HW-DCDC"
+  },
+  {
+   "id": "F-ROOT",
+   "layer": "F",
+   "type": "功能分解树",
+   "name": "F 功能分解树（黑盒能力）",
+   "parent": null
+  },
+  {
+   "id": "F-OBC",
+   "layer": "F",
+   "type": "功能域",
+   "name": "OBC 功能",
+   "parent": "F-ROOT"
+  },
+  {
+   "id": "F-OBC-CHARGE",
+   "layer": "F",
+   "type": "功能",
+   "name": "充电功能（AC-DC 变换/电压调节/电流限制/模式管理）",
+   "parent": "F-OBC"
+  },
+  {
+   "id": "F-OBC-DISCHARGE",
+   "layer": "F",
+   "type": "功能",
+   "name": "放电功能（V2L/V2G/V2H 逆变）",
+   "parent": "F-OBC"
+  },
+  {
+   "id": "F-OBC-CP",
+   "layer": "F",
+   "type": "功能",
+   "name": "控制导引（CP/CC/锁止）",
+   "parent": "F-OBC"
+  },
+  {
+   "id": "F-OBC-PROTECT",
+   "layer": "F",
+   "type": "功能",
+   "name": "保护功能（过压/欠压/过流/短路/过温/绝缘监测）",
+   "parent": "F-OBC"
+  },
+  {
+   "id": "F-OBC-COMM",
+   "layer": "F",
+   "type": "功能",
+   "name": "通信功能（CAN/ISO15118/UDS）",
+   "parent": "F-OBC"
+  },
+  {
+   "id": "F-OBC-DIAG",
+   "layer": "F",
+   "type": "功能",
+   "name": "诊断功能",
+   "parent": "F-OBC"
+  },
+  {
+   "id": "F-OBC-WAKE",
+   "layer": "F",
+   "type": "功能",
+   "name": "待机唤醒",
+   "parent": "F-OBC"
+  },
+  {
+   "id": "F-DCDC",
+   "layer": "F",
+   "type": "功能域",
+   "name": "DCDC 功能",
+   "parent": "F-ROOT"
+  },
+  {
+   "id": "F-DCDC-CONV",
+   "layer": "F",
+   "type": "功能",
+   "name": "电压转换/低压输出",
+   "parent": "F-DCDC"
+  },
+  {
+   "id": "F-DCDC-REVERSE",
+   "layer": "F",
+   "type": "功能",
+   "name": "反供电/预充放电",
+   "parent": "F-DCDC"
+  },
+  {
+   "id": "F-DCDC-PROTECT",
+   "layer": "F",
+   "type": "功能",
+   "name": "DCDC 保护功能（过压/欠压/过流/短路/过温）",
+   "parent": "F-DCDC"
+  },
+  {
+   "id": "F-SYS",
+   "layer": "F",
+   "type": "功能",
+   "name": "系统级功能（OBC+DCDC 协同/故障管理）",
+   "parent": "F-ROOT"
+  },
+  {
+   "id": "L-ROOT",
+   "layer": "L",
+   "type": "逻辑组件树",
+   "name": "L 逻辑组件树（白盒组件）",
+   "parent": null
+  },
+  {
+   "id": "L-PWRCTRL",
+   "layer": "L",
+   "type": "组件",
+   "name": "功率控制逻辑域（环路/调制/功率级控制逻辑）",
+   "parent": "L-ROOT"
+  },
+  {
+   "id": "L-STATE",
+   "layer": "L",
+   "type": "组件",
+   "name": "状态管理（OBC/DCDC/休眠唤醒/AC Relay 状态机）",
+   "parent": "L-ROOT"
+  },
+  {
+   "id": "L-FAULT",
+   "layer": "L",
+   "type": "组件",
+   "name": "故障判定逻辑域（检测/判定/恢复逻辑）",
+   "parent": "L-ROOT"
+  },
+  {
+   "id": "L-COMM",
+   "layer": "L",
+   "type": "组件",
+   "name": "通信协议逻辑域（CAN/诊断/ISO15118 协议逻辑）",
+   "parent": "L-ROOT"
+  },
+  {
+   "id": "L-CAL",
+   "layer": "L",
+   "type": "组件",
+   "name": "标定逻辑域（标定参数管理逻辑）",
+   "parent": "L-ROOT"
+  },
+  {
+   "id": "L-SENSE",
+   "layer": "L",
+   "type": "组件",
+   "name": "采样监测逻辑域（绝缘/温度/采样逻辑）",
+   "parent": "L-ROOT"
+  },
+  {
+   "id": "L-SYS",
+   "layer": "L",
+   "type": "组件",
+   "name": "系统管理逻辑域（电源/唤醒/自检逻辑）",
+   "parent": "L-ROOT"
+  },
+  {
+   "id": "L-STRATEGY",
+   "layer": "L",
+   "type": "策略域",
+   "name": "控制策略点（G5 策略族）",
+   "parent": "L-ROOT"
+  },
+  {
+   "id": "L-STRATEGY-FREQ",
+   "layer": "L",
+   "type": "策略",
+   "name": "抖频策略（DCDC/OBC）",
+   "parent": "L-STRATEGY"
+  },
+  {
+   "id": "L-STRATEGY-CBC",
+   "layer": "L",
+   "type": "策略",
+   "name": "CBC 策略",
+   "parent": "L-STRATEGY"
+  },
+  {
+   "id": "L-STRATEGY-PEAK",
+   "layer": "L",
+   "type": "策略",
+   "name": "峰值功率策略",
+   "parent": "L-STRATEGY"
+  },
+  {
+   "id": "L-STRATEGY-PRECHARGE",
+   "layer": "L",
+   "type": "策略",
+   "name": "启动预充策略",
+   "parent": "L-STRATEGY"
+  },
+  {
+   "id": "L-STRATEGY-NTC",
+   "layer": "L",
+   "type": "策略",
+   "name": "NTC 查表策略",
+   "parent": "L-STRATEGY"
+  },
+  {
+   "id": "L-STRATEGY-LOWTEMP",
+   "layer": "L",
+   "type": "策略",
+   "name": "低温启机策略",
+   "parent": "L-STRATEGY"
+  },
+  {
+   "id": "L-STRATEGY-V2L",
+   "layer": "L",
+   "type": "策略",
+   "name": "V2L Inside 策略",
+   "parent": "L-STRATEGY"
+  },
+  {
+   "id": "L-STRATEGY-OPTO",
+   "layer": "L",
+   "type": "策略",
+   "name": "光耦黏连检测策略",
+   "parent": "L-STRATEGY"
+  },
+  {
+   "id": "L-STRATEGY-GPIO",
+   "layer": "L",
+   "type": "策略",
+   "name": "GPIO PWM 回读策略",
+   "parent": "L-STRATEGY"
+  },
+  {
+   "id": "L-STRATEGY-SENSE",
+   "layer": "L",
+   "type": "策略",
+   "name": "采样容差策略",
+   "parent": "L-STRATEGY"
+  },
+  {
+   "id": "R-ROOT",
+   "layer": "R",
+   "type": "需求追踪层",
+   "name": "R 需求树（追踪层，贯穿各层）",
+   "parent": null
+  },
+  {
+   "id": "R-FSC",
+   "layer": "R",
+   "type": "需求域",
+   "name": "功能安全需求（ISO 26262：SG→FSR→TSR→HSR/SSR）",
+   "parent": "R-ROOT"
+  },
+  {
+   "id": "R-PERF",
+   "layer": "R",
+   "type": "需求域",
+   "name": "性能需求（输入/输出特性/效率/降额）",
+   "parent": "R-ROOT"
+  },
+  {
+   "id": "R-PROTECT",
+   "layer": "R",
+   "type": "需求域",
+   "name": "保护需求（阈值/动作时间/恢复）",
+   "parent": "R-ROOT"
+  },
+  {
+   "id": "R-SAFETY",
+   "layer": "R",
+   "type": "需求域",
+   "name": "电气安全需求（绝缘/耐压/接触电流）",
+   "parent": "R-ROOT"
+  },
+  {
+   "id": "R-EMC",
+   "layer": "R",
+   "type": "需求域",
+   "name": "EMC 需求",
+   "parent": "R-ROOT"
+  },
+  {
+   "id": "R-ENV",
+   "layer": "R",
+   "type": "需求域",
+   "name": "环境需求（温度/湿度/机械/化学）",
+   "parent": "R-ROOT"
+  },
+  {
+   "id": "R-REL",
+   "layer": "R",
+   "type": "需求域",
+   "name": "可靠性需求（耐久/寿命/噪声）",
+   "parent": "R-ROOT"
+  },
+  {
+   "id": "R-SW",
+   "layer": "R",
+   "type": "需求域",
+   "name": "软件需求（SWRD：功率转换/通信/诊断/刷写）",
+   "parent": "R-ROOT"
+  },
+  {
+   "id": "R-HW",
+   "layer": "R",
+   "type": "需求域",
+   "name": "硬件需求（元器件/材料/安规）",
+   "parent": "R-ROOT"
+  },
+  {
+   "id": "R-IF",
+   "layer": "R",
+   "type": "需求域",
+   "name": "接口与通信需求（CAN 矩阵/状态机要求）",
+   "parent": "R-ROOT"
+  },
+  {
+   "id": "R-STD",
+   "layer": "R",
+   "type": "标准条款树",
+   "name": "标准条款（GB/T 40432/24347/18487/ISO14229/企标…全量）",
+   "parent": "R-ROOT"
+  },
+  {
+   "id": "G-ROOT",
+   "layer": "G",
+   "type": "过程维度",
+   "name": "G 过程维度（正交，作用于产品节点）",
+   "parent": null
+  },
+  {
+   "id": "G-DEV",
+   "layer": "G",
+   "type": "开发过程",
+   "name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+   "parent": "G-ROOT"
+  },
+  {
+   "id": "G-PROD",
+   "layer": "G",
+   "type": "生产过程",
+   "name": "生产过程树（PCBA/组装/生产测试/试制）",
+   "parent": "G-ROOT"
+  },
+  {
+   "id": "G-PROC-STD",
+   "layer": "G",
+   "type": "过程标准",
+   "name": "ASPICE 流程（SYS/SWE/SUP/MAN/ACQ）",
+   "parent": "G-ROOT"
+  },
+  {
+   "id": "G-METHOD",
+   "layer": "G",
+   "type": "开发方法",
+   "name": "开发方法域（建模/配置/工具使用）",
+   "parent": "G-ROOT"
+  },
+  {
+   "id": "G-METHOD-MBD",
+   "layer": "G",
+   "type": "方法",
+   "name": "MBD 建模方法（Simulink/Stateflow/模型检查）",
+   "parent": "G-METHOD"
+  },
+  {
+   "id": "G-METHOD-AUTOSAR",
+   "layer": "G",
+   "type": "方法",
+   "name": "AUTOSAR 配置方法（Neusar/RTE/EB/代码生成）",
+   "parent": "G-METHOD"
+  },
+  {
+   "id": "G-METHOD-TOOL",
+   "layer": "G",
+   "type": "方法",
+   "name": "工具使用方法（gitlab/Matlab/Polarion/测试工具）",
+   "parent": "G-METHOD"
+  },
+  {
+   "id": "G-ASSET",
+   "layer": "G",
+   "type": "可复用资产",
+   "name": "可复用资产（代码资产/文档模板/CBB设计标准）",
+   "parent": "G-ROOT"
+  },
+  {
+   "id": "Q-ROOT",
+   "layer": "Q",
+   "type": "质量经验域",
+   "name": "Q 质量/经验域（8 类实体：质量失效类）",
+   "parent": null
+  },
+  {
+   "id": "Q-PROBLEM",
+   "layer": "Q",
+   "type": "问题记录",
+   "name": "问题记录（问题排查/踩坑记录）",
+   "parent": "Q-ROOT"
+  },
+  {
+   "id": "Q-LESSON",
+   "layer": "Q",
+   "type": "经验教训",
+   "name": "经验教训（项目复盘/FAQ/最佳实践）",
+   "parent": "Q-ROOT"
+  },
+  {
+   "id": "Q-FAILURE",
+   "layer": "Q",
+   "type": "失效模式",
+   "name": "失效模式（FMEA 相关）",
+   "parent": "Q-ROOT"
+  },
+  {
+   "id": "M-ROOT",
+   "layer": "M",
+   "type": "实例层",
+   "name": "M 实例层（型号 vs 实例）",
+   "parent": null
+  },
+  {
+   "id": "M-CCU",
+   "layer": "M",
+   "type": "产品型号",
+   "name": "CCU 型号（OBC+DCDC+逆变集成）",
+   "parent": "M-ROOT"
+  },
+  {
+   "id": "M-MI",
+   "layer": "M",
+   "type": "项目实例",
+   "name": "曼岛项目（instanceOf CCU）",
+   "parent": "M-CCU"
+  },
+  {
+   "id": "M-VAVE",
+   "layer": "M",
+   "type": "项目实例",
+   "name": "VAVE 项目（instanceOf CCU）",
+   "parent": "M-CCU"
+  },
+  {
+   "id": "M-G5",
+   "layer": "M",
+   "type": "平台实例",
+   "name": "G5 平台（6.6kW/11kW，EVTECH）",
+   "parent": "M-CCU"
+  },
+  {
+   "id": "M-SW40",
+   "layer": "M",
+   "type": "平台实例",
+   "name": "SW4.0 软件平台（富特）",
+   "parent": "M-ROOT"
+  },
+  {
+   "id": "P-SW-ASW-OBCSTATE",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "OBCState（状态管理）",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-DCDCFAULTRPT",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "DCDCFaultReport",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-OBCFAULTDET",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "OBCFaultDetect",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-OBCFAULTRPT",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "OBCFaultReport",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-DCDCPWRCTRL",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "DCDCPowerCtrl（DCDC功率控制）",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-DCDCSTATE",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "DCDCState",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-DEH",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "DEH",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-ELECLOCK",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "ELEclock",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-GUNMANAGE",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "GunManage",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-GUNTEMP",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "GunTemp",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-HVDM",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "HVDM",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-INSDET",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "INSDET（绝缘检测）",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-INTERLOCK",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "Interlock（高压互锁）",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-LED",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "LED",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-NACS",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "NACS",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-ORINGOVP",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "ORingOVP",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-S2",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "S2",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-SLEEPWAKE",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "SleepWake（休眠唤醒）",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-TEMP",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "Temp（温度管理）",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "P-SW-ASW-UDMANAGE",
+   "layer": "P",
+   "type": "SW-C 组件",
+   "name": "UDManage",
+   "parent": "P-SW-ASW"
+  },
+  {
+   "id": "G-DEV-RFQ",
+   "layer": "G",
+   "type": "阶段",
+   "name": "RFQ（报价/立项）",
+   "parent": "G-DEV"
+  },
+  {
+   "id": "G-DEV-EVT1",
+   "layer": "G",
+   "type": "阶段",
+   "name": "EVT1（工程验证1）",
+   "parent": "G-DEV"
+  },
+  {
+   "id": "G-DEV-EVT2",
+   "layer": "G",
+   "type": "阶段",
+   "name": "EVT2（工程验证2）",
+   "parent": "G-DEV"
+  },
+  {
+   "id": "G-DEV-ET",
+   "layer": "G",
+   "type": "阶段",
+   "name": "ET（设计验证）",
+   "parent": "G-DEV"
+  },
+  {
+   "id": "G-DEV-PT0",
+   "layer": "G",
+   "type": "阶段",
+   "name": "PT0（生产验证0）",
+   "parent": "G-DEV"
+  },
+  {
+   "id": "G-DEV-PT1",
+   "layer": "G",
+   "type": "阶段",
+   "name": "PT1（生产验证1）",
+   "parent": "G-DEV"
+  },
+  {
+   "id": "G-DEV-PPAP",
+   "layer": "G",
+   "type": "阶段",
+   "name": "PPAP（量产批准）",
+   "parent": "G-DEV"
+  },
+  {
+   "id": "G-DEV-SOP",
+   "layer": "G",
+   "type": "阶段",
+   "name": "SOP（量产）",
+   "parent": "G-DEV"
+  },
+  {
+   "id": "M-G5D5",
+   "layer": "M",
+   "type": "平台实例",
+   "name": "G5d5 平台（instanceOf CCU）",
+   "parent": "M-CCU"
+  },
+  {
+   "id": "M-G7",
+   "layer": "M",
+   "type": "平台实例",
+   "name": "G7 平台（instanceOf CCU）",
+   "parent": "M-CCU"
+  },
+  {
+   "id": "M-D950",
+   "layer": "M",
+   "type": "项目实例",
+   "name": "零跑 D950 项目（instanceOf CCU）",
+   "parent": "M-CCU"
+  },
+  {
+   "id": "P-HW-MECH-HOUSING",
+   "layer": "P",
+   "type": "部件",
+   "name": "壳体（压铸/钣金/机加工/注塑壳体）",
+   "parent": "P-HW-MECH"
+  },
+  {
+   "id": "P-HW-MECH-WATERWAY",
+   "layer": "P",
+   "type": "部件",
+   "name": "水道系统（水道板/水嘴/进出水口/流道设计）",
+   "parent": "P-HW-MECH"
+  },
+  {
+   "id": "P-HW-MECH-SEAL",
+   "layer": "P",
+   "type": "部件",
+   "name": "密封系统（O型圈/密封垫/密封胶/气密界面）",
+   "parent": "P-HW-MECH"
+  },
+  {
+   "id": "P-HW-MECH-FASTENER",
+   "layer": "P",
+   "type": "部件",
+   "name": "紧固件（螺钉/螺栓/螺母/螺柱/卡扣）",
+   "parent": "P-HW-MECH"
+  },
+  {
+   "id": "P-HW-MECH-CONNECTOR",
+   "layer": "P",
+   "type": "部件",
+   "name": "连接器与接插件（高压/低压/信号/防呆）",
+   "parent": "P-HW-MECH"
+  },
+  {
+   "id": "P-HW-MECH-BUSBAR",
+   "layer": "P",
+   "type": "部件",
+   "name": "铜排/母排（大电流连接/绝缘间隔）",
+   "parent": "P-HW-MECH"
+  },
+  {
+   "id": "P-HW-MECH-NAMEPLATE",
+   "layer": "P",
+   "type": "部件",
+   "name": "铭牌/标签/标识（铭牌/高压标签/追溯码）",
+   "parent": "P-HW-MECH"
+  },
+  {
+   "id": "P-HW-MECH-SHIELD",
+   "layer": "P",
+   "type": "部件",
+   "name": "屏蔽与防护（EMC屏蔽罩/防尘/防水透气）",
+   "parent": "P-HW-MECH"
+  },
+  {
+   "id": "P-HW-MECH-BRACKET",
+   "layer": "P",
+   "type": "部件",
+   "name": "支架/托架/安装结构（安装板/法兰/减震支架）",
+   "parent": "P-HW-MECH"
+  },
+  {
+   "id": "P-HW-THERMAL",
+   "layer": "P",
+   "type": "热域",
+   "name": "热管理系统（散热/导热/风道）",
+   "parent": "P-MECH"
+  },
+  {
+   "id": "P-HW-THERMAL-HEATSINK",
+   "layer": "P",
+   "type": "部件",
+   "name": "散热器（铝挤/压铸/翅片/铲齿）",
+   "parent": "P-HW-THERMAL"
+  },
+  {
+   "id": "P-HW-THERMAL-TIM",
+   "layer": "P",
+   "type": "部件",
+   "name": "导热界面材料（导热垫/硅脂/相变材料）",
+   "parent": "P-HW-THERMAL"
+  },
+  {
+   "id": "P-HW-THERMAL-FAN",
+   "layer": "P",
+   "type": "部件",
+   "name": "风冷部件（风扇/风道/格栅）",
+   "parent": "P-HW-THERMAL"
+  },
+  {
+   "id": "P-HW-THERMAL-POT",
+   "layer": "P",
+   "type": "部件",
+   "name": "灌封与涂覆（灌封胶/三防漆/粘接剂）",
+   "parent": "P-HW-THERMAL"
+  },
+  {
+   "id": "P-HW-MATERIAL",
+   "layer": "P",
+   "type": "材料域",
+   "name": "材料库（金属/塑料/橡胶/磁材）",
+   "parent": "P-MECH"
+  },
+  {
+   "id": "P-HW-MATERIAL-METAL",
+   "layer": "P",
+   "type": "材料",
+   "name": "金属材料（铝ADC12/6061/铜/钢/钕铁硼）",
+   "parent": "P-HW-MATERIAL"
+  },
+  {
+   "id": "P-HW-MATERIAL-PLASTIC",
+   "layer": "P",
+   "type": "材料",
+   "name": "工程塑料（PA/PPA/PBT/PC/玻纤增强）",
+   "parent": "P-HW-MATERIAL"
+  },
+  {
+   "id": "P-HW-MATERIAL-RUBBER",
+   "layer": "P",
+   "type": "材料",
+   "name": "橡胶/硅胶/弹性体（密封/减震/垫片）",
+   "parent": "P-HW-MATERIAL"
+  },
+  {
+   "id": "P-HW-MATERIAL-SURFACE",
+   "layer": "P",
+   "type": "材料",
+   "name": "表面处理（阳极氧化/电镀/喷粉/三价铬钝化）",
+   "parent": "P-HW-MATERIAL"
+  },
+  {
+   "id": "G-PROD-CASTING",
+   "layer": "G",
+   "type": "工艺",
+   "name": "压铸工艺（模具/压铸参数/浇道）",
+   "parent": "G-PROD"
+  },
+  {
+   "id": "G-PROD-MACHINING",
+   "layer": "G",
+   "type": "工艺",
+   "name": "机加工（CNC/钻孔/攻丝/公差控制）",
+   "parent": "G-PROD"
+  },
+  {
+   "id": "G-PROD-SHEET",
+   "layer": "G",
+   "type": "工艺",
+   "name": "钣金工艺（冲压/折弯/焊接/铆接）",
+   "parent": "G-PROD"
+  },
+  {
+   "id": "G-PROD-INJECTION",
+   "layer": "G",
+   "type": "工艺",
+   "name": "注塑工艺（模具/注塑参数/脱模）",
+   "parent": "G-PROD"
+  },
+  {
+   "id": "G-PROD-SURFACE",
+   "layer": "G",
+   "type": "工艺",
+   "name": "表面处理工艺（阳极/电镀/喷涂/钝化）",
+   "parent": "G-PROD"
+  },
+  {
+   "id": "G-PROD-POTTING",
+   "layer": "G",
+   "type": "工艺",
+   "name": "灌封涂覆工艺（灌胶/点胶/三防）",
+   "parent": "G-PROD"
+  },
+  {
+   "id": "G-PROD-ASSEMBLY",
+   "layer": "G",
+   "type": "工艺",
+   "name": "装配工艺（压装/螺纹紧固/涂胶/组装）",
+   "parent": "G-PROD"
+  },
+  {
+   "id": "G-PROD-PACK",
+   "layer": "G",
+   "type": "工艺",
+   "name": "包装工艺（包装/防护/周转/防静电）",
+   "parent": "G-PROD"
+  },
+  {
+   "id": "G-VERIFY",
+   "layer": "G",
+   "type": "验证域",
+   "name": "验证活动树（测试/检测/试验）",
+   "parent": "G-ROOT"
+  },
+  {
+   "id": "G-VERIFY-THERMAL",
+   "layer": "G",
+   "type": "验证",
+   "name": "热测试（温升/热循环/热冲击/红外）",
+   "parent": "G-VERIFY"
+  },
+  {
+   "id": "G-VERIFY-VIBRATION",
+   "layer": "G",
+   "type": "验证",
+   "name": "振动与冲击测试（振动/跌落/扫频）",
+   "parent": "G-VERIFY"
+  },
+  {
+   "id": "G-VERIFY-AIRTIGHT",
+   "layer": "G",
+   "type": "验证",
+   "name": "气密与泄漏测试（气密/保压/氦检/水检）",
+   "parent": "G-VERIFY"
+  },
+  {
+   "id": "G-VERIFY-ENV",
+   "layer": "G",
+   "type": "验证",
+   "name": "环境测试（高温/低温/湿热/盐雾/防尘）",
+   "parent": "G-VERIFY"
+  },
+  {
+   "id": "G-VERIFY-DIM",
+   "layer": "G",
+   "type": "验证",
+   "name": "尺寸检测（全尺寸/CPK/三坐标/检具）",
+   "parent": "G-VERIFY"
+  },
+  {
+   "id": "G-VERIFY-REL",
+   "layer": "G",
+   "type": "验证",
+   "name": "可靠性试验（耐久/寿命/老化/温循）",
+   "parent": "G-VERIFY"
+  },
+  {
+   "id": "G-VERIFY-CAE",
+   "layer": "G",
+   "type": "验证",
+   "name": "CAE仿真验证（热仿真/模态/流阻/强度）",
+   "parent": "G-VERIFY"
+  },
+  {
+   "id": "G-VERIFY-ELECTRICAL",
+   "layer": "G",
+   "type": "验证",
+   "name": "电气测试（耐压/绝缘/安规/接触电阻）",
+   "parent": "G-VERIFY"
+  },
+  {
+   "id": "G-METHOD-CAE",
+   "layer": "G",
+   "type": "方法",
+   "name": "CAE仿真方法（热/结构/流场/电磁）",
+   "parent": "G-METHOD"
+  },
+  {
+   "id": "G-METHOD-CAE-THERMAL",
+   "layer": "G",
+   "type": "方法",
+   "name": "热仿真方法（Flotherm/热阻网络/CFD）",
+   "parent": "G-METHOD-CAE"
+  },
+  {
+   "id": "G-METHOD-CAE-STRUCT",
+   "layer": "G",
+   "type": "方法",
+   "name": "结构仿真方法（模态/强度/疲劳）",
+   "parent": "G-METHOD-CAE"
+  },
+  {
+   "id": "G-METHOD-CAE-FLUID",
+   "layer": "G",
+   "type": "方法",
+   "name": "流阻仿真方法（水冷流道/风道）",
+   "parent": "G-METHOD-CAE"
+  },
+  {
+   "id": "G-METHOD-DFM",
+   "layer": "G",
+   "type": "方法",
+   "name": "DFM/DFA设计方法（可制造性/可装配性）",
+   "parent": "G-METHOD"
+  },
+  {
+   "id": "G-METHOD-TOL",
+   "layer": "G",
+   "type": "方法",
+   "name": "公差分析方法（尺寸链/GD&T/公差带）",
+   "parent": "G-METHOD"
+  },
+  {
+   "id": "P-MECH",
+   "layer": "P",
+   "type": "学科域",
+   "name": "结构学科（零件分解：壳体/水道/密封/热/材料）",
+   "parent": "P-ROOT"
+  },
+  {
+   "id": "P-HW-MECH-HARNESS",
+   "layer": "P",
+   "type": "部件",
+   "name": "线束（信号线束/温度传感器线/内部连线）",
+   "parent": "P-HW-MECH"
+  },
+  {
+   "id": "G-METHOD-AUTOSAR-COMM",
+   "layer": "G",
+   "type": "方法",
+   "name": "AUTOSAR 通信与诊断（COM/DCM/DEM/CAN/LIN/ETH）",
+   "parent": "G-METHOD-AUTOSAR"
+  },
+  {
+   "id": "G-METHOD-AUTOSAR-OS",
+   "layer": "G",
+   "type": "方法",
+   "name": "AUTOSAR OS/内存（OS/NVM/Flash/EEPROM）",
+   "parent": "G-METHOD-AUTOSAR"
+  },
+  {
+   "id": "G-METHOD-AUTOSAR-RTE",
+   "layer": "G",
+   "type": "方法",
+   "name": "RTE 与接口（RTE/Port/接口映射）",
+   "parent": "G-METHOD-AUTOSAR"
+  },
+  {
+   "id": "G-METHOD-AUTOSAR-CFG",
+   "layer": "G",
+   "type": "方法",
+   "name": "ECU 配置（Neusar/EB/配置工具）",
+   "parent": "G-METHOD-AUTOSAR"
+  },
+  {
+   "id": "G-METHOD-AUTOSAR-STD",
+   "layer": "G",
+   "type": "方法",
+   "name": "AUTOSAR 规范条款（ARXML/标准文档）",
+   "parent": "G-METHOD-AUTOSAR"
+  },
+  {
+   "id": "G-METHOD-AUTOSAR-CODEGEN",
+   "layer": "G",
+   "type": "方法",
+   "name": "代码生成（C-Code/生成规则）",
+   "parent": "G-METHOD-AUTOSAR"
+  },
+  {
+   "id": "G-PROD-ASSEMBLY-FASTEN",
+   "layer": "G",
+   "type": "过程",
+   "name": "螺纹紧固（螺钉/螺栓/扭矩/预紧）",
+   "parent": "G-PROD-ASSEMBLY"
+  },
+  {
+   "id": "G-PROD-ASSEMBLY-PRESS",
+   "layer": "G",
+   "type": "过程",
+   "name": "压装压接（压装/压接/压入）",
+   "parent": "G-PROD-ASSEMBLY"
+  },
+  {
+   "id": "G-PROD-ASSEMBLY-BOND",
+   "layer": "G",
+   "type": "过程",
+   "name": "涂胶密封（涂胶/密封/点胶）",
+   "parent": "G-PROD-ASSEMBLY"
+  },
+  {
+   "id": "G-METHOD-FIXTURE",
+   "layer": "G",
+   "type": "方法",
+   "name": "工装治具设计方法（工装/治具/夹具）",
+   "parent": "G-METHOD"
+  },
+  {
+   "id": "G-PROD-ASSEMBLY-GEN",
+   "layer": "G",
+   "type": "过程",
+   "name": "通用组装（组装/装配/安装/插接）",
+   "parent": "G-PROD-ASSEMBLY"
+  },
+  {
+   "id": "G-PROD-POTTING-POT",
+   "layer": "G",
+   "type": "过程",
+   "name": "灌封（灌封/灌胶/灌封胶）",
+   "parent": "G-PROD-POTTING"
+  },
+  {
+   "id": "G-PROD-POTTING-DISP",
+   "layer": "G",
+   "type": "过程",
+   "name": "点胶涂覆（点胶/涂覆/三防）",
+   "parent": "G-PROD-POTTING"
+  },
+  {
+   "id": "G-PROD-POTTING-THERMAL",
+   "layer": "G",
+   "type": "过程",
+   "name": "导热材料（导热胶/导热泥/导热硅）",
+   "parent": "G-PROD-POTTING"
+  },
+  {
+   "id": "G-PROD-POTTING-SEAL",
+   "layer": "G",
+   "type": "过程",
+   "name": "密封胶（密封胶/FIPG/CIPG）",
+   "parent": "G-PROD-POTTING"
+  },
+  {
+   "id": "G-VERIFY-CAE-THERMAL",
+   "layer": "G",
+   "type": "过程",
+   "name": "热仿真验证（热仿真/热阻/温升）",
+   "parent": "G-VERIFY-CAE"
+  },
+  {
+   "id": "G-VERIFY-CAE-STRUCT",
+   "layer": "G",
+   "type": "过程",
+   "name": "结构仿真验证（应力/强度/静力学）",
+   "parent": "G-VERIFY-CAE"
+  },
+  {
+   "id": "G-VERIFY-CAE-VIBRATION",
+   "layer": "G",
+   "type": "过程",
+   "name": "振动仿真验证（振动/模态）",
+   "parent": "G-VERIFY-CAE"
+  },
+  {
+   "id": "G-VERIFY-CAE-FLUID",
+   "layer": "G",
+   "type": "过程",
+   "name": "流阻流体（流阻/CFD/流道）",
+   "parent": "G-VERIFY-CAE"
+  },
+  {
+   "id": "Q-PROBLEM-FAILURE",
+   "layer": "Q",
+   "type": "问题",
+   "name": "失效分析（失效/断裂/开裂/破损）",
+   "parent": "Q-PROBLEM"
+  },
+  {
+   "id": "Q-PROBLEM-CUSTOMER",
+   "layer": "Q",
+   "type": "问题",
+   "name": "客诉与问题（客诉/投诉/异常）",
+   "parent": "Q-PROBLEM"
+  },
+  {
+   "id": "Q-PROBLEM-DEFECT",
+   "layer": "Q",
+   "type": "问题",
+   "name": "工艺缺陷（缺陷/气泡/溢胶/氧化）",
+   "parent": "Q-PROBLEM"
+  },
+  {
+   "id": "Q-PROBLEM-TEST",
+   "layer": "Q",
+   "type": "问题",
+   "name": "测试异常（不合格/超差/NG）",
+   "parent": "Q-PROBLEM"
+  },
+  {
+   "id": "G-METHOD-CAE-STRUCT-STRENGTH",
+   "layer": "G",
+   "type": "方法",
+   "name": "强度疲劳（强度/应力/疲劳/静力学）",
+   "parent": "G-METHOD-CAE-STRUCT"
+  },
+  {
+   "id": "G-METHOD-CAE-STRUCT-MODAL",
+   "layer": "G",
+   "type": "方法",
+   "name": "模态分析（模态/固有频率）",
+   "parent": "G-METHOD-CAE-STRUCT"
+  },
+  {
+   "id": "G-METHOD-CAE-STRUCT-TOOL",
+   "layer": "G",
+   "type": "方法",
+   "name": "仿真工具方法（ANSYS/CAE/FLOEFD）",
+   "parent": "G-METHOD-CAE-STRUCT"
+  },
+  {
+   "id": "P-SW-BSW-COMM",
+   "layer": "P",
+   "type": "软件层",
+   "name": "BSW 通信栈（CAN/LIN/ETH/网络管理）",
+   "parent": "P-SW-BSW"
+  },
+  {
+   "id": "P-SW-BSW-MCAL",
+   "layer": "P",
+   "type": "软件层",
+   "name": "MCAL 驱动（ADC/SPI/GPIO/PWM/WDG）",
+   "parent": "P-SW-BSW"
+  },
+  {
+   "id": "P-SW-BSW-DIAG",
+   "layer": "P",
+   "type": "软件层",
+   "name": "BSW 诊断（DCM/DEM/UDS/OBD）",
+   "parent": "P-SW-BSW"
+  },
+  {
+   "id": "P-SW-BSW-MEM",
+   "layer": "P",
+   "type": "软件层",
+   "name": "BSW 存储（NVM/Flash/EEPROM）",
+   "parent": "P-SW-BSW"
+  },
+  {
+   "id": "G-VERIFY-VIBRATION-VIB",
+   "layer": "G",
+   "type": "过程",
+   "name": "振动测试（振动/随机/正弦/扫频）",
+   "parent": "G-VERIFY-VIBRATION"
+  },
+  {
+   "id": "G-VERIFY-VIBRATION-SHOCK",
+   "layer": "G",
+   "type": "过程",
+   "name": "冲击跌落（冲击/跌落/Shock）",
+   "parent": "G-VERIFY-VIBRATION"
+  },
+  {
+   "id": "G-VERIFY-VIBRATION-COND",
+   "layer": "G",
+   "type": "过程",
+   "name": "试验条件（PSD/GRMS/加速度）",
+   "parent": "G-VERIFY-VIBRATION"
+  },
+  {
+   "id": "G-FUSA",
+   "layer": "G",
+   "type": "过程",
+   "name": "功能安全过程（ISO 26262）",
+   "parent": "G-ROOT"
+  },
+  {
+   "id": "G-FUSA-ITEM",
+   "layer": "G",
+   "type": "活动",
+   "name": "相关项定义（item definition）",
+   "parent": "G-FUSA"
+  },
+  {
+   "id": "G-FUSA-HARA",
+   "layer": "G",
+   "type": "活动",
+   "name": "危害分析与风险评估（HARA）",
+   "parent": "G-FUSA"
+  },
+  {
+   "id": "G-FUSA-FSC",
+   "layer": "G",
+   "type": "活动",
+   "name": "功能安全概念（FSC）",
+   "parent": "G-FUSA"
+  },
+  {
+   "id": "G-FUSA-TSC",
+   "layer": "G",
+   "type": "活动",
+   "name": "技术安全概念（TSC）",
+   "parent": "G-FUSA"
+  },
+  {
+   "id": "G-FUSA-HWMETRIC",
+   "layer": "G",
+   "type": "活动",
+   "name": "硬件安全指标（PMHF/SPFM/LFM）",
+   "parent": "G-FUSA"
+  },
+  {
+   "id": "G-FUSA-VAL",
+   "layer": "G",
+   "type": "验证",
+   "name": "安全验证与确认",
+   "parent": "G-FUSA"
+  },
+  {
+   "id": "G-FUSA-CASE",
+   "layer": "G",
+   "type": "文档",
+   "name": "安全案例（safety case）",
+   "parent": "G-FUSA"
+  },
+  {
+   "id": "G-VERIFY-PERF",
+   "layer": "G",
+   "type": "测试",
+   "name": "电气性能测试（效率/纹波/限流/过冲/保护）",
+   "parent": "G-VERIFY"
+  },
+  {
+   "id": "G-VERIFY-SW",
+   "layer": "G",
+   "type": "测试",
+   "name": "软件测试（单元/集成/HiL）",
+   "parent": "G-VERIFY"
+  },
+  {
+   "id": "G-VERIFY-IF",
+   "layer": "G",
+   "type": "测试",
+   "name": "接口与通信测试（CAN矩阵/状态机）",
+   "parent": "G-VERIFY"
+  },
+  {
+   "id": "G-VERIFY-STD",
+   "layer": "G",
+   "type": "测试",
+   "name": "标准符合性/型式试验",
+   "parent": "G-VERIFY"
+  },
+  {
+   "id": "G-VERIFY-EMC",
+   "layer": "G",
+   "type": "测试",
+   "name": "EMC测试（传导/辐射/抗扰）",
+   "parent": "G-VERIFY"
+  },
+  {
+   "id": "G-METHOD-WCCA",
+   "layer": "G",
+   "type": "方法",
+   "name": "最坏情况电路分析（WCCA）",
+   "parent": "G-METHOD"
+  },
+  {
+   "id": "G-METHOD-CONDENSE",
+   "layer": "G",
+   "type": "方法",
+   "name": "凝露分析",
+   "parent": "G-METHOD"
+  },
+  {
+   "id": "G-METHOD-RELPREDICT",
+   "layer": "G",
+   "type": "方法",
+   "name": "可靠性预计（SN 29500）",
+   "parent": "G-METHOD"
+  },
+  {
+   "id": "Q-DQA",
+   "layer": "Q",
+   "type": "过程",
+   "name": "设计质量保证（DQA）",
+   "parent": "Q-ROOT"
+  },
+  {
+   "id": "Q-AQE",
+   "layer": "Q",
+   "type": "过程",
+   "name": "先期质量（AQE）",
+   "parent": "Q-ROOT"
+  },
+  {
+   "id": "Q-8D",
+   "layer": "Q",
+   "type": "方法",
+   "name": "8D 问题解决",
+   "parent": "Q-ROOT"
+  },
+  {
+   "id": "Q-SPC",
+   "layer": "Q",
+   "type": "方法",
+   "name": "统计过程控制（SPC）",
+   "parent": "Q-ROOT"
+  },
+  {
+   "id": "Q-MSA",
+   "layer": "Q",
+   "type": "方法",
+   "name": "测量系统分析（MSA）",
+   "parent": "Q-ROOT"
+  }
+ ],
+ "relations": [
+  {
+   "type": "allocate",
+   "source": "L-PWRCTRL",
+   "target": "P-SW-ASW-OBCPWRCTRL",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-FAULT",
+   "target": "P-SW-ASW-DCDCFAULTDET",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-SENSE",
+   "target": "P-SW-ASW-ADC",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-CAL",
+   "target": "P-SW-ASW-CAL",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STATE",
+   "target": "P-SW-ASW-OBCSTATE",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-COMM",
+   "target": "P-SW-ASW-CANREPORT",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-COMM",
+   "target": "P-SW-ASW-CANRCV",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-FSC",
+   "target": "F-OBC-PROTECT",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-FSC",
+   "target": "F-DCDC-PROTECT",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-PERF",
+   "target": "F-OBC-CHARGE",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-PERF",
+   "target": "F-OBC-DISCHARGE",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-PERF",
+   "target": "F-DCDC-CONV",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-PERF",
+   "target": "F-DCDC-REVERSE",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-PROTECT",
+   "target": "F-OBC-PROTECT",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-PROTECT",
+   "target": "F-DCDC-PROTECT",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-SAFETY",
+   "target": "F-OBC-PROTECT",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-SAFETY",
+   "target": "F-SYS",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-EMC",
+   "target": "F-SYS",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-ENV",
+   "target": "F-SYS",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-REL",
+   "target": "F-SYS",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-SW",
+   "target": "F-OBC-COMM",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-SW",
+   "target": "F-OBC-DIAG",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-SW",
+   "target": "F-OBC-WAKE",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-HW",
+   "target": "F-OBC-CHARGE",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-HW",
+   "target": "F-DCDC-CONV",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-IF",
+   "target": "F-OBC-CP",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-IF",
+   "target": "F-OBC-COMM",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-STD",
+   "target": "F-OBC-CHARGE",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-STD",
+   "target": "F-OBC-CP",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-STD",
+   "target": "F-DCDC-CONV",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-OBC-CHARGE",
+   "target": "L-PWRCTRL",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-OBC-DISCHARGE",
+   "target": "L-PWRCTRL",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-OBC-DISCHARGE",
+   "target": "L-STRATEGY-V2L",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-OBC-CP",
+   "target": "L-STATE",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-OBC-CP",
+   "target": "L-COMM",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-OBC-CP",
+   "target": "L-STRATEGY-GPIO",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-OBC-PROTECT",
+   "target": "L-FAULT",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-OBC-PROTECT",
+   "target": "L-SENSE",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-OBC-PROTECT",
+   "target": "L-STRATEGY-NTC",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-OBC-PROTECT",
+   "target": "L-STRATEGY-OPTO",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-OBC-PROTECT",
+   "target": "L-STRATEGY-SENSE",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-OBC-COMM",
+   "target": "L-COMM",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-OBC-DIAG",
+   "target": "L-COMM",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-OBC-WAKE",
+   "target": "L-SYS",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-OBC-WAKE",
+   "target": "L-STATE",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-DCDC-CONV",
+   "target": "L-PWRCTRL",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-DCDC-CONV",
+   "target": "L-STRATEGY-FREQ",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-DCDC-CONV",
+   "target": "L-STRATEGY-PEAK",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-DCDC-REVERSE",
+   "target": "L-PWRCTRL",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-DCDC-REVERSE",
+   "target": "L-STRATEGY-PRECHARGE",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-DCDC-PROTECT",
+   "target": "L-FAULT",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-SYS",
+   "target": "L-SYS",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-SYS",
+   "target": "L-STATE",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-SYS",
+   "target": "L-CAL",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-OBC-CHARGE",
+   "target": "L-STRATEGY-FREQ",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-OBC-CHARGE",
+   "target": "L-STRATEGY-CBC",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-OBC-CHARGE",
+   "target": "L-STRATEGY-PEAK",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-OBC-CHARGE",
+   "target": "L-STRATEGY-PRECHARGE",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "realize",
+   "source": "F-OBC-CHARGE",
+   "target": "L-STRATEGY-LOWTEMP",
+   "category": "referential",
+   "inverse": "realizes",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-PWRCTRL",
+   "target": "P-HW-OBC-PFC",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-PWRCTRL",
+   "target": "P-HW-OBC-DCDC",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-PWRCTRL",
+   "target": "P-HW-DCDC-CONV",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-PWRCTRL",
+   "target": "P-SW-ASW-DCDCPWRCTRL",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STATE",
+   "target": "P-SW-ASW-DCDCSTATE",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STATE",
+   "target": "P-SW-ASW-SLEEPWAKE",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-FAULT",
+   "target": "P-SW-ASW-OBCFAULTDET",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-FAULT",
+   "target": "P-SW-ASW-OBCFAULTRPT",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-FAULT",
+   "target": "P-SW-ASW-DCDCFAULTRPT",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-FAULT",
+   "target": "P-HW-CTRL-PROTECT",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-COMM",
+   "target": "P-SW-BSW-COMM",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-CAL",
+   "target": "P-CAL",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-SENSE",
+   "target": "P-HW-CTRL-SENSE",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-SENSE",
+   "target": "P-SW-ASW-INSDET",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-SENSE",
+   "target": "P-SW-ASW-TEMP",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-SYS",
+   "target": "P-HW-CTRL-MCU",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-SYS",
+   "target": "P-SW-ASW-SLEEPWAKE",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STRATEGY-FREQ",
+   "target": "P-SW-ASW-OBCPWRCTRL",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STRATEGY-FREQ",
+   "target": "P-SW-ASW-DCDCPWRCTRL",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STRATEGY-CBC",
+   "target": "P-SW-ASW-OBCPWRCTRL",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STRATEGY-PEAK",
+   "target": "P-SW-ASW-OBCPWRCTRL",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STRATEGY-PEAK",
+   "target": "P-SW-ASW-DCDCPWRCTRL",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STRATEGY-PRECHARGE",
+   "target": "P-SW-ASW-DCDCPWRCTRL",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STRATEGY-NTC",
+   "target": "P-SW-ASW-TEMP",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STRATEGY-NTC",
+   "target": "P-HW-CTRL-SENSE",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STRATEGY-LOWTEMP",
+   "target": "P-SW-ASW-OBCPWRCTRL",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STRATEGY-V2L",
+   "target": "P-SW-ASW-OBCPWRCTRL",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STRATEGY-OPTO",
+   "target": "P-SW-ASW-OBCFAULTDET",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STRATEGY-GPIO",
+   "target": "P-SW-BSW-MCAL",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STRATEGY-SENSE",
+   "target": "P-SW-ASW-ADC",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STRATEGY-SENSE",
+   "target": "P-HW-CTRL-SENSE",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-SAFETY",
+   "target": "P-HW-MECH-SEAL",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-SAFETY",
+   "target": "P-HW-MECH-BUSBAR",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-HW",
+   "target": "P-HW-MAG",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-HW",
+   "target": "P-HW-MATERIAL",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-ENV",
+   "target": "P-HW-MECH-SHIELD",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-ENV",
+   "target": "P-HW-THERMAL-POT",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-EMC",
+   "target": "P-HW-MECH-SHIELD",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "satisfy",
+   "source": "R-EMC",
+   "target": "P-HW-OBC-EMI",
+   "category": "referential",
+   "inverse": "satisfies",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-THERMAL",
+   "target": "P-HW-THERMAL-HEATSINK",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-THERMAL",
+   "target": "P-HW-THERMAL-TIM",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-THERMAL",
+   "target": "P-HW-THERMAL-FAN",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-VIBRATION",
+   "target": "P-HW-MECH-HOUSING",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-VIBRATION",
+   "target": "P-HW-MECH-BRACKET",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-VIBRATION",
+   "target": "P-HW-MECH-FASTENER",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-AIRTIGHT",
+   "target": "P-HW-MECH-SEAL",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-AIRTIGHT",
+   "target": "P-HW-MECH-HOUSING",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-AIRTIGHT",
+   "target": "P-HW-MECH-WATERWAY",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-ENV",
+   "target": "P-HW-MECH-SHIELD",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-ENV",
+   "target": "P-HW-THERMAL-POT",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-ENV",
+   "target": "P-HW-MECH-HOUSING",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-DIM",
+   "target": "P-HW-MECH-HOUSING",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-DIM",
+   "target": "P-HW-MECH-WATERWAY",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-DIM",
+   "target": "P-HW-MECH-BRACKET",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-DIM",
+   "target": "P-HW-MECH-BUSBAR",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-REL",
+   "target": "P-HW-MAG",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-REL",
+   "target": "P-HW-MECH-FASTENER",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-REL",
+   "target": "P-HW-THERMAL-TIM",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-CAE",
+   "target": "P-HW-MECH-HOUSING",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-CAE",
+   "target": "P-HW-MECH-WATERWAY",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-CAE",
+   "target": "P-HW-MECH-BRACKET",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-ELECTRICAL",
+   "target": "P-HW-OBC-PFC",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-ELECTRICAL",
+   "target": "P-HW-OBC-DCDC",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-ELECTRICAL",
+   "target": "P-HW-OBC-EMI",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-ELECTRICAL",
+   "target": "P-HW-OBC-ACRELAY",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-ELECTRICAL",
+   "target": "P-HW-CTRL-SENSE",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-ELECTRICAL",
+   "target": "P-HW-MECH-BUSBAR",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-ELECTRICAL",
+   "target": "P-HW-MECH-CONNECTOR",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-THERMAL",
+   "target": "R-ENV",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-THERMAL",
+   "target": "R-REL",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-VIBRATION",
+   "target": "R-ENV",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-VIBRATION",
+   "target": "R-REL",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-AIRTIGHT",
+   "target": "R-ENV",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-AIRTIGHT",
+   "target": "R-SAFETY",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-ENV",
+   "target": "R-ENV",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-DIM",
+   "target": "R-HW",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-REL",
+   "target": "R-REL",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-CAE",
+   "target": "R-PERF",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-CAE",
+   "target": "R-ENV",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-ELECTRICAL",
+   "target": "R-SAFETY",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-ELECTRICAL",
+   "target": "R-EMC",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-CASTING",
+   "target": "P-HW-MECH-HOUSING",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-CASTING",
+   "target": "P-HW-THERMAL-HEATSINK",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-MACHINING",
+   "target": "P-HW-MECH-HOUSING",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-MACHINING",
+   "target": "P-HW-MECH-BRACKET",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-MACHINING",
+   "target": "P-HW-THERMAL-HEATSINK",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-MACHINING",
+   "target": "P-HW-MECH-WATERWAY",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-SHEET",
+   "target": "P-HW-MECH-HOUSING",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-SHEET",
+   "target": "P-HW-MECH-BRACKET",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-SHEET",
+   "target": "P-HW-MECH-SHIELD",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-INJECTION",
+   "target": "P-HW-MECH-HOUSING",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-INJECTION",
+   "target": "P-HW-MECH-CONNECTOR",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-INJECTION",
+   "target": "P-HW-MECH-BRACKET",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-SURFACE",
+   "target": "P-HW-MECH-HOUSING",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-SURFACE",
+   "target": "P-HW-MATERIAL-SURFACE",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-POTTING",
+   "target": "P-HW-THERMAL-POT",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-POTTING",
+   "target": "P-HW-CTRL",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-ASSEMBLY",
+   "target": "P-HW-MECH-FASTENER",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-ASSEMBLY",
+   "target": "P-HW-MECH-CONNECTOR",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-ASSEMBLY",
+   "target": "P-HW-MECH-BUSBAR",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-ASSEMBLY",
+   "target": "P-HW-MAG",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-ASSEMBLY",
+   "target": "P-HW-OBC-PFC",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-ASSEMBLY",
+   "target": "P-HW-OBC-DCDC",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-ASSEMBLY",
+   "target": "P-HW-CTRL",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-PACK",
+   "target": "P-ROOT",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "instance-of",
+   "source": "M-CCU",
+   "target": "P-ROOT",
+   "category": "referential",
+   "inverse": "has_instance",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "instance-of",
+   "source": "M-SW40",
+   "target": "P-SW",
+   "category": "referential",
+   "inverse": "has_instance",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "issue-on",
+   "source": "Q-PROBLEM-FAILURE",
+   "target": "P-HW-MECH-HOUSING",
+   "category": "referential",
+   "inverse": "has_issue",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "issue-on",
+   "source": "Q-PROBLEM-DEFECT",
+   "target": "P-HW-MECH-HOUSING",
+   "category": "referential",
+   "inverse": "has_issue",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "issue-on",
+   "source": "Q-PROBLEM-DEFECT",
+   "target": "P-HW-THERMAL-POT",
+   "category": "referential",
+   "inverse": "has_issue",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "issue-on",
+   "source": "Q-PROBLEM-TEST",
+   "target": "P-HW-CTRL",
+   "category": "referential",
+   "inverse": "has_issue",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "issue-on",
+   "source": "Q-FAILURE",
+   "target": "P-HW-MECH-HOUSING",
+   "category": "referential",
+   "inverse": "has_issue",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "instance-of",
+   "source": "M-MI",
+   "target": "M-CCU",
+   "category": "referential",
+   "inverse": "has_instance",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "instance-of",
+   "source": "M-VAVE",
+   "target": "M-CCU",
+   "category": "referential",
+   "inverse": "has_instance",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "instance-of",
+   "source": "M-G5",
+   "target": "M-CCU",
+   "category": "referential",
+   "inverse": "has_instance",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "instance-of",
+   "source": "M-G5D5",
+   "target": "M-CCU",
+   "category": "referential",
+   "inverse": "has_instance",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "instance-of",
+   "source": "M-G7",
+   "target": "M-CCU",
+   "category": "referential",
+   "inverse": "has_instance",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "instance-of",
+   "source": "M-D950",
+   "target": "M-CCU",
+   "category": "referential",
+   "inverse": "has_instance",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-ASSEMBLY",
+   "target": "P-HW-OBC-AUX",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-ASSEMBLY",
+   "target": "P-HW-OBC-EMI",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-ASSEMBLY",
+   "target": "P-HW-OBC-ACRELAY",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-ASSEMBLY",
+   "target": "P-HW-DCDC-CONV",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-ASSEMBLY",
+   "target": "P-HW-DCDC-OUT",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-ASSEMBLY",
+   "target": "P-HW-CTRL-MCU",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-ASSEMBLY",
+   "target": "P-HW-CTRL-DRV",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-ASSEMBLY",
+   "target": "P-HW-CTRL-SENSE",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-ASSEMBLY",
+   "target": "P-HW-CTRL-PROTECT",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-POTTING",
+   "target": "P-HW-MECH-SEAL",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-SURFACE",
+   "target": "P-HW-MECH-NAMEPLATE",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-POTTING",
+   "target": "P-HW-THERMAL-TIM",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-ASSEMBLY",
+   "target": "P-HW-THERMAL-FAN",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-ASSEMBLY",
+   "target": "P-HW-MECH-HARNESS",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-FUSA-VAL",
+   "target": "R-FSC",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-PERF",
+   "target": "R-PROTECT",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-PERF",
+   "target": "R-PERF",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-SW",
+   "target": "R-SW",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-IF",
+   "target": "R-IF",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-STD",
+   "target": "R-STD",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-EMC",
+   "target": "R-EMC",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-PERF",
+   "target": "P-HW-OBC-PFC",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-PERF",
+   "target": "P-HW-OBC-DCDC",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-PERF",
+   "target": "P-HW-DCDC-CONV",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-SW",
+   "target": "P-SW-ASW",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-SW",
+   "target": "P-SW-BSW",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-IF",
+   "target": "P-IF",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-IF",
+   "target": "P-SW-BSW-COMM",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-STD",
+   "target": "P-ROOT",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-EMC",
+   "target": "P-HW-OBC-EMI",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-EMC",
+   "target": "P-HW-MECH-SHIELD",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STATE",
+   "target": "P-SW-ASW-ACRELAY",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-SYS",
+   "target": "P-SW-ASW-AUXPWR",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STATE",
+   "target": "P-SW-ASW-CC",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STATE",
+   "target": "P-SW-ASW-CP",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STATE",
+   "target": "P-SW-ASW-CPOUT",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-FAULT",
+   "target": "P-SW-ASW-DEH",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STATE",
+   "target": "P-SW-ASW-ELECLOCK",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STATE",
+   "target": "P-SW-ASW-GUNMANAGE",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-SENSE",
+   "target": "P-SW-ASW-GUNTEMP",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-PWRCTRL",
+   "target": "P-SW-ASW-HVDM",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-FAULT",
+   "target": "P-SW-ASW-INTERLOCK",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STATE",
+   "target": "P-SW-ASW-LED",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-COMM",
+   "target": "P-SW-ASW-NACS",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-PWRCTRL",
+   "target": "P-SW-ASW-ORINGOVP",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-STATE",
+   "target": "P-SW-ASW-S2",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-COMM",
+   "target": "P-SW-ASW-UDMANAGE",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-COMM",
+   "target": "P-SW-BSW-DIAG",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-SYS",
+   "target": "P-SW-BSW-MEM",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "allocate",
+   "source": "L-SYS",
+   "target": "P-SW-RTE",
+   "category": "referential",
+   "inverse": "allocated_to",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-ASSEMBLY-FASTEN",
+   "target": "P-HW-MECH-FASTENER",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-ASSEMBLY-PRESS",
+   "target": "P-HW-MECH-CONNECTOR",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-ASSEMBLY-BOND",
+   "target": "P-HW-MECH-SEAL",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-ASSEMBLY-GEN",
+   "target": "P-HW-MECH",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-POTTING-POT",
+   "target": "P-HW-THERMAL-POT",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-POTTING-DISP",
+   "target": "P-HW-THERMAL-POT",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-POTTING-SEAL",
+   "target": "P-HW-MECH-SEAL",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "produce",
+   "source": "G-PROD-POTTING-THERMAL",
+   "target": "P-HW-THERMAL-TIM",
+   "category": "referential",
+   "inverse": "produced_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-CAE-THERMAL",
+   "target": "P-HW-THERMAL-HEATSINK",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-CAE-STRUCT",
+   "target": "P-HW-MECH-HOUSING",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-CAE-VIBRATION",
+   "target": "P-HW-MECH-BRACKET",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-CAE-FLUID",
+   "target": "P-HW-MECH-WATERWAY",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-VIBRATION-VIB",
+   "target": "P-HW-MECH-HOUSING",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-VIBRATION-SHOCK",
+   "target": "P-HW-MECH-HOUSING",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "verify",
+   "source": "G-VERIFY-VIBRATION-COND",
+   "target": "R-ENV",
+   "category": "referential",
+   "inverse": "verified_by",
+   "evidence_refs": [],
+   "project_scope": null
+  },
+  {
+   "type": "issue-on",
+   "source": "Q-PROBLEM-CUSTOMER",
+   "target": "P-ROOT",
+   "category": "referential",
+   "inverse": "has_issue",
+   "evidence_refs": [],
+   "project_scope": null
+  }
+ ],
+ "updated_at": "2026-08-24"
+}

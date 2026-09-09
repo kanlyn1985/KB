@@ -1,0 +1,51 @@
+{
+ "case_id": "G012",
+ "category": "G12-state-query",
+ "difficulty": "medium",
+ "requirement_refs": [
+  "SYS-015"
+ ],
+ "input": {
+  "query": "OBC状态机现在定义了哪些状态"
+ },
+ "expected": {
+  "entities": [
+   {
+    "entity_id": "L-STATE",
+    "entity_type": "component",
+    "description": "状态管理（OBC/DCDC/休眠唤醒/AC Relay 状态机）"
+   }
+  ],
+  "assertions": [
+   {
+    "assertion_id": "ast_g012_1",
+    "subject_ref": "entity:obc_state_machine",
+    "predicate_ref": "relation:has_states",
+    "object": {
+     "kind": "literal",
+     "value": "由 L-STATE 逻辑域管理，覆盖 OBC/DCDC/休眠唤醒/AC Relay 状态机",
+     "datatype": "xsd:string"
+    },
+    "assertion_type": "asserted",
+    "status": "validated",
+    "evidence_refs": [
+     "evd:node:L-STATE:0"
+    ],
+    "confidence": 0.85
+   }
+  ],
+  "evidence": [
+   {
+    "evidence_id": "evd:node:L-STATE:0",
+    "document_id": "doc:node:L-STATE"
+   }
+  ],
+  "support_level": "partial",
+  "answer_contract": {
+   "disclose_gaps": true,
+   "max_chars": 800
+  }
+ },
+ "negative_expectations": [],
+ "notes": "状态清单的完整枚举依赖 L-STATE 卡内容厚度——partial 诚实判定"
+}

@@ -1,0 +1,37 @@
+{
+ "case_id": "G022",
+ "category": "G22-reverse-graph-query",
+ "difficulty": "medium",
+ "requirement_refs": [
+  "SYS-008"
+ ],
+ "input": {
+  "query": "哪些需求satisfy了F-OBC-CHARGE"
+ },
+ "expected": {
+  "relations": [
+   {
+    "source_ref": "entity:r_perf",
+    "predicate_ref": "relation:satisfies",
+    "target_ref": "entity:f_obc_charge",
+    "assertion_id": "rel:obc_dcdc:satisfy:R-PERF:F-OBC-CHARGE"
+   },
+   {
+    "source_ref": "entity:r_std",
+    "predicate_ref": "relation:satisfies",
+    "target_ref": "entity:f_obc_charge",
+    "assertion_id": "rel:obc_dcdc:satisfy:R-STD:F-OBC-CHARGE"
+   }
+  ],
+  "evidence": [
+   {
+    "evidence_id": "evd:gold:g022_reverse",
+    "excerpt": "skeleton relations 反向遍历：satisfy target=F-OBC-CHARGE 的 source 集合",
+    "document_id": "skeleton_v0.6.json"
+   }
+  ],
+  "support_level": "sufficient"
+ },
+ "negative_expectations": [],
+ "notes": "反向遍历：给定 target 找 source（图通道双向 BFS 已支持）"
+}

@@ -1,0 +1,34 @@
+{
+ "case_id": "RG-008",
+ "category": "positive",
+ "description": "RR-01 多规则展开（两 satisfies + 一 requires → 两条 inferred）",
+ "seed_assertions": [
+  {
+   "key": "s1",
+   "subject_ref": "Unit-1",
+   "predicate_ref": "satisfies_rule",
+   "value": "RuleX",
+   "confidence": 0.9
+  },
+  {
+   "key": "s2",
+   "subject_ref": "Unit-2",
+   "predicate_ref": "satisfies_rule",
+   "value": "RuleX",
+   "confidence": 0.8
+  },
+  {
+   "key": "req",
+   "subject_ref": "",
+   "predicate_ref": "rule_requires",
+   "value": "Inspect",
+   "confidence": 0.9
+  }
+ ],
+ "expectation": {
+  "candidates_min": 2,
+  "rule_refs": [
+   "RR-01"
+  ]
+ }
+}

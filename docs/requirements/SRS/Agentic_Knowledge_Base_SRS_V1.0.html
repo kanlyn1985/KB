@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Agentic Knowledge Base SRS V1.0</title><style>body{font-family:Arial,"Microsoft YaHei",sans-serif;line-height:1.7;margin:40px;color:#222}h1,h2{color:#17365d}table{border-collapse:collapse;width:100%;margin:16px 0}th,td{border:1px solid #aaa;padding:8px;vertical-align:top}th{background:#f2f2f2}pre{background:#111827;color:#eee;padding:16px;overflow:auto}</style></head><body>
+<h1>Agentic Knowledge Base 系统需求规格说明书 V1.0</h1>
+<p><b>文档编号：</b>AKB-SRS-001　<b>版本：</b>V1.0　<b>日期：</b>2026-08-31</p>
+<h2>1. 目的</h2><p>定义一个面向 Agent 的可信、可追溯、可推理、可持续演化的知识基础设施。系统不是单纯RAG、知识图谱或Memory，而是连接外部世界、知识模型、运行时与Agent的中间层。</p>
+<h2>2. 核心原则</h2><table><tr><th>原则</th><th>要求</th></tr><tr><td>Evidence First</td><td>Asserted/Validated Knowledge必须可追溯到Evidence。</td></tr><tr><td>Assertion First</td><td>Knowledge的Canonical Unit为Assertion。</td></tr><tr><td>Graph as Projection</td><td>Graph是Knowledge Assertion的语义投影，不是唯一真相源。</td></tr><tr><td>Asserted ≠ Derived</td><td>验证知识与推理知识必须区分。</td></tr><tr><td>Time First-Class</td><td>有效时间、观察时间、记录时间必须区分。</td></tr><tr><td>Provider Neutral</td><td>Graph、Vector、Parser、Reasoner、Connector均通过接口可替换。</td></tr></table>
+<h2>3. 最小完备架构</h2><pre>Agent
+ ↓
+Knowledge Runtime
+ ↓
+Knowledge Core
+ ↓
+Evidence & Source
+ ↓
+Reality</pre>
+<h2>4. Canonical Data Objects</h2><table><tr><th>Domain</th><th>Objects</th></tr><tr><td>Evidence</td><td>Source, Document, Evidence, SemanticUnit</td></tr><tr><td>Knowledge</td><td>Assertion, Entity, Relation, Event, State</td></tr><tr><td>Cognitive</td><td>Context, Memory, ReasoningTrace</td></tr><tr><td>Agent</td><td>Goal, Plan, Decision, Action, Observation</td></tr></table>
+<h2>5. Knowledge Lifecycle</h2><pre>Source → Document → Evidence → SemanticUnit → Candidate Assertion
+→ Validation → Asserted Knowledge → Semantic Projection → Graph
+→ Reasoning → Derived Assertion → Context → Decision → Agent</pre>
+<h2>6. System Requirements</h2><table><tr><th>ID</th><th>Requirement</th></tr><tr><td>SYS-EVD-001</td><td>系统必须生成可定位、可追溯的Evidence。</td></tr><tr><td>SYS-AST-001</td><td>系统必须以Assertion作为Canonical Knowledge Unit。</td></tr><tr><td>SYS-AST-002</td><td>无有效Evidence的Assertion不得晋升为Asserted Knowledge。</td></tr><tr><td>SYS-SEM-001</td><td>必须支持Entity、Relation、Event、State。</td></tr><tr><td>SYS-GRAPH-001</td><td>Graph Edge必须能够反查Assertion。</td></tr><tr><td>SYS-REASON-001</td><td>Reasoning必须输出Derived Assertion及推理链。</td></tr><tr><td>SYS-RET-001</td><td>必须支持Lexical、Vector、Graph等检索通道。</td></tr><tr><td>SYS-CTX-001</td><td>Context必须能够承载Knowledge、Evidence、State、Memory、Constraints与Uncertainty。</td></tr><tr><td>SYS-AGENT-001</td><td>Agent Action必须经过Policy与Permission控制。</td></tr></table>
+<h2>7. 核心不变量</h2><table><tr><th>ID</th><th>Invariant</th></tr><tr><td>INV-001</td><td>No Evidence → No Asserted Knowledge</td></tr><tr><td>INV-002</td><td>Derived Knowledge ≠ Asserted Knowledge</td></tr><tr><td>INV-003</td><td>Graph Edge → Assertion可追溯</td></tr><tr><td>INV-004</td><td>Assertion → Evidence可追溯</td></tr><tr><td>INV-005</td><td>Canonical Knowledge不得被Index反向修改</td></tr><tr><td>INV-006</td><td>Agent不得直接修改Authoritative Knowledge</td></tr></table>
+<h2>8. V模型</h2><pre>Requirements → Architecture → Design → Implementation
+                                             ↑
+Acceptance ← System Test ← Integration ← Unit Test</pre>
+<h2>9. 验证</h2><p>系统必须同时建立软件V与知识V。知识V至少覆盖Evidence、Assertion、Ontology、Graph、Retrieval、Reasoning、Answer/Decision。</p>
+<h2>10. 下一阶段</h2><p>在V1.0之后进入Data Model Specification、Interface Control Document、Verification &amp; Validation Plan，并在这些文档评审通过后建立工程实现基线。</p>
+</body></html>

@@ -1,0 +1,55 @@
+{
+ "case_id": "G009",
+ "category": "G09-historical-version",
+ "difficulty": "medium",
+ "requirement_refs": [
+  "SYS-002",
+  "SYS-002"
+ ],
+ "input": {
+  "query": "纹波限值30mVpp这条要求有没有被修订过"
+ },
+ "expected": {
+  "assertions": [
+   {
+    "assertion_id": "ast_g009_1",
+    "subject_ref": "entity:dcdc_output_ripple",
+    "predicate_ref": "relation:supersedes_history",
+    "object": {
+     "kind": "literal",
+     "value": "当前库内仅存在单一版本记录；无修订链",
+     "datatype": "xsd:string"
+    },
+    "assertion_type": "asserted",
+    "status": "candidate",
+    "evidence_refs": [
+     "evd:node:P-HW-DCDC-OUT:0"
+    ],
+    "confidence": 0.6
+   }
+  ],
+  "evidence": [
+   {
+    "evidence_id": "evd:node:P-HW-DCDC-OUT:0",
+    "document_id": "doc:node:P-HW-DCDC-OUT"
+   }
+  ],
+  "support_level": "insufficient",
+  "answer_contract": {
+   "disclose_gaps": true,
+   "must_not_include": [
+    "已修订",
+    "已废止"
+   ],
+   "max_chars": 700
+  }
+ },
+ "negative_expectations": [
+  {
+   "type": "no_overclaim",
+   "description": "证据不足时不得声称存在或不存在修订历史",
+   "invariant_ref": "INV-001"
+  }
+ ],
+ "notes": "历史完整性探针：正确行为=承认版本链信息不足（INV-T06 前置数据条件）"
+}

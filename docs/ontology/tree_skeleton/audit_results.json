@@ -1,0 +1,3265 @@
+[
+ {
+  "doc": "《YG3-1拆机报告_温湿度序列_2025042301-06》.adoc.md",
+  "text": "9 | 磁件参数检查 | OK | ",
+  "unit_type": "table_row",
+  "node_id": "P-HW",
+  "node_name": "电子学科（电路拓扑分解：EMI/PFC/LLC/控制/辅助）",
+  "rule": "table:hw",
+  "conf": 0.4,
+  "verdict": {
+   "correct": true,
+   "reason": "磁件参数检查属于硬件电子学科，且符合table:hw的落位规则"
+  }
+ },
+ {
+  "doc": "AY200高压-电控PV拆机报告_20250909_02.adoc.md",
+  "text": "图3-11 驱动板拆除 | ",
+  "unit_type": "table_row",
+  "node_id": "P-HW",
+  "node_name": "电子学科（电路拓扑分解：EMI/PFC/LLC/控制/辅助）",
+  "rule": "table:hw",
+  "conf": 0.4,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容涉及驱动板拆除，属于电子硬件范畴，符合table:hw的落位规则"
+  }
+ },
+ {
+  "doc": "04-分布式3KW DV温湿度拆机报告.axls.xlsx",
+  "text": "DCDC输入电流(工装上报) | 9.206343 | A | 9 | 10.625 | PASS",
+  "unit_type": "table_row",
+  "node_id": "P-HW",
+  "node_name": "电子学科（电路拓扑分解：EMI/PFC/LLC/控制/辅助）",
+  "rule": "table:hw",
+  "conf": 0.4,
+  "verdict": {
+   "correct": true,
+   "reason": "内容单元为硬件电路的DCDC输入电流测试数据，属于电子学科范畴且符合table:hw的落位规则。"
+  }
+ },
+ {
+  "doc": "04-分布式3KW DV温湿度拆机报告.axls.xlsx",
+  "text": "PDU小板付扭矩",
+  "unit_type": "table_row",
+  "node_id": "P-HW",
+  "node_name": "电子学科（电路拓扑分解：EMI/PFC/LLC/控制/辅助）",
+  "rule": "table:hw",
+  "conf": 0.4,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容涉及PDU小板的机械扭矩，与电子学科的电路拓扑（EMI/PFC/LLC/控制/辅助）不符"
+  }
+ },
+ {
+  "doc": "04-分布式3KW DV温湿度拆机报告.axls.xlsx",
+  "text": "OBC输出功率(工装上报) | 6582.2075 | 6200 | 7000 | PASS",
+  "unit_type": "table_row",
+  "node_id": "P-HW",
+  "node_name": "电子学科（电路拓扑分解：EMI/PFC/LLC/控制/辅助）",
+  "rule": "table:hw",
+  "conf": 0.4,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "P202511005_LP-C18-400V-车内逆变_Product Requirement Summary_V1.0_20251216.axls.xlsx",
+  "text": "2.4.2.4碳排放数据核查要求 | 必要时，供应商应无条件配合零跑对零件碳排放数据表中相关活动边界、活动数据、碳排放、排放因子选择及排放数据等内容的核查进行现场数据的收集和验证，包括但不限于文件评审、访谈、现场观察等方式。 | 13 | SQE | TBD | 2024/11/26：以后续零跑具体要求为准，根据具体要求做碳排放校核",
+  "unit_type": "table_row",
+  "node_id": "P-HW",
+  "node_name": "电子学科（电路拓扑分解：EMI/PFC/LLC/控制/辅助）",
+  "rule": "table:hw",
+  "conf": 0.4,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容涉及碳排放数据核查，属于供应链质量或环境管理范畴，与电子学科硬件电路拓扑无关。"
+  }
+ },
+ {
+  "doc": "P202308010_SK2-6.6kW_Tolerance Analysis_V2.0.axls.xlsx",
+  "text": "GEN-V-6.6kW-2IN1 | 45061",
+  "unit_type": "table_row",
+  "node_id": "G-METHOD-TOL",
+  "node_name": "公差分析方法（尺寸链/GD&T/公差带）",
+  "rule": "doc:me-tolerance",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容单元为产品标识（GEN-V-6.6kW-2IN1 | 45061），与公差分析方法（G-METHOD-TOL）无关"
+  }
+ },
+ {
+  "doc": "V0.D_EVT-SSG11-公差分析报告.axls.xlsx",
+  "text": "Hole/Shaft Dimension and Tolerance Filling Area | Referenced documents",
+  "unit_type": "table_row",
+  "node_id": "G-METHOD-TOL",
+  "node_name": "公差分析方法（尺寸链/GD&T/公差带）",
+  "rule": "doc:me-tolerance",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容涉及孔/轴尺寸及公差定义，属于公差分析方法（尺寸链/GD&T/公差带）的范畴，放置在G-METHOD-TOL节点合理。"
+  }
+ },
+ {
+  "doc": "P202308010_SK2-6.6kW_Tolerance Analysis_V2.0.axls.xlsx",
+  "text": "Drawing/sketch showing loop equation:",
+  "unit_type": "table_row",
+  "node_id": "G-METHOD-TOL",
+  "node_name": "公差分析方法（尺寸链/GD&T/公差带）",
+  "rule": "doc:me-tolerance",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "该图示展示了循环方程，属于公差分析方法中的尺寸链分析内容，符合骨架节点G-METHOD-TOL的定义。"
+  }
+ },
+ {
+  "doc": "V0.D_EVT-SSG11-公差分析报告.axls.xlsx",
+  "text": "Statistical  Gasket compression %",
+  "unit_type": "table_row",
+  "node_id": "G-METHOD-TOL",
+  "node_name": "公差分析方法（尺寸链/GD&T/公差带）",
+  "rule": "doc:me-tolerance",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "该文本描述的是统计垫片压缩率，属于性能或材料特性，而非公差分析方法"
+  }
+ },
+ {
+  "doc": "V0.D_EVT-SSG11-公差分析报告.axls.xlsx",
+  "text": "RSS:",
+  "unit_type": "table_row",
+  "node_id": "G-METHOD-TOL",
+  "node_name": "公差分析方法（尺寸链/GD&T/公差带）",
+  "rule": "doc:me-tolerance",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "RSS（根平方和法）是常用的公差堆叠分析方法，属于公差分析方法范畴，与骨架节点G-METHOD-TOL的定义相符"
+  }
+ },
+ {
+  "doc": "V0.D_EVT-SSG11-公差分析报告.axls.xlsx",
+  "text": "(-) | (+)",
+  "unit_type": "table_row",
+  "node_id": "G-METHOD-TOL",
+  "node_name": "公差分析方法（尺寸链/GD&T/公差带）",
+  "rule": "doc:me-tolerance",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "该符号表示正负公差，属于公差分析方法的内容"
+  }
+ },
+ {
+  "doc": "EVT_P202407007_NIO_Draco_F-IPU_高配_装配说明书_V8.0_增加信号屏蔽罩.adoc.md",
+  "text": "c. 48V BATTERY接插的安装：用2颗M4*12的螺丝依次固定i-j位置，锁紧顺序：预锁i→锁紧j→锁紧i ，扭力要求：2.8±0.2N*M。",
+  "unit_type": "para",
+  "node_id": "P-HW-MECH",
+  "node_name": "结构件（壳体/水道/密封/连接器/铜排/屏蔽）",
+  "rule": "doc:me-structure",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容涉及48V电池接插的安装，属于连接器类结构件，符合骨架节点P‑HW‑MECH的定义。"
+  }
+ },
+ {
+  "doc": "P202412008_AC3 VAVE_11kW_400V_装配说明书_ET_20260720.adoc.md",
+  "text": "1 | 400100165 | EOL_螺丝_盘头梅花_M6×16_碳钢10B21_锌镍合金_Precote80 | 3 | pcs | T30",
+  "unit_type": "table_row",
+  "node_id": "P-HW-MECH",
+  "node_name": "结构件（壳体/水道/密封/连接器/铜排/屏蔽）",
+  "rule": "doc:me-structure",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容为螺丝，属于紧固件而非结构件（壳体/水道/密封/连接器/铜排/屏蔽），归属不合理"
+  }
+ },
+ {
+  "doc": "STLA XS 7kW 结构开发三级计划.axls.xlsx",
+  "text": "Layout细化定稿 | 核对layout细化方案 | 1、与电子、layout确认PCBA布局细节调整，核对定稿DXF及stp，确认PCB设计评审Checklist中结构部分都已校核完成。 | 《PCB设计评审Checklist》 | EVT1结构方案细化定稿 | 45425 | 45440",
+  "unit_type": "table_row",
+  "node_id": "P-HW-MECH",
+  "node_name": "结构件（壳体/水道/密封/连接器/铜排/屏蔽）",
+  "rule": "doc:me-structure",
+  "conf": 0.8,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "P202306006_长安EDS2-AC_结构开模数模评审_EVT2_20250122.axls.xlsx",
+  "text": "20 | DFM | 压铸 | 引流筋未更新到最新的UDF状态 | 接受 | 是",
+  "unit_type": "table_row",
+  "node_id": "P-HW-MECH",
+  "node_name": "结构件（壳体/水道/密封/连接器/铜排/屏蔽）",
+  "rule": "doc:me-structure",
+  "conf": 0.8,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "P202509004_A03-800V_装配说明书_EVT2_20251219.adoc.md",
+  "text": "产品特殊特性传递 | ▽水道气密测试标准：压强：压强：250kPa ；充气时间：5s，稳定时间：30s，测试时间：30s，泄流量≤30Pa | 失效影响：腔体泄露、水道泄露",
+  "unit_type": "table_row",
+  "node_id": "P-HW-MECH",
+  "node_name": "结构件（壳体/水道/密封/连接器/铜排/屏蔽）",
+  "rule": "doc:me-structure",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "内容涉及水道气密测试标准，属于结构件的水道部件，符合骨架节点归属规则"
+  }
+ },
+ {
+  "doc": "项目编号_D99__装配说明书_ET_20260812.adoc.md",
+  "text": "2023.02.21 | 裘荣波 | V1.0 |  | ",
+  "unit_type": "table_row",
+  "node_id": "P-HW-MECH",
+  "node_name": "结构件（壳体/水道/密封/连接器/铜排/屏蔽）",
+  "rule": "doc:me-structure",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "内容为版本记录，与机械结构件文档不符"
+  }
+ },
+ {
+  "doc": "STLA_BEV STEP2.5&J4U_ME_Design_Checklist_V5.0.axls.xlsx",
+  "text": "x | x | ME | 58 | 共用物料数模是否从公用数据库里面获取？ | C | X | 是。",
+  "unit_type": "table_row",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:review-checklist",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "该检查项涉及共用物料数模是否从公用数据库获取，属于开发过程树的评审内容，归属合理。"
+  }
+ },
+ {
+  "doc": "P202503007_零跑D-700V_Mechanical_Design_Checklist_EVT2_20250708.axls.xlsx",
+  "text": "x | IE | 24 | 是否对IE识别的组装过程需要的特殊工装的设计进行了确认？ | X | 工装可参考B13项目",
+  "unit_type": "table_row",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:review-checklist",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "该条目涉及工艺装备设计确认，属于G-DEV开发过程树中ET/PT阶段的审查内容，归属合理。"
+  }
+ },
+ {
+  "doc": "EVT-P202312009-小鹏E29结构设计评审checklist-V1.0.axls.xlsx",
+  "text": "Version | Date | Responsibility | Update Description | Remarks",
+  "unit_type": "table_row",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:review-checklist",
+  "conf": 0.8,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "ECHO 22kW 400V-FAI Checklist(1).axls.xlsx",
+  "text": "2.28 | 软连接的位置螺钉吃牙超过7圈，硬链接的位置螺钉吃牙超过5圈；",
+  "unit_type": "table_row",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:review-checklist",
+  "conf": 0.8,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "P202503007_零跑D-700V_Mechanical_Design_Checklist_EVT2_20250708.axls.xlsx",
+  "text": "x | ME | 33 | 产品外壳及标签（含背胶）是否满足客户盐雾，液体和气体腐蚀要求？通过DV和PV试验进行结果确认。 | X",
+  "unit_type": "table_row",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:review-checklist",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "该检查项涉及产品在开发阶段需满足的腐蚀要求，属于开发过程树节点应覆盖的内容。"
+  }
+ },
+ {
+  "doc": "P202511004_LP-C18-800V-车内逆变_结构过往Issue检查表_V7.0_20260515.axls.xlsx",
+  "text": "项目名称：",
+  "unit_type": "table_row",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:review-checklist",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "项目名称属于项目元数据，与开发过程树的具体阶段（RFQ→SOP）无关，放置在此节点不合理。"
+  }
+ },
+ {
+  "doc": "P202511002_曼岛_公差分析报告_文件版本_阶段_日期_V4.0模板.axls.xlsx",
+  "text": "False | Cpk | Change in linear dim required",
+  "unit_type": "table_row",
+  "node_id": "G-ASSET",
+  "node_name": "可复用资产（代码资产/文档模板/CBB设计标准）",
+  "rule": "doc:code-template",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容为需求或说明文本，不是可复用的代码模板或资产"
+  }
+ },
+ {
+  "doc": "P202312014_22kW 800V_2D Released Drawing Comments_EVT2_20250806_模板V3.0.axls.xlsx",
+  "text": "7 | 否",
+  "unit_type": "table_row",
+  "node_id": "G-ASSET",
+  "node_name": "可复用资产（代码资产/文档模板/CBB设计标准）",
+  "rule": "doc:code-template",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元为普通文本\"7 | 否\"，不符合代码模板或可复用资产的定义，无法归属到该骨架节点。"
+  }
+ },
+ {
+  "doc": "P202511002_曼岛_公差分析报告_文件版本_阶段_日期_V4.0模板.axls.xlsx",
+  "text": "Cp | Cpk | position | shift:",
+  "unit_type": "table_row",
+  "node_id": "G-ASSET",
+  "node_name": "可复用资产（代码资产/文档模板/CBB设计标准）",
+  "rule": "doc:code-template",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元为测量参数列表，不属于代码模板或可复用资产。"
+  }
+ },
+ {
+  "doc": "P202511002_曼岛_公差分析报告_文件版本_阶段_日期_V4.0模板.axls.xlsx",
+  "text": "B | 排母贴片浮高 | 0.05 | 0.05",
+  "unit_type": "table_row",
+  "node_id": "G-ASSET",
+  "node_name": "可复用资产（代码资产/文档模板/CBB设计标准）",
+  "rule": "doc:code-template",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容为元件贴装浮高参数，属于技术规格而非可复用资产、代码模板或CBB设计标准"
+  }
+ },
+ {
+  "doc": "P20237016_STLA_M_2D Released Drawing Comments_PT0_20251120_模板V3.0.axls.xlsx",
+  "text": "钣金件",
+  "unit_type": "table_row",
+  "node_id": "G-ASSET",
+  "node_name": "可复用资产（代码资产/文档模板/CBB设计标准）",
+  "rule": "doc:code-template",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "钣金件属于机械零件，与代码资产、文档模板和CBB设计标准等可复用资产不符。"
+  }
+ },
+ {
+  "doc": "P202511002_曼岛_公差分析报告_文件版本_阶段_日期_V4.0模板.axls.xlsx",
+  "text": "False",
+  "unit_type": "table_row",
+  "node_id": "G-ASSET",
+  "node_name": "可复用资产（代码资产/文档模板/CBB设计标准）",
+  "rule": "doc:code-template",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "内容仅为布尔值 'False'，不属于代码模板或可复用资产"
+  }
+ },
+ {
+  "doc": "OBC+DCDC_Mechanical_Master_DFMEA.axls.xlsx",
+  "text": "灌封胶实现有效散热 | 灌胶槽尺寸设计满足散热要求 | 1.PCBA各磁件不能良好散热，温度超过许用温度要求 | #775\r\r\n#538 | 1.整机上报过温保护，停机或者限功率输出 | 8 | 1.侧壁与散热器件之间的间隙设计过大； | 3 | 1.参考EVT结构设计规范；\r\n2.公差分析； | 1.样机热测试；\r\n2.DV高温耐久测试； | 4",
+  "unit_type": "table_row",
+  "node_id": "Q-FAILURE",
+  "node_name": "失效模式（FMEA 相关）",
+  "rule": "doc:failure",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容描述了过温失效模式，符合Q-FAILURE节点及doc:failure归类规则"
+  }
+ },
+ {
+  "doc": "TWINGO-11KW_结构DFMEA在线版_20241202.axls.xlsx",
+  "text": "FIPG实现可靠密封 | DC副边屏蔽罩具有防呆防错功能 | PFC铝基板满足没有锡须要求 | 麦拉片可靠安装 | 麦拉不具有防呆防错功能",
+  "unit_type": "table_row",
+  "node_id": "Q-FAILURE",
+  "node_name": "失效模式（FMEA 相关）",
+  "rule": "doc:failure",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元主要描述设计特性和防护措施，而非失效模式"
+  }
+ },
+ {
+  "doc": "TWINGO-11KW_结构DFMEA在线版_20241202.axls.xlsx",
+  "text": "电气绝缘性能满足要求 | 安规距离满足要求 | 高压侧安规距离满足要求 | 1.整机上报绝缘耐压故障； | #907\r\n#294\r\n#293\r\n#241\r\n#95\r\n#332 | 1.整机元器件发生击穿，短路等； | 9 | 1.元器件之间的安规距离，元器件对地安规距离不符合安规设计规范； | 3 | 1.参考安规设计规范；\r\n2研发设计阶段拉通安规工程师进行安规检查，输出安规检查报告。\r\n3.对于安规不满足要求的位置，需增大对应器件距离使其满足安规要求。\r\n4.对于无法移动的器件，使用绝缘措施进行规避（热缩管、麦拉片、绝缘胶带，导热泥等），并需得到安规工程师的认可。 | 1.绝缘耐压测试； ",
+  "unit_type": "table_row",
+  "node_id": "Q-FAILURE",
+  "node_name": "失效模式（FMEA 相关）",
+  "rule": "doc:failure",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "内容描述的是绝缘耐压失效及安规距离不足等失效模式，符合Q-FAILURE节点和doc:failure归属。"
+  }
+ },
+ {
+  "doc": "OBC+DCDC_Mechanical_Master_DFMEA.axls.xlsx",
+  "text": "主板性能满足要求 | 主板满足随机振动要求",
+  "unit_type": "table_row",
+  "node_id": "Q-FAILURE",
+  "node_name": "失效模式（FMEA 相关）",
+  "rule": "doc:failure",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容描述的是主板满足性能和随机振动要求，属于成功或合格状态，而非失效模式，不能归属到Q-FAILURE节点"
+  }
+ },
+ {
+  "doc": "OBC+DCDC_Mechanical_Master_DFMEA.axls.xlsx",
+  "text": "绝缘胶带覆盖面积满足要求",
+  "unit_type": "table_row",
+  "node_id": "Q-FAILURE",
+  "node_name": "失效模式（FMEA 相关）",
+  "rule": "doc:failure",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "内容描述的是满足要求的符合性陈述，不属于失效模式或失效原因"
+  }
+ },
+ {
+  "doc": "OBC+DCDC_Mechanical_Master_DFMEA.axls.xlsx",
+  "text": "接插件密封圈实现可靠密封 | 1.接插件密封圈发生漏气 | #955\r\n#953\r\n#887\r\n#780\r\n#395\r\n#390 | 1.无法可靠密封，内部进水功能失效 | 9 | 1.壳体密封面粗糙度超差 | 3 | 1.参考接插件安装规格书进行密封面设计；\r\n2.3D数模评审； | 1.整机气密测试；\r\n2.DV/PV耐久实验 | 4",
+  "unit_type": "table_row",
+  "node_id": "Q-FAILURE",
+  "node_name": "失效模式（FMEA 相关）",
+  "rule": "doc:failure",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容单元完整描述了接插件密封圈的失效模式、原因、影响、风险等级及防控措施，符合FMEA失效模式的要求。"
+  }
+ },
+ {
+  "doc": "P202312014_22KW 800V_Vibration and Structure CAE Analysis _V1.0_20240805.adoc.md",
+  "text": "(2))材料属性",
+  "unit_type": "para",
+  "node_id": "G-METHOD-CAE",
+  "node_name": "CAE仿真方法（热/结构/流场/电磁）",
+  "rule": "doc:me-cae",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "材料属性属于仿真输入数据，不是CAE仿真方法本身，归入该节点不合理"
+  }
+ },
+ {
+  "doc": "项目编号_项目_Thermal Simulation Report_阶段_日期.adoc.md",
+  "text": "4.2.1.流速",
+  "unit_type": "heading",
+  "node_id": "G-METHOD-CAE",
+  "node_name": "CAE仿真方法（热/结构/流场/电磁）",
+  "rule": "doc:me-cae",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "流速是CAE流场仿真中的关键参数，归属该骨架节点符合doc:me-cae分类规则"
+  }
+ },
+ {
+  "doc": "P202512006_BMW CN_Thermal Simulation Report_阶段_20260731.adoc.md",
+  "text": "水道压降(Pa) | 215.3 | 802.5 | 1751.6 | 3059.2 | 4730.5 | 6756.2 | 9145.1 | 11924.2",
+  "unit_type": "table_row",
+  "node_id": "G-METHOD-CAE",
+  "node_name": "CAE仿真方法（热/结构/流场/电磁）",
+  "rule": "doc:me-cae",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容为CAE仿真得到的压降数值，属于CAE仿真方法的输出，符合doc:me-cae落位规则。"
+  }
+ },
+ {
+  "doc": "P202512006_BMW CN_Thermal Simulation Report_阶段_20260731.adoc.md",
+  "text": "水道压降(Pa) | 224 | 812.1 | 1750.9 | 3061.1 | 4731.6 | 6761.3 | 9204.1 | 11939.4",
+  "unit_type": "table_row",
+  "node_id": "G-METHOD-CAE",
+  "node_name": "CAE仿真方法（热/结构/流场/电磁）",
+  "rule": "doc:me-cae",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "水道压降数据属于CAE流场仿真结果，归属到CAE仿真方法节点合理。"
+  }
+ },
+ {
+  "doc": "项目编号_项目_Thermal Simulation Report_阶段_日期.adoc.md",
+  "text": "(1).LLC-PFC MOS损耗分布",
+  "unit_type": "heading",
+  "node_id": "G-METHOD-CAE",
+  "node_name": "CAE仿真方法（热/结构/流场/电磁）",
+  "rule": "doc:me-cae",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容描述的是具体功率器件的损耗分布，属于仿真结果而非CAE仿真方法的通用内容"
+  }
+ },
+ {
+  "doc": "P202512006_BMW CN_Thermal Simulation Report_阶段_20260731.adoc.md",
+  "text": "谐振电容 | 100 | 86.5",
+  "unit_type": "table_row",
+  "node_id": "G-METHOD-CAE",
+  "node_name": "CAE仿真方法（热/结构/流场/电磁）",
+  "rule": "doc:me-cae",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容为谐振电容的参数，属于硬件元件数据，与CAE仿真方法分类不匹配"
+  }
+ },
+ {
+  "doc": "物料描述规则及属性定义.axls.xlsx",
+  "text": "逻辑IC | 或门 | 31 | 04 | 原材料 | 外购",
+  "unit_type": "table_row",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:bom-ecr",
+  "conf": 0.75,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "物料描述规则及属性定义.axls.xlsx",
+  "text": "磁性器件 | 共模电感 | 14 | 02 | 原材料 | 外购 | 童佳骏",
+  "unit_type": "table_row",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:bom-ecr",
+  "conf": 0.75,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "物料描述规则及属性定义.axls.xlsx",
+  "text": "PCBA | MAG1 | 11 | 13 | 半成品 | 自制 | 王莟钰",
+  "unit_type": "table_row",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:bom-ecr",
+  "conf": 0.75,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "物料描述规则及属性定义.axls.xlsx",
+  "text": "周转车 | 周转车及配件 | 55 | 01 | 原材料 | 外购",
+  "unit_type": "table_row",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:bom-ecr",
+  "conf": 0.75,
+  "verdict": {
+   "correct": false,
+   "reason": "BOM条目应归属至BOM/ECR节点，而非开发过程树节点"
+  }
+ },
+ {
+  "doc": "物料描述规则及属性定义.axls.xlsx",
+  "text": "放大器 | 比较器 | 26 | 04 | 原材料 | 外购",
+  "unit_type": "table_row",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:bom-ecr",
+  "conf": 0.75,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元为 BOM 物料信息，属于 doc:bom-ecr 类别，而骨架节点 G-DEV 为开发过程树，两者不匹配。"
+  }
+ },
+ {
+  "doc": "物料描述规则及属性定义.axls.xlsx",
+  "text": "电源IC | Buck | 27 | 02 | 原材料 | 外购",
+  "unit_type": "table_row",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:bom-ecr",
+  "conf": 0.75,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "P202505003_平台SSG07_项目结构安规检查报告_EVT1_20250604.axls.xlsx",
+  "text": "8 | MB板TOP面HV侧端子与电气盖板 | 3.5 | 3.5 | 5.37 | 0.6 | 45806",
+  "unit_type": "table_row",
+  "node_id": "R-SAFETY",
+  "node_name": "电气安全需求（绝缘/耐压/接触电流）",
+  "rule": "doc:safety-design",
+  "conf": 0.8,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: \n{\"correct\": true, \"reason\": \"内容描述的是高压"
+  }
+ },
+ {
+  "doc": "P202505003_平台SSG07_项目结构安规检查报告_EVT1_20250604.axls.xlsx",
+  "text": "40 | 控制板与弹片锁附螺钉安规检查 | X | X | X",
+  "unit_type": "table_row",
+  "node_id": "R-SAFETY",
+  "node_name": "电气安全需求（绝缘/耐压/接触电流）",
+  "rule": "doc:safety-design",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "该条目涉及电气安全检查，符合 R‑SAFETY 电气安全需求（绝缘/耐压/接触电流）且归属 safety‑design 文档。"
+  }
+ },
+ {
+  "doc": "P202505003_平台SSG07_项目结构安规检查报告_EVT1_20250604.axls.xlsx",
+  "text": "50 | MB板T8引脚与屏蔽罩 | 2.8 | 2.8 | 4.74 | 0.5 | 45581 | /",
+  "unit_type": "table_row",
+  "node_id": "R-SAFETY",
+  "node_name": "电气安全需求（绝缘/耐压/接触电流）",
+  "rule": "doc:safety-design",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "内容单元描述了MB板T8引脚与屏蔽罩之间的绝缘距离，属于电气安全需求（绝缘/耐压/接触电流）范畴。"
+  }
+ },
+ {
+  "doc": "P202505003_平台SSG07_项目结构安规检查报告_EVT1_20250604.axls.xlsx",
+  "text": "48 | MCU铜排和壳体安规检查 | X | X | X",
+  "unit_type": "table_row",
+  "node_id": "R-SAFETY",
+  "node_name": "电气安全需求（绝缘/耐压/接触电流）",
+  "rule": "doc:safety-design",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "MCU铜排和壳体安规检查涉及电气安全需求，符合R‑SAFETY骨架节点定义"
+  }
+ },
+ {
+  "doc": "P202312014_22KW 800V_安规检查报告评审_EVT2_日期_会议纪要.axls.xlsx",
+  "text": "PCBA测试覆盖率分析报告",
+  "unit_type": "table_row",
+  "node_id": "R-SAFETY",
+  "node_name": "电气安全需求（绝缘/耐压/接触电流）",
+  "rule": "doc:safety-design",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "PCBA测试覆盖率分析报告主要关注测试覆盖度，而非电气安全需求（绝缘、耐压、接触电流），直接归属到R-SAFETY骨架节点不合理。"
+  }
+ },
+ {
+  "doc": "P202509004_A03-800V_安规检查会议纪要_20251030.adoc.md",
+  "text": "会议行动项：",
+  "unit_type": "para",
+  "node_id": "R-SAFETY",
+  "node_name": "电气安全需求（绝缘/耐压/接触电流）",
+  "rule": "doc:safety-design",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元为会议行动项，无电气安全相关内容，无法匹配骨架节点R-SAFETY"
+  }
+ },
+ {
+  "doc": "《MX11 800V 2023112801-04稳态湿热序列样机拆机报告》.adoc.md",
+  "text": "注：螺丝序列编号参图3-10示意。",
+  "unit_type": "para",
+  "node_id": "G-VERIFY-ENV",
+  "node_name": "环境测试（高温/低温/湿热/盐雾/防尘）",
+  "rule": "doc:me-env",
+  "conf": 0.85,
+  "verdict": {
+   "correct": false,
+   "reason": "螺丝序列编号示意与G-VERIFY-ENV环境测试无关，属于装配说明内容。"
+  }
+ },
+ {
+  "doc": "P202503007_零跑D700V_结构拆机报告_ET_高温耐久_20251215.axls.xlsx",
+  "text": "LVDC接插件螺钉扭矩 | 1.观察接插件结构是否完好，表面有无破损；\r\n2.观察密封圈有无无过压现象，回弹是否正常；\r\n3.观察螺钉表面质量是否良好，有无松动、断裂等异常；\r\n4.拍照记录细节情况；\r\n紧固扭力：                                     判定标准：\r\nM4：2.2±0.2N.M                          M4：＞1.54N.M | LVDC接插件螺钉扭矩 | 是 | 台湾Fanyaa数显扭矩起子",
+  "unit_type": "table_row",
+  "node_id": "G-VERIFY-ENV",
+  "node_name": "环境测试（高温/低温/湿热/盐雾/防尘）",
+  "rule": "doc:me-env",
+  "conf": 0.85,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容单元是机械接插件扭矩检查，属于机械验证而非环境测试，归入G-VERIFY-ENV不合理"
+  }
+ },
+ {
+  "doc": "《MX11 800V 2023112801-04稳态湿热序列样机拆机报告》.adoc.md",
+  "text": "HVEMI 板",
+  "unit_type": "heading",
+  "node_id": "G-VERIFY-ENV",
+  "node_name": "环境测试（高温/低温/湿热/盐雾/防尘）",
+  "rule": "doc:me-env",
+  "conf": 0.85,
+  "verdict": {
+   "correct": false,
+   "reason": "HVEMI板属于硬件组件，而非环境测试内容，不应归属到G-VERIFY-ENV节点"
+  }
+ },
+ {
+  "doc": "P202503007_零跑D700V_结构拆机报告_ET_高温耐久_20251215.axls.xlsx",
+  "text": "ACEMI板BOT面 | 1.观察ACEMI板结构是否完好，BOT面插件器件有无掉落等异常；\n2.观察三防漆是否有异常，是否有发白、气泡、开裂等缺陷；\n3.观察主板BOT面白胶有无剥落、散开等异常；\n4.拍照记录细节情况； | 是 | 目视观察",
+  "unit_type": "table_row",
+  "node_id": "G-VERIFY-ENV",
+  "node_name": "环境测试（高温/低温/湿热/盐雾/防尘）",
+  "rule": "doc:me-env",
+  "conf": 0.85,
+  "verdict": {
+   "correct": true,
+   "reason": "内容描述了对ACEMI板在环境测试后进行目视检查的步骤，符合G-VERIFY-ENV环境测试验证的要求。"
+  }
+ },
+ {
+  "doc": "《MX11 800V 2023112801-04稳态湿热序列样机拆机报告》.adoc.md",
+  "text": "如图3-12为实验结束后导热材料外观图，判定如下：",
+  "unit_type": "para",
+  "node_id": "G-VERIFY-ENV",
+  "node_name": "环境测试（高温/低温/湿热/盐雾/防尘）",
+  "rule": "doc:me-env",
+  "conf": 0.85,
+  "verdict": {
+   "correct": true,
+   "reason": "内容涉及实验后导热材料外观检查，属于环境测试结果描述，归类合理"
+  }
+ },
+ {
+  "doc": "P202503007_零跑D700V_结构拆机报告_ET_高温耐久_20251215.axls.xlsx",
+  "text": "13 | 0.78 | 0.8 ±0.1 | ＞0.56 | 0.06 | 4 | 0.72 | 0.8 ±0.1 | ＞0.56 | 序号 | 拆机扭力N.M | 紧固扭力N.M | 判定标准N.M",
+  "unit_type": "table_row",
+  "node_id": "G-VERIFY-ENV",
+  "node_name": "环境测试（高温/低温/湿热/盐雾/防尘）",
+  "rule": "doc:me-env",
+  "conf": 0.85,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元为拆机扭力、紧固扭力等机械性能数据，与骨架节点G-VERIFY-ENV（环境测试）不匹配。"
+  }
+ },
+ {
+  "doc": "《AY200低压拆机报告-综合耐久（客返件）_20251215》-OK.adoc.md",
+  "text": "图4-19 磁件检查 | ",
+  "unit_type": "table_row",
+  "node_id": "G-VERIFY-REL",
+  "node_name": "可靠性试验（耐久/寿命/老化/温循）",
+  "rule": "doc:me-reliability",
+  "conf": 0.85,
+  "verdict": {
+   "correct": false,
+   "reason": "图4-19 磁件检查属于检查环节,而非可靠性试验（耐久/寿命/老化/温循）"
+  }
+ },
+ {
+  "doc": "《AY200低压拆机报告-综合耐久（客返件）_20251215》-OK.adoc.md",
+  "text": "OBC逆变 | 245 | 9 | 220 | 3.3 | 25±2 | 40±2 | 10",
+  "unit_type": "table_row",
+  "node_id": "G-VERIFY-REL",
+  "node_name": "可靠性试验（耐久/寿命/老化/温循）",
+  "rule": "doc:me-reliability",
+  "conf": 0.85,
+  "verdict": {
+   "correct": true,
+   "reason": "内容单元为OBC逆变可靠性试验数据，符合骨架节点G-VERIFY-REL可靠性试验的定义和归属规则doc:me-reliability。"
+  }
+ },
+ {
+  "doc": "《AY200低压拆机报告-综合耐久（客返件）_20251215》-OK.adoc.md",
+  "text": "PFC电感 | L1-2 | 235μH±15% | 100kHz/1V | 243 | OK",
+  "unit_type": "table_row",
+  "node_id": "G-VERIFY-REL",
+  "node_name": "可靠性试验（耐久/寿命/老化/温循）",
+  "rule": "doc:me-reliability",
+  "conf": 0.85,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "《AY200低压拆机报告-综合耐久（客返件）_20251215》-OK.adoc.md",
+  "text": "5 | 0.775 | M3螺钉 0.8±0.1 | ＞0.56",
+  "unit_type": "table_row",
+  "node_id": "G-VERIFY-REL",
+  "node_name": "可靠性试验（耐久/寿命/老化/温循）",
+  "rule": "doc:me-reliability",
+  "conf": 0.85,
+  "verdict": {
+   "correct": true,
+   "reason": "内容单元为M3螺钉的扭矩测试数据，属于可靠性试验中的机械参数验证，归属合理。"
+  }
+ },
+ {
+  "doc": "《AY200低压拆机报告-综合耐久（客返件）_20251215》-OK.adoc.md",
+  "text": "2 | 0.805 | M3螺钉 0.8±0.1 | ＞0.56",
+  "unit_type": "table_row",
+  "node_id": "G-VERIFY-REL",
+  "node_name": "可靠性试验（耐久/寿命/老化/温循）",
+  "rule": "doc:me-reliability",
+  "conf": 0.85,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容为可靠性试验的扭矩测试数据，符合G‑VERIFY‑REL节点及doc:me‑reliability分类。"
+  }
+ },
+ {
+  "doc": "《AY200低压拆机报告-综合耐久（客返件）_20251215》-OK.adoc.md",
+  "text": "14 | 2.291 | M4螺钉 2.2±0.2 | ＞1.54",
+  "unit_type": "table_row",
+  "node_id": "G-VERIFY-REL",
+  "node_name": "可靠性试验（耐久/寿命/老化/温循）",
+  "rule": "doc:me-reliability",
+  "conf": 0.85,
+  "verdict": {
+   "correct": false,
+   "reason": "内容为零件尺寸规格和公差，未涉及可靠性试验或寿命测试。"
+  }
+ },
+ {
+  "doc": "平面、立体水道成本预估.axls.xlsx",
+  "text": "连接件 | 信号接插件 | 信号连接线 VCDC02-B-6.6-2.5-W-320-A-B-EVG-EE4 | 标准件 | PCS | 1 | 11 | 信号接插件 | 标准件 | PCS | 1 | 11",
+  "unit_type": "table_row",
+  "node_id": "P-HW-MECH-WATERWAY",
+  "node_name": "水道系统（水道板/水嘴/进出水口/流道设计）",
+  "rule": "doc:me-waterway",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容单元为信号接插件和连接线，属于电气信号类部件，而非水道系统的水路设计或部件，归属不合理。"
+  }
+ },
+ {
+  "doc": "EDS2-AC 塑胶水嘴气密验证.axls.xlsx",
+  "text": "1除去，2、3、4松 | 152.35",
+  "unit_type": "table_row",
+  "node_id": "P-HW-MECH-WATERWAY",
+  "node_name": "水道系统（水道板/水嘴/进出水口/流道设计）",
+  "rule": "doc:me-waterway",
+  "conf": 0.8,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "平面、立体水道成本预估.axls.xlsx",
+  "text": "盖板 | 盖板 | - | 定制件 | PCS | 1 | 18.6 | 上盖板 | 600x225x1.5 | 定制件 | PCS | 1 | 30 | 30",
+  "unit_type": "table_row",
+  "node_id": "P-HW-MECH-WATERWAY",
+  "node_name": "水道系统（水道板/水嘴/进出水口/流道设计）",
+  "rule": "doc:me-waterway",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容包含水道系统的盖板和上盖板，属于水道板等组件，符合 doc:me-waterway 落位规则。"
+  }
+ },
+ {
+  "doc": "水嘴及对应板孔安装测试说明.adoc.md",
+  "text": "尺寸 | 18.85 | 18.98 | 19.04 | 19.09 | 19.26",
+  "unit_type": "table_row",
+  "node_id": "P-HW-MECH-WATERWAY",
+  "node_name": "水道系统（水道板/水嘴/进出水口/流道设计）",
+  "rule": "doc:me-waterway",
+  "conf": 0.8,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "EDS2-AC 塑胶水嘴气密验证.axls.xlsx",
+  "text": "17 | 62 | 0.2 | 双密封圈模拟失效 | 26.02 | 中",
+  "unit_type": "table_row",
+  "node_id": "P-HW-MECH-WATERWAY",
+  "node_name": "水道系统（水道板/水嘴/进出水口/流道设计）",
+  "rule": "doc:me-waterway",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "内容涉及双密封圈失效模拟，属于水道系统的密封设计，符合骨架节点 P-HW-MECH-WATERWAY 的定义"
+  }
+ },
+ {
+  "doc": "散热优化后-能量域立体水道_Thermal Simulation Report_20250122.adoc.md",
+  "text": "产品简介",
+  "unit_type": "heading",
+  "node_id": "P-HW-MECH-WATERWAY",
+  "node_name": "水道系统（水道板/水嘴/进出水口/流道设计）",
+  "rule": "doc:me-waterway",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "产品简介是通用概述，无法体现水道系统的具体技术内容"
+  }
+ },
+ {
+  "doc": "VAVE 热仿真报告_V1.0_20240914.adoc.md",
+  "text": "PFC 慢管(D2) | 120 | 94 |  | ",
+  "unit_type": "table_row",
+  "node_id": "G-METHOD-CAE-THERMAL",
+  "node_name": "热仿真方法（Flotherm/热阻网络/CFD）",
+  "rule": "doc:me-cae-thermal",
+  "conf": 0.85,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元描述的是PFC慢管参数，与热仿真方法无关，不应归属到该骨架节点。"
+  }
+ },
+ {
+  "doc": "VAVE 热仿真报告_V1.0_20240914.adoc.md",
+  "text": "冷却液流量(L/min) | 8",
+  "unit_type": "table_row",
+  "node_id": "G-METHOD-CAE-THERMAL",
+  "node_name": "热仿真方法（Flotherm/热阻网络/CFD）",
+  "rule": "doc:me-cae-thermal",
+  "conf": 0.85,
+  "verdict": {
+   "correct": true,
+   "reason": "冷却液流量是热仿真常用的输入参数，归属于热仿真方法节点符合规则"
+  }
+ },
+ {
+  "doc": "VAVE 热仿真报告_V1.0_20240914.adoc.md",
+  "text": "DC副边绕组 | 铜",
+  "unit_type": "table_row",
+  "node_id": "G-METHOD-CAE-THERMAL",
+  "node_name": "热仿真方法（Flotherm/热阻网络/CFD）",
+  "rule": "doc:me-cae-thermal",
+  "conf": 0.85,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元描述的是DC副边绕组材质（铜），与热仿真方法节点无关。"
+  }
+ },
+ {
+  "doc": "VAVE 热仿真报告_V1.0_20240914.adoc.md",
+  "text": "磁芯 | 14.07*2 | 锰锌铁氧体",
+  "unit_type": "table_row",
+  "node_id": "G-METHOD-CAE-THERMAL",
+  "node_name": "热仿真方法（Flotherm/热阻网络/CFD）",
+  "rule": "doc:me-cae-thermal",
+  "conf": 0.85,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容描述磁芯材料与尺寸，属于磁性元件信息，与热仿真方法节点无关"
+  }
+ },
+ {
+  "doc": "VAVE 热仿真报告_V1.0_20240914.adoc.md",
+  "text": "DC原边 | 19.34*4pcs | 77.36 |  | ",
+  "unit_type": "table_row",
+  "node_id": "G-METHOD-CAE-THERMAL",
+  "node_name": "热仿真方法（Flotherm/热阻网络/CFD）",
+  "rule": "doc:me-cae-thermal",
+  "conf": 0.85,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容为DC原边零件的规格数据，与热仿真方法无关，不应归属到此骨架节点"
+  }
+ },
+ {
+  "doc": "热仿真裁剪说明.adoc.md",
+  "text": "功耗对比：",
+  "unit_type": "para",
+  "node_id": "G-METHOD-CAE-THERMAL",
+  "node_name": "热仿真方法（Flotherm/热阻网络/CFD）",
+  "rule": "doc:me-cae-thermal",
+  "conf": 0.85,
+  "verdict": {
+   "correct": true,
+   "reason": "功耗对比属于热仿真前的输入数据或分析结果，与热仿真方法节点的主题相符"
+  }
+ },
+ {
+  "doc": "P202312013_STLA XS_2D Released Drawing Comments_EVT2_20250707_DV-PCBA点胶图.axls.xlsx",
+  "text": "其他 | 其他",
+  "unit_type": "table_row",
+  "node_id": "P-HW",
+  "node_name": "电子学科（电路拓扑分解：EMI/PFC/LLC/控制/辅助）",
+  "rule": "doc:pcb",
+  "conf": 0.7,
+  "verdict": {
+   "correct": false,
+   "reason": "内容过于笼统，无法对应到电子学科的具体电路拓扑分类，不应落位在该骨架节点"
+  }
+ },
+ {
+  "doc": "P202312013_STLA XS_2D Released Drawing Comments_EVT2_20250707_DV-PCBA点胶图.axls.xlsx",
+  "text": "塑胶件",
+  "unit_type": "table_row",
+  "node_id": "P-HW",
+  "node_name": "电子学科（电路拓扑分解：EMI/PFC/LLC/控制/辅助）",
+  "rule": "doc:pcb",
+  "conf": 0.7,
+  "verdict": {
+   "correct": false,
+   "reason": "塑胶件属于机械结构件，与电子学科的电路拓扑分解不直接相关"
+  }
+ },
+ {
+  "doc": "理想OC_PCB板真空吸盘预留尺寸校核.axls.xlsx",
+  "text": "预留吸盘位置2直径 | 19 | mm | 自动线真空吸力 | kg | 自动线最终结果判定",
+  "unit_type": "table_row",
+  "node_id": "P-HW",
+  "node_name": "电子学科（电路拓扑分解：EMI/PFC/LLC/控制/辅助）",
+  "rule": "doc:pcb",
+  "conf": 0.7,
+  "verdict": {
+   "correct": false,
+   "reason": "内容描述的是机械定位和真空吸力等工艺参数，与电路拓扑分解的电子学科节点不匹配"
+  }
+ },
+ {
+  "doc": "P202312013_STLA XS_2D Released Drawing Comments_EVT2_20250707_DV-PCBA点胶图.axls.xlsx",
+  "text": "5 | 否",
+  "unit_type": "table_row",
+  "node_id": "P-HW",
+  "node_name": "电子学科（电路拓扑分解：EMI/PFC/LLC/控制/辅助）",
+  "rule": "doc:pcb",
+  "conf": 0.7,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元文本仅为“5 | 否”，与PCB文档和电路拓扑分解无关，归属不合理。"
+  }
+ },
+ {
+  "doc": "P202312013_STLA XS_2D Released Drawing Comments_EVT2_20250707_DV-PCBA点胶图.axls.xlsx",
+  "text": "2 | 否",
+  "unit_type": "table_row",
+  "node_id": "P-HW",
+  "node_name": "电子学科（电路拓扑分解：EMI/PFC/LLC/控制/辅助）",
+  "rule": "doc:pcb",
+  "conf": 0.7,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元“2 | 否”与P‑HW电子学科的电路拓扑主题及PCB文档规则不相关。"
+  }
+ },
+ {
+  "doc": "P202312013_STLA XS_2D Released Drawing Comments_EVT2_20250707_DV-PCBA点胶图.axls.xlsx",
+  "text": "项目名称：",
+  "unit_type": "table_row",
+  "node_id": "P-HW",
+  "node_name": "电子学科（电路拓扑分解：EMI/PFC/LLC/控制/辅助）",
+  "rule": "doc:pcb",
+  "conf": 0.7,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容仅为通用项目名称标题，未涉及电路拓扑或PCB技术，归属于该骨架节点不合理"
+  }
+ },
+ {
+  "doc": "LVDC正极端子设计规范_草案.adoc.md",
+  "text": "1、材料：硅橡胶；比重：1.3±0.25g/cm3；",
+  "unit_type": "para",
+  "node_id": "P-HW-MECH-CONNECTOR",
+  "node_name": "连接器与接插件（高压/低压/信号/防呆）",
+  "rule": "doc:me-connector",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容描述了硅橡胶的材料及比重，属于连接器常用的材料规格，归属到连接器节点合理。"
+  }
+ },
+ {
+  "doc": "板对板连接器测试数据.axls.xlsx",
+  "text": "y-3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0",
+  "unit_type": "table_row",
+  "node_id": "P-HW-MECH-CONNECTOR",
+  "node_name": "连接器与接插件（高压/低压/信号/防呆）",
+  "rule": "doc:me-connector",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元仅为数值列表，缺少对连接器的描述或标识，不符合doc:me-connector的落位要求"
+  }
+ },
+ {
+  "doc": "板对板连接器测试数据.axls.xlsx",
+  "text": "振动前 | 振动前",
+  "unit_type": "table_row",
+  "node_id": "P-HW-MECH-CONNECTOR",
+  "node_name": "连接器与接插件（高压/低压/信号/防呆）",
+  "rule": "doc:me-connector",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "振动前属于连接器振动测试的前置记录，属于连接器文档范围。"
+  }
+ },
+ {
+  "doc": "板对板连接器测试数据.axls.xlsx",
+  "text": "z2saopin | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0",
+  "unit_type": "table_row",
+  "node_id": "P-HW-MECH-CONNECTOR",
+  "node_name": "连接器与接插件（高压/低压/信号/防呆）",
+  "rule": "doc:me-connector",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容单元为普通数据，未包含doc:me-connector标记或连接器相关信息，不符合骨架节点归属规则。"
+  }
+ },
+ {
+  "doc": "板对板连接器测试数据.axls.xlsx",
+  "text": "振动前 | 振动前",
+  "unit_type": "table_row",
+  "node_id": "P-HW-MECH-CONNECTOR",
+  "node_name": "连接器与接插件（高压/低压/信号/防呆）",
+  "rule": "doc:me-connector",
+  "conf": 0.8,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "板对板连接器测试数据.axls.xlsx",
+  "text": "冲击y-3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0",
+  "unit_type": "table_row",
+  "node_id": "P-HW-MECH-CONNECTOR",
+  "node_name": "连接器与接插件（高压/低压/信号/防呆）",
+  "rule": "doc:me-connector",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容为冲击实验数据，与连接器无关，不应归入骨架节点"
+  }
+ },
+ {
+  "doc": "单组分导热泥涂覆工艺验证报告V1.1.adoc.md",
+  "text": "验证数据",
+  "unit_type": "heading",
+  "node_id": "G-PROD",
+  "node_name": "生产过程树（PCBA/组装/生产测试/试制）",
+  "rule": "doc:process",
+  "conf": 0.75,
+  "verdict": {
+   "correct": false,
+   "reason": "验证数据是数据/结果类内容，不符合doc:process的落位要求"
+  }
+ },
+ {
+  "doc": "单组分导热泥涂覆工艺验证报告V1.1.adoc.md",
+  "text": "两种MOS的导热泥厚度最大值分别为0.583mm和0.57mm，单侧最大为0.30mm，为评估陶瓷片印刷后存在局部空缺的风险，现采用0.5mm钢网对陶瓷片进行印刷，确认其被安装到壳体上后被压至0.4mm厚度时（理论为0.30mm胶厚）印刷空缺处的填充效果，验证结果如下：",
+  "unit_type": "para",
+  "node_id": "G-PROD",
+  "node_name": "生产过程树（PCBA/组装/生产测试/试制）",
+  "rule": "doc:process",
+  "conf": 0.75,
+  "verdict": {
+   "correct": true,
+   "reason": "该文本涉及导热泥厚度检测和陶瓷片印刷工艺验证，属于PCBA生产过程中的工艺控制与验证，符合G-PROD骨架节点的归属规则。"
+  }
+ },
+ {
+  "doc": "单组分导热泥涂覆工艺验证报告V1.1.adoc.md",
+  "text": "20260509 | 天脉TMQ-40LB<br>常规款 | 是 | 3 | 15 | 双印 |  | ",
+  "unit_type": "table_row",
+  "node_id": "G-PROD",
+  "node_name": "生产过程树（PCBA/组装/生产测试/试制）",
+  "rule": "doc:process",
+  "conf": 0.75,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "单组分导热泥涂覆工艺验证报告V1.1.adoc.md",
+  "text": "11 | POM整面 | 6-7 | 10 | 0.3 | 0.28 | 0.22 | 0.28 | 0.17 | 0.21 | 0.24 | 0.25 | 0.25 | 0.19 |  | / | 20s为10s基础上再次压装10s",
+  "unit_type": "table_row",
+  "node_id": "G-PROD",
+  "node_name": "生产过程树（PCBA/组装/生产测试/试制）",
+  "rule": "doc:process",
+  "conf": 0.75,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容单元描述的是POM整面压装的具体工艺参数和时间步骤，属于生产过程树的装配/压装工艺，符合doc:process规则"
+  }
+ },
+ {
+  "doc": "单组分导热泥涂覆工艺验证报告V1.1.adoc.md",
+  "text": "5 | POM整面 | 12.5-14.5 | 20 | 0.08 | 0 | 0.05 | 0.1 | 0.11 | 0.12 | 0.07 | 0.04 | 0.04 | 0.03 |  |  | ",
+  "unit_type": "table_row",
+  "node_id": "G-PROD",
+  "node_name": "生产过程树（PCBA/组装/生产测试/试制）",
+  "rule": "doc:process",
+  "conf": 0.75,
+  "verdict": {
+   "correct": true,
+   "reason": "内容单元为生产过程参数，包含工序名称POM整面和对应数值，符合G-PROD生产过程树节点的范围。"
+  }
+ },
+ {
+  "doc": "单组分导热泥涂覆工艺验证报告V1.1.adoc.md",
+  "text": "±20%计算最大胶量/g | 1.35 | 1.35 | 1.35 | 4.1 | 4.1 | 2.75 | 1.35 | 1.35 | 1.35 | 1.35 | 1.35 | 1.35",
+  "unit_type": "table_row",
+  "node_id": "G-PROD",
+  "node_name": "生产过程树（PCBA/组装/生产测试/试制）",
+  "rule": "doc:process",
+  "conf": 0.75,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "思索连接件-供应商常用料清单.axls.xlsx",
+  "text": "6 | 思索 | 2021H-05-PTBK | 塑壳 | - | PCS | 5605 | 45",
+  "unit_type": "table_row",
+  "node_id": "Q-LESSON",
+  "node_name": "经验教训（项目复盘/FAQ/最佳实践）",
+  "rule": "doc:me-supplier",
+  "conf": 0.75,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元仅为数据记录，缺乏经验教训或最佳实践要素，不适合归入Q-LESSON骨架节点"
+  }
+ },
+ {
+  "doc": "思索连接件-供应商常用料清单.axls.xlsx",
+  "text": "7 | 思索 | C2021-05-PTNC | 连接器配件支架 | - | PCS | 5605 | 45",
+  "unit_type": "table_row",
+  "node_id": "Q-LESSON",
+  "node_name": "经验教训（项目复盘/FAQ/最佳实践）",
+  "rule": "doc:me-supplier",
+  "conf": 0.75,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容是采购/库存记录，不属于经验教训或最佳实践，应归入相应的供应链或采购节点。"
+  }
+ },
+ {
+  "doc": "思索连接件-供应商常用料清单.axls.xlsx",
+  "text": "99 | 思索 | 2039TF-HSW1-Q | 端子五金 | 镀锡（71007）高导铜 | PCS | 2540 | 30",
+  "unit_type": "table_row",
+  "node_id": "Q-LESSON",
+  "node_name": "经验教训（项目复盘/FAQ/最佳实践）",
+  "rule": "doc:me-supplier",
+  "conf": 0.75,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容为供应商产品明细，属于物料信息而非经验教训或项目复盘类节点"
+  }
+ },
+ {
+  "doc": "思索连接件-供应商常用料清单.axls.xlsx",
+  "text": "68 | 思索 | C2022-03A-PTGY-Q | 连接器配件支架 | - | PCS | 2586 | 35",
+  "unit_type": "table_row",
+  "node_id": "Q-LESSON",
+  "node_name": "经验教训（项目复盘/FAQ/最佳实践）",
+  "rule": "doc:me-supplier",
+  "conf": 0.75,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容单元为供应商采购条目，不符合经验教训或最佳实践的定义"
+  }
+ },
+ {
+  "doc": "思索连接件-供应商常用料清单.axls.xlsx",
+  "text": "80 | 思索 | 2019T-HY2PH-02Q-Q | 端子五金 | 匹配#20-#22 | PCS | 2344 | 30",
+  "unit_type": "table_row",
+  "node_id": "Q-LESSON",
+  "node_name": "经验教训（项目复盘/FAQ/最佳实践）",
+  "rule": "doc:me-supplier",
+  "conf": 0.75,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元是零部件清单，不属于经验教训或最佳实践"
+  }
+ },
+ {
+  "doc": "思索连接件-供应商常用料清单.axls.xlsx",
+  "text": "93 | 思索 | 2021H-02-PTBK-Q | 塑壳 | - | PCS | 549 | 30",
+  "unit_type": "table_row",
+  "node_id": "Q-LESSON",
+  "node_name": "经验教训（项目复盘/FAQ/最佳实践）",
+  "rule": "doc:me-supplier",
+  "conf": 0.75,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容单元是生产记录而非经验教训或FAQ/最佳实践，不符合骨架节点定义"
+  }
+ },
+ {
+  "doc": "物料自动化上料抓取相关知识.adoc.md",
+  "text": "自动上料技术正从刚性自动化向 “柔性化、智能化、数字化” 深度演进，以应对多品种、小批量的生产挑战。其核心发展趋势可以概括为以下几个紧密关联的方面：",
+  "unit_type": "para",
+  "node_id": "P-KNOW-OBC",
+  "node_name": "OBC 知识（简介/拓扑原理/工作原理）",
+  "rule": "doc:know-obc",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "内容涉及自动上料技术而非OBC知识，归属不匹配"
+  }
+ },
+ {
+  "doc": "知识共创系统2.0-新人带教任务系统.adoc.md",
+  "text": "W31",
+  "unit_type": "heading",
+  "node_id": "P-KNOW-OBC",
+  "node_name": "OBC 知识（简介/拓扑原理/工作原理）",
+  "rule": "doc:know-obc",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元仅为代码 'W31'，不包含 OBC 知识内容，归属于该节点不合理。"
+  }
+ },
+ {
+  "doc": "物料自动化上料抓取相关知识.adoc.md",
+  "text": "工作原理 | 先吹后吸，气力结合：压缩空气将螺丝吹送至批嘴附近，真空吸附抓取并稳定螺丝，再进行锁付。 | 全程吸附：完全依靠电批头部的真空吸力，从供料器单颗吸取螺丝，然后移动至锁付点。",
+  "unit_type": "table_row",
+  "node_id": "P-KNOW-OBC",
+  "node_name": "OBC 知识（简介/拓扑原理/工作原理）",
+  "rule": "doc:know-obc",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容单元描述的是螺丝供料和吸持的工作原理，属于工具或工艺知识，而非 OBC（车载充电器）本身的功能或工作原理，因此不适合放在 OBC 知识节点下。"
+  }
+ },
+ {
+  "doc": "物料自动化上料抓取相关知识.adoc.md",
+  "text": "a、抓取核心要求：",
+  "unit_type": "para",
+  "node_id": "P-KNOW-OBC",
+  "node_name": "OBC 知识（简介/拓扑原理/工作原理）",
+  "rule": "doc:know-obc",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "该标题未体现 OBC 知识的简介、拓扑或工作原理，与节点主题不匹配"
+  }
+ },
+ {
+  "doc": "物料自动化上料抓取相关知识.adoc.md",
+  "text": "各上料方式特点",
+  "unit_type": "heading",
+  "node_id": "P-KNOW-OBC",
+  "node_name": "OBC 知识（简介/拓扑原理/工作原理）",
+  "rule": "doc:know-obc",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容涉及上料方式特点，属于制造工艺细节，不符合节点简介/拓扑原理/工作原理的定位。"
+  }
+ },
+ {
+  "doc": "知识共创系统2.0-新人带教任务系统.adoc.md",
+  "text": "带教计划任务项页面化",
+  "unit_type": "heading",
+  "node_id": "P-KNOW-OBC",
+  "node_name": "OBC 知识（简介/拓扑原理/工作原理）",
+  "rule": "doc:know-obc",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容涉及带教计划任务项的页面化，与OBC知识（简介/拓扑原理/工作原理）不相关。"
+  }
+ },
+ {
+  "doc": "P0384368_NT2.5 HVIM质量拆解报告_V2.0.axls.xlsx",
+  "text": "2 | 电气盖板 | 1 | ADC12 | 794",
+  "unit_type": "table_row",
+  "node_id": "P-HW-CTRL-SENSE",
+  "node_name": "采样电路",
+  "rule": "table:sense",
+  "conf": 0.65,
+  "verdict": {
+   "correct": true,
+   "reason": "内容单元涉及采样电路的ADC通道和传感器映射，属于sense表的典型条目。"
+  }
+ },
+ {
+  "doc": "P202312014_22KW 800V_Safety Inspection report_ET_V3.0_20260113.axls.xlsx",
+  "text": "MB板 | 39 | MB板AC电压采样铜皮与接地端 | 4.5 | 3.43 | 0.5 | 45581 | / | 让步接受",
+  "unit_type": "table_row",
+  "node_id": "P-HW-CTRL-SENSE",
+  "node_name": "采样电路",
+  "rule": "table:sense",
+  "conf": 0.65,
+  "verdict": {
+   "correct": true,
+   "reason": "内容单元描述的是MB板AC电压采样铜皮与接地端的采样数据，属于采样电路的sense表，符合骨架节点P-HW-CTRL-SENSE采样电路和落位规则table:sense。"
+  }
+ },
+ {
+  "doc": "04-分布式3KW DV温湿度拆机报告.axls.xlsx",
+  "text": "DCDC输入电压采样精度 | -0.07 | % | -1 | 1 | PASS",
+  "unit_type": "table_row",
+  "node_id": "P-HW-CTRL-SENSE",
+  "node_name": "采样电路",
+  "rule": "table:sense",
+  "conf": 0.65,
+  "verdict": {
+   "correct": true,
+   "reason": "该条目描述了DCDC输入电压的采样精度，属于采样电路的感知数据且符合table:sense归属规则"
+  }
+ },
+ {
+  "doc": "04-分布式3KW DV温湿度拆机报告.axls.xlsx",
+  "text": "OBC输入电压采样精度 | 0.61 | % | -1 | 1 | PASS",
+  "unit_type": "table_row",
+  "node_id": "P-HW-CTRL-SENSE",
+  "node_name": "采样电路",
+  "rule": "table:sense",
+  "conf": 0.65,
+  "verdict": {
+   "correct": true,
+   "reason": "内容单元为OBC输入电压采样精度，属于采样电路的sense测量，符合table:sense落位规则"
+  }
+ },
+ {
+  "doc": "04-分布式3KW DV温湿度拆机报告.axls.xlsx",
+  "text": "DCDC输入电压采样精度 | -0.01 | % | -1 | 1 | PASS",
+  "unit_type": "table_row",
+  "node_id": "P-HW-CTRL-SENSE",
+  "node_name": "采样电路",
+  "rule": "table:sense",
+  "conf": 0.65,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容属于采样电路且符合sense表的测量项，归属合理"
+  }
+ },
+ {
+  "doc": "04-分布式3KW DV温湿度拆机报告.axls.xlsx",
+  "text": "OBC输入电压采样精度 | 0.12 | % | -1 | 1 | PASS",
+  "unit_type": "table_row",
+  "node_id": "P-HW-CTRL-SENSE",
+  "node_name": "采样电路",
+  "rule": "table:sense",
+  "conf": 0.65,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容涉及OBC输入电压的采样精度，符合骨架节点‘P-HW-CTRL-SENSE 采样电路’及表sense的定义"
+  }
+ },
+ {
+  "doc": "项目编号_项目_拆机报告_阶段_日期(3).axls.xlsx",
+  "text": "1. 观察三防漆是否有异常，是否存在发白、气泡、开裂和剥落等缺陷；\r\n2. 观察PCB是否存在基材碳化变色、鼓包分层、表面开裂等缺陷，表面有无凝水；重点关注大电流铜箔路径、功率器件/磁件/继电器/热测试超降额或临界降额等高发热元器件周边区域；\r\n3. 观察贴片器件、插件状态是否完好，引脚是否存在氧化、弯曲，焊点是否存在虚焊、开裂等缺陷；重点关注BGA封装、大尺寸元器件以及高发热元器件；\r\n4. 观察对插的连接器是否有异常，是否存在对插松脱、氧化、变形等缺陷；\r\n5. 观察电解电容、混合态电容、薄膜电容等电容是否存在鼓包等缺陷；重点关注铝电解和DC-Link薄膜电容；\r\n6. 拍照记录细节信息；",
+  "unit_type": "table_row",
+  "node_id": "P-HW-OBC-ACRELAY",
+  "node_name": "AC 继电器",
+  "rule": "para:relay",
+  "conf": 0.7,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元为OBC硬件整体检查要点，虽提及继电器但未聚焦于AC继电器本身，归属不合理"
+  }
+ },
+ {
+  "doc": "物料描述规则及属性定义.axls.xlsx",
+  "text": "高压继电器",
+  "unit_type": "table_row",
+  "node_id": "P-HW-OBC-ACRELAY",
+  "node_name": "AC 继电器",
+  "rule": "para:relay",
+  "conf": 0.7,
+  "verdict": {
+   "correct": true,
+   "reason": "内容为高压继电器，属于继电器类型，符合para:relay规则"
+  }
+ },
+ {
+  "doc": "项目编号_项目_拆机报告_阶段_日期(3).axls.xlsx",
+  "text": "主功率板BOTTOM面 | 1.观察埋铜块有无脱落；\r\n2.观察主板BOT面白胶有无剥落、散开等异常； \r\r\n3.观察继电器等插件引脚有无断裂；\r\n4.拍照记录细节情况； | 是 | 目视观察 | 结构代表",
+  "unit_type": "table_row",
+  "node_id": "P-HW-OBC-ACRELAY",
+  "node_name": "AC 继电器",
+  "rule": "para:relay",
+  "conf": 0.7,
+  "verdict": {
+   "correct": true,
+   "reason": "内容单元涉及继电器引脚检查，属于AC继电器相关段落，符合para:relay归属规则。"
+  }
+ },
+ {
+  "doc": "P202312015_G636-6.6kW_System Assembly_V1.0.adoc.md",
+  "text": "2.12.1 继电器与正极铜排安装",
+  "unit_type": "heading",
+  "node_id": "P-HW-OBC-ACRELAY",
+  "node_name": "AC 继电器",
+  "rule": "para:relay",
+  "conf": 0.7,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容单元描述的是继电器与正极铜排的安装，符合骨架节点‘P‑HW‑OBC‑ACRELAY AC 继电器’且遵循para:relay的落位规则。"
+  }
+ },
+ {
+  "doc": "项目编号_项目_拆机报告_阶段_日期(3).axls.xlsx",
+  "text": "1. 观察三防漆是否有异常，是否存在发白、气泡、开裂和剥落等缺陷；\r\n2. 观察PCB是否存在基材碳化变色、鼓包分层、表面开裂等缺陷，表面有无凝水；重点关注大电流铜箔路径、功率器件/磁件/继电器/热测试超降额或临界降额等高发热元器件周边区域；\r\n3. 观察贴片器件、插件状态是否完好，引脚是否存在氧化、弯曲，焊点是否存在虚焊、开裂等缺陷；重点关注BGA封装、大尺寸元器件以及高发热元器件；\r\n4. 观察对插的连接器是否有异常，是否存在对插松脱、氧化、变形等缺陷；\r\n5. 观察电解电容、混合态电容、薄膜电容等电容是否存在鼓包等缺陷；重点关注铝电解和DC-Link薄膜电容；\r\n6. 拍照记录细节信息；",
+  "unit_type": "table_row",
+  "node_id": "P-HW-OBC-ACRELAY",
+  "node_name": "AC 继电器",
+  "rule": "para:relay",
+  "conf": 0.7,
+  "verdict": {
+   "correct": false,
+   "reason": "内容是针对整板外观检查的通用步骤，未聚焦于 AC 继电器本身的功能、特性或控制逻辑。"
+  }
+ },
+ {
+  "doc": "P202407013_ED1-6.6_重量拆解表_V1.0_20241009.axls.xlsx",
+  "text": "HFK10继电器 | 2 | pcs",
+  "unit_type": "table_row",
+  "node_id": "P-HW-OBC-ACRELAY",
+  "node_name": "AC 继电器",
+  "rule": "para:relay",
+  "conf": 0.7,
+  "verdict": {
+   "correct": true,
+   "reason": "内容单元描述的是继电器，符合 para:relay 规则且归属到 AC 继电器骨架节点合理"
+  }
+ },
+ {
+  "doc": "Aries保险丝烧毁客诉专案.adoc.md",
+  "text": "3.0 | 2024.04.07 | 陈啸宇 | 五、故障机拆机记录",
+  "unit_type": "table_row",
+  "node_id": "Q-PROBLEM",
+  "node_name": "问题记录（问题排查/踩坑记录）",
+  "rule": "doc:me-problem",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "内容单元为故障机拆机记录，属于问题排查/踩坑记录，且符合doc:me-problem的落位规则"
+  }
+ },
+ {
+  "doc": "Aries保险丝烧毁客诉专案.adoc.md",
+  "text": "规格书：",
+  "unit_type": "para",
+  "node_id": "Q-PROBLEM",
+  "node_name": "问题记录（问题排查/踩坑记录）",
+  "rule": "doc:me-problem",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容仅为规格书标题，属于文档结构而非问题排查或踩坑记录，不应归属到问题记录节点"
+  }
+ },
+ {
+  "doc": "Aries保险丝烧毁客诉专案.adoc.md",
+  "text": "15：29：07 F-PEU 电压降到12V",
+  "unit_type": "para",
+  "node_id": "Q-PROBLEM",
+  "node_name": "问题记录（问题排查/踩坑记录）",
+  "rule": "doc:me-problem",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "该日志记录了F-PEU电压降到12V的故障信息，属于问题排查/踩坑记录。"
+  }
+ },
+ {
+  "doc": "Aries保险丝烧毁客诉专案.adoc.md",
+  "text": "三方交流：",
+  "unit_type": "para",
+  "node_id": "Q-PROBLEM",
+  "node_name": "问题记录（问题排查/踩坑记录）",
+  "rule": "doc:me-problem",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "三方交流属于沟通记录，不属于问题排查/踩坑记录范畴"
+  }
+ },
+ {
+  "doc": "Aries保险丝烧毁客诉专案.adoc.md",
+  "text": "UL黄卡：",
+  "unit_type": "para",
+  "node_id": "Q-PROBLEM",
+  "node_name": "问题记录（问题排查/踩坑记录）",
+  "rule": "doc:me-problem",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容是关于UL黄卡的问题记录，符合Q-PROBLEM节点定义"
+  }
+ },
+ {
+  "doc": "Aries保险丝烧毁客诉专案.adoc.md",
+  "text": "蔚来补充现场情况：",
+  "unit_type": "para",
+  "node_id": "Q-PROBLEM",
+  "node_name": "问题记录（问题排查/踩坑记录）",
+  "rule": "doc:me-problem",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "属于问题排查/踩坑记录的补充说明，符合Q-PROBLEM节点定位"
+  }
+ },
+ {
+  "doc": "隆源不良壳体验证-0114.adoc.md",
+  "text": "5、维修室300kpa、350kpa梯度加压测试泄漏率",
+  "unit_type": "para",
+  "node_id": "P-HW-MECH-HOUSING",
+  "node_name": "壳体（压铸/钣金/机加工/注塑壳体）",
+  "rule": "doc:me-housing",
+  "conf": 0.8,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: \n{\"correct\": false, \"reason\": \"内容单元描述的是"
+  }
+ },
+ {
+  "doc": "08-钣金件学习小结.adoc.md",
+  "text": "贴片铜排 | T2/H65 | ①硬度牌号；②表面雾锡3~5μm；③载带包装；",
+  "unit_type": "table_row",
+  "node_id": "P-HW-MECH-HOUSING",
+  "node_name": "壳体（压铸/钣金/机加工/注塑壳体）",
+  "rule": "doc:me-housing",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "贴片铜排属于电子元器件而非壳体部件，故不适合归属到该骨架节点。"
+  }
+ },
+ {
+  "doc": "08-钣金件学习小结.adoc.md",
+  "text": "压紧弹片 | SUS301 3/4H | ①压紧力上下限确认；②公差计算；<br>参考案例：http://192.168.10.12/redmine/issues/70<br>http://192.168.10.12/redmine/issues/49",
+  "unit_type": "table_row",
+  "node_id": "P-HW-MECH-HOUSING",
+  "node_name": "壳体（压铸/钣金/机加工/注塑壳体）",
+  "rule": "doc:me-housing",
+  "conf": 0.8,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "隆源不良壳体验证-0114.adoc.md",
+  "text": "3、模拟密封圈外侧偏移，压力由300kpa增加至400kpa，静置10min，未发现漏点",
+  "unit_type": "para",
+  "node_id": "P-HW-MECH-HOUSING",
+  "node_name": "壳体（压铸/钣金/机加工/注塑壳体）",
+  "rule": "doc:me-housing",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容描述壳体密封性能测试，属于机械壳体（housing）技术文档，满足doc:me-housing归属规则"
+  }
+ },
+ {
+  "doc": "08-钣金件学习小结.adoc.md",
+  "text": "钣金件关联工艺&成本",
+  "unit_type": "process",
+  "node_id": "P-HW-MECH-HOUSING",
+  "node_name": "壳体（压铸/钣金/机加工/注塑壳体）",
+  "rule": "doc:me-housing",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "内容涉及钣金壳体的工艺与成本，归属壳体节点合理。"
+  }
+ },
+ {
+  "doc": "ALPS Blanc 6.6KW IPU FIPG气密&钣金盖板静力学仿真（终版）.adoc.md",
+  "text": "(5)载荷及约束设置",
+  "unit_type": "heading",
+  "node_id": "P-HW-MECH-HOUSING",
+  "node_name": "壳体（压铸/钣金/机加工/注塑壳体）",
+  "rule": "doc:me-housing",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "载荷及约束设置是壳体结构分析与设计的关键步骤，属于壳体设计与分析范畴，落位到 P-HW-MECH-HOUSING 符合归属规则。"
+  }
+ },
+ {
+  "doc": "材料合金表面处理方式.adoc.md",
+  "text": "镀银 | 优异的导电性和点接触性能，持续使用可达150°C | 成本贵，在含硫/氯环境下易变色生锈，硬度高于锡 | 中高 | 高压连接器、高频信号触点、OBC高压转接铜排、高压直流结构件 | 高压大电流连接器、开关机构、车载充电枪端子",
+  "unit_type": "table_row",
+  "node_id": "P-HW-MATERIAL",
+  "node_name": "材料库（金属/塑料/橡胶/磁材）",
+  "rule": "doc:me-material",
+  "conf": 0.75,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容描述的是金属材料（镀银）的属性与应用，符合材料库节点（金属/塑料/橡胶/磁材）及doc:me-material规则"
+  }
+ },
+ {
+  "doc": "导热界面材料刮涂和贴膜的工艺需求.adoc.md",
+  "text": "贴敷工艺",
+  "unit_type": "process",
+  "node_id": "P-HW-MATERIAL",
+  "node_name": "材料库（金属/塑料/橡胶/磁材）",
+  "rule": "doc:me-material",
+  "conf": 0.75,
+  "verdict": {
+   "correct": false,
+   "reason": "贴敷工艺属于工艺类内容，不属于材料库（金属/塑料/橡胶/磁材），归属不合理"
+  }
+ },
+ {
+  "doc": "导热界面材料刮涂和贴膜的工艺需求.adoc.md",
+  "text": "鉴于目前市面上导热绝缘材料适配喷涂工艺相对有限，现需备选刮涂和贴膜压热固化工艺进行储备。",
+  "unit_type": "process",
+  "node_id": "P-HW-MATERIAL",
+  "node_name": "材料库（金属/塑料/橡胶/磁材）",
+  "rule": "doc:me-material",
+  "conf": 0.75,
+  "verdict": {
+   "correct": true,
+   "reason": "内容涉及导热绝缘材料的工艺备选，属于材料库范畴。"
+  }
+ },
+ {
+  "doc": "材料合金表面处理方式.adoc.md",
+  "text": "热浸镀锌 | 将钢件浸入熔融锌液，形成 Zn/Fe 合金层 + 纯锌层，牺牲阳极保护 | 牺牲防锈，成本低，工艺成熟 | 切口易锈，耐刮擦弱 | 低 | 屏蔽罩、钣金支架",
+  "unit_type": "table_row",
+  "node_id": "P-HW-MATERIAL",
+  "node_name": "材料库（金属/塑料/橡胶/磁材）",
+  "rule": "doc:me-material",
+  "conf": 0.75,
+  "verdict": {
+   "correct": true,
+   "reason": "热浸镀锌属于金属材料的表面处理/镀层，符合材料库（金属）归属规则。"
+  }
+ },
+ {
+  "doc": "材料合金表面处理方式.adoc.md",
+  "text": "作用原理：",
+  "unit_type": "heading",
+  "node_id": "P-HW-MATERIAL",
+  "node_name": "材料库（金属/塑料/橡胶/磁材）",
+  "rule": "doc:me-material",
+  "conf": 0.75,
+  "verdict": {
+   "correct": false,
+   "reason": "作用原理属于功能描述，不符合材料库（doc:me-material）的文档类型"
+  }
+ },
+ {
+  "doc": "材料合金表面处理方式.adoc.md",
+  "text": "Ⅰ. 加镍阻挡层（Nickel Barrier Layer）",
+  "unit_type": "heading",
+  "node_id": "P-HW-MATERIAL",
+  "node_name": "材料库（金属/塑料/橡胶/磁材）",
+  "rule": "doc:me-material",
+  "conf": 0.75,
+  "verdict": {
+   "correct": true,
+   "reason": "加镍阻挡层属于金属材料处理工艺，符合材料库（金属类）的内容"
+  }
+ },
+ {
+  "doc": "《YG3-1拆机报告_温湿度序列_2025042301-06》.adoc.md",
+  "text": "试验中没有出现电晕、飞弧击穿或闪络现象且漏电流小于0.14mA,试验结束后能够正常工作。",
+  "unit_type": "para",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "para:verification",
+  "conf": 0.5,
+  "verdict": {
+   "correct": true,
+   "reason": "内容描述的是验证阶段的试验结果，符合G‑DEV开发过程树的验证环节。"
+  }
+ },
+ {
+  "doc": "《YG3-1拆机报告_温湿度序列_2025042301-06》.adoc.md",
+  "text": "（3）气密测试",
+  "unit_type": "para",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "para:verification",
+  "conf": 0.5,
+  "verdict": {
+   "correct": true,
+   "reason": "气密测试是验证产品密封性能的必要步骤，符合开发过程中的验证环节"
+  }
+ },
+ {
+  "doc": "《YG3-1拆机报告_温湿度序列_2025042301-06》.adoc.md",
+  "text": "扭矩合格标准为拧紧扭矩衰减30%以内，所有扭矩测试方法均为锁紧法。",
+  "unit_type": "para",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "para:verification",
+  "conf": 0.5,
+  "verdict": {
+   "correct": true,
+   "reason": "扭矩合格标准属于开发过程中的验证规范，放置于G-DEV开发过程树的验证段落符合para:verification的落位规则"
+  }
+ },
+ {
+  "doc": "《800V 客户路试-03号样机拆机报告》.adoc.md",
+  "text": "如表3-6所示为磁件板拧紧法拧紧力矩，根据力矩判定标准可知，螺钉衰减后的扭矩不得低于原始扭矩的30%，可有效保证螺钉的紧固效果，试验结果满足要求。",
+  "unit_type": "para",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "para:verification",
+  "conf": 0.5,
+  "verdict": {
+   "correct": true,
+   "reason": "该段落描述了磁件板拧紧力矩的验证测试结果，符合para:verification的归属规则"
+  }
+ },
+ {
+  "doc": "AY200高压-电控PV拆机报告_20250909_02.adoc.md",
+  "text": "试验中不应出现电晕、飞弧击穿或闪络现象且漏电流小于3.5mA，试验结束后应能够正常工作。",
+  "unit_type": "para",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "para:verification",
+  "conf": 0.5,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "《YG3-1拆机报告_温湿度序列_2025042301-06》.adoc.md",
+  "text": "如表4-4所示为HVEMI板正向拧紧力矩，根据力矩判定标准可知，该螺丝衰减力矩小余拧紧力矩30%以内，可有效保证螺钉的紧固效果，试验结果满足要求。",
+  "unit_type": "para",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "para:verification",
+  "conf": 0.5,
+  "verdict": {
+   "correct": true,
+   "reason": "内容单元描述了力矩试验验证结果，满足开发过程中的验证活动，符合落位规则para:verification。"
+  }
+ },
+ {
+  "doc": "BC2025061003-01 Draco FIPU高配纸箱包装跌落报告.adoc.md",
+  "text": "<br>试验前照片 | <br>试验后照片",
+  "unit_type": "table_row",
+  "node_id": "G-VERIFY-VIBRATION",
+  "node_name": "振动与冲击测试（振动/跌落/扫频）",
+  "rule": "doc:me-vibration",
+  "conf": 0.85,
+  "verdict": {
+   "correct": true,
+   "reason": "试验前后照片是振动冲击测试的验证记录，属于该测试节点的内容。"
+  }
+ },
+ {
+  "doc": "BC2025061003-01 Draco FIPU高配纸箱包装跌落报告.adoc.md",
+  "text": "检测结论 | 检测结论详见第4页 |  |  |  |  |  | ",
+  "unit_type": "table_row",
+  "node_id": "G-VERIFY-VIBRATION",
+  "node_name": "振动与冲击测试（振动/跌落/扫频）",
+  "rule": "doc:me-vibration",
+  "conf": 0.85,
+  "verdict": {
+   "correct": true,
+   "reason": "检测结论属于振动与冲击测试报告的内容，映射到me-vibration骨架节点合理"
+  }
+ },
+ {
+  "doc": "BC2025061003-01 Draco FIPU高配纸箱包装跌落报告.adoc.md",
+  "text": "六、对该报告若有异议，应尽早向本实验室提出，以便及时处理和解决。",
+  "unit_type": "para",
+  "node_id": "G-VERIFY-VIBRATION",
+  "node_name": "振动与冲击测试（振动/跌落/扫频）",
+  "rule": "doc:me-vibration",
+  "conf": 0.85,
+  "verdict": {
+   "correct": false,
+   "reason": "该条款涉及报告异议处理，与振动冲击测试无直接关联，不应归属到此节点"
+  }
+ },
+ {
+  "doc": "BC2025061003-01 Draco FIPU高配纸箱包装跌落报告.adoc.md",
+  "text": "型    号            E_Z_V_2B_03_5",
+  "unit_type": "para",
+  "node_id": "G-VERIFY-VIBRATION",
+  "node_name": "振动与冲击测试（振动/跌落/扫频）",
+  "rule": "doc:me-vibration",
+  "conf": 0.85,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容仅为型号信息，与振动与冲击测试骨架节点不匹配"
+  }
+ },
+ {
+  "doc": "BC2025061003-01 Draco FIPU高配纸箱包装跌落报告.adoc.md",
+  "text": "1. | 一般性检查 | 5 | 合格 | ",
+  "unit_type": "table_row",
+  "node_id": "G-VERIFY-VIBRATION",
+  "node_name": "振动与冲击测试（振动/跌落/扫频）",
+  "rule": "doc:me-vibration",
+  "conf": 0.85,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容属于振动测试文档的通用检查项，符合节点G-VERIFY-VIBRATION的归属规则"
+  }
+ },
+ {
+  "doc": "BC2025061003-01 Draco FIPU高配纸箱包装跌落报告.adoc.md",
+  "text": "2. | 纸箱跌落 | 6 | 合格 | ",
+  "unit_type": "table_row",
+  "node_id": "G-VERIFY-VIBRATION",
+  "node_name": "振动与冲击测试（振动/跌落/扫频）",
+  "rule": "doc:me-vibration",
+  "conf": 0.85,
+  "verdict": {
+   "correct": true,
+   "reason": "内容为纸箱跌落测试，属于振动与冲击测试范畴"
+  }
+ },
+ {
+  "doc": "导热泥涂敷面积评估.axls.xlsx",
+  "text": "陶瓷片\r\n（OBC MOS） | 46（L）X 40（W）X 1 （T） | 46 | 40 | 6",
+  "unit_type": "table_row",
+  "node_id": "P-HW-THERMAL-TIM",
+  "node_name": "导热界面材料（导热垫/硅脂/相变材料）",
+  "rule": "doc:me-tim",
+  "conf": 0.8,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: \n{\"correct"
+  }
+ },
+ {
+  "doc": "导热泥异常专题.adoc.md",
+  "text": "现场生产控制计划",
+  "unit_type": "heading",
+  "node_id": "P-HW-THERMAL-TIM",
+  "node_name": "导热界面材料（导热垫/硅脂/相变材料）",
+  "rule": "doc:me-tim",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "现场生产控制计划与导热界面材料的内容不相关，归属不合理"
+  }
+ },
+ {
+  "doc": "导热泥异常专题.adoc.md",
+  "text": "0709交流",
+  "unit_type": "heading",
+  "node_id": "P-HW-THERMAL-TIM",
+  "node_name": "导热界面材料（导热垫/硅脂/相变材料）",
+  "rule": "doc:me-tim",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元文本“0709交流”涉及交流类内容，与导热界面材料（导热垫/硅脂/相变材料）无关，归属不合理。"
+  }
+ },
+ {
+  "doc": "导热泥异常专题.adoc.md",
+  "text": "油料会进行粘稠度检测（抽检）、挥发性检测，检测仪器——搅拌式粘度仪。",
+  "unit_type": "para",
+  "node_id": "P-HW-THERMAL-TIM",
+  "node_name": "导热界面材料（导热垫/硅脂/相变材料）",
+  "rule": "doc:me-tim",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "内容单元描述的油料检测针对导热界面材料（如硅脂），与骨架节点导热界面材料主题一致"
+  }
+ },
+ {
+  "doc": "导热泥涂敷面积评估.axls.xlsx",
+  "text": "导热泥区域面积占比",
+  "unit_type": "table_row",
+  "node_id": "P-HW-THERMAL-TIM",
+  "node_name": "导热界面材料（导热垫/硅脂/相变材料）",
+  "rule": "doc:me-tim",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "导热泥属于导热界面材料，内容涉及面积占比，符合骨架节点归属"
+  }
+ },
+ {
+  "doc": "导热泥异常专题.adoc.md",
+  "text": "粉料会进行粒径检测（抽检），检测仪器——激光粒度分布仪",
+  "unit_type": "para",
+  "node_id": "P-HW-THERMAL-TIM",
+  "node_name": "导热界面材料（导热垫/硅脂/相变材料）",
+  "rule": "doc:me-tim",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "粉料粒径检测是导热界面材料生产过程中的常规质量控制步骤，与骨架节点描述的TIM直接相关"
+  }
+ },
+ {
+  "doc": "P202511005_LP-C18-400V-车内逆变_Product Requirement Summary_V1.0_20251216.axls.xlsx",
+  "text": "4 输出过压 | 17.0±0.5Vdc(持续 1s)\r\n符合 GB/T24347-2021 中 4.3.2 的相关要求\r\n备注：关闭输出，同时上报和存储保护信息； | 22 | 电子 | OK",
+  "unit_type": "table_row",
+  "node_id": "P-HW-CTRL-PROTECT",
+  "node_name": "保护电路",
+  "rule": "table:protect",
+  "conf": 0.7,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容描述输出过压保护功能，符合骨架节点‘保护电路’的定义，且符合 table:protect 落位规则"
+  }
+ },
+ {
+  "doc": "P202511005_LP-C18-400V-车内逆变_Product Requirement Summary_V1.0_20251216.axls.xlsx",
+  "text": "6 过温保护 | 85±1℃ \r\n备注：具体保护点可由供应商提供 | 22 | 电子 | OK",
+  "unit_type": "table_row",
+  "node_id": "P-HW-CTRL-PROTECT",
+  "node_name": "保护电路",
+  "rule": "table:protect",
+  "conf": 0.7,
+  "verdict": {
+   "correct": true,
+   "reason": "内容单元描述了过温保护，属于保护电路且符合protect表的结构"
+  }
+ },
+ {
+  "doc": "04-分布式3KW DV温湿度拆机报告.axls.xlsx",
+  "text": "MOS | 8MOS组件 | 1.观察MOS管有无破损；\r\n2.拍照记录细节情况；\r\n3.铝基板PIN针保护座是否完好，有无变形；\r\n4铝基板与壳体粘接面是否均匀，有无脱落； | 是 | 目视观察",
+  "unit_type": "table_row",
+  "node_id": "P-HW-CTRL-PROTECT",
+  "node_name": "保护电路",
+  "rule": "table:protect",
+  "conf": 0.7,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容单元描述了MOS组件的检查与保护措施，属于保护电路的维护范畴，合理归属。"
+  }
+ },
+ {
+  "doc": "DC正极保护帽统计.axls.xlsx",
+  "text": "9 | FY 6.6KW | 无该接插件，\r\n无保护帽 | / | / | / | 不涉及",
+  "unit_type": "table_row",
+  "node_id": "P-HW-CTRL-PROTECT",
+  "node_name": "保护电路",
+  "rule": "table:protect",
+  "conf": 0.7,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "项目编号_项目_拆机报告_阶段_日期(3).axls.xlsx",
+  "text": "接插件检查 | HVAC接插件\r\n螺钉扭矩 | 1.观察接插件结构是否完好，表面及线束绝缘皮有无破损情况；\r\n2.观察密封圈有无无过压现象，回弹是否正常，有无破损；\r\n3.观察螺钉表面质量是否良好，有无松动、断裂等异常；\r\n4.拍照记录细节情况；\r\n紧固扭力：                                     判定标准：\r\nM4：2.5±0.25N.M                          M4：＞0.75N.M | HVAC接插件螺钉扭矩 | 是 | 台湾Fanyaa数显扭矩起子 | 结构代表",
+  "unit_type": "table_row",
+  "node_id": "P-HW-CTRL-PROTECT",
+  "node_name": "保护电路",
+  "rule": "table:protect",
+  "conf": 0.7,
+  "verdict": {
+   "correct": true,
+   "reason": "内容涉及接插件和螺钉扭矩检查，属于保护电路的硬件维护范畴，符合table:protect的落位规则"
+  }
+ },
+ {
+  "doc": "P202511005_LP-C18-400V-车内逆变_Product Requirement Summary_V1.0_20251216.axls.xlsx",
+  "text": "3.7 其它要求（以下内容根据自己需要删减） | 3.7.1 清洁度及碰划伤 | 壳体表面须采取保护措施，保持清洁防止划伤。 | 18 | 机构 | TBD | 2024/11/26：同D400V外观标准",
+  "unit_type": "table_row",
+  "node_id": "P-HW-CTRL-PROTECT",
+  "node_name": "保护电路",
+  "rule": "table:protect",
+  "conf": 0.7,
+  "verdict": {
+   "correct": false,
+   "reason": "内容涉及壳体清洁与防划伤，属于结构外观要求，与保护电路节点不符"
+  }
+ },
+ {
+  "doc": "【DFT】-EVT1-【热测试】-热测试过程中铝基板热阻异常升高-导热粘接剂与铝基板剥离.adoc.md",
+  "text": "基于目前数据推测根本原因可能为1.MOS底部的导热粘接剂在100多摄氏度高低温梯度差异发生粘接脱落；2.由于铝基板上存在绝缘层，绝缘层、铝基、导热粘接剂三者热膨胀系数不一致，高温下膨胀分离，热阻异常的原因已明确为铝基板与粘接剂脱落导致，但高温粘接剂脱落的确切原因有待进一步验证。",
+  "unit_type": "para",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:test-spec",
+  "conf": 0.75,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元属于故障分析报告，不是测试规范文档，不符合骨架节点G-DEV的落位规则。"
+  }
+ },
+ {
+  "doc": "降本绝缘胶带热测试.axls.xlsx",
+  "text": "德莎-51408 | 106.5℃ | 110.2℃ | 113.0℃ | 106.1℃",
+  "unit_type": "table_row",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:test-spec",
+  "conf": 0.75,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "【DFT】-EVT1-【热测试】-热测试过程中铝基板热阻异常升高-导热粘接剂与铝基板剥离.adoc.md",
+  "text": "65℃水温下AC铝基板温度升高到90多度时温度快速上升，再次测量又发现热阻变为4左右，用力压紧温度异常MOS管，对应MOS热阻下降，随后发现AC铝基板松动脱落，初步怀疑在90多摄氏度下MOS管和导热粘接剂分离，导致热阻上升，压紧时接触热阻下降。异常管子如下图所示",
+  "unit_type": "para",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:test-spec",
+  "conf": 0.75,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "【DFT】-EVT1-【热测试】-热测试过程中铝基板热阻异常升高-导热粘接剂与铝基板剥离.adoc.md",
+  "text": "临时措施",
+  "unit_type": "heading",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:test-spec",
+  "conf": 0.75,
+  "verdict": {
+   "correct": false,
+   "reason": "临时措施不涉及测试规范文档，属于通用管理措施，无法匹配 doc:test-spec 的落位要求。"
+  }
+ },
+ {
+  "doc": "【DFT】-EVT1-【热测试】-热测试过程中铝基板热阻异常升高-导热粘接剂与铝基板剥离.adoc.md",
+  "text": "拆机测量胶水厚度50μm~70μm",
+  "unit_type": "para",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:test-spec",
+  "conf": 0.75,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容属于测试规范，符合开发过程树的测试阶段"
+  }
+ },
+ {
+  "doc": "【DFT】-EVT1-【热测试】-热测试过程中铝基板热阻异常升高-导热粘接剂与铝基板剥离.adoc.md",
+  "text": "铝基板粘接剂材料为TML-2001AT，材料参数见下列规格书，",
+  "unit_type": "para",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:test-spec",
+  "conf": 0.75,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "结构部开发流程.adoc.md",
+  "text": "核心目标",
+  "unit_type": "heading",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:process-std",
+  "conf": 0.7,
+  "verdict": {
+   "correct": false,
+   "reason": "核心目标是总体目标描述，不符合开发过程树的结构和文档标准要求。"
+  }
+ },
+ {
+  "doc": "结构部开发流程.adoc.md",
+  "text": "关键输入 & 输出概览",
+  "unit_type": "heading",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:process-std",
+  "conf": 0.7,
+  "verdict": {
+   "correct": true,
+   "reason": "关键输入输出概览符合开发过程树的范围，属于流程标准文档的内容，能够清晰描述过程的输入输出关系。"
+  }
+ },
+ {
+  "doc": "结构部开发流程.adoc.md",
+  "text": "0-总览流程图",
+  "unit_type": "process",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:process-std",
+  "conf": 0.7,
+  "verdict": {
+   "correct": true,
+   "reason": "内容单元为流程总览图，属于开发过程树的概览，与骨架节点所代表的开发流程相符，且符合文档标准类型。"
+  }
+ },
+ {
+  "doc": "结构部开发流程.adoc.md",
+  "text": "典型输入 | RFQ 各类输出文件、EE 提供的《DXF_Layout》《安规设计表》《热损耗图》、TE 提供的振动/冲击测试报告模板",
+  "unit_type": "table_row",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:process-std",
+  "conf": 0.7,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容描述RFQ阶段的典型输入，符合开发过程树中RFQ节点的业务属性"
+  }
+ },
+ {
+  "doc": "结构部开发流程.adoc.md",
+  "text": "快速响应客户询价需求，完成技术可行性判断与初步结构方案锁定，支撑商务报价与项目立项。",
+  "unit_type": "para",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:process-std",
+  "conf": 0.7,
+  "verdict": {
+   "correct": true,
+   "reason": "内容单元描述的快速响应客户询价、技术可行性判断及初步结构方案锁定属于G-DEV开发过程树中RFQ阶段的规范要求，归属doc:process-std正确。"
+  }
+ },
+ {
+  "doc": "结构部开发流程.adoc.md",
+  "text": "结构工程师核心任务",
+  "unit_type": "heading",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "doc:process-std",
+  "conf": 0.7,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元'结构工程师核心任务'属于角色职责描述文档，而非开发过程标准或流程规范，不适合以doc:process-std规则落位在G-DEV开发过程树节点上。"
+  }
+ },
+ {
+  "doc": "本阶段样机装机物料采购记录.axls.xlsx",
+  "text": "24 | 防水透气阀 | 防水透气阀 PA66+GF15 卡扣式 IP68 PUWKK8.5-4.5-17-8T | 440200002 | Y | 库存 | -",
+  "unit_type": "table_row",
+  "node_id": "Q-PROBLEM",
+  "node_name": "问题记录（问题排查/踩坑记录）",
+  "rule": "doc:problem",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容属于产品或库存信息，不涉及问题排查或踩坑记录，归属到 Q-PROBLEM 节点不合理。"
+  }
+ },
+ {
+  "doc": "本阶段样机装机物料采购记录.axls.xlsx",
+  "text": "5 | 辅源磁芯弹片 | 弹片_SUS304 3/4H_25.4×7.9×7.5_0.4__辅源磁芯卡扣_平台SSO项目 | 480201951 | Y | 库存 | 13 | 50",
+  "unit_type": "table_row",
+  "node_id": "Q-PROBLEM",
+  "node_name": "问题记录（问题排查/踩坑记录）",
+  "rule": "doc:problem",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "内容为库存/配件记录，非问题排查或踩坑记录"
+  }
+ },
+ {
+  "doc": "02-德鑫PDU塑胶座问题点清单.axls.xlsx",
+  "text": "3 | 490200225 | 来料缺料 | 底 | 45725 | 富特-安吉 | 1 | 德鑫",
+  "unit_type": "table_row",
+  "node_id": "Q-PROBLEM",
+  "node_name": "问题记录（问题排查/踩坑记录）",
+  "rule": "doc:problem",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "内容描述了来料缺料的问题记录，符合 Q-PROBLEM 节点的问题记录定义"
+  }
+ },
+ {
+  "doc": "本阶段样机装机物料采购记录.axls.xlsx",
+  "text": "18 | M3螺丝 | 螺丝_盘头梅花_M3×8_碳钢10B21_锌镍合金_Precote80 | 400100029 | Y | 库存 | 600",
+  "unit_type": "table_row",
+  "node_id": "Q-PROBLEM",
+  "node_name": "问题记录（问题排查/踩坑记录）",
+  "rule": "doc:problem",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容为螺丝库存记录，属于库存管理而非问题排查或踩坑记录。"
+  }
+ },
+ {
+  "doc": "本阶段样机装机物料采购记录.axls.xlsx",
+  "text": "15 | HVAC接插件 | 板端连接器_3P_800VDC_40A@85℃_HVC3PG63MV106-S0 | 420200034 | Y | 库存 | 20",
+  "unit_type": "table_row",
+  "node_id": "Q-PROBLEM",
+  "node_name": "问题记录（问题排查/踩坑记录）",
+  "rule": "doc:problem",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容是库存记录，属于库存管理而非问题排查/踩坑记录"
+  }
+ },
+ {
+  "doc": "本阶段样机装机物料采购记录.axls.xlsx",
+  "text": "10 | HVEMI麦拉片 | 麦拉片_KLX PP BK-12\r_57.8x43.4x1_T0.25_HVEMI | 500400721 | Y | 采购 | 20 | 20",
+  "unit_type": "table_row",
+  "node_id": "Q-PROBLEM",
+  "node_name": "问题记录（问题排查/踩坑记录）",
+  "rule": "doc:problem",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容为物料采购清单，不属于问题排查或踩坑记录。"
+  }
+ },
+ {
+  "doc": "罗杰斯电机控制器叠层母排方案介绍.adoc.md",
+  "text": "1~2m大尺寸的柔性铜排方案：长回路铝排（正负极用PA66塑胶架隔离，表面加绝缘膜） 端部压合软铜排",
+  "unit_type": "para",
+  "node_id": "P-HW-MECH-BUSBAR",
+  "node_name": "铜排/母排（大电流连接/绝缘间隔）",
+  "rule": "doc:me-busbar",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "内容描述了大尺寸柔性铜排方案，涉及铜排、绝缘和母排结构，符合骨架节点P-HW-MECH-BUSBAR的定义和落位规则。"
+  }
+ },
+ {
+  "doc": "STLA-M LVDC_BUSBAR静力仿真.adoc.md",
+  "text": "<br> | 最大=1.4215e-2",
+  "unit_type": "table_row",
+  "node_id": "P-HW-MECH-BUSBAR",
+  "node_name": "铜排/母排（大电流连接/绝缘间隔）",
+  "rule": "doc:me-busbar",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "内容涉及铜排/母排的最大参数值，属于该骨架节点范畴"
+  }
+ },
+ {
+  "doc": "STLA-M LVDC_BUSBAR静力仿真.adoc.md",
+  "text": "参考--包胶定位设计",
+  "unit_type": "para",
+  "node_id": "P-HW-MECH-BUSBAR",
+  "node_name": "铜排/母排（大电流连接/绝缘间隔）",
+  "rule": "doc:me-busbar",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "内容涉及铜排的包胶定位设计，符合该节点关于绝缘间隔的描述"
+  }
+ },
+ {
+  "doc": "罗杰斯电机控制器叠层母排方案介绍.adoc.md",
+  "text": "功率互联对插端子：",
+  "unit_type": "para",
+  "node_id": "P-HW-MECH-BUSBAR",
+  "node_name": "铜排/母排（大电流连接/绝缘间隔）",
+  "rule": "doc:me-busbar",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元描述的是功率互联对插端子，属于连接器而非铜排/母排，归属于该骨架节点不合理。"
+  }
+ },
+ {
+  "doc": "罗杰斯电机控制器叠层母排方案介绍.adoc.md",
+  "text": "电容母排板：",
+  "unit_type": "para",
+  "node_id": "P-HW-MECH-BUSBAR",
+  "node_name": "铜排/母排（大电流连接/绝缘间隔）",
+  "rule": "doc:me-busbar",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "内容涉及母排，符合骨架节点定义和落位规则"
+  }
+ },
+ {
+  "doc": "STLA-M LVDC_BUSBAR静力仿真.adoc.md",
+  "text": "合格参考计算比较方式",
+  "unit_type": "heading",
+  "node_id": "P-HW-MECH-BUSBAR",
+  "node_name": "铜排/母排（大电流连接/绝缘间隔）",
+  "rule": "doc:me-busbar",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容单元涉及合格参考计算方式，符合铜排/母排的工程设计与校核需求。"
+  }
+ },
+ {
+  "doc": "03.adoc.md",
+  "text": "3.MOS组件",
+  "unit_type": "component",
+  "node_id": "P-SW-ASW",
+  "node_name": "应用层 ASW",
+  "rule": "component:default",
+  "conf": 0.5,
+  "verdict": {
+   "correct": true,
+   "reason": "内容单元为组件，符合component:default规则且属于应用层ASW节点。"
+  }
+ },
+ {
+  "doc": "P202312015_G636-6.6kW_System Assembly_V1.0.adoc.md",
+  "text": "2.8.2 HVEMI屏蔽板组件安装",
+  "unit_type": "component",
+  "node_id": "P-SW-ASW",
+  "node_name": "应用层 ASW",
+  "rule": "component:default",
+  "conf": 0.5,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容为硬件屏蔽板组件安装，属于硬件层，不应放在应用层ASW节点"
+  }
+ },
+ {
+  "doc": "03.adoc.md",
+  "text": "5.DC输出组件",
+  "unit_type": "component",
+  "node_id": "P-SW-ASW",
+  "node_name": "应用层 ASW",
+  "rule": "component:default",
+  "conf": 0.5,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元‘5.DC输出组件’描述的是硬件输出组件，与骨架节点‘P‑SW‑ASW 应用层 ASW’所代表的应用层软件不符，故归属不合理。"
+  }
+ },
+ {
+  "doc": "《YG3-1拆机报告_温湿度序列_2025042301-06》.adoc.md",
+  "text": "HVEMI组件",
+  "unit_type": "component",
+  "node_id": "P-SW-ASW",
+  "node_name": "应用层 ASW",
+  "rule": "component:default",
+  "conf": 0.5,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "03.adoc.md",
+  "text": "如图3-5所示，MOS模块MOS管无破损；陶瓷片无破损；导热硅脂为牙膏状，未粉化； MOS安装座无损坏、破裂。弹片本身结构完好，由于弹片为自锁弹片，拆卸过程中为破坏性拆卸，此处MOS弹片不纳入评判标准。",
+  "unit_type": "component",
+  "node_id": "P-SW-ASW",
+  "node_name": "应用层 ASW",
+  "rule": "component:default",
+  "conf": 0.5,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容描述硬件检查，属于硬件层而非应用层ASW节点"
+  }
+ },
+ {
+  "doc": "AY200高压-电控PV拆机报告_20250909_02.adoc.md",
+  "text": "LVDC组件",
+  "unit_type": "component",
+  "node_id": "P-SW-ASW",
+  "node_name": "应用层 ASW",
+  "rule": "component:default",
+  "conf": 0.5,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "004-小米DC主变灌封胶热应力仿真.adoc.md",
+  "text": "2.设置",
+  "unit_type": "heading",
+  "node_id": "P-HW-THERMAL-POT",
+  "node_name": "灌封与涂覆（灌封胶/三防漆/粘接剂）",
+  "rule": "doc:me-potting",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容为灌封工艺的设置步骤，符合骨架节点‘灌封与涂覆’的定义和文档规则"
+  }
+ },
+ {
+  "doc": "004-小米DC主变灌封胶热应力仿真.adoc.md",
+  "text": "样例参考：19服务器——E:\\GSJ\\排针应力仿真2",
+  "unit_type": "para",
+  "node_id": "P-HW-THERMAL-POT",
+  "node_name": "灌封与涂覆（灌封胶/三防漆/粘接剂）",
+  "rule": "doc:me-potting",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元为服务器排针应力仿真的示例，与灌封与涂覆主题不相关，不应落位在此骨架节点"
+  }
+ },
+ {
+  "doc": "004-小米DC主变灌封胶热应力仿真.adoc.md",
+  "text": "合金铜 | 8300 | 18e-6 | 1.1e11 | 0.34 | 401 | -",
+  "unit_type": "table_row",
+  "node_id": "P-HW-THERMAL-POT",
+  "node_name": "灌封与涂覆（灌封胶/三防漆/粘接剂）",
+  "rule": "doc:me-potting",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元描述的是合金铜的材料属性（如密度、热膨胀系数等），与灌封与涂覆的工艺主题不匹配，故归属不合理。"
+  }
+ },
+ {
+  "doc": "004-小米DC主变灌封胶热应力仿真.adoc.md",
+  "text": "背景：磁芯因为灌封胶受热膨胀产生热应力而断裂",
+  "unit_type": "para",
+  "node_id": "P-HW-THERMAL-POT",
+  "node_name": "灌封与涂覆（灌封胶/三防漆/粘接剂）",
+  "rule": "doc:me-potting",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容涉及灌封胶导致热应力断裂，属于灌封与涂覆工艺范畴。"
+  }
+ },
+ {
+  "doc": "004-小米DC主变灌封胶热应力仿真.adoc.md",
+  "text": "变更履历",
+  "unit_type": "heading",
+  "node_id": "P-HW-THERMAL-POT",
+  "node_name": "灌封与涂覆（灌封胶/三防漆/粘接剂）",
+  "rule": "doc:me-potting",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "变更履历是通用文档管理信息，与灌封与涂覆的技术内容无关。"
+  }
+ },
+ {
+  "doc": "004-小米DC主变灌封胶热应力仿真.adoc.md",
+  "text": "(3)材料属性",
+  "unit_type": "heading",
+  "node_id": "P-HW-THERMAL-POT",
+  "node_name": "灌封与涂覆（灌封胶/三防漆/粘接剂）",
+  "rule": "doc:me-potting",
+  "conf": 0.8,
+  "verdict": {
+   "correct": true,
+   "reason": "材料属性是灌封与涂覆工艺中材料选择和性能评估的核心内容，属于该骨架节点的业务范围。"
+  }
+ },
+ {
+  "doc": "机加件-DFM.adoc.md",
+  "text": "学习面向制造的机加件设计，了解机加件常见设计禁忌/issue，避免在项目中踩坑；",
+  "unit_type": "experience",
+  "node_id": "G-METHOD-DFM",
+  "node_name": "DFM/DFA设计方法（可制造性/可装配性）",
+  "rule": "doc:me-dfm",
+  "conf": 0.85,
+  "verdict": {
+   "correct": true,
+   "reason": "内容涉及面向制造的机加件设计，属于可制造性设计方法的范畴。"
+  }
+ },
+ {
+  "doc": "机加件-DFM.adoc.md",
+  "text": "对支脚配合面进行铣削",
+  "unit_type": "para",
+  "node_id": "G-METHOD-DFM",
+  "node_name": "DFM/DFA设计方法（可制造性/可装配性）",
+  "rule": "doc:me-dfm",
+  "conf": 0.85,
+  "verdict": {
+   "correct": true,
+   "reason": "该文本涉及对支脚配合面的加工要求，属于可制造性设计方法中的工艺规划。"
+  }
+ },
+ {
+  "doc": "机加件-DFM.adoc.md",
+  "text": "学习加件设计指南，提高正向设计能力，整理形成自己的机加件design checklist",
+  "unit_type": "heading",
+  "node_id": "G-METHOD-DFM",
+  "node_name": "DFM/DFA设计方法（可制造性/可装配性）",
+  "rule": "doc:me-dfm",
+  "conf": 0.85,
+  "verdict": {
+   "correct": true,
+   "reason": "内容涉及加件设计指南和设计检查表，属于可制造性/可装配性设计方法的范畴。"
+  }
+ },
+ {
+  "doc": "机加件-DFM.adoc.md",
+  "text": "CHECKLIST：",
+  "unit_type": "para",
+  "node_id": "G-METHOD-DFM",
+  "node_name": "DFM/DFA设计方法（可制造性/可装配性）",
+  "rule": "doc:me-dfm",
+  "conf": 0.85,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "机加件-DFM.adoc.md",
+  "text": "剩余表面同理，大致为同一平面内的接触面在一次装夹的情况下全部铣削完成，由精度低的向精度高的过渡，铣削完成后钻孔，最后攻螺纹",
+  "unit_type": "para",
+  "node_id": "G-METHOD-DFM",
+  "node_name": "DFM/DFA设计方法（可制造性/可装配性）",
+  "rule": "doc:me-dfm",
+  "conf": 0.85,
+  "verdict": {
+   "correct": false,
+   "reason": "内容描述的是具体加工步骤，属于制造工艺而非DFM/DFA设计方法，故不应归属该骨架节点"
+  }
+ },
+ {
+  "doc": "机加件-DFM.adoc.md",
+  "text": "对水道-盖板接触面铣削",
+  "unit_type": "para",
+  "node_id": "G-METHOD-DFM",
+  "node_name": "DFM/DFA设计方法（可制造性/可装配性）",
+  "rule": "doc:me-dfm",
+  "conf": 0.85,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容描述的是具体加工工序，而非DFM/DFA设计方法，故不适合归属到骨架节点G-METHOD-DFM。"
+  }
+ },
+ {
+  "doc": "机加件学习笔记.adoc.md",
+  "text": "A1：工装夹具指机械制造过程中用于固定工件、引导刀具或辅助装配的关键工艺装备。",
+  "unit_type": "process",
+  "node_id": "G-PROD",
+  "node_name": "生产过程树（PCBA/组装/生产测试/试制）",
+  "rule": "process:工艺",
+  "conf": 0.7,
+  "verdict": {
+   "correct": true,
+   "reason": "工装夹具是机械制造中的关键工艺装备，属于工艺过程相关，符合骨架节点定义。"
+  }
+ },
+ {
+  "doc": "机加件学习笔记.adoc.md",
+  "text": "Q2：梳理并罗列出我司当前机加件的关联工艺",
+  "unit_type": "process",
+  "node_id": "G-PROD",
+  "node_name": "生产过程树（PCBA/组装/生产测试/试制）",
+  "rule": "process:工艺",
+  "conf": 0.7,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容涉及机加件的关联工艺，属于工艺/生产过程，符合G-PROD节点的业务范围"
+  }
+ },
+ {
+  "doc": "机加件学习笔记.adoc.md",
+  "text": "A2：搅拌摩擦焊，机加工提供高精度焊接基准面；水嘴粘接：粘接表面处理；碗型塞压装；表面强化工艺：喷丸强化等。",
+  "unit_type": "process",
+  "node_id": "G-PROD",
+  "node_name": "生产过程树（PCBA/组装/生产测试/试制）",
+  "rule": "process:工艺",
+  "conf": 0.7,
+  "verdict": {
+   "correct": true,
+   "reason": "内容单元描述的搅拌摩擦焊、机加工、粘接、压装、喷丸强化等均属于生产工艺，符合骨架节点G-PROD的工艺分类"
+  }
+ },
+ {
+  "doc": "成长日志-黄宝楷-6月.adoc.md",
+  "text": "输出PPT说明C1 C2样的工艺成熟度。跟结构的具体联系是什么，工艺那边也不清楚具体任务，问了下徐成那边大概意思是协助工艺说明工艺成熟度，辅助作用？",
+  "unit_type": "process",
+  "node_id": "G-PROD",
+  "node_name": "生产过程树（PCBA/组装/生产测试/试制）",
+  "rule": "process:工艺",
+  "conf": 0.7,
+  "verdict": {
+   "correct": true,
+   "reason": "内容涉及工艺成熟度的说明和协助，属于工艺(process)范畴，与生产过程树节点相匹配"
+  }
+ },
+ {
+  "doc": "机加件学习笔记.adoc.md",
+  "text": "4.1机加工关联工艺",
+  "unit_type": "process",
+  "node_id": "G-PROD",
+  "node_name": "生产过程树（PCBA/组装/生产测试/试制）",
+  "rule": "process:工艺",
+  "conf": 0.7,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容单元描述机加工关联工艺，属于生产过程树中的工艺，符合骨架节点G-PROD的process:工艺规则"
+  }
+ },
+ {
+  "doc": "P202312015_G636-6.6kW_System Assembly_V1.0.adoc.md",
+  "text": "6.烘烤灌封胶，烤箱温度85℃，烘烤时间30min，待灌封胶固化完成后进行选焊，具体参考工艺SOP；",
+  "unit_type": "process",
+  "node_id": "G-PROD",
+  "node_name": "生产过程树（PCBA/组装/生产测试/试制）",
+  "rule": "process:工艺",
+  "conf": 0.7,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容描述了生产过程中的烘烤灌封胶工艺步骤，符合骨架节点‘G-PROD 生产过程树’的工艺归属规则。"
+  }
+ },
+ {
+  "doc": "结构部新人学习导航.adoc.md",
+  "text": "2.8.1 映射共享盘步骤",
+  "unit_type": "process",
+  "node_id": "G-ROOT",
+  "node_name": "G 过程维度（正交，作用于产品节点）",
+  "rule": "process:default",
+  "conf": 0.4,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容单元描述的是映射共享盘的步骤，属于过程维度的操作，因此归属合理。"
+  }
+ },
+ {
+  "doc": "《YG3-1拆机报告_温湿度序列_2025042301-06》.adoc.md",
+  "text": "拆机步骤",
+  "unit_type": "process",
+  "node_id": "G-ROOT",
+  "node_name": "G 过程维度（正交，作用于产品节点）",
+  "rule": "process:default",
+  "conf": 0.4,
+  "verdict": {
+   "correct": true,
+   "reason": "拆机步骤属于过程维度，符合process:default规则，且作用于产品节点。"
+  }
+ },
+ {
+  "doc": "P202312015_G636-6.6kW_System Assembly_V1.0.adoc.md",
+  "text": "引用6.6kW铝基板安装SOP",
+  "unit_type": "process",
+  "node_id": "G-ROOT",
+  "node_name": "G 过程维度（正交，作用于产品节点）",
+  "rule": "process:default",
+  "conf": 0.4,
+  "verdict": {
+   "correct": true,
+   "reason": "内容单元为安装SOP，属于过程维度，符合骨架节点定义"
+  }
+ },
+ {
+  "doc": "AY200高压-电控PV拆机报告_20250909_02.adoc.md",
+  "text": "拆机步骤",
+  "unit_type": "process",
+  "node_id": "G-ROOT",
+  "node_name": "G 过程维度（正交，作用于产品节点）",
+  "rule": "process:default",
+  "conf": 0.4,
+  "verdict": {
+   "correct": true,
+   "reason": "拆机步骤属于过程维度内容，符合process:default的落位规则"
+  }
+ },
+ {
+  "doc": "优秀的微习惯.adoc.md",
+  "text": "#团队贡献# 基于小米客户对于MX11 800V DV拆机报告需求，罗建和顾少警整理并且编写了一个拆机模板，该模板规范了拆机步骤和检查项目，方便后续结构部内部拆机的全面数据记录，尤其是里面关于EMC功能和导热材料现场情况的部分可重点关注下；",
+  "unit_type": "process",
+  "node_id": "G-ROOT",
+  "node_name": "G 过程维度（正交，作用于产品节点）",
+  "rule": "process:default",
+  "conf": 0.4,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容描述了模板编写和拆机步骤整理等过程活动，符合过程维度的归属规则。"
+  }
+ },
+ {
+  "doc": "结构部新人学习导航.adoc.md",
+  "text": "2.8.2 远程桌面连接步骤",
+  "unit_type": "process",
+  "node_id": "G-ROOT",
+  "node_name": "G 过程维度（正交，作用于产品节点）",
+  "rule": "process:default",
+  "conf": 0.4,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容单元描述的是远程桌面连接的具体步骤，属于过程维度的流程信息。"
+  }
+ },
+ {
+  "doc": "《YG3-1拆机报告_温湿度序列_2025042301-06》.adoc.md",
+  "text": "功能测试数据详见下表，试验过程中及试验过程后均能满足功能等级A",
+  "unit_type": "para",
+  "node_id": "F-ROOT",
+  "node_name": "F 功能分解树（黑盒能力）",
+  "rule": "para:function",
+  "conf": 0.5,
+  "verdict": {
+   "correct": true,
+   "reason": "内容描述功能测试数据满足功能等级A，属于功能分解树的黑盒能力，符合para:function的落位规则"
+  }
+ },
+ {
+  "doc": "机加件学习笔记.adoc.md",
+  "text": "检验项目：1）尺寸精度，公差精度符合要求；2）表面质量：表面粗糙度仪检测。，目视或接触检查表面缺陷；3）材料性能：光谱分析仪检测材料成分、拉伸试验机测试抗拉强度；4）功能性：螺纹检查、试装配验证",
+  "unit_type": "para",
+  "node_id": "F-ROOT",
+  "node_name": "F 功能分解树（黑盒能力）",
+  "rule": "para:function",
+  "conf": 0.5,
+  "verdict": {
+   "correct": false,
+   "reason": "内容描述的是检验和测试项目，属于质量验证而非功能分解的黑盒能力描述"
+  }
+ },
+ {
+  "doc": "目标任务.adoc.md",
+  "text": "拆解目标，确认项目边界，确定需要满足什么功能，做什么，测试",
+  "unit_type": "para",
+  "node_id": "F-ROOT",
+  "node_name": "F 功能分解树（黑盒能力）",
+  "rule": "para:function",
+  "conf": 0.5,
+  "verdict": {
+   "correct": true,
+   "reason": "该文本描述了功能分解、需求确认及测试，属于功能分解树的黑盒能力范畴。"
+  }
+ },
+ {
+  "doc": "03.adoc.md",
+  "text": "c.接口MCU芯片引脚完好，无虚焊、断裂、变形等不良现象；",
+  "unit_type": "para",
+  "node_id": "F-ROOT",
+  "node_name": "F 功能分解树（黑盒能力）",
+  "rule": "para:function",
+  "conf": 0.5,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容描述的是硬件引脚质量检查，属于物理状态而非功能能力，不符合功能分解树的黑盒能力定位规则。"
+  }
+ },
+ {
+  "doc": "AY200高压-电控PV拆机报告_20250909_02.adoc.md",
+  "text": "如图2-1，整体外观良好，无破损、变形等结构缺陷，外观无发白现象，无功能不良；",
+  "unit_type": "para",
+  "node_id": "F-ROOT",
+  "node_name": "F 功能分解树（黑盒能力）",
+  "rule": "para:function",
+  "conf": 0.5,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "机加件学习笔记.adoc.md",
+  "text": "引入表面压应力层，显著提高零件的疲劳强度和抗应力腐蚀能力。这是机加工后非常重要的功能性表面处理。目的在于去除氧化皮、锈蚀、毛刺、旧涂层等，喷丸后可能需要再加工进行抛光或清洗，喷丸参数应严格控制。",
+  "unit_type": "para",
+  "node_id": "F-ROOT",
+  "node_name": "F 功能分解树（黑盒能力）",
+  "rule": "para:function",
+  "conf": 0.5,
+  "verdict": {
+   "correct": true,
+   "reason": "该文本描述了表面处理的功能性效果（提升疲劳强度和抗腐蚀），符合功能定位规则。"
+  }
+ },
+ {
+  "doc": "AY200高压-电控PV拆机报告_20250909_02.adoc.md",
+  "text": "(14) Oring驱动芯片引脚完好，无虚焊、断裂、变形等不良现象；",
+  "unit_type": "para",
+  "node_id": "L-ROOT",
+  "node_name": "L 逻辑组件树（白盒组件）",
+  "rule": "para:control-logic",
+  "conf": 0.6,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容描述的是芯片引脚的完好性检查，属于硬件质量检查，而非逻辑控制内容，与para:control-logic的落位规则不匹配。"
+  }
+ },
+ {
+  "doc": "AY200高压-电控PV拆机报告_20250909_02.adoc.md",
+  "text": "(4) LC原边MOS驱动芯片引脚完好，无虚焊、断裂、变形等不良现象；",
+  "unit_type": "para",
+  "node_id": "L-ROOT",
+  "node_name": "L 逻辑组件树（白盒组件）",
+  "rule": "para:control-logic",
+  "conf": 0.6,
+  "verdict": {
+   "correct": false,
+   "reason": "该文本描述芯片引脚的完好状态，属于质量检查而非控制逻辑"
+  }
+ },
+ {
+  "doc": "AY200高压-电控PV拆机报告_20250909_02.adoc.md",
+  "text": "表3-5 驱动板螺钉拆除扭矩检测",
+  "unit_type": "para",
+  "node_id": "L-ROOT",
+  "node_name": "L 逻辑组件树（白盒组件）",
+  "rule": "para:control-logic",
+  "conf": 0.6,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容是驱动板螺钉拆除扭矩检测表，属于测试/质量检查而非控制逻辑描述，归属到para:control-logic节点不合理"
+  }
+ },
+ {
+  "doc": "AY200高压-电控PV拆机报告_20250909_02.adoc.md",
+  "text": "(5) LC副边MOS驱动芯片引脚完好，无虚焊、断裂、变形等不良现象；",
+  "unit_type": "para",
+  "node_id": "L-ROOT",
+  "node_name": "L 逻辑组件树（白盒组件）",
+  "rule": "para:control-logic",
+  "conf": 0.6,
+  "verdict": {
+   "correct": false,
+   "reason": "内容描述的是LC副边MOS驱动芯片引脚完好性检查，属于硬件外观检查而非控制逻辑"
+  }
+ },
+ {
+  "doc": "AY200高压-电控PV拆机报告_20250909_02.adoc.md",
+  "text": "(8) PFC驱动芯片引脚完好，无虚焊、断裂、变形等不良现象；",
+  "unit_type": "para",
+  "node_id": "L-ROOT",
+  "node_name": "L 逻辑组件树（白盒组件）",
+  "rule": "para:control-logic",
+  "conf": 0.6,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容描述的是PFC驱动芯片引脚的物理完好状态，属于硬件检查而非控制逻辑，归属到para:control-logic规则下的逻辑组件节点不合理。"
+  }
+ },
+ {
+  "doc": "03.adoc.md",
+  "text": "a.MOS驱动芯片引脚完好，无虚焊、断裂、变形等不良现象；",
+  "unit_type": "para",
+  "node_id": "L-ROOT",
+  "node_name": "L 逻辑组件树（白盒组件）",
+  "rule": "para:control-logic",
+  "conf": 0.6,
+  "verdict": {
+   "correct": false,
+   "reason": "内容描述的是MOS驱动芯片引脚的物理完好状态，属于硬件检查而非控制逻辑，落位到para:control-logic不合理。"
+  }
+ },
+ {
+  "doc": "PDCA思想.adoc.md",
+  "text": "PDCA（Plan-Do-Check-Act）是一种系统化的持续改进管理方法论，由四个关键阶段构成的闭环循环：",
+  "unit_type": "process",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "process:阶段",
+  "conf": 0.7,
+  "verdict": {
+   "correct": false,
+   "reason": "PDCA是一种通用的持续改进方法论，不是具体阶段，无法匹配该开发过程树的阶段节点"
+  }
+ },
+ {
+  "doc": "PDCA思想.adoc.md",
+  "text": "Act（处理阶段）",
+  "unit_type": "process",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "process:阶段",
+  "conf": 0.7,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元为通用阶段名称，未对应骨架中定义的RFQ、EVT1等具体阶段，无法直接归属到该开发过程树"
+  }
+ },
+ {
+  "doc": "优秀的微习惯.adoc.md",
+  "text": "项目阶段评审、交付物裁剪评审的原因说明要在保持精炼的前提下，尽量条理清晰、逻辑完整。",
+  "unit_type": "process",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "process:阶段",
+  "conf": 0.7,
+  "verdict": {
+   "correct": true,
+   "reason": "内容涉及项目阶段评审，符合开发过程树的阶段属性。"
+  }
+ },
+ {
+  "doc": "开发人力匡算.adoc.md",
+  "text": "各项目群结构代表需每双周更新一下开发人力匡算表，其中填写好技术复杂度、功能复杂度后，会自动生成人力配置资源矩阵表；考虑到有些项目是量产维护阶段或者是衍生项目，例如LEO RIPU CN高配和LEO RIPU CN低配，结构代表需要将人力需求进行修正",
+  "unit_type": "process",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "process:阶段",
+  "conf": 0.7,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容涉及量产维护阶段及衍生项目，超出开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）范围，不属于特定阶段。"
+  }
+ },
+ {
+  "doc": "PDCA思想.adoc.md",
+  "text": "Check（检查阶段）",
+  "unit_type": "process",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "process:阶段",
+  "conf": 0.7,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "优秀的微习惯.adoc.md",
+  "text": "比如：判断阶段是否通过时需要判定的结构可靠性测试是否合格。1先给出结论是否合格，2再补充理由，如对应的交付物、评审结论等。3如果仍有待办项、未定的结论等，再给出后续计划。",
+  "unit_type": "process",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "process:阶段",
+  "conf": 0.7,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "优秀的微习惯.adoc.md",
+  "text": "关键词：组织贡献、思维工具",
+  "unit_type": "para",
+  "node_id": "G-METHOD-TOOL",
+  "node_name": "工具使用方法（gitlab/Matlab/Polarion/测试工具）",
+  "rule": "para:tool-table",
+  "conf": 0.6,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元仅列出关键词，未涉及gitlab、Matlab、Polarion或测试工具的具体使用方法，归属不合理。"
+  }
+ },
+ {
+  "doc": "优秀的微习惯.adoc.md",
+  "text": "#团队贡献# 李海诚和方威为部门开发了2024年的纪念物——54个思维模型扑克牌，为大家践行“恰如其分”的设计理念提供了思维工具。",
+  "unit_type": "para",
+  "node_id": "G-METHOD-TOOL",
+  "node_name": "工具使用方法（gitlab/Matlab/Polarion/测试工具）",
+  "rule": "para:tool-table",
+  "conf": 0.6,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元描述的是团队贡献的思维模型扑克牌，属于纪念物而非工具使用方法或工具表，归属于 G-METHOD-TOOL 骨架节点不合理。"
+  }
+ },
+ {
+  "doc": "PDCA思想.adoc.md",
+  "text": "关键工具：",
+  "unit_type": "para",
+  "node_id": "G-METHOD-TOOL",
+  "node_name": "工具使用方法（gitlab/Matlab/Polarion/测试工具）",
+  "rule": "para:tool-table",
+  "conf": 0.6,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "机加件学习笔记.adoc.md",
+  "text": "磨削指用磨料、模具切除工具上多于材料的方法，可分为：外圆磨削、内圆磨削、平面磨削、无心磨削等",
+  "unit_type": "para",
+  "node_id": "G-METHOD-TOOL",
+  "node_name": "工具使用方法（gitlab/Matlab/Polarion/测试工具）",
+  "rule": "para:tool-table",
+  "conf": 0.6,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容描述的是磨削工艺，不属于G-METHOD-TOOL节点所指的GitLab、Matlab等工具使用方法，也不符合para:tool-table落位规则"
+  }
+ },
+ {
+  "doc": "机加件学习笔记.adoc.md",
+  "text": "车床上利用车刀对工件的旋转表面进行切削加工。用来加工：轴类、套筒类以及盘类零件上的旋转表面和螺旋面；包括：内外圆柱孔、内外圆锥面、内外螺纹、成型回转面、沟槽以及滚花等。车床的主运动为工具旋转，进给运动则由刀具直线移动完成。",
+  "unit_type": "para",
+  "node_id": "G-METHOD-TOOL",
+  "node_name": "工具使用方法（gitlab/Matlab/Polarion/测试工具）",
+  "rule": "para:tool-table",
+  "conf": 0.6,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容描述的是车床的切削加工方法，属于机械加工工艺，而非gitlab、Matlab、Polarion或测试工具的使用方法，与骨架节点G-METHOD-TOOL不匹配。"
+  }
+ },
+ {
+  "doc": "优秀的微习惯.adoc.md",
+  "text": "关键词：工具优化、标准化",
+  "unit_type": "para",
+  "node_id": "G-METHOD-TOOL",
+  "node_name": "工具使用方法（gitlab/Matlab/Polarion/测试工具）",
+  "rule": "para:tool-table",
+  "conf": 0.6,
+  "verdict": {
+   "correct": false,
+   "reason": "关键词内容不适合作为工具使用方法的表格段落"
+  }
+ },
+ {
+  "doc": "结构部新人学习导航.adoc.md",
+  "text": "2.1 钉钉云盘（流程、入职引导等）：",
+  "unit_type": "process",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "process:流程",
+  "conf": 0.7,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容涉及钉钉云盘的流程和入职引导，与开发过程树所代表的阶段序列无直接关联，不宜归属。"
+  }
+ },
+ {
+  "doc": "机加件学习笔记.adoc.md",
+  "text": "4.机加工工艺流程",
+  "unit_type": "process",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "process:流程",
+  "conf": 0.7,
+  "verdict": {
+   "correct": true,
+   "reason": "机加工工艺流程属于开发过程中的工艺流程，符合流程类内容的落位规则"
+  }
+ },
+ {
+  "doc": "成长日志-12月.adoc.md",
+  "text": "从结构新人十课中学习了结构开发流程定义，我了解到在结构项目开发中，可以通过规范基本流程，从中提升开发效和质量。",
+  "unit_type": "process",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "process:流程",
+  "conf": 0.7,
+  "verdict": {
+   "correct": true,
+   "reason": "内容涉及结构开发流程的定义与规范，符合骨架节点“开发过程树”的流程属性"
+  }
+ },
+ {
+  "doc": "结构部新人学习导航.adoc.md",
+  "text": "4.3 流程类",
+  "unit_type": "process",
+  "node_id": "G-DEV",
+  "node_name": "开发过程树（RFQ→EVT1→EVT2→ET→PT0→PT1→PPAP→SOP）",
+  "rule": "process:流程",
+  "conf": 0.7,
+  "verdict": {
+   "correct": null,
+   "reason": "LLM 输出无法解析: "
+  }
+ },
+ {
+  "doc": "T68-X-G5-6.6kW_System Assembly_v1.a.adoc.md",
+  "text": "（1）如图所示，安装PDU负极塑胶座，☆扭力2.2N ± 0.2N*m；注意塑胶件方向必须与图示一致；",
+  "unit_type": "requirement",
+  "node_id": "R-ROOT",
+  "node_name": "R 需求树（追踪层，贯穿各层）",
+  "rule": "requirement:default",
+  "conf": 0.4,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容描述了PDU负极塑胶座的安装扭矩和方向要求，属于需求类信息，归入R-ROOT需求树符合requirement:default落位规则"
+  }
+ },
+ {
+  "doc": "T68-X-G5-6.6kW_System Assembly_v1.a.adoc.md",
+  "text": "2，本次客户需求增加接地线，3条线束安装位置必须与图示一致；",
+  "unit_type": "requirement",
+  "node_id": "R-ROOT",
+  "node_name": "R 需求树（追踪层，贯穿各层）",
+  "rule": "requirement:default",
+  "conf": 0.4,
+  "verdict": {
+   "correct": true,
+   "reason": "该内容描述的是客户需求，属于需求树根节点范围，符合 requirement:default 归位规则"
+  }
+ },
+ {
+  "doc": "T68-X-G5-6.6kW_System Assembly_v1.a.adoc.md",
+  "text": "2.通过导向柱将主板平稳安装到位（注意：主板放入时必须缓慢放入，速度过快胶不易充满器件缝隙，会溢出）；",
+  "unit_type": "requirement",
+  "node_id": "R-ROOT",
+  "node_name": "R 需求树（追踪层，贯穿各层）",
+  "rule": "requirement:default",
+  "conf": 0.4,
+  "verdict": {
+   "correct": false,
+   "reason": "该内容是装配步骤说明，属于操作指引而非需求描述，不适合作为需求树的需求节点归入R-ROOT。"
+  }
+ },
+ {
+  "doc": "OKR2024-TC04-1.4_顶部散热器件选型库.axls.xlsx",
+  "text": "2 | LV MOSFET | IAUS260N10S5N019T | infineon | 2.3 mm | ±0.05 mm | 175 ℃ | / | 0.5 K/W | Infineon-IAUS260N10S5N019T-DataSheet-v01_00-EN.pdf",
+  "unit_type": "table_row",
+  "node_id": "P-HW-THERMAL-HEATSINK",
+  "node_name": "散热器（铝挤/压铸/翅片/铲齿）",
+  "rule": "doc:me-heatsink",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元为LV MOSFET器件，而骨架节点为散热器，两者不匹配"
+  }
+ },
+ {
+  "doc": "OKR2024-TC04-1.4_顶部散热器件选型库.axls.xlsx",
+  "text": "1 | HV MOSFET | XE3M0160120U2 | wolfspeed | 3.5 mm | ±0.1 mm | 175 ℃ | / | 1.13 K/W | XE3M0160120U2_Product_Specification_Rev1_0.pdf",
+  "unit_type": "table_row",
+  "node_id": "P-HW-THERMAL-HEATSINK",
+  "node_name": "散热器（铝挤/压铸/翅片/铲齿）",
+  "rule": "doc:me-heatsink",
+  "conf": 0.8,
+  "verdict": {
+   "correct": false,
+   "reason": "内容单元描述的是MOSFET器件规格，而非散热器本身，不符合节点P-HW-THERMAL-HEATSINK的归属规则。"
+  }
+ },
+ {
+  "doc": "优秀的微习惯.adoc.md",
+  "text": "#优秀的微习惯#  新ERP上线后，王嘉辉在总成图发布时，发现两个产成品若发布两个总成图，图号需重新申请，图纸操作变更需处理两次，影响工作效率。因此，主动找到解决方案改善工作效率。并与制造中心确认一份总成图，后端搜索的可行性。",
+  "unit_type": "para",
+  "node_id": "Q-LESSON",
+  "node_name": "经验教训（项目复盘/FAQ/最佳实践）",
+  "rule": "para:best-practice",
+  "conf": 0.7,
+  "verdict": {
+   "correct": true,
+   "reason": "内容描述的是在ERP上线后通过改进总成图发布流程提升工作效率的最佳实践，符合Q-LESSON经验教训且符合para:best-practice规则"
+  }
+ },
+ {
+  "doc": "成长日志-12月.adoc.md",
+  "text": "四代机、五代机是平台那边推出的通用化方案，总的逻辑是希望项目开发过程中尽量能参考模块化机型，以此达到成本和可靠性的较优水平。之前我有对四代机五代机的差异做过梳理，详细可以看下这个文档",
+  "unit_type": "strategy",
+  "node_id": "L-STRATEGY",
+  "node_name": "控制策略点（G5 策略族）",
+  "rule": "strategy:default",
+  "conf": 0.5,
+  "verdict": {
+   "correct": false,
+   "reason": "内容聚焦平台通用化方案，未直接体现控制策略"
+  }
+ }
+]

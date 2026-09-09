@@ -1,0 +1,27 @@
+{
+ "case_id": "RG-023",
+ "category": "disputed",
+ "description": "disputed inferred trace 链保持可回溯",
+ "seed_assertions": [
+  {
+   "key": "ab",
+   "subject_ref": "A",
+   "predicate_ref": "before",
+   "value": "B",
+   "confidence": 0.9
+  },
+  {
+   "key": "bc",
+   "subject_ref": "B",
+   "predicate_ref": "before",
+   "value": "C",
+   "confidence": 0.9
+  },
+  {
+   "dispute_after_validate": true
+  }
+ ],
+ "expectation": {
+  "trace_keeps_parents": true
+ }
+}

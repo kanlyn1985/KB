@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>V0.1 Evidence Core — Implementation Summary</title>
+<style>
+body{font-family:"Microsoft YaHei",system-ui,sans-serif;background:#0f1420;color:#dbe4f5;margin:0;padding:24px;line-height:1.6}
+h1{color:#4da3ff;font-size:22px}h2{color:#4da3ff;font-size:17px;border-bottom:1px solid #2a3550;padding-bottom:6px;margin-top:28px}
+table{border-collapse:collapse;width:100%;font-size:13px;margin:10px 0}
+th,td{border:1px solid #2a3550;padding:6px 10px;text-align:left}th{background:#1c2540;color:#8b98b5}
+.ok{color:#34c98c;font-weight:700}.warn{color:#f0b429}.meta{color:#8b98b5;font-size:12px}
+code{background:#161d2e;padding:1px 6px;border-radius:4px;font-family:Consolas,monospace;font-size:12px}
+.card{background:#161d2e;border:1px solid #2a3550;border-radius:8px;padding:14px 18px;margin:12px 0}
+.pass{display:inline-block;background:#123b2b;color:#34c98c;border-radius:12px;padding:2px 10px;font-weight:700}
+.note{background:#3d3112;color:#f0b429;border-radius:6px;padding:8px 12px;font-size:13px}
+</style>
+</head>
+<body>
+<h1>V0.1 Evidence Core — Implementation Summary</h1>
+<p class="meta">Task: AKB-V01-IMPL-001 · Date: 2026-09-01 · Base: d9cd66f · Branch: rebuild/agent-kb-core · <span class="pass">ACCEPTED / RELEASE BASELINE</span></p>
+
+<h2>1. Architecture</h2>
+<div class="card">Canonical Knowledge Unit = <b>KnowledgeAssertion</b>（DM-005）。治理链冻结：<br>
+<code>Source → Document → Evidence → SemanticUnit → Assertion → (Projection: Graph/Vector/Lexical)</code><br>
+治理闸：<code>AssertionValidator</code>（INV-001/002）+ <code>assertion_transitions</code> 审计（INV-005）。
+七类不变量以 DB CHECK/触发器 + API 双层强制。</div>
+
+<h2>2. Implementation Scope</h2>
+<table><tr><th>In Scope（已实现）</th><th>Out of Scope（后续版本）</th></tr>
+<tr><td>Source/Document/Evidence/SemanticUnit 数据结构；KnowledgeAssertion + Validator + Store + Transition Audit；Provenance trace；graph_edges.assertion_ref；ReasoningTrace/Derived 数据结构</td>
+<td>复杂 Planning/Decision/Action/Memory；Causal Reasoning；自主 Agent Loop；ReasoningEngine 执行器；Semantica Adapter</td></tr></table>
+
+<h2>3. Module Inventory</h2>
+<table><tr><th>模块</th><th>职责</th></tr>
+<tr><td>evidence_core/ids.py</td><td>AKB ID 工厂（src_/doc_/evd_/su_/ast_/astt_/prov_；禁止 provider id/rowid/UUID 直用）</td></tr>
+<tr><td>evidence_core/models.py</td><td>7 模型，Row↔Domain↔Canonical JSON 零损往返</td></tr>
+<tr><td>evidence_core/store.py</td><td>EvidenceStore（内容寻址幂等）+ LegacyEvidenceResolver（compatibility adapter）</td></tr>
+<tr><td>evidence_core/state_machine.py</td><td>合法迁移矩阵/权限矩阵/INV 规则（纯函数）</td></tr>
+<tr><td>evidence_core/assertions.py</td><td>AssertionStore（create/get/list/list_conflicts/transition）+ Validator + Provenance（SAVEPOINT 原子迁移）</td></tr>
+<tr><td>evidence_core/graph.py</td><td>PATH A backfill / PATH B project_edge / integrity 巡检</td></tr>
+<tr><td>evidence_core/migration/</td><td>迁移工具（DRY-RUN 默认 / --apply / --batch-size / --resume / --verify）</td></tr></table>
+
+<h2>4. Database Changes</h2>
+<table><tr><th>对象</th><th>类型</th><th>说明</th></tr>
+<tr><td>akb_sources / akb_documents / akb_evidence / akb_semantic_units / akb_assertions / akb_assertion_transitions / akb_provenance</td><td>7 new tables</td><td>DDL 按 V0.1_DATABASE_DESIGN（CHECK 强制 INV-001/002；append-only 触发器×6；受控更新触发器×2）</td></tr>
+<tr><td>graph_edges.assertion_ref</td><td>1 column added</td><td>ADDITIVE；存量未回填（待批准后 --apply）</td></tr>
+<tr><td>既有 KB1 表</td><td>UNCHANGED</td><td>facts/legacy evidence/cards/projections 语义零改动</td></tr></table>
+
+<h2>5. State Machine</h2>
+<div class="card">双轴：assertion_type（extracted/observed/asserted/inferred/hypothesized）× status（candidate/validated/asserted/disputed/rejected/deprecated）。<br>
+非法组合（全部 E-ILLEGAL-*）：直创 asserted；inferred→asserted；hypothesized→validated/asserted（须重分类）；validated→candidate；rejected→any；无审计行的 status 变更。<br>
+Evidence Gate：validated/asserted/disputed 必须 ≥1 evidence（DB CHECK + Validator 双层）。</div>
+
+<h2>6. Evidence Gate</h2>
+<div class="card"><code>candidate → validate → (no evidence → 保持 candidate / E-INV-001-NO-EVIDENCE) · (valid evidence → validated)</code>。
+validator hash 复核；observed 弱信号 confidence ≤0.75 规则保留。</div>
+
+<h2>7. Provenance</h2>
+<div class="card"><code>Provenance.trace(assertion_id)</code>：Assertion → Evidence → Document → Source 四级链 +
+actor/activity/policy_version/occurred_at 历史；链断 → <b>E-CHAIN-BROKEN</b>（不静默）。
+legacy resolver 仅解析（compatibility adapter，不产 Canonical 行）。</div>
+
+<h2>8. Graph Projection</h2>
+<div class="card"><b>PATH A</b>（Migration Backfill）：legacy 边 → candidate 断言 → assertion_ref 回填（compatibility linkage）。<br>
+<b>PATH B</b>（Runtime Projection）：仅 validated/asserted 经 project_edge()；candidate/hypothesized/rejected/deprecated → 拒绝。<br>
+投影失败 → 事务回滚，Canonical 零变更（INV-006）。</div>
+
+<h2>9. Migration</h2>
+<div class="card">迁移版本 10 经现有 SchemaMigrator（复用，未建第二套框架）。DRY-RUN 默认；
+幂等（重跑 0 重复断言）；批事务 + resume；--verify 门禁（broken_refs=0 + INV-001/002 violations=0）。
+上游遗漏修复：v9（phase9_scheduler_leadership）纳入 CORE_MIGRATIONS；PLATFORM_MIGRATIONS=CORE（消除 version 重复应用）。</div>
+
+<h2>10. Test Results</h2>
+<table><tr><th>入口</th><th>结果</th></tr>
+<tr><td>V0.1 专项（agent_kb_core/tests/v01_evidence_core）</td><td class="ok">44 passed（11 文件，18+ 用例 ID 全覆盖）</td></tr>
+<tr><td>python -m pytest agent_kb_core/tests -q</td><td class="ok">132 passed</td></tr>
+<tr><td>python -m pytest -q（仓库根）</td><td class="ok">132 passed</td></tr></table>
+
+<h2>11. Golden Results</h2>
+<div class="card">validate_golden_dataset → <span class="pass">PASS</span>：30 cases / 0 invalid / 0 dup / Reasoning 6 / Negative 12/16 / Categories 30/30。
+Golden evd:node:* 引用经 legacy resolver 影子映射可解析。</div>
+
+<h2>12. Invariant Results</h2>
+<table><tr><th>Invariant</th><th>结果</th><th>证据</th></tr>
+<tr><td>INV-001 Evidence Gate</td><td class="ok">PASS</td><td>AST-002（API+DB CHECK 双层）</td></tr>
+<tr><td>INV-002 Derived Isolation</td><td class="ok">PASS</td><td>AST-004（API+DB CHECK 双层）</td></tr>
+<tr><td>INV-003 Graph Traceability</td><td class="ok">PASS</td><td>GRAPH-001A/B（回填 100%）</td></tr>
+<tr><td>INV-004 Evidence Traceability</td><td class="ok">PASS</td><td>PROV-001（四级链）</td></tr>
+<tr><td>INV-005 History Integrity</td><td class="ok">PASS</td><td>触发器 + AST-006/007</td></tr>
+<tr><td>INV-006 Index Independence</td><td class="ok">PASS</td><td>GRAPH-002</td></tr>
+<tr><td>INV-007 LLM Governance Gate</td><td class="ok">PASS</td><td>AST-001（统一入口）</td></tr>
+<tr><td>INV-008 Agent Write Boundary</td><td class="ok">PASS</td><td>静态审计 + 无写 API</td></tr>
+<tr><td>INV-009 / INV-010</td><td class="warn">NOT IN SCOPE</td><td>V0.1 无 Memory/Action（如实标注，不标"已实现"）</td></tr></table>
+
+<h2>13. Regression Results</h2>
+<table><tr><th>检查面</th><th>结果</th></tr>
+<tr><td>既有 KB1 检索/查询（answer contract 5 案例经生产库）</td><td class="ok">PASS（零回归）</td></tr>
+<tr><td>run_production_health（5 变体 + 判定契约）</td><td class="ok">PASS</td></tr>
+<tr><td>run_skeleton_health / run_retrieval_health</td><td class="ok">未受影响（无共享表改动）</td></tr>
+<tr><td>Requirement Resolver / CLI / API server</td><td class="ok">零默认行为变化</td></tr></table>
+
+<h2>14. Known Risks</h2>
+<div class="note">① 生产库 graph_edges 467 条待回填（工具就绪，待架构负责人批准 --apply）；<br>
+② 生产库 schema 变更由测试路径触发（answer contract 用生产库 + production_context 自动 migrate）——建议改隔离测试库（并入 AG-006）；<br>
+③ SAVEPOINT 触发器语义在实现期已按 SQLite 行为微调（守卫语义不变，DB_DESIGN 已注明）；<br>
+④ legacy resolver 生命周期与 V0.2 搬运绑定，届时退役。</div>
+
+<h2>15. Release Decision</h2>
+<div class="card"><span class="pass">READY FOR RELEASE — V0.1 Evidence Core（设计基线）</span><br>
+任务书 §32 checklist 全满足（INV-009/010 如实标注 NOT IN SCOPE）；Semantica 依赖：无；Provider 泄漏：无。
+生产 DB 状态：CHANGED（additive schema only，既有数据/行为零改动——见报告 §11 如实记录）。</div>
+
+<p class="meta">详细证据：V0.1_IMPLEMENTATION_VERIFICATION_REPORT.md · Gap Register · INVARIANT_REGISTRY</p>
+
+<h2>16. Release Hardening（AKB-V01-HARDENING-001 · 2026-09-02）</h2>
+<div class="card">生产库隔离 + Governance 硬化 + CI Evidence 三项收尾。</div>
+
+<h2>17. Production DB Isolation</h2>
+<table><tr><th>项</th><th>内容</th></tr>
+<tr><td>原问题</td><td>answer contract 测试经 query_production_store 触发生产库 migrate（v9/v10 被应用）</td></tr>
+<tr><td>修复</td><td>session 级 isolated_db fixture：生产库复制到 pytest tmp，断言全部跑副本</td></tr>
+<tr><td>证据</td><td>session-level hooks（pytest_sessionstart/finish 指纹对比，diff 即 FAIL）+ negative proof（副本 migrate→生产指纹逐字段不变）+ answer contract 静态审计（0 直连）</td></tr>
+<tr><td>skip 语义</td><td>CI 无生产库 → NOT EXECUTED（skipped），不冒充 PASS</td></tr>
+<tr><td>before/after</td><td class="ok">same file / same hash / same schema / same data</td></tr></table>
+
+<h2>18. Adversarial Governance Tests</h2>
+<table><tr><th>攻击路径</th><th>结果</th></tr>
+<tr><td>直 SQL 伪造完整链（provenance+transitions+UPDATE）</td><td>语义裁决：DB 层强制状态对/type 边界/provenance 一致性/append-only；actor 授权属应用层；伪造成功但完整留痕（append-only 可追责）；API 重放幂等 no-op</td></tr>
+<tr><td>假 provenance / 非法状态对 / provenance_ref 操纵</td><td class="ok">migration 11 触发器（11.1/11.2/11.3/11.4）全部 ABORT</td></tr>
+<tr><td>inferred→asserted / hypothesized→validated（SQL 层）</td><td class="ok">11.1b type-boundary ABORT</td></tr>
+<tr><td>伪造 actor（system/llm 冒充 promote）</td><td class="ok">API 权限矩阵 E-ACTOR-NOT-AUTHORIZED</td></tr></table>
+<p>新增 migration 11（v01_governance_hardening，4 触发器，ADDITIVE）；未删触发器、未退回纯 Python。</p>
+
+<h2>19. CI Evidence</h2>
+<table><tr><th>Verification</th><th>Local (Windows/3.14)</th><th>GitHub CI (ubuntu/3.11-3.13)</th></tr>
+<tr><td>Golden validator</td><td class="ok">PASS</td><td class="ok">PASS</td></tr>
+<tr><td>V0.1 专项</td><td class="ok">51 passed</td><td class="ok">PASS ×3 versions</td></tr>
+<tr><td>agent_kb_core 全量</td><td class="ok">135 passed</td><td class="ok">PASS ×3 versions</td></tr>
+<tr><td>仓库全量</td><td class="ok">135 passed</td><td class="ok">PASS ×3 versions</td></tr>
+<tr><td>Run ID</td><td>—</td><td>33645020731 (push) / 33645029559 (PR)，均 success</td></tr>
+<tr><td>legacy Tests workflow</td><td>—</td><td class="ok">PASS（baseline 修复后实证：run 33707156860 success；root cause=根目录无 pyproject，2026-07 起，非 V0.1 引入）</td></tr></table>
+<p class="meta">CI 矩阵终态（AKB-V01-ACCEPTANCE-001 §8）：V0.1 dedicated CI = PASS；
+legacy Tests = PASS（修复后实证）；overall GitHub CI = SUCCESS @ 9862cce（全部 required checks）。</p>
+
+<h2>20. Final Release Readiness</h2>
+<div class="card"><span class="pass">V0.1 EVIDENCE CORE = ACCEPTED / RELEASE BASELINE</span><br>
+§32 checklist 全满足；INV-009/010 NOT IN SCOPE 如实标注；Production DB Isolation PASS；
+Adversarial 9 项 PASS；GitHub CI 独立验证 success（非本地转述）。<br>
+<span class="warn">Outstanding</span>：生产库 graph_edges 467 条回填待批准（工具就绪）；
+answer-contract 隔离副本含 318MB 拷贝成本（可改 EBS/硬链接优化，非阻断）。</div>
+
+
+<h2>21. Acceptance Evidence Repair（AKB-V01-ACCEPTANCE-001 · 2026-09-03）</h2>
+<table><tr><th>项</th><th>终态</th></tr>
+<tr><td>session-level isolation</td><td class="ok">PASS（sessionstart/finish 指纹对比，本地 diff={}；CI 无库 = NOT_EXECUTED 如实标注）</td></tr>
+<tr><td>negative proof</td><td class="ok">副本 migrate → 生产库指纹逐字段不变（test_pii_002）</td></tr>
+<tr><td>answer contract 直连审计</td><td class="ok">0 直连（test_pii_003 静态锁定）</td></tr>
+<tr><td>legacy Tests workflow</td><td class="ok">PASS（run 33707156860；root cause=baseline 债务已最小修复）</td></tr>
+<tr><td>overall GitHub CI</td><td class="ok">SUCCESS @ 9862cce（AgentCore 33707156858 + Tests 33707156860，全部 jobs）</td></tr></table>
+</body>
+</html>

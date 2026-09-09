@@ -1,0 +1,12 @@
+{
+ "case_id": "RG-016",
+ "category": "negative",
+ "description": "inferred→asserted 迁移拒绝（状态机硬门）",
+ "seed_assertions": {
+  "promote_asserted": true
+ },
+ "expectation": {
+  "error_contains": "E-ILLEGAL-TRANSITION",
+  "promote_asserted": true
+ }
+}

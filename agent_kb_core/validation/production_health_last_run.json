@@ -1,0 +1,70 @@
+{
+ "baseline_version": "2026-08-28-real-vector",
+ "details": {
+  "vector_rows": 31557,
+  "variants": {
+   "lexical_only": {
+    "n": 43,
+    "hit5_pct": 74.42,
+    "mrr": 0.3764,
+    "graph_exec_cases": 0
+   },
+   "vector_only": {
+    "n": 43,
+    "hit5_pct": 72.09,
+    "mrr": 0.4357,
+    "graph_exec_cases": 0
+   },
+   "graph_only": {
+    "n": 43,
+    "hit5_pct": 74.42,
+    "mrr": 0.3926,
+    "graph_exec_cases": 43
+   },
+   "lexical+vector": {
+    "n": 43,
+    "hit5_pct": 74.42,
+    "mrr": 0.3709,
+    "graph_exec_cases": 0
+   },
+   "production_full": {
+    "n": 43,
+    "hit5_pct": 74.42,
+    "mrr": 0.3709,
+    "graph_exec_cases": 0
+   }
+  },
+  "judgement_contract": [
+   {
+    "query": "HARA分析怎么做",
+    "expect": "sufficient",
+    "status": "sufficient",
+    "score": 1.0
+   },
+   {
+    "query": "帮我介绍一下OBC的工作原理",
+    "expect": "sufficient",
+    "status": "sufficient",
+    "score": 0.91
+   },
+   {
+    "query": "热仿真怎么做",
+    "expect": "sufficient",
+    "status": "sufficient",
+    "score": 0.8714
+   },
+   {
+    "query": "输出纹波要求是多少",
+    "expect": "partial",
+    "status": "partial",
+    "score": 0.74
+   },
+   {
+    "query": "灌封胶选型要求",
+    "expect": "partial",
+    "status": "partial",
+    "score": 0.4
+   }
+  ]
+ }
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8"><title>V0.11 Final Acceptance Report</title>
+<style>body{font-family:Segoe UI,Microsoft YaHei,sans-serif;margin:32px;color:#1a1a2e}
+h1{border-bottom:3px solid #2a9d8f;padding-bottom:8px}h2{color:#264653;margin-top:26px}
+table{border-collapse:collapse;margin:10px 0}td,th{border:1px solid #b8ccc8;padding:5px 11px;font-size:13.5px}
+th{background:#eaf4f4}.pass{color:#0a7a2f;font-weight:600}.meta{color:#555;font-size:13px}</style></head><body>
+<h1>AKB V0.11 Final Acceptance Report — Knowledge Maintenance Proposal Layer</h1>
+<p class="meta">Date: 2026-09-04 · Final baseline: ed0a971 · Decision: <b>ACCEPTED / FROZEN</b></p>
+
+<h2>§1 Baseline Forensic</h2>
+<table><tr><th>Stage</th><th>SHA</th></tr>
+<tr><td>V0.11 Design</td><td>2e89a4f</td></tr>
+<tr><td>IMPL-001 Maintenance Proposal Runtime</td><td>ed0a971</td></tr>
+<tr><td>V0.10/V0.9/V0.8 Frozen</td><td>52ce55c / 88ea3bd / 0e49c3d</td></tr></table>
+<p>Forensic：全部 SHA cat-file = commit ✓，history 连续，零 rewrite，working
+tree clean。Design = 2e89a4f · IMPL = ed0a971 · HEAD = ed0a971。</p>
+
+<h2>§2 Design Compliance</h2>
+<p>A. health_signal → MaintenanceProposal ✓（001 实测）· B. conflict_record →
+MaintenanceProposal ✓（hypothesis 型正路 + entity 型 fail-close——002）·
+C. proposal → VerificationTask ✓（006：task 实存 + task_type 白名单 +
+status=created 零自动迁移）。proposal_id deterministic ✓ · task_id unchanged ✓ ·
+identity algorithm reused ✓（V0.8 verification_task_identity 原样复算——信号行
+粒度 evidence_requirements）· 无第二套 identity 系统 ✓。</p>
+
+<h2>§3 Proposal Architecture</h2>
+<p>maintenance/ 新包（runtime.py + __init__.py）：MaintenanceProposalRuntime +
+MaintenanceProposal（frozen dataclass，全十字段）+ MaintenanceProposalError。
+输入 = akb_health_signals + akb_conflict_records（V0.10 持久面）；输出 =
+确定性提案（V0.8 task 通道）；读面 = provenance 重放 + V0.10 keyset cursor
+模式（limit≤500 guard）。</p>
+
+<h2>§4 Governance Boundary（red line 五测试 FINAL 独立重执行全 PASS）</h2>
+<p>ProposalRuntime 零写 akb_assertions ✓（007 快照）· 零写 kg_nodes/kg_edges ✓
+（008 计数+快照）· hypothesis 状态零变化 ✓ · task 零自动迁移 ✓（created 后
+status 不变）· conflict 零 resolution ✓（status 零变更）· spec 零 truth 结论 ✓
+（固定模板"Please review ..."）。</p>
+
+<h2>§5 Provenance Audit</h2>
+<p>graph:maintenance-proposal-create 进 akb_provenance ✓ · seq 单调 ✓ ·
+metadata 完整（proposal_id/source_type/source_id/target_ref/spec/priority/
+fingerprint/actor）✓ · 单一审计命名空间 ✓ · akb_maintenance_proposals 表
+不存在（零第二套）✓。</p>
+
+<h2>§6 Determinism（FINAL 独立复算）</h2>
+<table><tr><th>Check</th><th>Result</th></tr>
+<tr><td>same input → same proposal_id</td><td class="pass">PASS</td></tr>
+<tr><td>same input → same fingerprint</td><td class="pass">PASS</td></tr>
+<tr><td>task_id == proposal_id（identity reuse）</td><td class="pass">PASS</td></tr>
+<tr><td>V0.8 identity algorithm原样复算（信号行粒度）</td><td class="pass">PASS</td></tr>
+<tr><td>diff input → diff identity</td><td class="pass">PASS</td></tr></table>
+<p>canonical JSON；零 timestamp/零 random/零 uuid4/零 runtime ordering。</p>
+
+<h2>§7 Migration Decision</h2>
+<p><b>Migration 18: NOT REQUIRED</b>——提案走 V0.8 VerificationTask 持久路径；
+akb_maintenance_proposals 表实测不存在；零 schema 变更。触发条件延续设计记录
+（①提案独立长期查询需求 ②proposal/source 大规模反向索引需求）。</p>
+
+<h2>§8 Frozen Isolation</h2>
+<p>V0.5 Fact / V0.6 Contract / V0.7 Runtime / V0.8 Evolution / V0.9
+Causal-Health-Conflict / V0.10 Persistence 零语义修改（git diff 52ce55c..HEAD
+实测）。唯一允许变更 = VerificationTask.VALID_TASK_TYPES +"maintenance_review"
+（设计授权；原有行为/identity/lifecycle 零变化实测——006 原类型仍可用）。</p>
+
+<h2>§9 Regression（FINAL 实测重取）</h2>
+<table><tr><th>Suite</th><th>Result</th></tr>
+<tr><td>V0.1 Golden</td><td class="pass">30/30</td></tr>
+<tr><td>V0.2 Golden</td><td class="pass">40/40</td></tr>
+<tr><td>V0.3 Golden</td><td class="pass">55/55</td></tr>
+<tr><td>V0.4 Reasoning</td><td class="pass">21/21</td></tr>
+<tr><td>V0.5 Graph</td><td class="pass">103/103</td></tr>
+<tr><td>V0.6 Contract</td><td class="pass">20/20</td></tr>
+<tr><td>V0.7 Runtime</td><td class="pass">40/40</td></tr>
+<tr><td>V0.8 Evolution</td><td class="pass">40/40</td></tr>
+<tr><td>V0.9 Causal/Health/Conflict</td><td class="pass">30/30</td></tr>
+<tr><td>V0.10 Persistence</td><td class="pass">36/36</td></tr>
+<tr><td>V0.11 Maintenance</td><td class="pass">12/12</td></tr>
+<tr><td>agent_kb_core</td><td class="pass">554 tests / 0 failures / 0 errors / 1 skipped</td></tr></table>
+<p class="meta">total=554, passed=553, failed=0, errors=0, skipped=1（V0.3 capped
+设计性历史记录——精确匹配预期 542+12=554）。</p>
+
+<h2>§10 CI</h2>
+<p>Agent KB Core CI run <b>34222087251 SUCCESS</b>（8 jobs 全 success）+ Tests
+run <b>34222087262 SUCCESS</b> @ ed0a971（release commit 为 docs-only）。</p>
+
+<h2>§11 P0/P1/P2</h2>
+<table><tr><th>Level</th><th>Count</th><th>Items</th></tr>
+<tr><td>P0</td><td>0</td><td>—</td></tr>
+<tr><td>P1</td><td>2</td><td>锚解析 fail-close 定标（entity/assertion 型 target
+  无实存 hypothesis 时拒绝——已实测，语义保持为后续扩展约束）· spec 确定性
+  模板锁定（已实测——模板演进需新任务书）</td></tr>
+<tr><td>P2</td><td>3</td><td>提案优先级排序视图 · 提案-裁决关联分析 ·
+  批量提案生成</td></tr></table>
+
+<h2>§12 Final Decision</h2>
+<p><b>AKB V0.11 = ACCEPTED / FROZEN</b>（release marker: docs/V0.11/V0.11_RELEASE.md；
+design 2e89a4f frozen 后语义变更需 V0.12+ change-control）。Freeze baseline =
+release commit（docs(v0.11): finalize release baseline）；证据链 =
+2e89a4f→ed0a971。</p>
+</body></html>

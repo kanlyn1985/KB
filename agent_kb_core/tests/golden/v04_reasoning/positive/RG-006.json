@@ -1,0 +1,28 @@
+{
+ "case_id": "RG-006",
+ "category": "positive",
+ "description": "置信聚合：RR-03 双 parent 置信加权",
+ "seed_assertions": [
+  {
+   "key": "s1",
+   "subject_ref": "M",
+   "predicate_ref": "has_parameter",
+   "value": "5W",
+   "confidence": 0.9
+  },
+  {
+   "key": "s2",
+   "subject_ref": "M",
+   "predicate_ref": "has_parameter",
+   "value": "5W",
+   "confidence": 0.7
+  }
+ ],
+ "expectation": {
+  "candidates_min": 1,
+  "confidence_between": [
+   0.5,
+   1.0
+  ]
+ }
+}

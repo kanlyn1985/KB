@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>agent_kb 查询全链路流程图</title>
+<style>
+  :root {
+    --bg: #0b0f18; --panel: #111826; --line: #24304a;
+    --text: #dbe3f0; --muted: #8b9bb8;
+    --blue: #4f8cff; --green: #27c08a; --purple: #a06bff;
+    --orange: #ff9f43; --red: #ff5d73; --gold: #ffd166;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", system-ui, sans-serif;
+    padding: 28px 20px 60px;
+  }
+  .wrap { max-width: 1200px; margin: 0 auto; }
+  header { border-bottom: 1px solid var(--line); padding-bottom: 16px; margin-bottom: 18px; }
+  header h1 { margin: 0 0 6px; font-size: 22px; letter-spacing: .3px; }
+  header p { margin: 0; color: var(--muted); font-size: 13px; }
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px;
+    font-size: 12px; color: var(--muted);
+  }
+  .legend .sw {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px; border-radius: 6px;
+    background: var(--panel); border: 1px solid var(--line);
+  }
+  .legend .sw i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+  .stage {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+    padding: 14px 16px; margin-bottom: 14px;
+  }
+  .stage h2 { margin: 0 0 4px; font-size: 14px; font-weight: 600; }
+  .stage p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .stage code { font-family: Consolas, monospace; color: #9fc0ff; font-size: 12px; }
+  .diagram {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+    padding: 20px 14px; overflow-x: auto;
+  }
+  .diagram svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+  footer { margin-top: 16px; color: var(--muted); font-size: 12px; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>agent_kb 查询全链路流程图</h1>
+    <p>从「用户提问」到「最终答案」的完整数据流 · 阶段 1–5 对应源码模块 · 金色节点为 ontology 保留点</p>
+  </header>
+
+  <div class="legend">
+    <span class="sw"><i style="background:#5b6b8c"></i>输入</span>
+    <span class="sw"><i style="background:#4f8cff"></i>查询理解</span>
+    <span class="sw"><i style="background:#27c08a"></i>检索</span>
+    <span class="sw"><i style="background:#a06bff"></i>Context Pack</span>
+    <span class="sw"><i style="background:#ff9f43"></i>证据判定</span>
+    <span class="sw"><i style="background:#ff5d73"></i>答案生成</span>
+    <span class="sw"><i style="background:#ffd166"></i>ontology 保留点</span>
+  </div>
+
+  <div class="diagram">
+    <pre class="mermaid">
+flowchart TD
+    Q["用户查询 query"]:::in
+    DP["领域包 domain_pack<br/>术语别名 · 答案契约 · 关系类型 · 隐藏上下文"]:::in
+
+    subgraph S1["阶段 1 · 查询理解  understand_query"]
+        direction TB
+        U1["归一化 + 意图识别<br/>definition / constraint / test_method / comparison / procedure / evidence"]:::p1
+        U2["目标节点链接<br/>查询词 → ontology 节点别名（正/反向匹配 + 置信度）"]:::onto
+        U3["别名展开 · 答案契约 · must/should 词<br/>槽位缺失检测 · 领域歧义检测"]:::p1
+        U4["QueryFrame<br/>intent · target_objects · retrieval_channels · answer_strategy"]:::frame
+        U1 --> U2 --> U3 --> U4
+    end
+
+    subgraph S2["阶段 2 · 多通道检索  hybrid_retrieve"]
+        direction TB
+        B["分支 A · 内存基线 retrieve()<br/>object_card · fact · table · evidence · keyword · semantic"]:::p2
+        L["分支 B1 · lexical 词面<br/>FTS trigram 全文检索 · w = 1.00"]:::p2
+        V["分支 B2 · vector 语义<br/>远程嵌入 bge-small-zh-v1.5 余弦相似度 · w = 0.95"]:::emb
+        G["分支 B3 · graph 走图<br/>ontology 关系 BFS 遍历（max_depth = 2）· w = 0.85"]:::onto
+        M["跨索引合并 + 交叉印证<br/>multi_adapter_corroboration 加分"]:::onto
+        R["确定性重排  DeterministicReranker<br/>目标节点 / 事实类型 / 证据绑定 / 答案形态"]:::p2
+        B --> M
+        L --> M
+        V --> M
+        G --> M
+        M --> R
+    end
+
+    subgraph S3["阶段 3 · Context Pack 组装  build_context_pack"]
+        direction TB
+        C1["选取 目标对象 / 关系 / 节点卡 / 事实 / 证据"]:::p3
+        C2["溯源链  evidence → facts → cards → nodes"]:::onto
+        C3["hidden_context · warnings · knowledge_gaps"]:::p3
+        C1 --> C2 --> C3
+    end
+
+    subgraph S4["阶段 4 · 证据充分性判定  judge_context_pack"]
+        direction TB
+        J["加权打分<br/>0.45 × 形态覆盖 + 0.30 × 证据 + 0.15 × 绑定 + 0.10 × 节点"]:::p4
+        JD{"充分性判定"}:::dec
+        J --> JD
+    end
+
+    subgraph S5["阶段 5 · 答案生成  answer_query"]
+        direction TB
+        AS1["answer_with_evidence<br/>直接回答 + 标注出处"]:::p5
+        AS2["answer_with_caution<br/>谨慎回答 + 标注不确定与限制"]:::p5
+        AS3["abstain<br/>不编造 / 通用知识补充（明确分隔）"]:::p5
+    end
+
+    Q --> U1
+    DP --> U1
+    U4 --> B
+    U4 --> L
+    U4 --> V
+    U4 --> G
+    R --> C1
+    C3 --> J
+    JD -->|"sufficient ≥ 0.75"| AS1
+    JD -->|"partial ≥ 0.40"| AS2
+    JD -->|"insufficient &lt; 0.40"| AS3
+
+    OUT["最终输出<br/>answer · evidence_status · citations · run_id"]:::frame
+    AS1 --> OUT
+    AS2 --> OUT
+    AS3 --> OUT
+
+    classDef in fill:#20293d,stroke:#5b6b8c,color:#c7d2e8,stroke-width:1.5px;
+    classDef p1 fill:#17243f,stroke:#4f8cff,color:#dbe7ff,stroke-width:1.5px;
+    classDef p2 fill:#0f2f27,stroke:#27c08a,color:#d4f5e8,stroke-width:1.5px;
+    classDef p3 fill:#241a3a,stroke:#a06bff,color:#e7d9ff,stroke-width:1.5px;
+    classDef p4 fill:#33240f,stroke:#ff9f43,color:#ffe6c7,stroke-width:1.5px;
+    classDef p5 fill:#32131c,stroke:#ff5d73,color:#ffd7de,stroke-width:1.5px;
+    classDef onto fill:#352b0e,stroke:#ffd166,color:#ffedc2,stroke-width:2px;
+    classDef emb fill:#0f2f27,stroke:#4fd6a2,color:#d4f5e8,stroke-width:1.5px;
+    classDef frame fill:#1a2233,stroke:#e6ebf5,color:#ffffff,stroke-width:2px;
+    classDef dec fill:#33240f,stroke:#ff9f43,color:#ffe6c7,stroke-width:2px;
+    </pre>
+  </div>
+
+  <footer>agent_kb_core · 依据源码 agent_kb/{query, retrieval, context, pipeline, commands} 生成 · 向量通道仅在「建索引」时批量嵌入，查询时只嵌入单句查询</footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    securityLevel: 'loose',
+    theme: 'base',
+    flowchart: { curve: 'basis', htmlLabels: true, useMaxWidth: true, nodeSpacing: 40, rankSpacing: 48, padding: 10 },
+    themeVariables: {
+      background: '#111826',
+      primaryColor: '#1a2233',
+      primaryTextColor: '#dbe3f0',
+      primaryBorderColor: '#2c3a5c',
+      lineColor: '#5b6b8c',
+      secondaryColor: '#141b2a',
+      tertiaryColor: '#141b2a',
+      clusterBkg: '#101625',
+      clusterBorder: '#2c3a5c',
+      edgeLabelBackground: '#111826',
+      fontSize: '13px'
+    }
+  });
+</script>
+</body>
+</html>

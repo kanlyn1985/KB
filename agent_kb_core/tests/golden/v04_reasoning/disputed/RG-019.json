@@ -1,0 +1,28 @@
+{
+ "case_id": "RG-019",
+ "category": "disputed",
+ "description": "RR-04 矛盾旗标：同 (subj,pred) 异值 → __DISPUTED__ 候选（不裁决）",
+ "seed_assertions": [
+  {
+   "key": "d1",
+   "subject_ref": "MOT",
+   "predicate_ref": "has_parameter",
+   "value": "400V",
+   "confidence": 0.9
+  },
+  {
+   "key": "d2",
+   "subject_ref": "MOT",
+   "predicate_ref": "has_parameter",
+   "value": "410V",
+   "confidence": 0.85
+  }
+ ],
+ "expectation": {
+  "candidates_min": 1,
+  "rule_refs": [
+   "RR-04"
+  ],
+  "disputed_value": "__DISPUTED__"
+ }
+}

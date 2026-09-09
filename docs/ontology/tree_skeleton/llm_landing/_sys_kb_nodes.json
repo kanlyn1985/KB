@@ -1,0 +1,1178 @@
+[
+ {
+  "name": "A_知识库总体指引",
+  "type": "FOLDER",
+  "nodeId": "YQBnd5ExVEwxn91kfg4D15oy8yeZqMmz",
+  "path": "A_知识库总体指引",
+  "depth": 0
+ },
+ {
+  "name": "B_待审核的文件",
+  "type": "FOLDER",
+  "nodeId": "6LeBq413JAzxa6e4f319p79X8DOnGvpb",
+  "path": "B_待审核的文件",
+  "depth": 0
+ },
+ {
+  "name": "0_公司及部门公示",
+  "type": "FOLDER",
+  "nodeId": "gvNG4YZ7JneLZ9bgiNlaLyx2V2LD0oRE",
+  "path": "0_公司及部门公示",
+  "depth": 0
+ },
+ {
+  "name": "1_部门管理与专项建设",
+  "type": "FOLDER",
+  "nodeId": "YndMj49yWjPedrm6sRqYXljyJ3pmz5aA",
+  "path": "1_部门管理与专项建设",
+  "depth": 0
+ },
+ {
+  "name": "2_质量保证与持续改进",
+  "type": "FOLDER",
+  "nodeId": "YndMj49yWjPedrm6sRqYzmM3J3pmz5aA",
+  "path": "2_质量保证与持续改进",
+  "depth": 0
+ },
+ {
+  "name": "3_平台化建设与标准化",
+  "type": "FOLDER",
+  "nodeId": "mExel2BLV542qwy0cPyR7XkdWgk9rpMq",
+  "path": "3_平台化建设与标准化",
+  "depth": 0
+ },
+ {
+  "name": "4_产品与技术知识",
+  "type": "FOLDER",
+  "nodeId": "6LeBq413JAzxa6e4f3192PkN8DOnGvpb",
+  "path": "4_产品与技术知识",
+  "depth": 0
+ },
+ {
+  "name": "5_系统工程方法",
+  "type": "FOLDER",
+  "nodeId": "G1DKw2zgV2R0lxyZiqZ27k74VB5r9YAn",
+  "path": "5_系统工程方法",
+  "depth": 0
+ },
+ {
+  "name": "6_行业标准",
+  "type": "FOLDER",
+  "nodeId": "ydxXB52LJq73OMephKOXPoG3WqjMp697",
+  "path": "6_行业标准",
+  "depth": 0
+ },
+ {
+  "name": "7_公司标准",
+  "type": "FOLDER",
+  "nodeId": "R1zknDm0WR3A7mkGF0jQwgPqVBQEx5rG",
+  "path": "7_公司标准",
+  "depth": 0
+ },
+ {
+  "name": "8_部门标准",
+  "type": "FOLDER",
+  "nodeId": "r1R7q3QmWe7OgGpqhNqQjop1JxkXOEP2",
+  "path": "8_部门标准",
+  "depth": 0
+ },
+ {
+  "name": "9_工作产品模板与Checklist",
+  "type": "FOLDER",
+  "nodeId": "G1DKw2zgV2R0lxyZiqZ2yE35VB5r9YAn",
+  "path": "9_工作产品模板与Checklist",
+  "depth": 0
+ },
+ {
+  "name": "10_系统部AI应用",
+  "type": "FOLDER",
+  "nodeId": "oP0MALyR8k7ABKbLhYnO4NmD83bzYmDO",
+  "path": "10_系统部AI应用",
+  "depth": 0
+ },
+ {
+  "name": "11_人才发展与梯队建设",
+  "type": "FOLDER",
+  "nodeId": "ydxXB52LJq73OMephKOX0PnpWqjMp697",
+  "path": "11_人才发展与梯队建设",
+  "depth": 0
+ },
+ {
+  "name": "12_跨部门协同与知识入口",
+  "type": "FOLDER",
+  "nodeId": "oP0MALyR8k7ABKbLhYnO9qG583bzYmDO",
+  "path": "12_跨部门协同与知识入口",
+  "depth": 0
+ },
+ {
+  "name": "99_历史归档",
+  "type": "FOLDER",
+  "nodeId": "EpGBa2Lm8azo4ljYfwqexQpLWgN7R35y",
+  "path": "99_历史归档",
+  "depth": 0
+ },
+ {
+  "name": "A.1 总览与导航",
+  "type": "FOLDER",
+  "nodeId": "MNDoBb60VLrMLX93TmeOX5qr8lemrZQ3",
+  "path": "A_知识库总体指引/A.1 总览与导航",
+  "depth": 1
+ },
+ {
+  "name": "A.2 运行规则",
+  "type": "FOLDER",
+  "nodeId": "6LeBq413JAzxa6e4f31KD4ak8DOnGvpb",
+  "path": "A_知识库总体指引/A.2 运行规则",
+  "depth": 1
+ },
+ {
+  "name": "A.3 运行管理",
+  "type": "FOLDER",
+  "nodeId": "2Amq4vjg89gP9BewTmzXMK6yV3kdP0wQ",
+  "path": "A_知识库总体指引/A.3 运行管理",
+  "depth": 1
+ },
+ {
+  "name": "A.4 智能知识服务",
+  "type": "FOLDER",
+  "nodeId": "AR4GpnMqJzMvgaY5tkMmg0jnVKe0xjE3",
+  "path": "A_知识库总体指引/A.4 智能知识服务",
+  "depth": 1
+ },
+ {
+  "name": "B.1 部门原创内容",
+  "type": "FOLDER",
+  "nodeId": "20eMKjyp81RkqyO2iePpqGNpWxAZB1Gv",
+  "path": "B_待审核的文件/B.1 部门原创内容",
+  "depth": 1
+ },
+ {
+  "name": "B.2 外部引入内容",
+  "type": "FOLDER",
+  "nodeId": "7NkDwLng8ZMndyKNtNXEQl63JKMEvZBY",
+  "path": "B_待审核的文件/B.2 外部引入内容",
+  "depth": 1
+ },
+ {
+  "name": "B.3 平台与AI候选",
+  "type": "FOLDER",
+  "nodeId": "QG53mjyd80RN63yXiwAqyn3qV6zbX04v",
+  "path": "B_待审核的文件/B.3 平台与AI候选",
+  "depth": 1
+ },
+ {
+  "name": "B.4 已处理",
+  "type": "FOLDER",
+  "nodeId": "XPwkYGxZV3RPqOymi9K5owyyWAgozOKL",
+  "path": "B_待审核的文件/B.4 已处理",
+  "depth": 1
+ },
+ {
+  "name": "1.1 部门介绍",
+  "type": "FOLDER",
+  "nodeId": "2Amq4vjg89gP9BewTmZEle7xV3kdP0wQ",
+  "path": "1_部门管理与专项建设/1.1 部门介绍",
+  "depth": 1
+ },
+ {
+  "name": "1.2 部门及团队规划",
+  "type": "FOLDER",
+  "nodeId": "gwva2dxOW4K2qPy7tk9j22Ny8bkz3BRL",
+  "path": "1_部门管理与专项建设/1.2 部门及团队规划",
+  "depth": 1
+ },
+ {
+  "name": "1.3 人力资源",
+  "type": "FOLDER",
+  "nodeId": "AR4GpnMqJzMvgaY5tkQxOmK0VKe0xjE3",
+  "path": "1_部门管理与专项建设/1.3 人力资源",
+  "depth": 1
+ },
+ {
+  "name": "1.4 专项课题介绍及规划",
+  "type": "FOLDER",
+  "nodeId": "dQPGYqjpJYgLB3mMTBbAx0PwWakx1Z5N",
+  "path": "1_部门管理与专项建设/1.4 专项课题介绍及规划",
+  "depth": 1
+ },
+ {
+  "name": "1.5 部门运行与决策",
+  "type": "FOLDER",
+  "nodeId": "R1zknDm0WR3A7mkGF0qOEYLbVBQEx5rG",
+  "path": "1_部门管理与专项建设/1.5 部门运行与决策",
+  "depth": 1
+ },
+ {
+  "name": "1.6 内外部会议材料",
+  "type": "FOLDER",
+  "nodeId": "Gl6Pm2Db8D3x5vejFeMQ2lwwJxLq0Ee4",
+  "path": "1_部门管理与专项建设/1.6 内外部会议材料",
+  "depth": 1
+ },
+ {
+  "name": "2.1 工作产品质量标准",
+  "type": "FOLDER",
+  "nodeId": "EpGBa2Lm8azo4ljYfwrBlY2KWgN7R35y",
+  "path": "2_质量保证与持续改进/2.1 工作产品质量标准",
+  "depth": 1
+ },
+ {
+  "name": "2.2 质量状态与改进",
+  "type": "FOLDER",
+  "nodeId": "gvNG4YZ7JneLZ9bgiNXzLm50V2LD0oRE",
+  "path": "2_质量保证与持续改进/2.2 质量状态与改进",
+  "depth": 1
+ },
+ {
+  "name": "2.3 知识内容质量标准",
+  "type": "FOLDER",
+  "nodeId": "o14dA3GK8g5ZqdzAInLqZELNV9ekBD76",
+  "path": "2_质量保证与持续改进/2.3 知识内容质量标准",
+  "depth": 1
+ },
+ {
+  "name": "3.1 平台资产库",
+  "type": "FOLDER",
+  "nodeId": "XPwkYGxZV3RPqOymi9K5YyyjWAgozOKL",
+  "path": "3_平台化建设与标准化/3.1 平台资产库",
+  "depth": 1
+ },
+ {
+  "name": "3.2 平台管理规则",
+  "type": "FOLDER",
+  "nodeId": "NZQYprEoWoe2YDbjiB7vlKx6J1waOeDk",
+  "path": "3_平台化建设与标准化/3.2 平台管理规则",
+  "depth": 1
+ },
+ {
+  "name": "3.3 平台资产索引",
+  "type": "FOLDER",
+  "nodeId": "QG53mjyd80RN63yXiwAqER7bV6zbX04v",
+  "path": "3_平台化建设与标准化/3.3 平台资产索引",
+  "depth": 1
+ },
+ {
+  "name": "4.1 通用基础知识",
+  "type": "FOLDER",
+  "nodeId": "NZQYprEoWoe2YDbjiB7vKB0YJ1waOeDk",
+  "path": "4_产品与技术知识/4.1 通用基础知识",
+  "depth": 1
+ },
+ {
+  "name": "4.2 产品知识",
+  "type": "FOLDER",
+  "nodeId": "YndMj49yWjPedrm6sRnlzyZ7J3pmz5aA",
+  "path": "4_产品与技术知识/4.2 产品知识",
+  "depth": 1
+ },
+ {
+  "name": "4.3 技术原理",
+  "type": "FOLDER",
+  "nodeId": "ydxXB52LJq73OMephK56nPlrWqjMp697",
+  "path": "4_产品与技术知识/4.3 技术原理",
+  "depth": 1
+ },
+ {
+  "name": "4.4 外部资料",
+  "type": "FOLDER",
+  "nodeId": "ZX6GRezwJl7Zlry4hg7aREeNVdqbropQ",
+  "path": "4_产品与技术知识/4.4 外部资料",
+  "depth": 1
+ },
+ {
+  "name": "4.5 典型项目方案与实践",
+  "type": "FOLDER",
+  "nodeId": "gwva2dxOW4K2qPy7tk9j77GB8bkz3BRL",
+  "path": "4_产品与技术知识/4.5 典型项目方案与实践",
+  "depth": 1
+ },
+ {
+  "name": "5.1 核心工程方法链",
+  "type": "FOLDER",
+  "nodeId": "EpGBa2Lm8azo4ljYfwqvgEe0WgN7R35y",
+  "path": "5_系统工程方法/5.1 核心工程方法链",
+  "depth": 1
+ },
+ {
+  "name": "5.2 工程实践机制",
+  "type": "FOLDER",
+  "nodeId": "amweZ92PV6v2K5yYSMNln44jVxEKBD6p",
+  "path": "5_系统工程方法/5.2 工程实践机制",
+  "depth": 1
+ },
+ {
+  "name": "5.3 工具与专项方法",
+  "type": "FOLDER",
+  "nodeId": "dpYLaezmVNLNp2gPcPbrjnKl8rMqPxX6",
+  "path": "5_系统工程方法/5.3 工具与专项方法",
+  "depth": 1
+ },
+ {
+  "name": "6.1 法规与行业标准",
+  "type": "FOLDER",
+  "nodeId": "mExel2BLV542qwy0cPd9mKzpWgk9rpMq",
+  "path": "6_行业标准/6.1 法规与行业标准",
+  "depth": 1
+ },
+ {
+  "name": "6.2 ASPICE、功能安全与网络安全标准",
+  "type": "FOLDER",
+  "nodeId": "XPwkYGxZV3RPqOymi9K53pkwWAgozOKL",
+  "path": "6_行业标准/6.2 ASPICE、功能安全与网络安全标准",
+  "depth": 1
+ },
+ {
+  "name": "6.3 客户规范与适用性分析",
+  "type": "FOLDER",
+  "nodeId": "gvNG4YZ7JneLZ9bgiNXzNEawV2LD0oRE",
+  "path": "6_行业标准/6.3 客户规范与适用性分析",
+  "depth": 1
+ },
+ {
+  "name": "6.4 供应商资料_Datasheet与手册",
+  "type": "FOLDER",
+  "nodeId": "AR4GpnMqJzMvgaY5tkQxkpQYVKe0xjE3",
+  "path": "6_行业标准/6.4 供应商资料_Datasheet与手册",
+  "depth": 1
+ },
+ {
+  "name": "6.5 标准适用性与版本登记",
+  "type": "FOLDER",
+  "nodeId": "Y1OQX0akWm3ZOvl9FblnNZQ6JGlDd3mE",
+  "path": "6_行业标准/6.5 标准适用性与版本登记",
+  "depth": 1
+ },
+ {
+  "name": "6.6 外部参考资料索引",
+  "type": "FOLDER",
+  "nodeId": "m9bN7RYPWdlGDAXwuKpNRZ6gWZd1wyK0",
+  "path": "6_行业标准/6.6 外部参考资料索引",
+  "depth": 1
+ },
+ {
+  "name": "7.1 公司研发流程与质量体系",
+  "type": "FOLDER",
+  "nodeId": "93NwLYZXWyg4DZbPTNqbKL5mJkyEqBQm",
+  "path": "7_公司标准/7.1 公司研发流程与质量体系",
+  "depth": 1
+ },
+ {
+  "name": "7.2 公司产品开发与项目管理要求",
+  "type": "FOLDER",
+  "nodeId": "kDnRL6jAJM3jQpDxFq2jaqb4WyMoPYe1",
+  "path": "7_公司标准/7.2 公司产品开发与项目管理要求",
+  "depth": 1
+ },
+ {
+  "name": "7.3 公司信息安全、保密与AI使用要求",
+  "type": "FOLDER",
+  "nodeId": "dQPGYqjpJYgLB3mMTBbAbjDkWakx1Z5N",
+  "path": "7_公司标准/7.3 公司信息安全、保密与AI使用要求",
+  "depth": 1
+ },
+ {
+  "name": "7.4 公司通用工具与系统使用规范",
+  "type": "FOLDER",
+  "nodeId": "qnYMoO1rWxDK9zbxfj7w4yNmW47Z3je9",
+  "path": "7_公司标准/7.4 公司通用工具与系统使用规范",
+  "depth": 1
+ },
+ {
+  "name": "7.5 公司标准适用性与权威入口",
+  "type": "FOLDER",
+  "nodeId": "2Amq4vjg89gP9BewTmZEBdkLV3kdP0wQ",
+  "path": "7_公司标准/7.5 公司标准适用性与权威入口",
+  "depth": 1
+ },
+ {
+  "name": "8.1 系统工程工作产品标准",
+  "type": "FOLDER",
+  "nodeId": "ZX6GRezwJl7Zlry4hg7amQRbVdqbropQ",
+  "path": "8_部门标准/8.1 系统工程工作产品标准",
+  "depth": 1
+ },
+ {
+  "name": "8.2 系统工程方法与评审规范",
+  "type": "FOLDER",
+  "nodeId": "gvNG4YZ7JneLZ9bgiNXzxNXpV2LD0oRE",
+  "path": "8_部门标准/8.2 系统工程方法与评审规范",
+  "depth": 1
+ },
+ {
+  "name": "8.3 质量保证与持续改进规范",
+  "type": "FOLDER",
+  "nodeId": "QG53mjyd80RN63yXiwAq95rZV6zbX04v",
+  "path": "8_部门标准/8.3 质量保证与持续改进规范",
+  "depth": 1
+ },
+ {
+  "name": "8.4 平台资产发布、复用与变更规范",
+  "type": "FOLDER",
+  "nodeId": "dQPGYqjpJYgLB3mMTBbAkba1Wakx1Z5N",
+  "path": "8_部门标准/8.4 平台资产发布、复用与变更规范",
+  "depth": 1
+ },
+ {
+  "name": "8.5 跨部门协同与接口规范",
+  "type": "FOLDER",
+  "nodeId": "ZgpG2NdyVXrA7YaDTPjLzaQd8MwvDqPk",
+  "path": "8_部门标准/8.5 跨部门协同与接口规范",
+  "depth": 1
+ },
+ {
+  "name": "8.6 部门标准版本、评审与发布记录",
+  "type": "FOLDER",
+  "nodeId": "R1zknDm0WR3A7mkGF0q5PqOpVBQEx5rG",
+  "path": "8_部门标准/8.6 部门标准版本、评审与发布记录",
+  "depth": 1
+ },
+ {
+  "name": "9.1 项目管理",
+  "type": "FOLDER",
+  "nodeId": "gvNG4YZ7JneLZ9bgiNXwG4MgV2LD0oRE",
+  "path": "9_工作产品模板与Checklist/9.1 项目管理",
+  "depth": 1
+ },
+ {
+  "name": "9.2 平台标准化",
+  "type": "FOLDER",
+  "nodeId": "ydxXB52LJq73OMephK5LBrBbWqjMp697",
+  "path": "9_工作产品模板与Checklist/9.2 平台标准化",
+  "depth": 1
+ },
+ {
+  "name": "9.3 功能安全",
+  "type": "FOLDER",
+  "nodeId": "kDnRL6jAJM3jQpDxFq2MlPq0WyMoPYe1",
+  "path": "9_工作产品模板与Checklist/9.3 功能安全",
+  "depth": 1
+ },
+ {
+  "name": "9.4 系统需求",
+  "type": "FOLDER",
+  "nodeId": "lyQod3RxJK3gYkvbFoq75edaJkb4Mw9r",
+  "path": "9_工作产品模板与Checklist/9.4 系统需求",
+  "depth": 1
+ },
+ {
+  "name": "9.5 系统架构",
+  "type": "FOLDER",
+  "nodeId": "2Amq4vjg89gP9BewTmZXE3gRV3kdP0wQ",
+  "path": "9_工作产品模板与Checklist/9.5 系统架构",
+  "depth": 1
+ },
+ {
+  "name": "9.6 AI应用开发",
+  "type": "FOLDER",
+  "nodeId": "EpGBa2Lm8azo4ljYfwryyndDWgN7R35y",
+  "path": "9_工作产品模板与Checklist/9.6 AI应用开发",
+  "depth": 1
+ },
+ {
+  "name": "10.1 基础知识",
+  "type": "FOLDER",
+  "nodeId": "dQPGYqjpJYgLB3mMTBbyykebWakx1Z5N",
+  "path": "10_系统部AI应用/10.1 基础知识",
+  "depth": 1
+ },
+ {
+  "name": "10.2 应用技巧",
+  "type": "FOLDER",
+  "nodeId": "QOG9lyrgJP3ApZjlFvokKBXbVzN67Mw4",
+  "path": "10_系统部AI应用/10.2 应用技巧",
+  "depth": 1
+ },
+ {
+  "name": "10.3 基础建设",
+  "type": "FOLDER",
+  "nodeId": "ZX6GRezwJl7Zlry4hg7OdxzEVdqbropQ",
+  "path": "10_系统部AI应用/10.3 基础建设",
+  "depth": 1
+ },
+ {
+  "name": "10.4 场景开发",
+  "type": "FOLDER",
+  "nodeId": "R1zknDm0WR3A7mkGF0q57Dp6VBQEx5rG",
+  "path": "10_系统部AI应用/10.4 场景开发",
+  "depth": 1
+ },
+ {
+  "name": "11.1 胜任力能力模型与学习地图",
+  "type": "FOLDER",
+  "nodeId": "YndMj49yWjPedrm6sRnekA04J3pmz5aA",
+  "path": "11_人才发展与梯队建设/11.1 胜任力能力模型与学习地图",
+  "depth": 1
+ },
+ {
+  "name": "11.2 新人带教",
+  "type": "FOLDER",
+  "nodeId": "6LeBq413JAzxa6e4f3GK0Mag8DOnGvpb",
+  "path": "11_人才发展与梯队建设/11.2 新人带教",
+  "depth": 1
+ },
+ {
+  "name": "11.3 产品、方法与专项技术课程",
+  "type": "FOLDER",
+  "nodeId": "R1zknDm0WR3A7mkGF0q5mqxmVBQEx5rG",
+  "path": "11_人才发展与梯队建设/11.3 产品、方法与专项技术课程",
+  "depth": 1
+ },
+ {
+  "name": "11.4 系统部育成体系建设",
+  "type": "FOLDER",
+  "nodeId": "AR4GpnMqJzMvgaY5tkQm7XalVKe0xjE3",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设",
+  "depth": 1
+ },
+ {
+  "name": "11.5 技术研讨",
+  "type": "FOLDER",
+  "nodeId": "o14dA3GK8g5ZqdzAInLa0XNRV9ekBD76",
+  "path": "11_人才发展与梯队建设/11.5 技术研讨",
+  "depth": 1
+ },
+ {
+  "name": "11.6 外部培训与标准研读",
+  "type": "FOLDER",
+  "nodeId": "AR4GpnMqJzMvgaY5tkQm0Mp9VKe0xjE3",
+  "path": "11_人才发展与梯队建设/11.6 外部培训与标准研读",
+  "depth": 1
+ },
+ {
+  "name": "11.7 能力建设记录与看板",
+  "type": "FOLDER",
+  "nodeId": "dQPGYqjpJYgLB3mMTBbyaQ3ZWakx1Z5N",
+  "path": "11_人才发展与梯队建设/11.7 能力建设记录与看板",
+  "depth": 1
+ },
+ {
+  "name": "12.7 公司研发系统与受控知识入口",
+  "type": "FOLDER",
+  "nodeId": "dpYLaezmVNLNp2gPcPb9meeL8rMqPxX6",
+  "path": "12_跨部门协同与知识入口/12.7 公司研发系统与受控知识入口",
+  "depth": 1
+ },
+ {
+  "name": "12.6 项目、质量、制造与其他接口",
+  "type": "FOLDER",
+  "nodeId": "Obva6QBXJw9wv263FMDO60aBWn4qY5Pr",
+  "path": "12_跨部门协同与知识入口/12.6 项目、质量、制造与其他接口",
+  "depth": 1
+ },
+ {
+  "name": "12.5 测试验证协同入口",
+  "type": "FOLDER",
+  "nodeId": "Obva6QBXJw9wv263FMDORYb3Wn4qY5Pr",
+  "path": "12_跨部门协同与知识入口/12.5 测试验证协同入口",
+  "depth": 1
+ },
+ {
+  "name": "12.4 功能安全与网络安全协同入口",
+  "type": "FOLDER",
+  "nodeId": "R1zknDm0WR3A7mkGF0q5nOo1VBQEx5rG",
+  "path": "12_跨部门协同与知识入口/12.4 功能安全与网络安全协同入口",
+  "depth": 1
+ },
+ {
+  "name": "12.3 结构、热与EMC协同入口",
+  "type": "FOLDER",
+  "nodeId": "P7QG4Yx2Jp7ewg3khQ6rYX37V9dEq3XD",
+  "path": "12_跨部门协同与知识入口/12.3 结构、热与EMC协同入口",
+  "depth": 1
+ },
+ {
+  "name": "12.2 硬件协同与知识入口",
+  "type": "FOLDER",
+  "nodeId": "7NkDwLng8ZMndyKNtNXP0xYyJKMEvZBY",
+  "path": "12_跨部门协同与知识入口/12.2 硬件协同与知识入口",
+  "depth": 1
+ },
+ {
+  "name": "12.1 软件协同与知识入口",
+  "type": "FOLDER",
+  "nodeId": "AR4GpnMqJzMvgaY5tkQm5XkmVKe0xjE3",
+  "path": "12_跨部门协同与知识入口/12.1 软件协同与知识入口",
+  "depth": 1
+ },
+ {
+  "name": "系统部知识库能力建设.adoc",
+  "type": "FILE",
+  "nodeId": "gvNG4YZ7JneLZ9bgiAgQdPmlV2LD0oRE",
+  "path": "A_知识库总体指引/A.1 总览与导航/系统部知识库能力建设.adoc",
+  "depth": 2
+ },
+ {
+  "name": "系统部知识库与能力建设总纲.adoc",
+  "type": "FILE",
+  "nodeId": "ZgpG2NdyVXrA7YaDTP7zB70y8MwvDqPk",
+  "path": "A_知识库总体指引/A.2 运行规则/系统部知识库与能力建设总纲.adoc",
+  "depth": 2
+ },
+ {
+  "name": "【说明】EVT_SO_知识库文件命名规范.adoc",
+  "type": "FILE",
+  "nodeId": "P7QG4Yx2Jp7ewg3khQ6q0kOlV9dEq3XD",
+  "path": "A_知识库总体指引/A.2 运行规则/【说明】EVT_SO_知识库文件命名规范.adoc",
+  "depth": 2
+ },
+ {
+  "name": "【说明】EVT_SO_子知识库情况统计.axls",
+  "type": "FILE",
+  "nodeId": "2Amq4vjg89gP9BewTmZmyL0gV3kdP0wQ",
+  "path": "A_知识库总体指引/A.3 运行管理/【说明】EVT_SO_子知识库情况统计.axls",
+  "depth": 2
+ },
+ {
+  "name": "第一次系统部全员大会.pptx",
+  "type": "FILE",
+  "nodeId": "lyQod3RxJK3gYkvbFoG7vwn0Jkb4Mw9r",
+  "path": "1_部门管理与专项建设/1.2 部门及团队规划/第一次系统部全员大会.pptx",
+  "depth": 2
+ },
+ {
+  "name": "Feature标准化",
+  "type": "FOLDER",
+  "nodeId": "qnYMoO1rWxDK9zbxfjyMAg9PW47Z3je9",
+  "path": "1_部门管理与专项建设/1.4 专项课题介绍及规划/Feature标准化",
+  "depth": 2
+ },
+ {
+  "name": "01_OPL_系统部",
+  "type": "FOLDER",
+  "nodeId": "YQBnd5ExVEwxn91kfgvNN0M58yeZqMmz",
+  "path": "1_部门管理与专项建设/1.5 部门运行与决策/01_OPL_系统部",
+  "depth": 2
+ },
+ {
+  "name": "02_项目信息管理",
+  "type": "FOLDER",
+  "nodeId": "lyQod3RxJK3gYkvbFomZE9AjJkb4Mw9r",
+  "path": "1_部门管理与专项建设/1.5 部门运行与决策/02_项目信息管理",
+  "depth": 2
+ },
+ {
+  "name": "系统部门项目双周会",
+  "type": "FOLDER",
+  "nodeId": "Qnp9zOoBVBZxOKe9ceqvxQRQV1DK0g6l",
+  "path": "1_部门管理与专项建设/1.6 内外部会议材料/系统部门项目双周会",
+  "depth": 2
+ },
+ {
+  "name": "培从V2L空载过热看透损耗与软开关.adoc",
+  "type": "FILE",
+  "nodeId": "Y1OQX0akWm3ZOvl9FjGygOEGJGlDd3mE",
+  "path": "4_产品与技术知识/4.3 技术原理/培从V2L空载过热看透损耗与软开关.adoc",
+  "depth": 2
+ },
+ {
+  "name": "双DCDC均流控制深度推演.adoc",
+  "type": "FILE",
+  "nodeId": "EpGBa2Lm8azo4ljYfzeG4zkrWgN7R35y",
+  "path": "4_产品与技术知识/4.3 技术原理/双DCDC均流控制深度推演.adoc",
+  "depth": 2
+ },
+ {
+  "name": "EVT_会议纪要模板.axls",
+  "type": "FILE",
+  "nodeId": "6LeBq413JAzxa6e4fz9Kamnj8DOnGvpb",
+  "path": "9_工作产品模板与Checklist/9.1 项目管理/EVT_会议纪要模板.axls",
+  "depth": 2
+ },
+ {
+  "name": "客户需求文件清单汇总——模板.axls",
+  "type": "FILE",
+  "nodeId": "N7dx2rn0JbZQvBNycZpZ9gA9JMGjLRb3",
+  "path": "9_工作产品模板与Checklist/9.1 项目管理/客户需求文件清单汇总——模板.axls",
+  "depth": 2
+ },
+ {
+  "name": "【模板】EVT_SO_Feature描述通用模板.adoc",
+  "type": "FILE",
+  "nodeId": "KGZLxjv9VG345gdzF6vO7zejV6EDybno",
+  "path": "9_工作产品模板与Checklist/9.2 平台标准化/【模板】EVT_SO_Feature描述通用模板.adoc",
+  "depth": 2
+ },
+ {
+  "name": "前线部署工程师.pdf",
+  "type": "FILE",
+  "nodeId": "P7QG4Yx2Jp7ewg3khQOavoP4V9dEq3XD",
+  "path": "10_系统部AI应用/10.1 基础知识/前线部署工程师.pdf",
+  "depth": 2
+ },
+ {
+  "name": "系统部胜任力",
+  "type": "FOLDER",
+  "nodeId": "Obva6QBXJw9wv263FLm16KPLWn4qY5Pr",
+  "path": "11_人才发展与梯队建设/11.1 胜任力能力模型与学习地图/系统部胜任力",
+  "depth": 2
+ },
+ {
+  "name": "拓扑相关问题点收集.axls",
+  "type": "FILE",
+  "nodeId": "14lgGw3P8v9K4jZbhgLDOrzNJ5daZ90D",
+  "path": "11_人才发展与梯队建设/11.2 新人带教/拓扑相关问题点收集.axls",
+  "depth": 2
+ },
+ {
+  "name": "000.育成体系roadmap",
+  "type": "FOLDER",
+  "nodeId": "ZgpG2NdyVXrA7YaDTPQ3olLE8MwvDqPk",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/000.育成体系roadmap",
+  "depth": 2
+ },
+ {
+  "name": "001.通识和白皮书",
+  "type": "FOLDER",
+  "nodeId": "oP0MALyR8k7ABKbLhYoeYDwk83bzYmDO",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/001.通识和白皮书",
+  "depth": 2
+ },
+ {
+  "name": "002.新人带教",
+  "type": "FOLDER",
+  "nodeId": "7NkDwLng8ZMndyKNtN09oDywJKMEvZBY",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/002.新人带教",
+  "depth": 2
+ },
+ {
+  "name": "003.入职培训课",
+  "type": "FOLDER",
+  "nodeId": "EpGBa2Lm8azo4ljYfwQarq4mWgN7R35y",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/003.入职培训课",
+  "depth": 2
+ },
+ {
+  "name": "004.萌芽训练营",
+  "type": "FOLDER",
+  "nodeId": "qnYMoO1rWxDK9zbxfjMaknybW47Z3je9",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/004.萌芽训练营",
+  "depth": 2
+ },
+ {
+  "name": "005.知识分享大讲堂(规划中)",
+  "type": "FOLDER",
+  "nodeId": "EpGBa2Lm8azo4ljYfw9ga9qzWgN7R35y",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/005.知识分享大讲堂(规划中)",
+  "depth": 2
+ },
+ {
+  "name": "099.落地实施",
+  "type": "FOLDER",
+  "nodeId": "R1zknDm0WR3A7mkGF0ZM3zzrVBQEx5rG",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/099.落地实施",
+  "depth": 2
+ },
+ {
+  "name": "系统部人才培养双周报.adoc",
+  "type": "FILE",
+  "nodeId": "YndMj49yWjPedrm6sRoArbGGJ3pmz5aA",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/系统部人才培养双周报.adoc",
+  "depth": 2
+ },
+ {
+  "name": "【计划】EVT_SYS_育成体系任务进度跟踪表-2026年.able",
+  "type": "FILE",
+  "nodeId": "r1R7q3QmWe7OgGpqhNoegwp6JxkXOEP2",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/【计划】EVT_SYS_育成体系任务进度跟踪表-2026年.able",
+  "depth": 2
+ },
+ {
+  "name": "系统Feature_OBC Charging module.adoc",
+  "type": "FILE",
+  "nodeId": "AR4GpnMqJzMvgaY5tLYv6jgEVKe0xjE3",
+  "path": "1_部门管理与专项建设/1.4 专项课题介绍及规划/Feature标准化/系统Feature_OBC Charging module.adoc",
+  "depth": 3
+ },
+ {
+  "name": "【说明】EVT_SO_Feature 标准库建设.adoc",
+  "type": "FILE",
+  "nodeId": "QOG9lyrgJP3ApZjlFvdnmylvVzN67Mw4",
+  "path": "1_部门管理与专项建设/1.4 专项课题介绍及规划/Feature标准化/【说明】EVT_SO_Feature 标准库建设.adoc",
+  "depth": 3
+ },
+ {
+  "name": "系统部Feature List.axls",
+  "type": "FILE",
+  "nodeId": "amweZ92PV6v2K5yYSMxbAK9NVxEKBD6p",
+  "path": "1_部门管理与专项建设/1.4 专项课题介绍及规划/Feature标准化/系统部Feature List.axls",
+  "depth": 3
+ },
+ {
+  "name": "01_国内项目1群_系统部",
+  "type": "FOLDER",
+  "nodeId": "93NwLYZXWyg4DZbPTN6mdaeBJkyEqBQm",
+  "path": "1_部门管理与专项建设/1.5 部门运行与决策/01_OPL_系统部/01_国内项目1群_系统部",
+  "depth": 3
+ },
+ {
+  "name": "04_国内项目4群_系统部",
+  "type": "FOLDER",
+  "nodeId": "amweZ92PV6v2K5yYSMBYYPLjVxEKBD6p",
+  "path": "1_部门管理与专项建设/1.5 部门运行与决策/01_OPL_系统部/04_国内项目4群_系统部",
+  "depth": 3
+ },
+ {
+  "name": "02_国内项目2群_系统部",
+  "type": "FOLDER",
+  "nodeId": "ydxXB52LJq73OMephKRjjA9rWqjMp697",
+  "path": "1_部门管理与专项建设/1.5 部门运行与决策/01_OPL_系统部/02_国内项目2群_系统部",
+  "depth": 3
+ },
+ {
+  "name": "项目信息管理表.able",
+  "type": "FILE",
+  "nodeId": "QG53mjyd80RN63yXiw2j0AnwV6zbX04v",
+  "path": "1_部门管理与专项建设/1.5 部门运行与决策/02_项目信息管理/项目信息管理表.able",
+  "depth": 3
+ },
+ {
+  "name": "系统双周会排班表2026.axls",
+  "type": "FILE",
+  "nodeId": "7NkDwLng8ZMndyKNt3yZAoQmJKMEvZBY",
+  "path": "1_部门管理与专项建设/1.6 内外部会议材料/系统部门项目双周会/系统双周会排班表2026.axls",
+  "depth": 3
+ },
+ {
+  "name": "双周报材料",
+  "type": "FOLDER",
+  "nodeId": "gwva2dxOW4K2qPy7tYp2GKAA8bkz3BRL",
+  "path": "1_部门管理与专项建设/1.6 内外部会议材料/系统部门项目双周会/双周报材料",
+  "depth": 3
+ },
+ {
+  "name": "系统胜任力模型V0.2-原始文档.axls",
+  "type": "FILE",
+  "nodeId": "vy20BglGWOekLzM5ivz3Gn7NJA7depqY",
+  "path": "11_人才发展与梯队建设/11.1 胜任力能力模型与学习地图/系统部胜任力/系统胜任力模型V0.2-原始文档.axls",
+  "depth": 3
+ },
+ {
+  "name": "系统胜任力模型V0.2.axls",
+  "type": "FILE",
+  "nodeId": "6LeBq413JAzxa6e4fzPpZrDr8DOnGvpb",
+  "path": "11_人才发展与梯队建设/11.1 胜任力能力模型与学习地图/系统部胜任力/系统胜任力模型V0.2.axls",
+  "depth": 3
+ },
+ {
+  "name": "人才育成体系roadmap一页纸-技术中心-V3.0-20260707.xlsx",
+  "type": "FILE",
+  "nodeId": "Obva6QBXJw9wv263FMNNZe9PWn4qY5Pr",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/000.育成体系roadmap/人才育成体系roadmap一页纸-技术中心-V3.0-20260707.xlsx",
+  "depth": 3
+ },
+ {
+  "name": "【说明】EVT_SYS_系统部育成体系策划书_2026年(持续更新).adoc",
+  "type": "FILE",
+  "nodeId": "QG53mjyd80RN63yXiwE7lAvaV6zbX04v",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/001.通识和白皮书/【说明】EVT_SYS_系统部育成体系策划书_2026年(持续更新).adoc",
+  "depth": 3
+ },
+ {
+  "name": "【手册】EVT_SYS_(校招)系统新人入职指南(持续更新).adoc",
+  "type": "FILE",
+  "nodeId": "vy20BglGWOekLzM5igQZrKBYJA7depqY",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/001.通识和白皮书/【手册】EVT_SYS_(校招)系统新人入职指南(持续更新).adoc",
+  "depth": 3
+ },
+ {
+  "name": "【计划】EVT_SYS_(校招)试用期培训课表-2026年(评审中).axls",
+  "type": "FILE",
+  "nodeId": "ydxXB52LJq73OMephKE75p6MWqjMp697",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/001.通识和白皮书/【计划】EVT_SYS_(校招)试用期培训课表-2026年(评审中).axls",
+  "depth": 3
+ },
+ {
+  "name": "【计划】EVT_SYS_(校招)系统工程师轮岗表-2026(冻结).axls",
+  "type": "FILE",
+  "nodeId": "G1DKw2zgV2R0lxyZiqox3AXXVB5r9YAn",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/001.通识和白皮书/【计划】EVT_SYS_(校招)系统工程师轮岗表-2026(冻结).axls",
+  "depth": 3
+ },
+ {
+  "name": "【手册】EVT_SYS_(校招)安吉产线实习题库(冻结).xlsx",
+  "type": "FILE",
+  "nodeId": "dQPGYqjpJYgLB3mMTBL0nZqZWakx1Z5N",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/001.通识和白皮书/【手册】EVT_SYS_(校招)安吉产线实习题库(冻结).xlsx",
+  "depth": 3
+ },
+ {
+  "name": "校招生安吉实习参观过程重点了解项—系统工程师.dlink",
+  "type": "FILE",
+  "nodeId": "ydxXB52LJq73OMephK3NDXBAWqjMp697",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/001.通识和白皮书/校招生安吉实习参观过程重点了解项—系统工程师.dlink",
+  "depth": 3
+ },
+ {
+  "name": "【校招】系统组新人带教计划培训课表(草稿版).axls",
+  "type": "FILE",
+  "nodeId": "93NwLYZXWyg4DZbPTNzmnZayJkyEqBQm",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/001.通识和白皮书/【校招】系统组新人带教计划培训课表(草稿版).axls",
+  "depth": 3
+ },
+ {
+  "name": "【模板】EVT_SYS_转正述职PPT模板_20260512(评审中).pptx",
+  "type": "FILE",
+  "nodeId": "NZQYprEoWoe2YDbjiBoLzlegJ1waOeDk",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/001.通识和白皮书/【模板】EVT_SYS_转正述职PPT模板_20260512(评审中).pptx",
+  "depth": 3
+ },
+ {
+  "name": "【校招】EVT_SYS_系统组新人带教计划（已冻结）.axls",
+  "type": "FILE",
+  "nodeId": "dQPGYqjpJYgLB3mMTBLkDZyLWakx1Z5N",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/002.新人带教/【校招】EVT_SYS_系统组新人带教计划（已冻结）.axls",
+  "depth": 3
+ },
+ {
+  "name": "【说明】EVT_SYS_新人带教计划方案策划书_2026版.adoc",
+  "type": "FILE",
+  "nodeId": "Qnp9zOoBVBZxOKe9cPz2rbdqV1DK0g6l",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/002.新人带教/【说明】EVT_SYS_新人带教计划方案策划书_2026版.adoc",
+  "depth": 3
+ },
+ {
+  "name": "【说明】EVT_SYS_系统入职培训课方案策划书_2026年.adoc",
+  "type": "FILE",
+  "nodeId": "gwva2dxOW4K2qPy7tkEw4x2A8bkz3BRL",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/003.入职培训课/【说明】EVT_SYS_系统入职培训课方案策划书_2026年.adoc",
+  "depth": 3
+ },
+ {
+  "name": "【计划】EVT_SYS_系统部入职培训课制作计划_2026年.axls",
+  "type": "FILE",
+  "nodeId": "Qnp9zOoBVBZxOKe9cPzY55NQV1DK0g6l",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/003.入职培训课/【计划】EVT_SYS_系统部入职培训课制作计划_2026年.axls",
+  "depth": 3
+ },
+ {
+  "name": "26年新人10课培训资料",
+  "type": "FOLDER",
+  "nodeId": "YQBnd5ExVEwxn91kfgndevnL8yeZqMmz",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/003.入职培训课/26年新人10课培训资料",
+  "depth": 3
+ },
+ {
+  "name": "【说明】EVT_SYS_萌芽训练营策划书_2026年(持续更新).adoc",
+  "type": "FILE",
+  "nodeId": "qnYMoO1rWxDK9zbxfjMakwmwW47Z3je9",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/004.萌芽训练营/【说明】EVT_SYS_萌芽训练营策划书_2026年(持续更新).adoc",
+  "depth": 3
+ },
+ {
+  "name": "【说明】EVT_SYS_萌芽训练营主题选择说明(已冻结).adoc",
+  "type": "FILE",
+  "nodeId": "dpYLaezmVNLNp2gPcPXLabek8rMqPxX6",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/004.萌芽训练营/【说明】EVT_SYS_萌芽训练营主题选择说明(已冻结).adoc",
+  "depth": 3
+ },
+ {
+  "name": "【说明】EVT_SYS_萌芽训练营分享主题清单(持续更新).axls",
+  "type": "FILE",
+  "nodeId": "R1zknDm0WR3A7mkGF0ZGZLkLVBQEx5rG",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/004.萌芽训练营/【说明】EVT_SYS_萌芽训练营分享主题清单(持续更新).axls",
+  "depth": 3
+ },
+ {
+  "name": "【说明】EVT_SYS_萌芽训练营评分手册_2026年(已冻结).adoc",
+  "type": "FILE",
+  "nodeId": "Obva6QBXJw9wv263FMgrNm29Wn4qY5Pr",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/004.萌芽训练营/【说明】EVT_SYS_萌芽训练营评分手册_2026年(已冻结).adoc",
+  "depth": 3
+ },
+ {
+  "name": "【手册】EVT_SYS_(校招)新人培养看板-2026年.able",
+  "type": "FILE",
+  "nodeId": "oP0MALyR8k7ABKbLhYyEBeqZ83bzYmDO",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/099.落地实施/【手册】EVT_SYS_(校招)新人培养看板-2026年.able",
+  "depth": 3
+ },
+ {
+  "name": "【手册】EVT_SYS_(校招)带教计划看板-2026年.able",
+  "type": "FILE",
+  "nodeId": "a9E05BDRVQ6ApaNEcDwqdAdDJ63zgkYA",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/099.落地实施/【手册】EVT_SYS_(校招)带教计划看板-2026年.able",
+  "depth": 3
+ },
+ {
+  "name": "系统Feature说明文档.adoc",
+  "type": "FILE",
+  "nodeId": "YndMj49yWjPedrm6sRNmvB5qJ3pmz5aA",
+  "path": "1_部门管理与专项建设/1.4 专项课题介绍及规划/Feature标准化/系统部Feature List.axls/系统Feature说明文档.adoc",
+  "depth": 4
+ },
+ {
+  "name": "项目1群OPL_系统部.able",
+  "type": "FILE",
+  "nodeId": "m9bN7RYPWdlGDAXwuK0ddGDZWZd1wyK0",
+  "path": "1_部门管理与专项建设/1.5 部门运行与决策/01_OPL_系统部/01_国内项目1群_系统部/项目1群OPL_系统部.able",
+  "depth": 4
+ },
+ {
+  "name": "项目4群OPL",
+  "type": "FILE",
+  "nodeId": "m9bN7RYPWdlGDAXwuK0ddvbpWZd1wyK0",
+  "path": "1_部门管理与专项建设/1.5 部门运行与决策/01_OPL_系统部/04_国内项目4群_系统部/项目4群OPL",
+  "depth": 4
+ },
+ {
+  "name": "项目2群OPL_系统部.able",
+  "type": "FILE",
+  "nodeId": "KGZLxjv9VG345gdzF6vXX61yV6EDybno",
+  "path": "1_部门管理与专项建设/1.5 部门运行与决策/01_OPL_系统部/02_国内项目2群_系统部/项目2群OPL_系统部.able",
+  "depth": 4
+ },
+ {
+  "name": "26CW38",
+  "type": "FOLDER",
+  "nodeId": "dQPGYqjpJYgLB3mMTKNOPYvPWakx1Z5N",
+  "path": "1_部门管理与专项建设/1.6 内外部会议材料/系统部门项目双周会/双周报材料/26CW38",
+  "depth": 4
+ },
+ {
+  "name": "26CW36",
+  "type": "FOLDER",
+  "nodeId": "mExel2BLV542qwy0cpROAodRWgk9rpMq",
+  "path": "1_部门管理与专项建设/1.6 内外部会议材料/系统部门项目双周会/双周报材料/26CW36",
+  "depth": 4
+ },
+ {
+  "name": "【新员工培训】第1课：融入系统文化",
+  "type": "FOLDER",
+  "nodeId": "m9bN7RYPWdlGDAXwuKdlvbnGWZd1wyK0",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/003.入职培训课/26年新人10课培训资料/【新员工培训】第1课：融入系统文化",
+  "depth": 4
+ },
+ {
+  "name": "【新员工培训】第2课：产品介绍及工作原理",
+  "type": "FOLDER",
+  "nodeId": "20eMKjyp81RkqyO2iee3m9oAWxAZB1Gv",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/003.入职培训课/26年新人10课培训资料/【新员工培训】第2课：产品介绍及工作原理",
+  "depth": 4
+ },
+ {
+  "name": "【新员工培训】第3课：系统工程介绍",
+  "type": "FOLDER",
+  "nodeId": "P7QG4Yx2Jp7ewg3khQo6k92BV9dEq3XD",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/003.入职培训课/26年新人10课培训资料/【新员工培训】第3课：系统工程介绍",
+  "depth": 4
+ },
+ {
+  "name": "【新员工培训】第4课：ASPICE方法论",
+  "type": "FOLDER",
+  "nodeId": "qnYMoO1rWxDK9zbxfje7jKn3W47Z3je9",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/003.入职培训课/26年新人10课培训资料/【新员工培训】第4课：ASPICE方法论",
+  "depth": 4
+ },
+ {
+  "name": "【新员工培训】第5课：产品开发流程及项目管理",
+  "type": "FOLDER",
+  "nodeId": "NZQYprEoWoe2YDbjiBoQE0aNJ1waOeDk",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/003.入职培训课/26年新人10课培训资料/【新员工培训】第5课：产品开发流程及项目管理",
+  "depth": 4
+ },
+ {
+  "name": "【新员工培训】第6课：客户对接及需求管理",
+  "type": "FOLDER",
+  "nodeId": "amweZ92PV6v2K5yYSqkkn1pYVxEKBD6p",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/003.入职培训课/26年新人10课培训资料/【新员工培训】第6课：客户对接及需求管理",
+  "depth": 4
+ },
+ {
+  "name": "【新员工培训】第9课：FMEA与FTA思想",
+  "type": "FOLDER",
+  "nodeId": "QG53mjyd80RN63yXiwQN1lY2V6zbX04v",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/003.入职培训课/26年新人10课培训资料/【新员工培训】第9课：FMEA与FTA思想",
+  "depth": 4
+ },
+ {
+  "name": "【新员工培训】第10课：AI时代的思维范式转移",
+  "type": "FOLDER",
+  "nodeId": "lyQod3RxJK3gYkvbFoZ1y7XBJkb4Mw9r",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/003.入职培训课/26年新人10课培训资料/【新员工培训】第10课：AI时代的思维范式转移",
+  "depth": 4
+ },
+ {
+  "name": "(社招)带教计划看板必看使用须知.adoc",
+  "type": "FILE",
+  "nodeId": "qnYMoO1rWxDK9zbxfjxbQPvxW47Z3je9",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/099.落地实施/【手册】EVT_SYS_(校招)新人培养看板-2026年.able/(社招)带教计划看板必看使用须知.adoc",
+  "depth": 4
+ },
+ {
+  "name": "(校招)带教计划看板必看使用须知.adoc",
+  "type": "FILE",
+  "nodeId": "6LeBq413JAzxa6e4f3wZ0xM18DOnGvpb",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/099.落地实施/【手册】EVT_SYS_(校招)带教计划看板-2026年.able/(校招)带教计划看板必看使用须知.adoc",
+  "depth": 4
+ },
+ {
+  "name": "【新员工培训】第1课：融入系统文化_黄俊_V2.0_260730.pptx",
+  "type": "FILE",
+  "nodeId": "Y1OQX0akWm3ZOvl9Fbrm5XoEJGlDd3mE",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/003.入职培训课/26年新人10课培训资料/【新员工培训】第1课：融入系统文化/【新员工培训】第1课：融入系统文化_黄俊_V2.0_260730.pptx",
+  "depth": 5
+ },
+ {
+  "name": "【新员工培训】第2课：产品介绍及工作原理_赵庆_V1.0_20260727.pptx",
+  "type": "FILE",
+  "nodeId": "dQPGYqjpJYgLB3mMTBB9PYl0Wakx1Z5N",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/003.入职培训课/26年新人10课培训资料/【新员工培训】第2课：产品介绍及工作原理/【新员工培训】第2课：产品介绍及工作原理_赵庆_V1.0_20260727.pptx",
+  "depth": 5
+ },
+ {
+  "name": "【新员工培训】第3课：系统工程介绍_张俊杰_V2.0_20260803.pptx",
+  "type": "FILE",
+  "nodeId": "lyQod3RxJK3gYkvbFoqqv0ARJkb4Mw9r",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/003.入职培训课/26年新人10课培训资料/【新员工培训】第3课：系统工程介绍/【新员工培训】第3课：系统工程介绍_张俊杰_V2.0_20260803.pptx",
+  "depth": 5
+ },
+ {
+  "name": "【新员工培训】第3课：系统工程介绍_张俊杰_V1.0_260714.pptx",
+  "type": "FILE",
+  "nodeId": "a9E05BDRVQ6ApaNEcDGb1rxEJ63zgkYA",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/003.入职培训课/26年新人10课培训资料/【新员工培训】第3课：系统工程介绍/【新员工培训】第3课：系统工程介绍_张俊杰_V1.0_260714.pptx",
+  "depth": 5
+ },
+ {
+  "name": "【新员工培训】第4课：ASPICE方法论_赵庆_V1.0_20260730.pptx",
+  "type": "FILE",
+  "nodeId": "XPwkYGxZV3RPqOymi9NKvoMjWAgozOKL",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/003.入职培训课/26年新人10课培训资料/【新员工培训】第4课：ASPICE方法论/【新员工培训】第4课：ASPICE方法论_赵庆_V1.0_20260730.pptx",
+  "depth": 5
+ },
+ {
+  "name": "【新员工培训】第5课：产品开发流程+项目管理流程_郭刘粉_V2.0_260819.pptx",
+  "type": "FILE",
+  "nodeId": "N7dx2rn0JbZQvBNycN7oG63EJMGjLRb3",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/003.入职培训课/26年新人10课培训资料/【新员工培训】第5课：产品开发流程及项目管理/【新员工培训】第5课：产品开发流程+项目管理流程_郭刘粉_V2.0_260819.pptx",
+  "depth": 5
+ },
+ {
+  "name": "【新员工培训】第5课：产品开发流程+项目管理流程_郭刘粉_V1.0_260713.pptx",
+  "type": "FILE",
+  "nodeId": "gvNG4YZ7JneLZ9bgiN1AqvvlV2LD0oRE",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/003.入职培训课/26年新人10课培训资料/【新员工培训】第5课：产品开发流程及项目管理/【新员工培训】第5课：产品开发流程+项目管理流程_郭刘粉_V1.0_260713.pptx",
+  "depth": 5
+ },
+ {
+  "name": "第6课：客户对接及需求管理_V1.0_邵羽_20260817.pptx",
+  "type": "FILE",
+  "nodeId": "7NkDwLng8ZMndyKNt3BAYBNKJKMEvZBY",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/003.入职培训课/26年新人10课培训资料/【新员工培训】第6课：客户对接及需求管理/第6课：客户对接及需求管理_V1.0_邵羽_20260817.pptx",
+  "depth": 5
+ },
+ {
+  "name": "FMEA与FTA思想介绍_张俊杰_V1.0_260720.pptx",
+  "type": "FILE",
+  "nodeId": "QG53mjyd80RN63yXiwQN4zL0V6zbX04v",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/003.入职培训课/26年新人10课培训资料/【新员工培训】第9课：FMEA与FTA思想/FMEA与FTA思想介绍_张俊杰_V1.0_260720.pptx",
+  "depth": 5
+ },
+ {
+  "name": "【新员工培训】第10课：AI时代的思维范式转移_林灿_V1.0_260703.pptx",
+  "type": "FILE",
+  "nodeId": "QOG9lyrgJP3ApZjlFvG11magVzN67Mw4",
+  "path": "11_人才发展与梯队建设/11.4 系统部育成体系建设/003.入职培训课/26年新人10课培训资料/【新员工培训】第10课：AI时代的思维范式转移/【新员工培训】第10课：AI时代的思维范式转移_林灿_V1.0_260703.pptx",
+  "depth": 5
+ }
+]

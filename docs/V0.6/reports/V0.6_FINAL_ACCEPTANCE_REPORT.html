@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8"><title>V0.6 Final Acceptance Report</title>
+<style>body{font-family:Segoe UI,Microsoft YaHei,sans-serif;margin:32px;color:#1a1a2e}
+h1{border-bottom:3px solid #9d4edd;padding-bottom:8px}h2{color:#5a189a;margin-top:26px}
+table{border-collapse:collapse;margin:10px 0}td,th{border:1px solid #c4b5d4;padding:5px 11px;font-size:13.5px}
+th{background:#f3eaf7}.pass{color:#0a7a2f;font-weight:600}.warn{color:#b06a00}.meta{color:#555;font-size:13px}</style></head><body>
+<h1>AKB V0.6 Final Acceptance Report — Graph-aware Deterministic Reasoning Layer</h1>
+<p class="meta">Date: 2026-09-04 · Final baseline: 1a6d08f · Decision: <b>ACCEPTED / FROZEN</b></p>
+
+<h2>1. Executive Summary</h2>
+<p>V0.6 四阶段（IMPL-001..004）全部完成且证据闭环：GraphReasoningContext 确定性构建
+（复用 V0.5 Query 只读面）、单一 V0.4 ReasoningEngine 编排（零第二引擎）、候选生命周期
+治理边界、五级 provenance 闭环、fail-closed 错误分类学、20 项 contract 套件。
+P0=0、P1=1（源头在 V0.5 frozen，开放项）、P2=4（accepted）。<b>V0.6 = ACCEPTED / FROZEN。</b></p>
+
+<h2>2. Baseline</h2>
+<table><tr><th>Stage</th><th>SHA</th></tr>
+<tr><td>V0.6 Design</td><td>3610c99</td></tr>
+<tr><td>IMPL-001 Context Builder</td><td>7b17625</td></tr>
+<tr><td>IMPL-002 Orchestrator</td><td>ddeb22f</td></tr>
+<tr><td>IMPL-003 Provenance Closure</td><td>749b58e</td></tr>
+<tr><td>IMPL-004 Contract Tests</td><td>1a6d08f</td></tr>
+<tr><td>V0.5 Frozen（上游）</td><td>e7a286e</td></tr></table>
+
+<h2>3. Design Compliance（contract 全覆盖实测）</h2>
+<table><tr><th>Contract</th><th>Implementation</th><th>Test</th><th>Evidence</th></tr>
+<tr><td>ReasoningContext（§9.1 字段集/确定性 identity）</td><td class="pass">context.py</td><td class="pass">VC-CMP-001/002/003</td><td class="pass">CONTRACT-CMP-002</td></tr>
+<tr><td>ReasoningRule（versioned/provider 通道）</td><td class="pass">复用 V0.4</td><td class="pass">OC-CMP-002</td><td class="pass">RR-01..04 frozen</td></tr>
+<tr><td>InferenceCandidate（候选≠事实）</td><td class="pass">orchestrator.py</td><td class="pass">OC-CMP-003/004/006</td><td class="pass">CONTRACT-CMP-006</td></tr>
+<tr><td>ReasoningRun（akb_reasoning_runs 复用）</td><td class="pass">零新表</td><td class="pass">PC-CMP-002</td><td class="pass">CONTRACT-CMP-015</td></tr>
+<tr><td>ReasoningResult（同构返回面）</td><td class="pass">orchestrator.run</td><td class="pass">OC-CMP-001</td><td class="pass">CONTRACT-CMP-001</td></tr>
+</table>
+
+<h2>4-7. Architecture / Provenance / Determinism / Status-Temporal</h2>
+<p><b>架构闭环</b>：kg_* 只读 → ContextBuilder（确定性 context_id）→ V0.4
+ReasoningEngine（复用）→ candidates（inferred/candidate）→ graph:reason 审计 →
+ReasoningProvenanceService 闭环。单一引擎（is my_engine 实测）+ kg 零污染
+（canonical view 跨全链路不变实测）。</p>
+<p><b>Provenance</b>：五级链 verify_closure 全闭环（CONTRACT-CMP-004）；
+缺级 fail-closed（ghost run/候选/非 inferred 全拒绝——PC-CMP-006）；
+V0.4 schema CHECK（inferred⇒derivation NOT NULL）为数据库级保护。</p>
+<p><b>Determinism</b>：同输入→同 context_id/fingerprint/candidate_id/trace
+（CONTRACT-CMP-002/016 跨实例）；V0.4 fingerprint 公式独立复算一致（003）。</p>
+<p><b>Status/Temporal</b>：invalidated 排除/disputed=flagged 保留/hypothesized 零进入
+（CONTRACT-CMP-008）；temporal 只读引用 + ambiguity fail-closed（VC-CMP-008）。</p>
+
+<h2>8. Governance / LLM / DomainPack Boundary</h2>
+<p>Governance：Reasoning 只产 candidate（CONTRACT-CMP-007 零 status 变更审计）；
+inferred→asserted 永禁（CONTRACT-CMP-006）；system/agent/llm 零晋升
+（CONTRACT-CMP-019 actor 矩阵）。LLM：非正确性必需（010 源码审计）。
+DomainPack：规则语义单一归属（设计 §13；实现期 provider 通道）。</p>
+
+<h2>9. Migration Integrity</h2>
+<p>V0.6 零 migration——migration chain 15 版本唯一（CONTRACT-CMP-015）；
+migration 14 完好（akb_reasoning_runs 列面实测）；零 V0.6 专表（sqlite_master 实测）；
+NO MIGRATION 决策达成（derivation_json JSON 扩展）。</p>
+
+<h2>10-13. Failure / Depth / Read-only / Legacy</h2>
+<p>fail-close 矩阵（CONTRACT-CMP-009：六类无效输入全显式拒绝）；
+深度独立性（CONTRACT-CMP-018：reasoning 4 ≠ query 8）；read-only（011：kg 四表
+快照零变化 + provenance 增量仅审计类）；legacy isolation（013：API 互斥 +
+graph_edges 零变化 + test_phase6/7 PASS）。</p>
+
+<h2>14. Regression（FINAL 实测重取）</h2>
+<table><tr><th>Suite</th><th>Result</th></tr>
+<tr><td>V0.1 Golden</td><td class="pass">30/30</td></tr>
+<tr><td>V0.2 Golden</td><td class="pass">40/40</td></tr>
+<tr><td>V0.3 Golden</td><td class="pass">55/55</td></tr>
+<tr><td>V0.4 reasoning</td><td class="pass">21/21</td></tr>
+<tr><td>V0.5 graph（GS7+ER16+GP25+GQ25）</td><td class="pass">83/83</td></tr>
+<tr><td>V0.6 VC/OC/PC</td><td class="pass">30/30</td></tr>
+<tr><td>V0.6 Contract</td><td class="pass">20/20</td></tr>
+<tr><td>agent_kb_core</td><td class="pass">396 passed + 1 skipped</td></tr>
+<tr><td>Full repository</td><td class="pass">395 passed + 1 skipped（exit 0）</td></tr></table>
+<p class="meta">1 skipped = V0.3 capped 数据场景设计性跳过（历史记录，非 V0.6 引入）。</p>
+
+<h2>15. CI</h2>
+<p>Agent KB Core CI run <b>34037031063 SUCCESS</b>（8 jobs 全 success）+ Tests run
+<b>34037031061 SUCCESS</b> @ 1a6d08f（release commit 为 docs-only）。</p>
+
+<h2>16. Production DB Safety</h2>
+<p>Production DB = <b>untouched</b>（prod-isolation fingerprint PASS；全部验证内存库）。</p>
+
+<h2>17-18. Scope Audit / P0-P2</h2>
+<p>Scope：kgraph 全模块 grep 零 LLM/Neo4j/向量/embedding/分布式/缓存（唯一 "llm" 命中 =
+governance 禁止清单）。V0.5 frozen 实质面（models/identity/projection/persistence/query/
+migrations/legacy）零变化（git diff e7a286e..HEAD 实测——V0.6 仅新增
+context/orchestrator/provenance/__init__）。</p>
+<table><tr><th>Level</th><th>Count</th><th>Items</th></tr>
+<tr><td>P0</td><td>0</td><td>—</td></tr>
+<tr><td>P1</td><td>1</td><td>源头在 V0.5 frozen：fingerprint 变化+相同 node_id 的全量
+  repersist PK 冲突（IMPL-001 发现；CONTRACT-CMP-014 只锚同状态重建语义；待 owner 决策）</td></tr>
+<tr><td>P2</td><td>4</td><td>depth=4 初值 / JSON 扩展取舍 / 爆炸上限 1024 / 跨 run 迭代环</td></tr></table>
+
+<h2>19-21. Known Limitations / Release Decision / Freeze Baseline</h2>
+<p>Known limitations 详见 V0.6_RELEASE.md（P2×4 + P1×1 开放项）。
+<b>Release Decision: AKB V0.6 = ACCEPTED / FROZEN</b>（release marker:
+docs/V0.6/V0.6_RELEASE.md；design 3610c99 frozen 后语义变更需 V0.7+ change-control）。
+Freeze baseline = release commit（docs(v0.6): finalize release baseline）；
+证据链 = 3610c99→7b17625→ddeb22f→749b58e→1a6d08f。</p>
+</body></html>

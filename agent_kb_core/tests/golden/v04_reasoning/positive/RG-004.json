@@ -1,0 +1,42 @@
+{
+ "case_id": "RG-004",
+ "category": "positive",
+ "description": "RR-01+RR-02 混合：双规则同 run 全部产出",
+ "seed_assertions": [
+  {
+   "key": "sat",
+   "subject_ref": "Valve-B",
+   "predicate_ref": "satisfies_rule",
+   "value": "RuleY",
+   "confidence": 0.8
+  },
+  {
+   "key": "req",
+   "subject_ref": "",
+   "predicate_ref": "rule_requires",
+   "value": "Seal-Check",
+   "confidence": 0.9
+  },
+  {
+   "key": "ab",
+   "subject_ref": "T1",
+   "predicate_ref": "before",
+   "value": "T2",
+   "confidence": 0.85
+  },
+  {
+   "key": "bc",
+   "subject_ref": "T2",
+   "predicate_ref": "before",
+   "value": "T3",
+   "confidence": 0.85
+  }
+ ],
+ "expectation": {
+  "candidates_min": 2,
+  "rule_refs": [
+   "RR-01",
+   "RR-02"
+  ]
+ }
+}

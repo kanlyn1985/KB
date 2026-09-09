@@ -1,0 +1,101 @@
+{
+ "object_types": {
+  "Parameter": {
+   "description": "Engineering parameter such as output ripple, output voltage, efficiency, or protection threshold.",
+   "properties": [
+    "canonical_name",
+    "aliases",
+    "unit_family",
+    "typical_conditions"
+   ]
+  },
+  "ParameterConstraint": {
+   "description": "Requirement or limit imposed on a parameter.",
+   "properties": [
+    "parameter_id",
+    "operator",
+    "value",
+    "unit",
+    "condition",
+    "source"
+   ]
+  },
+  "StandardClause": {
+   "description": "A clause or table row from a standard document.",
+   "properties": [
+    "standard_code",
+    "clause_no",
+    "clause_type",
+    "text"
+   ]
+  },
+  "TestMethod": {
+   "description": "Method or procedure used to verify a parameter or requirement.",
+   "properties": [
+    "target_parameter",
+    "condition",
+    "instrument",
+    "procedure"
+   ]
+  },
+  "TestResult": {
+   "description": "Measured result from a test report.",
+   "properties": [
+    "target_parameter",
+    "measured_value",
+    "unit",
+    "condition",
+    "status"
+   ]
+  },
+  "Experience": {
+   "description": "Ontology node type (Experience).",
+   "properties": [
+    "canonical_name",
+    "aliases"
+   ]
+  },
+  "Process": {
+   "description": "Ontology node type (Process).",
+   "properties": [
+    "canonical_name",
+    "aliases"
+   ]
+  },
+  "Requirement": {
+   "description": "Ontology node type (Requirement).",
+   "properties": [
+    "canonical_name",
+    "aliases"
+   ]
+  },
+  "Logic": {
+   "description": "Ontology node type (Logic).",
+   "properties": [
+    "canonical_name",
+    "aliases"
+   ]
+  },
+  "PhysicalComponent": {
+   "description": "Ontology node type (PhysicalComponent).",
+   "properties": [
+    "canonical_name",
+    "aliases"
+   ]
+  },
+  "ProjectInstance": {
+   "description": "Ontology node type (ProjectInstance).",
+   "properties": [
+    "canonical_name",
+    "aliases"
+   ]
+  },
+  "Function": {
+   "description": "Ontology node type (Function).",
+   "properties": [
+    "canonical_name",
+    "aliases"
+   ]
+  }
+ }
+}

@@ -1,0 +1,58 @@
+{
+ "case_id": "G006",
+ "category": "G06-single-hop-relation",
+ "difficulty": "easy",
+ "requirement_refs": [
+  "SYS-007",
+  "SYS-008"
+ ],
+ "input": {
+  "query": "OBC的PFC电路后面接什么"
+ },
+ "expected": {
+  "entities": [
+   {
+    "entity_id": "P-HW-OBC-DCDC",
+    "entity_type": "component",
+    "description": "隔离变换级（LLC）"
+   }
+  ],
+  "relations": [
+   {
+    "source_ref": "entity:pfc",
+    "predicate_ref": "relation:upstream_of",
+    "target_ref": "entity:llc_stage",
+    "assertion_id": "ast_g006_1"
+   }
+  ],
+  "assertions": [
+   {
+    "assertion_id": "ast_g006_1",
+    "subject_ref": "entity:pfc",
+    "predicate_ref": "relation:upstream_of",
+    "object": {
+     "kind": "literal",
+     "value": {
+      "kind": "entity_ref",
+      "entity_id": "entity:llc_stage"
+     }
+    },
+    "assertion_type": "asserted",
+    "status": "validated",
+    "evidence_refs": [
+     "evd:node:P-HW-OBC-PFC:0"
+    ],
+    "confidence": 0.8
+   }
+  ],
+  "evidence": [
+   {
+    "evidence_id": "evd:node:P-HW-OBC-PFC:0",
+    "document_id": "doc:node:P-HW-OBC-PFC"
+   }
+  ],
+  "support_level": "sufficient"
+ },
+ "negative_expectations": [],
+ "notes": "单跳：PFC→LLC 功率链"
+}

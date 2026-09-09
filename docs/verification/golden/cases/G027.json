@@ -1,0 +1,29 @@
+{
+ "case_id": "G027",
+ "category": "G27-knowledge-gap",
+ "difficulty": "medium",
+ "requirement_refs": [
+  "SYS-013"
+ ],
+ "input": {
+  "query": "标定流程具体怎么做"
+ },
+ "expected": {
+  "support_level": "insufficient",
+  "answer_contract": {
+   "disclose_gaps": true,
+   "must_not_include": [
+    "步骤如下"
+   ],
+   "max_chars": 600
+  }
+ },
+ "negative_expectations": [
+  {
+   "type": "no_deterministic_answer",
+   "description": "库内无相关 procedure 内容（81 条 procedure 零命中标定），不得编造流程",
+   "invariant_ref": "INV-001"
+  }
+ ],
+ "notes": "已知语料空洞（P2 定位）：诚实 insufficient + 指明缺口方向"
+}

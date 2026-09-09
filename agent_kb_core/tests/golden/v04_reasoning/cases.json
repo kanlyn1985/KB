@@ -1,0 +1,591 @@
+{
+ "manifest_version": "V1.0",
+ "total": 23,
+ "counts": {
+  "positive": 10,
+  "negative": 8,
+  "disputed": 5
+ },
+ "cases": [
+  {
+   "case_id": "RG-001",
+   "category": "positive",
+   "description": "RR-01 deduction: A satisfies RuleX + RuleX requires B → A requires B",
+   "seed_assertions": [
+    {
+     "key": "sat",
+     "subject_ref": "Pump-A",
+     "predicate_ref": "satisfies_rule",
+     "value": "RuleX",
+     "confidence": 0.9
+    },
+    {
+     "key": "req",
+     "subject_ref": "",
+     "predicate_ref": "rule_requires",
+     "value": "Inspection",
+     "confidence": 0.9
+    }
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "rule_refs": [
+     "RR-01"
+    ],
+    "expect_triple": [
+     "Pump-A",
+     "requires",
+     "Inspection"
+    ]
+   }
+  },
+  {
+   "case_id": "RG-002",
+   "category": "positive",
+   "description": "RR-02 transitive closure: A before B + B before C → A before C",
+   "seed_assertions": [
+    {
+     "key": "ab",
+     "subject_ref": "A",
+     "predicate_ref": "before",
+     "value": "B",
+     "confidence": 0.9
+    },
+    {
+     "key": "bc",
+     "subject_ref": "B",
+     "predicate_ref": "before",
+     "value": "C",
+     "confidence": 0.9
+    }
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "rule_refs": [
+     "RR-02"
+    ],
+    "expect_triple": [
+     "A",
+     "before",
+     "C"
+    ]
+   }
+  },
+  {
+   "case_id": "RG-003",
+   "category": "positive",
+   "description": "RR-03 corroboration: same (subj,pred) same value → merged candidate",
+   "seed_assertions": [
+    {
+     "key": "s1",
+     "subject_ref": "OBC",
+     "predicate_ref": "has_parameter",
+     "value": "265V",
+     "confidence": 0.9
+    },
+    {
+     "key": "s2",
+     "subject_ref": "OBC",
+     "predicate_ref": "has_parameter",
+     "value": "265V",
+     "confidence": 0.8
+    }
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "rule_refs": [
+     "RR-03"
+    ],
+    "expect_subject": "OBC"
+   }
+  },
+  {
+   "case_id": "RG-004",
+   "category": "positive",
+   "description": "RR-01+RR-02 混合：双规则同 run 全部产出",
+   "seed_assertions": [
+    {
+     "key": "sat",
+     "subject_ref": "Valve-B",
+     "predicate_ref": "satisfies_rule",
+     "value": "RuleY",
+     "confidence": 0.8
+    },
+    {
+     "key": "req",
+     "subject_ref": "",
+     "predicate_ref": "rule_requires",
+     "value": "Seal-Check",
+     "confidence": 0.9
+    },
+    {
+     "key": "ab",
+     "subject_ref": "T1",
+     "predicate_ref": "before",
+     "value": "T2",
+     "confidence": 0.85
+    },
+    {
+     "key": "bc",
+     "subject_ref": "T2",
+     "predicate_ref": "before",
+     "value": "T3",
+     "confidence": 0.85
+    }
+   ],
+   "expectation": {
+    "candidates_min": 2,
+    "rule_refs": [
+     "RR-01",
+     "RR-02"
+    ]
+   }
+  },
+  {
+   "case_id": "RG-005",
+   "category": "positive",
+   "description": "逆序 parent 输入 → 同 fingerprint（确定性锚）",
+   "seed_assertions": [
+    {
+     "key": "ab",
+     "subject_ref": "A",
+     "predicate_ref": "before",
+     "value": "B",
+     "confidence": 0.9
+    },
+    {
+     "key": "bc",
+     "subject_ref": "B",
+     "predicate_ref": "before",
+     "value": "C",
+     "confidence": 0.9
+    }
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "reorder_invariant": true
+   }
+  },
+  {
+   "case_id": "RG-006",
+   "category": "positive",
+   "description": "置信聚合：RR-03 双 parent 置信加权",
+   "seed_assertions": [
+    {
+     "key": "s1",
+     "subject_ref": "M",
+     "predicate_ref": "has_parameter",
+     "value": "5W",
+     "confidence": 0.9
+    },
+    {
+     "key": "s2",
+     "subject_ref": "M",
+     "predicate_ref": "has_parameter",
+     "value": "5W",
+     "confidence": 0.7
+    }
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "confidence_between": [
+     0.5,
+     1.0
+    ]
+   }
+  },
+  {
+   "case_id": "RG-007",
+   "category": "positive",
+   "description": "RR-02 链末端无关对不产出（无传递不捏造）",
+   "seed_assertions": [
+    {
+     "key": "ab",
+     "subject_ref": "A",
+     "predicate_ref": "before",
+     "value": "B",
+     "confidence": 0.9
+    },
+    {
+     "key": "xy",
+     "subject_ref": "X",
+     "predicate_ref": "before",
+     "value": "Y",
+     "confidence": 0.9
+    }
+   ],
+   "expectation": {
+    "candidates_max": 0
+   }
+  },
+  {
+   "case_id": "RG-008",
+   "category": "positive",
+   "description": "RR-01 多规则展开（两 satisfies + 一 requires → 两条 inferred）",
+   "seed_assertions": [
+    {
+     "key": "s1",
+     "subject_ref": "Unit-1",
+     "predicate_ref": "satisfies_rule",
+     "value": "RuleX",
+     "confidence": 0.9
+    },
+    {
+     "key": "s2",
+     "subject_ref": "Unit-2",
+     "predicate_ref": "satisfies_rule",
+     "value": "RuleX",
+     "confidence": 0.8
+    },
+    {
+     "key": "req",
+     "subject_ref": "",
+     "predicate_ref": "rule_requires",
+     "value": "Inspect",
+     "confidence": 0.9
+    }
+   ],
+   "expectation": {
+    "candidates_min": 2,
+    "rule_refs": [
+     "RR-01"
+    ]
+   }
+  },
+  {
+   "case_id": "RG-009",
+   "category": "positive",
+   "description": "derivation 完备六键（rule_ref/parents/reasoner/snapshot/basis/depth）",
+   "seed_assertions": [
+    {
+     "key": "ab",
+     "subject_ref": "A",
+     "predicate_ref": "before",
+     "value": "B",
+     "confidence": 0.9
+    },
+    {
+     "key": "bc",
+     "subject_ref": "B",
+     "predicate_ref": "before",
+     "value": "C",
+     "confidence": 0.9
+    }
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "derivation_keys": [
+     "rule_ref",
+     "parent_assertions",
+     "reasoner_id",
+     "rule_input_snapshot",
+     "confidence_basis",
+     "depth"
+    ]
+   }
+  },
+  {
+   "case_id": "RG-010",
+   "category": "positive",
+   "description": "provenance 双链（run 表 + derivation.reasoning_run_id + activity=infer）",
+   "seed_assertions": [
+    {
+     "key": "ab",
+     "subject_ref": "A",
+     "predicate_ref": "before",
+     "value": "B",
+     "confidence": 0.9
+    },
+    {
+     "key": "bc",
+     "subject_ref": "B",
+     "predicate_ref": "before",
+     "value": "C",
+     "confidence": 0.9
+    }
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "provenance_run": true
+   }
+  },
+  {
+   "case_id": "RG-011",
+   "category": "negative",
+   "description": "ghost parent → E-V04-PARENT-NOT-FOUND",
+   "seed_assertions": {
+    "ghost": true
+   },
+   "expectation": {
+    "error": "E-V04-PARENT-NOT-FOUND",
+    "candidates": 0
+   }
+  },
+  {
+   "case_id": "RG-012",
+   "category": "negative",
+   "description": "provider crash → run failed 零候选（既有产物零破坏）",
+   "seed_assertions": {
+    "crash": true
+   },
+   "expectation": {
+    "run_status": "failed",
+    "candidates": 0
+   }
+  },
+  {
+   "case_id": "RG-013",
+   "category": "negative",
+   "description": "malformed proposal（缺 rule_ref/snapshot）→ 提案级隔离",
+   "seed_assertions": {
+    "malformed": true
+   },
+   "expectation": {
+    "candidates": 0,
+    "warnings_min": 1
+   }
+  },
+  {
+   "case_id": "RG-014",
+   "category": "negative",
+   "description": "max_depth=0 → 全部提案 E-V04-DEPTH-EXCEEDED",
+   "seed_assertions": [
+    {
+     "key": "ab",
+     "subject_ref": "A",
+     "predicate_ref": "before",
+     "value": "B",
+     "confidence": 0.9
+    },
+    {
+     "key": "bc",
+     "subject_ref": "B",
+     "predicate_ref": "before",
+     "value": "C",
+     "confidence": 0.9
+    }
+   ],
+   "expectation": {
+    "candidates": 0,
+    "warnings_min": 1,
+    "max_depth": 0
+   }
+  },
+  {
+   "case_id": "RG-015",
+   "category": "negative",
+   "description": "幂等重放：锚命中零新候选零新 run",
+   "seed_assertions": {
+    "rerun": true
+   },
+   "expectation": {
+    "idempotent_hit": true
+   }
+  },
+  {
+   "case_id": "RG-016",
+   "category": "negative",
+   "description": "inferred→asserted 迁移拒绝（状态机硬门）",
+   "seed_assertions": {
+    "promote_asserted": true
+   },
+   "expectation": {
+    "error_contains": "E-ILLEGAL-TRANSITION",
+    "promote_asserted": true
+   }
+  },
+  {
+   "case_id": "RG-017",
+   "category": "negative",
+   "description": "inferred validation 非 human actor 拒绝",
+   "seed_assertions": [
+    {
+     "key": "sat",
+     "subject_ref": "Pump-A",
+     "predicate_ref": "satisfies_rule",
+     "value": "RuleX",
+     "confidence": 0.9
+    },
+    {
+     "key": "req",
+     "subject_ref": "",
+     "predicate_ref": "rule_requires",
+     "value": "Inspect",
+     "confidence": 0.9
+    }
+   ],
+   "expectation": {
+    "error": "E-V04-GOVERNANCE-ACTOR",
+    "govern_non_human": true
+   }
+  },
+  {
+   "case_id": "RG-018",
+   "category": "negative",
+   "description": "inferred validation 缺 reason 拒绝",
+   "seed_assertions": [
+    {
+     "key": "sat",
+     "subject_ref": "Pump-A",
+     "predicate_ref": "satisfies_rule",
+     "value": "RuleX",
+     "confidence": 0.9
+    },
+    {
+     "key": "req",
+     "subject_ref": "",
+     "predicate_ref": "rule_requires",
+     "value": "Inspect",
+     "confidence": 0.9
+    }
+   ],
+   "expectation": {
+    "error": "E-INVALID-REASON",
+    "govern_no_reason": true
+   }
+  },
+  {
+   "case_id": "RG-019",
+   "category": "disputed",
+   "description": "RR-04 矛盾旗标：同 (subj,pred) 异值 → __DISPUTED__ 候选（不裁决）",
+   "seed_assertions": [
+    {
+     "key": "d1",
+     "subject_ref": "MOT",
+     "predicate_ref": "has_parameter",
+     "value": "400V",
+     "confidence": 0.9
+    },
+    {
+     "key": "d2",
+     "subject_ref": "MOT",
+     "predicate_ref": "has_parameter",
+     "value": "410V",
+     "confidence": 0.85
+    }
+   ],
+   "expectation": {
+    "candidates_min": 1,
+    "rule_refs": [
+     "RR-04"
+    ],
+    "disputed_value": "__DISPUTED__"
+   }
+  },
+  {
+   "case_id": "RG-020",
+   "category": "disputed",
+   "description": "disputed candidate 治理：validated→disputed 迁移合法",
+   "seed_assertions": [
+    {
+     "key": "ab",
+     "subject_ref": "A",
+     "predicate_ref": "before",
+     "value": "B",
+     "confidence": 0.9
+    },
+    {
+     "key": "bc",
+     "subject_ref": "B",
+     "predicate_ref": "before",
+     "value": "C",
+     "confidence": 0.9
+    },
+    {
+     "dispute_after_validate": true
+    }
+   ],
+   "expectation": {
+    "audit_actions": [
+     "validate",
+     "transition"
+    ]
+   }
+  },
+  {
+   "case_id": "RG-021",
+   "category": "disputed",
+   "description": "inferred 治理后 parent disputed → 子女不自动失效（INV-005）",
+   "seed_assertions": [
+    {
+     "key": "sat",
+     "subject_ref": "Pump-A",
+     "predicate_ref": "satisfies_rule",
+     "value": "RuleX",
+     "confidence": 0.9
+    },
+    {
+     "key": "req",
+     "subject_ref": "",
+     "predicate_ref": "rule_requires",
+     "value": "Inspect",
+     "confidence": 0.9
+    },
+    {
+     "parent_dispute": true
+    }
+   ],
+   "expectation": {
+    "child_not_invalidated": true
+   }
+  },
+  {
+   "case_id": "RG-022",
+   "category": "disputed",
+   "description": "audit trail 时序完整（validate/transition/transition-rejected 全记录）",
+   "seed_assertions": [
+    {
+     "key": "ab",
+     "subject_ref": "A",
+     "predicate_ref": "before",
+     "value": "B",
+     "confidence": 0.9
+    },
+    {
+     "key": "bc",
+     "subject_ref": "B",
+     "predicate_ref": "before",
+     "value": "C",
+     "confidence": 0.9
+    },
+    {
+     "illegal_attempt": true
+    }
+   ],
+   "expectation": {
+    "audit_actions": [
+     "validate",
+     "transition",
+     "transition-rejected"
+    ]
+   }
+  },
+  {
+   "case_id": "RG-023",
+   "category": "disputed",
+   "description": "disputed inferred trace 链保持可回溯",
+   "seed_assertions": [
+    {
+     "key": "ab",
+     "subject_ref": "A",
+     "predicate_ref": "before",
+     "value": "B",
+     "confidence": 0.9
+    },
+    {
+     "key": "bc",
+     "subject_ref": "B",
+     "predicate_ref": "before",
+     "value": "C",
+     "confidence": 0.9
+    },
+    {
+     "dispute_after_validate": true
+    }
+   ],
+   "expectation": {
+    "trace_keeps_parents": true
+   }
+  }
+ ]
+}

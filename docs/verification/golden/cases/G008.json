@@ -1,0 +1,118 @@
+{
+ "case_id": "G008",
+ "category": "G08-temporal-relation",
+ "difficulty": "medium",
+ "requirement_refs": [
+  "SYS-007",
+  "SYS-017"
+ ],
+ "input": {
+  "query": "OBC 11kW平台项目T58-X是什么时候完成装配说明书V1.0的"
+ },
+ "expected": {
+  "entities": [
+   {
+    "entity_id": "M-T58X",
+    "entity_type": "project",
+    "description": "T58-X 车型平台实例"
+   }
+  ],
+  "events": [
+   {
+    "event_id": "evt_g008_1",
+    "event_time": "2023-08-10",
+    "targets": [
+     "P-HW-OBC"
+    ],
+    "description": "T58-X 低压双向三合一装配说明书 v1.0 发布"
+   }
+  ],
+  "assertions": [
+   {
+    "assertion_id": "ast_g008_1",
+    "subject_ref": "entity:t58x_assembly_manual",
+    "predicate_ref": "relation:published_at",
+    "object": {
+     "kind": "literal",
+     "value": "2023-08-10",
+     "datatype": "xsd:date"
+    },
+    "assertion_type": "observed",
+    "status": "validated",
+    "evidence_refs": [
+     "evd:gold:g008_docname"
+    ],
+    "confidence": 0.75,
+    "temporal_scope": {
+     "observed_at": "2023-08-10"
+    }
+   }
+  ],
+  "evidence": [
+   {
+    "evidence_id": "evd:gold:g008_docname",
+    "excerpt": "文档名含日期 2023_08_10（文档命名规约）",
+    "location": {
+     "section": "filename"
+    }
+   }
+  ],
+  "support_level": "partial",
+  "answer_contract": {
+   "must_include": [
+    "2023-08"
+   ],
+   "disclose_gaps": true,
+   "max_chars": 600
+  },
+  "reasoning": [
+   {
+    "reasoning_id": "R005",
+    "input_assertions": [
+     "ast_g008_1"
+    ],
+    "rule_refs": [
+     "RULE-TEMPORAL-DOCNAME-ANCHOR"
+    ],
+    "expected_derived_assertions": [
+     {
+      "assertion_id": "ast_g008_d1",
+      "subject_ref": "entity:t58x_assembly_manual",
+      "predicate_ref": "relation:effective_from",
+      "object": {
+       "kind": "literal",
+       "value": "2023-08-10",
+       "datatype": "xsd:date"
+      },
+      "assertion_type": "inferred",
+      "status": "candidate",
+      "evidence_refs": [
+       "evd:gold:g008_docname"
+      ],
+      "confidence": 0.7,
+      "derivation": {
+       "rule_ref": "RULE-TEMPORAL-DOCNAME-ANCHOR",
+       "parent_assertions": [
+        "ast_g008_1"
+       ],
+       "reasoner_id": "temporal_resolver_v1"
+      }
+     }
+    ],
+    "expected_trace": [
+     {
+      "step": 1,
+      "description": "从 evidence（文档名规约）解析出观测时间锚点 2023-08-10"
+     },
+     {
+      "step": 2,
+      "description": "推导 effective_from = observed_at（命名规约即生效日约定）",
+      "rule_ref": "RULE-TEMPORAL-DOCNAME-ANCHOR"
+     }
+    ]
+   }
+  ]
+ },
+ "negative_expectations": [],
+ "notes": "时间语义：从文档命名规约提取的时间锚点，observed 类型（非 asserted——命名规约是弱信号）"
+}

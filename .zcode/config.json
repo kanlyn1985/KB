@@ -1,0 +1,18 @@
+{
+  "mcp": {
+    "servers": {
+      "agent-kb-core": {
+        "command": "python",
+        "args": [
+          "-m",
+          "agent_kb.cli",
+          "mcp-stdio",
+          "--db",
+          "E:/AI_Project/opencode_workspace/KB1/agent_kb_core/node-index.sqlite3",
+          "--domain-dir",
+          "E:/AI_Project/opencode_workspace/KB1/agent_kb_core/domains/obc_dcdc"
+        ]
+      }
+    }
+  }
+}

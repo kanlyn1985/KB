@@ -1,0 +1,32 @@
+{
+ "case_id": "RG-009",
+ "category": "positive",
+ "description": "derivation 完备六键（rule_ref/parents/reasoner/snapshot/basis/depth）",
+ "seed_assertions": [
+  {
+   "key": "ab",
+   "subject_ref": "A",
+   "predicate_ref": "before",
+   "value": "B",
+   "confidence": 0.9
+  },
+  {
+   "key": "bc",
+   "subject_ref": "B",
+   "predicate_ref": "before",
+   "value": "C",
+   "confidence": 0.9
+  }
+ ],
+ "expectation": {
+  "candidates_min": 1,
+  "derivation_keys": [
+   "rule_ref",
+   "parent_assertions",
+   "reasoner_id",
+   "rule_input_snapshot",
+   "confidence_basis",
+   "depth"
+  ]
+ }
+}

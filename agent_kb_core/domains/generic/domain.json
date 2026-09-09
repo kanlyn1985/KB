@@ -1,0 +1,6 @@
+{
+  "domain_id": "generic",
+  "name": "Generic Knowledge Domain",
+  "version": "0.1.0",
+  "description": "Default domain pack for documents without a specialized ontology pack."
+}

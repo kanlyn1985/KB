@@ -1,0 +1,890 @@
+{
+  "draft": "main_chain_edges",
+  "version": "0.1",
+  "total": 98,
+  "new": 91,
+  "edges": [
+    {
+      "type": "satisfy",
+      "source": "R-FSC",
+      "target": "F-OBC-PROTECT",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-FSC",
+      "target": "F-DCDC-PROTECT",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-PERF",
+      "target": "F-OBC-CHARGE",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-PERF",
+      "target": "F-OBC-DISCHARGE",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-PERF",
+      "target": "F-DCDC-CONV",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-PERF",
+      "target": "F-DCDC-REVERSE",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-PROTECT",
+      "target": "F-OBC-PROTECT",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-PROTECT",
+      "target": "F-DCDC-PROTECT",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-SAFETY",
+      "target": "F-OBC-PROTECT",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-SAFETY",
+      "target": "F-SYS",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-EMC",
+      "target": "F-SYS",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-ENV",
+      "target": "F-SYS",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-REL",
+      "target": "F-SYS",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-SW",
+      "target": "F-OBC-COMM",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-SW",
+      "target": "F-OBC-DIAG",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-SW",
+      "target": "F-OBC-WAKE",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-HW",
+      "target": "F-OBC-CHARGE",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-HW",
+      "target": "F-DCDC-CONV",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-IF",
+      "target": "F-OBC-CP",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-IF",
+      "target": "F-OBC-COMM",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-STD",
+      "target": "F-OBC-CHARGE",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-STD",
+      "target": "F-OBC-CP",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-STD",
+      "target": "F-DCDC-CONV",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-OBC-CHARGE",
+      "target": "L-PWRCTRL",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-OBC-DISCHARGE",
+      "target": "L-PWRCTRL",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-OBC-DISCHARGE",
+      "target": "L-STRATEGY-V2L",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-OBC-CP",
+      "target": "L-STATE",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-OBC-CP",
+      "target": "L-COMM",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-OBC-CP",
+      "target": "L-STRATEGY-GPIO",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-OBC-PROTECT",
+      "target": "L-FAULT",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-OBC-PROTECT",
+      "target": "L-SENSE",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-OBC-PROTECT",
+      "target": "L-STRATEGY-NTC",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-OBC-PROTECT",
+      "target": "L-STRATEGY-OPTO",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-OBC-PROTECT",
+      "target": "L-STRATEGY-SENSE",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-OBC-COMM",
+      "target": "L-COMM",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-OBC-DIAG",
+      "target": "L-COMM",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-OBC-WAKE",
+      "target": "L-SYS",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-OBC-WAKE",
+      "target": "L-STATE",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-DCDC-CONV",
+      "target": "L-PWRCTRL",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-DCDC-CONV",
+      "target": "L-STRATEGY-FREQ",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-DCDC-CONV",
+      "target": "L-STRATEGY-PEAK",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-DCDC-REVERSE",
+      "target": "L-PWRCTRL",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-DCDC-REVERSE",
+      "target": "L-STRATEGY-PRECHARGE",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-DCDC-PROTECT",
+      "target": "L-FAULT",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-SYS",
+      "target": "L-SYS",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-SYS",
+      "target": "L-STATE",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-SYS",
+      "target": "L-CAL",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-OBC-CHARGE",
+      "target": "L-STRATEGY-FREQ",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-OBC-CHARGE",
+      "target": "L-STRATEGY-CBC",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-OBC-CHARGE",
+      "target": "L-STRATEGY-PEAK",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-OBC-CHARGE",
+      "target": "L-STRATEGY-PRECHARGE",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "realize",
+      "source": "F-OBC-CHARGE",
+      "target": "L-STRATEGY-LOWTEMP",
+      "category": "referential",
+      "inverse": "realizes",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-PWRCTRL",
+      "target": "P-HW-OBC-PFC",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-PWRCTRL",
+      "target": "P-HW-OBC-DCDC",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-PWRCTRL",
+      "target": "P-HW-DCDC-CONV",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-PWRCTRL",
+      "target": "P-SW-ASW-OBCPWRCTRL",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-PWRCTRL",
+      "target": "P-SW-ASW-DCDCPWRCTRL",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-STATE",
+      "target": "P-SW-ASW-OBCSTATE",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-STATE",
+      "target": "P-SW-ASW-DCDCSTATE",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-STATE",
+      "target": "P-SW-ASW-SLEEPWAKE",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-FAULT",
+      "target": "P-SW-ASW-OBCFAULTDET",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-FAULT",
+      "target": "P-SW-ASW-DCDCFAULTDET",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-FAULT",
+      "target": "P-SW-ASW-OBCFAULTRPT",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-FAULT",
+      "target": "P-SW-ASW-DCDCFAULTRPT",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-FAULT",
+      "target": "P-HW-CTRL-PROTECT",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-COMM",
+      "target": "P-SW-ASW-CANREPORT",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-COMM",
+      "target": "P-SW-ASW-CANRCV",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-COMM",
+      "target": "P-SW-BSW-COMM",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-CAL",
+      "target": "P-SW-ASW-CAL",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-CAL",
+      "target": "P-CAL",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-SENSE",
+      "target": "P-SW-ASW-ADC",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-SENSE",
+      "target": "P-HW-CTRL-SENSE",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-SENSE",
+      "target": "P-SW-ASW-INSDET",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-SENSE",
+      "target": "P-SW-ASW-TEMP",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-SYS",
+      "target": "P-HW-CTRL-MCU",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-SYS",
+      "target": "P-SW-ASW-SLEEPWAKE",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-STRATEGY-FREQ",
+      "target": "P-SW-ASW-OBCPWRCTRL",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-STRATEGY-FREQ",
+      "target": "P-SW-ASW-DCDCPWRCTRL",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-STRATEGY-CBC",
+      "target": "P-SW-ASW-OBCPWRCTRL",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-STRATEGY-PEAK",
+      "target": "P-SW-ASW-OBCPWRCTRL",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-STRATEGY-PEAK",
+      "target": "P-SW-ASW-DCDCPWRCTRL",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-STRATEGY-PRECHARGE",
+      "target": "P-SW-ASW-DCDCPWRCTRL",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-STRATEGY-NTC",
+      "target": "P-SW-ASW-TEMP",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-STRATEGY-NTC",
+      "target": "P-HW-CTRL-SENSE",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-STRATEGY-LOWTEMP",
+      "target": "P-SW-ASW-OBCPWRCTRL",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-STRATEGY-V2L",
+      "target": "P-SW-ASW-OBCPWRCTRL",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-STRATEGY-OPTO",
+      "target": "P-SW-ASW-OBCFAULTDET",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-STRATEGY-GPIO",
+      "target": "P-SW-BSW-MCAL",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-STRATEGY-SENSE",
+      "target": "P-SW-ASW-ADC",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "allocate",
+      "source": "L-STRATEGY-SENSE",
+      "target": "P-HW-CTRL-SENSE",
+      "category": "referential",
+      "inverse": "allocated_to",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-SAFETY",
+      "target": "P-HW-MECH-SEAL",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-SAFETY",
+      "target": "P-HW-MECH-BUSBAR",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-HW",
+      "target": "P-HW-MAG",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-HW",
+      "target": "P-HW-MATERIAL",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-ENV",
+      "target": "P-HW-MECH-SHIELD",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-ENV",
+      "target": "P-HW-THERMAL-POT",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-EMC",
+      "target": "P-HW-MECH-SHIELD",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "satisfy",
+      "source": "R-EMC",
+      "target": "P-HW-OBC-EMI",
+      "category": "referential",
+      "inverse": "satisfies",
+      "evidence_refs": [],
+      "project_scope": null
+    }
+  ]
+}

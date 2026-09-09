@@ -1,0 +1,25 @@
+{
+ "case_id": "RG-010",
+ "category": "positive",
+ "description": "provenance 双链（run 表 + derivation.reasoning_run_id + activity=infer）",
+ "seed_assertions": [
+  {
+   "key": "ab",
+   "subject_ref": "A",
+   "predicate_ref": "before",
+   "value": "B",
+   "confidence": 0.9
+  },
+  {
+   "key": "bc",
+   "subject_ref": "B",
+   "predicate_ref": "before",
+   "value": "C",
+   "confidence": 0.9
+  }
+ ],
+ "expectation": {
+  "candidates_min": 1,
+  "provenance_run": true
+ }
+}

@@ -1,0 +1,548 @@
+{
+ "manifest_version": "V1.0",
+ "schema": "semantic_compilation_case.schema.json",
+ "count_policy": "auto-computed by validate_semantic_compilation_golden.py",
+ "total": 40,
+ "cases": [
+  {
+   "case_id": "SC-001",
+   "category": "positive",
+   "description": "参数关系-额定电压",
+   "evidence_text": "OBC 额定输入电压 265V。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true,
+    "expected_relations": [
+     {
+      "predicate": "has_parameter"
+     }
+    ]
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-002",
+   "category": "positive",
+   "description": "参数关系-滤波电容",
+   "evidence_text": "输入滤波电容 22uF。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true,
+    "expected_relations": [
+     {
+      "predicate": "has_parameter"
+     }
+    ]
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-003",
+   "category": "positive",
+   "description": "参数关系-输出电流",
+   "evidence_text": "DCDC 最大输出电流 5A。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true,
+    "expected_relations": [
+     {
+      "predicate": "has_parameter"
+     }
+    ]
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-004",
+   "category": "positive",
+   "description": "参数关系-效率",
+   "evidence_text": "变换效率 92%。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true,
+    "expected_relations": [
+     {
+      "predicate": "has_parameter"
+     }
+    ]
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-005",
+   "category": "positive",
+   "description": "参数关系-待机功耗",
+   "evidence_text": "待机功耗小于 5W。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true,
+    "expected_relations": [
+     {
+      "predicate": "has_parameter"
+     }
+    ]
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-006",
+   "category": "positive",
+   "description": "约束-不超过",
+   "evidence_text": "输出电压纹波不超过 100mV。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true,
+    "expected_relations": [
+     {
+      "predicate": "constrained_by"
+     }
+    ]
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-007",
+   "category": "positive",
+   "description": "约束-至少",
+   "evidence_text": "绝缘电阻至少 100ohm。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true,
+    "expected_relations": [
+     {
+      "predicate": "constrained_by"
+     }
+    ]
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-008",
+   "category": "positive",
+   "description": "约束-温度范围",
+   "evidence_text": "工作温度范围 -40℃ 至 85℃。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true,
+    "expected_relations": [
+     {
+      "predicate": "has_parameter"
+     }
+    ]
+   },
+   "notes": "范围表达 V0.2 builtin 规则以参数关系捕获（-40℃ 端）；constrained_by 范围双端待规则演进"
+  },
+  {
+   "case_id": "SC-009",
+   "category": "positive",
+   "description": "定义关系",
+   "evidence_text": "OBC 是指车载充电机。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true,
+    "expected_relations": [
+     {
+      "predicate": "defined_as"
+     }
+    ]
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-010",
+   "category": "positive",
+   "description": "定义关系-条款",
+   "evidence_text": "高压互锁是指高压回路连接状态监测机制。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true,
+    "expected_relations": [
+     {
+      "predicate": "defined_as"
+     }
+    ]
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-011",
+   "category": "positive",
+   "description": "测试关系",
+   "evidence_text": "耐压测试 额定输入回路。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true,
+    "expected_relations": [
+     {
+      "predicate": "verified_by"
+     }
+    ]
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-012",
+   "category": "positive",
+   "description": "测试关系-绝缘",
+   "evidence_text": "绝缘阻抗测试 输出端口。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true,
+    "expected_relations": [
+     {
+      "predicate": "verified_by"
+     }
+    ]
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-013",
+   "category": "positive",
+   "description": "条件关系",
+   "evidence_text": "当环境温度超过 85℃ 时降额运行。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-014",
+   "category": "positive",
+   "description": "条件+参数",
+   "evidence_text": "当输出电流大于 5A 时保护动作阈值 6A。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-015",
+   "category": "positive",
+   "description": "观测-实测值",
+   "evidence_text": "实测输出电压 12.1V。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true,
+    "expected_relations": [
+     {
+      "predicate": "observed_value"
+     }
+    ]
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-016",
+   "category": "positive",
+   "description": "观测-测量结果",
+   "evidence_text": "测试结果为效率 91.5%。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true,
+    "expected_relations": [
+     {
+      "predicate": "observed_value"
+     }
+    ]
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-017",
+   "category": "positive",
+   "description": "绝对日期",
+   "evidence_text": "该标准于 2024-06-01 发布。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-018",
+   "category": "positive",
+   "description": "有效期",
+   "evidence_text": "本版本有效期至 2027-12-31。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-019",
+   "category": "positive",
+   "description": "相对生效",
+   "evidence_text": "自发布之日起实施。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-020",
+   "category": "positive",
+   "description": "组合句",
+   "evidence_text": "OBC 额定输出功率 3.3kW，实测效率 92.5%。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true,
+    "expected_relations": [
+     {
+      "predicate": "has_parameter"
+     }
+    ]
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-021",
+   "category": "negative",
+   "description": "空 evidence",
+   "evidence_text": "",
+   "expectation": {
+    "units_min": 0,
+    "assertions_allowed": false,
+    "expected_error": "E-COMPILER-INVALID-EVIDENCE"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-022",
+   "category": "negative",
+   "description": "纯空白",
+   "evidence_text": "   \n  ",
+   "expectation": {
+    "units_min": 0,
+    "assertions_allowed": false,
+    "expected_error": "E-COMPILER-INVALID-EVIDENCE"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-023",
+   "category": "negative",
+   "description": "纯符号无语义",
+   "evidence_text": "※※※ ※※※",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": false,
+    "expected_error": null
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-024",
+   "category": "negative",
+   "description": "无关系纯名词",
+   "evidence_text": "车载充电机",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": false,
+    "expected_error": null
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-025",
+   "category": "negative",
+   "description": "inferred 无 derivation",
+   "evidence_text": "OBC 额定输入电压 265V。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": false,
+    "expected_error": "E-CANDIDATE-BUILD-FAILED"
+   },
+   "notes": "inferred 无 derivation 场景由 reasoner 标记 unit + builder 校验覆盖"
+  },
+  {
+   "case_id": "SC-026",
+   "category": "negative",
+   "description": "非法 confidence 实体",
+   "evidence_text": "OBC 额定输入电压 265V。",
+   "expectation": {
+    "units_min": 0,
+    "assertions_allowed": false,
+    "expected_error": "E-SEMANTIC-EXTRACTION-FAILED"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-027",
+   "category": "negative",
+   "description": "missing entity 字段",
+   "evidence_text": "OBC 额定输入电压 265V。",
+   "expectation": {
+    "units_min": 0,
+    "assertions_allowed": false,
+    "expected_error": "E-SEMANTIC-EXTRACTION-FAILED"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-028",
+   "category": "negative",
+   "description": "unknown ontology quarantine",
+   "evidence_text": "神秘元件XYZ 额定输入电压 265V。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": false,
+    "expected_error": null,
+    "quarantine_expected": true
+   },
+   "notes": "",
+   "domain_pack": "obc_dcdc"
+  },
+  {
+   "case_id": "SC-029",
+   "category": "negative",
+   "description": "quarantine 全单元",
+   "evidence_text": "神秘元件XYZ 额定输出电压 12V。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": false,
+    "expected_error": null,
+    "quarantine_expected": true
+   },
+   "notes": "",
+   "domain_pack": "obc_dcdc"
+  },
+  {
+   "case_id": "SC-030",
+   "category": "negative",
+   "description": "run 中断后重试",
+   "evidence_text": "OBC 额定输入电压 265V。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true,
+    "expected_error": null
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-031",
+   "category": "determinism",
+   "description": "双跑全等",
+   "evidence_text": "OBC 额定输入电压 265V。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true,
+    "determinism_check": true,
+    "same_fingerprint_after_rerun": true
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-032",
+   "category": "determinism",
+   "description": "候选顺序稳定",
+   "evidence_text": "电容 22uF。电阻 100ohm。电感 10uH。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true,
+    "determinism_check": true,
+    "same_fingerprint_after_rerun": true
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-033",
+   "category": "determinism",
+   "description": "舍入一致",
+   "evidence_text": "效率 91.537%。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true,
+    "determinism_check": true,
+    "same_fingerprint_after_rerun": true
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-034",
+   "category": "determinism",
+   "description": "时间锚定（禁时钟）",
+   "evidence_text": "自发布之日起实施。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true,
+    "determinism_check": true,
+    "same_fingerprint_after_rerun": true
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-035",
+   "category": "determinism",
+   "description": "配置 hash 区分",
+   "evidence_text": "OBC 额定输入电压 265V。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true,
+    "determinism_check": true,
+    "same_fingerprint_after_rerun": true
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-036",
+   "category": "provider_boundary",
+   "description": "provider 换装不破坏 canonical",
+   "evidence_text": "OBC 额定输入电压 265V。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-037",
+   "category": "provider_boundary",
+   "description": "malformed 输出拒绝",
+   "evidence_text": "任意文本。",
+   "expectation": {
+    "units_min": 0,
+    "assertions_allowed": false,
+    "expected_error": "E-SEMANTIC-EXTRACTION-FAILED"
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-038",
+   "category": "provider_boundary",
+   "description": "provider 记录完整",
+   "evidence_text": "OBC 额定输入电压 265V。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-039",
+   "category": "provider_boundary",
+   "description": "provider 隔离失败不越界",
+   "evidence_text": "OBC 额定输入电压 265V。",
+   "expectation": {
+    "units_min": 0,
+    "assertions_allowed": false
+   },
+   "notes": ""
+  },
+  {
+   "case_id": "SC-040",
+   "category": "provider_boundary",
+   "description": "provider actor 无法治理跃迁",
+   "evidence_text": "OBC 额定输入电压 265V。",
+   "expectation": {
+    "units_min": 1,
+    "assertions_allowed": true
+   },
+   "notes": ""
+  }
+ ]
+}

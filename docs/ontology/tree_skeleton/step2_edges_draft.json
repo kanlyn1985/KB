@@ -1,0 +1,844 @@
+{
+  "draft": "step2_closure_hard_edges",
+  "version": "0.1",
+  "total": 93,
+  "edges": [
+    {
+      "type": "verify",
+      "source": "G-VERIFY-THERMAL",
+      "target": "P-HW-THERMAL-HEATSINK",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-THERMAL",
+      "target": "P-HW-THERMAL-TIM",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-THERMAL",
+      "target": "P-HW-THERMAL-FAN",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-VIBRATION",
+      "target": "P-HW-MECH-HOUSING",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-VIBRATION",
+      "target": "P-HW-MECH-BRACKET",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-VIBRATION",
+      "target": "P-HW-MECH-FASTENER",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-AIRTIGHT",
+      "target": "P-HW-MECH-SEAL",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-AIRTIGHT",
+      "target": "P-HW-MECH-HOUSING",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-AIRTIGHT",
+      "target": "P-HW-MECH-WATERWAY",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-ENV",
+      "target": "P-HW-MECH-SHIELD",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-ENV",
+      "target": "P-HW-THERMAL-POT",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-ENV",
+      "target": "P-HW-MECH-HOUSING",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-DIM",
+      "target": "P-HW-MECH-HOUSING",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-DIM",
+      "target": "P-HW-MECH-WATERWAY",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-DIM",
+      "target": "P-HW-MECH-BRACKET",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-DIM",
+      "target": "P-HW-MECH-BUSBAR",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-REL",
+      "target": "P-HW-MAG",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-REL",
+      "target": "P-HW-MECH-FASTENER",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-REL",
+      "target": "P-HW-THERMAL-TIM",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-CAE",
+      "target": "P-HW-MECH-HOUSING",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-CAE",
+      "target": "P-HW-MECH-WATERWAY",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-CAE",
+      "target": "P-HW-MECH-BRACKET",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-ELECTRICAL",
+      "target": "P-HW-OBC-PFC",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-ELECTRICAL",
+      "target": "P-HW-OBC-DCDC",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-ELECTRICAL",
+      "target": "P-HW-OBC-EMI",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-ELECTRICAL",
+      "target": "P-HW-OBC-ACRELAY",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-ELECTRICAL",
+      "target": "P-HW-CTRL-SENSE",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-ELECTRICAL",
+      "target": "P-HW-MECH-BUSBAR",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-ELECTRICAL",
+      "target": "P-HW-MECH-CONNECTOR",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-THERMAL",
+      "target": "R-ENV",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-THERMAL",
+      "target": "R-REL",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-VIBRATION",
+      "target": "R-ENV",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-VIBRATION",
+      "target": "R-REL",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-AIRTIGHT",
+      "target": "R-ENV",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-AIRTIGHT",
+      "target": "R-SAFETY",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-ENV",
+      "target": "R-ENV",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-DIM",
+      "target": "R-HW",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-REL",
+      "target": "R-REL",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-CAE",
+      "target": "R-PERF",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-CAE",
+      "target": "R-ENV",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-ELECTRICAL",
+      "target": "R-SAFETY",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "verify",
+      "source": "G-VERIFY-ELECTRICAL",
+      "target": "R-EMC",
+      "category": "referential",
+      "inverse": "verified_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-CASTING",
+      "target": "P-HW-MECH-HOUSING",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-CASTING",
+      "target": "P-HW-THERMAL-HEATSINK",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-MACHINING",
+      "target": "P-HW-MECH-HOUSING",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-MACHINING",
+      "target": "P-HW-MECH-BRACKET",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-MACHINING",
+      "target": "P-HW-THERMAL-HEATSINK",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-MACHINING",
+      "target": "P-HW-MECH-WATERWAY",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-SHEET",
+      "target": "P-HW-MECH-HOUSING",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-SHEET",
+      "target": "P-HW-MECH-BRACKET",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-SHEET",
+      "target": "P-HW-MECH-SHIELD",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-INJECTION",
+      "target": "P-HW-MECH-HOUSING",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-INJECTION",
+      "target": "P-HW-MECH-CONNECTOR",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-INJECTION",
+      "target": "P-HW-MECH-BRACKET",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-SURFACE",
+      "target": "P-HW-MECH-HOUSING",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-SURFACE",
+      "target": "P-HW-MATERIAL-SURFACE",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-POTTING",
+      "target": "P-HW-THERMAL-POT",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-POTTING",
+      "target": "P-HW-CTRL",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-ASSEMBLY",
+      "target": "P-HW-MECH-FASTENER",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-ASSEMBLY",
+      "target": "P-HW-MECH-CONNECTOR",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-ASSEMBLY",
+      "target": "P-HW-MECH-BUSBAR",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-ASSEMBLY",
+      "target": "P-HW-MAG",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-ASSEMBLY",
+      "target": "P-HW-OBC-PFC",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-ASSEMBLY",
+      "target": "P-HW-OBC-DCDC",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-ASSEMBLY",
+      "target": "P-HW-CTRL",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-PACK",
+      "target": "P-ROOT",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "instance-of",
+      "source": "M-CCU",
+      "target": "P-ROOT",
+      "category": "referential",
+      "inverse": "has_instance",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "instance-of",
+      "source": "M-SW40",
+      "target": "P-SW",
+      "category": "referential",
+      "inverse": "has_instance",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "issue-on",
+      "source": "Q-PROBLEM-FAILURE",
+      "target": "P-HW-MECH-HOUSING",
+      "category": "referential",
+      "inverse": "has_issue",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "issue-on",
+      "source": "Q-PROBLEM-DEFECT",
+      "target": "P-HW-MECH-HOUSING",
+      "category": "referential",
+      "inverse": "has_issue",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "issue-on",
+      "source": "Q-PROBLEM-DEFECT",
+      "target": "P-HW-THERMAL-POT",
+      "category": "referential",
+      "inverse": "has_issue",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "issue-on",
+      "source": "Q-PROBLEM-TEST",
+      "target": "P-HW-CTRL",
+      "category": "referential",
+      "inverse": "has_issue",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "issue-on",
+      "source": "Q-FAILURE",
+      "target": "P-HW-MECH-HOUSING",
+      "category": "referential",
+      "inverse": "has_issue",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "instance-of",
+      "source": "M-MI",
+      "target": "M-CCU",
+      "category": "referential",
+      "inverse": "has_instance",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "instance-of",
+      "source": "M-VAVE",
+      "target": "M-CCU",
+      "category": "referential",
+      "inverse": "has_instance",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "instance-of",
+      "source": "M-G5",
+      "target": "M-CCU",
+      "category": "referential",
+      "inverse": "has_instance",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "instance-of",
+      "source": "M-G5D5",
+      "target": "M-CCU",
+      "category": "referential",
+      "inverse": "has_instance",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "instance-of",
+      "source": "M-G7",
+      "target": "M-CCU",
+      "category": "referential",
+      "inverse": "has_instance",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "instance-of",
+      "source": "M-D950",
+      "target": "M-CCU",
+      "category": "referential",
+      "inverse": "has_instance",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-ASSEMBLY",
+      "target": "P-HW-OBC-AUX",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-ASSEMBLY",
+      "target": "P-HW-OBC-EMI",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-ASSEMBLY",
+      "target": "P-HW-OBC-ACRELAY",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-ASSEMBLY",
+      "target": "P-HW-DCDC-CONV",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-ASSEMBLY",
+      "target": "P-HW-DCDC-OUT",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-ASSEMBLY",
+      "target": "P-HW-CTRL-MCU",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-ASSEMBLY",
+      "target": "P-HW-CTRL-DRV",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-ASSEMBLY",
+      "target": "P-HW-CTRL-SENSE",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-ASSEMBLY",
+      "target": "P-HW-CTRL-PROTECT",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-POTTING",
+      "target": "P-HW-MECH-SEAL",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-SURFACE",
+      "target": "P-HW-MECH-NAMEPLATE",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-POTTING",
+      "target": "P-HW-THERMAL-TIM",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-ASSEMBLY",
+      "target": "P-HW-THERMAL-FAN",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    },
+    {
+      "type": "produce",
+      "source": "G-PROD-ASSEMBLY",
+      "target": "P-HW-MECH-HARNESS",
+      "category": "referential",
+      "inverse": "produced_by",
+      "evidence_refs": [],
+      "project_scope": null
+    }
+  ]
+}

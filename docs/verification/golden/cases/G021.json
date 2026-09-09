@@ -1,0 +1,70 @@
+{
+ "case_id": "G021",
+ "category": "G21-multi-step-reasoning",
+ "difficulty": "hard",
+ "requirement_refs": [
+  "SYS-010",
+  "SYS-008"
+ ],
+ "input": {
+  "query": "若绝缘监测失败（L-SENSE）会唤醒哪个故障上报组件，经过哪些层"
+ },
+ "expected": {
+  "reasoning": [
+   {
+    "reasoning_id": "R004",
+    "input_assertions": [
+     "rel:obc_dcdc:realize:F-OBC-PROTECT:L-FAULT",
+     "rel:obc_dcdc:allocate:L-FAULT:P-SW-ASW-OBCFAULTRPT"
+    ],
+    "rule_refs": [
+     "RULE-VCHAIN-F2L2P"
+    ],
+    "expected_derived_assertions": [
+     {
+      "assertion_id": "ast_g021_d1",
+      "subject_ref": "entity:l_sense_domain",
+      "predicate_ref": "relation:failure_surfaces_to",
+      "object": {
+       "kind": "literal",
+       "value": {
+        "kind": "entity_ref",
+        "entity_id": "entity:sw_obcfaultrpt"
+       }
+      },
+      "assertion_type": "inferred",
+      "status": "candidate",
+      "evidence_refs": [],
+      "confidence": 0.7,
+      "derivation": {
+       "rule_ref": "RULE-VCHAIN-F2L2P",
+       "parent_assertions": [
+        "rel:obc_dcdc:realize:F-OBC-PROTECT:L-FAULT",
+        "rel:obc_dcdc:allocate:L-FAULT:P-SW-ASW-OBCFAULTRPT"
+       ],
+       "reasoner_id": "graph_walk_v1"
+      }
+     }
+    ],
+    "expected_trace": [
+     {
+      "step": 1,
+      "description": "采样监测异常 → F-OBC-PROTECT（保护功能域）"
+     },
+     {
+      "step": 2,
+      "description": "F-OBC-PROTECT realize→ L-FAULT（故障判定）"
+     },
+     {
+      "step": 3,
+      "description": "L-FAULT allocate→ P-SW-ASW-OBCFAULTRPT（故障上报组件）",
+      "rule_ref": "RULE-VCHAIN-F2L2P"
+     }
+    ]
+   }
+  ],
+  "support_level": "sufficient"
+ },
+ "negative_expectations": [],
+ "notes": "跨层多步：感知→功能→逻辑→组件，4 跳链"
+}

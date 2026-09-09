@@ -1,0 +1,12 @@
+{
+ "case_id": "RG-011",
+ "category": "negative",
+ "description": "ghost parent → E-V04-PARENT-NOT-FOUND",
+ "seed_assertions": {
+  "ghost": true
+ },
+ "expectation": {
+  "error": "E-V04-PARENT-NOT-FOUND",
+  "candidates": 0
+ }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "DingTalk Knowledge Doc Fetcher"
+  short_description: "通过 OpenAPI 获取钉钉知识库文档正文、节点和在线表格"
+  default_prompt: "Use $skill-dingtalk-knowledge-doc-fetcher to fetch DingTalk knowledge-base documents and export online spreadsheets through the OpenAPI flow."

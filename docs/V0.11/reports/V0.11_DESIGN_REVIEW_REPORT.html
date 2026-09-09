@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8"><title>V0.11 Design Review Report</title>
+<style>body{font-family:Segoe UI,Microsoft YaHei,sans-serif;margin:32px;color:#1a1a2e}
+h1{border-bottom:3px solid #2a9d8f;padding-bottom:8px}h2{color:#264653;margin-top:26px}
+table{border-collapse:collapse;margin:10px 0}td,th{border:1px solid #b8ccc8;padding:5px 11px;font-size:13.5px}
+th{background:#eaf4f4}.pass{color:#0a7a2f;font-weight:600}.meta{color:#555;font-size:13px}</style></head><body>
+<h1>AKB V0.11 Design Review Report — Knowledge Maintenance Proposal Layer</h1>
+<p class="meta">Date: 2026-09-04 · Baseline: 52ce55c（V0.10 FROZEN）· DESIGN ONLY · Decision: <b>DESIGN COMPLETE</b></p>
+
+<h2>1. Executive Summary</h2>
+<p><b>主问题回答</b>：六层栈（Fact→Reasoning→Evolution→Causal Projection→Health
+Governance→Persistence）之后缺失的下一个语义抽象是<b>治理闭环的"行动层"</b>——
+系统已能"看见"知识问题（health/conflict 信号已持久化），但没有确定性、可审计、
+human-first 的行动通道。<b>V0.11 主能力 = Knowledge Maintenance Proposal
+Layer（Candidate C 单选）</b>：health/conflict 信号 → 确定性 review 提案（落地
+为 V0.8 VerificationTask，task_type 枚举扩展）→ human 裁决。五候选中 A
+counterfactual / B mechanism 双双 DEFERRED（前置：机制 ontology 冻结未发生），
+D analytics DEFERRED（非闭环缺口），E arbitration workflow REJECTED（自动
+truth selection 逸出风险）。migration 18 NOT REQUIRED。零 frozen 修改——唯一
+授权扩展 = V0.8 task_type 枚举 +1（V0.10 枚举扩展先例延续）。</p>
+
+<h2>2. Baseline</h2>
+<table><tr><th>Item</th><th>SHA/State</th></tr>
+<tr><td>V0.10 frozen</td><td>52ce55c（HEAD，clean）</td></tr>
+<tr><td>V0.9/V0.8 frozen</td><td>88ea3bd / 0e49c3d</td></tr>
+<tr><td>SHA verification</td><td>全部 cat-file = commit ✓</td></tr></table>
+
+<h2>3. Capability Gap Analysis</h2>
+<p>①发现-行动断裂（信号表无治理工作流）②V0.9 MaintenanceTask 语义未落地
+（前置 health history 已就绪）③V0.8 task 通道现成未复用 ④counterfactual/
+机制比对被治理行动层阻塞。结论：C 是唯一把检测面变成治理闭环的缺失环节，
+且全部前置依赖已就绪。</p>
+
+<h2>4-6. Candidate Matrix &amp; Selection</h2>
+<table><tr><th>Candidate</th><th>Decision</th><th>Reason</th></tr>
+<tr><td>A Counterfactual Reasoning</td><td>DEFERRED→V0.12+</td><td>机制比对 level-2+ 未就绪；V0.10 边界契约已预埋</td></tr>
+<tr><td>B Mechanism Understanding</td><td>DEFERRED→V0.12+</td><td>ontology 术语冻结未发生</td></tr>
+<tr><td>C Maintenance Proposal Layer</td><td class="pass">SELECTED（唯一主能力）</td><td>治理闭环最后一环；前置全就绪；提案制低风险</td></tr>
+<tr><td>D Semantic Analytics</td><td>DEFERRED→V0.12</td><td>纯只读聚合非闭环缺口</td></tr>
+<tr><td>E Conflict Arbitration Workflow</td><td>REJECTED</td><td>自动 truth selection 逸出风险（红线）</td></tr>
+</table>
+
+<h2>7-9. Architecture / Ownership / Data Flow</h2>
+<p>ProposalRuntime（V0.11 新包 maintenance/）消费 akb_health_signals +
+akb_conflict_records → 确定性提案（= V0.8 VerificationTask，task_type=
+"maintenance_review"）→ V0.8 生命周期零修改（human-only 迁移）→ 裁决产出走
+既有通道。六条禁止路径（P0 红线映射表）显式化：Proposal↛assertions/kg_*/
+hypothesis 状态/自动迁移/裁决性结论/Resolution。</p>
+
+<h2>10-12. Contracts</h2>
+<p>create_proposal_from_signal / create_proposal_from_conflict（fail-close
+NOT-FOUND + 确定性 spec 模板 + 幂等）· list_proposals（V0.10 keyset cursor
+模式复用 + PAGE-INVALID guard）· identity = V0.8 task_id 算法复用零新算法 ·
+provenance = graph:maintenance-proposal-create。</p>
+
+<h2>13-14. Migration / Change Control</h2>
+<p><b>Migration 18 NOT REQUIRED</b>（提案走 V0.8 task 通道——触发条件已记录）。
+Change control：全 frozen 面零修改；唯一授权扩展 = VALID_TASK_TYPES 枚举 +1
+（"maintenance_review"——V0.10 CONTRACT-CMP-015 枚举扩展先例延续，测试面同
+模式适配）。</p>
+
+<h2>15. Frozen Isolation Verification</h2>
+<p>V0.5..V0.10 frozen 零变化（git diff 52ce55c..HEAD 实测仅 docs/V0.11/；零
+代码/零测试/零 migration 实施）。</p>
+
+<h2>16-18. Acceptance Matrix / Risks / Decision Records</h2>
+<table><tr><th>Checklist</th><th>Result</th></tr>
+<tr><td>V11-DES-001..012（gap/五候选/单主能力/矩阵列/架构边界/所有权/数据流/
+contract/migration/change-control/roadmap/frozen isolation）</td>
+<td class="pass">12/12 PASS</td></tr></table>
+<table><tr><th>Level</th><th>Count</th><th>Items</th></tr>
+<tr><td>P0（触发即 STOP）</td><td>0 现存</td><td>4 条触发条件已定义（自动执行/
+  knowledge mutation/生命周期语义修改/conflict 自动裁决）</td></tr>
+<tr><td>P1（实现期必须解决）</td><td>2</td><td>target→hypothesis 解析规则
+  （entity 型 created_from 锚）· spec 确定性模板锁定</td></tr>
+<tr><td>P2（accepted）</td><td>3</td><td>优先级排序视图 · 提案-裁决关联分析 ·
+  批量提案生成</td></tr></table>
+<p>Decision records：①C 单选主能力 ②A/B DEFERRED（ontology 冻结前置）③
+E REJECTED（红线）④migration 18 NOT REQUIRED ⑤枚举扩展为唯一 frozen 面
+变更 ⑥duplicate/dedup 语义无涉（提案幂等按 V0.8 task_id）。</p>
+
+<h2>19-20. Docs / Final Decision</h2>
+<p>docs：V0.11_DESIGN.md / V0.11_ARCHITECTURE_AND_CONTRACT.md /
+V0.11_CHANGE_CONTROL_AND_ROADMAP.md / 本报告。</p>
+<p><b>DESIGN COMPLETE — READY_FOR_IMPLEMENTATION</b>（实现需独立任务书；P1 两项
+为实现期决策点；V0.5..V0.10 frozen 全程零触碰）。</p>
+</body></html>

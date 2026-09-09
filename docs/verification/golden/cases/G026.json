@@ -1,0 +1,55 @@
+{
+ "case_id": "G026",
+ "category": "G26-answer-contract",
+ "difficulty": "medium",
+ "requirement_refs": [
+  "SYS-013"
+ ],
+ "input": {
+  "query": "DCDC保护功能有哪些（答案必须引用证据）"
+ },
+ "expected": {
+  "entities": [
+   {
+    "entity_id": "F-DCDC-PROTECT",
+    "entity_type": "component",
+    "description": "DCDC 保护功能（过压/欠压/过流/短路/过温）"
+   }
+  ],
+  "assertions": [
+   {
+    "assertion_id": "ast_g026_1",
+    "subject_ref": "entity:dcdc_protect",
+    "predicate_ref": "relation:includes_protections",
+    "object": {
+     "kind": "literal",
+     "value": "过压/欠压/过流/短路/过温",
+     "datatype": "xsd:string"
+    },
+    "assertion_type": "asserted",
+    "status": "validated",
+    "evidence_refs": [
+     "evd:node:F-DCDC-PROTECT:0"
+    ],
+    "confidence": 0.9
+   }
+  ],
+  "evidence": [
+   {
+    "evidence_id": "evd:node:F-DCDC-PROTECT:0",
+    "document_id": "doc:node:F-DCDC-PROTECT"
+   }
+  ],
+  "support_level": "sufficient",
+  "answer_contract": {
+   "must_cite_evidence": true,
+   "must_include": [
+    "过压",
+    "过温"
+   ],
+   "max_chars": 900
+  }
+ },
+ "negative_expectations": [],
+ "notes": "Answer Contract：引用证据 + 关键锚点词（test_answer_contract.py 已覆盖）"
+}

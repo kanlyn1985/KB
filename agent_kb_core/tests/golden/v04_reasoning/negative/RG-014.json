@@ -1,0 +1,26 @@
+{
+ "case_id": "RG-014",
+ "category": "negative",
+ "description": "max_depth=0 → 全部提案 E-V04-DEPTH-EXCEEDED",
+ "seed_assertions": [
+  {
+   "key": "ab",
+   "subject_ref": "A",
+   "predicate_ref": "before",
+   "value": "B",
+   "confidence": 0.9
+  },
+  {
+   "key": "bc",
+   "subject_ref": "B",
+   "predicate_ref": "before",
+   "value": "C",
+   "confidence": 0.9
+  }
+ ],
+ "expectation": {
+  "candidates": 0,
+  "warnings_min": 1,
+  "max_depth": 0
+ }
+}

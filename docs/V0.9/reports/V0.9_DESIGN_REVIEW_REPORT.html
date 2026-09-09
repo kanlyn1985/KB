@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8"><title>V0.9 Design Review Report</title>
+<style>body{font-family:Segoe UI,Microsoft YaHei,sans-serif;margin:32px;color:#1a1a2e}
+h1{border-bottom:3px solid #bc4749;padding-bottom:8px}h2{color:#780000;margin-top:26px}
+table{border-collapse:collapse;margin:10px 0}td,th{border:1px solid #d4c0bb;padding:5px 11px;font-size:13.5px}
+th{background:#faf0e6}.pass{color:#0a7a2f;font-weight:600}.meta{color:#555;font-size:13px}</style></head><body>
+<h1>AKB V0.9 Design Review Report — Causal Knowledge Layer & Knowledge Health Governance</h1>
+<p class="meta">Date: 2026-09-04 · Baseline: 0e49c3d（V0.8 FROZEN）· DESIGN ONLY · Decision: <b>DESIGN COMPLETE</b></p>
+
+<h2>1. Executive Summary</h2>
+<p>核心设计判断：<b>因果层值得成为下一层抽象</b>——AKB 从"知识生命周期记录系统"
+进入"知识结构理解系统"的路径不是继续增加 runtime，而是引入 Causal Knowledge Layer
+（Candidate A SELECTED）+ Knowledge Health Governance（Candidate C SELECTED）。
+关键架构裁定：因果断言（内容）走 V0.4 既有 assertion 通道；因果结构（因→果→条件→
+机制图）以 CausalProjection 独立只读派生面存在（migration 16 append-only 两新表）；
+kg_* 零触碰；五条直通禁令（含新增 CausalProjection→kg_* 直写禁令）+ 4 条永久红线
+（multi-agent/learning/LLM truth/直通）全部显式。Deterministic first / provenance
+first / governance first 三原则全延续。</p>
+
+<h2>2. Baseline</h2>
+<table><tr><th>Item</th><th>SHA/State</th></tr>
+<tr><td>V0.8 frozen</td><td>0e49c3d（HEAD，clean）</td></tr>
+<tr><td>V0.7/V0.6/V0.5 frozen</td><td>3df1811 / b317c6e / e7a286e</td></tr>
+<tr><td>SHA verification</td><td>全部 cat-file = commit ✓</td></tr></table>
+
+<h2>3. Architecture State Analysis（缺口）</h2>
+<p>V0.5 graph（只有"是什么"）+ V0.6/0.7/0.8 生命周期运行时（记录"怎么变"）。
+缺口：①无因果语义（边全认识论关系）②知识健康度不可见（跨对象信号）③验证深度
+= 存在性 ④查询面性能（P1 延续）。判断：①=抽象层缺口（新本体层）、②=治理视图
+缺口、③④=工程优化——三者性质不同，①+② 进 V0.9，④ defer V0.10。</p>
+
+<h2>4-6. Candidate Decision Matrix & Selection</h2>
+<table><tr><th>Candidate</th><th>Decision</th><th>Reason</th></tr>
+<tr><td>A Causal Knowledge Model</td><td class="pass">SELECTED（核心）</td><td>抽象跃迁；独立因果投影不碰 kg_* frozen</td></tr>
+<tr><td>B Advanced Reasoning Trace</td><td>REJECTED for V0.9</td><td>=provenance 展示层，无新语义；replay 确定性不受影响</td></tr>
+<tr><td>C Evolution Intelligence</td><td class="pass">SELECTED（配套）</td><td>system-cannot-modify 红线下只产视图与提案</td></tr>
+<tr><td>D Runtime Optimization</td><td>DEFERRED→V0.10</td><td>工程优化≠能力演化</td></tr>
+<tr><td>E Multi-Agent Reasoning</td><td>REJECTED（永久红线）</td><td>autonomous 不可审计；planner 破坏 deterministic first；治理边界 human-only</td></tr>
+</table>
+
+<h2>7-9. Causal Model / Boundary 五律 / Architecture</h2>
+<p>因果边界五律：①CausalRelation ≠ Assertion（内容=assertion 通道；结构=独立投影）
+②Causal hypothesis ≠ Fact（V0.8 通道零修改）③kg_* read-only 不变 ④Causal
+projection 可重建（fingerprint 锚，V0.5 先例）⑤counterfactual = hypothesis 专属。
+架构图见 ARCHITECTURE §1——Ontology→Graph→Reasoning→Governance→Evolution 主轴
+延续，CausalProjection/Health/Conflict v2/MaintenanceTask 为新增只读+提案层。</p>
+
+<h2>10-13. Contracts（四件）</h2>
+<p>CausalProjectionRuntime（project/reproject/query——fingerprint 确定性 + 幂等
+锚 + fail-closed）· KnowledgeHealthRuntime（scan 四信号 + propose_maintenance——
+system 只产提案）· ConflictRuntime v2（机制级冲突确定性检测 → flag 不裁决）·
+MaintenanceTask（V0.8 task 通道 task_type 扩展——生命周期零修改）。字段级定义见
+ARCHITECTURE §3-§6。</p>
+
+<h2>14-17. Governance / Determinism / Provenance / Migration</h2>
+<p>Governance：五条直通禁令（Hypothesis→Assertion、Verdict→Fact、Reasoning→
+Knowledge Mutation、System→Governance、+新增 CausalProjection→kg_* 直写）。
+Determinism：同断言面同指纹/同投影同报告/同状态同提案集。Provenance：四新活动
+命名空间（graph:causal-project/health-scan/maintenance-proposal/conflict-detect-v2）
+复用 akb_provenance。<b>Migration：migration 16（append-only：akb_causal_edges +
+akb_health_signals）</b>——设计期明示理由（因果边基数 10^3-10^4 下 provenance-only
+JOIN 不可行，V0.8 P1-01 教训实测锚定）；rollback=drop 零数据损失；实现期保留
+降级 NO-MIGRATION 决策点。</p>
+
+<h2>18. Frozen Isolation Verification</h2>
+<p>V0.5/V0.6/V0.7/V0.8 frozen 零变化（git diff 0e49c3d..HEAD 实测仅 docs/V0.9/；
+零代码/零测试/零 migration 实施）。</p>
+
+<h2>19-20. Acceptance Matrix / Risks</h2>
+<table><tr><th>Checklist</th><th>Result</th></tr>
+<tr><td>V09-DES-001..010（architecture state/candidate matrix/causal boundary/
+governance boundary/determinism/provenance/migration/roadmap/risk/frozen
+isolation）</td><td class="pass">10/10 PASS（首轮 9/10——DES-005 为自检脚本
+引用错文档（DESIGN vs ARCHITECTURE），修正引用后 PASS，非设计缺陷）</td></tr></table>
+<table><tr><th>Level</th><th>Count</th><th>Items</th></tr>
+<tr><td>P0（触发即 STOP）</td><td>0 现存</td><td>4 条触发条件已定义（kg_* 直写/
+  maintenance 自动执行/conflict 自动裁决/migration 16 触碰既有表）</td></tr>
+<tr><td>P1（实现期必须解决）</td><td>3</td><td>因果谓词白名单跨域一致性（V0.7
+  namespace 约定）· health 阈值定标 · 机制等价判定（默认条件集合互斥，文本
+  语义比对 DEFERRED）</td></tr>
+<tr><td>P2（accepted）</td><td>3</td><td>causal edge 分页/索引 · health 趋势视图 ·
+  counterfactual 模板</td></tr></table>
+
+<h2>21-24. Decision Records / Docs / Final Decision</h2>
+<p>Decision records：①因果层=新抽象层（SELECTED）②Reasoning trace 展示层=
+REJECTED ③Optimization=DEFERRED V0.10 ④Multi-agent=永久 REJECTED ⑤migration 16
+双新表 append-only ⑥机制互斥判定=条件集合互斥（文本比对 defer）。
+docs：V0.9_DESIGN.md / V0.9_ARCHITECTURE_AND_CONTRACT.md /
+V0.9_CHANGE_CONTROL_AND_ROADMAP.md / 本报告。</p>
+<p><b>DESIGN COMPLETE — READY_FOR_IMPLEMENTATION</b>（实现需独立任务书；P1 三项
+为实现期决策点；V0.5..V0.8 frozen 全程零触碰）。</p>
+</body></html>

@@ -1,0 +1,24 @@
+{
+  "relation_types": {
+    "defined_by": {
+      "source_types": ["Parameter"],
+      "target_types": ["StandardClause"],
+      "description": "Parameter or concept is defined by a standard clause."
+    },
+    "constrained_by": {
+      "source_types": ["Parameter"],
+      "target_types": ["ParameterConstraint"],
+      "description": "Parameter is constrained by a requirement or limit."
+    },
+    "verified_by": {
+      "source_types": ["Parameter", "ParameterConstraint"],
+      "target_types": ["TestMethod", "TestResult"],
+      "description": "Parameter or constraint is verified by a method or result."
+    },
+    "derived_from": {
+      "source_types": ["ParameterConstraint", "TestMethod", "TestResult"],
+      "target_types": ["Evidence"],
+      "description": "Structured object is derived from source evidence."
+    }
+  }
+}

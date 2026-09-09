@@ -1,0 +1,52 @@
+{
+ "case_id": "G010",
+ "category": "G10-current-state",
+ "difficulty": "medium",
+ "requirement_refs": [
+  "SYS-007",
+  "SYS-015"
+ ],
+ "input": {
+  "query": "当前骨架里L-PWRCTRL分配到了哪些软件组件"
+ },
+ "expected": {
+  "entities": [
+   {
+    "entity_id": "L-PWRCTRL",
+    "entity_type": "component",
+    "description": "功率控制逻辑域"
+   }
+  ],
+  "states": [
+   {
+    "subject_ref": "entity:l_pwrctrl",
+    "state_name": "allocated_to: [P-SW-ASW-OBCPWRCTRL, P-SW-ASW-DCDCPWRCTRL]",
+    "observed_at": "skeleton_v0.6"
+   }
+  ],
+  "relations": [
+   {
+    "source_ref": "entity:l_pwrctrl",
+    "predicate_ref": "relation:allocated_to",
+    "target_ref": "entity:sw_obcpwrctrl",
+    "assertion_id": "rel:obc_dcdc:allocate:L-PWRCTRL:P-SW-ASW-OBCPWRCTRL"
+   },
+   {
+    "source_ref": "entity:l_pwrctrl",
+    "predicate_ref": "relation:allocated_to",
+    "target_ref": "entity:sw_dcdcpwrctrl",
+    "assertion_id": "rel:obc_dcdc:allocate:L-PWRCTRL:P-SW-ASW-DCDCPWRCTRL"
+   }
+  ],
+  "evidence": [
+   {
+    "evidence_id": "evd:gold:g010_skeleton",
+    "excerpt": "skeleton_v0.6.json relations: allocate L-PWRCTRL→P-SW-ASW-OBCPWRCTRL/DCDCPWRCTRL",
+    "document_id": "skeleton_v0.6.json"
+   }
+  ],
+  "support_level": "sufficient"
+ },
+ "negative_expectations": [],
+ "notes": "当前态快照：以 skeleton_v0.6 为 temporal_scope 基准"
+}
