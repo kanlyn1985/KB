@@ -7,5 +7,14 @@ from agent_kb.analytics.runtime import (
     analytics_report_identity,
 )
 
+from agent_kb.analytics.query import (  # noqa: E402
+    AnalyticsQueryCursor,
+    AnalyticsQueryError,
+    AnalyticsQueryRuntime,
+    AnalyticsReportPage,
+)
+
 __all__ = ["AnalyticsError", "KnowledgeMetricReport",
-           "KnowledgeAnalyticsRuntime", "analytics_report_identity"]
+           "KnowledgeAnalyticsRuntime", "analytics_report_identity",
+           "AnalyticsQueryCursor", "AnalyticsQueryError",
+           "AnalyticsQueryRuntime", "AnalyticsReportPage"]
