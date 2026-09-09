@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8"><title>V0.12 Final Acceptance Report</title>
+<style>body{font-family:Segoe UI,Microsoft YaHei,sans-serif;margin:32px;color:#1a1a2e}
+h1{border-bottom:3px solid #6d597a;padding-bottom:8px}h2{color:#355070;margin-top:26px}
+table{border-collapse:collapse;margin:10px 0}td,th{border:1px solid #c5c3d4;padding:5px 11px;font-size:13.5px}
+th{background:#f0eef4}.pass{color:#0a7a2f;font-weight:600}.meta{color:#555;font-size:13px}</style></head><body>
+<h1>AKB V0.12 Final Acceptance Report — Knowledge Analytics Layer</h1>
+<p class="meta">Date: 2026-09-04 · Final baseline: a8149e8 · Decision: <b>ACCEPTED / FROZEN</b></p>
+
+<h2>§1 Baseline Forensic</h2>
+<table><tr><th>Stage</th><th>SHA</th></tr>
+<tr><td>V0.12 Design</td><td>e01fb67</td></tr>
+<tr><td>IMPL-001 Knowledge Analytics Runtime</td><td>34d1ce9</td></tr>
+<tr><td>IMPL-002 Analytics Query Layer</td><td>a8149e8</td></tr>
+<tr><td>V0.11/V0.10/V0.9/V0.8 Frozen</td><td>cdec78e / 52ce55c / 88ea3bd / 0e49c3d</td></tr></table>
+<p>Forensic：全部 SHA cat-file = commit ✓，history 连续，零 rewrite，working
+tree clean。</p>
+
+<h2>§2 Analytics Contract Verify</h2>
+<p>KnowledgeMetricReport：immutable（frozen dataclass 赋值拒绝）✓ ·
+deterministic（同状态同 report_id）✓ · canonical fingerprint ✓ ·
+<b>Five Metrics 唯一性 ✓</b>（knowledge_growth / knowledge_drift /
+governance_efficiency / proposal_resolution_rate / causal_coverage_trend——
+白名单闭合，新增 metric 需新任务书）。</p>
+
+<h2>§3 Query Contract Verify</h2>
+<p>report query readonly ✓（零写面实测）· keyset cursor ✓（canonical JSON +
+指纹校验 + query binding——V0.10 causal cursor 复用拒绝实测）· deterministic
+ordering ✓（report_id ASC 唯一排序锚——零 created time/memory order/DB
+natural）· invalid cursor fail-close ✓（篡改/跨 query/非法 JSON 三分支）·
+scope/metric 过滤白名单 fail-close ✓。</p>
+
+<h2>§4 Governance Red Line Final Check（六条独立重执行全 PASS）</h2>
+<p>Analytics ↛ akb_assertions ✓ · ↛ kg_nodes ✓ · ↛ kg_edges ✓ ·
+↛ MaintenanceProposal ✓ · ↛ VerificationTask ✓ · ↛ Rule Learning ✓
+（constitution 级——human decisions 非学习信号；报告↛auto action 零桥实测）。
+redline-recheck 六测试全 PASS。</p>
+
+<h2>§5 Provenance Audit</h2>
+<p>唯一活动 graph:analytics-report-create 进 akb_provenance ✓ ·
+零新增 audit namespace ✓（activities 集合实测单元素）· payload = metrics
+摘要（metadata）。</p>
+
+<h2>§6 Determinism Final Recheck（五项独立复算全 PASS）</h2>
+<table><tr><th>Check</th><th>Result</th></tr>
+<tr><td>same input → same report_id</td><td class="pass">PASS</td></tr>
+<tr><td>same input → same fingerprint</td><td class="pass">PASS</td></tr>
+<tr><td>same input → same metrics</td><td class="pass">PASS</td></tr>
+<tr><td>five metrics 唯一性</td><td class="pass">PASS</td></tr>
+<tr><td>diff input → diff identity</td><td class="pass">PASS</td></tr></table>
+<p>零 timestamp/零 random/零 runtime ordering ✓。</p>
+
+<h2>§7 Migration Review</h2>
+<p><b>Migration 19: NOT REQUIRED</b>——akb_analytics_reports 表实测不存在 ✓ ·
+零 ALTER/零 INDEX/零 schema change ✓（analytics indexes: none 实测）。
+触发条件延续：①跨快照结构化对比查询 ②metrics 时序独立索引面。</p>
+
+<h2>§8 Frozen Isolation</h2>
+<p>V0.5 graph/fact + V0.6 reasoning + V0.7 runtime/policy/domain + V0.8
+evolution/hypothesis + V0.9 causal/health/conflict + V0.10
+persistence/query/registry + V0.11 maintenance proposal 全部零语义修改
+（git diff cdec78e..HEAD 实测——V0.12 仅新增 analytics 包 + v12 测试目录 +
+docs；analytics/runtime.py 属 V0.12 自身产物）。</p>
+
+<h2>§9 Regression（FINAL 实测重取）</h2>
+<table><tr><th>Suite</th><th>Result</th></tr>
+<tr><td>V0.1 Golden</td><td class="pass">30/30</td></tr>
+<tr><td>V0.2 Golden</td><td class="pass">40/40</td></tr>
+<tr><td>V0.3 Golden</td><td class="pass">55/55</td></tr>
+<tr><td>V0.4 Reasoning</td><td class="pass">21/21</td></tr>
+<tr><td>V0.5 Graph</td><td class="pass">103/103</td></tr>
+<tr><td>V0.6 Contract</td><td class="pass">20/20</td></tr>
+<tr><td>V0.7 Runtime</td><td class="pass">40/40</td></tr>
+<tr><td>V0.8 Evolution</td><td class="pass">40/40</td></tr>
+<tr><td>V0.9 Causal/Health/Conflict</td><td class="pass">30/30</td></tr>
+<tr><td>V0.10 Persistence</td><td class="pass">36/36</td></tr>
+<tr><td>V0.11 Maintenance</td><td class="pass">12/12</td></tr>
+<tr><td>V0.12 Analytics</td><td class="pass">24/24</td></tr>
+<tr><td>agent_kb_core</td><td class="pass">578 tests / 0 failures / 0 errors / 1 skipped</td></tr></table>
+<p class="meta">精确匹配预期 566+12=578；1 skipped = V0.3 capped 设计性跳过。</p>
+
+<h2>§10 CI</h2>
+<p>Agent KB Core CI run <b>34299415465 SUCCESS</b>（8 jobs 全 success）+ Tests
+run <b>34299415468 SUCCESS</b> @ a8149e8（release commit 为 docs-only）。</p>
+
+<h2>§11 P0/P1/P2 Finalization</h2>
+<table><tr><th>Level</th><th>Count</th><th>Items</th></tr>
+<tr><td>P0</td><td>0</td><td>no mutation / no governance bridge / no learning
+  全实测</td></tr>
+<tr><td>P1</td><td>3</td><td>provenance scan scalability（全表 LIKE 扫描——
+  migration 19 触发关联）· cursor payload growth（&lt;200B/cursor）·
+  analytics report storage decision（即时聚合 vs 物化面权衡）</td></tr>
+<tr><td>P2</td><td>3</td><td>report diff · materialized analytics view ·
+  visualization/export</td></tr></table>
+
+<h2>§12 Final Decision</h2>
+<p><b>AKB V0.12 = ACCEPTED / FROZEN</b>（release marker: docs/V0.12/V0.12_RELEASE.md；
+design e01fb67 frozen 后语义变更需 V0.13+ change-control）。Freeze baseline =
+release commit（docs(v0.12): finalize release baseline）；证据链 =
+e01fb67→34d1ce9→a8149e8。</p>
+</body></html>
